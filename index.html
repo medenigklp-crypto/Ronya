@@ -1936,105 +1936,56 @@ function elClick(n){
 }
 
 function openElDetail(el){
-  // MINIMUM TEST
-  var wrap = document.getElementById('eldetay-wrap');
-  var dbg = document.getElementById('dbg');
-  if(!dbg){dbg=document.createElement('div');dbg.id='dbg';dbg.style='position:fixed;top:0;left:0;right:0;background:purple;color:white;font-size:13px;padding:8px;z-index:99999;';document.body.appendChild(dbg);}
-  dbg.textContent = 'openElDetail: el='+(el?el.name:'NULL')+' wrap='+(wrap?'OK':'NULL');
-  if(!el||!wrap){ return; }
-  wrap.innerHTML = '<div style="color:#fff!important;font-size:24px;font-weight:700;padding:30px 20px;background:#1a1a2e;border:3px solid #6366f1;border-radius:12px;margin:10px;">'+el.name+' ('+el.sym+') - Atom No: '+el.n+'</div>';
-  nav('eldetay');
-  return; // GECICI - asil icerik sonra
   if(!el) return;
-  var d = EL_DATA[el.n];
-  var c2 = CAT_COLORS2[el.cat]||{bg:'rgba(30,41,59,.8)',border:'#6366f1'};
+  var d = EL_DATA[el.n] || {};
+  var c2 = CAT_COLORS2[el.cat] || {bg:'rgba(30,41,59,.8)', border:'#6366f1'};
   var cc = c2.border;
   var prevEl=null, nextEl=null;
-  for(var i=0;i<ELS.length;i++){ if(ELS[i].n===el.n-1){prevEl=ELS[i];break;} }
-  for(var i=0;i<ELS.length;i++){ if(ELS[i].n===el.n+1){nextEl=ELS[i];break;} }
-
-  var html = '';
-  html += '<div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap">';
-  html += '<button class="btn bs" onclick="nav(\'pt\')" style="font-size:12px;padding:8px 14px">← Periyodik Tablo</button>';
-  if(prevEl) html += '<button class="btn bs" onclick="openElDetail(ELS['+(prevEl.n-1)+'])" style="font-size:12px;padding:8px 14px">← '+prevEl.name+'</button>';
-  if(nextEl) html += '<button class="btn bs" onclick="openElDetail(ELS['+(nextEl.n-1)+'])" style="font-size:12px;padding:8px 14px">'+nextEl.name+' →</button>';
-  html += '</div>';
-
-  html += '<div class="card" style="border-top:4px solid '+cc+';margin-bottom:12px;background:'+c2.bg+'">';
-  html += '<div style="display:flex;gap:16px;flex-wrap:wrap">';
-  html += '<div style="background:'+cc+'22;border:2px solid '+cc+';border-radius:12px;padding:14px 18px;text-align:center;min-width:80px">';
-  html += '<div style="font-size:11px;color:'+cc+';font-weight:700">'+el.n+'</div>';
-  html += '<div style="font-family:Space Grotesk,sans-serif;font-size:44px;font-weight:800;color:'+cc+';line-height:1">'+el.sym+'</div>';
-  html += '<div style="font-size:10px;color:rgba(255,255,255,.5)">'+el.mass+'</div></div>';
-  html += '<div style="flex:1;min-width:150px">';
-  html += '<h2 style="font-family:Space Grotesk,sans-serif;font-size:20px;font-weight:800;margin-bottom:8px">'+el.name+' ('+el.sym+') <span style="font-size:13px;font-weight:400;color:var(--tx3)">'+(d?d.en:'')+'</span></h2>';
-  html += '<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">';
-  html += '<span style="background:'+cc+'22;border:1px solid '+cc+'44;border-radius:100px;padding:3px 10px;font-size:11px;color:'+cc+';font-weight:600">'+el.cat+'</span>';
-  if(d&&d.period) html += '<span style="background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--tx3)">Periyot '+d.period+'</span>';
-  if(d&&d.group)  html += '<span style="background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--tx3)">Grup '+d.group+'</span>';
-  if(d&&d.phase)  html += '<span style="background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--tx3)">'+d.phase+'</span>';
-  html += '</div>';
-  html += '<p style="font-size:13px;color:var(--tx2);line-height:1.6">'+(d?d.desc:'Atom numarası '+el.n)+'</p>';
-  html += '</div></div></div>';
-
-  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">';
-  html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ATOM NUMARASI</div><div style="font-size:28px;font-weight:800">'+el.n+'</div></div>';
-  html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ATOM KÜTLESİ</div><div style="font-size:20px;font-weight:800">'+el.mass+' g/mol</div></div>';
-  if(d&&d.conf)      html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ELEKTRON KONFİGÜRASYONU</div><div style="font-size:12px;font-weight:700">'+d.conf+'</div></div>';
-  if(d&&d.shells)    html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">KABUKLAR</div><div style="font-size:16px;font-weight:700">'+d.shells+'</div></div>';
-  if(d&&d.neg!=null) html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ELEKTRONEGATİFLİK</div><div style="font-size:24px;font-weight:800">'+d.neg+'</div></div>';
-  if(d&&d.density)   html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">YOĞUNLUK</div><div style="font-size:16px;font-weight:700">'+d.density+' g/cm³</div></div>';
-  if(d&&d.melt!=null) html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ERİME NOKTASI</div><div style="font-size:22px;font-weight:800;color:#f59e0b">'+d.melt+'°C</div></div>';
-  if(d&&d.boil!=null) html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">KAYNAMA NOKTASI</div><div style="font-size:22px;font-weight:800;color:#ef4444">'+d.boil+'°C</div></div>';
-  if(d&&d.disc)      html += '<div class="card" style="border:1px solid '+cc+'44;grid-column:span 2"><div class="slbl" style="color:'+cc+'">KEŞFEDEN</div><div style="font-size:14px;font-weight:700">'+d.disc+(d.year?' ('+d.year+')':'')+'</div></div>';
-  html += '</div>';
-
-  if(d){
-    if(d.history) html += '<div class="card" style="margin-bottom:10px;border-left:3px solid #22d3ee"><div class="slbl" style="color:#22d3ee">🔍 KEŞİF TARİHİ</div><p style="font-size:13px;color:var(--tx2);line-height:1.7">'+d.history+'</p></div>';
-    if(d.iso&&d.iso.length){
-      html += '<div style="margin-bottom:10px"><div class="slbl" style="color:'+cc+'">⚛️ İZOTOPLAR</div>';
-      for(var i=0;i<d.iso.length;i++) html += '<div style="background:var(--sf2);border-radius:var(--r);padding:10px;margin-bottom:6px;font-size:13px;color:var(--tx2);border:1px solid var(--br)">'+d.iso[i]+'</div>';
-      html += '</div>';
-    }
-    if(d.compounds&&d.compounds.length){
-      html += '<div style="margin-bottom:10px"><div class="slbl" style="color:#f59e0b">🧪 ÖNEMLİ BİLEŞİKLER</div>';
-      for(var i=0;i<d.compounds.length;i++){
-        var co = d.compounds[i];
-        html += '<div style="background:var(--sf2);border-radius:var(--r);padding:12px;margin-bottom:6px;border:1px solid var(--br)">'
-          +'<div style="font-size:14px;font-weight:700;color:'+cc+';margin-bottom:2px">'+co.f+'</div>'
-          +'<div style="font-weight:600;font-size:13px;margin-bottom:2px">'+co.n+'</div>'
-          +'<div style="font-size:12px;color:var(--tx3)">'+co.d+'</div></div>';
-      }
-      html += '</div>';
-    }
-    if(d.uses&&d.uses.length){
-      html += '<div class="card" style="margin-bottom:10px;border-left:3px solid var(--gr)"><div class="slbl" style="color:var(--gr)">✅ KULLANIM ALANLARI</div>';
-      for(var i=0;i<d.uses.length;i++) html += '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--tx2)"><span style="color:var(--gr)">•</span><span>'+d.uses[i]+'</span></div>';
-      html += '</div>';
-    }
-    if(d.bio) html += '<div class="card" style="margin-bottom:10px;border-left:3px solid #06b6d4"><div class="slbl" style="color:#06b6d4">🔬 BİYOLOJİK ROL</div><p style="font-size:13px;color:var(--tx2);line-height:1.7">'+d.bio+'</p></div>';
-    if(d.fun&&d.fun.length){
-      html += '<div class="card" style="margin-bottom:10px;border-left:3px solid var(--yw)"><div class="slbl" style="color:var(--yw)">⭐ İLGİNÇ BİLGİLER</div>';
-      for(var i=0;i<d.fun.length;i++) html += '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--tx2)"><span style="color:var(--yw)">•</span><span>'+d.fun[i]+'</span></div>';
-      html += '</div>';
-    }
-    if(d.notes&&d.notes.length){
-      html += '<div class="card" style="margin-bottom:10px;border-left:3px solid var(--ac2)"><div class="slbl" style="color:var(--ac2)">⚡ ÇALIŞMA NOTLARI</div>';
-      for(var i=0;i<d.notes.length;i++) html += '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--tx2)"><span style="color:var(--ac2)">•</span><span>'+d.notes[i]+'</span></div>';
-      html += '</div>';
-    }
+  for(var i=0;i<ELS.length;i++){
+    if(ELS[i].n===el.n-1) prevEl=ELS[i];
+    if(ELS[i].n===el.n+1) nextEl=ELS[i];
   }
 
-  html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px">';
-  html += prevEl ? '<button class="btn bs" onclick="openElDetail(ELS['+(prevEl.n-1)+'])" style="font-size:12px">← '+prevEl.name+'</button>' : '<div></div>';
-  html += '<button class="btn bp" onclick="nav(\'pt\')" style="font-size:12px">⊞ Periyodik Tablo</button>';
-  html += nextEl ? '<button class="btn bs" onclick="openElDetail(ELS['+(nextEl.n-1)+'])" style="font-size:12px">'+nextEl.name+' →</button>' : '<div></div>';
-  html += '</div>';
+  var html = '';
+  html += '<div style="margin-bottom:16px">';
+  html += '<button onclick="nav(\'pt\')" style="padding:8px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:13px">← Periyodik Tablo<\/button>';
+  html += '<\/div>';
 
-  var wrap = document.getElementById('eldetay-wrap');
-  if(wrap) wrap.innerHTML = '<div style="color:white;font-size:20px;padding:20px;background:red">TEST: '+el.name+'</div>' + html;
+  html += '<div style="background:'+c2.bg+';border:1px solid '+cc+';border-radius:16px;padding:20px;margin-bottom:16px">';
+  html += '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">';
+  html += '<div style="background:'+cc+'33;border:2px solid '+cc+';border-radius:12px;padding:12px 16px;text-align:center;min-width:80px">';
+  html += '<div style="font-size:12px;color:'+cc+';font-weight:700">'+el.n+'<\/div>';
+  html += '<div style="font-size:40px;font-weight:800;color:'+cc+';line-height:1">'+el.sym+'<\/div>';
+  html += '<div style="font-size:11px;color:rgba(255,255,255,.5)">'+el.mass+'<\/div>';
+  html += '<\/div>';
+  html += '<div>';
+  html += '<div style="font-size:22px;font-weight:800;color:#fff;margin-bottom:6px">'+el.name+'<\/div>';
+  html += '<div style="font-size:14px;color:var(--tx3);margin-bottom:8px">'+(d.en||'')+'<\/div>';
+  html += '<span style="background:'+cc+'22;border:1px solid '+cc+'44;border-radius:100px;padding:4px 12px;font-size:12px;color:'+cc+'">'+el.cat+'<\/span>';
+  html += '<\/div><\/div><\/div>';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">';
+  html += '<div style="background:var(--sf2);border:1px solid '+cc+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+cc+';font-weight:700;margin-bottom:6px">ATOM NUMARASI<\/div><div style="font-size:26px;font-weight:800;color:#fff">'+el.n+'<\/div><\/div>';
+  html += '<div style="background:var(--sf2);border:1px solid '+cc+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+cc+';font-weight:700;margin-bottom:6px">ATOM KUTLESI<\/div><div style="font-size:18px;font-weight:800;color:#fff">'+el.mass+' g\/mol<\/div><\/div>';
+  if(d.conf) html += '<div style="background:var(--sf2);border:1px solid '+cc+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+cc+';font-weight:700;margin-bottom:6px">ELEKTRON KONFIGURASYONU<\/div><div style="font-size:12px;font-weight:700;color:#fff">'+d.conf+'<\/div><\/div>';
+  if(d.shells) html += '<div style="background:var(--sf2);border:1px solid '+cc+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+cc+';font-weight:700;margin-bottom:6px">KABUKLAR<\/div><div style="font-size:16px;font-weight:700;color:#fff">'+d.shells+'<\/div><\/div>';
+  if(d.neg!=null) html += '<div style="background:var(--sf2);border:1px solid '+cc+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+cc+';font-weight:700;margin-bottom:6px">ELEKTRONEGATIFLIK<\/div><div style="font-size:22px;font-weight:800;color:#fff">'+d.neg+'<\/div><\/div>';
+  if(d.melt!=null) html += '<div style="background:var(--sf2);border:1px solid '+cc+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+cc+';font-weight:700;margin-bottom:6px">ERIME NOKTASI<\/div><div style="font-size:20px;font-weight:800;color:#f59e0b">'+d.melt+' C<\/div><\/div>';
+  if(d.boil!=null) html += '<div style="background:var(--sf2);border:1px solid '+cc+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+cc+';font-weight:700;margin-bottom:6px">KAYNAMA NOKTASI<\/div><div style="font-size:20px;font-weight:800;color:#ef4444">'+d.boil+' C<\/div><\/div>';
+  if(d.desc) html += '<div style="background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:14px;grid-column:span 2"><div style="font-size:10px;color:var(--tx3);font-weight:700;margin-bottom:6px">ACIKLAMA<\/div><div style="font-size:13px;color:var(--tx2);line-height:1.6">'+d.desc+'<\/div><\/div>';
+  html += '<\/div>';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px">';
+  html += prevEl ? '<button onclick="elClick('+prevEl.n+')" style="padding:10px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:12px">&#8592; '+prevEl.name+'<\/button>' : '<div><\/div>';
+  html += '<button onclick="nav(\'pt\')" style="padding:10px;background:rgba(99,102,241,.15);border:1px solid #6366f1;border-radius:var(--r);color:#a5b4fc;cursor:pointer;font-size:12px">Tablo<\/button>';
+  html += nextEl ? '<button onclick="elClick('+nextEl.n+')" style="padding:10px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:12px">'+nextEl.name+' &#8594;<\/button>' : '<div><\/div>';
+  html += '<\/div>';
+
+  document.getElementById('eldetay-wrap').innerHTML = html;
   nav('eldetay');
 }
+
+
 
 // ============================================================
 // TABLO / TREND SEKME
