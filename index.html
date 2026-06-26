@@ -1851,7 +1851,7 @@ function renderRealPT(){
     var op = (!ms||!mc) ? '0.08' : '1';
     var mass = typeof el.mass==='number' ? (el.mass<100?el.mass.toFixed(2):el.mass.toFixed(1)) : String(el.mass);
     var cb = colors.border;
-    return '<div class="pt-cell-wrap" style="background:'+colors.bg+';border-color:'+cb+'66;opacity:'+op+'" onclick="elClick('+el.n+')">'
+    return '<div class="pt-cell-wrap" data-elnum="'+el.n+'" style="background:'+colors.bg+';border-color:'+cb+'66;opacity:'+op+'" onclick="elClick('+el.n+')">'
       +'<span style="display:block;font-size:6px;font-weight:700;color:'+cb+';line-height:1.1;width:100%;text-align:center;overflow:hidden">'+el.n+'</span>'
       +'<span style="display:block;font-size:13px;font-weight:800;color:#fff;line-height:1;text-shadow:0 1px 4px rgba(0,0,0,.6);width:100%;text-align:center;overflow:hidden">'+el.sym+'</span>'
       +'<span style="display:block;font-size:5px;color:rgba(255,255,255,.75);line-height:1.1;margin-top:1px;width:100%;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+el.name+'</span>'
@@ -2022,11 +2022,13 @@ function openElDetail(el){
   html += nextEl ? '<button class="btn bs" onclick="openElDetail(ELS['+(nextEl.n-1)+'])" style="font-size:12px">'+nextEl.name+' →</button>' : '<div></div>';
   html += '</div>';
 
-  document.getElementById('eldetay-wrap').innerHTML = html;
-  var scs = document.querySelectorAll('.sc');
-  for(var i=0;i<scs.length;i++) scs[i].classList.remove('active');
-  document.getElementById('s-eldetay').classList.add('active');
-  window.scrollTo(0,0);
+  var wrap = document.getElementById('eldetay-wrap');
+  if(wrap) wrap.innerHTML = html;
+  var dbg=document.getElementById('dbg');
+  if(!dbg){dbg=document.createElement('div');dbg.id='dbg';dbg.style='position:fixed;top:0;left:0;right:0;background:orange;color:black;font-size:13px;padding:8px;z-index:99999;';document.body.appendChild(dbg);}
+  dbg.textContent='openElDetail: wrap='+(wrap?'OK':'NULL')+' html='+html.length+'chars';
+  nav('eldetay');
+  dbg.textContent='nav eldetay done, s-eldetay display='+document.getElementById('s-eldetay').style.display;
 }
 
 // ============================================================
