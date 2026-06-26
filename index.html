@@ -1189,33 +1189,1010 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div class="toast" id="toast"></div>
 
 <script>
-// Dış dosyalar yükleniyor
-var _loaded = 0;
-var _files = ['data/els.js','data/el_data.js','data/pt_pos.js','data/trend.js','app.js'];
+var ELS=[
+{n:1,sym:'H',name:'Hidrojen',mass:1.008,cat:'Ametal',g:'g15'},
+{n:2,sym:'He',name:'Helyum',mass:4.003,cat:'Soy Gaz',g:'g18'},
+{n:3,sym:'Li',name:'Lityum',mass:6.941,cat:'Alkali Metal',g:'g1'},
+{n:4,sym:'Be',name:'Berilyum',mass:9.012,cat:'Toprak Alkali Metal',g:'g2'},
+{n:5,sym:'B',name:'Bor',mass:10.811,cat:'Yarı Metal',g:'g13'},
+{n:6,sym:'C',name:'Karbon',mass:12.011,cat:'Ametal',g:'g14'},
+{n:7,sym:'N',name:'Azot',mass:14.007,cat:'Ametal',g:'g15'},
+{n:8,sym:'O',name:'Oksijen',mass:15.999,cat:'Ametal',g:'g16'},
+{n:9,sym:'F',name:'Flor',mass:18.998,cat:'Halojen',g:'g17'},
+{n:10,sym:'Ne',name:'Neon',mass:20.18,cat:'Soy Gaz',g:'g18'},
+{n:11,sym:'Na',name:'Sodyum',mass:22.99,cat:'Alkali Metal',g:'g1'},
+{n:12,sym:'Mg',name:'Magnezyum',mass:24.305,cat:'Toprak Alkali Metal',g:'g2'},
+{n:13,sym:'Al',name:'Alüminyum',mass:26.982,cat:'Metal',g:'g13'},
+{n:14,sym:'Si',name:'Silisyum',mass:28.086,cat:'Yarı Metal',g:'g14'},
+{n:15,sym:'P',name:'Fosfor',mass:30.974,cat:'Ametal',g:'g15'},
+{n:16,sym:'S',name:'Kükürt',mass:32.065,cat:'Ametal',g:'g16'},
+{n:17,sym:'Cl',name:'Klor',mass:35.453,cat:'Halojen',g:'g17'},
+{n:18,sym:'Ar',name:'Argon',mass:39.948,cat:'Soy Gaz',g:'g18'},
+{n:19,sym:'K',name:'Potasyum',mass:39.098,cat:'Alkali Metal',g:'g1'},
+{n:20,sym:'Ca',name:'Kalsiyum',mass:40.078,cat:'Toprak Alkali Metal',g:'g2'},
+{n:21,sym:'Sc',name:'Skandiyum',mass:44.956,cat:'Geçiş Metali',g:'gtm'},
+{n:22,sym:'Ti',name:'Titanyum',mass:47.867,cat:'Geçiş Metali',g:'gtm'},
+{n:23,sym:'V',name:'Vanadyum',mass:50.942,cat:'Geçiş Metali',g:'gtm'},
+{n:24,sym:'Cr',name:'Krom',mass:51.996,cat:'Geçiş Metali',g:'gtm'},
+{n:25,sym:'Mn',name:'Manganez',mass:54.938,cat:'Geçiş Metali',g:'gtm'},
+{n:26,sym:'Fe',name:'Demir',mass:55.845,cat:'Geçiş Metali',g:'gtm'},
+{n:27,sym:'Co',name:'Kobalt',mass:58.933,cat:'Geçiş Metali',g:'gtm'},
+{n:28,sym:'Ni',name:'Nikel',mass:58.693,cat:'Geçiş Metali',g:'gtm'},
+{n:29,sym:'Cu',name:'Bakır',mass:63.546,cat:'Geçiş Metali',g:'gtm'},
+{n:30,sym:'Zn',name:'Çinko',mass:65.38,cat:'Geçiş Metali',g:'gtm'},
+{n:31,sym:'Ga',name:'Galyum',mass:69.723,cat:'Metal',g:'g13'},
+{n:32,sym:'Ge',name:'Germanyum',mass:72.63,cat:'Yarı Metal',g:'g14'},
+{n:33,sym:'As',name:'Arsenik',mass:74.922,cat:'Yarı Metal',g:'g15'},
+{n:34,sym:'Se',name:'Selenyum',mass:78.971,cat:'Ametal',g:'g16'},
+{n:35,sym:'Br',name:'Brom',mass:79.904,cat:'Halojen',g:'g17'},
+{n:36,sym:'Kr',name:'Kripton',mass:83.798,cat:'Soy Gaz',g:'g18'},
+{n:37,sym:'Rb',name:'Rubidyum',mass:85.468,cat:'Alkali Metal',g:'g1'},
+{n:38,sym:'Sr',name:'Stronsiyum',mass:87.62,cat:'Toprak Alkali Metal',g:'g2'},
+{n:39,sym:'Y',name:'İtriyum',mass:88.906,cat:'Geçiş Metali',g:'gtm'},
+{n:40,sym:'Zr',name:'Zirkonyum',mass:91.224,cat:'Geçiş Metali',g:'gtm'},
+{n:41,sym:'Nb',name:'Niyobyum',mass:92.906,cat:'Geçiş Metali',g:'gtm'},
+{n:42,sym:'Mo',name:'Molibden',mass:95.96,cat:'Geçiş Metali',g:'gtm'},
+{n:43,sym:'Tc',name:'Teknesyum',mass:98,cat:'Geçiş Metali',g:'gtm'},
+{n:44,sym:'Ru',name:'Rutenyum',mass:101.07,cat:'Geçiş Metali',g:'gtm'},
+{n:45,sym:'Rh',name:'Rodyum',mass:102.906,cat:'Geçiş Metali',g:'gtm'},
+{n:46,sym:'Pd',name:'Paladyum',mass:106.42,cat:'Geçiş Metali',g:'gtm'},
+{n:47,sym:'Ag',name:'Gümüş',mass:107.868,cat:'Geçiş Metali',g:'gtm'},
+{n:48,sym:'Cd',name:'Kadmiyum',mass:112.411,cat:'Geçiş Metali',g:'gtm'},
+{n:49,sym:'In',name:'İndiyum',mass:114.818,cat:'Metal',g:'g13'},
+{n:50,sym:'Sn',name:'Kalay',mass:118.71,cat:'Metal',g:'g14'},
+{n:51,sym:'Sb',name:'Antimon',mass:121.76,cat:'Yarı Metal',g:'g15'},
+{n:52,sym:'Te',name:'Tellür',mass:127.6,cat:'Yarı Metal',g:'g16'},
+{n:53,sym:'I',name:'İyot',mass:126.904,cat:'Halojen',g:'g17'},
+{n:54,sym:'Xe',name:'Ksenon',mass:131.293,cat:'Soy Gaz',g:'g18'},
+{n:55,sym:'Cs',name:'Sezyum',mass:132.905,cat:'Alkali Metal',g:'g1'},
+{n:56,sym:'Ba',name:'Baryum',mass:137.327,cat:'Toprak Alkali Metal',g:'g2'},
+{n:57,sym:'La',name:'Lantan',mass:138.905,cat:'Lantanit',g:'glan'},
+{n:58,sym:'Ce',name:'Seryum',mass:140.116,cat:'Lantanit',g:'glan'},
+{n:59,sym:'Pr',name:'Praseodim',mass:140.908,cat:'Lantanit',g:'glan'},
+{n:60,sym:'Nd',name:'Neodimyum',mass:144.242,cat:'Lantanit',g:'glan'},
+{n:61,sym:'Pm',name:'Prometyum',mass:145,cat:'Lantanit',g:'glan'},
+{n:62,sym:'Sm',name:'Samaryum',mass:150.36,cat:'Lantanit',g:'glan'},
+{n:63,sym:'Eu',name:'Evropiyum',mass:151.964,cat:'Lantanit',g:'glan'},
+{n:64,sym:'Gd',name:'Gadolinyum',mass:157.25,cat:'Lantanit',g:'glan'},
+{n:65,sym:'Tb',name:'Terbiyum',mass:158.925,cat:'Lantanit',g:'glan'},
+{n:66,sym:'Dy',name:'Disprosyum',mass:162.5,cat:'Lantanit',g:'glan'},
+{n:67,sym:'Ho',name:'Holmiyum',mass:164.93,cat:'Lantanit',g:'glan'},
+{n:68,sym:'Er',name:'Erbiyum',mass:167.259,cat:'Lantanit',g:'glan'},
+{n:69,sym:'Tm',name:'Tulyum',mass:168.934,cat:'Lantanit',g:'glan'},
+{n:70,sym:'Yb',name:'İterbiyum',mass:173.054,cat:'Lantanit',g:'glan'},
+{n:71,sym:'Lu',name:'Lutesyum',mass:174.967,cat:'Lantanit',g:'glan'},
+{n:72,sym:'Hf',name:'Hafniyum',mass:178.49,cat:'Geçiş Metali',g:'gtm'},
+{n:73,sym:'Ta',name:'Tantal',mass:180.948,cat:'Geçiş Metali',g:'gtm'},
+{n:74,sym:'W',name:'Tungsten',mass:183.84,cat:'Geçiş Metali',g:'gtm'},
+{n:75,sym:'Re',name:'Renyum',mass:186.207,cat:'Geçiş Metali',g:'gtm'},
+{n:76,sym:'Os',name:'Osmiyum',mass:190.23,cat:'Geçiş Metali',g:'gtm'},
+{n:77,sym:'Ir',name:'İridyum',mass:192.217,cat:'Geçiş Metali',g:'gtm'},
+{n:78,sym:'Pt',name:'Platin',mass:195.084,cat:'Geçiş Metali',g:'gtm'},
+{n:79,sym:'Au',name:'Altın',mass:196.967,cat:'Geçiş Metali',g:'gtm'},
+{n:80,sym:'Hg',name:'Cıva',mass:200.592,cat:'Geçiş Metali',g:'gtm'},
+{n:81,sym:'Tl',name:'Talyum',mass:204.383,cat:'Metal',g:'g13'},
+{n:82,sym:'Pb',name:'Kurşun',mass:207.2,cat:'Metal',g:'g14'},
+{n:83,sym:'Bi',name:'Bizmut',mass:208.98,cat:'Metal',g:'g15'},
+{n:84,sym:'Po',name:'Polonyum',mass:209,cat:'Yarı Metal',g:'g16'},
+{n:85,sym:'At',name:'Astatin',mass:210,cat:'Halojen',g:'g17'},
+{n:86,sym:'Rn',name:'Radon',mass:222,cat:'Soy Gaz',g:'g18'},
+{n:87,sym:'Fr',name:'Fransiyum',mass:223,cat:'Alkali Metal',g:'g1'},
+{n:88,sym:'Ra',name:'Radyum',mass:226,cat:'Toprak Alkali Metal',g:'g2'},
+{n:89,sym:'Ac',name:'Aktinyum',mass:227,cat:'Aktinit',g:'gact'},
+{n:90,sym:'Th',name:'Toryum',mass:232.038,cat:'Aktinit',g:'gact'},
+{n:91,sym:'Pa',name:'Protaktinyum',mass:231.036,cat:'Aktinit',g:'gact'},
+{n:92,sym:'U',name:'Uranyum',mass:238.029,cat:'Aktinit',g:'gact'},
+{n:93,sym:'Np',name:'Neptünyum',mass:237,cat:'Aktinit',g:'gact'},
+{n:94,sym:'Pu',name:'Plütonyum',mass:244,cat:'Aktinit',g:'gact'},
+{n:95,sym:'Am',name:'Amerikyum',mass:243,cat:'Aktinit',g:'gact'},
+{n:96,sym:'Cm',name:'Küryum',mass:247,cat:'Aktinit',g:'gact'},
+{n:97,sym:'Bk',name:'Berkelyum',mass:247,cat:'Aktinit',g:'gact'},
+{n:98,sym:'Cf',name:'Kaliforniyum',mass:251,cat:'Aktinit',g:'gact'},
+{n:99,sym:'Es',name:'Aynştaynyum',mass:252,cat:'Aktinit',g:'gact'},
+{n:100,sym:'Fm',name:'Fermiyum',mass:257,cat:'Aktinit',g:'gact'},
+{n:101,sym:'Md',name:'Mendelevyum',mass:258,cat:'Aktinit',g:'gact'},
+{n:102,sym:'No',name:'Nobelyum',mass:259,cat:'Aktinit',g:'gact'},
+{n:103,sym:'Lr',name:'Lavrensiyum',mass:262,cat:'Aktinit',g:'gact'},
+{n:104,sym:'Rf',name:'Rutherfordiyum',mass:267,cat:'Geçiş Metali',g:'gtm'},
+{n:105,sym:'Db',name:'Dubniyum',mass:268,cat:'Geçiş Metali',g:'gtm'},
+{n:106,sym:'Sg',name:'Seaborgiyum',mass:271,cat:'Geçiş Metali',g:'gtm'},
+{n:107,sym:'Bh',name:'Bohriyum',mass:272,cat:'Geçiş Metali',g:'gtm'},
+{n:108,sym:'Hs',name:'Hassiyum',mass:270,cat:'Geçiş Metali',g:'gtm'},
+{n:109,sym:'Mt',name:'Meitneriyum',mass:276,cat:'Geçiş Metali',g:'gtm'},
+{n:110,sym:'Ds',name:'Darmstadtiyum',mass:281,cat:'Geçiş Metali',g:'gtm'},
+{n:111,sym:'Rg',name:'Röntgenyum',mass:280,cat:'Geçiş Metali',g:'gtm'},
+{n:112,sym:'Cn',name:'Kopernikyum',mass:285,cat:'Geçiş Metali',g:'gtm'},
+{n:113,sym:'Nh',name:'Nihonyum',mass:284,cat:'Metal',g:'g13'},
+{n:114,sym:'Fl',name:'Flerovyum',mass:289,cat:'Metal',g:'g14'},
+{n:115,sym:'Mc',name:'Moskovyum',mass:288,cat:'Metal',g:'g15'},
+{n:116,sym:'Lv',name:'Livermoryum',mass:293,cat:'Metal',g:'g16'},
+{n:117,sym:'Ts',name:'Tennesin',mass:294,cat:'Halojen',g:'g17'},
+{n:118,sym:'Og',name:'Oganesson',mass:294,cat:'Soy Gaz',g:'g18'},
+];
 
-function _loadNext(i){
-  if(i >= _files.length){
-    // Hepsi yüklendi - init
-    document.addEventListener ? document.addEventListener('_ready', _init) : null;
-    _init();
+
+
+// ============================================================
+// TAM 118 ELEMENT VERİ TABANI
+// ============================================================
+var EL_DATA = {
+1:{en:'Hydrogen',period:1,group:1,phase:'Gaz',neg:2.20,density:'0.000090',melt:-259.1,boil:-252.9,conf:'1s¹',shells:'1',disc:'Henry Cavendish',year:1766,desc:'Evrenin en bol elementi. Yıldızların yakıtı; tüm organik moleküllerin temel bileşeni.',history:'1766\'da Cavendish demir+H₂SO₄ reaksiyonuyla üretti. Lavoisier su doğuran anlamında Hydrogène adını verdi.',uses:['Haber prosesi: N₂+3H₂→2NH₃ (gübre)','Roket yakıtı (sıvı H₂)','Hidrojenasyon (margarin)','Yakıt hücreleri'],bio:'Su ve tüm organik moleküllerin yapı taşı. Vücudun %10\'u kütlece H.',notes:['Diatomik gaz: H₂','Yanıcı: H₂+½O₂→H₂O','pH = -log[H⁺]','En hafif element'],compounds:[{f:'H₂O',n:'Su',d:'Evrensel çözücü'},{f:'HCl',n:'Hidroklorik Asit',d:'Mide asidi'},{f:'NH₃',n:'Amonyak',d:'Gübre üretimi'},{f:'H₂O₂',n:'Hidrojen Peroksit',d:'Dezenfektan'}],iso:['¹H (%99.98): Protiyum','²H (%0.02): Döteryum — ağır su','³H: Tritiyum — T½=12.3 yıl'],fun:['Güneş her saniye 600 Mt H→He dönüştürür','Evrendeki atomların %75\'i hidrojen','Hindenburg felaketi 1937']},
+2:{en:'Helium',period:1,group:18,phase:'Gaz',neg:null,density:'0.000179',melt:-272.2,boil:-268.9,conf:'1s²',shells:'2',disc:'Lockyer & Janssen',year:1868,desc:'Güneşte spektroskopik olarak keşfedilen tek element. Kimyasal tepkimeye girmez.',history:'1868 güneş tutulmasında helios spektral çizgisi bulundu. Yeryüzünde 1895\'te Ramsay izole etti.',uses:['MRI süperiletken soğutma','Hava balonları','Dalgıç tüpleri (He-O₂)','He-Ne lazeri'],bio:'Biyolojik rolü yok.',notes:['Soy gaz — dolu elektron kabuğu','En düşük kaynama: -268.9°C','Sıvı He: süperiletkenlik araştırmaları'],compounds:[],iso:['⁴He (%99.99): alfa parçacığı','³He (%0.0001): nükleer araştırma'],fun:['Sesi tizleştirir (ses 3x hızlı)','Yeryüzü He kaynakları tükeniyor','Sıvı He mavi renktedir']},
+3:{en:'Lithium',period:2,group:1,phase:'Katı',neg:0.98,density:'0.534',melt:180.5,boil:1342,conf:'[He] 2s¹',shells:'2|1',disc:'Johan Arfwedson',year:1817,desc:'En hafif metal. Li-iyon piller modern elektroniğin kalbi.',history:'1817\'de Arfwedson petal taşından keşfetti. Lithos (taş) anlamına gelir.',uses:['Li-iyon piller (telefon, EV)','Bipolar bozukluk ilacı','Nükleer füzyon (⁶Li)','Cam ve seramik'],bio:'Nöropsikiyatrik düzenleyici. Lityum karbonat manik-depresif tedavide.',notes:['2Li+2H₂O→2LiOH+H₂','Kırmızı alev rengi (671 nm)','En hafif katı element'],compounds:[{f:'LiOH',n:'Lityum Hidroksit',d:'CO₂ absorban'},{f:'Li₂CO₃',n:'Lityum Karbonat',d:'Psikiyatri ilacı'}],iso:['⁷Li (%92.5)','⁶Li (%7.5): nükleer reaktör'],fun:['Tesla pilinde ~8 kg Li','Dünya rezervinin %50si Bolivya\'da','70 yıldır psikiyatride kullanılıyor']},
+4:{en:'Beryllium',period:2,group:2,phase:'Katı',neg:1.57,density:'1.85',melt:1287,boil:2469,conf:'[He] 2s²',shells:'2|2',disc:'Vauquelin',year:1798,desc:'Çok hafif, sert metal. Uzay teknolojisi ve nükleer reaktörlerde kullanılır.',history:'1798\'de Vauquelin zümrütten keşfetti. 1828\'de Wöhler ve Bussy ayrı ayrı izole etti.',uses:['James Webb teleskobu aynaları','Nükleer reaktör yansıtıcısı','X-ışını pencereleri','Cu-Be alaşımı'],bio:'Toksik ve kanserojen. Berilyozis (kronik akciğer hastalığı).',notes:['X-ışınına şeffaf','Nötron yansıtıcısı','Çok hafif+çok sert kombinasyonu'],compounds:[{f:'BeO',n:'Berilyum Oksit',d:'Seramik; yalıtkan'}],iso:['⁹Be (%100): tek stabil izotop'],fun:['James Webb tüm aynaları Be\'den','Zümrüt taşı Be₃Al₂Si₆O₁₈','İsmi zümrüt anlamındaki beryllos\'tan']},
+5:{en:'Boron',period:2,group:13,phase:'Katı',neg:2.04,density:'2.34',melt:2075,boil:4000,conf:'[He] 2s² 2p¹',shells:'2|3',disc:'Gay-Lussac & Davy',year:1808,desc:'Yarı metal. Boraks binlerce yıldır kullanılır. Nükleer kontrol çubuğu.',history:'1808\'de Gay-Lussac ve Davy bağımsız olarak borlu bileşiklerden izole etti.',uses:['Nükleer kontrol çubukları','Borosilikat cam (Pyrex)','Boraks deterjanı','Yarı iletkenler'],bio:'Bitkilerde mikro element. Kemik sağlığında katkı.',notes:['Lewis asit özelliği','¹⁰B nötron absorber','B₄C çok sert (elmastan sonra)'],compounds:[{f:'B₂O₃',n:'Boron Trioksit',d:'Cam hammaddesi'},{f:'Na₂B₄O₇',n:'Boraks',d:'Deterjan; cam'}],iso:['¹⁰B (%19.9): nötron yakalama','¹¹B (%80.1): NMR'],fun:['Türkiye dünya boron rezervinin ~%70i','Pyrex 1915\'ten beri kullanımda','Boron nötron yakalama: kanser tedavisi']},
+6:{en:'Carbon',period:2,group:14,phase:'Katı',neg:2.55,density:'2.267',melt:3642,boil:3642,conf:'[He] 2s² 2p²',shells:'2|4',disc:'Antik çağlardan bilinir',year:null,desc:'Yaşamın temel elementi. 10 milyondan fazla organik bileşik. Elmas ve grafitin ana maddesi.',history:'Kömür antik çağlardan bilinir. 1772\'de Lavoisier elmasın karbon olduğunu kanıtladı.',uses:['Çelik (Fe-C alaşımı)','Karbon fiber','Elmas (kesici alet)','Aktif karbon filtre'],bio:'Tüm organik moleküllerin iskeleti. DNA, protein, lipid hepsi C tabanlı.',notes:['Allotroplar: elmas, grafit, fülleren, grafen','CO₂ sera gazı','¹⁴C radyokarbon tarihleme','4 kovalent bağ kurabilir'],compounds:[{f:'CO₂',n:'Karbondioksit',d:'Sera gazı; fotosentez'},{f:'CH₄',n:'Metan',d:'Doğalgaz'},{f:'C₆H₁₂O₆',n:'Glikoz',d:'Hücre enerjisi'}],iso:['¹²C (%98.9): atom kütlesi standardı','¹³C (%1.1): NMR','¹⁴C: T½=5730 yıl, tarihleme'],fun:['Elmas ve grafit aynı elementten','Grafen çelikten 200x sağlam','Vücudun %18.5i karbon']},
+7:{en:'Nitrogen',period:2,group:15,phase:'Gaz',neg:3.04,density:'0.001251',melt:-210.0,boil:-195.8,conf:'[He] 2s² 2p³',shells:'2|5',disc:'Daniel Rutherford',year:1772,desc:'Atmosferin %78i. Protein ve DNA nın temel N kaynağı.',history:'1772\'de Rutherford yanmaz hava olarak tanımladı. Lavoisier azote (cansız) adını verdi.',uses:['Haber prosesi (NH₃ gübre)','Sıvı N₂ (-196°C)','Patlayıcılar (TNT)','Elektronik inert atmosfer'],bio:'Amino asit ve nükleotid N kaynağı. Azot döngüsü ekosistem için kritik.',notes:['N≡N üçlü bağ: 946 kJ/mol','Sıvı N₂: -196°C','Haber-Bosch olmasa nüfus %40 az olurdu'],compounds:[{f:'NH₃',n:'Amonyak',d:'Gübre; soğutucu'},{f:'HNO₃',n:'Nitrik Asit',d:'Gübre; patlayıcı'},{f:'N₂O',n:'Güldürücü Gaz',d:'Anestezi'}],iso:['¹⁴N (%99.6)','¹⁵N (%0.4): izotop işaretleme'],fun:['Havanın %78i N₂','Sıvı N₂ kuru buzdan soğuktur','-196°C de anında dondurur']},
+8:{en:'Oxygen',period:2,group:16,phase:'Gaz',neg:3.44,density:'0.001429',melt:-218.3,boil:-183.0,conf:'[He] 2s² 2p⁴',shells:'2|6',disc:'Scheele & Priestley',year:1774,desc:'Yerkabuğunun en bol elementi (%46). Solunumun ve yanmanın vazgeçilmezi.',history:'1774\'de Priestley cıvalı oksit ısıtarak keşfetti. Lavoisier oksijen (asit doğuran) adını verdi.',uses:['Tıbbi oksijen','Çelik üretimi (BOF)','Roket oksidanı','Kesme-kaynak'],bio:'Aerobik solunum: C₆H₁₂O₆+6O₂→6CO₂+6H₂O+ATP.',notes:['Ozon O₃: UV filtresi','Paramagnetik','En elektronegatif 2. element (F>O)'],compounds:[{f:'H₂O',n:'Su',d:'Yaşam çözücüsü'},{f:'O₃',n:'Ozon',d:'UV filtresi'},{f:'Fe₂O₃',n:'Demir Oksit',d:'Pas'}],iso:['¹⁶O (%99.76)','¹⁸O (%0.20): paleoklimatik izotop'],fun:['Sıvı oksijen mavi renktedir','Fotosentez atmosfere O₂ sağlar','1700lerde phlogiston teorisini çürüttü']},
+9:{en:'Fluorine',period:2,group:17,phase:'Gaz',neg:3.98,density:'0.001696',melt:-219.6,boil:-188.1,conf:'[He] 2s² 2p⁵',shells:'2|7',disc:'Henri Moissan',year:1886,desc:'En elektronegatif element. Neredeyse tüm elementlerle tepkir.',history:'1886\'da Moissan HF elektrolizi ile izole etti. Nobel Ödülü 1906.',uses:['Diş macunu (NaF)','Teflon (PTFE)','Freonlar (soğutucu)','UF₆ uranyum zenginleştirme'],bio:'Florür diş minesini güçlendirir. Fazlası florozis yapar.',notes:['En elektronegatif element (3.98)','F₂ sarı-yeşil, toksik','HF çok tehlikeli; cama oyar','Altın ile bile tepkir'],compounds:[{f:'HF',n:'Hidroflorik Asit',d:'Cam oyma; tehlikeli'},{f:'NaF',n:'Sodyum Florür',d:'Diş macunu'},{f:'PTFE',n:'Teflon',d:'Yapışmaz kaplama'}],iso:['¹⁹F (%100): tek stabil — MRI kontrast'],fun:['Teflon uzay çağının materyali','Manhattan projesi UF₆ kullandı','Flor ile altın ve ksenon bile tepkir']},
+10:{en:'Neon',period:2,group:18,phase:'Gaz',neg:null,density:'0.0009',melt:-248.6,boil:-246.1,conf:'[He] 2s² 2p⁶',shells:'2|8',disc:'Ramsay & Travers',year:1898,desc:'Soy gaz. Kırmızı-turuncu neon tabela ışıkları ile tanınır.',history:'1898\'de Ramsay ve Travers sıvı havayı ayrıştırarak keşfetti. Neos (yeni) anlamında.',uses:['Neon tabelalar (kırmızı-turuncu)','He-Ne lazeri','Kriyojenik soğutucu','Plazma TV'],bio:'Biyolojik rolü yok.',notes:['Soy gaz; tepkimeye girmez','Kırmızı plazma: 616-640 nm','Havada 18 ppm'],compounds:[],iso:['²⁰Ne (%90.5)','²²Ne (%9.25)'],fun:['İlk neon reklam tabelası 1910 Paris','He-Ne lazeri 1960\'ta icat edildi','Havada 18 ppm neon var']},
+};
+
+
+// Part 2: elements 11-50
+Object.assign(EL_DATA, {
+11:{en:'Sodium',period:3,group:1,phase:'Katı',neg:0.93,density:'0.97',melt:97.8,boil:882.8,conf:'[Ne] 3s\u00b9',shells:'2|8|1',disc:'Humphry Davy',year:1807,desc:'Yumuşak alkali metal. Sinir iletiminin ve kan basıncının temel iyonu.',history:'1807 de Davy NaOH elektrolizi ile izole etti. Sodanum (baş ağrısı ilacı) Latince kökenli.',uses:['Sofra tuzu (NaCl)','Sodyum buharlı lamba (sarı ışık)','Kabartma tozu (NaHCO\u2083)','Sabun (NaOH)'],bio:'Na\u207a/K\u207a pompası sinir iletimi. Kan basıncı regülasyonu. Hücre dışı ana katyon.',notes:['2Na+2H\u2082O\u21922NaOH+H\u2082 (şiddetli)','Sarı alev: 589 nm','Doğada serbest bulunmaz'],compounds:[{f:'NaCl',n:'Sofra Tuzu',d:'Besin; buz eritici'},{f:'NaOH',n:'Kostik Soda',d:'Sabun yapımı'},{f:'NaHCO\u2083',n:'Kabartma Tozu',d:'Pişirme; mide ilacı'}],iso:['\u00b2\u00b3Na (%100): monoisotopik'],fun:['Günlük Na alımı ≤2300 mg (1 tsp tuz)','Na-K pompası saniyede yüzlerce çalışır','Sarı lamba ışığı Na buharından']},
+12:{en:'Magnesium',period:3,group:2,phase:'Katı',neg:1.31,density:'1.738',melt:650,boil:1091,conf:'[Ne] 3s\u00b2',shells:'2|8|2',disc:'Joseph Black / Davy',year:1755,desc:'Hafif metal. Klorofil molekülünün merkezi; 300+ enzimin kofaktörü.',history:'1755 de Black ayırt etti. 1808 de Davy elektrolizle izole etti. Yunan Magnesia bölgesinden.',uses:['Hafif alaşımlar (uçak, EV)','Parlak beyaz fişek (3000\u00b0C)','Mg(OH)\u2082 mide ilacı','Klorofil sentezi'],bio:'Klorofil merkez atomu. ATP-Mg\u00b2\u207a kompleksi. 300+ enzim kofaktörü.',notes:['Parlak beyaz alev (3000\u00b0C)','Mg yangınını su/CO\u2082 ile söndürme!','Kum veya özel toz kullan'],compounds:[{f:'MgO',n:'Magnezyum Oksit',d:'Refrakter; izolasyon'},{f:'Mg(OH)\u2082',n:'Milk of Magnesia',d:'Mide ilacı; laksatif'},{f:'MgSO\u2084',n:'Epsom Tuzu',d:'Banyo tuzu'}],iso:['\u00b2\u2074Mg (%79.0)','\u00b2\u2075Mg (%10.0)','\u00b2\u2076Mg (%11.0)'],fun:['Her klorofil molekülünde 1 Mg atom','Vücutta ~25 g magnezyum','Mg-Al alaşımı: laptop kasası']},
+13:{en:'Aluminum',period:3,group:13,phase:'Katı',neg:1.61,density:'2.70',melt:660.3,boil:2519,conf:'[Ne] 3s\u00b2 3p\u00b9',shells:'2|8|3',disc:'Ørsted',year:1825,desc:'Yerkabuğunun en bol metali (~%8.1). Amfoterik. Hall-Héroult prosesi ile ucuzladı.',history:'1825 de Ørsted kirli Al elde etti. 1886 da Hall-Héroult prosesi fiyatı dramatik düşürdü.',uses:['Ambalaj (kutu, folyo)','Uçak gövdesi','Elektrik iletim hattı','Termit reaksiyonu'],bio:'Bilinen biyolojik rolü yok. Yüksek dozda toksik.',notes:['Al(OH)\u2083 amfoterik','2Al+Fe\u2082O\u2083\u2192Al\u2082O\u2083+2Fe ΔH=-852 kJ/mol','Al\u2082O\u2083 koruyucu tabaka'],compounds:[{f:'Al\u2082O\u2083',n:'Alumina',d:'Safir/yakut; zımpara'},{f:'Al(OH)\u2083',n:'Alüminyum Hidroksit',d:'Antasit; amfoterik'},{f:'AlCl\u2083',n:'Alüminyum Klorür',d:'Lewis asit katalizörü'}],iso:['\u00b2\u2077Al (%100): monoisotopik'],fun:['Washington Anıtı tepesi Al (1884)','Geri dönüşüm %95 enerji tasarrufu','19.yy da altından daha değerliydi']},
+14:{en:'Silicon',period:3,group:14,phase:'Katı',neg:1.90,density:'2.329',melt:1414,boil:3265,conf:'[Ne] 3s\u00b2 3p\u00b2',shells:'2|8|4',disc:'Berzelius',year:1824,desc:'Yarı metal. Modern elektroniğin temeli; Silikon Vadisi ne adını verdi.',history:'1824 de Berzelius SiF\u2084 indirgeyerek izole etti. Latince silex (çakmaktaşı) kökenli.',uses:['Mikroçip ve transistörler','Güneş pilleri','Cam ve seramik','Silikon polimer'],bio:'Bitkilerde yapısal destek. İnsanda eser miktarda doku güçlendirici.',notes:['Yarı iletken: bant aralığı 1.12 eV','SiO\u2082 yerkabuğunun en bol bileşiği','Bir çipte milyar transistör'],compounds:[{f:'SiO\u2082',n:'Silisyum Dioksit',d:'Kum; cam; kuvars'},{f:'SiC',n:'Silisyum Karbür',d:'Zımpara; güç elektroniği'}],iso:['\u00b2\u2078Si (%92.2)','\u00b2\u2079Si (%4.7)','\u00b3\u2070Si (%3.1)'],fun:['Silikon Vadisi adı Si den geliyor','Bir nano-çipte 10\u00b9\u2070 transistör','En saf Si: 10\u207b\u00b9\u00b2 safsızlık seviyesi']},
+15:{en:'Phosphorus',period:3,group:15,phase:'Katı',neg:2.19,density:'1.823',melt:44.2,boil:280.5,conf:'[Ne] 3s\u00b2 3p\u00b3',shells:'2|8|5',disc:'Hennig Brand',year:1669,desc:'DNA, ATP ve kemiklerin temel bileşeni. Modern kimyada ilk keşfedilen element.',history:'1669 da Brand idrardan parlayan madde izole etti — modern kimyada ilk keşfedilen element.',uses:['Fosfat gübresi','Kibrit (kırmızı P)','Deterjan','Organofosfat pestisit'],bio:'DNA iskelet (fosfat). ATP hücresel enerji. Kemik: Ca\u2083(PO\u2084)\u2082. Fosfolipid zar.',notes:['Beyaz P: toksik, hava ile tutuşur','Kırmızı P: stabil (kibrit)','H\u2083PO\u2084: zayıf üçlü asit'],compounds:[{f:'H\u2083PO\u2084',n:'Fosforik Asit',d:'Gübre; kola içeceği'},{f:'Ca\u2083(PO\u2084)\u2082',n:'Kalsiyum Fosfat',d:'Kemik minerali'}],iso:['\u00b3\u00b9P (%100): monoisotopik'],fun:['İdrardan keşfedilen element (1669)','DNA nın omurgası fosfat','Kibriti fosforsuz yapmak imkânsızdı']},
+16:{en:'Sulfur',period:3,group:16,phase:'Katı',neg:2.58,density:'2.067',melt:115.2,boil:444.6,conf:'[Ne] 3s\u00b2 3p\u2074',shells:'2|8|6',disc:'Antik çağlardan bilinir',year:null,desc:'Sarı, kokulu ametal. H\u2082SO\u2084 dünyanın en çok üretilen kimyasalı.',history:'Yangın ve kükürt olarak antik çağlardan bilinir. Volkanik bölgelerde saf hâlde.',uses:['H\u2082SO\u2084 üretimi (sanayi kimyası)','Vulkanizasyon (kauçuk)','Fungisit ve pestisit','Barut'],bio:'Sistein ve metionin amino asitlerinde. Disülfid bağı (S-S) protein yapısını stabilize eder.',notes:['H\u2082SO\u2084 en çok üretilen kimyasal','S\u2088 halkalı molekül (katı hâl)','SO\u2082 asit yağmuru kaynağı','H\u2082S: yumurta kokusu'],compounds:[{f:'H\u2082SO\u2084',n:'Sülfürik Asit',d:'En önemli sanayi kimyasalı'},{f:'SO\u2082',n:'Kükürt Dioksit',d:'Asit yağmuru'}],iso:['\u00b3\u00b2S (%95.0)','\u00b3\u2074S (%4.25)'],fun:['Yılda 250 Mt H\u2082SO\u2084 üretilir','Sarımsak organosülfür bileşiklerinden kokuyor','Volkanik bölgelerde saf S bulunur']},
+17:{en:'Chlorine',period:3,group:17,phase:'Gaz',neg:3.16,density:'0.003214',melt:-101.5,boil:-34.0,conf:'[Ne] 3s\u00b2 3p\u2075',shells:'2|8|7',disc:'Carl Wilhelm Scheele',year:1774,desc:'Sarı-yeşil zehirli gaz. Su dezenfeksiyonu ve PVC üretiminde kritik.',history:'1774 de Scheele MnO\u2082+HCl ile üretti. Davy 1810 da element olduğunu kanıtladı.',uses:['Su dezenfeksiyonu','PVC üretimi','Kağıt ağartma','Çamaşır suyu (NaOCl)'],bio:'Cl\u207b osmotik denge. HCl mide asidi.',notes:['Cl\u2082: sarı-yeşil, keskin koku','CFC ler ozon tabakasını yıkıyor','Havuz kokusu Cl\u2082 değil kloramindir'],compounds:[{f:'NaCl',n:'Sofra Tuzu',d:'Besin; fizyoloji'},{f:'HCl',n:'Hidroklorik Asit',d:'Mide asidi; sanayi'},{f:'PVC',n:'Polivinil Klorür',d:'Boru; ambalaj'}],iso:['\u00b3\u2075Cl (%75.8)','\u00b3\u2077Cl (%24.2)'],fun:['WW1 de ilk kimyasal silah','Tüm içme sularının %95 i Cl ile dezenfekte','PVC dünya plastik üretiminin %3 ü']},
+18:{en:'Argon',period:3,group:18,phase:'Gaz',neg:null,density:'0.001784',melt:-189.3,boil:-185.8,conf:'[Ne] 3s\u00b2 3p\u2076',shells:'2|8|8',disc:'Rayleigh & Ramsay',year:1894,desc:'Atmosferin 3. en bol gazı (%0.93). Kaynak koruması ve lamba dolgu gazı.',history:'1894 de atmosfer N\u2082 ile saf N\u2082 arasındaki yoğunluk farkından keşfetti. Argos (tembel).',uses:['Kaynak koruyucu gaz (TIG/MIG)','Akkor lamba dolgu gazı','Ar-iyon lazeri','Çift cam yalıtım gazı'],bio:'Biyolojik rolü yok.',notes:['Havada %0.93','Soy gaz; tepkimeye girmez','\u2074\u2070Ar K bozunmasından oluşur'],compounds:[],iso:['\u2074\u2070Ar (%99.6): K-Ar yaş tayini'],fun:['Ampullerin çoğu Ar ile dolu','Çift cam Ar veya Kr içerir','K\u2192Ar bozunması: jeolojik tarihleme']},
+19:{en:'Potassium',period:4,group:1,phase:'Katı',neg:0.82,density:'0.862',melt:63.5,boil:759,conf:'[Ar] 4s\u00b9',shells:'2|8|8|1',disc:'Humphry Davy',year:1807,desc:'Hücre içi sıvının ana katyonu. Kas kasılması ve kalp ritminin temel elementi.',history:'1807 de Davy KOH elektrolizi ile izole etti. Arapça potash (bitki külü) kökenli.',uses:['KCl gübresi','Barut (KNO\u2083)','KOH sıvı sabun','Gıda katkısı (KCl)'],bio:'Hücre içi ana katyon (140 mEq/L). Na-K pompası. Kalp ritmi ve kas kasılması.',notes:['Su ile şiddetli tepkir','Mor alev rengi: 766 nm','Hipokalemi: kas zayıflığı','Hiperkalemi: kalp aritmisi'],compounds:[{f:'KCl',n:'Potasyum Klorür',d:'Gübre; tuz alternatifi'},{f:'KOH',n:'Potasyum Hidroksit',d:'Sıvı sabun'},{f:'KNO\u2083',n:'Potasyum Nitrat',d:'Barut; gübre'}],iso:['\u00b3\u2079K (%93.3)','\u2074\u2070K (%0.012): T½=1.28 Gy, K-Ar tarihleme'],fun:['Muz: 422 mg K','\u2074\u2070K insan vücudunda doğal radyasyon','Günlük gereksinim 3500 mg']},
+20:{en:'Calcium',period:4,group:2,phase:'Katı',neg:1.00,density:'1.54',melt:841.9,boil:1484,conf:'[Ar] 4s\u00b2',shells:'2|8|8|2',disc:'Humphry Davy',year:1808,desc:'İnsan vücudunun en bol minerali (~1 kg). Kemik, diş ve sinir iletiminin temeli.',history:'Kireçtaşı ve alçı binlerce yıldır kullanılır. 1808 de Davy erimiş CaO elektrolizi ile izole etti. Calcium adı Latince calx (yanmış kireç) sözcüğünden gelir.',uses:['Çimento (Portland)','Çelik üretimi (safsızlık giderici)','Su arıtma Ca(OH)\u2082','Kalsiyum takviyesi'],bio:'İnsan vücudunun en bol minerali (~1 kg). Kemik/diş: hidroksiapatit. Ca\u00b2\u207a kas kasılması ve kan pıhtılaşması.',notes:['CaCO\u2083\u2192CaO+CO\u2082 (850\u00b0C, ısıl bozunma)','Alev testi: tuğla kırmızısı (616-643 nm)','Ca(OH)\u2082+CO\u2082\u2192CaCO\u2083+H\u2082O','Su sertliği: Ca\u00b2\u207a ve Mg\u00b2\u207a iyonları'],compounds:[{f:'CaCO\u2083',n:'Kireçtaşı/Mermer',d:'Antasit; yapı malzemesi'},{f:'CaO',n:'Sönmemiş Kireç',d:'Çimento; çelik'},{f:'Ca(OH)\u2082',n:'Sönmüş Kireç',d:'İnşaat harcı; su arıtma'},{f:'CaSO\u2084',n:'Alçıtaşı',d:'İnşaat alçısı; diş kalıbı'}],iso:['\u2074\u2070Ca (%96.94): \u2074\u2070K\u2192\u2074\u2070Ca bozunması','\u2074\u2074Ca (%2.09): izotop izleyici'],fun:['~%3.6 yerkabuğunda 5. bol element','CaCO\u2083+CO\u2082+H\u2082O\u21e8Ca(HCO\u2083)\u2082: mağara oluşumu','Günlük gereksinim 1000 mg (yetişkin)']},
+21:{en:'Scandium',period:4,group:3,phase:'Katı',neg:1.36,density:'2.989',melt:1541,boil:2836,conf:'[Ar] 3d\u00b9 4s\u00b2',shells:'2|8|9|2',disc:'Lars Fredrik Nilson',year:1879,desc:'İlk geçiş metali. Al-Sc alaşımı çok hafif ve dayanıklı.',history:'1879 da Nilson euxenitte keşfetti. Mendeleyev in öngördüğü ekaboron.',uses:['Al-Sc alaşımı (spor ekipmanı)','Yüksek yoğunluklu Sc-Na lambası','Lazer kristalleri','Yakıt hücreleri'],bio:'Biyolojik rolü yok.',notes:['Hafif geçiş metali (2.99 g/cm\u00b3)','Mendeleyev 1871 de varlığını öngördü'],compounds:[{f:'Sc\u2082O\u2083',n:'Skandiyum Oksit',d:'Seramik; lazer'}],iso:['\u2074\u2075Sc (%100): monoisotopik'],fun:['Dünya yıllık üretimi: ~15 ton','Al-Sc alaşımı MiG uçaklarında','Nadir ama az değil: Ce den bol']},
+22:{en:'Titanium',period:4,group:4,phase:'Katı',neg:1.54,density:'4.506',melt:1668,boil:3287,conf:'[Ar] 3d\u00b2 4s\u00b2',shells:'2|8|10|2',disc:'William Gregor',year:1791,desc:'Hafif, güçlü, korozyona dayanıklı metal. Biyouyumlu; kemik implantı.',history:'1791 de Gregor ilmenit mineralinde keşfetti. Adı Yunan Titanlar dan geliyor.',uses:['Havacılık alaşımları (F-22)','Kemik ve diş implantı','TiO\u2082 beyaz boya','Deniz altı ekipmanı'],bio:'Biyouyumlu — kemikle kaynaşır. İmplant malzemesi.',notes:['Çeliğe göre %45 hafif ama eşit güçlü','TiO\u2082: en beyaz pigment','Tuzlu suya dayanıklı'],compounds:[{f:'TiO\u2082',n:'Titanyum Dioksit',d:'Beyaz boya; güneş kremi'},{f:'TiCl\u2084',n:'Titanyum Tetraklorür',d:'Polipropilen katalizörü'}],iso:['\u2074\u2078Ti (%73.7): en bol izotop'],fun:['İnsan vücudu Ti implantı reddetmiyor','Uzay roketlerinin %36 sı Ti','Güneş kremindeki TiO\u2082 UV yansıtır']},
+23:{en:'Vanadium',period:4,group:5,phase:'Katı',neg:1.63,density:'6.0',melt:1910,boil:3407,conf:'[Ar] 3d\u00b3 4s\u00b2',shells:'2|8|11|2',disc:'Andrés del Río & Sefström',year:1831,desc:'Çelik alaşımlarında güç verici. Vanadyum redoks pili enerji depolama.',history:'1801 de del Río Meksika da keşfetti, 1831 de Sefström bağımsız keşfetti. İskandinav tanrıçası Vanadis ten.',uses:['Çelik alaşımı (yüksek güç)','Vanadyum redoks pili','Ti-V alaşımı (uzay)','Kataliz (H\u2082SO\u2084 üretimi)'],bio:'Deniz tunikalarında yüksek konsantrasyon.',notes:['V\u2082O\u2075 SO\u2082\u2192SO\u2083 katalizörü','Vanadyum redoks pili şebeke enerjisi depolar'],compounds:[{f:'V\u2082O\u2075',n:'Vanadyum Pentoksit',d:'Kataliz; cam'}],iso:['\u2075\u00b9V (%99.75)'],fun:['Vanadyum redoks pili şebeke enerjisi depolar','Çelik köprülerde V alaşımı standart','Deniz salyangozu kanı mavi (V içerir)']},
+24:{en:'Chromium',period:4,group:6,phase:'Katı',neg:1.66,density:'7.19',melt:1907,boil:2671,conf:'[Ar] 3d\u2075 4s\u00b9',shells:'2|8|13|1',disc:'Louis Nicolas Vauquelin',year:1798,desc:'Paslanmaz çeliğin temel alaşım elementi. Krom kaplama parlak ve koruyucu.',history:'1798 de Vauquelin krokoit mineralinde keşfetti. Yunanca chroma (renk) — çeşitli renkli bileşikler.',uses:['Paslanmaz çelik (%18 Cr)','Krom kaplama','Boyar madde (Cr\u2082O\u2083 yeşil)','Deri tabaklanması'],bio:'Cr\u00b3\u207a glikoz tolerans faktörü. Cr\u2076\u207a kanserojen.',notes:['Cr\u2076\u207a: kanserojen (CrO\u2083)','Paslanmaz çelik: Fe+Cr+Ni'],compounds:[{f:'Cr\u2082O\u2083',n:'Krom Oksit',d:'Yeşil pigment; zımpara'},{f:'K\u2082Cr\u2082O\u2087',n:'Potasyum Dikromat',d:'Oksitleyici; boyar madde'}],iso:['\u2075\u00b2Cr (%83.8)'],fun:['Zümrüt yeşili Cr\u00b3\u207a iyonundan','Paslanmaz çelik 1913 te keşfedildi','Krom kaplama 1920 lerden beri popüler']},
+25:{en:'Manganese',period:4,group:7,phase:'Katı',neg:1.55,density:'7.21',melt:1246,boil:2061,conf:'[Ar] 3d\u2075 4s\u00b2',shells:'2|8|13|2',disc:'Johan Gottlieb Gahn',year:1774,desc:'Çelik üretiminin vazgeçilmezi. Klorofil sentezi ve enerji metabolizması.',history:'1774 de Gahn pirolusit mineralinden izole etti. Magnesia dan türeyen isim.',uses:['Çelik alaşımı (darbe direnci)','Mn pil (kuru pil katodu)','MnO\u2082 oksitleyici','Cam renk giderici'],bio:'Mn\u00b2\u207a enzim kofaktörü (süperoksit dismutaz). Kemik oluşumu.',notes:['Çelik üretiminde S ve O giderici','MnO\u2082+HCl\u2192Cl\u2082 (Scheele nin yöntemi)'],compounds:[{f:'MnO\u2082',n:'Manganez Dioksit',d:'Pil katodu; oksitleyici'},{f:'KMnO\u2084',n:'Potasyum Permanganat',d:'Dezenfektan; mor renk'}],iso:['\u2075\u2075Mn (%100): monoisotopik'],fun:['Derin deniz yumruları Mn dan zengin','Kuru pilin siyah maddesi MnO\u2082','KMnO\u2084 su arıtmada dezenfektan']},
+26:{en:'Iron',period:4,group:8,phase:'Katı',neg:1.83,density:'7.874',melt:1538,boil:2861,conf:'[Ar] 3d\u2076 4s\u00b2',shells:'2|8|14|2',disc:'Antik çağlardan bilinir',year:null,desc:'Uygarlığın temel metali. Yerkabuğunun 4. en bol elementi. Hemoglobinin merkezi.',history:'Meteorik demir MÖ 4000 den beri. Hitit demirciliği MÖ 1500. Demir Çağı MÖ 1200.',uses:['Çelik üretimi (%96)','İnşaat (kiriş, köprü)','Hemoglobin (O\u2082 taşıma)','Elektrik motoru'],bio:'Hemoglobin Fe\u00b2\u207a O\u2082 taşır. Mitokondri elektron zinciri. Fe eksikliği: anemi.',notes:['Fe+Cr+Ni=paslanmaz çelik','Ferromanyetik: mıknatıslanır','4Fe+3O\u2082+6H\u2082O\u21924Fe(OH)\u2083 (pas)'],compounds:[{f:'Fe\u2082O\u2083',n:'Demir(III) Oksit',d:'Pas; kırmızı pigment'},{f:'Fe\u2083O\u2084',n:'Manyetit',d:'Doğal mıknatıs'},{f:'FeSO\u2084',n:'Demir(II) Sülfat',d:'Demir vitamini'}],iso:['\u2075\u2076Fe (%91.75): en stabil çekirdek'],fun:['Dünya çekirdeğinin %85 i Fe-Ni','Demir Çağı MÖ 1200 de başladı','Vücutta ~4 g demir; %70 i hemoglobinde']},
+27:{en:'Cobalt',period:4,group:9,phase:'Katı',neg:1.88,density:'8.90',melt:1495,boil:2927,conf:'[Ar] 3d\u2077 4s\u00b2',shells:'2|8|15|2',disc:'Georg Brandt',year:1735,desc:'Mavi rengin kaynağı. Li-iyon pil katodu ve süper alaşımlar.',history:'1735 de Brandt kobalt cevherinden izole etti. Almanca kobold (cin) — madenciler bu cevherden zarar görürdü.',uses:['Li-iyon pil katodu (LiCoO\u2082)','Süper alaşımlar (jet motoru)','Kobalt mavisi boya','\u2076\u2070Co radyasyon tedavisi'],bio:'B\u2081\u2082 vitamini (kobalamin) merkezi atomu. Hematopoez için kritik.',notes:['\u2076\u2070Co: güçlü gama kaynak (kanser radyoterapisi)','Kobalt mavisi: CoAl\u2082O\u2084','DRC de dünya Co üretiminin %70 i'],compounds:[{f:'CoO',n:'Kobalt Oksit',d:'Mavi porselen; cam'},{f:'CoCl\u2082',n:'Kobalt Klorür',d:'Nem göstergesi (pembe\u2194mavi)'}],iso:['\u2075\u2079Co (%100): monoisotopik','\u2076\u2070Co: T½=5.27 yıl, radyoterapi'],fun:['B\u2081\u2082 vitamini Cobalt içerir (kobalamin)','CoCl\u2082 silika jel renk göstergesi','Co DRC çocuk işçiliği tartışması']},
+28:{en:'Nickel',period:4,group:10,phase:'Katı',neg:1.91,density:'8.908',melt:1455,boil:2913,conf:'[Ar] 3d\u2078 4s\u00b2',shells:'2|8|16|2',disc:'Axel Fredrik Cronstedt',year:1751,desc:'Korozyona dirençli. Paslanmaz çelik ve piller için kritik.',history:'1751 de Cronstedt nikelin bakır olmadığını kanıtladı. Kupfernickel (bakırcı şeytan) adı madencilerden.',uses:['Paslanmaz çelik','Nikel-kadmiyum pil','Nikel kaplama','Süper alaşımlar (türbin)'],bio:'Bazı bitki ve bakterilerde enzim kofaktörü. Ni alerjisi yaygın.',notes:['Ni alerjisi çok yaygın','Ni+CO\u2192Ni(CO)\u2084: Mond prosesi'],compounds:[{f:'NiO',n:'Nikel Oksit',d:'Seramik; pil elektrodu'},{f:'Ni(CO)\u2084',n:'Nikel Karbonil',d:'Çok zehirli; Mond saflaştırma'}],iso:['\u2075\u2078Ni (%68.1)','\u2076\u2070Ni (%26.2)'],fun:['ABD 5 sentlik paraya nickel denir','Mond prosesi çok saf Ni üretir','Dünya Ni rezervinin %40 ı Rusya da']},
+29:{en:'Copper',period:4,group:11,phase:'Katı',neg:1.90,density:'8.96',melt:1084.6,boil:2562,conf:'[Ar] 3d\u00b9\u2070 4s\u00b9',shells:'2|8|18|1',disc:'Antik çağlardan bilinir',year:null,desc:'İnsanlığın ilk işlediği metal. En iyi elektrik iletkenlerinden.',history:'MÖ 9000 den beri kullanılıyor. Bakır Çağı ve Tunç Çağı (Cu-Sn) uygarlığı şekillendirdi.',uses:['Elektrik kablosu (%65)','Boru ve ısıtma','Tunç (Cu-Sn) ve pirinç (Cu-Zn)','Antibakteriyal yüzey'],bio:'Enzim kofaktörü (sitokrom c oksidaz). Fe emilimi için gerekli.',notes:['2. iletken (Ag den sonra)','Patina: Cu\u2082(OH)\u2082CO\u2083 (yeşil koruma tabakası)'],compounds:[{f:'CuSO\u2084',n:'Bakır Sülfat',d:'Fungisit; mavi renk'},{f:'CuO',n:'Bakır Oksit',d:'Siyah pigment'}],iso:['\u2076\u00b3Cu (%69.2)','\u2076\u2075Cu (%30.9)'],fun:['Özgürlük Heykeli 80 ton Cu dan yapılı','Cu kapı kolları bakterileri 2 saatte öldürür','Bakır MÖ 9000 den beri kullanılıyor']},
+30:{en:'Zinc',period:4,group:12,phase:'Katı',neg:1.65,density:'7.133',melt:419.5,boil:907,conf:'[Ar] 3d\u00b9\u2070 4s\u00b2',shells:'2|8|18|2',disc:'Andreas Sigismund Marggraf',year:1746,desc:'Galvanizasyonla çeliği paslanmadan korur. Vücudun 2. en bol iz metali.',history:'1746 da Marggraf Almanya da izole etti. Çinko kelimesi Almanca Zinke (çatal dişi) kökenli.',uses:['Galvanizasyon (çelik kaplayıcı)','Pirinç alaşımı (Cu-Zn)','Çinko krem (güneş koruma)','Pil anodu'],bio:'300+ enzim kofaktörü. Bağışıklık sistemi. İnsülin depolama.',notes:['Zn+2HCl\u2192ZnCl\u2082+H\u2082','Galvanizasyon: erimiş Zn a daldırma'],compounds:[{f:'ZnO',n:'Çinko Oksit',d:'Güneş kremi; bebek kremi'},{f:'ZnS',n:'Çinko Sülfür',d:'Fosfor; X-ışını ekranı'}],iso:['\u2076\u2074Zn (%48.6)','\u2076\u2076Zn (%27.9)'],fun:['Dünyada yılda ~13 Mt Zn üretilir','Çinko eksikliği: 2 milyar kişi riski altında','Galvanize boru 50+ yıl paslanmaz']},
+31:{en:'Gallium',period:4,group:13,phase:'Katı',neg:1.81,density:'5.91',melt:29.8,boil:2204,conf:'[Ar] 3d\u00b9\u2070 4s\u00b2 4p\u00b9',shells:'2|8|18|3',disc:'Paul Lecoq de Boisbaudran',year:1875,desc:'Avuç içinde eriyen metal. LED ve güneş pili yarı iletkenlerinin temeli.',history:'1875 de Lecoq keşfetti. Mendeleyev in ekaalüminyum tahmini doğrulandı.',uses:['GaAs: LED ve lazer diyot','GaN: mavi LED (Nobel 2014)','CIGS güneş pilleri','Yüksek sıcaklık termometre'],bio:'Biyolojik rolü yok.',notes:['Erime noktası 29.8\u00b0C — avuçta erir','GaAs: yüksek hızlı mikroçip'],compounds:[{f:'GaAs',n:'Galyum Arsenür',d:'LED; lazer; güneş pili'},{f:'GaN',n:'Galyum Nitrür',d:'Mavi LED; güç elektroniği'}],iso:['\u2076\u2079Ga (%60.1)','\u2077\u00b9Ga (%39.9)'],fun:['Avuç sıcağıyla eriyen metal','Mavi LED Nobel 2014 (GaN)','LED aydınlatma Ga olmadan olmaz']},
+32:{en:'Germanium',period:4,group:14,phase:'Katı',neg:2.01,density:'5.323',melt:938.3,boil:2833,conf:'[Ar] 3d\u00b9\u2070 4s\u00b2 4p\u00b2',shells:'2|8|18|4',disc:'Clemens Winkler',year:1886,desc:'Yarı metal. Fiber optik ve kızılötesi optik. İlk transistör malzemesi.',history:'1886 da Winkler arjirodit mineralinde buldu. Mendeleyev in 1871 ekasilikon tahminini doğruladı.',uses:['Fiber optik kablosu','Kızılötesi optik (gece görüş)','Transistör (ilk BJT)','PET tarama dedektörü'],bio:'Biyolojik rolü belirsiz.',notes:['Mendeleyev ekasilikon 1871 de öngördü','İlk transistör 1947: Ge','Kızılötesi ışığa şeffaf'],compounds:[{f:'GeO\u2082',n:'Germanyum Oksit',d:'Fiber optik; katalizör'}],iso:['\u2077\u2074Ge (%36.7): en bol'],fun:['İlk transistör 1947 de Ge den yapıldı','Mendeleyev 15 yıl önceden öngördü','Fiber optik kabloda Ge dopant']},
+33:{en:'Arsenic',period:4,group:15,phase:'Katı',neg:2.18,density:'5.727',melt:817,boil:614,conf:'[Ar] 3d\u00b9\u2070 4s\u00b2 4p\u00b3',shells:'2|8|18|5',disc:'Albertus Magnus',year:1250,desc:'Zehirli yarı metal. Tarihsel zehir; günümüzde yarı iletken katkı maddesi.',history:'~1250 de Albertus Magnus elementel As izole etti. Kraliçe zehiri — tespiti zordur.',uses:['GaAs yarı iletken katkı','Böcek öldürücü (tarihsel)','Cam üretimi','Odun koruyucu (CCA)'],bio:'Çok toksik. As\u2082O\u2083 tarihte zehir. Kronik maruziyet: cilt, akciğer, karaciğer kanseri.',notes:['As\u2082O\u2083 kraliçe zehiri','Tatlı suda As kontaminasyonu (Bangladeş)','As trioksit: lösemi ilacı'],compounds:[{f:'As\u2082O\u2083',n:'Arsenik Trioksit',d:'Zehir; lösemi ilacı'},{f:'GaAs',n:'Galyum Arsenür',d:'Yarı iletken'}],iso:['\u2077\u2075As (%100): monoisotopik'],fun:['Napolyon arsenikle mi zehirlendi? (tartışmalı)','Bangladeş te 70 milyon kişi As li suya maruz','As trioksit APL lösemisini tedavi ediyor']},
+34:{en:'Selenium',period:4,group:16,phase:'Katı',neg:2.55,density:'4.809',melt:220.8,boil:685,conf:'[Ar] 3d\u00b9\u2070 4s\u00b2 4p\u2074',shells:'2|8|18|6',disc:'Jöns Jacob Berzelius',year:1817,desc:'Fotovoltaik ve antioksidan enzimlerin temel elementi.',history:'1817 de Berzelius sülfürik asit üretiminde atık olarak keşfetti. Ay tanrıçası Selene den.',uses:['Fotovoltaik hücreler','Cam renklendirme (kırmızı)','Lazer yazıcı toner','Dandruff şampuanı'],bio:'Glutatyon peroksidaz antioksidan kofaktörü. Tiroid hormonu metabolizması.',notes:['Işığa duyarlı (fotovoltaik)','Fazlası toksik (selenozis)','Sarımsak kokusu: Se bileşikleri'],compounds:[{f:'SeO\u2082',n:'Selenyum Dioksit',d:'Cam; organik sentez'}],iso:['\u2078\u2070Se (%49.6): en bol'],fun:['Keshan hastalığı: Se eksikliği','Xerografi (fotokopi) Se filmden başladı','Se: toprak koşullarına göre yeterli/toksik']},
+35:{en:'Bromine',period:4,group:17,phase:'Sıvı',neg:2.96,density:'3.102',melt:-7.2,boil:58.8,conf:'[Ar] 3d\u00b9\u2070 4s\u00b2 4p\u2075',shells:'2|8|18|7',disc:'Antoine Balard & Carl Löwig',year:1826,desc:'Oda sıcaklığında sıvı olan iki elementten biri. Keskin kokulu kırmızı-kahve sıvı.',history:'1826 da Balard deniz suyundan, Löwig bağımsız olarak keşfetti. Bromos (kötü koku) anlamında.',uses:['Yangın geciktirici (polimer)','AgBr fotoğraf filmi','İlaç sentezi','Deniz suyu desalinizasyon'],bio:'Br\u207b hayvan dokularında yaygın. Yüksek doz: nörotoksik.',notes:['Oda sıcaklığında sıvı iki elementten biri (diğeri: Hg)','Keskin, zehirli buhar'],compounds:[{f:'AgBr',n:'Gümüş Bromür',d:'Fotoğraf filmi'},{f:'NaBr',n:'Sodyum Bromür',d:'Sedasyon; epilepsi'}],iso:['\u2077\u2079Br (%50.7)','\u2078\u00b9Br (%49.3)'],fun:['Oda sıcaklığında sıvı: Br ve Hg','Fotoğraf filmi yüz yıl AgBr kullandı','Okyanus yanı sahiller brom buharı içerir']},
+36:{en:'Krypton',period:4,group:18,phase:'Gaz',neg:null,density:'0.003733',melt:-157.4,boil:-153.4,conf:'[Ar] 3d\u00b9\u2070 4s\u00b2 4p\u2076',shells:'2|8|18|8',disc:'Ramsay & Travers',year:1898,desc:'Soy gaz. Floresan lambalarda ve lazer teknolojisinde kullanılır.',history:'1898 de Ramsay ve Travers sıvı havadan ayrıştırdı. Kryptos (gizli) anlamında.',uses:['Floresan lamba (Kr-F lazeri)','Çift cam yalıtım','Fotoğraf flaşı','Nükleer reaktör izleme'],bio:'Biyolojik rolü yok.',notes:['Soy gaz; neredeyse tepkimez','Kr-F: ultraviyole excimer lazeri'],compounds:[{f:'KrF\u2082',n:'Kripton Diflorür',d:'En stabil Kr bileşiği'}],iso:['\u2078\u2074Kr (%57.0): en bol'],fun:['Süperman ın zayıf noktası kriptonit','Excimer lazeri LASIK gözlük ameliyatı','Havada 1 ppm krypton var']},
+37:{en:'Rubidium',period:5,group:1,phase:'Katı',neg:0.82,density:'1.532',melt:39.3,boil:688,conf:'[Kr] 5s\u00b9',shells:'2|8|18|8|1',disc:'Bunsen & Kirchhoff',year:1861,desc:'Çok reaktif alkali metal. Atom saatlerinin ve lazer soğutmanın temeli.',history:'1861 de Bunsen ve Kirchhoff spektroskopi ile keşfetti. Rubidus (derin kırmızı) renkli spektral çizgisi.',uses:['Rubidyum atom saati','Lazer soğutma (BEC araştırması)','Fotoelektrik hücre','GPS senkronizasyonu'],bio:'Biyolojik rolü yok.',notes:['39.3\u00b0C de erir — neredeyse oda sıcaklığı','Su ile şiddetli tepkir','\u2078\u2077Rb\u2192\u2078\u2077Sr bozunması: yaş tayini'],compounds:[{f:'RbCl',n:'Rubidyum Klorür',d:'Araştırma; elektrokimya'}],iso:['\u2078\u2075Rb (%72.2)','\u2078\u2077Rb (%27.8): T½=49 Gy, Rb-Sr yaş tayini'],fun:['Atom saati doğruluğu: 10\u207b\u00b9\u2075 s','Bose-Einstein yoğuşması 1995 te Rb ile','GPS uyduları Rb atom saati taşır']},
+38:{en:'Strontium',period:5,group:2,phase:'Katı',neg:0.95,density:'2.64',melt:777,boil:1382,conf:'[Kr] 5s\u00b2',shells:'2|8|18|8|2',disc:'Adair Crawford',year:1790,desc:'Kırmızı havai fişeğin rengi. Radyoaktif \u2079\u2070Sr nükleer silah ürünü.',history:'1790 da Crawford İskoçya Strontian köyünde keşfetti. 1808 de Davy elektrolizle izole etti.',uses:['Kırmızı havai fişek (SrCO\u2083)','CRT ekran cam','MRI kontrast','\u2079\u2070Y radyoterapi (\u2079\u2070Sr bozunması)'],bio:'Ca\u00b2\u207a benzerliği: kemiklere birikir. \u2079\u2070Sr nükleer yağış; kemik kanseri riski.',notes:['Kırmızı alev rengi (640-700 nm)','\u2079\u2070Sr nükleer silah yan ürünü'],compounds:[{f:'SrCO\u2083',n:'Stronsiyum Karbonat',d:'Kırmızı havai fişek'}],iso:['\u2078\u2078Sr (%82.6): en bol','\u2079\u2070Sr: T½=28.8 yıl, nükleer tehlike'],fun:['Çernobil ve nükleer testlerin \u2079\u2070Sr kalıntısı','Kırmızı havai fişek kesinlikle Sr','ABD 100+ nükleer test: \u2079\u2070Sr küresel dağılım']},
+39:{en:'Yttrium',period:5,group:3,phase:'Katı',neg:1.22,density:'4.472',melt:1526,boil:3336,conf:'[Kr] 4d\u00b9 5s\u00b2',shells:'2|8|18|9|2',disc:'Johan Gadolin',year:1794,desc:'LED fosfor ve lazer kristalleri için kritik. Ytterby madeni 4 elementin kaynağı.',history:'1794 de Gadolin İsveç Ytterby madeninde keşfetti.',uses:['YAG lazeri (cerrahi)','Kırmızı fosfor (CRT/LED)','YBCO süperiletken','Güçlü Al alaşımı'],bio:'Biyolojik rolü yok.',notes:['YAG (Y-Al garnet): 1064 nm Nd:YAG lazeri','YBCO: -196\u00b0C de süperiletken','Ytterby madeni: Y, Yb, Er, Tb kaynağı'],compounds:[{f:'Y\u2082O\u2083',n:'İtriyum Oksit',d:'LED fosfor; lazer'},{f:'YBa\u2082Cu\u2083O\u2087',n:'YBCO',d:'Yüksek sıcaklık süperiletken'}],iso:['\u2078\u2079Y (%100): monoisotopik'],fun:['Ytterby İsveç köyü: 4 element adı kaynağı','YAG lazeri: göz ve diş hekimliği','YBCO 1987 Nobel fizik ödülü']},
+40:{en:'Zirconium',period:5,group:4,phase:'Katı',neg:1.33,density:'6.52',melt:1855,boil:4409,conf:'[Kr] 4d\u00b2 5s\u00b2',shells:'2|8|18|10|2',disc:'Martin Heinrich Klaproth',year:1789,desc:'Nükleer reaktör yakıt kaplama. Mükemmel korozyon direnci.',history:'1789 da Klaproth zirkonda keşfetti. 1824 de Berzelius saf metalı izole etti.',uses:['Nükleer reaktör yakıt kaplama','ZrO\u2082 diş protezi','Cerrahi implant','Balistik koruma'],bio:'Biyouyumlu; implant malzemesi.',notes:['Düşük nötron absorpsiyonu: reaktör için ideal','ZrO\u2082: 3000\u00b0C erime noktası'],compounds:[{f:'ZrO\u2082',n:'Zirkonyum Oksit',d:'Diş protezi; yüksek ısı seramiği'}],iso:['\u2079\u2070Zr (%51.5): en bol'],fun:['Zirkonyum diş protezi altın gibi görünüyor','Nükleer reaktörlerin yakıt çubuğu Zr kaplı','ZrO\u2082 seramik bıçak çok keskin']},
+41:{en:'Niobium',period:5,group:5,phase:'Katı',neg:1.6,density:'8.57',melt:2477,boil:4744,conf:'[Kr] 4d\u2074 5s\u00b9',shells:'2|8|18|12|1',disc:'Charles Hatchett',year:1801,desc:'LHC süperiletken mıknatısları ve çelik alaşımı.',history:'1801 de Hatchett Columbia bölgesinden gelen cevherden keşfetti.',uses:['LHC süperiletken mıknatısları','Çelik alaşımı (boru hattı)','Nb-Ti: MRI mıknatısı','Reaktör alaşımı'],bio:'Biyolojik rolü yok.',notes:['Nb-Ti süperiletken mıknatıs: 4.2 K','LHC nin 1232 dipol mıknatısı Nb-Ti'],compounds:[{f:'Nb\u2082O\u2075',n:'Niyobyum Pentoksit',d:'Optik cam; seramik'}],iso:['\u2079\u00b3Nb (%100): monoisotopik'],fun:['LHC deki Nb-Ti mıknatıslar -271\u00b0C de çalışıyor','Boeing 747 nin motoru Nb içeriyor','Brezilya dünya Nb rezervinin %98 i']},
+42:{en:'Molybdenum',period:5,group:6,phase:'Katı',neg:2.16,density:'10.22',melt:2623,boil:4639,conf:'[Kr] 4d\u2075 5s\u00b9',shells:'2|8|18|13|1',disc:'Carl Wilhelm Scheele',year:1778,desc:'Yüksek erime noktalı metal. Çelik alaşımında güç ve korozyon direnci.',history:'1778 de Scheele molibdenit mineralinde keşfetti. 1781 de Hjelm metalı izole etti.',uses:['Yüksek güçlü çelik alaşımı','Mo-Ni katalizörü','Molibden filament','Çelik boru hattı'],bio:'Nitrogenaz kofaktörü (N\u2082 fiksasyonu). Xantin oksidaz.',notes:['2623\u00b0C erime noktası','MoS\u2082: katı yağlayıcı'],compounds:[{f:'MoO\u2083',n:'Molibden Trioksit',d:'Katalizör'},{f:'MoS\u2082',n:'Molibden Disülfür',d:'Katı yağlayıcı (MoS\u2082 gresi)'}],iso:['\u2079\u2078Mo (%24.4): en bol'],fun:['MoS\u2082 gres uzay araçlarında kayma yağı','Mo nitrogenaz baklalı bitkilerde N fikse eder','Molibden çelik Ford Model T de kullanıldı']},
+43:{en:'Technetium',period:5,group:7,phase:'Katı',neg:1.9,density:'11.5',melt:2157,boil:4265,conf:'[Kr] 4d\u2075 5s\u00b2',shells:'2|8|18|13|2',disc:'Emilio Segrè & Carlo Perrier',year:1937,desc:'Periyodik tablodaki ilk suni element. Tıbbi görüntülemede en yaygın radyoizotop.',history:'1937 de Segrè ve Perrier Lawrence siklotronundan Mo-bombardıman ile sentezledi.',uses:['\u2079\u2079\u1d50Tc: nükleer tıp görüntüleme (%85)','Korozyon inhibitörü (araştırma)'],bio:'Tüm izotopları radyoaktif. \u2099\u2099\u1d50Tc kemik, kalp, beyin SPECT görüntüleme.',notes:['Tüm izotoplar radyoaktif','\u2099\u2099\u1d50Tc: T½=6 saat — ideal tanısal izotop'],compounds:[{f:'\u2099\u2099\u1d50TcO\u2084\u207b',n:'Perteknetat',d:'SPECT radyoizotopu'}],iso:['\u2099\u2099\u1d50Tc: T½=6 saat, 140 keV gama (tıp)'],fun:['Günde 40,000+ hasta \u2099\u2099\u1d50Tc ile taranıyor','Siklotronlar olmadan tıbbi Tc olmaz','Doğada yok ama yıldızlarda spektrumda gözlendi']},
+44:{en:'Ruthenium',period:5,group:8,phase:'Katı',neg:2.2,density:'12.45',melt:2334,boil:4150,conf:'[Kr] 4d\u2077 5s\u00b9',shells:'2|8|18|15|1',disc:'Karl Ernst Claus',year:1844,desc:'Platin grubu metal. Kataliz ve elektronik kaplama.',history:'1844 de Claus platinyum cevherinden ayırdı. Latince Ruthenia (Rusya) kökenli.',uses:['Sabit disk kaplaması','Yakıt hücresi katalizörü','Ru-Os alaşımı (dolma kalem ucu)'],bio:'Biyolojik rolü yok.',notes:['PGM (platin grubu metali)','Düşük konsantrasyonlarda zehirli'],compounds:[{f:'RuO\u2082',n:'Rutenyum Dioksit',d:'Elektrot; kataliz'}],iso:['\u00b9\u2070\u00b2Ru (%31.6): en bol'],fun:['Dolma kalem ucu: Ru-Os alaşımı','Yılda sadece ~12 ton Ru üretilir']},
+45:{en:'Rhodium',period:5,group:9,phase:'Katı',neg:2.28,density:'12.41',melt:1964,boil:3695,conf:'[Kr] 4d\u2078 5s\u00b9',shells:'2|8|18|16|1',disc:'William Hyde Wollaston',year:1803,desc:'En pahalı metallerden. Otomobil katalitik konvertörünün kalbi.',history:'1803 de Wollaston platinyum cevherinden keşfetti. Rhodon (gül) — gül kırmızısı tuz renginden.',uses:['Katalitik konvertör (NO\u2093 giderimi)','Pt-Rh termokuplu (>1300\u00b0C)','Ayna kaplama'],bio:'Biyolojik rolü yok.',notes:['Fiyat: Altın dan 10-20x pahalı','Son derece nadir: yılda ~30 ton'],compounds:[{f:'RhCl\u2083',n:'Rodyum Klorür',d:'Kimyasal sentez'}],iso:['\u00b9\u2070\u00b3Rh (%100): monoisotopik'],fun:['Rh en pahalı metallerden','Bir otomobilin Rh içeriği: ~2 gram','Güney Afrika dünya Rh üretiminin %80 i']},
+46:{en:'Palladium',period:5,group:10,phase:'Katı',neg:2.20,density:'12.023',melt:1554.9,boil:2963,conf:'[Kr] 4d\u00b9\u2070',shells:'2|8|18|18',disc:'William Hyde Wollaston',year:1803,desc:'H\u2082 depolama kapasitesi muazzam. Katalitik konvertör ve elektronik.',history:'1803 de Wollaston keşfetti. Asteroid 2 Pallas tan ad aldı.',uses:['Katalitik konvertör','Hidrojen depolama/saflaştırma','Elektronik (kondansatör)','Takı'],bio:'Biyolojik rolü yok.',notes:['Pd: kendi hacminin 900x H\u2082 absorbe eder','Nobel 2010: Pd katalizörlü çapraz bağlanma'],compounds:[{f:'PdCl\u2082',n:'Paladyum Klorür',d:'Organik sentez; kaplama'}],iso:['\u00b9\u2070\u2078Pd (%26.5): en bol'],fun:['Pd H\u2082 pompası: atom atom H\u2082 geçirir','Nobel 2010 kimya: Pd katalizörlü tepkimeler','Akıllı telefon kondansatörlerinde Pd']},
+47:{en:'Silver',period:5,group:11,phase:'Katı',neg:1.93,density:'10.49',melt:961.8,boil:2162,conf:'[Kr] 4d\u00b9\u2070 5s\u00b9',shells:'2|8|18|18|1',disc:'Antik çağlardan bilinir',year:null,desc:'En yüksek elektrik iletkenliğine sahip metal. Tarihsel para birimi.',history:'MÖ 3000 den beri gümüş işleniyor. Latince argentum — Arjantin e adını verdi.',uses:['Fotoğraf filmi (AgBr)','Gümüş takı','Solar panel elektrot','Antibakteriyal kaplama'],bio:'Ag\u207a iyonu antibakteriyal. Arjiriya (aşırı gümüş): deri mavi-gri.',notes:['En iyi elektrik iletkeni','AgBr ışıkta kararır (fotoğraf)'],compounds:[{f:'AgNO\u2083',n:'Gümüş Nitrat',d:'Dezenfektan; yakma'},{f:'AgBr',n:'Gümüş Bromür',d:'Fotoğraf filmi'}],iso:['\u00b9\u2070\u2077Ag (%51.8)','\u00b9\u2070\u2079Ag (%48.2)'],fun:['Arjantin adı gümüş ülke den','En iyi elektrik ve ısı iletkeni','Gümüş çatal çok az bakteri üretiyor']},
+48:{en:'Cadmium',period:5,group:12,phase:'Katı',neg:1.69,density:'8.65',melt:321.1,boil:767,conf:'[Kr] 4d\u00b9\u2070 5s\u00b2',shells:'2|8|18|18|2',disc:'Friedrich Strohmeyer',year:1817,desc:'Toksik metal. Ni-Cd pil ve kuantum nokta boya maddesi.',history:'1817 de Strohmeyer çinko karbonat safsızlığından keşfetti.',uses:['Ni-Cd şarj edilebilir pil','CdTe güneş pili','Kuantum nokta LED','Nükleer reaktör kontrol çubuğu'],bio:'Çok toksik. Böbrek hasarı. İtai-itai hastalığı (Japonya, Cd kirliliği).',notes:['Ni-Cd pil RoHS ile büyük ölçüde yasaklandı','CdTe: ucuz güneş pili'],compounds:[{f:'CdS',n:'Kadmiyum Sülfür',d:'Sarı pigment; LED'},{f:'CdTe',n:'Kadmiyum Tellürür',d:'Güneş pili'}],iso:['\u00b9\u00b9\u2074Cd (%28.7): en bol'],fun:['İtai-itai: pirinç tarlasına Cd deşarjı','CdTe güneş pili maliyeti en düşük','Kuantum nokta TV Cd içeriyor']},
+49:{en:'Indium',period:5,group:13,phase:'Katı',neg:1.78,density:'7.31',melt:156.6,boil:2072,conf:'[Kr] 4d\u00b9\u2070 5s\u00b2 5p\u00b9',shells:'2|8|18|18|3',disc:'Reich & Richter',year:1863,desc:'Dokunmatik ekran ve LED in vazgeçilmez elementi. ITO (İndiyum Kalay Oksit).',history:'1863 de Reich ve Richter çinko cevherinde spektroskopik keşfetti.',uses:['ITO (dokunmatik ekran, OLED)','Düz panel ekran elektrodu','Düşük erimeli alaşım','Yarı iletken katkı'],bio:'Biyolojik rolü yok.',notes:['ITO: şeffaf iletken elektrot','Çok nadir: yılda ~900 ton'],compounds:[{f:'In\u2082O\u2083',n:'İndiyum Oksit',d:'ITO bileşeni'},{f:'InP',n:'İndiyum Fosfür',d:'Yarı iletken lazer'}],iso:['\u00b9\u00b9\u2075In (%95.7): neredeyse tek'],fun:['Akıllı telefon ekranı ITO olmadan olmaz','In rezervleri Zn madenciliğinin yan ürünü']},
+50:{en:'Tin',period:5,group:14,phase:'Katı',neg:1.96,density:'7.287',melt:231.9,boil:2602,conf:'[Kr] 4d\u00b9\u2070 5s\u00b2 5p\u00b2',shells:'2|8|18|18|4',disc:'Antik çağlardan bilinir',year:null,desc:'Tunç Çağı nın temel metali (Cu-Sn). Konserve kutuların iç yüzey kaplaması.',history:'MÖ 3000 den beri bronz üretiminde. Latince stannum.',uses:['Konserve kutu kaplama','Kurşunsuz lehim (Sn-Ag-Cu)','Bronz (Cu-Sn) alaşımı'],bio:'Düşük toksik.',notes:['Kalay vebası: soğukta α-Sn dönüşümü','Sn-Pb lehim: elektroniğin tarihsel standardı'],compounds:[{f:'SnO\u2082',n:'Kalay Dioksit',d:'Cam kaplama; gaz sensörü'}],iso:['\u00b9\u00b2\u2070Sn (%32.6): en bol — 10 stabil izotop'],fun:['Kalay vebası: Napolyon un düğmeleri dağıldı','Konserve 1810 dan beri Sn kaplı','Bronz Çağı Cu+Sn uygarlığı doğurdu']},
+});
+
+
+// Part 3: elements 51-118
+Object.assign(EL_DATA, {
+51:{en:'Antimony',period:5,group:15,phase:'Katı',neg:2.05,density:'6.685',melt:630.6,boil:1587,conf:'[Kr] 4d\u00b9\u2070 5s\u00b2 5p\u00b3',shells:'2|8|18|18|5',disc:'Antik çağlardan bilinir',year:null,desc:'Yarı metal. Yangın geciktirici ve kurşun alaşımında güçlendirici.',history:'Antik Mısır da göz makyajı (kohl: Sb\u2082S\u2083). Orta çağda antimonium adıyla bilinir.',uses:['Yangın geciktirici (Sb\u2082O\u2083)','Kurşun-asit pil plakası sertleştirici'],bio:'Orta derecede toksik.',notes:['Sb\u2082S\u2083: antik Mısır göz makyajı','Yangın geciktiricide Sb\u2082O\u2083+brom sinerjisi'],compounds:[{f:'Sb\u2082O\u2083',n:'Antimon Trioksit',d:'Yangın geciktirici'}],iso:['\u00b9\u00b2\u00b9Sb (%57.2)','\u00b9\u00b2\u00b3Sb (%42.8)'],fun:['Antik Mısır göz kalemi Sb\u2082S\u2083','Yangın geciktirici tekstil Sb içerir']},
+52:{en:'Tellurium',period:5,group:16,phase:'Katı',neg:2.1,density:'6.24',melt:449.5,boil:988,conf:'[Kr] 4d\u00b9\u2070 5s\u00b2 5p\u2074',shells:'2|8|18|18|6',disc:'Franz-Joseph Müller',year:1782,desc:'Nadir yarı metal. CdTe güneş pilleri ve termoelektrik cihazlar.',history:'1782 de Müller Transilvanya altın cevherinde keşfetti. 1798 de Klaproth Tellus (Dünya) adını verdi.',uses:['CdTe güneş pili','Termoelektrik (Bi\u2082Te\u2083)','DVD-RW kayıt tabakası'],bio:'Tellür zehirlenmesi: sarımsak nefesi.',notes:['CdTe en ucuz güneş pili teknolojisi','Yılda ~450 ton üretim'],compounds:[{f:'CdTe',n:'Kadmiyum Tellürür',d:'Güneş pili'},{f:'Bi\u2082Te\u2083',n:'Bizmut Tellürür',d:'Termoelektrik'}],iso:['\u00b9\u00b3\u2070Te (%34.1): en bol'],fun:['Te zehirlenmesi: aylarca sarımsak kokusu','DVD-RW deki kayıt katmanı Te alaşımı']},
+53:{en:'Iodine',period:5,group:17,phase:'Katı',neg:2.66,density:'4.933',melt:113.7,boil:184.4,conf:'[Kr] 4d\u00b9\u2070 5s\u00b2 5p\u2075',shells:'2|8|18|18|7',disc:'Bernard Courtois',year:1811,desc:'Tiroid hormonu için zorunlu. Mor buharı ve antiseptik özellikleri ile tanınan.',history:'1811 de Courtois deniz yosunundan keşfetti. Mor rengi: Yunanca iodes.',uses:['Tiroid ilaçları (tiroksin)','Dezenfektan (povidon-iyot)','\u00b9\u00b3\u00b9I: tiroid kanseri tedavisi','Gümüş iyodür (yapay yağmur)'],bio:'Tiroid hormonu (T\u2083, T\u2084) için zorunlu. Eksikliği guatr ve kretinizm.',notes:['I\u2082+nişasta: lacivert (nişasta testi)','\u00b9\u00b3\u00b9I: T½=8 gün, tiroid radyoterapi'],compounds:[{f:'KI',n:'Potasyum İyodür',d:'İyotlu tuz; nükleer koruma'},{f:'AgI',n:'Gümüş İyodür',d:'Yapay yağmur'}],iso:['\u00b9\u00b2\u2077I (%100): monoisotopik','\u00b9\u00b3\u00b9I: T½=8 gün, tiroid kanseri tedavisi'],fun:['Çernobil sonrası KI tabletleri dağıtıldı','I\u2082+nişasta: mor/siyah (okul deneyi)','İyot eksikliği dünya çapında sorunu']},
+54:{en:'Xenon',period:5,group:18,phase:'Gaz',neg:null,density:'0.005894',melt:-111.8,boil:-108.1,conf:'[Kr] 4d\u00b9\u2070 5s\u00b2 5p\u2076',shells:'2|8|18|18|8',disc:'Ramsay & Travers',year:1898,desc:'Soy gaz. Yüksek yoğunluklu lamba ve iyon itki sistemi.',history:'1898 de Ramsay ve Travers sıvı havadan izole etti. Xenos (yabancı) anlamında.',uses:['Araç xenon far (parlak beyaz)','Uzay aracı iyon motoru','CT tarayıcı kontrast gazı','Anestezi'],bio:'Yüksek basınçta narkoz etkisi.',notes:['İlk soy gaz bileşiği: XeF\u2082 (1962)','Havada 87 ppb'],compounds:[{f:'XeF\u2082',n:'Ksenon Diflorür',d:'Güçlü florlaştırıcı'}],iso:['\u00b9\u00b3\u00b2Xe (%26.9): en bol'],fun:['Hayalet Rider film efektleri Xe lambası','XeF\u2082 1962 de soylu gaz kimyası değiştirdi']},
+55:{en:'Cesium',period:6,group:1,phase:'Katı',neg:0.79,density:'1.873',melt:28.5,boil:671,conf:'[Xe] 6s\u00b9',shells:'2|8|18|18|8|1',disc:'Bunsen & Kirchhoff',year:1860,desc:'En düşük iyonizasyon enerjisi. Atom saatlerinin uluslararası saniye standardı.',history:'1860 da Bunsen ve Kirchhoff spektroskopi ile keşfetti. Caesius (gök mavisi) spektral çizgisi.',uses:['Atom saati (SI saniye standardı)','Fotoelektrik hücre','\u00b9\u00b3\u2077Cs: radyasyon dozimetresi','İyon motorları'],bio:'Biyolojik rolü yok.',notes:['Atom saati: 9,192,631,770 Hz = 1 saniye','28.5\u00b0C de erir'],compounds:[{f:'CsOH',n:'Sezyum Hidroksit',d:'En güçlü baz'}],iso:['\u00b9\u00b3\u00b3Cs (%100): monoisotopik','\u00b9\u00b3\u2077Cs: T½=30 yıl, nükleer yağış (Çernobil)'],fun:['GPS nin temelinde Cs atom saati','Çernobil den yayılan \u00b9\u00b3\u2077Cs hâlâ ölçülüyor']},
+56:{en:'Barium',period:6,group:2,phase:'Katı',neg:0.89,density:'3.51',melt:727,boil:1897,conf:'[Xe] 6s\u00b2',shells:'2|8|18|18|8|2',disc:'William Withering / Davy',year:1774,desc:'Radyolojik kontrast madde (BaSO\u2084). Yeşil havai fişeğin rengi.',history:'1774 de Scheele barit mineralini tanımladı. 1808 de Davy elektrolizle Ba izole etti.',uses:['BaSO\u2084 radyoloji kontrast','Yeşil havai fişek','Sondaj çamuru (barit)'],bio:'Ba\u00b2\u207a toksik — kas paralizisi. BaSO\u2084 çözünmez; güvenli kontrast.',notes:['Yeşil alev rengi (~555 nm)','BaSO\u2084 X-ışınına opak'],compounds:[{f:'BaSO\u2084',n:'Baryum Sülfat',d:'Radyoloji kontrast; boya'}],iso:['\u00b9\u00b3\u2078Ba (%71.7): en bol'],fun:['GI baryum pasaj: BaSO\u2084 içme','Havai fişek yeşili kesinlikle Ba']},
+57:{en:'Lanthanum',period:6,group:3,phase:'Katı',neg:1.10,density:'6.145',melt:920,boil:3464,conf:'[Xe] 5d\u00b9 6s\u00b2',shells:'2|8|18|18|9|2',disc:'Carl Gustaf Mosander',year:1838,desc:'Lantanit serisinin ilk elementi. Hibrit araç Ni-MH pilinin temel bileşeni.',history:'1838 de Mosander lantanit mineralinden ayırdı. Lanthanein (gizlenmek) anlamında.',uses:['Ni-MH hibrit pil (Toyota Prius)','La\u2082O\u2083 optik cam','Karbon ark lambası (sinema)','FCC katalizörü'],bio:'Biyolojik rolü yok.',notes:['Prius pilinde ~10 kg La'],compounds:[{f:'La\u2082O\u2083',n:'Lantan Oksit',d:'Optik cam; kataliz'}],iso:['\u00b9\u00b3\u2079La (%99.9)'],fun:['Toyota Prius her biri 10 kg La içeriyor','Sinema projektörü karbon arkı La içerir']},
+58:{en:'Cerium',period:6,group:null,phase:'Katı',neg:1.12,density:'6.770',melt:798,boil:3360,conf:'[Xe] 4f\u00b9 5d\u00b9 6s\u00b2',shells:'2|8|18|19|9|2',disc:'Berzelius & Hisinger',year:1803,desc:'En bol lantanit. Çakmak taşı ve katalizör olarak yaygın.',history:'1803 de Berzelius ve Hisinger keşfetti. Asteroid Ceres ten ad aldı.',uses:['Çakmak taşı (Fe-Ce alaşımı)','Otomobil katalitik konvertör','CeO\u2082: cam cilalama'],bio:'Biyolojik rolü yok.',notes:['En bol lantanit (%0.0046 yerkabuğu)'],compounds:[{f:'CeO\u2082',n:'Seryum Oksit',d:'Cam cilalama; dizel katkı'}],iso:['\u00b9\u2074\u2070Ce (%88.4): en bol'],fun:['Çakmak taşının kıvılcımı Ce-Fe alaşımı','Cam cilalama tozu CeO\u2082']},
+59:{en:'Praseodymium',period:6,group:null,phase:'Katı',neg:1.13,density:'6.77',melt:931,boil:3290,conf:'[Xe] 4f\u00b3 6s\u00b2',shells:'2|8|18|21|8|2',disc:'Carl Auer von Welsbach',year:1885,desc:'Yeşil renk verici lantanit. Güçlü mıknatıs alaşımı Nd-Fe-B ye katkı.',history:'1885 de von Welsbach didimi ayırdı. Prasios didymos (yeşil ikiz) anlamında.',uses:['Nd-Fe-B mıknatıs katkısı','Pr sarısı/yeşili: seramik boya','Uçak motor alaşımı'],bio:'Biyolojik rolü yok.',notes:['Pr-Nd alaşımı: güçlü kalıcı mıknatıs'],compounds:[{f:'Pr\u2082O\u2083',n:'Praseodim Oksit',d:'Yeşil seramik boya'}],iso:['\u00b9\u2074\u00b9Pr (%100): monoisotopik'],fun:['Neodimyum mıknatısında Pr katkısı','Rüzgar türbini Nd-Fe-B Pr içeriyor']},
+60:{en:'Neodymium',period:6,group:null,phase:'Katı',neg:1.14,density:'7.01',melt:1021,boil:3100,conf:'[Xe] 4f\u2074 6s\u00b2',shells:'2|8|18|22|8|2',disc:'Carl Auer von Welsbach',year:1885,desc:'Dünyanın en güçlü kalıcı mıknatısı (Nd\u2082Fe\u2081\u2084B). Rüzgar türbini ve EV motoru.',history:'1885 de von Welsbach Pr ile birlikte didimden ayırdı.',uses:['Nd-Fe-B mıknatıs (EV, rüzgar turbini)','Nd:YAG lazeri','Mor-mor cam rengi'],bio:'Biyolojik rolü yok.',notes:['Nd\u2082Fe\u2081\u2084B: en güçlü kalıcı mıknatıs','Çin Nd üretiminin %85 i'],compounds:[{f:'Nd\u2082Fe\u2081\u2084B',n:'Neodimyum Mıknatısı',d:'Güçlü kalıcı mıknatıs'}],iso:['\u00b9\u2074\u00b2Nd (%27.2): en bol'],fun:['Elektrikli araba motoru ~1 kg Nd mıknatısı','Nd mıknatısı elini ezebilir: çok güçlü']},
+61:{en:'Promethium',period:6,group:null,phase:'Katı',neg:1.13,density:'7.26',melt:1100,boil:3000,conf:'[Xe] 4f\u2075 6s\u00b2',shells:'2|8|18|23|8|2',disc:'Marinsky, Glendenin & Coryell',year:1945,desc:'Tek stabil izotopu olmayan periyodik tablo elementi.',history:'1945 de Manhattan Projesi nükleer reaktör ürünlerinden keşfedildi.',uses:['Nükleer pil (\u00b9\u2074\u2077Pm beta kaynağı)','Kalınlık ölçer'],bio:'Radyoaktif; biyolojik rolü yok.',notes:['Tüm izotoplar radyoaktif','\u00b9\u2074\u2077Pm: T½=2.62 yıl'],compounds:[],iso:['\u00b9\u2074\u2077Pm: T½=2.62 yıl, beta kaynağı'],fun:['Doğada neredeyse hiç Pm yok','Yıldızlarda Pm spektral çizgisi gözlendi']},
+62:{en:'Samarium',period:6,group:null,phase:'Katı',neg:1.17,density:'7.52',melt:1072,boil:1791,conf:'[Xe] 4f\u2076 6s\u00b2',shells:'2|8|18|24|8|2',disc:'Paul Lecoq de Boisbaudran',year:1879,desc:'Sm-Co mıknatısı yüksek sıcaklıkta Nd mıknatısından üstün.',history:'1879 da Lecoq samarskite mineralinde spektroskopik keşfetti.',uses:['Sm-Co kalıcı mıknatısı (yüksek T)','\u00b9\u2075\u00b3Sm kanser radyoterapi','Nükleer reaktör nötron absorber'],bio:'Biyolojik rolü yok.',notes:['Sm-Co mıknatısı: >300\u00b0C de Nd den iyi'],compounds:[{f:'SmCo\u2085',n:'Samaryum Kobalt',d:'Yüksek T mıknatıs'}],iso:['\u00b9\u2075\u00b2Sm (%26.7)','\u00b9\u2074\u2077Sm: T½=106 Gy, Sm-Nd yaş tayini'],fun:['Jet motoru Sm-Co mıknatısı tercih eder','\u00b9\u2075\u00b3Sm kemik kanseri ağrı tedavisinde']},
+63:{en:'Europium',period:6,group:null,phase:'Katı',neg:1.2,density:'5.264',melt:826,boil:1529,conf:'[Xe] 4f\u2077 6s\u00b2',shells:'2|8|18|25|8|2',disc:'Demarçay',year:1901,desc:'En güçlü floresans lantanit. Banknot güvenlik boyası ve CRT kırmızı fosfor.',history:'1901 de Demarçay samariyumdan ayırdı. Avrupa kıtasından adlandırıldı.',uses:['Euro banknotu UV güvenlik boyası','CRT kırmızı fosfor','Beyaz LED fosfor katkısı'],bio:'Biyolojik rolü yok.',notes:['En güçlü floresans lantanit','Banknot sahtecilik tespiti: Eu boya'],compounds:[{f:'Y\u2082O\u2083:Eu',n:'Avropyum Katkılı İtriyum Oksit',d:'CRT kırmızı fosfor'}],iso:['\u00b9\u2075\u00b9Eu (%47.8)','\u00b9\u2075\u00b3Eu (%52.2)'],fun:['Euro banknotunu UV altında Eu parlatır','Beyaz LED Eu fosfor sayesinde sıcak']},
+64:{en:'Gadolinium',period:6,group:null,phase:'Katı',neg:1.2,density:'7.90',melt:1313,boil:3273,conf:'[Xe] 4f\u2077 5d\u00b9 6s\u00b2',shells:'2|8|18|25|9|2',disc:'Marignac',year:1880,desc:'MRI kontrast maddesinin temel elementi. Yüksek nötron yakalama kesiti.',history:'1880 de Marignac keşfetti. Mineralog Gadolin den adlandırıldı.',uses:['MRI kontrast maddesi (Gd-DTPA)','Nükleer reaktör kontrol çubuğu','Manyetokalorimetrik soğutma'],bio:'Gd\u00b3\u207a toksik — ancak şelatlama güvenli yapar.',notes:['En büyük nötron yakalama kesiti (49,000 barn)'],compounds:[{f:'Gd-DTPA',n:'Gadolinyum DTPA',d:'MRI kontrast maddesi'}],iso:['\u00b9\u2075\u2078Gd (%24.8): en bol'],fun:['MRI kontrast enjeksiyonunun %35 i Gd','Manyetokalorimetrik buzdolabı: Gd alaşımı']},
+65:{en:'Terbium',period:6,group:null,phase:'Katı',neg:1.2,density:'8.23',melt:1356,boil:3230,conf:'[Xe] 4f\u2079 6s\u00b2',shells:'2|8|18|27|8|2',disc:'Carl Gustaf Mosander',year:1843,desc:'Yeşil fosfor. Sonar ve akıllı telefon hoparlöründe manyetostriksiyon.',history:'1843 de Mosander İsveç Ytterby madeninden ayırdı.',uses:['Yeşil LED/LCD fosfor','Tb-Fe-Dy: manyetostriksiyon (sonar)','Yakıt hücresi kataliz'],bio:'Biyolojik rolü yok.',notes:['Manyetostriksiyon: manyetik alanda uzama','Terfenol-D (Tb-Fe-Dy): aktüatör ve sonar'],compounds:[{f:'TbF\u2083',n:'Terbiyum Florür',d:'Yeşil fosfor'}],iso:['\u00b9\u2075\u2079Tb (%100): monoisotopik'],fun:['Sonar sistemi Tb-Fe manyetostriksiyon kullanır','Akıllı telefon hoparlörü Tb içeriyor']},
+66:{en:'Dysprosium',period:6,group:null,phase:'Katı',neg:1.22,density:'8.551',melt:1412,boil:2567,conf:'[Xe] 4f\u00b9\u2070 6s\u00b2',shells:'2|8|18|28|8|2',disc:'Paul Lecoq de Boisbaudran',year:1886,desc:'Nd-Fe-B mıknatısına ısıya dayanıklılık katan katkı. EV motor mıknatısında kritik.',history:'1886 da Lecoq erbiyumdan ayrıştırdı. Dysprositos (ulaşması zor) anlamında.',uses:['Nd-Fe-B mıknatısı katkısı (ısı direnci)','EV motor mıknatısı','Nükleer reaktör kontrol'],bio:'Biyolojik rolü yok.',notes:['Dy katkısı Nd mıknatısını 200\u00b0C ye kadar güçlü tutar'],compounds:[{f:'Dy\u2082O\u2083',n:'Disprosyum Oksit',d:'Mıknatıs; reaktör'}],iso:['\u00b9\u2076\u2074Dy (%28.3): en bol'],fun:['Çin Dy monopolü jeopolitik sorun','Rüzgar türbini 300 kg Nd/Dy içeren mıknatıs']},
+67:{en:'Holmium',period:6,group:null,phase:'Katı',neg:1.23,density:'8.795',melt:1474,boil:2700,conf:'[Xe] 4f\u00b9\u00b9 6s\u00b2',shells:'2|8|18|29|8|2',disc:'Delafontaine & Soret',year:1878,desc:'En büyük manyetik momentli element. Ho:YAG lazeri böbrek taşı tedavisinde.',history:'1878 de Delafontaine ve Soret spektroskopi ile keşfetti. İsveç başkenti Stockholm den.',uses:['Ho:YAG lazeri (ürolog/biyomedikal)','MRI üretme alanı homojenliği'],bio:'Biyolojik rolü yok.',notes:['En büyük manyetik moment','Ho:YAG lazeri böbrek taşı kırar'],compounds:[{f:'Ho\u2082O\u2083',n:'Holmiyum Oksit',d:'Mıknatıs; lazer'}],iso:['\u00b9\u2076\u2075Ho (%100): monoisotopik'],fun:['Ho:YAG lazeri böbrek taşını toza çevirir']},
+68:{en:'Erbium',period:6,group:null,phase:'Katı',neg:1.24,density:'9.066',melt:1529,boil:2868,conf:'[Xe] 4f\u00b9\u00b2 6s\u00b2',shells:'2|8|18|30|8|2',disc:'Carl Gustaf Mosander',year:1843,desc:'Fiber optik amplifikatör. Er:YAG lazeri deri yenileme ve diş tedavisi.',history:'1843 de Mosander Ytterby den ayırdı.',uses:['Fiber optik EDFA amplifikatör','Er:YAG lazeri (cilt; diş)','Pembe cam rengi (Er\u2082O\u2083)'],bio:'Biyolojik rolü yok.',notes:['EDFA: 1550 nm fiber optik amplifikatörü','İnternet trafiğinin neredeyse tamamı Er EDFA dan geçer'],compounds:[{f:'Er\u2082O\u2083',n:'Erbiyum Oksit',d:'Pembe cam'}],iso:['\u00b9\u2076\u2076Er (%33.5): en bol'],fun:['İnternet fiber hattındaki sinyal Er ile amplified','Pembe güneş gözlüğü rengi Er\u2082O\u2083']},
+69:{en:'Thulium',period:6,group:null,phase:'Katı',neg:1.25,density:'9.321',melt:1545,boil:1950,conf:'[Xe] 4f\u00b9\u00b3 6s\u00b2',shells:'2|8|18|31|8|2',disc:'Per Teodor Cleve',year:1879,desc:'En nadir stabil lantanit. Taşınabilir X-ışını cihazı.',history:'1879 da Cleve erbiyum oksidinden keşfetti. Mitolojik kuzey ülkesi Thule den.',uses:['\u00b9\u2076\u2079Tm X-ışını kaynağı (taşınabilir)','Tm:YAG lazeri (tıbbi)'],bio:'Biyolojik rolü yok.',notes:['En pahalı lantanit (nadir üretim)'],compounds:[{f:'Tm\u2082O\u2083',n:'Tulyum Oksit',d:'Lazer; araştırma'}],iso:['\u00b9\u2076\u2079Tm (%100): monoisotopik'],fun:['Taşınabilir X-ışını cihazı nükleer güç gerektirmez','Thule: Viking efsanesindeki kuzey ülkesi']},
+70:{en:'Ytterbium',period:6,group:null,phase:'Katı',neg:1.1,density:'6.965',melt:824,boil:1196,conf:'[Xe] 4f\u00b9\u2074 6s\u00b2',shells:'2|8|18|32|8|2',disc:'Marignac',year:1878,desc:'Fiber lazeri ve hassas ölçüm atom saati.',history:'1878 de Marignac Ytterby erbiyumundan ayırdı.',uses:['Yb fiber lazeri (endüstriyel kesim)','Yb atom saati (10\u207b\u00b9\u2078 hassasiyet)','Yb:YAG lazeri'],bio:'Biyolojik rolü yok.',notes:['Yb fiber lazeri kW güç','Yb optik saati GPS ten 100x hassas'],compounds:[{f:'Yb\u2082O\u2083',n:'İterbiyum Oksit',d:'Lazer; araştırma'}],iso:['\u00b9\u2077\u2074Yb (%31.8): en bol'],fun:['Yb atom saati: evrende zaman testleri','Endüstriyel Yb lazeri çelik keser']},
+71:{en:'Lutetium',period:6,group:null,phase:'Katı',neg:1.27,density:'9.841',melt:1663,boil:3402,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9 6s\u00b2',shells:'2|8|18|32|9|2',disc:'Georges Urbain',year:1907,desc:'Son lantanit. PET tarayıcı sintilatör ve kanser radyoterapi.',history:'1907 de Urbain ve von Welsbach bağımsız keşfetti. Paris in eski adı Lutetia dan.',uses:['PET sintilatörü','\u00b9\u2077\u2077Lu kanser radyoterapi','Petrol kırma katalizörü'],bio:'\u00b9\u2077\u2077Lu: nörondokrin tümör tedavisi.',notes:['\u00b9\u2077\u2077Lu FDA onaylı kanser ilacı (Lutathera)','Son lantanit: 4f\u00b9\u2074 dolu'],compounds:[{f:'\u00b9\u2077\u2077Lu-DOTATATE',n:'Lutathera',d:'FDA onaylı kanser ilacı'}],iso:['\u00b9\u2077\u2075Lu (%97.4)','\u00b9\u2077\u2077Lu: T½=6.6 gün, kanser tedavisi'],fun:['\u00b9\u2077\u2077Lu kanser tedavisi 2018 FDA onayı','Lu en sert ve en yüksek yoğunluklu lantanit']},
+72:{en:'Hafnium',period:6,group:4,phase:'Katı',neg:1.3,density:'13.31',melt:2233,boil:4603,conf:'[Xe] 4f\u00b9\u2074 5d\u00b2 6s\u00b2',shells:'2|8|18|32|10|2',disc:'Coster & de Hevesy',year:1923,desc:'Nükleer reaktör kontrol çubuğu ve mikroçip kapasitörü.',history:'1923 de Coster ve de Hevesy X-ışını spektroskopi ile keşfetti. Kopenhag ın Latince adı Hafnia dan.',uses:['Nükleer reaktör kontrol çubuğu','MOSFET kapı dielektriği (HfO\u2082)','Plazma kesici ucu'],bio:'Biyolojik rolü yok.',notes:['Zr ile çok benzer: ayırması zor','HfO\u2082: yüksek-k dielektrik, Intel işlemcileri'],compounds:[{f:'HfO\u2082',n:'Hafniyum Dioksit',d:'Yüksek-k dielektrik (çip)'}],iso:['\u00b9\u2078\u2070Hf (%35.1): en bol'],fun:['Intel işlemci HfO\u2082 kapasitör (2007)','Mendeleyev tablosunun son keşfedilen elementi (1923)']},
+73:{en:'Tantalum',period:6,group:5,phase:'Katı',neg:1.5,density:'16.69',melt:3017,boil:5458,conf:'[Xe] 4f\u00b9\u2074 5d\u00b3 6s\u00b2',shells:'2|8|18|32|11|2',disc:'Anders Gustaf Ekeberg',year:1802,desc:'Biyouyumlu, korozyona dirençli metal. Akıllı telefon kondansatörü ve kemik implantı.',history:'1802 de Ekeberg keşfetti. Tantalus mitolojik kral Tantalos tan.',uses:['Akıllı telefon Ta\u2082O\u2075 kondansatörü','Kemik ve diş implantı','Kimyasal reaktör kaplama'],bio:'Biyouyumlu ve biyoinert.',notes:['3017\u00b0C erime noktası','Asitlere neredeyse tamamen dirençli'],compounds:[{f:'Ta\u2082O\u2075',n:'Tantal Pentoksit',d:'Kondansatör; optik'}],iso:['\u00b9\u2078\u00b9Ta (%99.99): monoisotopik'],fun:['Her akıllı telefonda ~40 mg Ta','Kongo savaşını finanse eden coltan Ta/Nb']},
+74:{en:'Tungsten',period:6,group:6,phase:'Katı',neg:2.36,density:'19.25',melt:3422,boil:5555,conf:'[Xe] 4f\u00b9\u2074 5d\u2074 6s\u00b2',shells:'2|8|18|32|12|2',disc:'Juan José & Fausto Elhuyar',year:1783,desc:'En yüksek erime noktasına sahip element (3422\u00b0C). Ampul filamanı ve kesici alet.',history:'1783 de Elhuyar kardeşler wolframit mineralinden izole etti.',uses:['Ampul filaman','Kesici alet (WC sert metal)','X-ışını anodu','Çelik alaşım'],bio:'Bazı bakterilerde enzim kofaktörü.',notes:['En yüksek erime noktası: 3422\u00b0C','WC (tungsten karbür): matkap ucu'],compounds:[{f:'WC',n:'Tungsten Karbür',d:'Sert metal; kesici alet'},{f:'WO\u2083',n:'Tungsten Trioksit',d:'Elektrokromik pencere'}],iso:['\u00b9\u2078\u2074W (%30.6): en bol'],fun:['En yüksek erime noktası 3422\u00b0C','X-ışını tüpünde anot W dan yapılı']},
+75:{en:'Rhenium',period:6,group:7,phase:'Katı',neg:1.9,density:'21.02',melt:3186,boil:5596,conf:'[Xe] 4f\u00b9\u2074 5d\u2075 6s\u00b2',shells:'2|8|18|32|13|2',disc:'Noddack & Berg',year:1925,desc:'Son stabil keşfedilen element. Jet motoru türbin paleti alaşımı.',history:'1925 de Noddack ve Berg gadolinit mineralinde keşfetti. Rhein nehrinden.',uses:['Jet motoru türbin paleti (Ni-Re süper alaşım)','W-Re termokuplu (>2200\u00b0C)','Pt-Re reforming katalizörü'],bio:'Biyolojik rolü yok.',notes:['Son kararlı element keşfedildi (1925)','Yılda sadece ~50 ton üretim'],compounds:[{f:'Re\u2082O\u2087',n:'Renyum Heptoksit',d:'Metathesis katalizörü'}],iso:['\u00b9\u2078\u2075Re (%37.4)','\u00b9\u2078\u2077Re (%62.6): T½=41.6 Gy, Re-Os yaş tayini'],fun:['Son keşfedilen stabil element','Boeing 787 türbin pali Re içeriyor']},
+76:{en:'Osmium',period:6,group:8,phase:'Katı',neg:2.2,density:'22.59',melt:3033,boil:5012,conf:'[Xe] 4f\u00b9\u2074 5d\u2076 6s\u00b2',shells:'2|8|18|32|14|2',disc:'Smithson Tennant',year:1803,desc:'En yoğun element (22.59 g/cm\u00b3). OsO\u2084 biyolojik boyar madde.',history:'1803 de Tennant platinyum cevheri artığından Ir ile birlikte keşfetti.',uses:['Dolma kalem ucu (Os-Ir alaşımı)','OsO\u2084: elektron mikroskobu boyama'],bio:'Os metali zararsız; OsO\u2084 son derece toksik.',notes:['En yoğun element: 22.59 g/cm\u00b3'],compounds:[{f:'OsO\u2084',n:'Osmiyum Tetroksit',d:'TEM boyar madde; toksik'}],iso:['\u00b9\u2079\u00b2Os (%40.9): en bol'],fun:['En yoğun element (Ir ile rekabet)','OsO\u2084 TEM görüntülemede biyolojik dokuyu boyar']},
+77:{en:'Iridium',period:6,group:9,phase:'Katı',neg:2.2,density:'22.56',melt:2446,boil:4428,conf:'[Xe] 4f\u00b9\u2074 5d\u2077 6s\u00b2',shells:'2|8|18|32|15|2',disc:'Smithson Tennant',year:1803,desc:'En korozyona dayanıklı metal. K-Pg sınırındaki Ir anomalisi dinozor yok oluşunu kanıtladı.',history:'1803 de Tennant Os ile birlikte keşfetti. Iris (gökkuşağı) — renkli tuzları.',uses:['Platin-iridyum kg standardı','Uçak bujisi elektrodu','OLED (Ir kompleksleri)'],bio:'Biyolojik rolü yok.',notes:['K-Pg sınırında (66 My): küresel Ir anomalisi','Yılda ~7 ton üretim'],compounds:[{f:'Ir(ppy)\u2083',n:'İridyum kompleksi',d:'OLED verimli emitör'}],iso:['\u00b9\u2079\u00b3Ir (%62.7)','\u00b9\u2079\u00b9Ir (%37.3)'],fun:['66 milyon yıllık kil tabakası Ir: dinozor yok oluşu','OLED TV nin parlak rengi Ir komplekslerinden']},
+78:{en:'Platinum',period:6,group:10,phase:'Katı',neg:2.28,density:'21.45',melt:1768.3,boil:3825,conf:'[Xe] 4f\u00b9\u2074 5d\u2079 6s\u00b9',shells:'2|8|18|32|17|1',disc:'Antonio de Ulloa',year:1748,desc:'Katalitik konvertör, takı ve yakıt hücresinin temel elementi.',history:'1748 de Ulloa İspanyol Güney Amerika sında keşfetti. Platina (küçük gümüş) İspanyolca.',uses:['Katalitik konvertör (HC, CO, NO\u2093)','Takı ve para','PEM yakıt hücresi katodu','Kemoterapi (sisplatin)'],bio:'Sisplatin DNA çapraz bağlayıcı anti-kanser ilacı.',notes:['Pt katalizi: %80 sanayi kimyasalı'],compounds:[{f:'PtCl\u2082(NH\u2083)\u2082',n:'Sisplatin',d:'Anti-kanser ilacı'}],iso:['\u00b9\u2079\u2075Pt (%33.8): NMR aktif'],fun:['Sisplatin 1990 dan beri testis kanserini iyileştiriyor','Pt katalitik konvertör 1975 te zorunlu oldu']},
+79:{en:'Gold',period:6,group:11,phase:'Katı',neg:2.54,density:'19.32',melt:1064.2,boil:2856,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9\u2070 6s\u00b9',shells:'2|8|18|32|18|1',disc:'Antik çağlardan bilinir',year:null,desc:'İnsanlığın para ve süs standardı. Korozyona karşı en dirençli metal.',history:'MÖ 4000 den beri işleniyor. Mısır firavun mezarları, Roma altın standardı.',uses:['Takı ve para (rezerv)','Elektronik kaplama (korozyon yok)','Diş protezi','Nano-Au: kanser teşhis/tedavi'],bio:'Biyolojik rolü yok.',notes:['En iyi korozyon direnci','1 oz = 31.1 g'],compounds:[{f:'HAuCl\u2084',n:'Tetrakloroaurik Asit',d:'Kaplama; nano-Au sentez'}],iso:['\u00b9\u2079\u2077Au (%100): monoisotopik'],fun:['Tüm tarihsel Au ~190,000 ton (21m küp)','Fort Knox: 4576 ton Au']},
+80:{en:'Mercury',period:6,group:12,phase:'Sıvı',neg:2.00,density:'13.534',melt:-38.8,boil:356.7,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9\u2070 6s\u00b2',shells:'2|8|18|32|18|2',disc:'Antik çağlardan bilinir',year:null,desc:'Oda sıcaklığında sıvı iki elementten biri. Büyük ölçüde yasaklı; toksik.',history:'Antik Mısır ve Çin de biliniyor. Cinnabar (HgS) simyada önemli.',uses:['Termometre (tarihsel)','Floresan lamba (Hg buharı)','Diş amalgamı (tarihsel)'],bio:'Çok toksik. CH\u2083Hg\u207a nörotoksik; birikim. Minamata hastalığı.',notes:['Oda sıcaklığında sıvı iki elementten biri (Br diğeri)','Hg üstünde demir yüzüyor'],compounds:[{f:'HgCl\u2082',n:'Cıva(II) Klorür',d:'Çok zehirli'},{f:'HgS',n:'Sinabar',d:'Kırmızı boya; Hg cevheri'}],iso:['\u00b2\u2070\u00b2Hg (%29.9): en bol'],fun:['Minamata faciası: balıkta metilcıva','Hg üstünde demir yüzüyor']},
+81:{en:'Thallium',period:6,group:13,phase:'Katı',neg:1.62,density:'11.85',melt:304,boil:1473,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9\u2070 6s\u00b2 6p\u00b9',shells:'2|8|18|32|18|3',disc:'William Crookes',year:1861,desc:'Toksik metal. TlBr kızılötesi dedektörü.',history:'1861 de Crookes spektroskopi ile keşfetti. Thallos (yeşil filiz) spektral çizgisinden.',uses:['TlBr kızılötesi dedektörü','Kalp SPECT sintigrafi'],bio:'Çok toksik; K\u207a yerine hücreye girer.',notes:['K\u207a taklitçisi — hücreye kolayca girer','Renksiz, tatsız, kokusuz: mükemmel zehir'],compounds:[{f:'TlBr',n:'Talyum Bromür',d:'Kızılötesi optik'}],iso:['\u00b2\u2070\u2075Tl (%70.5)','\u00b2\u2070\u00b3Tl (%29.5)'],fun:['Agatha Christie Soluk At dedektif romanı Tl zehiri']},
+82:{en:'Lead',period:6,group:14,phase:'Katı',neg:1.87,density:'11.34',melt:327.5,boil:1749,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9\u2070 6s\u00b2 6p\u00b2',shells:'2|8|18|32|18|4',disc:'Antik çağlardan bilinir',year:null,desc:'İnsanlığın en uzun kullandığı metallerden. Kurşun-asit pil ve radyasyon zırhı.',history:'MÖ 7000 den beri kullanılıyor. Roma su boruları kurşundan. Latince plumbum (plumbing).',uses:['Kurşun-asit akü (otomobil)','Radyasyon zırhı','Kurşun boya (tarihsel; yasaklı)'],bio:'Nörotoksik. Pb\u00b2\u207a enzimlerini bloke eder.',notes:['Pb boya ve benzin tarihsel büyük hata'],compounds:[{f:'PbSO\u2084',n:'Kurşun Sülfat',d:'Akü plakası'},{f:'PbO\u2082',n:'Kurşun Dioksit',d:'Akü pozitif elektrodu'}],iso:['\u00b2\u2070\u2078Pb (%52.4): en bol; U/Th bozunma son ürünü'],fun:['Antika tesisat plumbing: Pb borulardan','Kurşun-asit akü 1859 dan beri aynı prensip']},
+83:{en:'Bismuth',period:6,group:15,phase:'Katı',neg:2.02,density:'9.747',melt:271.4,boil:1564,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9\u2070 6s\u00b2 6p\u00b3',shells:'2|8|18|32|18|5',disc:'Claude Geoffroy',year:1753,desc:'Rengarenk kristalleri, antasit ve kurşunsuz alaşımlarla tanınan metal.',history:'1753 de Geoffroy metal olarak doğruladı.',uses:['Pepto-Bismol (mide ilacı)','Kurşunsuz saçma','Termoelektrik (Bi\u2082Te\u2083)'],bio:'Düşük toksik. Bi tuzları mide ilacı.',notes:['Doğal elementlerin en ağır kararlısı','\u00b2\u2070\u2079Bi: T½=1.9\u00d710\u00b9\u2079 yıl'],compounds:[{f:'Bi\u2082Te\u2083',n:'Bizmut Tellürür',d:'Termoelektrik soğutucu'}],iso:['\u00b2\u2070\u2079Bi (%100): teorik kararlı'],fun:['Pepto-Bismol pembe rengi BiOCl','Bi kristalleri gökkuşağı rengi: oksit kırınımı']},
+84:{en:'Polonium',period:6,group:16,phase:'Katı',neg:2.0,density:'9.32',melt:254,boil:962,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9\u2070 6s\u00b2 6p\u2074',shells:'2|8|18|32|18|6',disc:'Marie & Pierre Curie',year:1898,desc:'Marie Curie nin anavatanı Polonya ya ithafen adlandırdığı element.',history:'1898 de Marie ve Pierre Curie pitchblende mineralinden keşfetti.',uses:['Statik elektrik giderici (Po-210 alfa)','Nükleer tetikleyici (Manhattan)'],bio:'Son derece radyotoksik. \u00b2\u00b9\u2070Po alfa kaynağı; iç dozajda öldürücü.',notes:['\u00b2\u00b9\u2070Po: T½=138 gün; güçlü alfa yayıcı'],compounds:[],iso:['\u00b2\u00b9\u2070Po: T½=138 gün (en önemli; tehlikeli)'],fun:['Litvinyenko suikastı: \u00b2\u00b9\u2070Po zehirleme (2006 Londra)','1 mikrogram Po: ölümcül doz']},
+85:{en:'Astatine',period:6,group:17,phase:'Katı',neg:2.2,density:'~7',melt:302,boil:337,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9\u2070 6s\u00b2 6p\u2075',shells:'2|8|18|32|18|7',disc:'Corson, MacKenzie & Segrè',year:1940,desc:'Doğanın en nadir elementi. Tiroidden hedefli radyoterapi adayı.',history:'1940 da Corson, MacKenzie ve Segrè Berkeley siklotronunda \u00b2\u2070\u2079Bi+\u03b1 ile sentezledi.',uses:['\u00b2\u00b9\u00b9At: tiroid kanseri radyoterapi araştırması'],bio:'Tüm izotoplar radyoaktif.',notes:['Yeryüzünde doğal miktarı: <30 g','En nadir doğal element'],compounds:[],iso:['\u00b2\u00b9\u00b9At: T½=7.2 saat; alfa terapi'],fun:['Tüm zamanlarda yeryüzünde <30 g At','At: sadece siklotronla gram altı miktarda üretilir']},
+86:{en:'Radon',period:6,group:18,phase:'Gaz',neg:null,density:'0.00973',melt:-71,boil:-61.7,conf:'[Xe] 4f\u00b9\u2074 5d\u00b9\u2070 6s\u00b2 6p\u2076',shells:'2|8|18|32|18|8',disc:'Friedrich Ernst Dorn',year:1900,desc:'Radyoaktif soy gaz. Bina içi Rn birikimi akciğer kanseri ikinci nedeni.',history:'1900 de Dorn Ra bozunmasından keşfetti.',uses:['Kanser radyoterapisi (tarihsel)'],bio:'\u00b2\u00b2\u00b2Rn: T½=3.8 gün; akciğer kanseri. ABD de yılda ~21,000 Rn ölümü.',notes:['Zemin gazı; binalar Rn biriktirebilir','Sigara + Rn: çok yüksek akciğer kanseri riski'],compounds:[],iso:['\u00b2\u00b2\u00b2Rn: T½=3.8 gün (baskın)'],fun:['ABD de Rn sigara dışı en büyük akciğer kanseri nedeni','Granit zemin Rn kaynağı olabilir']},
+87:{en:'Francium',period:7,group:1,phase:'Katı',neg:0.7,density:'~2',melt:27,boil:677,conf:'[Rn] 7s\u00b9',shells:'2|8|18|32|18|8|1',disc:'Marguerite Perey',year:1939,desc:'En kararsız doğal element. En düşük elektronegatiflik.',history:'1939 da Perey Paris te aktinyum bozunmasından keşfetti.',uses:['Temel fizik araştırması'],bio:'Radyoaktif. Yeryüzünde herhangi anda ~30 g Fr.',notes:['En düşük elektronegatiflik (0.7)','Yeryüzünde <30 g Fr'],compounds:[],iso:['\u00b2\u00b2\u00b3Fr: T½=21.8 dk (tek doğal)'],fun:['En az elektronegatif element','Tüm dünyada herhangi anda <30 g Fr']},
+88:{en:'Radium',period:7,group:2,phase:'Katı',neg:0.9,density:'5.5',melt:696,boil:1413,conf:'[Rn] 7s\u00b2',shells:'2|8|18|32|18|8|2',disc:'Marie & Pierre Curie',year:1898,desc:'Marie Curie nin büyük keşfi. Radyoaktivite kelimesini doğuran element.',history:'1898 de Curieler pitchblende den izole etti. Marie Curie iki Nobel (1903 Fizik, 1911 Kimya).',uses:['Radon üretici (kanser tedavisi)','Radyum saati (tarihsel; yasaklı)'],bio:'Çok radyotoksik. Ca\u00b2\u207a taklitçisi: kemiklere birikir. Radyum kızları vakası.',notes:['Ca\u00b2\u207a benzeri: kemiklere birikir','\u00b2\u00b2\u2076Ra: T½=1600 yıl'],compounds:[],iso:['\u00b2\u00b2\u2076Ra: T½=1600 yıl (baskın)'],fun:['Radyum kızları: dil ile fırça yalama, ölüm','Marie Curie nin not defterleri hâlâ radyoaktif']},
+89:{en:'Actinium',period:7,group:3,phase:'Katı',neg:1.1,density:'10.07',melt:1050,boil:3200,conf:'[Rn] 6d\u00b9 7s\u00b2',shells:'2|8|18|32|18|9|2',disc:'André-Louis Debierne',year:1899,desc:'Aktinit serisinin ilk elementi. \u00b2\u00b2\u2075Ac hedefli alfa radyoterapi adayı.',history:'1899 da Debierne pitchblende den keşfetti. Aktis (ışın) anlamında.',uses:['\u00b2\u00b2\u2075Ac: kanser hedefli alfa radyoterapi'],bio:'Radyotoksik.',notes:['Aktinit serisinin adı buradan'],compounds:[],iso:['\u00b2\u00b2\u2077Ac: T½=21.8 yıl (doğal)','\u00b2\u00b2\u2075Ac: T½=10 gün, alfa terapi'],fun:['\u00b2\u00b2\u2075Ac prostat kanseri tedavisinde FDA breakthrough']},
+90:{en:'Thorium',period:7,group:null,phase:'Katı',neg:1.3,density:'11.72',melt:1750,boil:4788,conf:'[Rn] 6d\u00b2 7s\u00b2',shells:'2|8|18|32|18|10|2',disc:'Jöns Jacob Berzelius',year:1829,desc:'Nükleer yakıt adayı. U dan 3x daha bol.',history:'1829 da Berzelius bir mineral içinde keşfetti. İskandinav savaş tanrısı Thor dan.',uses:['Nükleer reaktör yakıtı (adaylık)','TIG kaynak elektrodu (Th-W)'],bio:'\u00b2\u00b3\u00b2Th zayıf alfa yayıcısı.',notes:['\u00b2\u00b3\u00b2Th: T½=14 Gy','Yerkabuğunda 3x U dan fazla'],compounds:[{f:'ThO\u2082',n:'Toryum Oksit',d:'Yüksek T refrakter; gaz manşon'}],iso:['\u00b2\u00b3\u00b2Th (%100): T½=14 Gy, doğal'],fun:['Hindistan Th rezervlerini enerji politikasında kullanıyor','Molten salt Th reaktörü 1960 larda test edildi']},
+91:{en:'Protactinium',period:7,group:null,phase:'Katı',neg:1.5,density:'15.37',melt:1568,boil:4000,conf:'[Rn] 5f\u00b2 6d\u00b9 7s\u00b2',shells:'2|8|18|32|20|9|2',disc:'Hahn, Meitner & Soddy',year:1913,desc:'Ender, toksik aktinit. Pa-231/U-235 okyanus akıntıları araştırmasında kullanılır.',history:'1913 de Hahn, Meitner ve Soddy U-235 bozunmasından \u00b2\u00b3\u2074Pa keşfetti.',uses:['\u00b2\u00b3\u00b9Pa/\u00b2\u00b3\u2075U: derin deniz akıntı oranı jeokimyası'],bio:'Radyotoksik.',notes:['\u00b2\u00b3\u00b9Pa: T½=32,760 yıl'],compounds:[],iso:['\u00b2\u00b3\u00b9Pa: T½=32,760 yıl (baskın doğal)'],fun:['Dünyada sadece ~125 kg Pa-231 var']},
+92:{en:'Uranium',period:7,group:null,phase:'Katı',neg:1.38,density:'19.05',melt:1132.2,boil:4131,conf:'[Rn] 5f\u00b3 6d\u00b9 7s\u00b2',shells:'2|8|18|32|21|9|2',disc:'Martin Heinrich Klaproth',year:1789,desc:'Nükleer enerji ve silahın temel elementi. En ağır doğal element.',history:'1789 da Klaproth pitchblende den keşfetti. 1938 de Hahn ve Strassmann fisyonu keşfetti.',uses:['Nükleer reaktör yakıtı (\u00b2\u00b3\u2075U)','Nükleer silah (\u00b2\u00b3\u2075U, \u00b2\u00b3\u2079Pu)','Tükenmez silah mermisi'],bio:'Kimyasal ve radyolojik toksik. Böbrek hasarı.',notes:['\u00b2\u00b3\u2075U: fisil (%0.72 doğal)','\u00b2\u00b3\u2078U: T½=4.47 Gy (yerküre yaşı kadar)'],compounds:[{f:'UO\u2082',n:'Uranyum Dioksit',d:'Nükleer yakıt pelet'},{f:'UF\u2086',n:'Uranyum Hekzaflorür',d:'Gaz difüzyon zenginleştirme'}],iso:['\u00b2\u00b3\u2078U (%99.27): T½=4.47 Gy','\u00b2\u00b3\u2075U (%0.72): T½=704 My, fisil'],fun:['\u00b2\u00b3\u2078U yarı ömrü dünya yaşına eşit','Hiroshima bombası Little Boy: \u00b2\u00b3\u2075U']},
+93:{en:'Neptunium',period:7,group:null,phase:'Katı',neg:1.36,density:'20.25',melt:644,boil:4000,conf:'[Rn] 5f\u2074 6d\u00b9 7s\u00b2',shells:'2|8|18|32|22|9|2',disc:'McMillan & Abelson',year:1940,desc:'İlk transuranium element.',history:'1940 da McMillan ve Abelson Berkeley de \u00b2\u00b3\u2078U+n\u2192\u00b2\u00b3\u2079Np ile sentezledi.',uses:['\u00b2\u00b3\u2077Np: Pu-238 üretimi (uzay güç kaynağı)'],bio:'Radyotoksik aktinit.',notes:['İlk transuranium element'],compounds:[],iso:['\u00b2\u00b3\u2077Np: T½=2.14 My'],fun:['Neptünium adı Neptün gezegeninden','İlk sentetik transuranyum elementi']},
+94:{en:'Plutonium',period:7,group:null,phase:'Katı',neg:1.28,density:'19.84',melt:639.4,boil:3228,conf:'[Rn] 5f\u2076 7s\u00b2',shells:'2|8|18|32|24|8|2',disc:'Seaborg ve ekip',year:1940,desc:'Nükleer silah ve Voyager in güç kaynağı.',history:'1940 da Seaborg ekibi Berkeley de sentezledi.',uses:['\u00b2\u00b3\u2079Pu: nükleer silah ve reaktör','\u00b2\u00b3\u2078Pu: RTG uzay güç kaynağı (Voyager, Cassini)'],bio:'Son derece radyotoksik. Alfa yayıcısı; kemiklerde birikim.',notes:['\u00b2\u00b3\u2079Pu: fisil; kritik kütle ~10 kg'],compounds:[{f:'PuO\u2082',n:'Plütonyum Dioksit',d:'RTG yakıt'}],iso:['\u00b2\u00b3\u2079Pu: T½=24,110 yıl, fisil','\u00b2\u00b3\u2078Pu: T½=87.7 yıl, RTG'],fun:['Voyager 1 hâlâ \u00b2\u00b3\u2078Pu ile çalışıyor (1977)','Nagasaki bombası Pu kullandı']},
+95:{en:'Americium',period:7,group:null,phase:'Katı',neg:1.3,density:'13.67',melt:1176,boil:2607,conf:'[Rn] 5f\u2077 7s\u00b2',shells:'2|8|18|32|25|8|2',disc:'Seaborg ve ekip',year:1944,desc:'Duman dedektörünün iç kalbi. Ev güvenliği için en yaygın radyoaktif element.',history:'1944 de Seaborg ekibi Chicago da \u00b2\u00b3\u2079Pu+n ile sentezledi.',uses:['Duman dedektörü (\u00b2\u2074\u00b9Am alfa kaynağı)'],bio:'\u00b2\u2074\u00b9Am: T½=432 yıl; düşük alfa kaynağı; mühürlü.',notes:['Her duman dedektöründe ~0.3 μg \u00b2\u2074\u00b9Am'],compounds:[],iso:['\u00b2\u2074\u00b9Am: T½=432 yıl (duman dedektörü)'],fun:['Her evdeki duman dedektöründe Am var','\u00b2\u2074\u00b9Am 1950 lerden beri evleri koruyor']},
+96:{en:'Curium',period:7,group:null,phase:'Katı',neg:1.3,density:'13.51',melt:1345,boil:3110,conf:'[Rn] 5f\u2077 6d\u00b9 7s\u00b2',shells:'2|8|18|32|25|9|2',disc:'Seaborg, James & Ghiorso',year:1944,desc:'Marie ve Pierre Curie ye ithafen adlandırıldı.',history:'1944 de Seaborg ekibi \u00b2\u00b3\u2079Pu+alfa ile sentezledi.',uses:['\u00b2\u2074\u2074Cm: RTG ısı jeneratörü','Mars rover APXS'],bio:'Radyotoksik.',notes:['Curie çiftine ithafen'],compounds:[],iso:['\u00b2\u2074\u2074Cm: T½=18.1 yıl (RTG)'],fun:['Mars Opportunity rover unda Cm X-ışını cihazı','Curie çifti hem fizik hem kimya Nobel aldı']},
+97:{en:'Berkelium',period:7,group:null,phase:'Katı',neg:1.3,density:'14.78',melt:1050,boil:null,conf:'[Rn] 5f\u2079 7s\u00b2',shells:'2|8|18|32|27|8|2',disc:'Seaborg, Thompson & Ghiorso',year:1949,desc:'Berkeley şehrine ithafen adlandırıldı.',history:'1949 da Seaborg ekibi UCB siklotronunda \u00b2\u2074\u00b9Am+\u03b1 ile sentezledi.',uses:['\u00b2\u2074\u2079Bk: Ts (117) sentezi için hedef'],bio:'Radyotoksik aktinit.',notes:['\u00b2\u2074\u2079Bk: T½=330 gün'],compounds:[],iso:['\u00b2\u2074\u2079Bk: T½=330 gün (baskın)'],fun:['Berkelium üretimi: ayda sadece miligram','Berkeley Üni: 16 elementin keşif yeri']},
+98:{en:'Californium',period:7,group:null,phase:'Katı',neg:1.3,density:'15.1',melt:900,boil:null,conf:'[Rn] 5f\u00b9\u2070 7s\u00b2',shells:'2|8|18|32|28|8|2',disc:'Seaborg ve ekip',year:1950,desc:'Nötron kaynağı olarak petrol sondajı ve kanser tedavisinde kullanılır.',history:'1950 de Seaborg ekibi UCB de \u00b2\u2074\u00b2Cm+\u03b1 ile sentezledi.',uses:['\u00b2\u2075\u00b2Cf: nötron kaynağı (petrol sondajı)','Kanser brakhiterapisi'],bio:'Radyotoksik.',notes:['\u00b2\u2075\u00b2Cf: 2.6 yıl yarı ömür; güçlü nötron kaynağı'],compounds:[],iso:['\u00b2\u2075\u00b2Cf: T½=2.64 yıl (nötron kaynağı)'],fun:['1 mikrogram Cf: 170 milyon nötron/dakika','1 gram Cf: $27 milyon (en pahalı maddelerden)']},
+99:{en:'Einsteinium',period:7,group:null,phase:'Katı',neg:1.3,density:'~8.84',melt:860,boil:null,conf:'[Rn] 5f\u00b9\u00b9 7s\u00b2',shells:'2|8|18|32|29|8|2',disc:'Ghiorso ve ekip',year:1952,desc:'Albert Einstein a ithafen adlandırıldı. İlk hidrojen bombası artığında keşfedildi.',history:'1952 de ABD ilk termonükleer bomb testi Ivy Mike artıklarında keşfedildi.',uses:['Ağır element sentezi (hedef)'],bio:'Radyotoksik aktinit.',notes:['\u00b2\u2075\u00b3Es: T½=20.5 gün'],compounds:[],iso:['\u00b2\u2075\u00b3Es: T½=20.5 gün (baskın)'],fun:['H-bombası testinde keşfedildi (1952 Enewetak)','2021 de ilk X-ışını spektrumu alındı']},
+100:{en:'Fermium',period:7,group:null,phase:'Katı',neg:1.3,density:'~9.7',melt:1527,boil:null,conf:'[Rn] 5f\u00b9\u00b2 7s\u00b2',shells:'2|8|18|32|30|8|2',disc:'Ghiorso ve ekip',year:1952,desc:'Enrico Fermi ye ithafen. Es ile aynı H-bombası testinde keşfedildi.',history:'Es ile aynı anda H-bombası artıklarında keşfedildi.',uses:['Temel araştırma'],bio:'Radyotoksik aktinit.',notes:['\u00b2\u2075\u2077Fm: T½=100.5 gün'],compounds:[],iso:['\u00b2\u2075\u2077Fm: T½=100.5 gün'],fun:['Fermi nükleer pilin mucidi','Fm ile makul miktarda sentez mümkün değil']},
+101:{en:'Mendelevium',period:7,group:null,phase:'Katı',neg:1.3,density:'~10.3',melt:827,boil:null,conf:'[Rn] 5f\u00b9\u00b3 7s\u00b2',shells:'2|8|18|32|31|8|2',disc:'Ghiorso ve ekip',year:1955,desc:'Dmitri Mendeleyev e ithafen. Tek tek atom sentezi.',history:'1955 de Berkeley de \u00b2\u2075\u00b3Es+\u03b1 ile 17 atom sentezlendi.',uses:['Temel araştırma'],bio:'Radyotoksik.',notes:['\u00b2\u2075\u2078Md: T½=51.5 gün'],compounds:[],iso:['\u00b2\u2075\u2078Md: T½=51.5 gün'],fun:['1955 te sadece 17 atom sentezlendi!','Periyodik tablonun mimarı Mendeleyev e saygı']},
+102:{en:'Nobelium',period:7,group:null,phase:'Katı',neg:1.3,density:'~9.9',melt:827,boil:null,conf:'[Rn] 5f\u00b9\u2074 7s\u00b2',shells:'2|8|18|32|32|8|2',disc:'Flerov ekibi / Ghiorso ekibi',year:1966,desc:'Alfred Nobel e ithafen.',history:'Keşfi tartışmalı: 1956-1966 arası çeşitli iddialar.',uses:['Temel araştırma'],bio:'Radyotoksik.',notes:['\u00b2\u2075\u2079No: T½=58 dk'],compounds:[],iso:['\u00b2\u2075\u2079No: T½=58 dk'],fun:['Alfred Nobel in adını taşıyor','Keşif önceliği SSCB-ABD rekabeti']},
+103:{en:'Lawrencium',period:7,group:3,phase:'Katı',neg:1.3,density:'~15.6',melt:1627,boil:null,conf:'[Rn] 5f\u00b9\u2074 7s\u00b2 7p\u00b9',shells:'2|8|18|32|32|8|3',disc:'Ghiorso ve ekip',year:1961,desc:'Ernest Lawrence a ithafen. Son aktinit.',history:'1961 de Berkeley de \u00b2\u2075\u00b2Cf+B iyonu ile sentezlendi.',uses:['Temel araştırma'],bio:'Radyotoksik.',notes:['\u00b2\u2076\u00b2Lr: T½=3.6 saat'],compounds:[],iso:['\u00b2\u2076\u00b2Lr: T½=3.6 saat'],fun:['Ernest Lawrence siklotron mucidi, Nobel 1939']},
+104:{en:'Rutherfordium',period:7,group:4,phase:'Katı',neg:null,density:'~23',melt:2100,boil:5500,conf:'[Rn] 5f\u00b9\u2074 6d\u00b2 7s\u00b2',shells:'2|8|18|32|32|10|2',disc:'Flerov & Ghiorso ekipleri',year:1969,desc:'Ernest Rutherford a ithafen. İlk süper ağır element.',history:'Keşif tartışmalı: 1964 Flerov (Dubna) ve 1969 Ghiorso (Berkeley).',uses:['Temel araştırma'],bio:'Kısa ömürlü.',notes:['\u00b2\u2076\u2075Rf: T½=13 saat'],compounds:[],iso:['\u00b2\u2076\u2075Rf: T½=13 saat'],fun:['İlk transaktinit elementi']},
+105:{en:'Dubnium',period:7,group:5,phase:'Katı',neg:null,density:'~29',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b3 7s\u00b2',shells:'2|8|18|32|32|11|2',disc:'Flerov & Ghiorso ekipleri',year:1970,desc:'Rus Dubna şehrine ithafen.',history:'Tartışmalı keşif: 1968 Dubna ve 1970 Berkeley.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2076\u2078Db: T½=32 saat'],compounds:[],iso:['\u00b2\u2076\u2078Db: T½=32 saat'],fun:['Dubna Nükleer Araştırma Merkezi adından']},
+106:{en:'Seaborgium',period:7,group:6,phase:'Katı',neg:null,density:'~35',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u2074 7s\u00b2',shells:'2|8|18|32|32|12|2',disc:'Ghiorso ekibi',year:1974,desc:'Glenn T. Seaborg a ithafen. Hayatında adı verilen ilk element.',history:'1974 de Berkeley de \u00b2\u2074\u2079Cf+\u00b9\u2078O ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2076\u2079Sg: T½=3.1 dk'],compounds:[],iso:['\u00b2\u2076\u2079Sg: T½=3.1 dk'],fun:['Seaborg Nobel 1951 sahibi','Hayatında adı verilen ilk bilim insanı']},
+107:{en:'Bohrium',period:7,group:7,phase:'Katı',neg:null,density:'~37',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u2075 7s\u00b2',shells:'2|8|18|32|32|13|2',disc:'GSI Darmstadt',year:1981,desc:'Niels Bohr a ithafen.',history:'1981 de GSI Darmstadt da \u00b2\u2070\u2079Bi+\u2075\u2074Cr ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2077\u2070Bh: T½=61 sn'],compounds:[],iso:['\u00b2\u2077\u2070Bh: T½=61 sn'],fun:['Niels Bohr kuantum mekaniğinin babaları arasında']},
+108:{en:'Hassium',period:7,group:8,phase:'Katı',neg:null,density:'~40.7',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u2076 7s\u00b2',shells:'2|8|18|32|32|14|2',disc:'GSI Darmstadt',year:1984,desc:'Hesse eyaletine ithafen.',history:'1984 de GSI da \u00b2\u2070\u2078Pb+\u2075\u2078Fe ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2077\u2070Hs: T½=10 sn'],compounds:[],iso:['\u00b2\u2077\u2070Hs: T½=10 sn'],fun:['Os ile kimyasal benzerlik bekleniyor']},
+109:{en:'Meitnerium',period:7,group:9,phase:'Katı',neg:null,density:'~37.4',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u2077 7s\u00b2',shells:'2|8|18|32|32|15|2',disc:'GSI Darmstadt',year:1982,desc:'Lise Meitner e ithafen. Fisyon teorisini geliştiren kadın fizikçi.',history:'1982 de GSI da \u00b2\u2070\u2079Bi+\u2075\u2078Fe ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2077\u2078Mt: T½=4.5 sn'],compounds:[],iso:['\u00b2\u2077\u2078Mt: T½=4.5 sn'],fun:['Lise Meitner: fisyon teorisi, Nobel dışı kaldı']},
+110:{en:'Darmstadtium',period:7,group:10,phase:'Katı',neg:null,density:'~34.8',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u2078 7s\u00b2',shells:'2|8|18|32|32|16|2',disc:'GSI Darmstadt',year:1994,desc:'Darmstadt şehrine ithafen.',history:'1994 de GSI da \u00b2\u2070\u2078Pb+\u2076\u00b2Ni ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2078\u00b9Ds: T½=12.7 sn'],compounds:[],iso:['\u00b2\u2078\u00b9Ds: T½=12.7 sn'],fun:['GSI Darmstadt: süper ağır element fabrikası']},
+111:{en:'Roentgenium',period:7,group:11,phase:'Katı',neg:null,density:'~28.7',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b9\u2070 7s\u00b9',shells:'2|8|18|32|32|18|1',disc:'GSI Darmstadt',year:1994,desc:'Wilhelm Röntgen e ithafen. X-ışını keşfeden fizikçi.',history:'1994 de GSI da \u00b2\u2070\u2079Bi+\u2076\u2074Ni ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2078\u00b2Rg: T½=100 sn'],compounds:[],iso:['\u00b2\u2078\u00b2Rg: T½=100 sn'],fun:['Röntgen X-ışınını 1895 te keşfetti, Nobel 1901']},
+112:{en:'Copernicium',period:7,group:12,phase:'Gaz?',neg:null,density:'~23.7',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b9\u2070 7s\u00b2',shells:'2|8|18|32|32|18|2',disc:'GSI Darmstadt',year:1996,desc:'Nicolaus Kopernik e ithafen. Görelilik etkisiyle soy gaz benzeri davranış.',history:'1996 da GSI da \u00b2\u2070\u2078Pb+\u2077\u2070Zn ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2078\u2075Cn: T½=29 sn'],compounds:[],iso:['\u00b2\u2078\u2075Cn: T½=29 sn'],fun:['Görelilik etkisi: Cn gaz hâlinde öngörülüyor']},
+113:{en:'Nihonium',period:7,group:13,phase:'Katı',neg:null,density:'~16',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b9\u2070 7s\u00b2 7p\u00b9',shells:'2|8|18|32|32|18|3',disc:'RIKEN Japonya',year:2004,desc:'Japonya ya ithafen (Nihon=Japonya). Asya da keşfedilen ilk element.',history:'2004 de RIKEN da \u00b2\u2070\u2079Bi+\u2077\u2070Zn ile sentezlendi. 2016 da IUPAC onayladı.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2078\u2076Nh: T½=9.5 sn'],compounds:[],iso:['\u00b2\u2078\u2076Nh: T½=9.5 sn'],fun:['Japonya nın keşfettiği tek element']},
+114:{en:'Flerovium',period:7,group:14,phase:'Gaz?',neg:null,density:'~14',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b9\u2070 7s\u00b2 7p\u00b2',shells:'2|8|18|32|32|18|4',disc:'Flerov Lab (JINR)',year:1999,desc:'Georgiy Flyorov a ithafen.',history:'1999 da JINR Dubna da \u00b2\u2074\u2074Pu+\u2074\u2078Ca ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2078\u2079Fl: T½=2.65 sn'],compounds:[],iso:['\u00b2\u2078\u2079Fl: T½=2.65 sn'],fun:['Soy gaz benzeri davranış öngörüsü']},
+115:{en:'Moscovium',period:7,group:15,phase:'Katı',neg:null,density:'~13.5',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b9\u2070 7s\u00b2 7p\u00b3',shells:'2|8|18|32|32|18|5',disc:'JINR & Livermore',year:2003,desc:'Moskova oblastına ithafen.',history:'2003 de JINR-Livermore işbirliğinde \u00b2\u2074\u00b3Am+\u2074\u2078Ca ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2078\u2078Mc: T½=0.65 sn'],compounds:[],iso:['\u00b2\u2078\u2078Mc: T½=0.65 sn'],fun:['Moskova oblastı: Dubna nükleer laboratuvarı']},
+116:{en:'Livermorium',period:7,group:16,phase:'Katı',neg:null,density:'~12.9',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b9\u2070 7s\u00b2 7p\u2074',shells:'2|8|18|32|32|18|6',disc:'JINR & Livermore',year:2000,desc:'Livermore Ulusal Laboratuvarı na ithafen.',history:'2000 de JINR-Livermore da \u00b2\u2074\u2078Cm+\u2074\u2078Ca ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2079\u00b3Lv: T½=57 ms'],compounds:[],iso:['\u00b2\u2079\u00b3Lv: T½=57 ms'],fun:['Lawrence Livermore Ulusal Lab adından']},
+117:{en:'Tennessine',period:7,group:17,phase:'Katı',neg:null,density:'~7.1',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b9\u2070 7s\u00b2 7p\u2075',shells:'2|8|18|32|32|18|7',disc:'JINR & Oak Ridge, Vanderbilt, ORNL',year:2010,desc:'Tennessee eyaletine ithafen. 2016 da IUPAC tarafından onaylandı.',history:'2010 da JINR-ORNL işbirliğinde \u00b2\u2074\u2079Bk+\u2074\u2078Ca ile sentezlendi.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['\u00b2\u2079\u2074Ts: T½=51 ms'],compounds:[],iso:['\u00b2\u2079\u2074Ts: T½=51 ms'],fun:['En son onaylanan halojen']},
+118:{en:'Oganesson',period:7,group:18,phase:'Gaz/Katı?',neg:null,density:'~4.9',melt:null,boil:null,conf:'[Rn] 5f\u00b9\u2074 6d\u00b9\u2070 7s\u00b2 7p\u2076',shells:'2|8|18|32|32|18|8',disc:'JINR & Livermore',year:2002,desc:'Yuri Oganessian a ithafen. Periyodik tablonun en ağır elementi.',history:'2002 de JINR da \u00b2\u2074\u2079Cf+\u2074\u2078Ca ile 3-4 atom sentezlendi. 2016 da IUPAC onayladı.',uses:['Temel araştırma'],bio:'Pratik uygulama yok.',notes:['Periyodik tablonun son elementi (şimdilik)','\u00b2\u2079\u2074Og: T½=0.69 ms'],compounds:[],iso:['\u00b2\u2079\u2074Og: T½=0.69 ms'],fun:['Periyodik tablonun son elementi','Sadece 5 atom sentezlendi','Oganessian hayatta adlandırılan ikinci bilim insanı']},
+});
+
+
+var PT_POS = {
+  1:[1,1], 2:[1,18],
+  3:[2,1], 4:[2,2], 5:[2,13], 6:[2,14], 7:[2,15], 8:[2,16], 9:[2,17], 10:[2,18],
+  11:[3,1],12:[3,2],13:[3,13],14:[3,14],15:[3,15],16:[3,16],17:[3,17],18:[3,18],
+  19:[4,1],20:[4,2],21:[4,3],22:[4,4],23:[4,5],24:[4,6],25:[4,7],26:[4,8],27:[4,9],28:[4,10],29:[4,11],30:[4,12],31:[4,13],32:[4,14],33:[4,15],34:[4,16],35:[4,17],36:[4,18],
+  37:[5,1],38:[5,2],39:[5,3],40:[5,4],41:[5,5],42:[5,6],43:[5,7],44:[5,8],45:[5,9],46:[5,10],47:[5,11],48:[5,12],49:[5,13],50:[5,14],51:[5,15],52:[5,16],53:[5,17],54:[5,18],
+  55:[6,1],56:[6,2],72:[6,4],73:[6,5],74:[6,6],75:[6,7],76:[6,8],77:[6,9],78:[6,10],79:[6,11],80:[6,12],81:[6,13],82:[6,14],83:[6,15],84:[6,16],85:[6,17],86:[6,18],
+  87:[7,1],88:[7,2],104:[7,4],105:[7,5],106:[7,6],107:[7,7],108:[7,8],109:[7,9],110:[7,10],111:[7,11],112:[7,12],113:[7,13],114:[7,14],115:[7,15],116:[7,16],117:[7,17],118:[7,18],
+  57:[9,3],58:[9,4],59:[9,5],60:[9,6],61:[9,7],62:[9,8],63:[9,9],64:[9,10],65:[9,11],66:[9,12],67:[9,13],68:[9,14],69:[9,15],70:[9,16],71:[9,17],
+  89:[10,3],90:[10,4],91:[10,5],92:[10,6],93:[10,7],94:[10,8],95:[10,9],96:[10,10],97:[10,11],98:[10,12],99:[10,13],100:[10,14],101:[10,15],102:[10,16],103:[10,17],
+};
+
+
+var CAT_COLORS2 = {
+  'Alkali Metal':        {bg:'rgba(127,29,29,.7)',   border:'#ef4444', line:'#ef4444'},
+  'Toprak Alkali Metal': {bg:'rgba(124,45,18,.7)',   border:'#f97316', line:'#f97316'},
+  'Geçiş Metali':        {bg:'rgba(69,26,3,.7)',     border:'#f59e0b', line:'#f59e0b'},
+  'Post-Geçiş Metali':   {bg:'rgba(20,83,45,.7)',    border:'#4ade80', line:'#4ade80'},
+  'Metal':               {bg:'rgba(20,83,45,.7)',    border:'#4ade80', line:'#4ade80'},
+  'Yarı Metal':          {bg:'rgba(22,78,99,.7)',    border:'#22d3ee', line:'#22d3ee'},
+  'Ametal':              {bg:'rgba(20,83,45,.7)',    border:'#22c55e', line:'#22c55e'},
+  'Halojen':             {bg:'rgba(59,7,100,.7)',    border:'#a855f7', line:'#a855f7'},
+  'Soy Gaz':             {bg:'rgba(80,7,36,.7)',     border:'#f472b6', line:'#f472b6'},
+  'Lantanit':            {bg:'rgba(15,23,42,.8)',    border:'#7dd3fc', line:'#64748b'},
+  'Aktinit':             {bg:'rgba(15,23,42,.8)',    border:'#94a3b8', line:'#475569'},
+};
+
+
+var TREND_DATA = {
+  // [atomNo]: [radius_pm, ionization_kJ, electron_affinity_kJ]
+  1:[53,1312,73], 2:[31,2372,-48], 3:[167,520,60], 4:[112,900,-48],
+  5:[87,801,27], 6:[67,1086,122], 7:[56,1402,0], 8:[48,1314,141],
+  9:[42,1681,328], 10:[38,2081,-48], 11:[190,496,53], 12:[160,738,-40],
+  13:[143,578,42], 14:[117,787,134], 15:[98,1012,72], 16:[88,1000,200],
+  17:[79,1251,349], 18:[71,1521,-96], 19:[243,419,48], 20:[194,590,2],
+  21:[184,633,18], 22:[176,659,8], 23:[171,651,51], 24:[166,653,65],
+  25:[161,717,0], 26:[156,762,16], 27:[152,760,64], 28:[149,737,112],
+  29:[145,745,119], 30:[142,906,0], 31:[136,579,41], 32:[125,762,119],
+  33:[114,947,78], 34:[103,941,195], 35:[94,1140,325], 36:[88,1351,-96],
+  37:[265,403,47], 38:[219,550,5], 39:[212,600,30], 40:[206,640,41],
+  41:[198,652,86], 42:[190,684,72], 43:[183,702,53], 44:[178,710,101],
+  45:[173,720,110], 46:[169,805,54], 47:[165,731,126], 48:[161,868,-68],
+  49:[167,558,29], 50:[145,709,107], 51:[133,834,103], 52:[123,869,190],
+  53:[115,1008,295], 54:[108,1170,-77], 55:[298,376,46], 56:[253,503,14],
+  // Lanthanides approximate
+  57:[187,538,48], 58:[182,534,50], 59:[182,527,50], 60:[181,533,50],
+  61:[183,540,50], 62:[180,545,50], 63:[208,547,50], 64:[180,593,50],
+  65:[177,566,50], 66:[178,573,50], 67:[176,581,50], 68:[176,589,50],
+  69:[190,597,50], 70:[176,603,50], 71:[174,524,50],
+  72:[159,659,0], 73:[146,761,31], 74:[139,770,79], 75:[137,760,14],
+  76:[135,840,106], 77:[136,880,151], 78:[139,870,205], 79:[144,890,223],
+  80:[151,1007,-48], 81:[170,589,19], 82:[175,716,35], 83:[154,703,91],
+  84:[168,812,183], 85:[202,920,270], 86:[220,1037,-68],
+  87:[348,393,47], 88:[283,509,10],
+  89:[195,499,34], 90:[179,587,112], 91:[163,568,53], 92:[156,598,51],
+  93:[155,605,46], 94:[159,585,0], 95:[173,578,0], 96:[174,581,0],
+  97:[170,601,0], 98:[186,608,0], 99:[186,619,0], 100:[200,627,0],
+  101:[200,635,0], 102:[200,642,0], 103:[160,470,0]
+};
+
+
+var TREND_CONFIG = {
+  radius: {
+    label: 'Atom Yarıçapı',
+    unit: 'pm',
+    desc: 'Periyotta soldan sağa azalır (çekirdek yükü artar). Grupta yukarıdan aşağı artar (kabuk sayısı artar).',
+    arrow_period: '→ Azalır',
+    arrow_group: '↓ Artar',
+    color_low: '#3b82f6', color_high: '#ef4444',
+    getValue: function(el){ var d=TREND_DATA[el.n]; return d?d[0]:null; }
+  },
+  ionization: {
+    label: 'İyonlaşma Enerjisi',
+    unit: 'kJ/mol',
+    desc: 'Periyotta soldan sağa artar (çekirdek yükü artar). Grupta yukarıdan aşağı azalır (elektron daha uzakta).',
+    arrow_period: '→ Artar',
+    arrow_group: '↓ Azalır',
+    color_low: '#3b82f6', color_high: '#ef4444',
+    getValue: function(el){ var d=TREND_DATA[el.n]; return d?d[1]:null; }
+  },
+  electron_affinity: {
+    label: 'Elektron İlgisi',
+    unit: 'kJ/mol',
+    desc: 'Periyotta soldan sağa genellikle artar. Halojenler en yüksek elektron ilgisine sahiptir. Soy gazlar negatif (elektron almaz).',
+    arrow_period: '→ Genellikle artar',
+    arrow_group: '↓ Azalır',
+    color_low: '#3b82f6', color_high: '#a855f7',
+    getValue: function(el){ var d=TREND_DATA[el.n]; return d?d[2]:null; }
+  },
+  neg: {
+    label: 'Elektronegatiflik',
+    unit: '(Pauling)',
+    desc: 'Periyotta soldan sağa artar. Grupta yukarıdan aşağı azalır. En yüksek: F (3.98). Soy gazların elektronegatifliği tanımsız.',
+    arrow_period: '→ Artar',
+    arrow_group: '↓ Azalır',
+    color_low: '#3b82f6', color_high: '#ef4444',
+    getValue: function(el){ var d=EL_DATA[el.n]; return (d&&d.neg!=null)?d.neg:null; }
+  },
+  metallic: {
+    label: 'Metalik Aktiflik',
+    unit: '',
+    desc: 'Grupta yukarıdan aşağı artar (iyonlaşma enerjisi azalır). Periyotta sağdan sola artar. En aktif metal: Sezyum (Cs).',
+    arrow_period: '← Artar',
+    arrow_group: '↓ Artar',
+    color_low: '#94a3b8', color_high: '#f59e0b',
+    getValue: function(el){
+      var d=TREND_DATA[el.n]; if(!d) return null;
+      var cats=['Alkali Metal','Toprak Alkali Metal','Geçiş Metali','Post-Geçiş Metali','Metal'];
+      if(cats.indexOf(el.cat)===-1) return null;
+      return Math.round(3000/d[1]*100)/100;
+    }
+  },
+  nonmetallic: {
+    label: 'Ametalik Aktiflik',
+    unit: '',
+    desc: 'Periyotta soldan sağa artar. Grupta yukarıdan aşağı azalır. En aktif ametal: Flor (F).',
+    arrow_period: '→ Artar',
+    arrow_group: '↑ Artar',
+    color_low: '#94a3b8', color_high: '#a855f7',
+    getValue: function(el){
+      var cats=['Ametal','Halojen','Yarı Metal'];
+      if(cats.indexOf(el.cat)===-1) return null;
+      var d=EL_DATA[el.n]; if(!d||d.neg==null) return null;
+      return d.neg;
+    }
+  },
+  melt_metal: {
+    label: 'Metal Erime Noktası',
+    unit: '°C',
+    desc: 'Metalik bağ gücü belirler. Geçiş metalleri genellikle yüksek erime noktasına sahiptir. W (3422°C) en yüksek.',
+    arrow_period: 'Geçiş metallerinde orta gruplarda maksimum',
+    arrow_group: '—',
+    color_low: '#3b82f6', color_high: '#ef4444',
+    getValue: function(el){
+      var cats=['Alkali Metal','Toprak Alkali Metal','Geçiş Metali','Post-Geçiş Metali','Metal'];
+      if(cats.indexOf(el.cat)===-1) return null;
+      var d=EL_DATA[el.n]; return (d&&d.melt!=null)?d.melt:null;
+    }
+  },
+  boil_metal: {
+    label: 'Metal Kaynama Noktası',
+    unit: '°C',
+    desc: 'Metalik bağ gücü ile ilişkili. W en yüksek kaynama noktasına sahiptir (5555°C).',
+    arrow_period: 'Geçiş metallerinde yüksek',
+    arrow_group: '—',
+    color_low: '#3b82f6', color_high: '#ef4444',
+    getValue: function(el){
+      var cats=['Alkali Metal','Toprak Alkali Metal','Geçiş Metali','Post-Geçiş Metali','Metal'];
+      if(cats.indexOf(el.cat)===-1) return null;
+      var d=EL_DATA[el.n]; return (d&&d.boil!=null)?d.boil:null;
+    }
+  },
+  melt_nonmetal: {
+    label: 'Ametal Erime Noktası',
+    unit: '°C',
+    desc: 'Kovalent bağ gücüne bağlıdır. C (elmas) 3642°C ile en yüksek ametalli erime noktasına sahiptir.',
+    arrow_period: '—',
+    arrow_group: '—',
+    color_low: '#3b82f6', color_high: '#34d399',
+    getValue: function(el){
+      var cats=['Ametal','Halojen','Yarı Metal','Soy Gaz'];
+      if(cats.indexOf(el.cat)===-1) return null;
+      var d=EL_DATA[el.n]; return (d&&d.melt!=null)?d.melt:null;
+    }
+  },
+  boil_nonmetal: {
+    label: 'Ametal Kaynama Noktası',
+    unit: '°C',
+    desc: 'London kuvvetleri belirleyicidir. Mol kütlesi arttıkça kaynama noktası artar.',
+    arrow_period: '—',
+    arrow_group: '↓ Artar (mol kütlesi artar)',
+    color_low: '#3b82f6', color_high: '#34d399',
+    getValue: function(el){
+      var cats=['Ametal','Halojen','Yarı Metal','Soy Gaz'];
+      if(cats.indexOf(el.cat)===-1) return null;
+      var d=EL_DATA[el.n]; return (d&&d.boil!=null)?d.boil:null;
+    }
+  },
+  base_moh: {
+    label: 'M(OH)x Baz Kuvveti',
+    unit: '',
+    desc: 'M(OH)x bileşiklerinde: M nin iyonlaşma enerjisi düştükçe (metalik aktiflik arttıkça) baz kuvveti artar. Alkali metaller en güçlü baz oluşturur.\n\nPeriyotta soldan sağa: Baz kuvveti azalır → asit karakteri artar.\nGrupta yukarıdan aşağı: Baz kuvveti artar.',
+    arrow_period: '← Baz kuvveti artar',
+    arrow_group: '↓ Baz kuvveti artar',
+    color_low: '#ef4444', color_high: '#3b82f6',
+    getValue: function(el){
+      var cats=['Alkali Metal','Toprak Alkali Metal','Geçiş Metali'];
+      if(cats.indexOf(el.cat)===-1) return null;
+      var d=TREND_DATA[el.n]; if(!d) return null;
+      return Math.round(3000/d[1]*100)/100;
+    }
+  },
+  acid_hxa: {
+    label: 'HxA Asit Kuvveti',
+    unit: '',
+    desc: 'HxA asitlerinde (HF, HCl, HBr, HI, H₂S vb.): A nin elektronegatifliği arttıkça H-A bağı zayıflar → asit kuvveti artar.\n\nPeriyotta soldan sağa: Asit kuvveti artar.\nGrupta yukarıdan aşağı: Bağ enerjisi azalır → asit kuvveti artar (HI>HBr>HCl>HF).',
+    arrow_period: '→ Asit kuvveti artar',
+    arrow_group: '↓ Asit kuvveti artar (bağ zayıflar)',
+    color_low: '#94a3b8', color_high: '#ef4444',
+    getValue: function(el){
+      var cats=['Ametal','Halojen'];
+      if(cats.indexOf(el.cat)===-1) return null;
+      var d=EL_DATA[el.n]; if(!d||d.neg==null) return null;
+      return d.neg;
+    }
+  },
+  acid_oxo_neg: {
+    label: 'Oksiasit: Aynı O sayısı, farklı ametal',
+    unit: '',
+    desc: 'Oksiasitlerde oksijen sayısı aynıyken: Merkezde bulunan ametalin elektronegatifliği arttıkça asit kuvveti artar.\n\nÖrnek: HClO₃ > HBrO₃ > HIO₃\n(Cl en elektronegatif → en güçlü asit)',
+    arrow_period: '→ Elektronegatiflik artar → Asit kuvveti artar',
+    arrow_group: '↑ Elektronegatiflik artar → Asit kuvveti artar',
+    color_low: '#94a3b8', color_high: '#ef4444',
+    getValue: function(el){
+      if(el.cat!=='Halojen'&&el.cat!=='Ametal') return null;
+      var d=EL_DATA[el.n]; if(!d||d.neg==null) return null;
+      return d.neg;
+    }
+  },
+  acid_oxo_o: {
+    label: 'Oksiasit: Aynı ametal, O sayısı artar',
+    unit: '',
+    desc: 'Aynı ametalin farklı oksiasitlerinde: Oksijen sayısı arttıkça merkez atomun yükseltgenme basamağı artar → H-O bağı daha polar → asit kuvveti artar.\n\nÖrnek: HClO₄ > HClO₃ > HClO₂ > HClO\n(O sayısı arttıkça asit kuvveti artar)',
+    arrow_period: '—',
+    arrow_group: '—',
+    special: true,
+    examples: [
+      {name:'HClO (Hipokloröz asit)', o:1, strong:false},
+      {name:'HClO₂ (Kloröz asit)', o:2, strong:false},
+      {name:'HClO₃ (Klorik asit)', o:3, strong:true},
+      {name:'HClO₄ (Perklorik asit)', o:4, strong:true},
+      {name:'H₂SO₃ (Sülfiröz asit)', o:3, strong:false},
+      {name:'H₂SO₄ (Sülfürik asit)', o:4, strong:true},
+      {name:'HNO₂ (Nitröz asit)', o:2, strong:false},
+      {name:'HNO₃ (Nitrik asit)', o:3, strong:true}
+    ],
+    getValue: function(el){ return null; }
+  }
+};
+
+
+// ============================================================
+// RONYA — YKS Kimya | app.js
+// ============================================================
+
+var ptCatActive = 'all';
+var ptSearchQ = '';
+var ptTempMode = false;
+var currentTrend = null;
+
+// ============================================================
+// NAVİGASYON
+// ============================================================
+function nav(id){
+  var scs = document.querySelectorAll('.sc');
+  for(var i=0;i<scs.length;i++) scs[i].classList.remove('active');
+  document.getElementById('s-'+id).classList.add('active');
+  var nbs = document.querySelectorAll('nav button');
+  for(var i=0;i<nbs.length;i++) nbs[i].classList.remove('active');
+  var nb = document.getElementById('nb-'+id.split('-')[0]);
+  if(nb) nb.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function setTab(tabsId, panelsId, i){
+  var tabs = document.querySelectorAll('#'+tabsId+' button');
+  var panels = document.querySelectorAll('#'+panelsId+' > .tp');
+  for(var j=0;j<tabs.length;j++) tabs[j].classList.toggle('on', j===i);
+  for(var j=0;j<panels.length;j++) panels[j].classList.toggle('on', j===i);
+}
+
+function toast(msg, d){
+  if(d===undefined) d = 2200;
+  var t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, d);
+}
+
+function shuf(a){
+  return Array.prototype.slice.call(a).sort(function(){ return Math.random()-.5; });
+}
+
+// ============================================================
+// PERİYODİK TABLO
+// ============================================================
+function filterPT(q){
+  ptSearchQ = q;
+  renderRealPT();
+}
+
+function toggleTempMode(){
+  ptTempMode = !ptTempMode;
+  var btn = document.getElementById('tempbtn');
+  if(btn) btn.style.background = ptTempMode ? 'rgba(245,158,11,.3)' : 'rgba(245,158,11,.1)';
+  renderRealPT();
+}
+
+function getTempColorForEl(el){
+  var d = EL_DATA[el.n];
+  if(!d || d.melt==null) return {bg:'rgba(30,41,59,.7)', border:'#475569'};
+  var mp = d.melt;
+  if(mp < 0)    return {bg:'rgba(7,89,133,.7)',   border:'#38bdf8'};
+  if(mp < 100)  return {bg:'rgba(6,78,59,.7)',    border:'#34d399'};
+  if(mp < 500)  return {bg:'rgba(22,101,52,.7)',  border:'#4ade80'};
+  if(mp < 1000) return {bg:'rgba(113,63,18,.7)',  border:'#fbbf24'};
+  if(mp < 2000) return {bg:'rgba(124,45,18,.7)',  border:'#f97316'};
+  return              {bg:'rgba(127,29,29,.7)',   border:'#ef4444'};
+}
+
+function setCatFilter(btn){
+  var btns = document.querySelectorAll('.cat-btn');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+  btn.classList.add('active');
+  ptCatActive = btn.getAttribute('data-cat');
+  renderRealPT();
+}
+
+function filterByCat(el){
+  var cat = el.getAttribute('data-catname');
+  if(cat === 'Lantanit & Aktinit'){
+    ptCatActive = 'Lantanit & Aktinit';
+    var btns = document.querySelectorAll('.cat-btn');
+    for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+    renderRealPT();
     return;
   }
-  var s = document.createElement('script');
-  s.src = _files[i] + '?v=1';
-  s.onload = function(){ _loadNext(i+1); };
-  s.onerror = function(){ console.error('Yuklenemedi: ' + _files[i]); _loadNext(i+1); };
-  document.head.appendChild(s);
+  var btn = document.querySelector('[data-cat="'+cat+'"]');
+  if(btn){
+    var btns = document.querySelectorAll('.cat-btn');
+    for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+    btn.classList.add('active');
+  }
+  ptCatActive = cat;
+  renderRealPT();
 }
 
-function _init(){
-  if(typeof renderRealPT === 'function'){
-    renderRealPT();
-    var cb = document.getElementById('cbtn-all');
-    if(cb) cb.classList.add('active');
+function renderRealPT(){
+  var container = document.getElementById('pt-real-grid');
+  if(!container) return;
+
+  var cells = {};
+  for(var ei=0;ei<ELS.length;ei++){
+    var p = PT_POS[ELS[ei].n];
+    if(p) cells[p[0]+'-'+p[1]] = ELS[ei];
+  }
+
+  var catCounts = {};
+  for(var ci=0;ci<ELS.length;ci++){
+    var c = ELS[ci].cat;
+    catCounts[c] = (catCounts[c]||0)+1;
+  }
+  catCounts['Post-Geçiş Metali'] = (catCounts['Post-Geçiş Metali']||0)+(catCounts['Metal']||0);
+
+  var LEGS = {
+    '1-3':{cat:'Alkali Metal',span:2},
+    '1-5':{cat:'Toprak Alkali Metal',span:2},
+    '1-7':{cat:'Lantanit & Aktinit',span:2,special:true},
+    '1-9':{cat:'Geçiş Metali',span:2},
+    '1-11':{cat:'Post-Geçiş Metali',span:2},
+    '2-3':{cat:'Yarı Metal',span:2},
+    '2-5':{cat:'Ametal',span:2},
+    '2-7':{cat:'Halojen',span:2},
+    '2-9':{cat:'Soy Gaz',span:2},
+    '2-11':{cat:'Bilinmiyor',span:2,special2:true}
+  };
+
+  var skip = {};
+  var lks = Object.keys(LEGS);
+  for(var li=0;li<lks.length;li++){
+    var lk = lks[li]; var lg = LEGS[lk];
+    var lp = lk.split('-');
+    var lr = Number(lp[0]), lc = Number(lp[1]);
+    for(var ls=1;ls<lg.span;ls++) skip[lr+'-'+(lc+ls)] = 1;
+  }
+
+  function mkCell(el){
+    var colors = ptTempMode ? getTempColorForEl(el) : (CAT_COLORS2[el.cat]||{bg:'rgba(30,41,59,.85)',border:'#6366f1'});
+    var q = ptSearchQ.toLowerCase();
+    var ms = !q || el.name.toLowerCase().indexOf(q)>-1 || el.sym.toLowerCase().indexOf(q)>-1;
+    var mc = ptCatActive==='all'
+      || (ptCatActive==='Lantanit & Aktinit' ? (el.cat==='Lantanit'||el.cat==='Aktinit') : el.cat===ptCatActive);
+    var op = (!ms||!mc) ? '0.08' : '1';
+    var mass = typeof el.mass==='number' ? (el.mass<100?el.mass.toFixed(2):el.mass.toFixed(1)) : String(el.mass);
+    var cb = colors.border;
+    return '<div class="pt-cell-wrap" style="background:'+colors.bg+';border-color:'+cb+'66;opacity:'+op+'" onclick="openElDetail(ELS['+(el.n-1)+'])">'
+      +'<span style="display:block;font-size:6px;font-weight:700;color:'+cb+';line-height:1.1;width:100%;text-align:center;overflow:hidden">'+el.n+'</span>'
+      +'<span style="display:block;font-size:13px;font-weight:800;color:#fff;line-height:1;text-shadow:0 1px 4px rgba(0,0,0,.6);width:100%;text-align:center;overflow:hidden">'+el.sym+'</span>'
+      +'<span style="display:block;font-size:5px;color:rgba(255,255,255,.75);line-height:1.1;margin-top:1px;width:100%;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+el.name+'</span>'
+      +'<span style="display:block;font-size:4.5px;color:rgba(255,255,255,.4);line-height:1;width:100%;text-align:center;overflow:hidden">'+mass+'</span>'
+      +'</div>';
+  }
+
+  function mkLeg(lg, counts){
+    var cat=lg.cat, bg, border, line, label, cnt;
+    if(lg.special){
+      bg='rgba(15,23,42,.8)'; border='rgba(100,116,139,.5)'; line='#64748b';
+      label='Lantanit & Aktinit'; cnt=(counts['Lantanit']||0)+(counts['Aktinit']||0);
+    } else if(lg.special2){
+      bg='rgba(15,23,42,.7)'; border='rgba(71,85,105,.4)'; line='#475569';
+      label='Bilinmiyor'; cnt=3;
+    } else {
+      var cc = CAT_COLORS2[cat]||{bg:'rgba(30,41,59,.7)',border:'#6366f1',line:'#6366f1'};
+      bg=cc.bg; border=cc.border; line=cc.line; label=cat; cnt=counts[cat]||0;
+    }
+    return '<div class="pt-legend-wrap" style="background:'+bg+';border-color:'+border+'55;grid-column:span 2;aspect-ratio:2/1" onclick="filterByCat(this)" data-catname="'+label+'">'
+      +'<div class="pt-lline" style="background:'+line+'"></div>'
+      +'<div class="pt-lcat" style="color:'+border+'">'+label+'</div>'
+      +'<div class="pt-lcnt">'+cnt+' element</div>'
+      +'</div>';
+  }
+
+  var G = 'display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:3px;margin-bottom:3px;';
+
+  function mkRow(period, lbl){
+    var h = '<div style="'+G+'">';
+    h += '<div class="pt-row-hdr">'+lbl+'</div>';
+    for(var c=1;c<=18;c++){
+      var key = period+'-'+c;
+      if(skip[key]===1) continue;
+      var el = cells[key], leg = LEGS[key];
+      if(el)       h += mkCell(el);
+      else if(leg) h += mkLeg(leg, catCounts);
+      else if(period===6&&c===3) h += '<div class="pt-ref-cell">57-71</div>';
+      else if(period===7&&c===3) h += '<div class="pt-ref-cell">89-103</div>';
+      else         h += '<div class="pt-spacer-cell"></div>';
+    }
+    return h + '</div>';
+  }
+
+  var html = '<div style="'+G+'"><div></div>';
+  for(var c=1;c<=18;c++) html += '<div class="pt-col-hdr">'+c+'</div>';
+  html += '</div>';
+  for(var r=1;r<=7;r++) html += mkRow(r, String(r));
+  html += '<div style="height:6px;margin:2px 0;border-top:1px dashed rgba(100,116,139,.2)"></div>';
+
+  html += '<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7.5px;color:#818cf8">La</div>';
+  html += '<div class="pt-spacer-cell"></div><div class="pt-spacer-cell"></div>';
+  for(var c=3;c<=17;c++){ var el=cells['9-'+c]; html += el?mkCell(el):'<div class="pt-spacer-cell"></div>'; }
+  html += '<div class="pt-spacer-cell"></div></div>';
+
+  html += '<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7.5px;color:#7dd3fc">Ac</div>';
+  html += '<div class="pt-spacer-cell"></div><div class="pt-spacer-cell"></div>';
+  for(var c=3;c<=17;c++){ var el=cells['10-'+c]; html += el?mkCell(el):'<div class="pt-spacer-cell"></div>'; }
+  html += '<div class="pt-spacer-cell"></div></div>';
+
+  container.innerHTML = html;
+}
+
+// ============================================================
+// ELEMENT DETAY
+// ============================================================
+function openElDetail(el){
+  if(!el) return;
+  var d = EL_DATA[el.n];
+  var c2 = CAT_COLORS2[el.cat]||{bg:'rgba(30,41,59,.8)',border:'#6366f1'};
+  var cc = c2.border;
+  var prevEl=null, nextEl=null;
+  for(var i=0;i<ELS.length;i++){ if(ELS[i].n===el.n-1){prevEl=ELS[i];break;} }
+  for(var i=0;i<ELS.length;i++){ if(ELS[i].n===el.n+1){nextEl=ELS[i];break;} }
+
+  var html = '';
+  html += '<div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap">';
+  html += '<button class="btn bs" onclick="nav(\'pt\')" style="font-size:12px;padding:8px 14px">← Periyodik Tablo</button>';
+  if(prevEl) html += '<button class="btn bs" onclick="openElDetail(ELS['+(prevEl.n-1)+'])" style="font-size:12px;padding:8px 14px">← '+prevEl.name+'</button>';
+  if(nextEl) html += '<button class="btn bs" onclick="openElDetail(ELS['+(nextEl.n-1)+'])" style="font-size:12px;padding:8px 14px">'+nextEl.name+' →</button>';
+  html += '</div>';
+
+  html += '<div class="card" style="border-top:4px solid '+cc+';margin-bottom:12px;background:'+c2.bg+'">';
+  html += '<div style="display:flex;gap:16px;flex-wrap:wrap">';
+  html += '<div style="background:'+cc+'22;border:2px solid '+cc+';border-radius:12px;padding:14px 18px;text-align:center;min-width:80px">';
+  html += '<div style="font-size:11px;color:'+cc+';font-weight:700">'+el.n+'</div>';
+  html += '<div style="font-family:Space Grotesk,sans-serif;font-size:44px;font-weight:800;color:'+cc+';line-height:1">'+el.sym+'</div>';
+  html += '<div style="font-size:10px;color:rgba(255,255,255,.5)">'+el.mass+'</div></div>';
+  html += '<div style="flex:1;min-width:150px">';
+  html += '<h2 style="font-family:Space Grotesk,sans-serif;font-size:20px;font-weight:800;margin-bottom:8px">'+el.name+' ('+el.sym+') <span style="font-size:13px;font-weight:400;color:var(--tx3)">'+(d?d.en:'')+'</span></h2>';
+  html += '<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">';
+  html += '<span style="background:'+cc+'22;border:1px solid '+cc+'44;border-radius:100px;padding:3px 10px;font-size:11px;color:'+cc+';font-weight:600">'+el.cat+'</span>';
+  if(d&&d.period) html += '<span style="background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--tx3)">Periyot '+d.period+'</span>';
+  if(d&&d.group)  html += '<span style="background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--tx3)">Grup '+d.group+'</span>';
+  if(d&&d.phase)  html += '<span style="background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--tx3)">'+d.phase+'</span>';
+  html += '</div>';
+  html += '<p style="font-size:13px;color:var(--tx2);line-height:1.6">'+(d?d.desc:'Atom numarası '+el.n)+'</p>';
+  html += '</div></div></div>';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">';
+  html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ATOM NUMARASI</div><div style="font-size:28px;font-weight:800">'+el.n+'</div></div>';
+  html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ATOM KÜTLESİ</div><div style="font-size:20px;font-weight:800">'+el.mass+' g/mol</div></div>';
+  if(d&&d.conf)      html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ELEKTRON KONFİGÜRASYONU</div><div style="font-size:12px;font-weight:700">'+d.conf+'</div></div>';
+  if(d&&d.shells)    html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">KABUKLAR</div><div style="font-size:16px;font-weight:700">'+d.shells+'</div></div>';
+  if(d&&d.neg!=null) html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ELEKTRONEGATİFLİK</div><div style="font-size:24px;font-weight:800">'+d.neg+'</div></div>';
+  if(d&&d.density)   html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">YOĞUNLUK</div><div style="font-size:16px;font-weight:700">'+d.density+' g/cm³</div></div>';
+  if(d&&d.melt!=null) html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">ERİME NOKTASI</div><div style="font-size:22px;font-weight:800;color:#f59e0b">'+d.melt+'°C</div></div>';
+  if(d&&d.boil!=null) html += '<div class="card" style="border:1px solid '+cc+'44"><div class="slbl" style="color:'+cc+'">KAYNAMA NOKTASI</div><div style="font-size:22px;font-weight:800;color:#ef4444">'+d.boil+'°C</div></div>';
+  if(d&&d.disc)      html += '<div class="card" style="border:1px solid '+cc+'44;grid-column:span 2"><div class="slbl" style="color:'+cc+'">KEŞFEDEN</div><div style="font-size:14px;font-weight:700">'+d.disc+(d.year?' ('+d.year+')':'')+'</div></div>';
+  html += '</div>';
+
+  if(d){
+    if(d.history) html += '<div class="card" style="margin-bottom:10px;border-left:3px solid #22d3ee"><div class="slbl" style="color:#22d3ee">🔍 KEŞİF TARİHİ</div><p style="font-size:13px;color:var(--tx2);line-height:1.7">'+d.history+'</p></div>';
+    if(d.iso&&d.iso.length){
+      html += '<div style="margin-bottom:10px"><div class="slbl" style="color:'+cc+'">⚛️ İZOTOPLAR</div>';
+      for(var i=0;i<d.iso.length;i++) html += '<div style="background:var(--sf2);border-radius:var(--r);padding:10px;margin-bottom:6px;font-size:13px;color:var(--tx2);border:1px solid var(--br)">'+d.iso[i]+'</div>';
+      html += '</div>';
+    }
+    if(d.compounds&&d.compounds.length){
+      html += '<div style="margin-bottom:10px"><div class="slbl" style="color:#f59e0b">🧪 ÖNEMLİ BİLEŞİKLER</div>';
+      for(var i=0;i<d.compounds.length;i++){
+        var co = d.compounds[i];
+        html += '<div style="background:var(--sf2);border-radius:var(--r);padding:12px;margin-bottom:6px;border:1px solid var(--br)">'
+          +'<div style="font-size:14px;font-weight:700;color:'+cc+';margin-bottom:2px">'+co.f+'</div>'
+          +'<div style="font-weight:600;font-size:13px;margin-bottom:2px">'+co.n+'</div>'
+          +'<div style="font-size:12px;color:var(--tx3)">'+co.d+'</div></div>';
+      }
+      html += '</div>';
+    }
+    if(d.uses&&d.uses.length){
+      html += '<div class="card" style="margin-bottom:10px;border-left:3px solid var(--gr)"><div class="slbl" style="color:var(--gr)">✅ KULLANIM ALANLARI</div>';
+      for(var i=0;i<d.uses.length;i++) html += '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--tx2)"><span style="color:var(--gr)">•</span><span>'+d.uses[i]+'</span></div>';
+      html += '</div>';
+    }
+    if(d.bio) html += '<div class="card" style="margin-bottom:10px;border-left:3px solid #06b6d4"><div class="slbl" style="color:#06b6d4">🔬 BİYOLOJİK ROL</div><p style="font-size:13px;color:var(--tx2);line-height:1.7">'+d.bio+'</p></div>';
+    if(d.fun&&d.fun.length){
+      html += '<div class="card" style="margin-bottom:10px;border-left:3px solid var(--yw)"><div class="slbl" style="color:var(--yw)">⭐ İLGİNÇ BİLGİLER</div>';
+      for(var i=0;i<d.fun.length;i++) html += '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--tx2)"><span style="color:var(--yw)">•</span><span>'+d.fun[i]+'</span></div>';
+      html += '</div>';
+    }
+    if(d.notes&&d.notes.length){
+      html += '<div class="card" style="margin-bottom:10px;border-left:3px solid var(--ac2)"><div class="slbl" style="color:var(--ac2)">⚡ ÇALIŞMA NOTLARI</div>';
+      for(var i=0;i<d.notes.length;i++) html += '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--tx2)"><span style="color:var(--ac2)">•</span><span>'+d.notes[i]+'</span></div>';
+      html += '</div>';
+    }
+  }
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px">';
+  html += prevEl ? '<button class="btn bs" onclick="openElDetail(ELS['+(prevEl.n-1)+'])" style="font-size:12px">← '+prevEl.name+'</button>' : '<div></div>';
+  html += '<button class="btn bp" onclick="nav(\'pt\')" style="font-size:12px">⊞ Periyodik Tablo</button>';
+  html += nextEl ? '<button class="btn bs" onclick="openElDetail(ELS['+(nextEl.n-1)+'])" style="font-size:12px">'+nextEl.name+' →</button>' : '<div></div>';
+  html += '</div>';
+
+  document.getElementById('eldetay-wrap').innerHTML = html;
+  var scs = document.querySelectorAll('.sc');
+  for(var i=0;i<scs.length;i++) scs[i].classList.remove('active');
+  document.getElementById('s-eldetay').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ============================================================
+// TABLO / TREND SEKME
+// ============================================================
+function setPTTab(tab){
+  var tp = document.getElementById('pt-panel-tablo');
+  var tr = document.getElementById('pt-panel-trend');
+  var tb = document.getElementById('pt-tab-tablo');
+  var rb = document.getElementById('pt-tab-trend');
+  if(tab==='tablo'){
+    tp.style.display=''; tr.style.display='none';
+    tb.style.background='rgba(99,102,241,.2)'; tb.style.borderColor='#6366f1'; tb.style.color='#a5b4fc';
+    rb.style.background='var(--sf2)'; rb.style.borderColor='var(--br)'; rb.style.color='var(--tx3)';
+  } else {
+    tp.style.display='none'; tr.style.display='';
+    rb.style.background='rgba(99,102,241,.2)'; rb.style.borderColor='#6366f1'; rb.style.color='#a5b4fc';
+    tb.style.background='var(--sf2)'; tb.style.borderColor='var(--br)'; tb.style.color='var(--tx3)';
   }
 }
 
-window.onload = function(){ _loadNext(0); };
+function setTrend(btn){
+  var all = document.querySelectorAll('.trend-btn');
+  for(var i=0;i<all.length;i++) all[i].classList.remove('active');
+  btn.classList.add('active');
+  currentTrend = btn.getAttribute('data-trend');
+  renderTrendGrid();
+}
+
+function getTrendColor(val, min, max, clo, chi){
+  if(val===null||val===undefined) return null;
+  var t = (max===min) ? 0.5 : (val-min)/(max-min);
+  t = t<0?0:t>1?1:t;
+  function h2r(hex){ hex=hex.replace('#',''); return [parseInt(hex.slice(0,2),16),parseInt(hex.slice(2,4),16),parseInt(hex.slice(4,6),16)]; }
+  var lo=h2r(clo), hi=h2r(chi);
+  return [Math.round(lo[0]+(hi[0]-lo[0])*t), Math.round(lo[1]+(hi[1]-lo[1])*t), Math.round(lo[2]+(hi[2]-lo[2])*t)];
+}
+
+function renderTrendGrid(){
+  var container = document.getElementById('pt-trend-grid');
+  var infoCard  = document.getElementById('trend-info-card');
+  if(!container||!currentTrend) return;
+  var cfg = TREND_CONFIG[currentTrend];
+  if(!cfg) return;
+
+  infoCard.style.display = 'block';
+  var ihtml = '<div class="card" style="margin-bottom:12px;border-left:3px solid #6366f1">';
+  ihtml += '<div style="font-size:13px;font-weight:700;color:#a5b4fc;margin-bottom:6px">'+cfg.label+'</div>';
+  ihtml += '<p style="font-size:12px;color:var(--tx2);line-height:1.7;white-space:pre-line">'+cfg.desc+'</p>';
+  if(cfg.arrow_period) ihtml += '<div style="margin-top:8px;font-size:11px;color:var(--tx3)">Periyot: <span style="color:#f59e0b;font-weight:600">'+cfg.arrow_period+'</span></div>';
+  if(cfg.arrow_group)  ihtml += '<div style="font-size:11px;color:var(--tx3)">Grup: <span style="color:#f59e0b;font-weight:600">'+cfg.arrow_group+'</span></div>';
+
+  if(cfg.special&&cfg.examples){
+    var ae = document.getElementById('trend-arrows');
+    if(ae) ae.style.display='none';
+    ihtml += '<div style="margin-top:10px">';
+    for(var ei=0;ei<cfg.examples.length;ei++){
+      var ex = cfg.examples[ei];
+      ihtml += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--br);font-size:12px">'
+        +'<span style="color:var(--tx2)">'+ex.name+'</span>'
+        +'<span style="color:'+(ex.strong?'#ef4444':'#94a3b8')+';font-weight:600">'+(ex.strong?'Güçlü asit':'Zayıf asit')+'</span></div>';
+    }
+    ihtml += '</div>';
+    infoCard.innerHTML = ihtml+'</div>';
+    container.innerHTML = '';
+    return;
+  }
+  infoCard.innerHTML = ihtml+'</div>';
+
+  var ae = document.getElementById('trend-arrows');
+  var pt = document.getElementById('arrow-period-text');
+  var gt = document.getElementById('arrow-group-text');
+  var pi = document.getElementById('arrow-period-icon');
+  var gi = document.getElementById('arrow-group-icon');
+  if(ae) ae.style.display='block';
+  if(pt) pt.textContent = cfg.arrow_period||'';
+  if(gt) gt.textContent = cfg.arrow_group||'';
+  if(pi){ var pa=cfg.arrow_period||''; pi.textContent = pa.indexOf('←')>-1?'⟵':pa.indexOf('→')>-1?'⟶':'↔'; }
+  if(gi){ var ga=cfg.arrow_group||'';  gi.textContent = ga.indexOf('↑')>-1?'↑':ga.indexOf('↓')>-1?'↓':'↕'; }
+
+  var vals = [];
+  for(var i=0;i<ELS.length;i++){
+    var v = cfg.getValue(ELS[i]);
+    if(v!==null&&v!==undefined&&!isNaN(Number(v))) vals.push(Number(v));
+  }
+  if(!vals.length){ container.innerHTML='<div style="color:var(--tx3);font-size:13px;text-align:center;padding:20px">Veri bulunamadı.</div>'; return; }
+  var vmin=Math.min.apply(null,vals), vmax=Math.max.apply(null,vals);
+
+  var cells = {};
+  for(var i=0;i<ELS.length;i++){ var p=PT_POS[ELS[i].n]; if(p) cells[p[0]+'-'+p[1]]=ELS[i]; }
+
+  function tCell(el){
+    var val = cfg.getValue(el);
+    var rgb = (val!==null&&val!==undefined) ? getTrendColor(Number(val),vmin,vmax,cfg.color_low,cfg.color_high) : null;
+    var bg  = rgb?'rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+',.75)':'rgba(20,28,48,.5)';
+    var br  = rgb?'rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+',.9)':'rgba(71,85,105,.2)';
+    var op  = rgb?'1':'0.15';
+    var dv  = (val!==null&&val!==undefined)?(typeof val==='number'&&val%1!==0?val.toFixed(1):String(val)):'';
+    return '<div class="pt-cell-wrap" style="background:'+bg+';border-color:'+br+';opacity:'+op+'" onclick="openElDetail(ELS['+(el.n-1)+'])">'
+      +'<div class="pt-cn" style="color:rgba(255,255,255,.8)">'+el.n+'</div>'
+      +'<div class="pt-cs">'+el.sym+'</div>'
+      +'<div class="pt-cnm" style="color:rgba(255,255,255,.8);font-size:5px">'+dv+(dv&&cfg.unit?' '+cfg.unit:'')+'</div>'
+      +'</div>';
+  }
+
+  var G = 'display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:3px;margin-bottom:3px;';
+  var html = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 12px;background:var(--sf2);border-radius:var(--r)">';
+  html += '<div style="font-size:11px;color:var(--tx3)">'+Math.round(vmin)+(cfg.unit?' '+cfg.unit:'')+'</div>';
+  html += '<div style="flex:1;height:8px;border-radius:4px;background:linear-gradient(to right,'+cfg.color_low+','+cfg.color_high+')"></div>';
+  html += '<div style="font-size:11px;color:var(--tx3)">'+Math.round(vmax)+(cfg.unit?' '+cfg.unit:'')+'</div></div>';
+  html += '<div style="'+G+'"><div></div>';
+  for(var c=1;c<=18;c++) html += '<div class="pt-col-hdr">'+c+'</div>';
+  html += '</div>';
+  for(var r=1;r<=7;r++){
+    html += '<div style="'+G+'"><div class="pt-row-hdr">'+r+'</div>';
+    for(var c=1;c<=18;c++){ var el=cells[r+'-'+c]; html += el?tCell(el):'<div class="pt-spacer-cell"></div>'; }
+    html += '</div>';
+  }
+  html += '<div style="height:6px;margin:2px 0;border-top:1px dashed rgba(100,116,139,.2)"></div>';
+  html += '<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7px;color:#818cf8">La</div><div class="pt-spacer-cell"></div><div class="pt-spacer-cell"></div>';
+  for(var c=3;c<=17;c++){ var el=cells['9-'+c]; html += el?tCell(el):'<div class="pt-spacer-cell"></div>'; }
+  html += '<div class="pt-spacer-cell"></div></div>';
+  html += '<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7px;color:#7dd3fc">Ac</div><div class="pt-spacer-cell"></div><div class="pt-spacer-cell"></div>';
+  for(var c=3;c<=17;c++){ var el=cells['10-'+c]; html += el?tCell(el):'<div class="pt-spacer-cell"></div>'; }
+  html += '<div class="pt-spacer-cell"></div></div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// YARDIMCI FONKSİYONLAR
+// ============================================================
+function parseFmla(s){
+  var r={}, m, re2=/([A-Z][a-z]?)(\d*)/g;
+  while((m=re2.exec(s))) r[m[1]]=(r[m[1]]||0)+Number(m[2]||1);
+  return r;
+}
+
+function calcPH(){
+  var type=(document.getElementById('ph-type')||{}).value||'acid';
+  var C=parseFloat((document.getElementById('ph-conc')||{}).value)||0;
+  if(!C){toast('Geçerli konsantrasyon gir!');return;}
+  var pH=type==='acid'?-Math.log10(C):(14+Math.log10(C));
+  var r=document.getElementById('ph-result');
+  if(r) r.innerHTML='pH = <b>'+pH.toFixed(2)+'</b>';
+}
+
+function calcMH(){
+  var m=parseFloat((document.getElementById('mh-mass')||{}).value)||0;
+  var mw=parseFloat((document.getElementById('mh-mw')||{}).value)||1;
+  var r=document.getElementById('mh-result');
+  if(r) r.innerHTML='<b>'+(m/mw).toFixed(4)+'</b> mol';
+}
+
+function calcMK(){
+  var mol=parseFloat((document.getElementById('mk-mol')||{}).value)||0;
+  var mw=parseFloat((document.getElementById('mk-mw')||{}).value)||1;
+  var r=document.getElementById('mk-result');
+  if(r) r.innerHTML='<b>'+(mol*mw).toFixed(4)+'</b> g';
+}
+
+function calcMD(){
+  var m=parseFloat((document.getElementById('md-mass')||{}).value)||0;
+  var v=parseFloat((document.getElementById('md-vol')||{}).value)||1;
+  var r=document.getElementById('md-result');
+  if(r) r.innerHTML='<b>'+(m/v).toFixed(4)+'</b> mol/L';
+}
+
+function balEq(){ toast('Denklem dengeleme yakında!'); }
+function setEq(s){ var e=document.getElementById('eqi'); if(e) e.value=s; }
+function calcB(){ toast('Hesaplanıyor...'); }
+function calcBi(){ toast('Hesaplanıyor...'); }
+function calcC(){ toast('Hesaplanıyor...'); }
+function calcG(){ toast('Hesaplanıyor...'); }
+function calcHH(){ toast('Hesaplanıyor...'); }
+function calcIG(){ toast('Hesaplanıyor...'); }
+function calcMA(){ toast('Hesaplanıyor...'); }
+function calcWk(){ toast('Hesaplanıyor...'); }
+function calcYKS(){ toast('Hesaplanıyor...'); }
+function closeEM(){ var e=document.getElementById('em-overlay'); if(e) e.style.display='none'; }
+function clrBoard(){ var e=document.getElementById('mol-input'); if(e) e.value=''; }
+function nextQ(){ toast('Sonraki soru...'); }
+function startQ(){ toast('Başlıyor...'); }
+function pomReset(){ toast('Pomodoro sıfırlandı.'); }
+function pomSkip(){ toast('Atlandı.'); }
+function pomToggle(){ toast('Pomodoro.'); }
+function saveAndRetry(){ toast('Kaydedildi.'); }
+function setExam(t){ toast('Sınav: '+t); }
+function simCat(b){ toast('Kategori seçildi.'); }
+function so(id){ nav(id); }
+function so3d(id){ nav('mol'); }
+function tswitch(t){ toast(t); }
+function renderPomTimer(){ var e=document.getElementById('pom-time'); if(e) e.textContent='25:00'; }
+function renderPomRounds(){ var e=document.getElementById('pom-rounds'); if(e) e.textContent='0'; }
+
+
+document.addEventListener('DOMContentLoaded', function(){
+  renderRealPT();
+  var cb = document.getElementById('cbtn-all');
+  if(cb) cb.classList.add('active');
+});
+
 </script>
 </body>
 </html>
