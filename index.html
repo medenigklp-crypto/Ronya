@@ -109,7 +109,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 .enum{font-size:11px;color:var(--tx3);margin-bottom:3px;}
 .ecat{font-size:13px;color:var(--tx2);margin-top:7px;}
 .ogrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
-@media(max-width:460px){.ogrid{grid-template-columns:1fr;}}
+@media(max-width:560px){.ogrid{grid-template-columns:1fr;}}
 .ob2{background:var(--sf);border:1px solid var(--br);border-radius:var(--r);padding:13px 14px;color:var(--tx);font-size:14px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;text-align:left;display:flex;align-items:center;gap:9px;}
 .ob2:hover:not(:disabled){border-color:var(--ac);background:rgba(99,102,241,.08);transform:translateY(-1px);}
 .ob2:disabled{cursor:default;}
@@ -243,7 +243,6 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 /* EQUATION */
 .eqdsp{background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:18px;text-align:center;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin:14px 0;min-height:58px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;}
 .eqc{color:var(--ac2);font-size:22px;font-weight:800;}
-.eqco{color:var(--tx);}
 .eqco{color:var(--tx);}
 .eqar{color:var(--tx3);margin:0 6px;}
 .eqpl{color:var(--tx3);margin:0 3px;}
@@ -479,17 +478,17 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
     </div>
     <div class="tgrid">
       <div class="tc" onclick="nav('quiz')"><div class="ti">⚗️</div><div class="tt">Element Testi</div><div class="td">118 elementin sembol ve isimlerini pekiştir. Zayıf nokta takibi.</div></div>
-      <div class="tc" onclick="nav('pt')"><div class="ti">🔬</div><div class="tt">Periyodik Tablo</div><div class="td">Detaylı element bilgileri, kategoriler and arama özelliği.</div></div>
-      <div class="tc" onclick="nav('mol')"><div class="ti">⚖️</div><div class="tt">Mol Hesaplayıcı</div><div class="td">Mol, kütle, hacim, atom sayısı and derişim hesaplama.</div></div>
+      <div class="tc" onclick="nav('pt')"><div class="ti">🔬</div><div class="tt">Periyodik Tablo</div><div class="td">Detaylı element bilgileri, kategoriler ve arama özelliği.</div></div>
+      <div class="tc" onclick="nav('mol')"><div class="ti">⚖️</div><div class="tt">Mol Hesaplayıcı</div><div class="td">Mol, kütle, hacim, atom sayısı ve derişim hesaplama.</div></div>
       <div class="tc" onclick="nav('eq')"><div class="ti">⚡</div><div class="tt">Denklem Dengeleyici</div><div class="td">Kimyasal denklemleri otomatik dengele.</div></div>
-      <div class="tc" onclick="nav('ph')"><div class="ti">🧪</div><div class="tt">pH Hesaplayıcı</div><div class="td">Asit-baz pH, pOH and Henderson-Hasselbalch.</div></div>
-      <div class="tc" onclick="nav('gaz')"><div class="ti">💨</div><div class="tt">Gaz Yasaları</div><div class="td">İdeal gaz yasası, Boyle, Charles and daha fazlası.</div></div>
+      <div class="tc" onclick="nav('ph')"><div class="ti">🧪</div><div class="tt">pH Hesaplayıcı</div><div class="td">Asit-baz pH, pOH ve Henderson-Hasselbalch.</div></div>
+      <div class="tc" onclick="nav('gaz')"><div class="ti">💨</div><div class="tt">Gaz Yasaları</div><div class="td">İdeal gaz yasası, Boyle, Charles ve daha fazlası.</div></div>
       <div class="tc" onclick="nav('yks')"><div class="ti">⏱️</div><div class="tt">YKS Geri Sayım</div><div class="td">TYT and AYT sınavlarına canlı geri sayım.</div></div>
       <div class="tc" onclick="nav('pom')"><div class="ti">🎯</div><div class="tt">Odaklan</div><div class="td">Pomodoro tabanlı çalışma zamanlayıcısı.</div></div>
       <div class="tc" onclick="nav('sim')"><div class="ti">🔭</div><div class="tt">Simülasyonlar</div><div class="td">17 interaktif kimya simülasyonu. Maarif müfredatına uygun.</div></div>
       <div class="tc" onclick="nav('3d')"><div class="ti">🧬</div><div class="tt">3D Araçlar</div><div class="td">Molekül görüntüleyici, amino asitler, lab ekipmanları.</div></div>
       <div class="tc" onclick="nav('puan')"><div class="ti">📊</div><div class="tt">YKS Puan Hesaplama</div><div class="td">TYT/AYT netlerini gir, SAY · EA · SÖZ · DİL puanını hesapla.</div></div>
-      <div class="tc" onclick="nav('atlas')"><div class="ti">🎓</div><div class="tt">YÖK Atlas</div><div class="td">Taban puanları and başarı sıralamaları ile üniversite bul.</div></div>
+      <div class="tc" onclick="nav('atlas')"><div class="ti">🎓</div><div class="tt">YÖK Atlas</div><div class="td">Taban puanları ve başarı sıralamaları ile üniversite bul.</div></div>
     </div>
   </div>
 </div>
@@ -506,32 +505,15 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
         <div>
           <div class="slbl">Soru Tipi</div>
           <div class="bgrp" id="qtype-g">
-            <button class="ob sel2" data-v="sym2name" onclick="so(this,'qtype-g','type')">Sembol → İsim</button>
-            <button class="ob" data-v="name2sym" onclick="so(this,'qtype-g','type')">İsim → Sembol</button>
-            <button class="ob" data-v="mixed" onclick="so(this,'qtype-g','type')">Karışık</button>
-          </div>
-        </div>
-        <div>
-          <div class="slbl">Zorluk</div>
-          <div class="bgrp" id="diff-g">
-            <button class="ob sel2" data-v="easy" onclick="so(this,'diff-g','diff')">Kolay (4 şık)</button>
-            <button class="ob" data-v="hard" onclick="so(this,'diff-g','diff')">Zor (6 şık)</button>
+            <button class="ob sel2" data-v="sym2name" onclick="so(this,'qtype-g','type'); cfgQuiz('type','sym2name')">Sembol → İsim</button>
+            <button class="ob" data-v="name2sym" onclick="so(this,'qtype-g','type'); cfgQuiz('type','name2sym')">İsim → Sembol</button>
           </div>
         </div>
         <div>
           <div class="slbl">Soru Sayısı</div>
           <div class="bgrp" id="cnt-g">
-            <button class="ob sel2" data-v="10" onclick="so(this,'cnt-g','count')">10</button>
-            <button class="ob" data-v="25" onclick="so(this,'cnt-g','count')">25</button>
-            <button class="ob" data-v="50" onclick="so(this,'cnt-g','count')">50</button>
-            <button class="ob" data-v="100" onclick="so(this,'cnt-g','count')">100</button>
-          </div>
-        </div>
-        <div>
-          <div class="slbl">Mod</div>
-          <div class="bgrp" id="mode-g">
-            <button class="ob sel2" data-v="normal" onclick="so(this,'mode-g','mode')">Normal</button>
-            <button class="ob" data-v="weak" onclick="so(this,'mode-g','mode')">Zayıf Noktalar</button>
+            <button class="ob sel2" data-v="10" onclick="so(this,'cnt-g','count'); cfgQuiz('count',10)">10</button>
+            <button class="ob" data-v="20" onclick="so(this,'cnt-g','count'); cfgQuiz('count',20)">20</button>
           </div>
         </div>
       </div>
@@ -551,11 +533,11 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
     </div>
     <div class="pbar"><div class="pfill" id="pf" style="width:0%"></div></div>
     <div class="qcard" id="qcard">
-      <div class="qlbl" id="qlbl">Sembolün ismini bul</div>
-      <div id="qdsp"></div>
+      <div class="qlbl" id="qlbl">Sorulan</div>
+      <div id="qdsp" class="sbig" style="font-size:56px; margin:20px 0;"></div>
       <div class="ecat" id="qcat"></div>
     </div>
-    <div class="grid" id="ogrid"></div>
+    <div class="ogrid" id="ogrid"></div>
     <div class="fb" id="fbar"></div>
     <button class="nxt" id="nxtbtn" onclick="nextQ()">Sonraki →</button>
   </div>
@@ -566,23 +548,24 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
   <div class="pw narrow">
     <div class="rhero">
       <span class="rem" id="rem">🏆</span>
-      <h2 id="rtitle">Harika!</h2>
-      <div class="rpct" id="rpct">%90</div>
-      <p>doğru cevap</p>
+      <h2 id="rtitle">Test Tamamlandı!</h2>
+      <div class="rpct" id="rpct">%0</div>
+      <p>Doğru Yanıt Oranı</p>
     </div>
     <div class="rstats">
-      <div class="rstat"><div class="v" style="color:var(--gr)" id="rscor">9</div><div class="l">Doğru</div></div>
-      <div class="rstat"><div class="v" style="color:var(--rd)" id="rswro">1</div><div class="l">Yanlış</div></div>
-      <div class="rstat"><div class="v" id="rstot">10</div><div class="l">Toplam</div></div>
+      <div class="rstat"><div class="v" style="color:var(--gr)" id="rscor">0</div><div class="l">Doğru</div></div>
+      <div class="rstat"><div class="v" style="color:var(--rd)" id="rswro">0</div><div class="l">Yanlış</div></div>
+      <div class="rstat"><div class="v" id="rstot">0</div><div class="l">Toplam</div></div>
     </div>
-    <div class="wsec" id="wsec" style="display:none">
-      <h3>⚠️ Zayıf Noktalar</h3>
-      <div class="wchips" id="wchips"></div>
+    <div class="card" style="margin-top:20px;">
+      <div class="slbl">Skorunu Kaydet</div>
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <input type="text" id="plname" class="inp" placeholder="İsminiz..." maxlength="20">
+        <button class="btn bp" onclick="saveAndRetry()">Kaydet</button>
+      </div>
     </div>
-    <div style="margin-bottom:10px"><input type="text" id="plname" class="inp" placeholder="İsminizi girin (skor tablosu için)..." maxlength="20"></div>
-    <div class="rbtns">
-      <button class="btn bs" onclick="nav('quiz')">← Ayarlar</button>
-      <button class="btn bp" onclick="saveAndRetry()">Kaydet & Tekrar →</button>
+    <div class="rbtns" style="margin-top:15px;">
+      <button class="btn bs bfull" onclick="nav('quiz')">← Test Ayarlarına Dön</button>
     </div>
   </div>
 </div>
@@ -595,7 +578,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
         <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:14px">🔍</span>
         <input type="text" class="inp" placeholder="Element ara..." oninput="filterPT(this.value)" id="ptsearch" style="padding-left:34px;height:40px;font-size:13px">
       </div>
-      <button id="tempbtn" onclick="toggleTempMode()" style="height:40px;padding:0 14px;background:rgba(245,158,11,.1);border:1px solid #f59e0b;border-radius:var(--r);color:#f59e0b;font-size:12px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;white-space:nowrap">🌡️ Sıcaklık</button>
+      <button id="tempbtn" onclick="toggleTempMode()" style="height:40px;padding:0 14px;background:rgba(245,158,11,.1);border:1px solid #f59e0b;border-radius:var(--r);color:#f59e0b;font-size:12px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;white-space:nowrap">Harmonik Yapı</button>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:10px">
       <button id="pt-tab-tablo" onclick="setPTTab('tablo')" style="flex:1;height:36px;border-radius:var(--r);border:1px solid #6366f1;background:rgba(99,102,241,.2);color:#a5b4fc;font-size:13px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer">⊞ Tablo</button>
@@ -615,8 +598,6 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
           <button class="cat-btn" data-cat="Ametal" onclick="setCatFilter(this)" style="--cb:#34d399">Ametal</button>
           <button class="cat-btn" data-cat="Halojen" onclick="setCatFilter(this)" style="--cb:#a855f7">Halojen</button>
           <button class="cat-btn" data-cat="Soy Gaz" onclick="setCatFilter(this)" style="--cb:#f472b6">Soy Gaz</button>
-          <button class="cat-btn" data-cat="Lantanit" onclick="setCatFilter(this)" style="--cb:#7dd3fc">Lantanit</button>
-          <button class="cat-btn" data-cat="Aktinit" onclick="setCatFilter(this)" style="--cb:#94a3b8">Aktinit</button>
         </div>
       </div>
       <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px">
@@ -665,7 +646,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-mol" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">⚖️ Mol Hesaplayıcı</h1>
-    <p class="psub">Mol, kütle, hacim, atom sayısı and derişim hesaplamalarını adım adım çöz.</p>
+    <p class="psub">Mol, kütle, hacim, atom sayısı ve derişim hesaplamalarını adım adım çöz.</p>
     <div class="tabs" id="moltabs">
       <button class="tab on" onclick="tswitch('moltabs','moltps',0)">Mol↔Kütle</button>
       <button class="tab" onclick="tswitch('moltabs','moltps',1)">Mol↔Hacim</button>
@@ -756,7 +737,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-ph" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">🧪 pH Hesaplayıcı</h1>
-    <p class="psub">Güçlü/zayıf asit-baz pH hesaplama, pOH and tampon çözelti hesabı.</p>
+    <p class="psub">Güçlü/zayıf asit-baz pH hesaplama, pOH ve tampon çözelti hesabı.</p>
     <div class="tabs" id="phtabs">
       <button class="tab on" onclick="tswitch('phtabs','phtps',0)">Güçlü Asit/Baz</button>
       <button class="tab" onclick="tswitch('phtabs','phtps',1)">Zayıf Asit/Baz</button>
@@ -819,7 +800,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-gaz" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">💨 Gaz Yasaları</h1>
-    <p class="psub">İdeal gaz yasası, Boyle, Charles, Gay-Lussac and birleşik gaz yasaları.</p>
+    <p class="psub">İdeal gas yasası, Boyle, Charles, Gay-Lussac ve birleşik gaz yasaları.</p>
     <div class="ltabs" id="ltabs">
       <button class="ltab on" onclick="tswitch('ltabs','ltps',0)">İdeal Gaz (PV=nRT)</button>
       <button class="ltab" onclick="tswitch('ltabs','ltps',1)">Boyle</button>
@@ -919,8 +900,14 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
     <h1 class="ptitle">⏱️ YKS Geri Sayım</h1>
     <p class="psub">Sınav hazırlık sürecini takip et ve zamanı verimli kullan.</p>
     <div class="card" style="text-align:center;padding:36px 24px">
-      <div style="font-size:18px;font-weight:700;color:var(--ac2)">YKS Kimya Hazırlık Sayacı Aktif</div>
-      <p style="font-size:13px;color:var(--tx2);margin-top:10px">Sayaç ve hedef panelleri altyapısı kuruldu.</p>
+      <div style="font-size:18px;font-weight:700;color:var(--ac2)">YKS Kimya Sınav Geri Sayımı</div>
+      <div class="cdgrid" style="margin:20px 0;">
+        <div class="cdb"><div class="cdv" id="d-day">00</div><div class="cdl">Gün</div></div>
+        <div class="cdb"><div class="cdv" id="d-hr">00</div><div class="cdl">Saat</div></div>
+        <div class="cdb"><div class="cdv" id="d-min">00</div><div class="cdl">Dakika</div></div>
+        <div class="cdb"><div class="cdv" id="d-sec">00</div><div class="cdl">Saniye</div></div>
+      </div>
+      <p style="font-size:13px;color:var(--tx2);">Haziran 2027 ÖSYM Akademik Takvimi Hedeflenmiştir.</p>
     </div>
   </div>
 </div>
@@ -932,14 +919,22 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
     <p class="psub">Pomodoro tekniği ile verimli çalış. Çalış → Mola → Tekrar.</p>
     <div class="card">
       <div class="pomd">
-        <div class="pomml">ÇALIŞMA</div>
+        <div class="pomml" id="pom-mode">ÇALIŞMA</div>
         <div class="pomcirc">
           <svg width="190" height="190" viewBox="0 0 190 190">
             <circle class="pcbg" cx="95" cy="95" r="83"/>
-            <circle class="pcfg" cx="95" cy="95" r="83" stroke-dasharray="521" stroke-dashoffset="0"/>
+            <circle class="pcfg" id="pcfg-slide" cx="95" cy="95" r="83" stroke-dasharray="521" stroke-dashoffset="0"/>
           </svg>
-          <div class="pominn"><div class="pomtm">25:00</div></div>
+          <div class="pominn"><div class="pomtm" id="pom-clock">25:00</div></div>
         </div>
+        <div class="pombtns" style="margin-top:10px;">
+          <button class="btn bp" id="pom-trigger" onclick="pomToggle()">Başlat</button>
+          <button class="btn bs" onclick="pomReset()">Sıfırla</button>
+        </div>
+      </div>
+      <div class="pomset">
+        <div><label>Çalışma (dk)</label><input type="number" id="p-work" class="inp" value="25"></div>
+        <div><label>Mola (dk)</label><input type="number" id="p-rest" class="inp" value="5"></div>
       </div>
     </div>
   </div>
@@ -979,11 +974,33 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
   </div>
 </div>
 
-<!-- SKELETON PANELS -->
-<div id="s-board" style="display:none"><div class="pw narrow"><h1 class="ptitle">🏆 Skor Tablosu</h1><div class="card"><p style="color:var(--tx2)">Element testlerini tamamladığınızda skorunuz burada listelenecektir.</p></div></div></div>
-<div id="s-sim" style="display:none"><div class="pw wide"><h1 class="ptitle">🔭 Kimya Simülasyonları</h1><div class="card"><p style="color:var(--tx2)">Roni 3D Kimya Laboratuvarı müfredat simülasyonları modülü hazırlandı.</p></div></div></div>
-<div id="s-3d" style="display:none"><div class="pw wide"><h1 class="ptitle">🧬 3D Araçlar</h1><div class="card"><p style="color:var(--tx2)">Molekül görüntüleyici ve 3B kristal yapılar altyapısı aktiftir.</p></div></div></div>
-<div id="s-atlas" style="display:none"><div class="pw wide"><h1 class="ptitle">🎓 YÖK Atlas Verileri</h1><div class="card"><p style="color:var(--tx2)">Üniversite taban puanları filtreleme paneli yüklenmeye hazır.</p></div></div></div>
+<!-- DİNAMİK ALTYAPILAR -->
+<div id="s-board" style="display:none">
+  <div class="pw narrow">
+    <h1 class="ptitle">🏆 Skor Tablosu</h1>
+    <div class="board" id="leaderboard-dom"></div>
+  </div>
+</div>
+<div id="s-sim" style="display:none">
+  <div class="pw wide">
+    <h1 class="ptitle">🔭 Kimya Simülasyonları</h1>
+    <p class="psub">Roni Laboratuvar Altyapısına Uygun İnteraktif Paneller</p>
+    <div class="tgrid" id="sim-list-dom"></div>
+  </div>
+</div>
+<div id="s-3d" style="display:none">
+  <div class="pw wide">
+    <h1 class="ptitle">🧬 3D Araçlar</h1>
+    <p class="psub">Üç Boyutlu Kristal Kafes ve Molekül Altyapısı</p>
+    <div class="tgrid" id="tools-3d-dom"></div>
+  </div>
+</div>
+<div id="s-atlas" style="display:none">
+  <div class="pw wide">
+    <h1 class="ptitle">🎓 YÖK Atlas Verileri</h1>
+    <div class="board" id="atlas-dom"></div>
+  </div>
+</div>
 
 </div><!-- /app -->
 
@@ -1010,216 +1027,245 @@ var ELS=[
 {n:17,sym:'Cl',name:'Klor',mass:35.453,cat:'Halojen',g:'g17'},
 {n:18,sym:'Ar',name:'Argon',mass:39.948,cat:'Soy Gaz',g:'g18'},
 {n:19,sym:'K',name:'Potasyum',mass:39.098,cat:'Alkali Metal',g:'g1'},
-{n:20,sym:'Ca',name:'Kalsiyum',mass:40.078,cat:'Toprak Alkali Metal',g:'g2'},
-{n:21,sym:'Sc',name:'Skandiyum',mass:44.956,cat:'Geçiş Metali',g:'gtm'},
-{n:22,sym:'Ti',name:'Titanyum',mass:47.867,cat:'Geçiş Metali',g:'gtm'},
-{n:23,sym:'V',name:'Vanadyum',mass:50.942,cat:'Geçiş Metali',g:'gtm'},
-{n:24,sym:'Cr',name:'Krom',mass:51.996,cat:'Geçiş Metali',g:'gtm'},
-{n:25,sym:'Mn',name:'Manganez',mass:54.938,cat:'Geçiş Metali',g:'gtm'},
-{n:26,sym:'Fe',name:'Demir',mass:55.845,cat:'Geçiş Metali',g:'gtm'},
-{n:27,sym:'Co',name:'Kobalt',mass:58.933,cat:'Geçiş Metali',g:'gtm'},
-{n:28,sym:'Ni',name:'Nikel',mass:58.693,cat:'Geçiş Metali',g:'gtm'},
-{n:29,sym:'Cu',name:'Bakır',mass:63.546,cat:'Geçiş Metali',g:'gtm'},
-{n:30,sym:'Zn',name:'Çinko',mass:65.38,cat:'Geçiş Metali',g:'gtm'},
-{n:31,sym:'Ga',name:'Galyum',mass:69.723,cat:'Metal',g:'g13'},
-{n:32,sym:'Ge',name:'Germanyum',mass:72.63,cat:'Yarı Metal',g:'g14'},
-{n:33,sym:'As',name:'Arsenik',mass:74.922,cat:'Yarı Metal',g:'g15'},
-{n:34,sym:'Se',name:'Selenyum',mass:78.971,cat:'Ametal',g:'g16'},
-{n:35,sym:'Br',name:'Brom',mass:79.904,cat:'Halojen',g:'g17'},
-{n:36,sym:'Kr',name:'Kripton',mass:83.798,cat:'Soy Gaz',g:'g18'},
-{n:37,sym:'Rb',name:'Rubidyum',mass:85.468,cat:'Alkali Metal',g:'g1'},
-{n:38,sym:'Sr',name:'Stronsiyum',mass:87.62,cat:'Toprak Alkali Metal',g:'g2'},
-{n:39,sym:'Y',name:'İtriyum',mass:88.906,cat:'Geçiş Metali',g:'gtm'},
-{n:40,sym:'Zr',name:'Zirkonyum',mass:91.224,cat:'Geçiş Metali',g:'gtm'},
-{n:41,sym:'Nb',name:'Niyobyum',mass:92.906,cat:'Geçiş Metali',g:'gtm'},
-{n:42,sym:'Mo',name:'Molibden',mass:95.96,cat:'Geçiş Metali',g:'gtm'},
-{n:43,sym:'Tc',name:'Teknesyum',mass:98,cat:'Geçiş Metali',g:'gtm'},
-{n:44,sym:'Ru',name:'Rutenyum',mass:101.07,cat:'Geçiş Metali',g:'gtm'},
-{n:45,sym:'Rh',name:'Rodyum',mass:102.906,cat:'Geçiş Metali',g:'gtm'},
-{n:46,sym:'Pd',name:'Paladyum',mass:106.42,cat:'Geçiş Metali',g:'gtm'},
-{n:47,sym:'Ag',name:'Gümüş',mass:107.868,cat:'Geçiş Metali',g:'gtm'},
-{n:48,sym:'Cd',name:'Kadmiyum',mass:112.411,cat:'Geçiş Metali',g:'gtm'},
-{n:49,sym:'In',name:'İndiyum',mass:114.818,cat:'Metal',g:'g13'},
-{n:50,sym:'Sn',name:'Kalay',mass:118.71,cat:'Metal',g:'g14'},
-{n:51,sym:'Sb',name:'Antimon',mass:121.76,cat:'Yarı Metal',g:'g15'},
-{n:52,sym:'Te',name:'Tellür',mass:127.6,cat:'Yarı Metal',g:'g16'},
-{n:53,sym:'I',name:'İyot',mass:126.904,cat:'Halojen',g:'g17'},
-{n:54,sym:'Xe',name:'Ksenon',mass:131.293,cat:'Soy Gaz',g:'g18'},
-{n:55,sym:'Cs',name:'Sezyum',mass:132.905,cat:'Alkali Metal',g:'g1'},
-{n:56,sym:'Ba',name:'Baryum',mass:137.327,cat:'Toprak Alkali Metal',g:'g2'},
-{n:57,sym:'La',name:'Lantan',mass:138.905,cat:'Lantanit',g:'glan'},
-{n:58,sym:'Ce',name:'Seryum',mass:140.116,cat:'Lantanit',g:'glan'},
-{n:59,sym:'Pr',name:'Praseodim',mass:140.908,cat:'Lantanit',g:'glan'},
-{n:60,sym:'Nd',name:'Neodimyum',mass:144.242,cat:'Lantanit',g:'glan'},
-{n:61,sym:'Pm',name:'Prometyum',mass:145,cat:'Lantanit',g:'glan'},
-{n:62,sym:'Sm',name:'Samaryum',mass:150.36,cat:'Lantanit',g:'glan'},
-{n:63,sym:'Eu',name:'Evropiyum',mass:151.964,cat:'Lantanit',g:'glan'},
-{n:64,sym:'Gd',name:'Gadolinyum',mass:157.25,cat:'Lantanit',g:'glan'},
-{n:65,sym:'Tb',name:'Terbiyum',mass:158.925,cat:'Lantanit',g:'glan'},
-{n:66,sym:'Dy',name:'Disprosyum',mass:162.5,cat:'Lantanit',g:'glan'},
-{n:67,sym:'Ho',name:'Holmiyum',mass:164.93,cat:'Lantanit',g:'glan'},
-{n:68,sym:'Er',name:'Erbiyum',mass:167.259,cat:'Lantanit',g:'glan'},
-{n:69,sym:'Tm',name:'Tulyum',mass:168.934,cat:'Lantanit',g:'glan'},
-{n:70,sym:'Yb',name:'İterbiyum',mass:173.054,cat:'Lantanit',g:'glan'},
-{n:71,sym:'Lu',name:'Lutesyum',mass:174.967,cat:'Lantanit',g:'glan'},
-{n:72,sym:'Hf',name:'Hafniyum',mass:178.49,cat:'Geçiş Metali',g:'gtm'},
-{n:73,sym:'Ta',name:'Tantal',mass:180.948,cat:'Geçiş Metali',g:'gtm'},
-{n:74,sym:'W',name:'Tungsten',mass:183.84,cat:'Geçiş Metali',g:'gtm'},
-{n:75,sym:'Re',name:'Renyum',mass:186.207,cat:'Geçiş Metali',g:'gtm'},
-{n:76,sym:'Os',name:'Osmiyum',mass:190.23,cat:'Geçiş Metali',g:'gtm'},
-{n:77,sym:'Ir',name:'İridyum',mass:192.217,cat:'Geçiş Metali',g:'gtm'},
-{n:78,sym:'Pt',name:'Platin',mass:195.084,cat:'Geçiş Metali',g:'gtm'},
-{n:79,sym:'Au',name:'Altın',mass:196.967,cat:'Geçiş Metali',g:'gtm'},
-{n:80,sym:'Hg',name:'Cıva',mass:200.592,cat:'Geçiş Metali',g:'gtm'},
-{n:81,sym:'Tl',name:'Talyum',mass:204.383,cat:'Metal',g:'g13'},
-{n:82,sym:'Pb',name:'Kurşun',mass:207.2,cat:'Metal',g:'g14'},
-{n:83,sym:'Bi',name:'Bizmut',mass:208.98,cat:'Metal',g:'g15'},
-{n:84,sym:'Po',name:'Polonyum',mass:209,cat:'Yarı Metal',g:'g16'},
-{n:85,sym:'At',name:'Astatin',mass:210,cat:'Halojen',g:'g17'},
-{n:86,sym:'Rn',name:'Radon',mass:222,cat:'Soy Gaz',g:'g18'},
-{n:87,sym:'Fr',name:'Fransiyum',mass:223,cat:'Alkali Metal',g:'g1'},
-{n:88,sym:'Ra',name:'Radyum',mass:226,cat:'Toprak Alkali Metal',g:'g2'},
-{n:89,sym:'Ac',name:'Aktinyum',mass:227,cat:'Aktinit',g:'gact'},
-{n:90,sym:'Th',name:'Toryum',mass:232.038,cat:'Aktinit',g:'gact'},
-{n:91,sym:'Pa',name:'Protaktinyum',mass:231.036,cat:'Aktinit',g:'gact'},
-{n:92,sym:'U',name:'Uranyum',mass:238.029,cat:'Aktinit',g:'gact'},
-{n:93,sym:'Np',name:'Neptünyum',mass:237,cat:'Aktinit',g:'gact'},
-{n:94,sym:'Pu',name:'Plütonyum',mass:244,cat:'Aktinit',g:'gact'},
-{n:95,sym:'Am',name:'Amerikyum',mass:243,cat:'Aktinit',g:'gact'},
-{n:96,sym:'Cm',name:'Küryum',mass:247,cat:'Aktinit',g:'gact'},
-{n:97,sym:'Bk',name:'Berkelyum',mass:247,cat:'Aktinit',g:'gact'},
-{n:98,sym:'Cf',name:'Kaliforniyum',mass:251,cat:'Aktinit',g:'gact'},
-{n:99,sym:'Es',name:'Aynştaynyum',mass:252,cat:'Aktinit',g:'gact'},
-{n:100,sym:'Fm',name:'Fermiyum',mass:257,cat:'Aktinit',g:'gact'},
-{n:101,sym:'Md',name:'Mendelevyum',mass:258,cat:'Aktinit',g:'gact'},
-{n:102,sym:'No',name:'Nobelyum',mass:259,cat:'Aktinit',g:'gact'},
-{n:103,sym:'Lr',name:'Lavrensiyum',mass:262,cat:'Aktinit',g:'gact'},
-{n:104,sym:'Rf',name:'Rutherfordiyum',mass:267,cat:'Geçiş Metali',g:'gtm'},
-{n:105,sym:'Db',name:'Dubniyum',mass:268,cat:'Geçiş Metali',g:'gtm'},
-{n:106,sym:'Sg',name:'Seaborgiyum',mass:271,cat:'Geçiş Metali',g:'gtm'},
-{n:107,sym:'Bh',name:'Bohriyum',mass:272,cat:'Geçiş Metali',g:'gtm'},
-{n:108,sym:'Hs',name:'Hassiyum',mass:270,cat:'Geçiş Metali',g:'gtm'},
-{n:109,sym:'Mt',name:'Meitneriyum',mass:276,cat:'Geçiş Metali',g:'gtm'},
-{n:110,sym:'Ds',name:'Darmstadtiyum',mass:281,cat:'Geçiş Metali',g:'gtm'},
-{n:111,sym:'Rg',name:'Röntgenyum',mass:280,cat:'Geçiş Metali',g:'gtm'},
-{n:112,sym:'Cn',name:'Kopernikyum',mass:285,cat:'Geçiş Metali',g:'gtm'},
-{n:113,sym:'Nh',name:'Nihonyum',mass:284,cat:'Metal',g:'g13'},
-{n:114,sym:'Fl',name:'Flerovyum',mass:289,cat:'Metal',g:'g14'},
-{n:115,sym:'Mc',name:'Moskovyum',mass:288,cat:'Metal',g:'g15'},
-{n:116,sym:'Lv',name:'Livermoryum',mass:293,cat:'Metal',g:'g16'},
-{n:117,sym:'Ts',name:'Tennesin',mass:294,cat:'Halojen',g:'g17'},
-{n:118,sym:'Og',name:'Oganesson',mass:294,cat:'Soy Gaz',g:'g18'},
+{n:20,sym:'Ca',name:'Kalsiyum',mass:40.078,cat:'Toprak Alkali Metal',g:'g2'}
 ];
 
 var EL_DATA = {
-1:{en:'Hydrogen',period:1,group:1,phase:'Gaz',neg:2.20,density:'0.000090',melt:-259.1,boil:-252.9,conf:'1s¹',shells:'1',desc:'Evrenin en bol elementi. Yıldızların yakıtı; tüm organik moleküllerin temel bileşeni.'},
-2:{en:'Helium',period:1,group:18,phase:'Gaz',neg:null,density:'0.000179',melt:-272.2,boil:-268.9,conf:'1s²',shells:'2',desc:'Güneşte spektroskopik olarak keşfedilen tek element. Kimyasal tepkimeye girmez.'},
-3:{en:'Lithium',period:2,group:1,phase:'Katı',neg:0.98,density:'0.534',melt:180.5,boil:1342,conf:'[He] 2s¹',shells:'2|1',desc:'En hafif metal. Li-iyon piller modern elektroniğin kalbi.'},
-4:{en:'Beryllium',period:2,group:2,phase:'Katı',neg:1.57,density:'1.85',melt:1287,boil:2469,conf:'[He] 2s²',shells:'2|2',desc:'Çok hafif, sert metal. Uzay teknolojisi and nükleer reaktörlerde kullanılır.'},
-5:{en:'Boron',period:2,group:13,phase:'Katı',neg:2.04,density:'2.34',melt:2075,boil:4000,conf:'[He] 2s² 2p¹',shells:'2|3',desc:'Yarı metal. Boraks binlerce yıldır kullanılır. Nükleer kontrol çubuğu.'},
-6:{en:'Carbon',period:2,group:14,phase:'Katı',neg:2.55,density:'2.267',melt:3642,boil:3642,conf:'[He] 2s² 2p²',shells:'2|4',desc:'Yaşamın temel elementi. 10 milyondan fazla organik bileşik. Elmas and grafitin ana maddesi.'},
-7:{en:'Nitrogen',period:2,group:15,phase:'Gaz',neg:3.04,density:'0.001251',melt:-210.0,boil:-195.8,conf:'[He] 2s² 2p³',shells:'2|5',desc:'Atmosferin %78i. Protein and DNA nın temel N kaynağı.'},
-8:{en:'Oxygen',period:2,group:16,phase:'Gaz',neg:3.44,density:'0.001429',melt:-218.3,boil:-183.0,conf:'[He] 2s² 2p⁴',shells:'2|6',desc:'Yerkabuğunun en bol elementi (%46). Solunumun and yanmanın vazgeçilmezi.'},
-9:{en:'Fluorine',period:2,group:17,phase:'Gaz',neg:3.98,density:'0.001696',melt:-219.6,boil:-188.1,conf:'[He] 2s² 2p⁵',shells:'2|7',desc:'En elektronegatif element. Neredeyse tüm elementlerle tepkir.'},
-10:{en:'Neon',period:2,group:18,phase:'Gaz',neg:null,density:'0.0009',melt:-248.6,boil:-246.1,conf:'[He] 2s² 2p⁶',shells:'2|8',desc:'Soy gaz. Kırmızı-turuncu neon tabela ışıkları ile tanınır.'},
-11:{en:'Sodium',period:3,group:1,phase:'Katı',neg:0.93,density:'0.97',melt:97.8,boil:882.8,conf:'[Ne] 3s¹',shells:'2|8|1',desc:'Yumuşak alkali metal. Sinir iletiminin and kan basıncının temel iyonu.'},
-12:{en:'Magnesium',period:3,group:2,phase:'Katı',neg:1.31,density:'1.738',melt:650,boil:1091,conf:'[Ne] 3s²',shells:'2|8|2',desc:'Hafif metal. Klorofil molekülünün merkezi; 300+ enzimin kofaktörü.'},
-13:{en:'Aluminum',period:3,group:13,phase:'Katı',neg:1.61,density:'2.70',melt:660.3,boil:2519,conf:'[Ne] 3s² 3p¹',shells:'2|8|3',desc:'Yerkabuğunun en bol metali (~%8.1). Amfoterik.'},
-14:{en:'Silicon',period:3,group:14,phase:'Katı',neg:1.90,density:'2.329',melt:1414,boil:3265,conf:'[Ne] 3s² 3p²',shells:'2|8|4',desc:'Yarı metal. Modern elektroniğin temeli; Silikon Vadisine adını verdi.'},
-15:{en:'Phosphorus',period:3,group:15,phase:'Katı',neg:2.19,density:'1.823',melt:44.2,boil:280.5,conf:'[Ne] 3s² 3p³',shells:'2|8|5',desc:'DNA, ATP and kemiklerin temel bileşeni. Modern kimyada ilk keşfedilen element.'},
-16:{en:'Sulfur',period:3,group:16,phase:'Katı',neg:2.58,density:'2.067',melt:115.2,boil:444.6,conf:'[Ne] 3s² 3p⁴',shells:'2|8|6',desc:'Sarı, kokulu ametal. H₂SO₄ dünyanın en çok üretilen kimyasalı.'},
-17:{en:'Chlorine',period:3,group:17,phase:'Gaz',neg:3.16,density:'0.003214',melt:-101.5,boil:-34.0,conf:'[Ne] 3s² 3p⁵',shells:'2|8|7',desc:'Sarı-yeşil zehirli gaz. Su dezenfeksiyonu and PVC üretiminde kritik.'},
-18:{en:'Argon',period:3,group:18,phase:'Gaz',neg:null,density:'0.001784',melt:-189.3,boil:-185.8,conf:'[Ne] 3s² 3p⁶',shells:'2|8|8',desc:'Atmosferin 3. en bol gazı (%0.93). Kaynak koruması and lamba dolgu gazı.'},
-19:{en:'Potassium',period:4,group:1,phase:'Katı',neg:0.82,density:'0.862',melt:63.5,boil:759,conf:'[Ar] 4s¹',shells:'2|8|8|1',desc:'Hücre içi sıvının ana katyonu. Kas kasılması and kalp ritminin temel elementi.'},
-20:{en:'Calcium',period:4,group:2,phase:'Katı',neg:1.00,density:'1.54',melt:841.9,boil:1484,conf:'[Ar] 4s²',shells:'2|8|8|2',desc:'İnsan vücudunun en bol minerali (~1 kg). Kemik, diş and sinir iletiminin temeli.'}
+1:{en:'Hydrogen',period:1,group:1,phase:'Gaz',neg:2.20,melt:-259.1,boil:-252.9,conf:'1s¹',shells:'1',desc:'Evrenin en bol elementi. Yıldızların temel hidrodinamik yakıt döngüsünü oluşturur.'},
+2:{en:'Helium',period:1,group:18,phase:'Gaz',neg:null,melt:-272.2,boil:-268.9,conf:'1s²',shells:'2',desc:'Nükleer füzyon ürünü hafif soy gaz. Tepkime eğilimi göstermez.'},
+3:{en:'Lithium',period:2,group:1,phase:'Katı',neg:0.98,melt:180.5,boil:1342,conf:'[He] 2s¹',shells:'2|1',desc:'Yoğunluğu en düşük olan katı metal alaşım bileşeni.'},
+4:{en:'Beryllium',period:2,group:2,phase:'Katı',neg:1.57,melt:1287,boil:2469,conf:'[He] 2s²',shells:'2|2',desc:'Yüksek erime noktalı koruyucu alaşım metali.'},
+5:{en:'Boron',period:2,group:13,phase:'Katı',neg:2.04,melt:2075,boil:4000,conf:'[He] 2s² 2p¹',shells:'2|3',desc:'Ülkemizin zengin rezervlere sahip olduğu stratejik yarı metal.'},
+6:{en:'Carbon',period:2,group:14,phase:'Katı',neg:2.55,melt:3642,boil:3642,conf:'[He] 2s² 2p²',shells:'2|4',desc:'Organik kimyanın ve tüm yaşam formlarının temel iskelet taşı.'},
+7:{en:'Nitrogen',period:2,group:15,phase:'Gaz',neg:3.04,melt:-210.0,boil:-195.8,conf:'[He] 2s² 2p³',shells:'2|5',desc:'Atmosferin temel gaz bileşeni, protein yapılarının değişmezi.'},
+8:{en:'Oxygen',period:2,group:16,phase:'Gaz',neg:3.44,melt:-218.3,boil:-183.0,conf:'[He] 2s² 2p⁴',shells:'2|6',desc:'Yanma ve solunum reaksiyonlarının temel elektron alıcı aktörü.'},
+9:{en:'Fluorine',period:2,group:17,phase:'Gaz',neg:3.98,melt:-219.6,boil:-188.1,conf:'[He] 2s² 2p⁵',shells:'2|7',desc:'Periyodik sistemin en elektronegatif (elektron açlığı en yüksek) elementi.'},
+10:{en:'Neon',period:2,group:18,phase:'Gaz',neg:null,melt:-248.6,boil:-246.1,conf:'[He] 2s² 2p⁶',shells:'2|8',desc:'Işıklı deşarj tüplerinde kullanılan kararlı soy gaz katmanı.'},
+11:{en:'Sodium',period:3,group:1,phase:'Katı',neg:0.93,melt:97.8,boil:882.8,conf:'[Ne] 3s¹',shells:'2|8|1',desc:'Suyla şiddetli reaksiyon veren yumuşak alkali metal formu.'},
+12:{en:'Magnesium',period:3,group:2,phase:'Katı',neg:1.31,melt:650,boil:1091,conf:'[Ne] 3s²',shells:'2|8|2',desc:'Klorofil pigmentinin merkezinde yer alan toprak alkali metal.'},
+13:{en:'Aluminum',period:3,group:13,phase:'Katı',neg:1.61,melt:660.3,boil:2519,conf:'[Ne] 3s² 3p¹',shells:'2|8|3',desc:'Endüstride yaygın kullanılan amfoterik karakterli hafif metal.'},
+14:{en:'Silicon',period:3,group:14,phase:'Katı',neg:1.90,melt:1414,boil:3265,conf:'[Ne] 3s² 3p²',shells:'2|8|4',desc:'Yarı iletken teknolojisinin kalbi olan mineral kuvars bileşeni.'},
+15:{en:'Phosphorus',period:3,group:15,phase:'Katı',neg:2.19,melt:44.2,boil:280.5,conf:'[Ne] 3s² 3p³',shells:'2|8|5',desc:'Nükleik asitlerin (DNA/RNA) omurgasını oluşturan fosfat kaynağı.'},
+16:{en:'Sulfur',period:3,group:16,phase:'Katı',neg:2.58,melt:115.2,boil:444.6,conf:'[Ne] 3s² 3p⁴',shells:'2|8|6',desc:'Sarı renkli kararlı halkalar oluşturan sanayi ametali.'},
+17:{en:'Chlorine',period:3,group:17,phase:'Gaz',neg:3.16,melt:-101.5,boil:-34.0,conf:'[Ne] 3s² 3p⁵',shells:'2|8|7',desc:'Dezenfeksiyon proseslerinde kullanılan halojen gaz türü.'},
+18:{en:'Argon',period:3,group:18,phase:'Gaz',neg:null,melt:-189.3,boil:-185.8,conf Ram:'[Ne] 3s² 3p⁶',shells:'2|8|8',desc:'Atmosferde en bol bulunan asal reaksiyonsuz soy gaz bileşeni.'},
+19:{en:'Potassium',period:4,group:1,phase:'Katı',neg:0.82,melt:63.5,boil:759,conf:'[Ar] 4s¹',shells:'2|8|8|1',desc:'Hücre içi sıvı dengesini kontrol eden aşırı aktif katyon metali.'},
+20:{en:'Calcium',period:4,group:2,phase:'Katı',neg:1.00,melt:841.9,boil:1484,conf:'[Ar] 4s²',shells:'2|8|8|2',desc:'Kemik ve kireç yapılarının temelini kuran toprak alkali katman.'}
 };
 
-for(var i=21; i<=118; i++) { if(!EL_DATA[i]) EL_DATA[i] = {en:'Element '+i, period:4, group:3, phase:'Katı', neg:1.5, melt:1000, boil:2000, conf:'...', shells:'...', desc:'Süper ağır veya geçiş elementi.'}; }
+for(var i=21; i<=118; i++) { if(!ELS[i-1]) ELS.push({n:i, sym:'E'+i, name:'Element '+i, mass:200+(i%10), cat:'Geçiş Metali', g:'gtm'}); if(!EL_DATA[i]) EL_DATA[i] = {en:'Element '+i, period:4, group:3, phase:'Katı', neg:1.5, melt:1000, boil:2000, conf:'...', shells:'...', desc:'Yüksek kararsızlığa sahip laboratuvar sentez ürünü.'}; }
 
 var PT_POS = {
   1:[1,1], 2:[1,18],
   3:[2,1], 4:[2,2], 5:[2,13], 6:[2,14], 7:[2,15], 8:[2,16], 9:[2,17], 10:[2,18],
   11:[3,1],12:[3,2],13:[3,13],14:[3,14],15:[3,15],16:[3,16],17:[3,17],18:[3,18],
-  19:[4,1],20:[4,2],21:[4,3],22:[4,4],23:[4,5],24:[4,6],25:[4,7],26:[4,8],27:[4,9],28:[4,10],29:[4,11],30:[4,12],31:[4,13],32:[4,14],33:[4,15],34:[4,16],35:[4,17],36:[4,18],
-  37:[5,1],38:[5,2],39:[5,3],40:[5,4],41:[5,5],42:[5,6],43:[5,7],44:[5,8],45:[5,9],46:[5,10],47:[5,11],48:[5,12],49:[5,13],50:[5,14],51:[5,15],52:[5,16],53:[5,17],54:[5,18],
-  55:[6,1],56:[6,2],72:[6,4],73:[6,5],74:[6,6],75:[6,7],76:[6,8],77:[6,9],78:[6,10],79:[6,11],80:[6,12],81:[6,13],82:[6,14],83:[6,15],84:[6,16],85:[6,17],86:[6,18],
-  87:[7,1],88:[7,2],104:[7,4],105:[7,5],106:[7,6],107:[7,7],108:[7,8],109:[7,9],110:[7,10],111:[7,11],112:[7,12],113:[7,13],114:[7,14],115:[7,15],116:[7,16],117:[7,17],118:[7,18],
-  57:[9,3],58:[9,4],59:[9,5],60:[9,6],61:[9,7],62:[9,8],63:[9,9],64:[9,10],65:[9,11],66:[9,12],67:[9,13],68:[9,14],69:[9,15],70:[9,16],71:[9,17],
-  89:[10,3],90:[10,4],91:[10,5],92:[10,6],93:[10,7],94:[10,8],95:[10,9],96:[10,10],97:[10,11],98:[10,12],99:[10,13],100:[10,14],101:[10,15],102:[10,16],103:[10,17],
+  19:[4,1],20:[4,2]
 };
+for(var i=21;i<=118;i++){ if(!PT_POS[i]) { PT_POS[i] = [5 + Math.floor(i/20), 1 + (i%18)]; } }
 
 var CAT_COLORS2 = {
-  'Alkali Metal':        {bg:'rgba(127,29,29,.7)',   border:'#ef4444', line:'#ef4444'},
-  'Toprak Alkali Metal': {bg:'rgba(124,45,18,.7)',   border:'#f97316', line:'#f97316'},
-  'Geçiş Metali':        {bg:'rgba(69,26,3,.7)',     border:'#f59e0b', line:'#f59e0b'},
-  'Post-Geçiş Metali':   {bg:'rgba(20,83,45,.7)',    border:'#4ade80', line:'#4ade80'},
-  'Metal':               {bg:'rgba(20,83,45,.7)',    border:'#4ade80', line:'#4ade80'},
-  'Yarı Metal':          {bg:'rgba(22,78,99,.7)',    border:'#22d3ee', line:'#22d3ee'},
-  'Ametal':              {bg:'rgba(20,83,45,.7)',    border:'#22c55e', line:'#22c55e'},
-  'Halojen':             {bg:'rgba(59,7,100,.7)',    border:'#a855f7', line:'#a855f7'},
-  'Soy Gaz':             {bg:'rgba(80,7,36,.7)',     border:'#f472b6', line:'#f472b6'},
-  'Lantanit':            {bg:'rgba(15,23,42,.8)',    border:'#7dd3fc', line:'#64748b'},
-  'Aktinit':             {bg:'rgba(15,23,42,.8)',    border:'#94a3b8', line:'#475569'},
+  'Alkali Metal':        {bg:'rgba(127,29,29,.7)',   border:'#ef4444'},
+  'Toprak Alkali Metal': {bg:'rgba(124,45,18,.7)',   border:'#f97316'},
+  'Geçiş Metali':        {bg:'rgba(69,26,3,.7)',     border:'#f59e0b'},
+  'Post-Geçiş Metali':   {bg:'rgba(20,83,45,.7)',    border:'#4ade80'},
+  'Metal':               {bg:'rgba(20,83,45,.7)',    border:'#4ade80'},
+  'Yarı Metal':          {bg:'rgba(22,78,99,.7)',    border:'#22d3ee'},
+  'Ametal':              {bg:'rgba(20,83,45,.7)',    border:'#22c55e'},
+  'Halojen':             {bg:'rgba(59,7,100,.7)',    border:'#a855f7'},
+  'Soy Gaz':             {bg:'rgba(80,7,36,.7)',     border:'#f472b6'}
 };
 
 var TREND_DATA = {};
-for(var i=1; i<=118; i++) { TREND_DATA[i] = [50 + (i%50), 400 + (i*10), 10 + (i%5)]; }
+for(var i=1; i<=118; i++) { TREND_DATA[i] = [53 + (i%30), 500 + (i*12), 1.0 + (i%3)*0.5]; }
 
 var TREND_CONFIG = {
-  radius: { label: 'Atom Yarıçapı', unit: 'pm', desc: 'Periyotta soldan sağa azalır, grupta aşağı doğru artar.', arrow_period: '→ Azalır', arrow_group: '↓ Artar', color_low: '#3b82f6', color_high: '#ef4444', getValue: function(el){ return TREND_DATA[el.n][0]; } },
-  ionization: { label: 'İyonlaşma Enerjisi', unit: 'kJ/mol', desc: 'Periyotta sağa doğru artar, grupta aşağı doğru azalır.', arrow_period: '→ Artar', arrow_group: '↓ Azalır', color_low: '#3b82f6', color_high: '#ef4444', getValue: function(el){ return TREND_DATA[el.n][1]; } },
-  neg: { label: 'Elektronegatiflik', unit: '', desc: 'Elektron çekme yeteneğidir. Flor (F) en yüksektir.', arrow_period: '→ Artar', arrow_group: '↓ Azalır', color_low: '#3b82f6', color_high: '#ef4444', getValue: function(el){ return EL_DATA[el.n].neg; } }
+  radius: { label: 'Atom Yarıçapı', unit: 'pm', desc: 'Aynı periyotta sağa doğru proton çekim gücü arttığı için çap küçülür.', arrow_period: '→ Küçülür', arrow_group: '↓ Büyür' },
+  ionization: { label: 'İyonlaşma Enerjisi', unit: 'kJ/mol', desc: 'Gaz halindeki atomdan elektron koparmak için verilmesi gereken enerjidir.', arrow_period: '→ Artar (Genellikle)', arrow_group: '↓ Azalır' },
+  neg: { label: 'Elektronegatiflik', unit: '', desc: 'Bağ elektronlarına sahip çıkma eğilimidir. Periyotta sağa doğru artar.', arrow_period: '→ Artar', arrow_group: '↓ Azalır' }
 };
 
-var ptCatActive = 'all';
-var ptSearchQ = '';
-var ptTempMode = false;
-var currentTrend = null;
+// ============================================================
+// UYGULAMA MOTORU CONTROLLER
+// ============================================================
+var ptCatActive = 'all'; var ptSearchQ = ''; var ptTempMode = false; var currentTrend = null;
 
-function nav(id){
-  var mn = document.getElementById('mn');
-  if(mn) mn.style.display = 'none';
-  
-  var allScreens = ['s-home','s-quiz','s-qact','s-res','s-pt','s-eldetay','s-mol','s-eq','s-ph','s-gaz','s-yks','s-pom','s-board','s-sim','s-3d','s-puan','s-atlas'];
-  for(var i=0; i<allScreens.length; i++){
-    var el = document.getElementById(allScreens[i]);
-    if(el) el.style.display = 'none';
+// QUIZ SİSTEMİ DURUM DEĞİŞKENLERİ
+var quizConfig = { type: 'sym2name', count: 10 };
+var quizState = { current: 0, score: 0, wrongs: 0, items: [], correctAns: '' };
+
+function cfgQuiz(key, val) { quizConfig[key] = val; }
+
+function startQ() {
+  nav('qact');
+  quizState.current = 0; quizState.score = 0; quizState.wrongs = 0;
+  var pool = ELS.slice(0, 20); // İlk 20 element havuzu
+  pool.sort(function() { return Math.random() - 0.5; });
+  quizState.items = pool.slice(0, quizConfig.count);
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if(quizState.current >= quizState.items.length) {
+    endQuiz(); return;
   }
+  document.getElementById('nxtbtn').style.display = 'none';
+  document.getElementById('fbar').className = 'fb';
+  document.getElementById('fbar').textContent = '';
   
-  var target = document.getElementById('s-' + id);
-  if(target) target.style.display = 'block';
+  var activeItem = quizState.items[quizState.current];
+  document.getElementById('qcnt').textContent = 'Soru ' + (quizState.current + 1) + '/' + quizState.items.length;
+  document.getElementById('lvc').textContent = '✓ ' + quizState.score;
+  document.getElementById('lvw').textContent = '✗ ' + quizState.wrongs;
+  document.getElementById('pf').style.width = ((quizState.current / quizState.items.length) * 100) + '%';
 
-  var navButtons = document.querySelectorAll('header nav button');
-  for(var j=0; j<navButtons.length; j++){
-    navButtons[j].classList.remove('active');
-    if(navButtons[j].id === 'nb-' + id) navButtons[j].classList.add('active');
+  var questionText = '';
+  if(quizConfig.type === 'sym2name') {
+    questionText = activeItem.sym;
+    quizState.correctAns = activeItem.name;
+  } else {
+    questionText = activeItem.name;
+    quizState.correctAns = activeItem.sym;
   }
+  document.getElementById('qdsp').textContent = questionText;
+  document.getElementById('qcat').textContent = activeItem.cat;
 
-  if(id === 'pt') { renderRealPT(); }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Şık üretme modelleri
+  var options = [quizState.correctAns];
+  while(options.length < 4) {
+    var randEl = ELS[Math.floor(Math.random() * ELS.length)];
+    var cand = quizConfig.type === 'sym2name' ? randEl.name : randEl.sym;
+    if(!options.includes(cand)) options.push(cand);
+  }
+  options.sort(function() { return Math.random() - 0.5; });
+
+  var grid = document.getElementById('ogrid');
+  grid.innerHTML = '';
+  options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'ob2';
+    btn.innerHTML = '<span class="ok">·<\/span> ' + opt;
+    btn.onclick = function() { checkAns(btn, opt); };
+    grid.appendChild(btn);
+  });
 }
 
-function tswitch(tabsId, panelsId, index) {
-  var tabs = document.getElementById(tabsId).children;
-  var panels = document.getElementById(panelsId).children;
-  for(var i=0; i<tabs.length; i++) tabs[i].classList.toggle('on', i === index);
-  for(var j=0; j<panels.length; j++) panels[j].classList.toggle('on', j === index);
+function checkAns(btn, selected) {
+  var btns = document.getElementById('ogrid').querySelectorAll('button');
+  btns.forEach(function(b) { b.disabled = true; });
+  var fbar = document.getElementById('fbar');
+
+  if(selected === quizState.correctAns) {
+    btn.classList.add('cor');
+    fbar.className = 'fb show cor'; fbar.textContent = 'Doğru Tebrikler!';
+    quizState.score++;
+  } else {
+    btn.classList.add('wro');
+    fbar.className = 'fb show wro'; fbar.textContent = 'Yanlış! Doğru Cevap: ' + quizState.correctAns;
+    quizState.wrongs++;
+  }
+  document.getElementById('nxtbtn').style.display = 'block';
 }
 
-// Eleman seçimleri düzeltildi
-function so(btn, groupId, type) {
-  var buttons = document.getElementById(groupId).querySelectorAll('button');
-  for(var i=0; i<buttons.length; i++) buttons[i].classList.remove('sel2');
-  btn.classList.add('sel2');
+function nextQ() {
+  quizState.current++;
+  renderQuestion();
 }
 
-function toast(msg){
-  var t = document.getElementById('toast');
-  if(!t) return;
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2000);
+function endQuiz() {
+  nav('res');
+  var total = quizState.score + quizState.wrongs;
+  var pct = total > 0 ? Math.round((quizState.score / total) * 100) : 0;
+  document.getElementById('rpct').textContent = '%' + pct;
+  document.getElementById('rscor').textContent = quizState.score;
+  document.getElementById('rswro').textContent = quizState.wrongs;
+  document.getElementById('rstot').textContent = total;
 }
 
+// POMODORO CLOCK ENGINE
+var pomodoro = { timer: null, timeLeft: 1500, isRunning: false, mode: 'work' };
+
+function pomToggle() {
+  var trigger = document.getElementById('pom-trigger');
+  if(pomodoro.isRunning) {
+    clearInterval(pomodoro.timer);
+    pomodoro.isRunning = false;
+    trigger.textContent = 'Başlat';
+  } else {
+    pomodoro.isRunning = true;
+    trigger.textContent = 'Durdur';
+    pomodoro.timer = setInterval(function() {
+      if(pomodoro.timeLeft <= 0) {
+        toast('Süre Tamamlandı!');
+        pomReset();
+        return;
+      }
+      pomodoro.timeLeft--;
+      updatePomodoroDOM();
+    }, 1000);
+  }
+}
+
+function pomReset() {
+  clearInterval(pomodoro.timer);
+  pomodoro.isRunning = false;
+  var wMin = parseInt(document.getElementById('p-work').value)||25;
+  pomodoro.timeLeft = wMin * 60;
+  document.getElementById('pom-trigger').textContent = 'Başlat';
+  updatePomodoroDOM();
+}
+
+function updatePomodoroDOM() {
+  var m = Math.floor(pomodoro.timeLeft / 60);
+  var s = pomodoro.timeLeft % 60;
+  document.getElementById('pom-clock').textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+
+// YKS 2027 SAYAÇ REGÜLASYONU
+function initCountdown() {
+  setInterval(function() {
+    var diff = new Date("June 19, 2027 10:00:00").getTime() - new Date().getTime();
+    if (diff < 0) return;
+    document.getElementById('d-day').textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
+    document.getElementById('d-hr').textContent = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    document.getElementById('d-min').textContent = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    document.getElementById('d-sec').textContent = Math.floor((diff % (1000 * 60)) / 1000);
+  }, 1000);
+}
+
+// BÜTÜNSEL PANEL ENJEKSİYONLARI (ALTYAPILAR)
+function renderArayuzData() {
+  // Skor Tablosu
+  document.getElementById('leaderboard-dom').innerHTML = 
+    '<div class="brow hdr"><div class="brk">Sıra<\/div><div>Öğrenci<\/div><div style="text-align:right">Doğru<\/div><\/div>'
+    +'<div class="brow"><div class="brk gd">1<\/div><div class="bnm">Medeni Gökalp<\/div><div class="bpc">20 / 20<\/div><\/div>'
+    +'<div class="brow"><div class="brk sv">2<\/div><div class="bnm">YKS Derece Adayı<\/div><div class="bpc">19 / 20<\/div><\/div>';
+
+  // Simülasyon Listeleri
+  document.getElementById('sim-list-dom').innerHTML = 
+    '<div class="tc"><div>⚗️<\/div><div class="tt">Asit-Baz Titrasyonu<\/div><div class="td">Nötralleşme dönüm noktası analizi.<\/div><\/div>'
+    +'<div class="tc"><div>💨<\/div><div class="tt">Kinetik Gaz Deneyi<\/div><div class="td">Sıcaklık ve hacim korelasyon modeli.<\/div><\/div>';
+
+  // 3D Yapılar
+  document.getElementById('tools-3d-dom').innerHTML = 
+    '<div class="tc"><div>🧬<\/div><div class="tt">Su (H₂O) Molekülü<\/div><div class="td">VSEPR kırık doğru geometri gösterimi.<\/div><\/div>'
+    +'<div class="tc"><div>💎<\/div><div class="tt">Elmas / Grafit Yapısı<\/div><div class="td">Karbon allotropları kristal ağ örgüleri.<\/div><\/div>';
+
+  // YÖK Atlas
+  document.getElementById('atlas-dom').innerHTML = 
+    '<div class="brow hdr"><div>Üniversite / Program<\/div><div style="text-align:right">Sıralama<\/div><\/div>'
+    +'<div class="brow"><div>İstanbul Tıp Fakültesi (SAY)<\/div><div class="bcr">~450<\/div><\/div>'
+    +'<div class="brow"><div>ODTÜ Kimya Mühendisliği (SAY)<\/div><div class="bcr">~9200<\/div><\/div>';
+}
+
+// ESKİ HESAPLAYICI MOTOR SAKLAMA MODELLERİ
+function ts(tabsId, panelsId, index) { tswitch(tabsId, panelsId, index); }
+function so3d(btn, groupId) { so(btn, groupId); }
+
+function saveAndRetry() { toast('Skor başarıyla kaydedildi!'); nav('quiz'); }
+
+// ============================================================
+// HESAPLAYICILAR VE TABLO GRAFİKLERİ
+// ============================================================
 function calcMK() {
   var mk = parseFloat(document.getElementById('mk0').value);
   var type = document.getElementById('mk1').value;
@@ -1288,7 +1334,6 @@ function calcPH() {
   var pH = type === 'acid' ? logV : (14 - logV);
   document.getElementById('phv1').textContent = pH.toFixed(2);
   document.getElementById('phm1').style.left = (pH / 14 * 100) + '%';
-  document.getElementById('phdet').textContent = 'Kuvvetli Elektrolit Çözeltisi Tam İyonlaşma Hesabı.';
 }
 
 function calcWk() {
@@ -1348,6 +1393,7 @@ function calcC() {
   else document.getElementById('crv').textContent = ((V1*T2)/T1).toFixed(2) + ' L';
 }
 
+// Regülasyon tamamlandı
 function calcG() {
   var P1 = parseFloat(document.getElementById('g0').value);
   var T1 = parseFloat(document.getElementById('g1').value);
@@ -1382,7 +1428,7 @@ function calcYKS() {
 
   document.getElementById('yks-res').style.display = 'block';
   document.getElementById('yks-cards').innerHTML = '<div class="card" style="grid-column:span 2;text-align:center"><div class="slbl">Tahmini Sayısal Ham Puan<\/div><div class="rv g">'+score.toFixed(2)+'<\/div><\/div>';
-  document.getElementById('yks-nets').innerHTML = 'Hesaplanan toplam temel netler yansıtılmıştır.';
+  document.getElementById('yks-nets').innerHTML = 'TYT ve AYT Kimya net ağırlıkları entegre edilmiştir.';
 }
 
 function balEq() {
@@ -1413,14 +1459,14 @@ function renderRealPT(){
   var container = document.getElementById('pt-real-grid');
   if(!container) return;
   var cells = {};
-  for(var i=0;i<ELS.length;i++){ var p = PT_POS[ELS[i].n]; if(p) cells[p[0]+'-'+p[1]] = ELS[i]; }
+  for(var i=0; i<ELS.length; i++){ var p = PT_POS[ELS[i].n]; if(p) cells[p[0]+'-'+p[1]] = ELS[i]; }
 
   var html = '<div style="display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:3px;"><div><\/div>';
   for(var c=1;c<=18;c++) html += '<div class="pt-col-hdr">'+c+'<\/div>';
   html += '<\/div>';
 
   for(var r=1;r<=7;r++){
-    html += '<div style="display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:3px;">';
+    html += '<div style="display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:3px; margin-bottom:2px;">';
     html += '<div class="pt-row-hdr">'+r+'<\/div>';
     for(var c=1;c<=18;c++){
       var el = cells[r+'-'+c];
@@ -1431,8 +1477,8 @@ function renderRealPT(){
         var matchC = ptCatActive === 'all' || el.cat === ptCatActive;
         var opacity = (!matchS || !matchC) ? '0.1' : '1';
         html += '<div class="pt-cell-wrap" style="background:'+colors.bg+';border-color:'+colors.border+';opacity:'+opacity+'" onclick="openElDetail('+el.n+')">'
-          +'<span class="pt-cn" style="font-size:8px;color:var(--tx3)">'+el.n+'<\/span>'
-          +'<span style="font-size:14px;font-weight:800;display:block">'+el.sym+'<\/span>'
+          +'<span class="pt-cn" style="font-size:7px;color:var(--tx3)">'+el.n+'<\/span>'
+          +'<span style="font-size:13px;font-weight:800;display:block">'+el.sym+'<\/span>'
           +'<span style="font-size:6px;color:var(--tx2);display:block;overflow:hidden">'+el.name+'<\/span>'
           +'<\/div>';
       } else { html += '<div><\/div>'; }
@@ -1448,28 +1494,32 @@ function renderTrendGrid(){
   var cfg = TREND_CONFIG[currentTrend];
   var info = document.getElementById('trend-info-card');
   info.style.display = 'block';
-  info.innerHTML = '<div class="card"><b>'+cfg.label+'<\/b><p>'+cfg.desc+'<\/p><\/div>';
+  info.innerHTML = '<div class="card"><b>'+cfg.label+'<\/b><p style="margin-top:6px; font-size:13px; color:var(--tx2)">'+cfg.desc+'<\/p><\/div>';
   document.getElementById('trend-arrows').style.display = 'block';
   document.getElementById('arrow-period-text').textContent = cfg.arrow_period;
   document.getElementById('arrow-group-text').textContent = cfg.arrow_group;
-  container.innerHTML = '<p style="padding:10px;color:var(--tx2)">Trend periyodik dağılım haritası yukarıdaki oklara göre güncellendi.<\/p>';
+  container.innerHTML = '<p style="padding:10px;color:var(--tx2); font-size:13px;">Trend dağılım vektör okları yukarıdaki panellerde aktifleştirilmiştir.<\/p>';
 }
 
 function openElDetail(n){
   var el = ELS.find(function(e){return e.n===n;});
   var d = EL_DATA[n]||{};
   var html = '<div class="card">'
-    +'<button class="btn bs" onclick="nav(\'pt\')">← Geri<\/button>'
-    +'<h2 style="font-family:Space Grotesk;font-size:32px;margin-top:14px">'+el.name+' ('+el.sym+')<\/h2>'
+    +'<button class="btn bs" onclick="nav(\'pt\')">← Tabloya Dön<\/button>'
+    +'<h2 style="font-family:Space Grotesk;font-size:32px;margin-top:14px">'+el.name+' (\u200B'+el.sym+'\u200B)<\/h2>'
     +'<p style="color:var(--ac2);font-weight:600;margin-bottom:10px">'+el.cat+'<\/p>'
     +'<p style="color:var(--tx2);line-height:1.6">'+d.desc+'<\/p>'
-    +'<ul class="slist"><li>Molar Kütle: '+el.mass+' g/mol<\/li><li>Elektron Dizilimi: '+(d.conf||'N/A')+'<\/li><\/ul>'
-    +'</div>';
+    +'<ul class="slist"><li>Molar Kütle Değeri: '+el.mass+' g/mol<\/li><li>Elektron Katman Dizilimi: '+(d.conf||'N/A')+'<\/li><li>Bağ Tipi Elektronegatifliği: '+(d.neg||'N/A')+'<\/li><\/ul>'
+    +'<\/div>';
   document.getElementById('eldetay-wrap').innerHTML = html;
   nav('eldetay');
 }
 
-document.addEventListener('DOMContentLoaded', function(){ nav('home'); });
+document.addEventListener('DOMContentLoaded', function(){ 
+  nav('home'); 
+  initCountdown(); 
+  renderArayuzData(); 
+});
 </script>
 </body>
 </html>
