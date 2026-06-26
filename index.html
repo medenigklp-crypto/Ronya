@@ -1936,6 +1936,15 @@ function elClick(n){
 }
 
 function openElDetail(el){
+  // MINIMUM TEST
+  var wrap = document.getElementById('eldetay-wrap');
+  var dbg = document.getElementById('dbg');
+  if(!dbg){dbg=document.createElement('div');dbg.id='dbg';dbg.style='position:fixed;top:0;left:0;right:0;background:purple;color:white;font-size:13px;padding:8px;z-index:99999;';document.body.appendChild(dbg);}
+  dbg.textContent = 'openElDetail: el='+(el?el.name:'NULL')+' wrap='+(wrap?'OK':'NULL');
+  if(!el||!wrap){ return; }
+  wrap.innerHTML = '<div style="color:white;font-size:18px;padding:40px 20px;min-height:200px">'+el.name+' ('+el.sym+') - Atom No: '+el.n+'</div>';
+  nav('eldetay');
+  return; // GECICI - asil icerik sonra
   if(!el) return;
   var d = EL_DATA[el.n];
   var c2 = CAT_COLORS2[el.cat]||{bg:'rgba(30,41,59,.8)',border:'#6366f1'};
@@ -2023,12 +2032,8 @@ function openElDetail(el){
   html += '</div>';
 
   var wrap = document.getElementById('eldetay-wrap');
-  if(wrap) wrap.innerHTML = html;
-  var dbg=document.getElementById('dbg');
-  if(!dbg){dbg=document.createElement('div');dbg.id='dbg';dbg.style='position:fixed;top:0;left:0;right:0;background:orange;color:black;font-size:13px;padding:8px;z-index:99999;';document.body.appendChild(dbg);}
-  dbg.textContent='openElDetail: wrap='+(wrap?'OK':'NULL')+' html='+html.length+'chars';
+  if(wrap) wrap.innerHTML = '<div style="color:white;font-size:20px;padding:20px;background:red">TEST: '+el.name+'</div>' + html;
   nav('eldetay');
-  dbg.textContent='nav eldetay done, s-eldetay display='+document.getElementById('s-eldetay').style.display;
 }
 
 // ============================================================
