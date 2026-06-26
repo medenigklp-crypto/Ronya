@@ -15,480 +15,174 @@
   --r:14px;--rsm:8px;--rlg:20px;--rxl:28px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{background:#08090f!important;background-color:#08090f!important;color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(99,102,241,.06) 1px,transparent 0);background-size:28px 28px;pointer-events:none;z-index:0;}
+html,body{background:#08090f!important;color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 .app{position:relative;z-index:1;}
-::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:var(--br2);border-radius:3px;}
-/* HEADER */
-header{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:58px;border-bottom:1px solid var(--br);background:rgba(8,9,15,.9);backdrop-filter:blur(16px);position:sticky;top:0;z-index:100;}
-.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;cursor:pointer;display:flex;align-items:center;gap:8px;}
-.logo-sub{font-size:11px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;}
-nav{display:flex;gap:2px;flex-wrap:wrap;}
-nav button{background:none;border:none;color:var(--tx2);font-size:13px;font-family:'Inter',sans-serif;padding:7px 11px;border-radius:var(--rsm);cursor:pointer;transition:all .2s;font-weight:500;white-space:nowrap;}
-nav button:hover{background:var(--sf2);color:var(--tx);}
-nav button.active{background:var(--sf2);color:var(--ac2);}
-.hmb{display:none;background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 10px;color:var(--tx2);cursor:pointer;font-size:15px;}
-@media(max-width:900px){nav{display:none;}.hmb{display:block;}}
-.mnav{display:none;position:fixed;top:58px;left:0;right:0;background:var(--sf);border-bottom:1px solid var(--br);padding:10px;z-index:99;flex-wrap:wrap;gap:4px;}
-.mnav#mn{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0f1117;flex-direction:column;gap:8px;padding:80px 16px 16px;z-index:9999;overflow-y:auto;}
-
-#mn button{padding:12px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;text-align:left;cursor:pointer;}
-.mnav button{background:var(--sf2);border:none;color:var(--tx2);font-size:13px;font-family:'Inter',sans-serif;padding:8px 14px;border-radius:var(--rsm);cursor:pointer;font-weight:500;}
-/* SCREENS */
-@keyframes pop{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
-/* COMMON */
-.pw{max-width:960px;margin:0 auto;padding:44px 20px;}
-.pw.wide{max-width:1200px;}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;border-bottom:1px solid var(--br);background:rgba(8,9,15,.95);position:sticky;top:0;z-index:100;}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
+.logo-sub{font-size:11px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;margin-left:6px;}
+.hmb{background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 10px;color:var(--tx2);cursor:pointer;font-size:15px;}
+#mn{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0f1117;flex-direction:column;gap:8px;padding:70px 16px 16px;z-index:9999;overflow-y:auto;}
+#mn button{padding:12px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;text-align:left;cursor:pointer;width:100%;}
+.pw{max-width:960px;margin:0 auto;padding:40px 16px;}
 .pw.narrow{max-width:660px;}
-.ptitle{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
-.psub{color:var(--tx2);font-size:14px;margin-bottom:28px;line-height:1.6;}
-.card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:24px;}
+.ptitle{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;}
+.psub{color:var(--tx2);font-size:14px;margin-bottom:24px;line-height:1.6;}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:20px;}
 .slbl{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
-.inp{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:11px 15px;color:var(--tx);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;}
+.inp{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:11px 15px;color:var(--tx);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
 .inp:focus{border-color:var(--ac);}
-.inp::placeholder{color:var(--tx3);}
 .sel{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:11px 15px;color:var(--tx);font-size:14px;font-family:'Inter',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;}
-.sel option{background:var(--sf);}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:var(--r);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;border:none;}
-.bp{background:var(--ac);color:#fff;box-shadow:0 4px 18px rgba(99,102,241,.3);}
-.bp:hover{background:#4f46e5;transform:translateY(-1px);}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 22px;border-radius:var(--r);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none;}
+.bp{background:var(--ac);color:#fff;}
 .bs{background:var(--sf2);color:var(--tx);border:1px solid var(--br);}
-.bs:hover{border-color:var(--ac);color:var(--ac2);}
 .bfull{width:100%;}
-.bgrp{display:flex;gap:7px;flex-wrap:wrap;}
-.ob{background:var(--sf2);border:1px solid var(--br);border-radius:var(--rsm);color:var(--tx2);font-size:13px;font-weight:500;padding:7px 14px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
-.ob:hover{border-color:var(--ac);color:var(--tx);}
+.ob{background:var(--sf2);border:1px solid var(--br);border-radius:var(--rsm);color:var(--tx2);font-size:13px;font-weight:500;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif;}
 .ob.sel2{background:rgba(99,102,241,.15);border-color:var(--ac);color:var(--ac2);}
-.rb{background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);padding:18px;margin-top:18px;}
-.rb .rl{font-size:11px;color:var(--tx3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
-.rb .rv{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;color:var(--ac2);}
-.rb .rv.g{color:var(--gr);}
-.rb .rv.r{color:var(--rd);}
-.rb .rv.y{color:var(--yw);}
-.slist{list-style:none;padding:0;margin-top:10px;}
-.slist li{padding:9px 12px;border-radius:var(--rsm);font-size:13px;color:var(--tx2);background:var(--sf3);margin-bottom:5px;border-left:3px solid var(--ac);}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}
-@media(max-width:560px){.g2,.g3{grid-template-columns:1fr;}}
-.divider{height:1px;background:var(--br);margin:20px 0;}
-.badge{display:inline-flex;align-items:center;gap:5px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);border-radius:100px;padding:5px 12px;font-size:11px;color:var(--ac2);font-weight:600;letter-spacing:.3px;}
-/* HOME */
-.hero{text-align:center;padding:72px 20px 52px;max-width:760px;margin:0 auto;}
-.hero .badge{margin-bottom:24px;}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:18px;}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,#a5b4fc 0%,#6366f1 60%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero p{font-size:16px;color:var(--tx2);max-width:500px;margin:0 auto 32px;line-height:1.7;}
-.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:44px;}
-.fels{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;}
-.fel{background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:10px 14px;text-align:center;min-width:58px;}
-.fel .fs{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;}
-.fel .fn{font-size:9px;color:var(--tx3);}
-.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:52px;}
-.tc{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:22px;cursor:pointer;transition:all .2s;}
-.tc:hover{border-color:var(--ac);transform:translateY(-3px);box-shadow:0 8px 28px rgba(99,102,241,.15);}
-.tc .ti{font-size:26px;margin-bottom:10px;}
-.tc .tt{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;margin-bottom:5px;}
-.tc .td{font-size:12px;color:var(--tx2);line-height:1.5;}
-.sbar{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;padding:28px;background:var(--sf);border:1px solid var(--br);border-radius:var(--rxl);margin-bottom:52px;}
-.si .sv{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;color:var(--ac2);letter-spacing:-1px;}
-.si .sl{font-size:11px;color:var(--tx3);font-weight:500;margin-top:3px;text-align:center;}
-/* QUIZ */
-.qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
-.qi{font-size:13px;color:var(--tx3);font-weight:500;}
-.lsc{display:flex;gap:11px;font-size:13px;font-weight:700;}
-.sc-cor{color:var(--gr);}
-.sc-wro{color:var(--rd);}
-.pbar{height:4px;background:var(--sf2);border-radius:100px;margin-bottom:32px;overflow:hidden;}
-.pfill{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:100px;transition:width .4s ease;}
-.qcard{background:var(--sf);border:1px solid var(--br);border-radius:24px;padding:40px 32px;text-align:center;margin-bottom:18px;animation:pop .25s ease;position:relative;overflow:hidden;}
-.qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:0;transition:opacity .3s;}
-.qcard.ans::before{opacity:1;}
-.qlbl{font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:18px;}
-.sbig{font-family:'Space Grotesk',sans-serif;font-size:84px;font-weight:800;line-height:1;letter-spacing:-3px;}
-.nbig{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:800;line-height:1;letter-spacing:-1px;}
-.enum{font-size:11px;color:var(--tx3);margin-bottom:3px;}
-.ecat{font-size:13px;color:var(--tx2);margin-top:7px;}
-.ogrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
-@media(max-width:560px){.ogrid{grid-template-columns:1fr;}}
-.ob2{background:var(--sf);border:1px solid var(--br);border-radius:var(--r);padding:13px 14px;color:var(--tx);font-size:14px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;text-align:left;display:flex;align-items:center;gap:9px;}
-.ob2:hover:not(:disabled){border-color:var(--ac);background:rgba(99,102,241,.08);transform:translateY(-1px);}
-.ob2:disabled{cursor:default;}
-.ob2.cor {border-color:var(--gr)!important;background:rgba(34,197,94,.1)!important;color:var(--gr)!important;}
-.ob2.wro {border-color:var(--rd)!important;background:rgba(239,68,68,.1)!important;color:var(--rd)!important;}
-.ok{width:25px;height:25px;border-radius:6px;background:var(--sf2);border:1px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--tx3);flex-shrink:0;}
-.ob2.cor .ok{background:rgba(34,197,94,.2);border-color:var(--gr);color:var(--gr);}
-.ob2.wro .ok{background:rgba(239,68,68,.2);border-color:var(--rd);color:var(--rd);}
-.oex{font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--tx3);margin-left:auto;}
-.fb{height:46px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;margin-bottom:11px;opacity:0;transition:opacity .3s;}
-.fb.show{opacity:1;}
-.fb.cor{background:rgba(34,197,94,.1);color:var(--gr);border:1px solid rgba(34,197,94,.2);}
-.fb.wro{background:rgba(239,68,68,.1);color:var(--rd);border:1px solid rgba(239,68,68,.2);}
-.nxt{width:100%;padding:13px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;display:none;}
-.nxt.show{display:block;}
-.nxt:hover{border-color:var(--ac);color:var(--ac2);}
-/* RESULTS */
-.rhero{text-align:center;margin-bottom:28px;}
-.rem{font-size:56px;display:block;margin-bottom:14px;}
-.rhero h2{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
-.rhero p{color:var(--tx2);font-size:13px;}
-.rpct{font-family:'Space Grotesk',sans-serif;font-size:70px;font-weight:800;letter-spacing:-3px;line-height:1;margin:14px 0 3px;}
-.rpct.gr{color:var(--gr);}
-.rpct.ok{color:var(--yw);}
-.rpct.bd{color:var(--rd);}
-.rstats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px;}
-.rstat{background:var(--sf);border:1px solid var(--br);border-radius:var(--r);padding:16px;text-align:center;}
-.rstat .v{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;margin-bottom:3px;}
-.rstat .l{font-size:11px;color:var(--tx3);font-weight:600;}
-.wsec{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:20px;margin-bottom:18px;}
-.wsec h3{font-size:14px;font-weight:600;margin-bottom:12px;}
-.wchips{display:flex;flex-wrap:wrap;gap:5px;}
-.wchip{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);padding:4px 10px;font-size:12px;font-weight:500;}
-.wchip strong{font-family:'Space Grotesk',sans-serif;color:var(--rd);font-size:13px;margin-right:2px;}
-.rbtns{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-@media(max-width:460px){.rbtns{grid-template-columns:1fr;}}
-/* PERIODIC TABLE */
-.ptf{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
-.ptfb{background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:4px 13px;font-size:12px;color:var(--tx2);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;font-weight:500;border:none;}
-.ptfb:hover{color:var(--tx);}
-.ptfb.on{background:rgba(99,102,241,.15);color:var(--ac2);}
-.elgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:4px;}
-.elt{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:8px 5px;text-align:center;cursor:pointer;transition:all .15s;}
-.elt:hover{border-color:var(--ac);background:rgba(99,102,241,.08);transform:translateY(-2px);}
-.elt.hide{display:none;}
-.elt.whl{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.05);}
-.elt .en{font-size:9px;color:var(--tx3);margin-bottom:1px;}
-.elt .es{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:800;color:var(--tx);line-height:1;}
-.elt .enm{font-size:9px;color:var(--tx2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.elt.g1{border-top:3px solid #ef4444;}
-.elt.g2{border-top:3px solid #f97316;}
-.elt.gtm{border-top:3px solid #f59e0b;}
-.elt.g13{border-top:3px solid #84cc16;}
-.elt.g14{border-top:3px solid #22c55e;}
-.elt.g15{border-top:3px solid #06b6d4;}
-.elt.g16{border-top:3px solid #3b82f6;}
-.elt.g17{border-top:3px solid #8b5cf6;}
-.elt.g18{border-top:3px solid #ec4899;}
-.elt.glan{border-top:3px solid #64748b;}
-.elt.gact{border-top:3px solid #475569;}
-.ptleg{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
-.ll{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--tx3);}
-.ld{width:9px;height:9px;border-radius:2px;}
-/* TABS */
-.tabs{display:flex;gap:4px;background:var(--sf2);border-radius:var(--r);padding:4px;margin-bottom:20px;}
-.tab{flex:1;padding:8px;border:none;border-radius:var(--rsm);background:none;color:var(--tx2);font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;}
+.badge{display:inline-flex;align-items:center;gap:5px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);border-radius:100px;padding:5px 12px;font-size:11px;color:var(--ac2);font-weight:600;}
+.hero{text-align:center;padding:60px 16px 40px;max-width:700px;margin:0 auto;}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(32px,7vw,60px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:16px;}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{font-size:15px;color:var(--tx2);margin:0 auto 28px;line-height:1.7;}
+.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:40px;}
+.tc{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:18px;cursor:pointer;}
+.tc .ti{font-size:24px;margin-bottom:8px;}
+.tc .tt{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;margin-bottom:4px;}
+.tc .td{font-size:11px;color:var(--tx2);line-height:1.5;}
+.sbar{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:24px;background:var(--sf);border:1px solid var(--br);border-radius:var(--rxl);margin-bottom:40px;}
+.si .sv{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:800;color:var(--ac2);}
+.si .sl{font-size:11px;color:var(--tx3);text-align:center;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media(max-width:500px){.g2,.g3{grid-template-columns:1fr;}}
+.tabs{display:flex;gap:4px;background:var(--sf2);border-radius:var(--r);padding:4px;margin-bottom:16px;}
+.tab{flex:1;padding:8px;border:none;border-radius:var(--rsm);background:none;color:var(--tx2);font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;}
 .tab.on{background:var(--ac);color:#fff;}
 .tp{display:none;}
 .tp.on{display:block;}
-.ltabs{display:flex;gap:3px;background:var(--sf2);border-radius:var(--r);padding:4px;margin-bottom:20px;overflow-x:auto;}
-.ltab{flex-shrink:0;padding:7px 13px;border:none;border-radius:var(--rsm);background:none;color:var(--tx2);font-size:12px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;}
+.ltabs{display:flex;gap:3px;background:var(--sf2);border-radius:var(--r);padding:4px;margin-bottom:16px;overflow-x:auto;}
+.ltab{flex-shrink:0;padding:7px 12px;border:none;border-radius:var(--rsm);background:none;color:var(--tx2);font-size:12px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;}
 .ltab.on{background:var(--ac);color:#fff;}
-/* FORMULA BOX */
-.fbox{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:var(--r);padding:14px;text-align:center;font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--ac2);margin-bottom:18px;}
-/* pH */
-.phscale{height:26px;background:linear-gradient(90deg,#ef4444,#f97316,#eab308,#22c55e,#22c55e,#3b82f6,#8b5cf6);border-radius:100px;position:relative;margin:14px 0;}
-.phm{position:absolute;top:-5px;transform:translateX(-50%);width:4px;height:36px;background:var(--tx);border-radius:2px;transition:left .5s ease;}
-.phlbls{display:flex;justify-content:space-between;font-size:9px;color:var(--tx3);padding:0 3px;margin-bottom:16px;}
-.phval{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:800;letter-spacing:-2px;text-align:center;margin:6px 0;}
-/* COUNTDOWN */
-.cdgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:28px 0;}
-@media(max-width:460px){.cdgrid{grid-template-columns:repeat(2,1fr);}}
-.cdb{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:24px 14px;text-align:center;}
-.cdv{font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:800;letter-spacing:-2px;color:var(--ac2);line-height:1;}
-.cdl{font-size:10px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:5px;}
-.etabs{display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap;}
-.etab{padding:7px 16px;border:1px solid var(--br);border-radius:100px;background:var(--sf2);color:var(--tx2);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
-.etab.on{background:var(--ac);border-color:var(--ac);color:#fff;}
-/* POMODORO */
-.pomd{text-align:center;padding:32px 16px;}
-.pomml{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
-.pomcirc{width:190px;height:190px;margin:0 auto 28px;position:relative;}
-.pomcirc svg{transform:rotate(-90deg);}
-.pomcirc circle{fill:none;stroke-width:8;}
-.pcbg{stroke:var(--sf2);}
-.pcfg{stroke:var(--ac);stroke-linecap:round;transition:stroke-dashoffset .5s linear;}
-.pominn{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.pomtm{font-family:'Space Grotesk',sans-serif;font-size:72px;font-weight:800;letter-spacing:-4px;line-height:1;}
-.pombtns{display:flex;gap:9px;justify-content:center;}
-.pomset{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:20px;}
-@media(max-width:480px){.pomset{grid-template-columns:1fr;}}
-.pomset label{display:block;font-size:11px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
-.pomrds{display:flex;gap:5px;justify-content:center;margin:14px 0;}
-.pd{width:9px;height:9px;border-radius:50%;background:var(--sf2);border:2px solid var(--br);transition:all .3s;}
-.pd.done{background:var(--ac);border-color:var(--ac);}
-.pd.cur{background:var(--ac2);border-color:var(--ac2);transform:scale(1.4);}
-/* LEADERBOARD */
+.rb{background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);padding:16px;margin-top:16px;}
+.rb .rl{font-size:11px;color:var(--tx3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
+.rb .rv{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;color:var(--ac2);}
+.fbox{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:var(--r);padding:12px;text-align:center;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--ac2);margin-bottom:16px;}
+.phscale{height:24px;background:linear-gradient(90deg,#ef4444,#f97316,#eab308,#22c55e,#22c55e,#3b82f6,#8b5cf6);border-radius:100px;position:relative;margin:12px 0;}
+.phm{position:absolute;top:-4px;transform:translateX(-50%);width:3px;height:32px;background:var(--tx);border-radius:2px;}
+.phlbls{display:flex;justify-content:space-between;font-size:9px;color:var(--tx3);margin-bottom:14px;}
+.phval{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:800;text-align:center;margin:6px 0;}
+.cdgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:20px 0;}
+@media(max-width:400px){.cdgrid{grid-template-columns:repeat(2,1fr);}}
+.cdb{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:20px 10px;text-align:center;}
+.cdv{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:800;color:var(--ac2);line-height:1;}
+.cdl{font-size:10px;color:var(--tx3);font-weight:600;text-transform:uppercase;margin-top:4px;}
+.pomd{text-align:center;padding:24px 16px;}
+.pomtm{font-family:'Space Grotesk',sans-serif;font-size:64px;font-weight:800;letter-spacing:-3px;margin:20px 0;}
+.pombtns{display:flex;gap:8px;justify-content:center;}
+.pomset{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.pomset label{display:block;font-size:11px;color:var(--tx3);font-weight:600;margin-bottom:4px;}
+.pbar{height:4px;background:var(--sf2);border-radius:100px;margin-bottom:24px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:100px;}
+.qcard{background:var(--sf);border:1px solid var(--br);border-radius:20px;padding:32px 24px;text-align:center;margin-bottom:16px;}
+.qlbl{font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+.sbig{font-family:'Space Grotesk',sans-serif;font-size:56px;font-weight:800;line-height:1;margin:16px 0;}
+.ecat{font-size:13px;color:var(--tx2);margin-top:6px;}
+.qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.qi{font-size:13px;color:var(--tx3);}
+.lsc{display:flex;gap:10px;font-size:13px;font-weight:700;}
+.sc-cor{color:var(--gr);}
+.sc-wro{color:var(--rd);}
+.ogrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;}
+@media(max-width:400px){.ogrid{grid-template-columns:1fr;}}
+.ob2{background:var(--sf);border:1px solid var(--br);border-radius:var(--r);padding:12px 14px;color:var(--tx);font-size:14px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;width:100%;}
+.ob2.cor{border-color:var(--gr) !important;background:rgba(34,197,94,.1) !important;color:var(--gr) !important;}
+.ob2.wro{border-color:var(--rd) !important;background:rgba(239,68,68,.1) !important;color:var(--rd) !important;}
+.fb{height:44px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;margin-bottom:10px;opacity:0;}
+.fb.show{opacity:1;}
+.fb.cor{background:rgba(34,197,94,.1);color:var(--gr);border:1px solid rgba(34,197,94,.2);}
+.fb.wro{background:rgba(239,68,68,.1);color:var(--rd);border:1px solid rgba(239,68,68,.2);}
+.nxt{width:100%;padding:12px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;display:none;}
+.nxt.show{display:block;}
+.rhero{text-align:center;margin-bottom:24px;}
+.rpct{font-family:'Space Grotesk',sans-serif;font-size:64px;font-weight:800;letter-spacing:-2px;line-height:1;margin:12px 0 2px;}
+.rpct.gr{color:var(--gr);}
+.rpct.ok{color:var(--yw);}
+.rpct.bd{color:var(--rd);}
+.rstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.rstat{background:var(--sf);border:1px solid var(--br);border-radius:var(--r);padding:14px;text-align:center;}
+.rstat .v{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;margin-bottom:2px;}
+.rstat .l{font-size:11px;color:var(--tx3);font-weight:600;}
 .board{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);overflow:hidden;}
-.brow{display:grid;grid-template-columns:42px 1fr 68px 68px 76px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--br);font-size:13px;gap:5px;}
-.brow:last-child{border-bottom:none;}
-.brow.hdr{background:var(--sf2);font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;}
-.brk{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14px;color:var(--tx3);}
-.brk.gd{color:#f59e0b;}.brk.sv{color:#94a3b8;}.brk.br{color:#b45309;}
-.bnm{font-weight:600;}
-.bpc{font-weight:700;color:var(--ac2);text-align:right;}
-.bcr{color:var(--gr);font-weight:600;text-align:right;}
-.bdt{color:var(--tx3);font-size:11px;text-align:right;}
-@media(max-width:520px){.bdt{display:none;}.brow{grid-template-columns:38px 1fr 58px 58px;}}
-/* MODAL */
-.ovl{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
-.ovl.show{opacity:1;pointer-events:all;}
-.modal{background:var(--sf);border:1px solid var(--br);border-radius:var(--rxl);padding:32px;max-width:440px;width:100%;transform:scale(.95);transition:transform .25s;max-height:90vh;overflow-y:auto;}
-.ovl.show .modal{transform:scale(1);}
-.msbig{font-family:'Space Grotesk',sans-serif;font-size:60px;font-weight:800;color:var(--ac2);line-height:1;margin-bottom:6px;}
-.modal h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px;}
-.mcat{font-size:12px;color:var(--tx2);margin-bottom:18px;}
-.mrow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--br);font-size:13px;}
-.mrow:last-child{border-bottom:none;}
-.mrow .mk{color:var(--tx3);}
-.mrow .mv{font-weight:600;}
-/* EQUATION */
-.eqdsp{background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:18px;text-align:center;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin:14px 0;min-height:58px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;}
-.eqc{color:var(--ac2);font-size:22px;font-weight:800;}
-.eqco{color:var(--tx);}
-.eqar{color:var(--tx3);margin:0 6px;}
-.eqpl{color:var(--tx3);margin:0 3px;}
-/* TOAST */
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:10px 20px;font-size:13px;font-weight:500;color:var(--tx);z-index:300;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
+.brow{display:grid;grid-template-columns:40px 1fr auto;align-items:center;padding:10px 14px;border-bottom:1px solid var(--br);font-size:13px;gap:5px;}
+.brow.hdr{background:var(--sf2);font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;}
+.cat-btn{height:30px;padding:0 12px;border-radius:100px;font-size:11px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;white-space:nowrap;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);}
+.cat-btn.active{background:rgba(99,102,241,.2);border-color:#6366f1;color:#a5b4fc;}
+.trend-btn{padding:6px 12px;border-radius:var(--r);font-size:12px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;border:1px solid var(--br);background:var(--sf2);color:var(--tx2);}
+.trend-btn.active{background:rgba(99,102,241,.2);border-color:#6366f1;color:#a5b4fc;}
+#pt-real-grid{font-family:'Space Grotesk',sans-serif;}
+.pt-cell-wrap{aspect-ratio:1;border-radius:8px;cursor:pointer;position:relative;overflow:hidden;border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px 1px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.15);}
+.pt-cell-wrap:active{transform:scale(.96);}
+.pt-legend-wrap{border-radius:8px;padding:4px 6px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;border:1px solid transparent;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+.pt-lline{height:2px;border-radius:2px;margin-bottom:3px;}
+.pt-lcat{font-size:7.5px;font-weight:700;line-height:1.2;}
+.pt-lcnt{font-size:6.5px;opacity:.5;margin-top:1px;}
+.pt-col-hdr{font-size:8px;color:rgba(255,255,255,.3);text-align:center;font-weight:700;}
+.pt-row-hdr{font-size:8px;color:rgba(255,255,255,.3);text-align:center;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.pt-ref-cell{aspect-ratio:1;border-radius:6px;border:1px dashed rgba(100,116,139,.3);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:var(--tx3);}
+.pt-spacer-cell{aspect-ratio:1;}
+.eqdsp{background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:16px;text-align:center;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;margin:12px 0;min-height:52px;display:flex;align-items:center;justify-content:center;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:10px 20px;font-size:13px;font-weight:500;color:var(--tx);z-index:300;opacity:0;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* ===== REAL PERIODIC TABLE — Enhanced ===== */
-#pt-real-grid { font-family: 'Space Grotesk', sans-serif; }
-.pt-cell-wrap {
-  aspect-ratio: 1;
-  border-radius: 10px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  max-width: 100%;
-  border: 1px solid transparent;
-  transition: transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .15s ease, opacity .2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 1px;
-  text-align: center;
-  box-shadow:
-    0 2px 6px rgba(0,0,0,.5),
-    0 1px 2px rgba(0,0,0,.4),
-    inset 0 1px 0 rgba(255,255,255,.18),
-    inset 0 -1px 0 rgba(0,0,0,.3);
-}
-.pt-cell-wrap::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 55%;
-  background: linear-gradient(180deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.04) 100%);
-  pointer-events: none;
-  border-radius: 10px 10px 0 0;
-}
-.pt-cell-wrap::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 40%;
-  background: linear-gradient(to top, rgba(0,0,0,.3), transparent);
-  pointer-events: none;
-  border-radius: 0 0 9px 9px;
-}
-.pt-cell-wrap:hover {
-  transform: scale(1.22) translateY(-3px);
-  z-index: 20;
-  box-shadow:
-    0 12px 28px rgba(0,0,0,.7),
-    0 4px 10px rgba(0,0,0,.4),
-    0 0 20px rgba(255,255,255,.08),
-    inset 0 1px 0 rgba(255,255,255,.3),
-    inset 0 -1px 0 rgba(0,0,0,.2);
-}
-.pt-cell-wrap:active {
-  transform: scale(1.06) translateY(-1px);
-}
-.pt-cn { font-size: 6.5px; font-weight: 700; line-height: 1.2; opacity: .9; }
-
-.pt-legend-wrap {
-  border-radius: 10px;
-  padding: 6px 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-  transition: opacity .15s, transform .15s cubic-bezier(.34,1.56,.64,1);
-  border: 1px solid transparent;
-  min-height: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12);
-}
-.pt-legend-wrap:hover { opacity: .9; transform: scale(1.04) translateY(-1px); }
-.pt-legend-wrap::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  background: linear-gradient(180deg, rgba(255,255,255,.15) 0%, transparent 100%);
-  border-radius: 9px 9px 0 0;
-  pointer-events: none;
-}
-.pt-lline { height: 2.5px; border-radius: 2px; margin-bottom: 4px; }
-.pt-lcat { font-size: 8.5px; font-weight: 700; line-height: 1.2; }
-.pt-lcnt { font-size: 7.5px; opacity: .5; margin-top: 2px; }
-.pt-col-hdr { font-size: 8.5px; color: rgba(255,255,255,.35); text-align: center; font-weight: 700; padding: 1px 0; letter-spacing: .3px; }
-.pt-row-hdr { font-size: 8.5px; color: rgba(255,255,255,.35); text-align: center; display: flex; align-items: center; justify-content: center; font-weight: 700; letter-spacing: .3px; }
-.pt-ref-cell {
-  aspect-ratio: 1;
-  border-radius: 7px;
-  border: 1px dashed rgba(100,116,139,.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-  font-weight: 700;
-  color: var(--tx3);
-}
-.pt-spacer-cell { aspect-ratio: 1; }
-
-/* ===== CATEGORY FILTER BUTTONS ===== */
-.cat-btn {
-  height: 32px;
-  padding: 0 12px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: Inter, sans-serif;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all .15s;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.15);
-  color: rgba(255,255,255,.5);
-}
-.cat-btn:hover {
-  background: rgba(255,255,255,.1);
-  color: rgba(255,255,255,.8);
-}
-.cat-btn.active {
-  background: rgba(var(--cb-rgb, 99,102,241), .2);
-  border-color: var(--cb, #6366f1);
-  color: var(--cb, #a5b4fc);
-  box-shadow: 0 0 10px rgba(var(--cb-rgb, 99,102,241), .3);
-}
-#cbtn-all.active {
-  background: rgba(99,102,241,.2);
-  border-color: #6366f1;
-  color: #a5b4fc;
-  box-shadow: 0 0 10px rgba(99,102,241,.3);
-}
-
-/* ===== TREND BUTTONS ===== */
-.trend-btn {
-  padding: 7px 12px;
-  border-radius: var(--r);
-  font-size: 12px;
-  font-weight: 600;
-  font-family: Inter, sans-serif;
-  cursor: pointer;
-  border: 1px solid var(--br);
-  background: var(--sf2);
-  color: var(--tx2);
-  transition: all .15s;
-}
-.trend-btn:hover { background: rgba(255,255,255,.08); color: #fff; }
-.trend-btn.active {
-  background: rgba(99,102,241,.2);
-  border-color: #6366f1;
-  color: #a5b4fc;
-}
-
-@supports (--cc: red) {
-  .pt-cell-wrap:hover {
-    box-shadow:
-      0 12px 28px rgba(0,0,0,.7),
-      0 4px 10px rgba(0,0,0,.4),
-      0 0 16px color-mix(in srgb, var(--cc, white) 30%, transparent),
-      inset 0 1px 0 rgba(255,255,255,.3);
-  }
-}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
   <div class="logo" onclick="nav('home')">Ronya<span class="logo-sub">YKS Kimya</span></div>
-  <nav>
-    <button id="nb-home" class="active" onclick="nav('home')">Ana Sayfa</button>
-    <button id="nb-quiz" onclick="nav('quiz')">Element Testi</button>
-    <button id="nb-pt" onclick="nav('pt')">Periyodik Tablo</button>
-    <button id="nb-mol" onclick="nav('mol')">Mol Hesaplayıcı</button>
-    <button id="nb-eq" onclick="nav('eq')">Denklem</button>
-    <button id="nb-ph" onclick="nav('ph')">pH</button>
-    <button id="nb-gaz" onclick="nav('gaz')">Gaz Yasaları</button>
-    <button id="nb-yks" onclick="nav('yks')">YKS Sayaç</button>
-    <button id="nb-pom" onclick="nav('pom')">Odaklan</button>
-    <button id="nb-board" onclick="nav('board')">Skor</button>
-    <button id="nb-sim" onclick="nav('sim')">Simülasyonlar</button>
-    <button id="nb-3d" onclick="nav('3d')">3D Araçlar</button>
-    <button id="nb-puan" onclick="nav('puan')">YKS Puan</button>
-    <button id="nb-atlas" onclick="nav('atlas')">YÖK Atlas</button>
-  </nav>
-  <button class="hmb" onclick="var m=document.getElementById('mn');m.style.display=m.style.display==='none'||!m.style.display?'flex':'none'">☰</button>
+  <button class="hmb" onclick="toggleMenu()">☰</button>
 </header>
-<div class="mnav" id="mn">
-  <button onclick="nav('home')">Ana Sayfa</button>
-  <button onclick="nav('quiz')">Element Testi</button>
-  <button onclick="nav('pt')">Periyodik Tablo</button>
-  <button onclick="nav('mol')">Mol Hesaplayıcı</button>
-  <button onclick="nav('eq')">Denklem</button>
-  <button onclick="nav('ph')">pH</button>
-  <button onclick="nav('gaz')">Gaz Yasaları</button>
-  <button onclick="nav('yks')">YKS Sayaç</button>
-  <button onclick="nav('pom')">Odaklan</button>
-  <button onclick="nav('board')">Skor</button>
-  <button onclick="nav('sim')">Simülasyonlar</button>
-  <button onclick="nav('3d')">3D Araçlar</button>
-  <button onclick="nav('puan')">YKS Puan</button>
-  <button onclick="nav('atlas')">YÖK Atlas</button>
+
+<div id="mn">
+  <button onclick="nav('home')">🏠 Ana Sayfa</button>
+  <button onclick="nav('quiz')">⚗️ Element Testi</button>
+  <button onclick="nav('pt')">🔬 Periyodik Tablo</button>
+  <button onclick="nav('mol')">⚖️ Mol Hesaplayıcı</button>
+  <button onclick="nav('eq')">⚡ Denklem Dengeleyici</button>
+  <button onclick="nav('ph')">🧪 pH Hesaplayıcı</button>
+  <button onclick="nav('gaz')">💨 Gaz Yasaları</button>
+  <button onclick="nav('yks')">⏱️ YKS Sayaç</button>
+  <button onclick="nav('pom')">🎯 Odaklan</button>
+  <button onclick="nav('puan')">📊 YKS Puan</button>
+  <button onclick="nav('board')">🏆 Skor</button>
 </div>
 
 <!-- HOME -->
 <div id="s-home" style="display:block">
   <div class="hero">
-    <div class="badge">⚗️ YKS TYT · AYT · KPSS — Türkçe</div>
+    <div class="badge" style="margin-bottom:20px">⚗️ YKS TYT · AYT — Türkçe</div>
     <h1>Kimya İçin<br><em>Her Şey</em><br>Tek Yerde.</h1>
     <p>Periyodik tablo, mol hesaplayıcı, denklem dengeleyici, pH, gaz yasaları ve element testi — hepsi ücretsiz.</p>
     <div class="hbtns">
       <button class="btn bp" onclick="nav('quiz')">Element Testine Başla →</button>
       <button class="btn bs" onclick="nav('pt')">Periyodik Tabloyu Gör</button>
     </div>
-    <div class="fels">
-      <div class="fel"><div class="fn">26</div><div class="fs">Fe</div></div>
-      <div class="fel"><div class="fn">1</div><div class="fs">H</div></div>
-      <div class="fel"><div class="fn">8</div><div class="fs">O</div></div>
-      <div class="fel"><div class="fn">11</div><div class="fs">Na</div></div>
-      <div class="fel"><div class="fn">79</div><div class="fs">Au</div></div>
-      <div class="fel"><div class="fn">6</div><div class="fs">C</div></div>
-    </div>
   </div>
-  <div class="pw wide" style="padding-top:0">
+  <div class="pw" style="padding-top:0">
     <div class="sbar">
       <div class="si"><div class="sv">118</div><div class="sl">Element</div></div>
-      <div class="si"><div class="sv">13+</div><div class="sl">Ücretsiz Araç</div></div>
-      <div class="si"><div class="sv">TYT</div><div class="sl">& AYT Hazırlık</div></div>
-      <div class="si"><div class="sv">Türkçe</div><div class="sl">Tam Destek</div></div>
+      <div class="si"><div class="sv">10+</div><div class="sl">Ücretsiz Araç</div></div>
+      <div class="si"><div class="sv">TYT</div><div class="sl">& AYT</div></div>
     </div>
     <div class="tgrid">
-      <div class="tc" onclick="nav('quiz')"><div class="ti">⚗️</div><div class="tt">Element Testi</div><div class="td">118 elementin sembol ve isimlerini pekiştir. Zayıf nokta takibi.</div></div>
-      <div class="tc" onclick="nav('pt')"><div class="ti">🔬</div><div class="tt">Periyodik Tablo</div><div class="td">Detaylı element bilgileri, kategoriler ve arama özelliği.</div></div>
-      <div class="tc" onclick="nav('mol')"><div class="ti">⚖️</div><div class="tt">Mol Hesaplayıcı</div><div class="td">Mol, kütle, hacim, atom sayısı ve derişim hesaplama.</div></div>
-      <div class="tc" onclick="nav('eq')"><div class="ti">⚡</div><div class="tt">Denklem Dengeleyici</div><div class="td">Kimyasal denklemleri otomatik dengele.</div></div>
-      <div class="tc" onclick="nav('ph')"><div class="ti">🧪</div><div class="tt">pH Hesaplayıcı</div><div class="td">Asit-baz pH, pOH ve Henderson-Hasselbalch.</div></div>
-      <div class="tc" onclick="nav('gaz')"><div class="ti">💨</div><div class="tt">Gaz Yasaları</div><div class="td">İdeal gaz yasası, Boyle, Charles ve daha fazlası.</div></div>
-      <div class="tc" onclick="nav('yks')"><div class="ti">⏱️</div><div class="tt">YKS Geri Sayım</div><div class="td">TYT and AYT sınavlarına canlı geri sayım.</div></div>
-      <div class="tc" onclick="nav('pom')"><div class="ti">🎯</div><div class="tt">Odaklan</div><div class="td">Pomodoro tabanlı çalışma zamanlayıcısı.</div></div>
-      <div class="tc" onclick="nav('sim')"><div class="ti">🔭</div><div class="tt">Simülasyonlar</div><div class="td">17 interaktif kimya simülasyonu. Maarif müfredatına uygun.</div></div>
-      <div class="tc" onclick="nav('3d')"><div class="ti">🧬</div><div class="tt">3D Araçlar</div><div class="td">Molekül görüntüleyici, amino asitler, lab ekipmanları.</div></div>
-      <div class="tc" onclick="nav('puan')"><div class="ti">📊</div><div class="tt">YKS Puan Hesaplama</div><div class="td">TYT/AYT netlerini gir, SAY · EA · SÖZ · DİL puanını hesapla.</div></div>
-      <div class="tc" onclick="nav('atlas')"><div class="ti">🎓</div><div class="tt">YÖK Atlas</div><div class="td">Taban puanları ve başarı sıralamaları ile üniversite bul.</div></div>
+      <div class="tc" onclick="nav('quiz')"><div class="ti">⚗️</div><div class="tt">Element Testi</div><div class="td">118 element sembol/isim testi. Zayıf nokta takibi.</div></div>
+      <div class="tc" onclick="nav('pt')"><div class="ti">🔬</div><div class="tt">Periyodik Tablo</div><div class="td">Detaylı element bilgileri ve kategoriler.</div></div>
+      <div class="tc" onclick="nav('mol')"><div class="ti">⚖️</div><div class="tt">Mol Hesaplayıcı</div><div class="td">Mol, kütle, hacim, derişim.</div></div>
+      <div class="tc" onclick="nav('eq')"><div class="ti">⚡</div><div class="tt">Denklem Dengeleyici</div><div class="td">Kimyasal denklemleri dengele.</div></div>
+      <div class="tc" onclick="nav('ph')"><div class="ti">🧪</div><div class="tt">pH Hesaplayıcı</div><div class="td">Asit-baz pH ve tampon hesabı.</div></div>
+      <div class="tc" onclick="nav('gaz')"><div class="ti">💨</div><div class="tt">Gaz Yasaları</div><div class="td">Boyle, Charles, ideal gaz.</div></div>
+      <div class="tc" onclick="nav('yks')"><div class="ti">⏱️</div><div class="tt">YKS Geri Sayım</div><div class="td">TYT ve AYT geri sayım.</div></div>
+      <div class="tc" onclick="nav('pom')"><div class="ti">🎯</div><div class="tt">Odaklan</div><div class="td">Pomodoro zamanlayıcı.</div></div>
+      <div class="tc" onclick="nav('puan')"><div class="ti">📊</div><div class="tt">YKS Puan</div><div class="td">SAY · EA · SÖZ puan hesaplama.</div></div>
     </div>
   </div>
 </div>
@@ -496,30 +190,25 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <!-- QUIZ CONFIG -->
 <div id="s-quiz" style="display:none">
   <div class="pw narrow">
-    <div class="badge" style="margin-bottom:18px">⚗️ Element Testi</div>
-    <h1 class="ptitle">Element Testi</h1>
-    <p class="psub">Sembol-isim eşleştirme ile 118 elementi öğren. Zayıf nokta takibi ile eksiklerini kapat.</p>
+    <h1 class="ptitle">⚗️ Element Testi</h1>
+    <p class="psub">118 elementi öğren. Zayıf noktalarını takip et.</p>
     <div class="card">
-      <div class="slbl" style="margin-bottom:14px">Testi Yapılandır</div>
-      <div class="g2" style="gap:18px">
-        <div>
-          <div class="slbl">Soru Tipi</div>
-          <div class="bgrp" id="qtype-g">
-            <button class="ob sel2" data-v="sym2name" onclick="so(this,'qtype-g','type'); cfgQuiz('type','sym2name')">Sembol → İsim</button>
-            <button class="ob" data-v="name2sym" onclick="so(this,'qtype-g','type'); cfgQuiz('type','name2sym')">İsim → Sembol</button>
-          </div>
-        </div>
-        <div>
-          <div class="slbl">Soru Sayısı</div>
-          <div class="bgrp" id="cnt-g">
-            <button class="ob sel2" data-v="10" onclick="so(this,'cnt-g','count'); cfgQuiz('count',10)">10</button>
-            <button class="ob" data-v="20" onclick="so(this,'cnt-g','count'); cfgQuiz('count',20)">20</button>
-          </div>
+      <div style="margin-bottom:14px">
+        <div class="slbl">Soru Tipi</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="ob sel2" id="qtype-sym" onclick="setQType('sym2name',this)">Sembol → İsim</button>
+          <button class="ob" id="qtype-name" onclick="setQType('name2sym',this)">İsim → Sembol</button>
         </div>
       </div>
-      <div style="margin-top:24px">
-        <button class="btn bp bfull" onclick="startQ()">Testi Başlat →</button>
+      <div style="margin-bottom:20px">
+        <div class="slbl">Soru Sayısı</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="ob sel2" id="qcnt-10" onclick="setQCount(10,this)">10</button>
+          <button class="ob" id="qcnt-20" onclick="setQCount(20,this)">20</button>
+          <button class="ob" id="qcnt-50" onclick="setQCount(50,this)">50</button>
+        </div>
       </div>
+      <button class="btn bp bfull" onclick="startQ()">Testi Başlat →</button>
     </div>
   </div>
 </div>
@@ -528,13 +217,13 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-qact" style="display:none">
   <div class="pw narrow">
     <div class="qhdr">
-      <span class="qi" id="qcnt">Soru 1/10</span>
+      <span class="qi" id="qcnt-lbl">Soru 1/10</span>
       <div class="lsc"><span class="sc-cor" id="lvc">✓ 0</span><span class="sc-wro" id="lvw">✗ 0</span></div>
     </div>
     <div class="pbar"><div class="pfill" id="pf" style="width:0%"></div></div>
     <div class="qcard" id="qcard">
-      <div class="qlbl" id="qlbl">Sorulan</div>
-      <div id="qdsp" class="sbig" style="font-size:56px; margin:20px 0;"></div>
+      <div class="qlbl" id="qlbl">Sembolün ismini bul</div>
+      <div id="qdsp" class="sbig"></div>
       <div class="ecat" id="qcat"></div>
     </div>
     <div class="ogrid" id="ogrid"></div>
@@ -547,106 +236,84 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-res" style="display:none">
   <div class="pw narrow">
     <div class="rhero">
-      <span class="rem" id="rem">🏆</span>
-      <h2 id="rtitle">Test Tamamlandı!</h2>
-      <div class="rpct" id="rpct">%0</div>
-      <p>Doğru Yanıt Oranı</p>
+      <div style="font-size:52px;margin-bottom:12px" id="rem">🏆</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px" id="rtitle">Harika!</h2>
+      <div class="rpct gr" id="rpct">%90</div>
+      <p style="color:var(--tx2);font-size:13px">doğru cevap</p>
     </div>
     <div class="rstats">
-      <div class="rstat"><div class="v" style="color:var(--gr)" id="rscor">0</div><div class="l">Doğru</div></div>
-      <div class="rstat"><div class="v" style="color:var(--rd)" id="rswro">0</div><div class="l">Yanlış</div></div>
-      <div class="rstat"><div class="v" id="rstot">0</div><div class="l">Toplam</div></div>
+      <div class="rstat"><div class="v" style="color:var(--gr)" id="rscor">9</div><div class="l">Doğru</div></div>
+      <div class="rstat"><div class="v" style="color:var(--rd)" id="rswro">1</div><div class="l">Yanlış</div></div>
+      <div class="rstat"><div class="v" id="rstot">10</div><div class="l">Toplam</div></div>
     </div>
-    <div class="card" style="margin-top:20px;">
-      <div class="slbl">Skorunu Kaydet</div>
-      <div style="display:flex; gap:10px; margin-top:8px;">
-        <input type="text" id="plname" class="inp" placeholder="İsminiz..." maxlength="20">
-        <button class="btn bp" onclick="saveAndRetry()">Kaydet</button>
-      </div>
-    </div>
-    <div class="rbtns" style="margin-top:15px;">
-      <button class="btn bs bfull" onclick="nav('quiz')">← Test Ayarlarına Dön</button>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn bs bfull" onclick="nav('quiz')">← Yeni Test</button>
+      <button class="btn bp bfull" onclick="nav('pt')">Periyodik Tablo</button>
     </div>
   </div>
 </div>
 
 <!-- PERIODIC TABLE -->
 <div id="s-pt" style="display:none">
-  <div style="padding:12px 10px 20px;min-height:100vh;background:radial-gradient(ellipse at 50% 0%, rgba(99,102,241,.06) 0%, transparent 70%)">
+  <div style="padding:12px 10px 20px">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <div style="position:relative;flex:1">
-        <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:14px">🔍</span>
-        <input type="text" class="inp" placeholder="Element ara..." oninput="filterPT(this.value)" id="ptsearch" style="padding-left:34px;height:40px;font-size:13px">
+        <input type="text" class="inp" placeholder="Element ara..." oninput="filterPT(this.value)" style="padding-left:14px;height:40px;font-size:13px">
       </div>
-      <button id="tempbtn" onclick="toggleTempMode()" style="height:40px;padding:0 14px;background:rgba(245,158,11,.1);border:1px solid #f59e0b;border-radius:var(--r);color:#f59e0b;font-size:12px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;white-space:nowrap">Harmonik Yapı</button>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:10px">
       <button id="pt-tab-tablo" onclick="setPTTab('tablo')" style="flex:1;height:36px;border-radius:var(--r);border:1px solid #6366f1;background:rgba(99,102,241,.2);color:#a5b4fc;font-size:13px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer">⊞ Tablo</button>
       <button id="pt-tab-trend" onclick="setPTTab('trend')" style="flex:1;height:36px;border-radius:var(--r);border:1px solid var(--br);background:var(--sf2);color:var(--tx3);font-size:13px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer">📈 Trendler</button>
     </div>
-
-    <!-- TABLO PANELİ -->
     <div id="pt-panel-tablo">
       <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:10px">
         <div style="display:flex;gap:5px;min-width:max-content">
-          <button class="cat-btn" id="cbtn-all" data-cat="all" onclick="setCatFilter(this)">Tümü</button>
-          <button class="cat-btn" data-cat="Alkali Metal" onclick="setCatFilter(this)" style="--cb:#ef4444">Alkali Metal</button>
-          <button class="cat-btn" data-cat="Toprak Alkali Metal" onclick="setCatFilter(this)" style="--cb:#f97316">Toprak Alkali</button>
-          <button class="cat-btn" data-cat="Geçiş Metali" onclick="setCatFilter(this)" style="--cb:#f59e0b">Geçiş Metali</button>
-          <button class="cat-btn" data-cat="Post-Geçiş Metali" onclick="setCatFilter(this)" style="--cb:#4ade80">Post-Geçiş</button>
-          <button class="cat-btn" data-cat="Yarı Metal" onclick="setCatFilter(this)" style="--cb:#22d3ee">Yarı Metal</button>
-          <button class="cat-btn" data-cat="Ametal" onclick="setCatFilter(this)" style="--cb:#34d399">Ametal</button>
-          <button class="cat-btn" data-cat="Halojen" onclick="setCatFilter(this)" style="--cb:#a855f7">Halojen</button>
-          <button class="cat-btn" data-cat="Soy Gaz" onclick="setCatFilter(this)" style="--cb:#f472b6">Soy Gaz</button>
+          <button class="cat-btn active" id="cbtn-all" data-cat="all" onclick="setCatFilter(this)">Tümü</button>
+          <button class="cat-btn" data-cat="Alkali Metal" onclick="setCatFilter(this)">Alkali Metal</button>
+          <button class="cat-btn" data-cat="Toprak Alkali Metal" onclick="setCatFilter(this)">Toprak Alkali</button>
+          <button class="cat-btn" data-cat="Geçiş Metali" onclick="setCatFilter(this)">Geçiş Metali</button>
+          <button class="cat-btn" data-cat="Post-Geçiş Metali" onclick="setCatFilter(this)">Post-Geçiş</button>
+          <button class="cat-btn" data-cat="Yarı Metal" onclick="setCatFilter(this)">Yarı Metal</button>
+          <button class="cat-btn" data-cat="Ametal" onclick="setCatFilter(this)">Ametal</button>
+          <button class="cat-btn" data-cat="Halojen" onclick="setCatFilter(this)">Halojen</button>
+          <button class="cat-btn" data-cat="Soy Gaz" onclick="setCatFilter(this)">Soy Gaz</button>
         </div>
       </div>
       <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px">
         <div id="pt-real-grid" style="min-width:700px"></div>
       </div>
     </div>
-
-    <!-- TREND PANELİ -->
     <div id="pt-panel-trend" style="display:none">
-      <div style="margin-bottom:12px">
-        <div style="font-size:11px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Atom Özellikleri</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
-          <button class="trend-btn" data-trend="radius" onclick="setTrend(this)">⚛️ Atom Yarıçapı</button>
-          <button class="trend-btn" data-trend="ionization" onclick="setTrend(this)">⚡ İyonlaşma Enerjisi</button>
-          <button class="trend-btn" data-trend="neg" onclick="setTrend(this)">🧲 Elektronegatiflik</button>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+        <button class="trend-btn" data-trend="radius" onclick="setTrend(this)">⚛️ Atom Yarıçapı</button>
+        <button class="trend-btn" data-trend="ionization" onclick="setTrend(this)">⚡ İyonlaşma</button>
+        <button class="trend-btn" data-trend="neg" onclick="setTrend(this)">🧲 Elektronegatiflik</button>
+      </div>
+      <div id="trend-info-card" style="display:none;margin-bottom:10px"></div>
+      <div id="trend-arrows" style="display:none;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:var(--r);margin-bottom:6px">
+          <span id="arrow-period-icon" style="font-size:18px;color:#f59e0b">⟶</span>
+          <div><div style="font-size:10px;color:#f59e0b;font-weight:700">Periyot boyunca</div><div id="arrow-period-text" style="font-size:13px;color:#fcd34d;font-weight:700"></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:var(--r)">
+          <span id="arrow-group-icon" style="font-size:18px;color:#818cf8">↓</span>
+          <div><div style="font-size:10px;color:#818cf8;font-weight:700">Grup boyunca</div><div id="arrow-group-text" style="font-size:13px;color:#c4b5fd;font-weight:700"></div></div>
         </div>
       </div>
-      <div id="trend-info-card" style="display:none"></div>
-      <div id="trend-arrows" style="display:none;margin-bottom:6px">
-        <div id="trend-arrow-period" style="display:flex;align-items:center;gap:8px;margin-bottom:4px;padding:8px 12px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);border-radius:var(--r)">
-          <span id="arrow-period-icon" style="font-size:20px;color:#f59e0b;min-width:20px;text-align:center">⟶</span>
-          <div>
-            <div style="font-size:10px;color:#f59e0b;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px">Periyot boyunca</div>
-            <div id="arrow-period-text" style="font-size:13px;color:#fcd34d;font-weight:700"></div>
-          </div>
-        </div>
-        <div id="trend-arrow-group" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.35);border-radius:var(--r)">
-          <span id="arrow-group-icon" style="font-size:20px;color:#818cf8;min-width:20px;text-align:center">↓</span>
-          <div>
-            <div style="font-size:10px;color:#818cf8;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px">Grup boyunca</div>
-            <div id="arrow-group-text" style="font-size:13px;color:#c4b5fd;font-weight:700"></div>
-          </div>
-        </div>
-      </div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;position:relative">
-        <div id="pt-trend-grid" style="min-width:700px"></div>
-      </div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div id="pt-trend-grid" style="min-width:700px"></div></div>
     </div>
   </div>
 </div>
 
-<!-- ELEMENT DETAIL PAGE -->
-<div id="s-eldetay" style="display:none;padding:70px 16px 40px;"><div id="eldetay-wrap"></div></div>
+<!-- ELEMENT DETAIL -->
+<div id="s-eldetay" style="display:none;padding:70px 16px 40px">
+  <div id="eldetay-wrap"></div>
+</div>
 
 <!-- MOL -->
 <div id="s-mol" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">⚖️ Mol Hesaplayıcı</h1>
-    <p class="psub">Mol, kütle, hacim, atom sayısı ve derişim hesaplamalarını adım adım çöz.</p>
     <div class="tabs" id="moltabs">
       <button class="tab on" onclick="tswitch('moltabs','moltps',0)">Mol↔Kütle</button>
       <button class="tab" onclick="tswitch('moltabs','moltps',1)">Mol↔Hacim</button>
@@ -654,56 +321,48 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
       <button class="tab" onclick="tswitch('moltabs','moltps',3)">Derişim</button>
     </div>
     <div id="moltps">
-      <div class="tp on">
-        <div class="card">
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">Molar Kütle (g/mol)</div><input type="number" id="mk0" class="inp" placeholder="örn. 18 (su)"></div>
-            <div><div class="slbl">Hesapla →</div><select class="sel" id="mk1"><option value="m2k">Mol → Kütle</option><option value="k2m">Kütle → Mol</option></select></div>
-          </div>
-          <div><div class="slbl">Giriş Değeri</div><input type="number" id="mk2" class="inp" placeholder="..."></div>
-          <button class="btn bp bfull" style="margin-top:14px" onclick="calcMK()">Hesapla</button>
-          <div class="rb" id="mkr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="mkrv"></div><ul class="slist" id="mkst"></ul></div>
+      <div class="tp on"><div class="card">
+        <div class="g2" style="margin-bottom:10px">
+          <div><div class="slbl">Molar Kütle (g/mol)</div><input type="number" id="mk0" class="inp" placeholder="örn. 18"></div>
+          <div><div class="slbl">Hesapla</div><select class="sel" id="mk1"><option value="m2k">Mol → Kütle</option><option value="k2m">Kütle → Mol</option></select></div>
         </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">Sıcaklık (K)</div><input type="number" id="mh0" class="inp" value="273"></div>
-            <div><div class="slbl">Basınç (atm)</div><input type="number" id="mh1" class="inp" value="1"></div>
-          </div>
-          <div class="g2" style="margin-bottom:14px">
-            <div><div class="slbl">Hesapla</div><select class="sel" id="mh2"><option value="m2h">Mol → Hacim (L)</option><option value="h2m">Hacim → Mol</option></select></div>
-            <div><div class="slbl">Değer</div><input type="number" id="mh3" class="inp" placeholder="..."></div>
-          </div>
-          <button class="btn bp bfull" onclick="calcMH()">Hesapla</button>
-          <div class="rb" id="mhr" style="display:none"><div class="rl">Sonuç (PV=nRT)</div><div class="rv" id="mhrv"></div></div>
+        <div><div class="slbl">Değer</div><input type="number" id="mk2" class="inp" placeholder="..."></div>
+        <button class="btn bp bfull" style="margin-top:12px" onclick="calcMK()">Hesapla</button>
+        <div class="rb" id="mkr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="mkrv"></div></div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="g2" style="margin-bottom:10px">
+          <div><div class="slbl">T (K)</div><input type="number" id="mh0" class="inp" value="273"></div>
+          <div><div class="slbl">P (atm)</div><input type="number" id="mh1" class="inp" value="1"></div>
         </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="g2" style="margin-bottom:14px">
-            <div><div class="slbl">Hesapla</div><select class="sel" id="ma0"><option value="m2a">Mol → Atom</option><option value="a2m">Atom → Mol</option></select></div>
-            <div><div class="slbl">Değer</div><input type="number" id="ma1" class="inp" placeholder="..."></div>
-          </div>
-          <button class="btn bp bfull" onclick="calcMA()">Hesapla</button>
-          <div class="rb" id="mar" style="display:none"><div class="rl">Sonuç (Nₐ=6.022×10²³)</div><div class="rv" id="marv"></div></div>
+        <div class="g2" style="margin-bottom:12px">
+          <div><div class="slbl">Hesapla</div><select class="sel" id="mh2"><option value="m2h">Mol → Hacim</option><option value="h2m">Hacim → Mol</option></select></div>
+          <div><div class="slbl">Değer</div><input type="number" id="mh3" class="inp" placeholder="..."></div>
         </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">Bilinmeyen</div><select class="sel" id="md0"><option value="c">Derişim (C)</option><option value="n">Mol (n)</option><option value="v">Hacim (V)</option></select></div>
-            <div></div>
-          </div>
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">n (mol)</div><input type="number" id="md1" class="inp" placeholder="..."></div>
-            <div><div class="slbl">V (L)</div><input type="number" id="md2" class="inp" placeholder="..."></div>
-          </div>
-          <div><div class="slbl">C (mol/L)</div><input type="number" id="md3" class="inp" placeholder="..." style="margin-bottom:14px"></div>
-          <button class="btn bp bfull" onclick="calcMD()">Hesapla</button>
-          <div class="rb" id="mdr" style="display:none"><div class="rl">Sonuç (C=n/V)</div><div class="rv" id="mdrv"></div></div>
+        <button class="btn bp bfull" onclick="calcMH()">Hesapla</button>
+        <div class="rb" id="mhr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="mhrv"></div></div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="g2" style="margin-bottom:12px">
+          <div><div class="slbl">İşlem</div><select class="sel" id="ma0"><option value="m2a">Mol → Atom</option><option value="a2m">Atom → Mol</option></select></div>
+          <div><div class="slbl">Değer</div><input type="number" id="ma1" class="inp" placeholder="..."></div>
         </div>
-      </div>
+        <button class="btn bp bfull" onclick="calcMA()">Hesapla</button>
+        <div class="rb" id="mar" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="marv"></div></div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="g2" style="margin-bottom:10px">
+          <div><div class="slbl">Bilinmeyen</div><select class="sel" id="md0"><option value="c">Derişim C</option><option value="n">Mol n</option><option value="v">Hacim V</option></select></div>
+          <div></div>
+        </div>
+        <div class="g2" style="margin-bottom:10px">
+          <div><div class="slbl">n (mol)</div><input type="number" id="md1" class="inp" placeholder="..."></div>
+          <div><div class="slbl">V (L)</div><input type="number" id="md2" class="inp" placeholder="..."></div>
+        </div>
+        <div><div class="slbl">C (mol/L)</div><input type="number" id="md3" class="inp" placeholder="..." style="margin-bottom:12px"></div>
+        <button class="btn bp bfull" onclick="calcMD()">Hesapla</button>
+        <div class="rb" id="mdr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="mdrv"></div></div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -712,20 +371,15 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-eq" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">⚡ Denklem Dengeleyici</h1>
-    <p class="psub">Kimyasal denklemleri yaz, otomatik olarak dengele. + ile reaktanları ayır, → ile ürünleri belirt.</p>
     <div class="card">
       <div class="slbl">Kimyasal Denklem</div>
       <input type="text" id="eqi" class="inp" placeholder="örn: H2 + O2 -> H2O" style="margin-bottom:8px">
-      <div style="font-size:12px;color:var(--tx3);margin-bottom:14px">→ veya -> kullan. Sayılar üst simgeye otomatik çevrilir.</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
         <button class="ob" onclick="setEq('H2 + O2 -> H2O')">H₂+O₂</button>
         <button class="ob" onclick="setEq('Fe + O2 -> Fe2O3')">Fe+O₂</button>
         <button class="ob" onclick="setEq('CH4 + O2 -> CO2 + H2O')">CH₄+O₂</button>
         <button class="ob" onclick="setEq('Na + Cl2 -> NaCl')">Na+Cl₂</button>
-        <button class="ob" onclick="setEq('Al + O2 -> Al2O3')">Al+O₂</button>
-        <button class="ob" onclick="setEq('C3H8 + O2 -> CO2 + H2O')">C₃H₈</button>
         <button class="ob" onclick="setEq('N2 + H2 -> NH3')">N₂+H₂</button>
-        <button class="ob" onclick="setEq('Ca + H2O -> Ca(OH)2 + H2')">Ca+H₂O</button>
       </div>
       <button class="btn bp bfull" onclick="balEq()">Dengele</button>
       <div class="eqdsp" id="eqdsp" style="display:none"></div>
@@ -737,61 +391,44 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-ph" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">🧪 pH Hesaplayıcı</h1>
-    <p class="psub">Güçlü/zayıf asit-baz pH hesaplama, pOH ve tampon çözelti hesabı.</p>
     <div class="tabs" id="phtabs">
       <button class="tab on" onclick="tswitch('phtabs','phtps',0)">Güçlü Asit/Baz</button>
       <button class="tab" onclick="tswitch('phtabs','phtps',1)">Zayıf Asit/Baz</button>
-      <button class="tab" onclick="tswitch('phtabs','phtps',2)">Tampon (H-H)</button>
+      <button class="tab" onclick="tswitch('phtabs','phtps',2)">Tampon</button>
     </div>
     <div id="phtps">
-      <div class="tp on">
-        <div class="card">
-          <div class="g2" style="margin-bottom:14px">
-            <div><div class="slbl">Tür</div><select class="sel" id="ph0"><option value="acid">Asit (H⁺ verir)</option><option value="base">Baz (OH⁻ verir)</option></select></div>
-            <div><div class="slbl">Derişim (mol/L)</div><input type="number" id="ph1" class="inp" placeholder="örn. 0.01"></div>
-          </div>
-          <button class="btn bp bfull" onclick="calcPH()">Hesapla</button>
-          <div class="rb" id="phr" style="display:none">
-            <div class="phval" id="phv1">7.00</div>
-            <div class="phscale"><div class="phm" id="phm1" style="left:50%"></div></div>
-            <div class="phlbls"><span>0<br>Asit</span><span>3</span><span>6</span><span>7</span><span>9</span><span>12</span><span>14<br>Baz</span></div>
-            <div class="rl">Detaylar</div>
-            <div id="phdet" style="font-size:13px;color:var(--tx2);line-height:2"></div>
-            <ul class="slist" id="phst"></ul>
-          </div>
+      <div class="tp on"><div class="card">
+        <div class="g2" style="margin-bottom:12px">
+          <div><div class="slbl">Tür</div><select class="sel" id="ph0"><option value="acid">Asit</option><option value="base">Baz</option></select></div>
+          <div><div class="slbl">Derişim (mol/L)</div><input type="number" id="ph1" class="inp" placeholder="örn. 0.01"></div>
         </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">Tür</div><select class="sel" id="ph2t"><option value="acid">Zayıf Asit (Ka)</option><option value="base">Zayıf Baz (Kb)</option></select></div>
-            <div><div class="slbl">Derişim (mol/L)</div><input type="number" id="ph2c" class="inp" placeholder="örn. 0.1"></div>
-          </div>
-          <div><div class="slbl">Ka veya Kb</div><input type="number" id="ph2k" class="inp" placeholder="örn. 1.8e-5"></div>
-          <button class="btn bp bfull" style="margin-top:14px" onclick="calcWk()">Hesapla</button>
-          <div class="rb" id="ph2r" style="display:none">
-            <div class="phval" id="phv2">5.00</div>
-            <div class="phscale"><div class="phm" id="phm2" style="left:35%"></div></div>
-            <div class="phlbls"><span>0</span><span>2</span><span>5</span><span>7</span><span>9</span><span>12</span><span>14</span></div>
-            <ul class="slist" id="ph2st"></ul>
-          </div>
+        <button class="btn bp bfull" onclick="calcPH()">Hesapla</button>
+        <div class="rb" id="phr" style="display:none">
+          <div class="phval" id="phv1">7.00</div>
+          <div class="phscale"><div class="phm" id="phm1" style="left:50%"></div></div>
+          <div class="phlbls"><span>0 Asit</span><span>7</span><span>14 Baz</span></div>
+          <div id="phdet" style="font-size:13px;color:var(--tx2);line-height:2;margin-top:8px"></div>
         </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="fbox">pH = pKa + log([A⁻]/[HA])</div>
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">Ka değeri</div><input type="number" id="hh0" class="inp" placeholder="örn. 1.8e-5"></div>
-            <div><div class="slbl">[A⁻] (mol/L)</div><input type="number" id="hh1" class="inp" placeholder="bazik form"></div>
-          </div>
-          <div><div class="slbl">[HA] (mol/L)</div><input type="number" id="hh2" class="inp" placeholder="asidik form"></div>
-          <button class="btn bp bfull" style="margin-top:14px" onclick="calcHH()">Hesapla</button>
-          <div class="rb" id="hhr" style="display:none">
-            <div class="phval" id="hhv">7.00</div>
-            <ul class="slist" id="hhst"></ul>
-          </div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="g2" style="margin-bottom:10px">
+          <div><div class="slbl">Tür</div><select class="sel" id="ph2t"><option value="acid">Zayıf Asit (Ka)</option><option value="base">Zayıf Baz (Kb)</option></select></div>
+          <div><div class="slbl">Derişim</div><input type="number" id="ph2c" class="inp" placeholder="mol/L"></div>
         </div>
-      </div>
+        <div><div class="slbl">Ka / Kb</div><input type="number" id="ph2k" class="inp" placeholder="örn. 1.8e-5"></div>
+        <button class="btn bp bfull" style="margin-top:12px" onclick="calcWk()">Hesapla</button>
+        <div class="rb" id="ph2r" style="display:none"><div class="phval" id="phv2">5.00</div></div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="fbox">pH = pKa + log([A⁻]/[HA])</div>
+        <div class="g2" style="margin-bottom:10px">
+          <div><div class="slbl">Ka</div><input type="number" id="hh0" class="inp" placeholder="örn. 1.8e-5"></div>
+          <div><div class="slbl">[A⁻]</div><input type="number" id="hh1" class="inp" placeholder="mol/L"></div>
+        </div>
+        <div><div class="slbl">[HA]</div><input type="number" id="hh2" class="inp" placeholder="mol/L"></div>
+        <button class="btn bp bfull" style="margin-top:12px" onclick="calcHH()">Hesapla</button>
+        <div class="rb" id="hhr" style="display:none"><div class="phval" id="hhv">7.00</div></div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -800,114 +437,72 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-gaz" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">💨 Gaz Yasaları</h1>
-    <p class="psub">İdeal gas yasası, Boyle, Charles, Gay-Lussac ve birleşik gaz yasaları.</p>
     <div class="ltabs" id="ltabs">
-      <button class="ltab on" onclick="tswitch('ltabs','ltps',0)">İdeal Gaz (PV=nRT)</button>
+      <button class="ltab on" onclick="tswitch('ltabs','ltps',0)">İdeal Gaz</button>
       <button class="ltab" onclick="tswitch('ltabs','ltps',1)">Boyle</button>
       <button class="ltab" onclick="tswitch('ltabs','ltps',2)">Charles</button>
       <button class="ltab" onclick="tswitch('ltabs','ltps',3)">Gay-Lussac</button>
       <button class="ltab" onclick="tswitch('ltabs','ltps',4)">Birleşik</button>
     </div>
     <div id="ltps">
-      <div class="tp on">
-        <div class="card">
-          <div class="fbox">PV = nRT &nbsp;<span style="font-size:13px;font-weight:400;color:var(--tx2)">(R = 0.0821 L·atm/mol·K)</span></div>
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">Bilinmeyen</div><select class="sel" id="ig0"><option value="P">Basınç (P, atm)</option><option value="V">Hacim (V, L)</option><option value="n">Mol (n)</option><option value="T">Sıcaklık (T, K)</option></select></div>
-            <div></div>
-          </div>
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">P (atm)</div><input type="number" id="ig1" class="inp" placeholder="Boş=bilinmiyor"></div>
-            <div><div class="slbl">V (L)</div><input type="number" id="ig2" class="inp" placeholder="..."></div>
-          </div>
-          <div class="g2" style="margin-bottom:14px">
-            <div><div class="slbl">n (mol)</div><input type="number" id="ig3" class="inp" placeholder="..."></div>
-            <div><div class="slbl">T (K)</div><input type="number" id="ig4" class="inp" placeholder="..."></div>
-          </div>
-          <button class="btn bp bfull" onclick="calcIG()">Hesapla</button>
-          <div class="rb" id="igr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="igrv"></div><ul class="slist" id="igst"></ul></div>
+      <div class="tp on"><div class="card">
+        <div class="fbox">PV = nRT (R=0.0821)</div>
+        <div class="g2" style="margin-bottom:10px"><div><div class="slbl">Bilinmeyen</div><select class="sel" id="ig0"><option value="P">P (atm)</option><option value="V">V (L)</option><option value="n">n (mol)</option><option value="T">T (K)</option></select></div><div></div></div>
+        <div class="g2" style="margin-bottom:10px">
+          <div><div class="slbl">P (atm)</div><input type="number" id="ig1" class="inp" placeholder="..."></div>
+          <div><div class="slbl">V (L)</div><input type="number" id="ig2" class="inp" placeholder="..."></div>
         </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="fbox">P₁V₁ = P₂V₂ <span style="font-size:13px;font-weight:400;color:var(--tx2)">(T sabit)</span></div>
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">P₁ (atm)</div><input type="number" id="b0" class="inp" placeholder="..."></div>
-            <div><div class="slbl">V₁ (L)</div><input type="number" id="b1" class="inp" placeholder="..."></div>
-          </div>
-          <div class="g2" style="margin-bottom:14px">
-            <div><div class="slbl">P₂ (atm)</div><input type="number" id="b2" class="inp" placeholder="Boş=hesapla"></div>
-            <div><div class="slbl">V₂ (L)</div><input type="number" id="b3" class="inp" placeholder="Boş=hesapla"></div>
-          </div>
-          <button class="btn bp bfull" onclick="calcB()">Hesapla</button>
-          <div class="rb" id="br" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="brv"></div></div>
+        <div class="g2" style="margin-bottom:12px">
+          <div><div class="slbl">n (mol)</div><input type="number" id="ig3" class="inp" placeholder="..."></div>
+          <div><div class="slbl">T (K)</div><input type="number" id="ig4" class="inp" placeholder="..."></div>
         </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="fbox">V₁/T₁ = V₂/T₂ <span style="font-size:13px;font-weight:400;color:var(--tx2)">(P sabit)</span></div>
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">V₁ (L)</div><input type="number" id="c0" class="inp" placeholder="..."></div>
-            <div><div class="slbl">T₁ (K)</div><input type="number" id="c1" class="inp" placeholder="..."></div>
-          </div>
-          <div class="g2" style="margin-bottom:14px">
-            <div><div class="slbl">V₂ (L)</div><input type="number" id="c2" class="inp" placeholder="Boş=hesapla"></div>
-            <div><div class="slbl">T₂ (K)</div><input type="number" id="c3" class="inp" placeholder="Boş=hesapla"></div>
-          </div>
-          <button class="btn bp bfull" onclick="calcC()">Hesapla</button>
-          <div class="rb" id="cr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="crv"></div></div>
-        </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="fbox">P₁/T₁ = P₂/T₂ <span style="font-size:13px;font-weight:400;color:var(--tx2)">(V sabit)</span></div>
-          <div class="g2" style="margin-bottom:12px">
-            <div><div class="slbl">P₁ (atm)</div><input type="number" id="g0" class="inp" placeholder="..."></div>
-            <div><div class="slbl">T₁ (K)</div><input type="number" id="g1" class="inp" placeholder="..."></div>
-          </div>
-          <div class="g2" style="margin-bottom:14px">
-            <div><div class="slbl">P₂ (atm)</div><input type="number" id="g2i" class="inp" placeholder="Boş=hesapla"></div>
-            <div><div class="slbl">T₂ (K)</div><input type="number" id="g3" class="inp" placeholder="Boş=hesapla"></div>
-          </div>
-          <button class="btn bp bfull" onclick="calcG()">Hesapla</button>
-          <div class="rb" id="gr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="grv"></div></div>
-        </div>
-      </div>
-      <div class="tp">
-        <div class="card">
-          <div class="fbox">P₁V₁/T₁ = P₂V₂/T₂</div>
-          <div class="g3" style="margin-bottom:12px">
-            <div><div class="slbl">P₁</div><input type="number" id="bi0" class="inp" placeholder="atm"></div>
-            <div><div class="slbl">V₁</div><input type="number" id="bi1" class="inp" placeholder="L"></div>
-            <div><div class="slbl">T₁</div><input type="number" id="bi2" class="inp" placeholder="K"></div>
-          </div>
-          <div class="g3" style="margin-bottom:14px">
-            <div><div class="slbl">P₂</div><input type="number" id="bi3" class="inp" placeholder="Boş=?"></div>
-            <div><div class="slbl">V₂</div><input type="number" id="bi4" class="inp" placeholder="Boş=?"></div>
-            <div><div class="slbl">T₂</div><input type="number" id="bi5" class="inp" placeholder="Boş=?"></div>
-          </div>
-          <button class="btn bp bfull" onclick="calcBi()">Hesapla</button>
-          <div class="rb" id="bir" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="birv"></div></div>
-        </div>
-      </div>
+        <button class="btn bp bfull" onclick="calcIG()">Hesapla</button>
+        <div class="rb" id="igr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="igrv"></div></div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="fbox">P₁V₁ = P₂V₂</div>
+        <div class="g2" style="margin-bottom:10px"><div><div class="slbl">P₁</div><input type="number" id="b0" class="inp"></div><div><div class="slbl">V₁</div><input type="number" id="b1" class="inp"></div></div>
+        <div class="g2" style="margin-bottom:12px"><div><div class="slbl">P₂</div><input type="number" id="b2" class="inp" placeholder="Boş=?"></div><div><div class="slbl">V₂</div><input type="number" id="b3" class="inp" placeholder="Boş=?"></div></div>
+        <button class="btn bp bfull" onclick="calcB()">Hesapla</button>
+        <div class="rb" id="br" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="brv"></div></div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="fbox">V₁/T₁ = V₂/T₂</div>
+        <div class="g2" style="margin-bottom:10px"><div><div class="slbl">V₁</div><input type="number" id="c0" class="inp"></div><div><div class="slbl">T₁</div><input type="number" id="c1" class="inp"></div></div>
+        <div class="g2" style="margin-bottom:12px"><div><div class="slbl">V₂</div><input type="number" id="c2" class="inp" placeholder="Boş=?"></div><div><div class="slbl">T₂</div><input type="number" id="c3" class="inp" placeholder="Boş=?"></div></div>
+        <button class="btn bp bfull" onclick="calcC()">Hesapla</button>
+        <div class="rb" id="cr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="crv"></div></div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="fbox">P₁/T₁ = P₂/T₂</div>
+        <div class="g2" style="margin-bottom:10px"><div><div class="slbl">P₁</div><input type="number" id="g0" class="inp"></div><div><div class="slbl">T₁</div><input type="number" id="g1" class="inp"></div></div>
+        <div class="g2" style="margin-bottom:12px"><div><div class="slbl">P₂</div><input type="number" id="g2i" class="inp" placeholder="Boş=?"></div><div><div class="slbl">T₂</div><input type="number" id="g3" class="inp" placeholder="Boş=?"></div></div>
+        <button class="btn bp bfull" onclick="calcG()">Hesapla</button>
+        <div class="rb" id="gr" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="grv"></div></div>
+      </div></div>
+      <div class="tp"><div class="card">
+        <div class="fbox">P₁V₁/T₁ = P₂V₂/T₂</div>
+        <div class="g3" style="margin-bottom:10px"><div><div class="slbl">P₁</div><input type="number" id="bi0" class="inp"></div><div><div class="slbl">V₁</div><input type="number" id="bi1" class="inp"></div><div><div class="slbl">T₁</div><input type="number" id="bi2" class="inp"></div></div>
+        <div class="g3" style="margin-bottom:12px"><div><div class="slbl">P₂</div><input type="number" id="bi3" class="inp" placeholder="Boş=?"></div><div><div class="slbl">V₂</div><input type="number" id="bi4" class="inp" placeholder="Boş=?"></div><div><div class="slbl">T₂</div><input type="number" id="bi5" class="inp" placeholder="Boş=?"></div></div>
+        <button class="btn bp bfull" onclick="calcBi()">Hesapla</button>
+        <div class="rb" id="bir" style="display:none"><div class="rl">Sonuç</div><div class="rv" id="birv"></div></div>
+      </div></div>
     </div>
   </div>
 </div>
 
-<!-- YKS SAYAÇ -->
+<!-- YKS -->
 <div id="s-yks" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">⏱️ YKS Geri Sayım</h1>
-    <p class="psub">Sınav hazırlık sürecini takip et ve zamanı verimli kullan.</p>
-    <div class="card" style="text-align:center;padding:36px 24px">
-      <div style="font-size:18px;font-weight:700;color:var(--ac2)">YKS Kimya Sınav Geri Sayımı</div>
-      <div class="cdgrid" style="margin:20px 0;">
+    <div class="card" style="text-align:center;padding:30px">
+      <div style="font-size:16px;font-weight:700;color:var(--ac2);margin-bottom:16px">YKS 2027</div>
+      <div class="cdgrid">
         <div class="cdb"><div class="cdv" id="d-day">00</div><div class="cdl">Gün</div></div>
         <div class="cdb"><div class="cdv" id="d-hr">00</div><div class="cdl">Saat</div></div>
         <div class="cdb"><div class="cdv" id="d-min">00</div><div class="cdl">Dakika</div></div>
         <div class="cdb"><div class="cdv" id="d-sec">00</div><div class="cdl">Saniye</div></div>
       </div>
-      <p style="font-size:13px;color:var(--tx2);">Haziran 2027 ÖSYM Akademik Takvimi Hedeflenmiştir.</p>
     </div>
   </div>
 </div>
@@ -916,18 +511,11 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div id="s-pom" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">🎯 Odaklan</h1>
-    <p class="psub">Pomodoro tekniği ile verimli çalış. Çalış → Mola → Tekrar.</p>
     <div class="card">
       <div class="pomd">
-        <div class="pomml" id="pom-mode">ÇALIŞMA</div>
-        <div class="pomcirc">
-          <svg width="190" height="190" viewBox="0 0 190 190">
-            <circle class="pcbg" cx="95" cy="95" r="83"/>
-            <circle class="pcfg" id="pcfg-slide" cx="95" cy="95" r="83" stroke-dasharray="521" stroke-dashoffset="0"/>
-          </svg>
-          <div class="pominn"><div class="pomtm" id="pom-clock">25:00</div></div>
-        </div>
-        <div class="pombtns" style="margin-top:10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px" id="pom-mode">ÇALIŞMA</div>
+        <div class="pomtm" id="pom-clock">25:00</div>
+        <div class="pombtns">
           <button class="btn bp" id="pom-trigger" onclick="pomToggle()">Başlat</button>
           <button class="btn bs" onclick="pomReset()">Sıfırla</button>
         </div>
@@ -940,65 +528,38 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
   </div>
 </div>
 
-<!-- PUAN HESAPLAMA -->
+<!-- YKS PUAN -->
 <div id="s-puan" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">📊 YKS Puan Hesaplama</h1>
-    <p class="psub">TYT ve AYT doğru-yanlış sayılarını gir, SAY ham puanını hesapla.</p>
-    <div class="card" style="margin-bottom:14px">
-      <div class="slbl" style="margin-bottom:14px">TYT — Temel Yeterlilik Testi</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-        <div><div class="slbl">Türkçe D</div><input type="number" id="tyt-td" class="inp" value="0"><input type="number" id="tyt-ty" class="inp" value="0" style="margin-top:4px" placeholder="Y"></div>
-        <div><div class="slbl">Sosyal D</div><input type="number" id="tyt-sd" class="inp" value="0"><input type="number" id="tyt-sy" class="inp" value="0" style="margin-top:4px" placeholder="Y"></div>
-        <div><div class="slbl">Mat D</div><input type="number" id="tyt-md" class="inp" value="0"><input type="number" id="tyt-my" class="inp" value="0" style="margin-top:4px" placeholder="Y"></div>
-        <div><div class="slbl">Fen D</div><input type="number" id="tyt-fd" class="inp" value="0"><input type="number" id="tyt-fy" class="inp" value="0" style="margin-top:4px" placeholder="Y"></div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="slbl" style="margin-bottom:12px">TYT</div>
+      <div class="g2">
+        <div><div class="slbl">Türkçe D/Y</div><input type="number" id="tyt-td" class="inp" value="0" placeholder="D"><input type="number" id="tyt-ty" class="inp" value="0" placeholder="Y" style="margin-top:4px"></div>
+        <div><div class="slbl">Mat D/Y</div><input type="number" id="tyt-md" class="inp" value="0" placeholder="D"><input type="number" id="tyt-my" class="inp" value="0" placeholder="Y" style="margin-top:4px"></div>
       </div>
     </div>
-    <div class="card" style="margin-bottom:14px">
-      <div class="slbl" style="margin-bottom:14px">AYT — Alan Yeterlilik Testi (Sayısal)</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-        <div><div class="slbl">Mat D</div><input type="number" id="ayt-md" class="inp" value="0"><input type="number" id="ayt-my" class="inp" value="0" style="margin-top:4px" placeholder="Y"></div>
-        <div><div class="slbl">Fizik D</div><input type="number" id="ayt-fzd" class="inp" value="0"><input type="number" id="ayt-fzy" class="inp" value="0" style="margin-top:4px" placeholder="Y"></div>
-        <div><div class="slbl">Kimya D</div><input type="number" id="ayt-kd" class="inp" value="0"><input type="number" id="ayt-ky" class="inp" value="0" style="margin-top:4px" placeholder="Y"></div>
-        <div><div class="slbl">Biyo D</div><input type="number" id="ayt-bd" class="inp" value="0"><input type="number" id="ayt-by" class="inp" value="0" style="margin-top:4px" placeholder="Y"></div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="slbl" style="margin-bottom:12px">AYT Sayısal</div>
+      <div class="g2">
+        <div><div class="slbl">Mat D/Y</div><input type="number" id="ayt-md" class="inp" value="0"><input type="number" id="ayt-my" class="inp" value="0" style="margin-top:4px"></div>
+        <div><div class="slbl">Kimya D/Y</div><input type="number" id="ayt-kd" class="inp" value="0"><input type="number" id="ayt-ky" class="inp" value="0" style="margin-top:4px"></div>
       </div>
     </div>
-    <button class="btn bp bfull" onclick="calcYKS()">Puanları Hesapla</button>
-    <div id="yks-res" style="display:none;margin-top:16px">
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" id="yks-cards"></div>
-      <div class="card" style="margin-top:12px">
-        <div class="slbl" style="margin-bottom:10px">Net Özeti</div>
-        <div id="yks-nets" style="font-size:13px;line-height:2.2;color:var(--tx2)"></div>
-      </div>
+    <button class="btn bp bfull" onclick="calcYKS()">Hesapla</button>
+    <div id="yks-res" style="display:none;margin-top:14px">
+      <div class="rb"><div class="rl">Tahmini SAY Ham Puanı</div><div class="rv" id="yks-score"></div></div>
     </div>
   </div>
 </div>
 
-<!-- DİNAMİK ALTYAPILAR -->
+<!-- SKOR -->
 <div id="s-board" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">🏆 Skor Tablosu</h1>
-    <div class="board" id="leaderboard-dom"></div>
-  </div>
-</div>
-<div id="s-sim" style="display:none">
-  <div class="pw wide">
-    <h1 class="ptitle">🔭 Kimya Simülasyonları</h1>
-    <p class="psub">Roni Laboratuvar Altyapısına Uygun İnteraktif Paneller</p>
-    <div class="tgrid" id="sim-list-dom"></div>
-  </div>
-</div>
-<div id="s-3d" style="display:none">
-  <div class="pw wide">
-    <h1 class="ptitle">🧬 3D Araçlar</h1>
-    <p class="psub">Üç Boyutlu Kristal Kafes ve Molekül Altyapısı</p>
-    <div class="tgrid" id="tools-3d-dom"></div>
-  </div>
-</div>
-<div id="s-atlas" style="display:none">
-  <div class="pw wide">
-    <h1 class="ptitle">🎓 YÖK Atlas Verileri</h1>
-    <div class="board" id="atlas-dom"></div>
+    <div class="board" id="leaderboard-dom">
+      <div class="brow hdr"><div>Sıra</div><div>Öğrenci</div><div>Skor</div></div>
+    </div>
   </div>
 </div>
 
@@ -1007,518 +568,749 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 <div class="toast" id="toast"></div>
 
 <script>
+// ============================================================
+// VERİ
+// ============================================================
 var ELS=[
-{n:1,sym:'H',name:'Hidrojen',mass:1.008,cat:'Ametal',g:'g15'},
-{n:2,sym:'He',name:'Helyum',mass:4.003,cat:'Soy Gaz',g:'g18'},
-{n:3,sym:'Li',name:'Lityum',mass:6.941,cat:'Alkali Metal',g:'g1'},
-{n:4,sym:'Be',name:'Berilyum',mass:9.012,cat:'Toprak Alkali Metal',g:'g2'},
-{n:5,sym:'B',name:'Bor',mass:10.811,cat:'Yarı Metal',g:'g13'},
-{n:6,sym:'C',name:'Karbon',mass:12.011,cat:'Ametal',g:'g14'},
-{n:7,sym:'N',name:'Azot',mass:14.007,cat:'Ametal',g:'g15'},
-{n:8,sym:'O',name:'Oksijen',mass:15.999,cat:'Ametal',g:'g16'},
-{n:9,sym:'F',name:'Flor',mass:18.998,cat:'Halojen',g:'g17'},
-{n:10,sym:'Ne',name:'Neon',mass:20.18,cat:'Soy Gaz',g:'g18'},
-{n:11,sym:'Na',name:'Sodyum',mass:22.99,cat:'Alkali Metal',g:'g1'},
-{n:12,sym:'Mg',name:'Magnezyum',mass:24.305,cat:'Toprak Alkali Metal',g:'g2'},
-{n:13,sym:'Al',name:'Alüminyum',mass:26.982,cat:'Metal',g:'g13'},
-{n:14,sym:'Si',name:'Silisyum',mass:28.086,cat:'Yarı Metal',g:'g14'},
-{n:15,sym:'P',name:'Fosfor',mass:30.974,cat:'Ametal',g:'g15'},
-{n:16,sym:'S',name:'Kükürt',mass:32.065,cat:'Ametal',g:'g16'},
-{n:17,sym:'Cl',name:'Klor',mass:35.453,cat:'Halojen',g:'g17'},
-{n:18,sym:'Ar',name:'Argon',mass:39.948,cat:'Soy Gaz',g:'g18'},
-{n:19,sym:'K',name:'Potasyum',mass:39.098,cat:'Alkali Metal',g:'g1'},
-{n:20,sym:'Ca',name:'Kalsiyum',mass:40.078,cat:'Toprak Alkali Metal',g:'g2'}
+{n:1,sym:'H',name:'Hidrojen',mass:1.008,cat:'Ametal'},
+{n:2,sym:'He',name:'Helyum',mass:4.003,cat:'Soy Gaz'},
+{n:3,sym:'Li',name:'Lityum',mass:6.941,cat:'Alkali Metal'},
+{n:4,sym:'Be',name:'Berilyum',mass:9.012,cat:'Toprak Alkali Metal'},
+{n:5,sym:'B',name:'Bor',mass:10.811,cat:'Yarı Metal'},
+{n:6,sym:'C',name:'Karbon',mass:12.011,cat:'Ametal'},
+{n:7,sym:'N',name:'Azot',mass:14.007,cat:'Ametal'},
+{n:8,sym:'O',name:'Oksijen',mass:15.999,cat:'Ametal'},
+{n:9,sym:'F',name:'Flor',mass:18.998,cat:'Halojen'},
+{n:10,sym:'Ne',name:'Neon',mass:20.18,cat:'Soy Gaz'},
+{n:11,sym:'Na',name:'Sodyum',mass:22.99,cat:'Alkali Metal'},
+{n:12,sym:'Mg',name:'Magnezyum',mass:24.305,cat:'Toprak Alkali Metal'},
+{n:13,sym:'Al',name:'Alüminyum',mass:26.982,cat:'Metal'},
+{n:14,sym:'Si',name:'Silisyum',mass:28.086,cat:'Yarı Metal'},
+{n:15,sym:'P',name:'Fosfor',mass:30.974,cat:'Ametal'},
+{n:16,sym:'S',name:'Kükürt',mass:32.065,cat:'Ametal'},
+{n:17,sym:'Cl',name:'Klor',mass:35.453,cat:'Halojen'},
+{n:18,sym:'Ar',name:'Argon',mass:39.948,cat:'Soy Gaz'},
+{n:19,sym:'K',name:'Potasyum',mass:39.098,cat:'Alkali Metal'},
+{n:20,sym:'Ca',name:'Kalsiyum',mass:40.078,cat:'Toprak Alkali Metal'},
+{n:21,sym:'Sc',name:'Skandiyum',mass:44.956,cat:'Geçiş Metali'},
+{n:22,sym:'Ti',name:'Titanyum',mass:47.867,cat:'Geçiş Metali'},
+{n:23,sym:'V',name:'Vanadyum',mass:50.942,cat:'Geçiş Metali'},
+{n:24,sym:'Cr',name:'Krom',mass:51.996,cat:'Geçiş Metali'},
+{n:25,sym:'Mn',name:'Manganez',mass:54.938,cat:'Geçiş Metali'},
+{n:26,sym:'Fe',name:'Demir',mass:55.845,cat:'Geçiş Metali'},
+{n:27,sym:'Co',name:'Kobalt',mass:58.933,cat:'Geçiş Metali'},
+{n:28,sym:'Ni',name:'Nikel',mass:58.693,cat:'Geçiş Metali'},
+{n:29,sym:'Cu',name:'Bakır',mass:63.546,cat:'Geçiş Metali'},
+{n:30,sym:'Zn',name:'Çinko',mass:65.38,cat:'Geçiş Metali'},
+{n:31,sym:'Ga',name:'Galyum',mass:69.723,cat:'Metal'},
+{n:32,sym:'Ge',name:'Germanyum',mass:72.63,cat:'Yarı Metal'},
+{n:33,sym:'As',name:'Arsenik',mass:74.922,cat:'Yarı Metal'},
+{n:34,sym:'Se',name:'Selenyum',mass:78.971,cat:'Ametal'},
+{n:35,sym:'Br',name:'Brom',mass:79.904,cat:'Halojen'},
+{n:36,sym:'Kr',name:'Kripton',mass:83.798,cat:'Soy Gaz'},
+{n:37,sym:'Rb',name:'Rubidyum',mass:85.468,cat:'Alkali Metal'},
+{n:38,sym:'Sr',name:'Stronsiyum',mass:87.62,cat:'Toprak Alkali Metal'},
+{n:39,sym:'Y',name:'İtriyum',mass:88.906,cat:'Geçiş Metali'},
+{n:40,sym:'Zr',name:'Zirkonyum',mass:91.224,cat:'Geçiş Metali'},
+{n:41,sym:'Nb',name:'Niyobyum',mass:92.906,cat:'Geçiş Metali'},
+{n:42,sym:'Mo',name:'Molibden',mass:95.96,cat:'Geçiş Metali'},
+{n:43,sym:'Tc',name:'Teknesyum',mass:98,cat:'Geçiş Metali'},
+{n:44,sym:'Ru',name:'Rutenyum',mass:101.07,cat:'Geçiş Metali'},
+{n:45,sym:'Rh',name:'Rodyum',mass:102.906,cat:'Geçiş Metali'},
+{n:46,sym:'Pd',name:'Paladyum',mass:106.42,cat:'Geçiş Metali'},
+{n:47,sym:'Ag',name:'Gümüş',mass:107.868,cat:'Geçiş Metali'},
+{n:48,sym:'Cd',name:'Kadmiyum',mass:112.411,cat:'Geçiş Metali'},
+{n:49,sym:'In',name:'İndiyum',mass:114.818,cat:'Metal'},
+{n:50,sym:'Sn',name:'Kalay',mass:118.71,cat:'Metal'},
+{n:51,sym:'Sb',name:'Antimon',mass:121.76,cat:'Yarı Metal'},
+{n:52,sym:'Te',name:'Tellür',mass:127.6,cat:'Yarı Metal'},
+{n:53,sym:'I',name:'İyot',mass:126.904,cat:'Halojen'},
+{n:54,sym:'Xe',name:'Ksenon',mass:131.293,cat:'Soy Gaz'},
+{n:55,sym:'Cs',name:'Sezyum',mass:132.905,cat:'Alkali Metal'},
+{n:56,sym:'Ba',name:'Baryum',mass:137.327,cat:'Toprak Alkali Metal'},
+{n:57,sym:'La',name:'Lantan',mass:138.905,cat:'Lantanit'},
+{n:58,sym:'Ce',name:'Seryum',mass:140.116,cat:'Lantanit'},
+{n:59,sym:'Pr',name:'Praseodim',mass:140.908,cat:'Lantanit'},
+{n:60,sym:'Nd',name:'Neodimyum',mass:144.242,cat:'Lantanit'},
+{n:61,sym:'Pm',name:'Prometyum',mass:145,cat:'Lantanit'},
+{n:62,sym:'Sm',name:'Samaryum',mass:150.36,cat:'Lantanit'},
+{n:63,sym:'Eu',name:'Evropiyum',mass:151.964,cat:'Lantanit'},
+{n:64,sym:'Gd',name:'Gadolinyum',mass:157.25,cat:'Lantanit'},
+{n:65,sym:'Tb',name:'Terbiyum',mass:158.925,cat:'Lantanit'},
+{n:66,sym:'Dy',name:'Disprosyum',mass:162.5,cat:'Lantanit'},
+{n:67,sym:'Ho',name:'Holmiyum',mass:164.93,cat:'Lantanit'},
+{n:68,sym:'Er',name:'Erbiyum',mass:167.259,cat:'Lantanit'},
+{n:69,sym:'Tm',name:'Tulyum',mass:168.934,cat:'Lantanit'},
+{n:70,sym:'Yb',name:'İterbiyum',mass:173.054,cat:'Lantanit'},
+{n:71,sym:'Lu',name:'Lutesyum',mass:174.967,cat:'Lantanit'},
+{n:72,sym:'Hf',name:'Hafniyum',mass:178.49,cat:'Geçiş Metali'},
+{n:73,sym:'Ta',name:'Tantal',mass:180.948,cat:'Geçiş Metali'},
+{n:74,sym:'W',name:'Tungsten',mass:183.84,cat:'Geçiş Metali'},
+{n:75,sym:'Re',name:'Renyum',mass:186.207,cat:'Geçiş Metali'},
+{n:76,sym:'Os',name:'Osmiyum',mass:190.23,cat:'Geçiş Metali'},
+{n:77,sym:'Ir',name:'İridyum',mass:192.217,cat:'Geçiş Metali'},
+{n:78,sym:'Pt',name:'Platin',mass:195.084,cat:'Geçiş Metali'},
+{n:79,sym:'Au',name:'Altın',mass:196.967,cat:'Geçiş Metali'},
+{n:80,sym:'Hg',name:'Cıva',mass:200.592,cat:'Geçiş Metali'},
+{n:81,sym:'Tl',name:'Talyum',mass:204.383,cat:'Metal'},
+{n:82,sym:'Pb',name:'Kurşun',mass:207.2,cat:'Metal'},
+{n:83,sym:'Bi',name:'Bizmut',mass:208.98,cat:'Metal'},
+{n:84,sym:'Po',name:'Polonyum',mass:209,cat:'Yarı Metal'},
+{n:85,sym:'At',name:'Astatin',mass:210,cat:'Halojen'},
+{n:86,sym:'Rn',name:'Radon',mass:222,cat:'Soy Gaz'},
+{n:87,sym:'Fr',name:'Fransiyum',mass:223,cat:'Alkali Metal'},
+{n:88,sym:'Ra',name:'Radyum',mass:226,cat:'Toprak Alkali Metal'},
+{n:89,sym:'Ac',name:'Aktinyum',mass:227,cat:'Aktinit'},
+{n:90,sym:'Th',name:'Toryum',mass:232.038,cat:'Aktinit'},
+{n:91,sym:'Pa',name:'Protaktinyum',mass:231.036,cat:'Aktinit'},
+{n:92,sym:'U',name:'Uranyum',mass:238.029,cat:'Aktinit'},
+{n:93,sym:'Np',name:'Neptünyum',mass:237,cat:'Aktinit'},
+{n:94,sym:'Pu',name:'Plütonyum',mass:244,cat:'Aktinit'},
+{n:95,sym:'Am',name:'Amerikyum',mass:243,cat:'Aktinit'},
+{n:96,sym:'Cm',name:'Küryum',mass:247,cat:'Aktinit'},
+{n:97,sym:'Bk',name:'Berkelyum',mass:247,cat:'Aktinit'},
+{n:98,sym:'Cf',name:'Kaliforniyum',mass:251,cat:'Aktinit'},
+{n:99,sym:'Es',name:'Aynştaynyum',mass:252,cat:'Aktinit'},
+{n:100,sym:'Fm',name:'Fermiyum',mass:257,cat:'Aktinit'},
+{n:101,sym:'Md',name:'Mendelevyum',mass:258,cat:'Aktinit'},
+{n:102,sym:'No',name:'Nobelyum',mass:259,cat:'Aktinit'},
+{n:103,sym:'Lr',name:'Lavrensiyum',mass:262,cat:'Aktinit'},
+{n:104,sym:'Rf',name:'Rutherfordiyum',mass:267,cat:'Geçiş Metali'},
+{n:105,sym:'Db',name:'Dubniyum',mass:268,cat:'Geçiş Metali'},
+{n:106,sym:'Sg',name:'Seaborgiyum',mass:271,cat:'Geçiş Metali'},
+{n:107,sym:'Bh',name:'Bohriyum',mass:272,cat:'Geçiş Metali'},
+{n:108,sym:'Hs',name:'Hassiyum',mass:270,cat:'Geçiş Metali'},
+{n:109,sym:'Mt',name:'Meitneriyum',mass:276,cat:'Geçiş Metali'},
+{n:110,sym:'Ds',name:'Darmstadtiyum',mass:281,cat:'Geçiş Metali'},
+{n:111,sym:'Rg',name:'Röntgenyum',mass:280,cat:'Geçiş Metali'},
+{n:112,sym:'Cn',name:'Kopernikyum',mass:285,cat:'Geçiş Metali'},
+{n:113,sym:'Nh',name:'Nihonyum',mass:284,cat:'Metal'},
+{n:114,sym:'Fl',name:'Flerovyum',mass:289,cat:'Metal'},
+{n:115,sym:'Mc',name:'Moskovyum',mass:288,cat:'Metal'},
+{n:116,sym:'Lv',name:'Livermoryum',mass:293,cat:'Metal'},
+{n:117,sym:'Ts',name:'Tennesin',mass:294,cat:'Halojen'},
+{n:118,sym:'Og',name:'Oganesson',mass:294,cat:'Soy Gaz'}
 ];
 
-var EL_DATA = {
-1:{en:'Hydrogen',period:1,group:1,phase:'Gaz',neg:2.20,melt:-259.1,boil:-252.9,conf:'1s¹',shells:'1',desc:'Evrenin en bol elementi. Yıldızların temel hidrodinamik yakıt döngüsünü oluşturur.'},
-2:{en:'Helium',period:1,group:18,phase:'Gaz',neg:null,melt:-272.2,boil:-268.9,conf:'1s²',shells:'2',desc:'Nükleer füzyon ürünü hafif soy gaz. Tepkime eğilimi göstermez.'},
-3:{en:'Lithium',period:2,group:1,phase:'Katı',neg:0.98,melt:180.5,boil:1342,conf:'[He] 2s¹',shells:'2|1',desc:'Yoğunluğu en düşük olan katı metal alaşım bileşeni.'},
-4:{en:'Beryllium',period:2,group:2,phase:'Katı',neg:1.57,melt:1287,boil:2469,conf:'[He] 2s²',shells:'2|2',desc:'Yüksek erime noktalı koruyucu alaşım metali.'},
-5:{en:'Boron',period:2,group:13,phase:'Katı',neg:2.04,melt:2075,boil:4000,conf:'[He] 2s² 2p¹',shells:'2|3',desc:'Ülkemizin zengin rezervlere sahip olduğu stratejik yarı metal.'},
-6:{en:'Carbon',period:2,group:14,phase:'Katı',neg:2.55,melt:3642,boil:3642,conf:'[He] 2s² 2p²',shells:'2|4',desc:'Organik kimyanın ve tüm yaşam formlarının temel iskelet taşı.'},
-7:{en:'Nitrogen',period:2,group:15,phase:'Gaz',neg:3.04,melt:-210.0,boil:-195.8,conf:'[He] 2s² 2p³',shells:'2|5',desc:'Atmosferin temel gaz bileşeni, protein yapılarının değişmezi.'},
-8:{en:'Oxygen',period:2,group:16,phase:'Gaz',neg:3.44,melt:-218.3,boil:-183.0,conf:'[He] 2s² 2p⁴',shells:'2|6',desc:'Yanma ve solunum reaksiyonlarının temel elektron alıcı aktörü.'},
-9:{en:'Fluorine',period:2,group:17,phase:'Gaz',neg:3.98,melt:-219.6,boil:-188.1,conf:'[He] 2s² 2p⁵',shells:'2|7',desc:'Periyodik sistemin en elektronegatif (elektron açlığı en yüksek) elementi.'},
-10:{en:'Neon',period:2,group:18,phase:'Gaz',neg:null,melt:-248.6,boil:-246.1,conf:'[He] 2s² 2p⁶',shells:'2|8',desc:'Işıklı deşarj tüplerinde kullanılan kararlı soy gaz katmanı.'},
-11:{en:'Sodium',period:3,group:1,phase:'Katı',neg:0.93,melt:97.8,boil:882.8,conf:'[Ne] 3s¹',shells:'2|8|1',desc:'Suyla şiddetli reaksiyon veren yumuşak alkali metal formu.'},
-12:{en:'Magnesium',period:3,group:2,phase:'Katı',neg:1.31,melt:650,boil:1091,conf:'[Ne] 3s²',shells:'2|8|2',desc:'Klorofil pigmentinin merkezinde yer alan toprak alkali metal.'},
-13:{en:'Aluminum',period:3,group:13,phase:'Katı',neg:1.61,melt:660.3,boil:2519,conf:'[Ne] 3s² 3p¹',shells:'2|8|3',desc:'Endüstride yaygın kullanılan amfoterik karakterli hafif metal.'},
-14:{en:'Silicon',period:3,group:14,phase:'Katı',neg:1.90,melt:1414,boil:3265,conf:'[Ne] 3s² 3p²',shells:'2|8|4',desc:'Yarı iletken teknolojisinin kalbi olan mineral kuvars bileşeni.'},
-15:{en:'Phosphorus',period:3,group:15,phase:'Katı',neg:2.19,melt:44.2,boil:280.5,conf:'[Ne] 3s² 3p³',shells:'2|8|5',desc:'Nükleik asitlerin (DNA/RNA) omurgasını oluşturan fosfat kaynağı.'},
-16:{en:'Sulfur',period:3,group:16,phase:'Katı',neg:2.58,melt:115.2,boil:444.6,conf:'[Ne] 3s² 3p⁴',shells:'2|8|6',desc:'Sarı renkli kararlı halkalar oluşturan sanayi ametali.'},
-17:{en:'Chlorine',period:3,group:17,phase:'Gaz',neg:3.16,melt:-101.5,boil:-34.0,conf:'[Ne] 3s² 3p⁵',shells:'2|8|7',desc:'Dezenfeksiyon proseslerinde kullanılan halojen gaz türü.'},
-18:{en:'Argon',period:3,group:18,phase:'Gaz',neg:null,melt:-189.3,boil:-185.8,conf Ram:'[Ne] 3s² 3p⁶',shells:'2|8|8',desc:'Atmosferde en bol bulunan asal reaksiyonsuz soy gaz bileşeni.'},
-19:{en:'Potassium',period:4,group:1,phase:'Katı',neg:0.82,melt:63.5,boil:759,conf:'[Ar] 4s¹',shells:'2|8|8|1',desc:'Hücre içi sıvı dengesini kontrol eden aşırı aktif katyon metali.'},
-20:{en:'Calcium',period:4,group:2,phase:'Katı',neg:1.00,melt:841.9,boil:1484,conf:'[Ar] 4s²',shells:'2|8|8|2',desc:'Kemik ve kireç yapılarının temelini kuran toprak alkali katman.'}
+var EL_DATA={
+1:{en:'Hydrogen',period:1,group:1,phase:'Gaz',neg:2.20,melt:-259.1,boil:-252.9,conf:'1s\u00b9',shells:'1',desc:'Evrenin en bol elementi.'},
+2:{en:'Helium',period:1,group:18,phase:'Gaz',neg:null,melt:-272.2,boil:-268.9,conf:'1s\u00b2',shells:'2',desc:'En hafif soy gaz.'},
+3:{en:'Lithium',period:2,group:1,phase:'Kat\u0131',neg:0.98,melt:180.5,boil:1342,conf:'[He] 2s\u00b9',shells:'2|1',desc:'En hafif metal.'},
+4:{en:'Beryllium',period:2,group:2,phase:'Kat\u0131',neg:1.57,melt:1287,boil:2469,conf:'[He] 2s\u00b2',shells:'2|2',desc:'Toprak alkali metal.'},
+5:{en:'Boron',period:2,group:13,phase:'Kat\u0131',neg:2.04,melt:2075,boil:4000,conf:'[He] 2s\u00b2 2p\u00b9',shells:'2|3',desc:'Yar\u0131 metal.'},
+6:{en:'Carbon',period:2,group:14,phase:'Kat\u0131',neg:2.55,melt:3642,boil:3642,conf:'[He] 2s\u00b2 2p\u00b2',shells:'2|4',desc:'Organik kimyan\u0131n temeli.'},
+7:{en:'Nitrogen',period:2,group:15,phase:'Gaz',neg:3.04,melt:-210.0,boil:-195.8,conf:'[He] 2s\u00b2 2p\u00b3',shells:'2|5',desc:'Atmosferin %78i.'},
+8:{en:'Oxygen',period:2,group:16,phase:'Gaz',neg:3.44,melt:-218.3,boil:-183.0,conf:'[He] 2s\u00b2 2p\u2074',shells:'2|6',desc:'Solunum ve yanman\u0131n vazge\u00e7ilmezi.'},
+9:{en:'Fluorine',period:2,group:17,phase:'Gaz',neg:3.98,melt:-219.6,boil:-188.1,conf:'[He] 2s\u00b2 2p\u2075',shells:'2|7',desc:'En elektronegatif element.'},
+10:{en:'Neon',period:2,group:18,phase:'Gaz',neg:null,melt:-248.6,boil:-246.1,conf:'[He] 2s\u00b2 2p\u2076',shells:'2|8',desc:'Neon tabelalar.'},
+11:{en:'Sodium',period:3,group:1,phase:'Kat\u0131',neg:0.93,melt:97.8,boil:882.8,conf:'[Ne] 3s\u00b9',shells:'2|8|1',desc:'Na\u207a sinir iletimi.'},
+12:{en:'Magnesium',period:3,group:2,phase:'Kat\u0131',neg:1.31,melt:650,boil:1091,conf:'[Ne] 3s\u00b2',shells:'2|8|2',desc:'Klorofil merkezi.'},
+13:{en:'Aluminum',period:3,group:13,phase:'Kat\u0131',neg:1.61,melt:660.3,boil:2519,conf:'[Ne] 3s\u00b2 3p\u00b9',shells:'2|8|3',desc:'En bol metal.'},
+14:{en:'Silicon',period:3,group:14,phase:'Kat\u0131',neg:1.90,melt:1414,boil:3265,conf:'[Ne] 3s\u00b2 3p\u00b2',shells:'2|8|4',desc:'Yar\u0131 iletken.'},
+15:{en:'Phosphorus',period:3,group:15,phase:'Kat\u0131',neg:2.19,melt:44.2,boil:280.5,conf:'[Ne] 3s\u00b2 3p\u00b3',shells:'2|8|5',desc:'DNA omurgas\u0131.'},
+16:{en:'Sulfur',period:3,group:16,phase:'Kat\u0131',neg:2.58,melt:115.2,boil:444.6,conf:'[Ne] 3s\u00b2 3p\u2074',shells:'2|8|6',desc:'Sar\u0131 ametal.'},
+17:{en:'Chlorine',period:3,group:17,phase:'Gaz',neg:3.16,melt:-101.5,boil:-34.0,conf:'[Ne] 3s\u00b2 3p\u2075',shells:'2|8|7',desc:'Dezenfektan.'},
+18:{en:'Argon',period:3,group:18,phase:'Gaz',neg:null,melt:-189.3,boil:-185.8,conf:'[Ne] 3s\u00b2 3p\u2076',shells:'2|8|8',desc:'Havada %0.93.'},
+19:{en:'Potassium',period:4,group:1,phase:'Kat\u0131',neg:0.82,melt:63.5,boil:759,conf:'[Ar] 4s\u00b9',shells:'2|8|8|1',desc:'H\u00fccre i\u00e7i katyon.'},
+20:{en:'Calcium',period:4,group:2,phase:'Kat\u0131',neg:1.00,melt:841.9,boil:1484,conf:'[Ar] 4s\u00b2',shells:'2|8|8|2',desc:'Kemik minerali.'}
 };
+for(var _i=21;_i<=118;_i++){
+  if(!EL_DATA[_i]) EL_DATA[_i]={en:'Element '+_i,period:5,group:3,phase:'Kat\u0131',neg:1.5,melt:1000,boil:2000,conf:'...',shells:'...',desc:'Sentetik element.'};
+}
 
-for(var i=21; i<=118; i++) { if(!ELS[i-1]) ELS.push({n:i, sym:'E'+i, name:'Element '+i, mass:200+(i%10), cat:'Geçiş Metali', g:'gtm'}); if(!EL_DATA[i]) EL_DATA[i] = {en:'Element '+i, period:4, group:3, phase:'Katı', neg:1.5, melt:1000, boil:2000, conf:'...', shells:'...', desc:'Yüksek kararsızlığa sahip laboratuvar sentez ürünü.'}; }
-
-var PT_POS = {
-  1:[1,1], 2:[1,18],
-  3:[2,1], 4:[2,2], 5:[2,13], 6:[2,14], 7:[2,15], 8:[2,16], 9:[2,17], 10:[2,18],
+var PT_POS={
+  1:[1,1],2:[1,18],
+  3:[2,1],4:[2,2],5:[2,13],6:[2,14],7:[2,15],8:[2,16],9:[2,17],10:[2,18],
   11:[3,1],12:[3,2],13:[3,13],14:[3,14],15:[3,15],16:[3,16],17:[3,17],18:[3,18],
-  19:[4,1],20:[4,2]
-};
-for(var i=21;i<=118;i++){ if(!PT_POS[i]) { PT_POS[i] = [5 + Math.floor(i/20), 1 + (i%18)]; } }
-
-var CAT_COLORS2 = {
-  'Alkali Metal':        {bg:'rgba(127,29,29,.7)',   border:'#ef4444'},
-  'Toprak Alkali Metal': {bg:'rgba(124,45,18,.7)',   border:'#f97316'},
-  'Geçiş Metali':        {bg:'rgba(69,26,3,.7)',     border:'#f59e0b'},
-  'Post-Geçiş Metali':   {bg:'rgba(20,83,45,.7)',    border:'#4ade80'},
-  'Metal':               {bg:'rgba(20,83,45,.7)',    border:'#4ade80'},
-  'Yarı Metal':          {bg:'rgba(22,78,99,.7)',    border:'#22d3ee'},
-  'Ametal':              {bg:'rgba(20,83,45,.7)',    border:'#22c55e'},
-  'Halojen':             {bg:'rgba(59,7,100,.7)',    border:'#a855f7'},
-  'Soy Gaz':             {bg:'rgba(80,7,36,.7)',     border:'#f472b6'}
+  19:[4,1],20:[4,2],21:[4,3],22:[4,4],23:[4,5],24:[4,6],25:[4,7],26:[4,8],27:[4,9],28:[4,10],29:[4,11],30:[4,12],31:[4,13],32:[4,14],33:[4,15],34:[4,16],35:[4,17],36:[4,18],
+  37:[5,1],38:[5,2],39:[5,3],40:[5,4],41:[5,5],42:[5,6],43:[5,7],44:[5,8],45:[5,9],46:[5,10],47:[5,11],48:[5,12],49:[5,13],50:[5,14],51:[5,15],52:[5,16],53:[5,17],54:[5,18],
+  55:[6,1],56:[6,2],72:[6,4],73:[6,5],74:[6,6],75:[6,7],76:[6,8],77:[6,9],78:[6,10],79:[6,11],80:[6,12],81:[6,13],82:[6,14],83:[6,15],84:[6,16],85:[6,17],86:[6,18],
+  87:[7,1],88:[7,2],104:[7,4],105:[7,5],106:[7,6],107:[7,7],108:[7,8],109:[7,9],110:[7,10],111:[7,11],112:[7,12],113:[7,13],114:[7,14],115:[7,15],116:[7,16],117:[7,17],118:[7,18],
+  57:[9,3],58:[9,4],59:[9,5],60:[9,6],61:[9,7],62:[9,8],63:[9,9],64:[9,10],65:[9,11],66:[9,12],67:[9,13],68:[9,14],69:[9,15],70:[9,16],71:[9,17],
+  89:[10,3],90:[10,4],91:[10,5],92:[10,6],93:[10,7],94:[10,8],95:[10,9],96:[10,10],97:[10,11],98:[10,12],99:[10,13],100:[10,14],101:[10,15],102:[10,16],103:[10,17]
 };
 
-var TREND_DATA = {};
-for(var i=1; i<=118; i++) { TREND_DATA[i] = [53 + (i%30), 500 + (i*12), 1.0 + (i%3)*0.5]; }
+var CAT_COLORS2={
+  'Alkali Metal':{bg:'rgba(127,29,29,.8)',border:'#ef4444'},
+  'Toprak Alkali Metal':{bg:'rgba(124,45,18,.8)',border:'#f97316'},
+  'Geçiş Metali':{bg:'rgba(69,26,3,.8)',border:'#f59e0b'},
+  'Post-Geçiş Metali':{bg:'rgba(20,83,45,.8)',border:'#4ade80'},
+  'Metal':{bg:'rgba(20,83,45,.8)',border:'#4ade80'},
+  'Yarı Metal':{bg:'rgba(22,78,99,.8)',border:'#22d3ee'},
+  'Ametal':{bg:'rgba(5,46,22,.8)',border:'#22c55e'},
+  'Halojen':{bg:'rgba(59,7,100,.8)',border:'#a855f7'},
+  'Soy Gaz':{bg:'rgba(80,7,36,.8)',border:'#f472b6'},
+  'Lantanit':{bg:'rgba(15,23,42,.8)',border:'#7dd3fc'},
+  'Aktinit':{bg:'rgba(15,23,42,.8)',border:'#94a3b8'}
+};
 
-var TREND_CONFIG = {
-  radius: { label: 'Atom Yarıçapı', unit: 'pm', desc: 'Aynı periyotta sağa doğru proton çekim gücü arttığı için çap küçülür.', arrow_period: '→ Küçülür', arrow_group: '↓ Büyür' },
-  ionization: { label: 'İyonlaşma Enerjisi', unit: 'kJ/mol', desc: 'Gaz halindeki atomdan elektron koparmak için verilmesi gereken enerjidir.', arrow_period: '→ Artar (Genellikle)', arrow_group: '↓ Azalır' },
-  neg: { label: 'Elektronegatiflik', unit: '', desc: 'Bağ elektronlarına sahip çıkma eğilimidir. Periyotta sağa doğru artar.', arrow_period: '→ Artar', arrow_group: '↓ Azalır' }
+var TREND_CONFIG={
+  radius:{label:'Atom Yarıçapı',unit:'pm',desc:'Periyotta sağa doğru azalır (çekirdek yükü artar). Grupta aşağı doğru artar (kabuk sayısı artar).',arrow_period:'→ Azalır',arrow_group:'↓ Artar',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){return 280-(el.n%20)*3;}},
+  ionization:{label:'İyonlaşma Enerjisi',unit:'kJ/mol',desc:'Periyotta sağa doğru artar. Grupta aşağı doğru azalır.',arrow_period:'→ Artar',arrow_group:'↓ Azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){return 400+el.n*8;}},
+  neg:{label:'Elektronegatiflik',unit:'',desc:'Periyotta sağa doğru artar. Grupta aşağı doğru azalır. En yüksek: F(3.98).',arrow_period:'→ Artar',arrow_group:'↓ Azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){var d=EL_DATA[el.n]; return (d&&d.neg!=null)?d.neg:null;}}
 };
 
 // ============================================================
-// UYGULAMA MOTORU CONTROLLER
+// NAV - Çok basit, sadece display:none/block
 // ============================================================
-var ptCatActive = 'all'; var ptSearchQ = ''; var ptTempMode = false; var currentTrend = null;
+var SCREENS=['s-home','s-quiz','s-qact','s-res','s-pt','s-eldetay','s-mol','s-eq','s-ph','s-gaz','s-yks','s-pom','s-puan','s-board'];
 
-// QUIZ SİSTEMİ DURUM DEĞİŞKENLERİ
-var quizConfig = { type: 'sym2name', count: 10 };
-var quizState = { current: 0, score: 0, wrongs: 0, items: [], correctAns: '' };
+function nav(id){
+  var mn=document.getElementById('mn');
+  if(mn) mn.style.display='none';
+  for(var i=0;i<SCREENS.length;i++){
+    var sc=document.getElementById(SCREENS[i]);
+    if(sc) sc.style.display='none';
+  }
+  var t=document.getElementById('s-'+id);
+  if(t) t.style.display='block';
+  if(id==='pt') renderRealPT();
+  document.body.scrollTop=0;
+  document.documentElement.scrollTop=0;
+}
 
-function cfgQuiz(key, val) { quizConfig[key] = val; }
+function toggleMenu(){
+  var mn=document.getElementById('mn');
+  mn.style.display=(mn.style.display==='flex')?'none':'flex';
+}
 
-function startQ() {
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2200);
+}
+
+function tswitch(tabsId,panelsId,idx){
+  var tabs=document.querySelectorAll('#'+tabsId+' button');
+  var panels=document.querySelectorAll('#'+panelsId+' > .tp');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.toggle('on',i===idx);
+  for(var i=0;i<panels.length;i++) panels[i].classList.toggle('on',i===idx);
+}
+
+function so(btn,groupId){
+  var btns=document.querySelectorAll('#'+groupId+' .ob');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('sel2');
+  btn.classList.add('sel2');
+}
+
+// ============================================================
+// QUIZ
+// ============================================================
+var quizCfg={type:'sym2name',count:10};
+var quizSt={cur:0,score:0,wrongs:0,items:[],correct:''};
+
+function setQType(t,btn){quizCfg.type=t;so(btn,'s-quiz');}
+function setQCount(n,btn){quizCfg.count=n;so(btn,'s-quiz');}
+
+function startQ(){
   nav('qact');
-  quizState.current = 0; quizState.score = 0; quizState.wrongs = 0;
-  var pool = ELS.slice(0, 20); // İlk 20 element havuzu
-  pool.sort(function() { return Math.random() - 0.5; });
-  quizState.items = pool.slice(0, quizConfig.count);
-  renderQuestion();
+  quizSt.cur=0; quizSt.score=0; quizSt.wrongs=0;
+  var pool=[];
+  for(var i=0;i<ELS.length;i++) pool.push(ELS[i]);
+  // shuffle
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;}
+  quizSt.items=pool.slice(0,quizCfg.count);
+  renderQ();
 }
 
-function renderQuestion() {
-  if(quizState.current >= quizState.items.length) {
-    endQuiz(); return;
-  }
-  document.getElementById('nxtbtn').style.display = 'none';
-  document.getElementById('fbar').className = 'fb';
-  document.getElementById('fbar').textContent = '';
-  
-  var activeItem = quizState.items[quizState.current];
-  document.getElementById('qcnt').textContent = 'Soru ' + (quizState.current + 1) + '/' + quizState.items.length;
-  document.getElementById('lvc').textContent = '✓ ' + quizState.score;
-  document.getElementById('lvw').textContent = '✗ ' + quizState.wrongs;
-  document.getElementById('pf').style.width = ((quizState.current / quizState.items.length) * 100) + '%';
+function renderQ(){
+  if(quizSt.cur>=quizSt.items.length){endQuiz();return;}
+  document.getElementById('nxtbtn').style.display='none';
+  var fb=document.getElementById('fbar');
+  fb.className='fb'; fb.textContent='';
+  var el=quizSt.items[quizSt.cur];
+  document.getElementById('qcnt-lbl').textContent='Soru '+(quizSt.cur+1)+'/'+quizSt.items.length;
+  document.getElementById('lvc').textContent='\u2713 '+quizSt.score;
+  document.getElementById('lvw').textContent='\u2717 '+quizSt.wrongs;
+  document.getElementById('pf').style.width=(quizSt.cur/quizSt.items.length*100)+'%';
 
-  var questionText = '';
-  if(quizConfig.type === 'sym2name') {
-    questionText = activeItem.sym;
-    quizState.correctAns = activeItem.name;
+  var qText,correct;
+  if(quizCfg.type==='sym2name'){
+    qText=el.sym; correct=el.name;
+    document.getElementById('qlbl').textContent='Bu sembolün elementi hangidir?';
   } else {
-    questionText = activeItem.name;
-    quizState.correctAns = activeItem.sym;
+    qText=el.name; correct=el.sym;
+    document.getElementById('qlbl').textContent='Bu elementin sembolü nedir?';
   }
-  document.getElementById('qdsp').textContent = questionText;
-  document.getElementById('qcat').textContent = activeItem.cat;
+  document.getElementById('qdsp').textContent=qText;
+  document.getElementById('qcat').textContent=el.cat;
+  quizSt.correct=correct;
 
-  // Şık üretme modelleri
-  var options = [quizState.correctAns];
-  while(options.length < 4) {
-    var randEl = ELS[Math.floor(Math.random() * ELS.length)];
-    var cand = quizConfig.type === 'sym2name' ? randEl.name : randEl.sym;
-    if(!options.includes(cand)) options.push(cand);
+  var opts=[correct];
+  while(opts.length<4){
+    var r=ELS[Math.floor(Math.random()*ELS.length)];
+    var cand=quizCfg.type==='sym2name'?r.name:r.sym;
+    var found=false;
+    for(var i=0;i<opts.length;i++){if(opts[i]===cand){found=true;break;}}
+    if(!found) opts.push(cand);
   }
-  options.sort(function() { return Math.random() - 0.5; });
+  // shuffle opts
+  for(var i=opts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=opts[i];opts[i]=opts[j];opts[j]=tmp;}
 
-  var grid = document.getElementById('ogrid');
-  grid.innerHTML = '';
-  options.forEach(function(opt) {
-    var btn = document.createElement('button');
-    btn.className = 'ob2';
-    btn.innerHTML = '<span class="ok">·<\/span> ' + opt;
-    btn.onclick = function() { checkAns(btn, opt); };
-    grid.appendChild(btn);
-  });
+  var grid=document.getElementById('ogrid');
+  grid.innerHTML='';
+  for(var i=0;i<opts.length;i++){
+    (function(opt){
+      var btn=document.createElement('button');
+      btn.className='ob2';
+      btn.textContent=opt;
+      btn.onclick=function(){checkAns(btn,opt);};
+      grid.appendChild(btn);
+    })(opts[i]);
+  }
 }
 
-function checkAns(btn, selected) {
-  var btns = document.getElementById('ogrid').querySelectorAll('button');
-  btns.forEach(function(b) { b.disabled = true; });
-  var fbar = document.getElementById('fbar');
-
-  if(selected === quizState.correctAns) {
-    btn.classList.add('cor');
-    fbar.className = 'fb show cor'; fbar.textContent = 'Doğru Tebrikler!';
-    quizState.score++;
+function checkAns(btn,sel){
+  var btns=document.getElementById('ogrid').querySelectorAll('button');
+  for(var i=0;i<btns.length;i++) btns[i].disabled=true;
+  var fb=document.getElementById('fbar');
+  if(sel===quizSt.correct){
+    btn.className='ob2 cor';
+    fb.className='fb show cor'; fb.textContent='\u2713 Doğru!';
+    quizSt.score++;
   } else {
-    btn.classList.add('wro');
-    fbar.className = 'fb show wro'; fbar.textContent = 'Yanlış! Doğru Cevap: ' + quizState.correctAns;
-    quizState.wrongs++;
+    btn.className='ob2 wro';
+    fb.className='fb show wro'; fb.textContent='\u2717 Yanlış! Doğru: '+quizSt.correct;
+    quizSt.wrongs++;
   }
-  document.getElementById('nxtbtn').style.display = 'block';
+  document.getElementById('nxtbtn').style.display='block';
 }
 
-function nextQ() {
-  quizState.current++;
-  renderQuestion();
-}
+function nextQ(){quizSt.cur++;renderQ();}
 
-function endQuiz() {
+function endQuiz(){
   nav('res');
-  var total = quizState.score + quizState.wrongs;
-  var pct = total > 0 ? Math.round((quizState.score / total) * 100) : 0;
-  document.getElementById('rpct').textContent = '%' + pct;
-  document.getElementById('rscor').textContent = quizState.score;
-  document.getElementById('rswro').textContent = quizState.wrongs;
-  document.getElementById('rstot').textContent = total;
+  var tot=quizSt.score+quizSt.wrongs;
+  var pct=tot>0?Math.round(quizSt.score/tot*100):0;
+  document.getElementById('rpct').textContent='%'+pct;
+  document.getElementById('rscor').textContent=quizSt.score;
+  document.getElementById('rswro').textContent=quizSt.wrongs;
+  document.getElementById('rstot').textContent=tot;
+  document.getElementById('rem').textContent=pct>=80?'\ud83c\udfc6':pct>=50?'\ud83d\udc4d':'\ud83d\udcaa';
 }
 
-// POMODORO CLOCK ENGINE
-var pomodoro = { timer: null, timeLeft: 1500, isRunning: false, mode: 'work' };
-
-function pomToggle() {
-  var trigger = document.getElementById('pom-trigger');
-  if(pomodoro.isRunning) {
-    clearInterval(pomodoro.timer);
-    pomodoro.isRunning = false;
-    trigger.textContent = 'Başlat';
-  } else {
-    pomodoro.isRunning = true;
-    trigger.textContent = 'Durdur';
-    pomodoro.timer = setInterval(function() {
-      if(pomodoro.timeLeft <= 0) {
-        toast('Süre Tamamlandı!');
-        pomReset();
-        return;
-      }
-      pomodoro.timeLeft--;
-      updatePomodoroDOM();
-    }, 1000);
-  }
-}
-
-function pomReset() {
-  clearInterval(pomodoro.timer);
-  pomodoro.isRunning = false;
-  var wMin = parseInt(document.getElementById('p-work').value)||25;
-  pomodoro.timeLeft = wMin * 60;
-  document.getElementById('pom-trigger').textContent = 'Başlat';
-  updatePomodoroDOM();
-}
-
-function updatePomodoroDOM() {
-  var m = Math.floor(pomodoro.timeLeft / 60);
-  var s = pomodoro.timeLeft % 60;
-  document.getElementById('pom-clock').textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
-}
-
-// YKS 2027 SAYAÇ REGÜLASYONU
-function initCountdown() {
-  setInterval(function() {
-    var diff = new Date("June 19, 2027 10:00:00").getTime() - new Date().getTime();
-    if (diff < 0) return;
-    document.getElementById('d-day').textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
-    document.getElementById('d-hr').textContent = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    document.getElementById('d-min').textContent = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    document.getElementById('d-sec').textContent = Math.floor((diff % (1000 * 60)) / 1000);
-  }, 1000);
-}
-
-// BÜTÜNSEL PANEL ENJEKSİYONLARI (ALTYAPILAR)
-function renderArayuzData() {
-  // Skor Tablosu
-  document.getElementById('leaderboard-dom').innerHTML = 
-    '<div class="brow hdr"><div class="brk">Sıra<\/div><div>Öğrenci<\/div><div style="text-align:right">Doğru<\/div><\/div>'
-    +'<div class="brow"><div class="brk gd">1<\/div><div class="bnm">Medeni Gökalp<\/div><div class="bpc">20 / 20<\/div><\/div>'
-    +'<div class="brow"><div class="brk sv">2<\/div><div class="bnm">YKS Derece Adayı<\/div><div class="bpc">19 / 20<\/div><\/div>';
-
-  // Simülasyon Listeleri
-  document.getElementById('sim-list-dom').innerHTML = 
-    '<div class="tc"><div>⚗️<\/div><div class="tt">Asit-Baz Titrasyonu<\/div><div class="td">Nötralleşme dönüm noktası analizi.<\/div><\/div>'
-    +'<div class="tc"><div>💨<\/div><div class="tt">Kinetik Gaz Deneyi<\/div><div class="td">Sıcaklık ve hacim korelasyon modeli.<\/div><\/div>';
-
-  // 3D Yapılar
-  document.getElementById('tools-3d-dom').innerHTML = 
-    '<div class="tc"><div>🧬<\/div><div class="tt">Su (H₂O) Molekülü<\/div><div class="td">VSEPR kırık doğru geometri gösterimi.<\/div><\/div>'
-    +'<div class="tc"><div>💎<\/div><div class="tt">Elmas / Grafit Yapısı<\/div><div class="td">Karbon allotropları kristal ağ örgüleri.<\/div><\/div>';
-
-  // YÖK Atlas
-  document.getElementById('atlas-dom').innerHTML = 
-    '<div class="brow hdr"><div>Üniversite / Program<\/div><div style="text-align:right">Sıralama<\/div><\/div>'
-    +'<div class="brow"><div>İstanbul Tıp Fakültesi (SAY)<\/div><div class="bcr">~450<\/div><\/div>'
-    +'<div class="brow"><div>ODTÜ Kimya Mühendisliği (SAY)<\/div><div class="bcr">~9200<\/div><\/div>';
-}
-
-// ESKİ HESAPLAYICI MOTOR SAKLAMA MODELLERİ
-function ts(tabsId, panelsId, index) { tswitch(tabsId, panelsId, index); }
-function so3d(btn, groupId) { so(btn, groupId); }
-
-function saveAndRetry() { toast('Skor başarıyla kaydedildi!'); nav('quiz'); }
+function saveAndRetry(){toast('Kaydedildi!');nav('quiz');}
 
 // ============================================================
-// HESAPLAYICILAR VE TABLO GRAFİKLERİ
+// PERİYODİK TABLO
 // ============================================================
-function calcMK() {
-  var mk = parseFloat(document.getElementById('mk0').value);
-  var type = document.getElementById('mk1').value;
-  var val = parseFloat(document.getElementById('mk2').value);
-  var resBox = document.getElementById('mkr');
-  if(isNaN(mk) || isNaN(val)) { toast('Lütfen değerleri girin!'); return; }
-  resBox.style.display = 'block';
-  if(type === 'm2k') {
-    var res = val * mk; document.getElementById('mkrv').textContent = res.toFixed(2) + ' g';
-    document.getElementById('mkst').innerHTML = '<li>m = n × M_A formülü uygulandı.<\/li>';
-  } else {
-    var res = val / mk; document.getElementById('mkrv').textContent = res.toFixed(4) + ' mol';
-    document.getElementById('mkst').innerHTML = '<li>n = m / M_A formülü uygulandı.<\/li>';
-  }
-}
+var ptCatActive='all'; var ptSearchQ=''; var ptTempMode=false; var currentTrend=null;
 
-function calcMH() {
-  var T = parseFloat(document.getElementById('mh0').value);
-  var P = parseFloat(document.getElementById('mh1').value);
-  var type = document.getElementById('mh2').value;
-  var val = parseFloat(document.getElementById('mh3').value);
-  if(isNaN(T) || isNaN(P) || isNaN(val)) { toast('Boş alan bırakmayın!'); return; }
-  document.getElementById('mhr').style.display = 'block';
-  var R = 0.0821;
-  if(type === 'm2h') {
-    var V = (val * R * T) / P; document.getElementById('mhrv').textContent = V.toFixed(2) + ' L';
-  } else {
-    var n = (P * val) / (R * T); document.getElementById('mhrv').textContent = n.toFixed(4) + ' mol';
-  }
-}
+function filterPT(q){ptSearchQ=q;renderRealPT();}
+function toggleTempMode(){ptTempMode=!ptTempMode;renderRealPT();}
 
-function calcMA() {
-  var type = document.getElementById('ma0').value;
-  var val = parseFloat(document.getElementById('ma1').value);
-  if(isNaN(val)) { toast('Değer girin!'); return; }
-  document.getElementById('mar').style.display = 'block';
-  var NA = 6.022e23;
-  if(type === 'm2a') {
-    document.getElementById('marv').textContent = (val * NA).toExponential(2) + ' tane';
-  } else {
-    document.getElementById('marv').textContent = (val / NA).toExponential(3) + ' mol';
-  }
-}
-
-function calcMD() {
-  var target = document.getElementById('md0').value;
-  var n = parseFloat(document.getElementById('md1').value);
-  var V = parseFloat(document.getElementById('md2').value);
-  var C = parseFloat(document.getElementById('md3').value);
-  document.getElementById('mdr').style.display = 'block';
-  if(target === 'c') {
-    document.getElementById('mdrv').textContent = (n / V).toFixed(3) + ' M';
-  } else if(target === 'n') {
-    document.getElementById('mdrv').textContent = (C * V).toFixed(3) + ' mol';
-  } else {
-    document.getElementById('mdrv').textContent = (n / C).toFixed(2) + ' L';
-  }
-}
-
-function calcPH() {
-  var type = document.getElementById('ph0').value;
-  var C = parseFloat(document.getElementById('ph1').value);
-  if(isNaN(C) || C <= 0) { toast('Derişim geçersiz!'); return; }
-  document.getElementById('phr').style.display = 'block';
-  var logV = -Math.log10(C);
-  var pH = type === 'acid' ? logV : (14 - logV);
-  document.getElementById('phv1').textContent = pH.toFixed(2);
-  document.getElementById('phm1').style.left = (pH / 14 * 100) + '%';
-}
-
-function calcWk() {
-  var type = document.getElementById('ph2t').value;
-  var C = parseFloat(document.getElementById('ph2c').value);
-  var K = parseFloat(document.getElementById('ph2k').value);
-  if(isNaN(C) || isNaN(K)) { toast('Girdiler eksik!'); return; }
-  document.getElementById('ph2r').style.display = 'block';
-  var H = Math.sqrt(K * C);
-  var logV = -Math.log10(H);
-  var pH = type === 'acid' ? logV : (14 - logV);
-  document.getElementById('phv2').textContent = pH.toFixed(2);
-  document.getElementById('phm2').style.left = (pH / 14 * 100) + '%';
-}
-
-function calcHH() {
-  var Ka = parseFloat(document.getElementById('hh0').value);
-  var A = parseFloat(document.getElementById('hh1').value);
-  var HA = parseFloat(document.getElementById('hh2').value);
-  if(isNaN(Ka)||isNaN(A)||isNaN(HA)) { toast('Eksikleri doldurun!'); return; }
-  document.getElementById('hhr').style.display = 'block';
-  var pH = -Math.log10(Ka) + Math.log10(A / HA);
-  document.getElementById('hhv').textContent = pH.toFixed(2);
-}
-
-function calcIG() {
-  var t = document.getElementById('ig0').value;
-  var P = parseFloat(document.getElementById('ig1').value);
-  var V = parseFloat(document.getElementById('ig2').value);
-  var n = parseFloat(document.getElementById('ig3').value);
-  var T = parseFloat(document.getElementById('ig4').value);
-  document.getElementById('igr').style.display = 'block';
-  var R = 0.0821;
-  if(t==='P') document.getElementById('igrv').textContent = ((n*R*T)/V).toFixed(2) + ' atm';
-  if(t==='V') document.getElementById('igrv').textContent = ((n*R*T)/P).toFixed(2) + ' L';
-  if(t==='n') document.getElementById('igrv').textContent = ((P*V)/(R*T)).toFixed(4) + ' mol';
-  if(t==='T') document.getElementById('igrv').textContent = ((P*V)/(n*R)).toFixed(1) + ' K';
-}
-
-function calcB() {
-  var P1 = parseFloat(document.getElementById('b0').value);
-  var V1 = parseFloat(document.getElementById('b1').value);
-  var P2 = parseFloat(document.getElementById('b2').value);
-  var V2 = parseFloat(document.getElementById('b3').value);
-  document.getElementById('br').style.display = 'block';
-  if(isNaN(V2)) document.getElementById('brv').textContent = ((P1*V1)/P2).toFixed(2) + ' L';
-  else document.getElementById('brv').textContent = ((P1*V1)/V2).toFixed(2) + ' atm';
-}
-
-function calcC() {
-  var V1 = parseFloat(document.getElementById('c0').value);
-  var T1 = parseFloat(document.getElementById('c1').value);
-  var V2 = parseFloat(document.getElementById('c2').value);
-  var T2 = parseFloat(document.getElementById('c3').value);
-  document.getElementById('cr').style.display = 'block';
-  if(isNaN(T2)) document.getElementById('crv').textContent = ((V2*T1)/V1).toFixed(1) + ' K';
-  else document.getElementById('crv').textContent = ((V1*T2)/T1).toFixed(2) + ' L';
-}
-
-// Regülasyon tamamlandı
-function calcG() {
-  var P1 = parseFloat(document.getElementById('g0').value);
-  var T1 = parseFloat(document.getElementById('g1').value);
-  var P2 = parseFloat(document.getElementById('g2i').value);
-  var T2 = parseFloat(document.getElementById('g3').value);
-  document.getElementById('gr').style.display = 'block';
-  if(isNaN(T2)) document.getElementById('grv').textContent = ((P2*T1)/P1).toFixed(1) + ' K';
-  else document.getElementById('grv').textContent = ((P1*T2)/T1).toFixed(2) + ' atm';
-}
-
-function calcBi() {
-  var P1 = parseFloat(document.getElementById('bi0').value);
-  var V1 = parseFloat(document.getElementById('bi1').value);
-  var T1 = parseFloat(document.getElementById('bi2').value);
-  var P2 = parseFloat(document.getElementById('bi3').value);
-  var V2 = parseFloat(document.getElementById('bi4').value);
-  var T2 = parseFloat(document.getElementById('bi5').value);
-  document.getElementById('bir').style.display = 'block';
-  if(isNaN(P2)) document.getElementById('birv').textContent = ((P1*V1*T2)/(T1*V2)).toFixed(2) + ' atm';
-  else if(isNaN(V2)) document.getElementById('birv').textContent = ((P1*V1*T2)/(T1*P2)).toFixed(2) + ' L';
-}
-
-function calcYKS() {
-  var td = parseFloat(document.getElementById('tyt-td').value)||0, ty = parseFloat(document.getElementById('tyt-ty').value)||0;
-  var md = parseFloat(document.getElementById('tyt-md').value)||0, my = parseFloat(document.getElementById('tyt-my').value)||0;
-  var amd = parseFloat(document.getElementById('ayt-md').value)||0, amy = parseFloat(document.getElementById('ayt-my').value)||0;
-  var akd = parseFloat(document.getElementById('ayt-kd').value)||0, aky = parseFloat(document.getElementById('ayt-ky').value)||0;
-  
-  var tytNet = (td - ty*0.25) + (md - my*0.25);
-  var aytNet = (amd - amy*0.25) + (akd - aky*0.25);
-  var score = 100 + tytNet * 1.5 + aytNet * 3.0;
-
-  document.getElementById('yks-res').style.display = 'block';
-  document.getElementById('yks-cards').innerHTML = '<div class="card" style="grid-column:span 2;text-align:center"><div class="slbl">Tahmini Sayısal Ham Puan<\/div><div class="rv g">'+score.toFixed(2)+'<\/div><\/div>';
-  document.getElementById('yks-nets').innerHTML = 'TYT ve AYT Kimya net ağırlıkları entegre edilmiştir.';
-}
-
-function balEq() {
-  var val = document.getElementById('eqi').value;
-  var dsp = document.getElementById('eqdsp');
-  if(!val) return; dsp.style.display = 'flex';
-  if(val.includes('H2 + O2')) dsp.innerHTML = '<span class="eqc">2<\/span>H₂ + O₂ <span class="eqar">→<\/span> <span class="eqc">2<\/span>H₂O';
-  else dsp.textContent = val + ' (Kütle ve atom sayısı korundu)';
-}
-
-function setEq(s) { document.getElementById('eqi').value = s; }
-
-function filterPT(q){ ptSearchQ = q; renderRealPT(); }
-function toggleTempMode(){ ptTempMode = !ptTempMode; renderRealPT(); }
 function setCatFilter(btn){
-  var btns = document.querySelectorAll('.cat-btn');
+  var btns=document.querySelectorAll('.cat-btn');
   for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
-  btn.classList.add('active'); ptCatActive = btn.getAttribute('data-cat'); renderRealPT();
+  btn.classList.add('active');
+  ptCatActive=btn.getAttribute('data-cat');
+  renderRealPT();
 }
 
-function setTrend(btn){
-  var all = document.querySelectorAll('.trend-btn');
-  for(var i=0;i<all.length;i++) all[i].classList.remove('active');
-  btn.classList.add('active'); currentTrend = btn.getAttribute('data-trend'); renderTrendGrid();
+function setPTTab(tab){
+  var tp=document.getElementById('pt-panel-tablo');
+  var tr=document.getElementById('pt-panel-trend');
+  var tb=document.getElementById('pt-tab-tablo');
+  var rb=document.getElementById('pt-tab-trend');
+  if(tab==='tablo'){
+    tp.style.display=''; tr.style.display='none';
+    tb.style.background='rgba(99,102,241,.2)'; tb.style.borderColor='#6366f1'; tb.style.color='#a5b4fc';
+    rb.style.background='var(--sf2)'; rb.style.borderColor='var(--br)'; rb.style.color='var(--tx3)';
+  } else {
+    tp.style.display='none'; tr.style.display='';
+    rb.style.background='rgba(99,102,241,.2)'; rb.style.borderColor='#6366f1'; rb.style.color='#a5b4fc';
+    tb.style.background='var(--sf2)'; tb.style.borderColor='var(--br)'; tb.style.color='var(--tx3)';
+  }
 }
 
 function renderRealPT(){
-  var container = document.getElementById('pt-real-grid');
+  var container=document.getElementById('pt-real-grid');
   if(!container) return;
-  var cells = {};
-  for(var i=0; i<ELS.length; i++){ var p = PT_POS[ELS[i].n]; if(p) cells[p[0]+'-'+p[1]] = ELS[i]; }
+  var cells={};
+  for(var i=0;i<ELS.length;i++){var p=PT_POS[ELS[i].n];if(p) cells[p[0]+'-'+p[1]]=ELS[i];}
 
-  var html = '<div style="display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:3px;"><div><\/div>';
-  for(var c=1;c<=18;c++) html += '<div class="pt-col-hdr">'+c+'<\/div>';
-  html += '<\/div>';
+  var G='display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:2px;margin-bottom:2px;';
+  var html='<div style="'+G+'"><div></div>';
+  for(var c=1;c<=18;c++) html+='<div class="pt-col-hdr">'+c+'</div>';
+  html+='</div>';
+
+  var SKIP={};
+  var LEGS={'1-3':{cat:'Alkali Metal',span:2},'1-5':{cat:'Toprak Alkali Metal',span:2},'1-7':{cat:'Ge\u00e7i\u015f Metali',span:2},'1-9':{cat:'Post-Ge\u00e7i\u015f Metali',span:2},'2-3':{cat:'Yar\u0131 Metal',span:2},'2-5':{cat:'Ametal',span:2},'2-7':{cat:'Halojen',span:2},'2-9':{cat:'Soy Gaz',span:2}};
+  var lks=Object.keys(LEGS);
+  for(var li=0;li<lks.length;li++){var lk=lks[li];var lg=LEGS[lk];var lp=lk.split('-');var lr=Number(lp[0]);var lc=Number(lp[1]);for(var ls=1;ls<lg.span;ls++) SKIP[lr+'-'+(lc+ls)]=1;}
 
   for(var r=1;r<=7;r++){
-    html += '<div style="display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:3px; margin-bottom:2px;">';
-    html += '<div class="pt-row-hdr">'+r+'<\/div>';
+    html+='<div style="'+G+'"><div class="pt-row-hdr">'+r+'</div>';
     for(var c=1;c<=18;c++){
-      var el = cells[r+'-'+c];
+      var key=r+'-'+c;
+      if(SKIP[key]) continue;
+      var el=cells[key];
+      var leg=LEGS[key];
       if(el){
-        var colors = CAT_COLORS2[el.cat]||{bg:'var(--sf)',border:'var(--br)'};
-        var q = ptSearchQ.toLowerCase();
-        var matchS = !q || el.name.toLowerCase().includes(q) || el.sym.toLowerCase().includes(q);
-        var matchC = ptCatActive === 'all' || el.cat === ptCatActive;
-        var opacity = (!matchS || !matchC) ? '0.1' : '1';
-        html += '<div class="pt-cell-wrap" style="background:'+colors.bg+';border-color:'+colors.border+';opacity:'+opacity+'" onclick="openElDetail('+el.n+')">'
-          +'<span class="pt-cn" style="font-size:7px;color:var(--tx3)">'+el.n+'<\/span>'
-          +'<span style="font-size:13px;font-weight:800;display:block">'+el.sym+'<\/span>'
-          +'<span style="font-size:6px;color:var(--tx2);display:block;overflow:hidden">'+el.name+'<\/span>'
-          +'<\/div>';
-      } else { html += '<div><\/div>'; }
+        var col=CAT_COLORS2[el.cat]||{bg:'var(--sf)',border:'var(--br)'};
+        var q=ptSearchQ.toLowerCase();
+        var ms=!q||el.name.toLowerCase().indexOf(q)>-1||el.sym.toLowerCase().indexOf(q)>-1;
+        var mc=ptCatActive==='all'||(el.cat===ptCatActive)||(ptCatActive==='Lantanit & Aktinit'&&(el.cat==='Lantanit'||el.cat==='Aktinit'));
+        var op=(!ms||!mc)?'0.08':'1';
+        html+='<div class="pt-cell-wrap" style="background:'+col.bg+';border-color:'+col.border+';opacity:'+op+'" onclick="openElDetail('+el.n+')">'
+          +'<span style="font-size:6px;font-weight:700;color:'+col.border+';display:block">'+el.n+'</span>'
+          +'<span style="font-size:13px;font-weight:800;color:#fff;display:block">'+el.sym+'</span>'
+          +'<span style="font-size:5px;color:rgba(255,255,255,.7);display:block;overflow:hidden">'+el.name+'</span>'
+          +'</div>';
+      } else if(leg){
+        var cc=CAT_COLORS2[leg.cat]||{bg:'var(--sf)',border:'var(--br)'};
+        html+='<div class="pt-legend-wrap" style="background:'+cc.bg+';border-color:'+cc.border+'55;grid-column:span 2;aspect-ratio:2/1">'
+          +'<div class="pt-lline" style="background:'+cc.border+'"></div>'
+          +'<div class="pt-lcat" style="color:'+cc.border+'">'+leg.cat+'</div>'
+          +'</div>';
+      } else if(r===6&&c===3){
+        html+='<div class="pt-ref-cell">57-71</div>';
+      } else if(r===7&&c===3){
+        html+='<div class="pt-ref-cell">89-103</div>';
+      } else {
+        html+='<div class="pt-spacer-cell"></div>';
+      }
     }
-    html += '<\/div>';
+    html+='</div>';
   }
-  container.innerHTML = html;
+
+  html+='<div style="height:4px;margin:2px 0;border-top:1px dashed rgba(100,116,139,.2)"></div>';
+  html+='<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7px">La</div><div></div><div></div>';
+  for(var c=3;c<=17;c++){var el=cells['9-'+c];html+=el?'<div class="pt-cell-wrap" style="background:'+(CAT_COLORS2[el.cat]||{bg:'var(--sf)'}).bg+';border-color:'+(CAT_COLORS2[el.cat]||{border:'var(--br)'}).border+'" onclick="openElDetail('+el.n+')">'+'<span style="font-size:6px;font-weight:700;color:'+(CAT_COLORS2[el.cat]||{border:'#fff'}).border+';display:block">'+el.n+'</span>'+'<span style="font-size:13px;font-weight:800;color:#fff;display:block">'+el.sym+'</span>'+'</div>':'<div class="pt-spacer-cell"></div>';}
+  html+='<div class="pt-spacer-cell"></div></div>';
+  html+='<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7px">Ac</div><div></div><div></div>';
+  for(var c=3;c<=17;c++){var el=cells['10-'+c];html+=el?'<div class="pt-cell-wrap" style="background:'+(CAT_COLORS2[el.cat]||{bg:'var(--sf)'}).bg+';border-color:'+(CAT_COLORS2[el.cat]||{border:'var(--br)'}).border+'" onclick="openElDetail('+el.n+')">'+'<span style="font-size:6px;font-weight:700;color:'+(CAT_COLORS2[el.cat]||{border:'#fff'}).border+';display:block">'+el.n+'</span>'+'<span style="font-size:13px;font-weight:800;color:#fff;display:block">'+el.sym+'</span>'+'</div>':'<div class="pt-spacer-cell"></div>';}
+  html+='<div class="pt-spacer-cell"></div></div>';
+
+  container.innerHTML=html;
 }
 
-function renderTrendGrid(){
-  var container = document.getElementById('pt-trend-grid');
-  if(!container || !currentTrend) return;
-  var cfg = TREND_CONFIG[currentTrend];
-  var info = document.getElementById('trend-info-card');
-  info.style.display = 'block';
-  info.innerHTML = '<div class="card"><b>'+cfg.label+'<\/b><p style="margin-top:6px; font-size:13px; color:var(--tx2)">'+cfg.desc+'<\/p><\/div>';
-  document.getElementById('trend-arrows').style.display = 'block';
-  document.getElementById('arrow-period-text').textContent = cfg.arrow_period;
-  document.getElementById('arrow-group-text').textContent = cfg.arrow_group;
-  container.innerHTML = '<p style="padding:10px;color:var(--tx2); font-size:13px;">Trend dağılım vektör okları yukarıdaki panellerde aktifleştirilmiştir.<\/p>';
-}
-
+// ============================================================
+// ELEMENT DETAY
+// ============================================================
 function openElDetail(n){
-  var el = ELS.find(function(e){return e.n===n;});
-  var d = EL_DATA[n]||{};
-  var html = '<div class="card">'
-    +'<button class="btn bs" onclick="nav(\'pt\')">← Tabloya Dön<\/button>'
-    +'<h2 style="font-family:Space Grotesk;font-size:32px;margin-top:14px">'+el.name+' (\u200B'+el.sym+'\u200B)<\/h2>'
-    +'<p style="color:var(--ac2);font-weight:600;margin-bottom:10px">'+el.cat+'<\/p>'
-    +'<p style="color:var(--tx2);line-height:1.6">'+d.desc+'<\/p>'
-    +'<ul class="slist"><li>Molar Kütle Değeri: '+el.mass+' g/mol<\/li><li>Elektron Katman Dizilimi: '+(d.conf||'N/A')+'<\/li><li>Bağ Tipi Elektronegatifliği: '+(d.neg||'N/A')+'<\/li><\/ul>'
-    +'<\/div>';
-  document.getElementById('eldetay-wrap').innerHTML = html;
+  var el=null;
+  for(var i=0;i<ELS.length;i++){if(ELS[i].n===n){el=ELS[i];break;}}
+  if(!el) return;
+  var d=EL_DATA[n]||{};
+  var c=CAT_COLORS2[el.cat]||{bg:'rgba(30,41,59,.8)',border:'#6366f1'};
+  var prevEl=null,nextEl=null;
+  for(var i=0;i<ELS.length;i++){if(ELS[i].n===n-1)prevEl=ELS[i];if(ELS[i].n===n+1)nextEl=ELS[i];}
+
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">';
+  html+='<button onclick="nav(\'pt\')" style="padding:8px 14px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:13px">← Periyodik Tablo</button>';
+  if(prevEl) html+='<button onclick="openElDetail('+prevEl.n+')" style="padding:8px 14px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:13px">← '+prevEl.name+'</button>';
+  if(nextEl) html+='<button onclick="openElDetail('+nextEl.n+')" style="padding:8px 14px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:13px">'+nextEl.name+' →</button>';
+  html+='</div>';
+
+  html+='<div style="background:'+c.bg+';border:1px solid '+c.border+';border-radius:16px;padding:20px;margin-bottom:16px">';
+  html+='<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">';
+  html+='<div style="background:'+c.border+'33;border:2px solid '+c.border+';border-radius:12px;padding:12px 16px;text-align:center;min-width:80px">';
+  html+='<div style="font-size:12px;color:'+c.border+';font-weight:700">'+el.n+'</div>';
+  html+='<div style="font-family:Space Grotesk,sans-serif;font-size:40px;font-weight:800;color:'+c.border+';line-height:1">'+el.sym+'</div>';
+  html+='<div style="font-size:11px;color:rgba(255,255,255,.5)">'+el.mass+'</div></div>';
+  html+='<div>';
+  html+='<div style="font-family:Space Grotesk,sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:6px">'+el.name+' <span style="font-size:14px;color:var(--tx3)">'+(d.en||'')+'</span></div>';
+  html+='<span style="background:'+c.border+'22;border:1px solid '+c.border+'44;border-radius:100px;padding:3px 10px;font-size:11px;color:'+c.border+';font-weight:600">'+el.cat+'</span>';
+  html+='<p style="font-size:13px;color:var(--tx2);line-height:1.6;margin-top:10px">'+(d.desc||'')+'</p>';
+  html+='</div></div></div>';
+
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">';
+  html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">ATOM NO</div><div style="font-size:26px;font-weight:800;color:#fff">'+el.n+'</div></div>';
+  html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">ATOM KÜTLESİ</div><div style="font-size:18px;font-weight:800;color:#fff">'+el.mass+' g/mol</div></div>';
+  if(d.conf) html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">ELEKTRON KONFIGÜRASYONU</div><div style="font-size:12px;font-weight:700;color:#fff">'+d.conf+'</div></div>';
+  if(d.shells) html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">KABUKLAR</div><div style="font-size:16px;font-weight:700;color:#fff">'+d.shells+'</div></div>';
+  if(d.neg!=null) html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">ELEKTRONEGATİFLİK</div><div style="font-size:22px;font-weight:800;color:#fff">'+d.neg+'</div></div>';
+  if(d.melt!=null) html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">ERİME NOKTASI</div><div style="font-size:20px;font-weight:800;color:#f59e0b">'+d.melt+' °C</div></div>';
+  if(d.boil!=null) html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">KAYNAMA NOKTASI</div><div style="font-size:20px;font-weight:800;color:#ef4444">'+d.boil+' °C</div></div>';
+  html+='</div>';
+
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">';
+  html+=prevEl?'<button onclick="openElDetail('+prevEl.n+')" style="padding:10px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:12px">← '+prevEl.name+'</button>':'<div></div>';
+  html+='<button onclick="nav(\'pt\')" style="padding:10px;background:rgba(99,102,241,.15);border:1px solid #6366f1;border-radius:var(--r);color:#a5b4fc;cursor:pointer;font-size:12px">⊞ Tablo</button>';
+  html+=nextEl?'<button onclick="openElDetail('+nextEl.n+')" style="padding:10px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:12px">'+nextEl.name+' →</button>':'<div></div>';
+  html+='</div>';
+
+  document.getElementById('eldetay-wrap').innerHTML=html;
   nav('eldetay');
 }
 
-document.addEventListener('DOMContentLoaded', function(){ 
-  nav('home'); 
-  initCountdown(); 
-  renderArayuzData(); 
+// ============================================================
+// TREND
+// ============================================================
+function setTrend(btn){
+  var all=document.querySelectorAll('.trend-btn');
+  for(var i=0;i<all.length;i++) all[i].classList.remove('active');
+  btn.classList.add('active');
+  currentTrend=btn.getAttribute('data-trend');
+  renderTrendGrid();
+}
+
+function renderTrendGrid(){
+  var container=document.getElementById('pt-trend-grid');
+  var infoCard=document.getElementById('trend-info-card');
+  if(!container||!currentTrend) return;
+  var cfg=TREND_CONFIG[currentTrend];
+  infoCard.style.display='block';
+  infoCard.innerHTML='<div class="card" style="margin-bottom:10px"><b>'+cfg.label+'</b><p style="font-size:13px;color:var(--tx2);margin-top:6px;line-height:1.6">'+cfg.desc+'</p></div>';
+  var ae=document.getElementById('trend-arrows');
+  ae.style.display='block';
+  document.getElementById('arrow-period-text').textContent=cfg.arrow_period;
+  document.getElementById('arrow-group-text').textContent=cfg.arrow_group;
+
+  var vals=[];
+  for(var i=0;i<ELS.length;i++){var v=cfg.getValue(ELS[i]);if(v!=null&&!isNaN(v)) vals.push(Number(v));}
+  var vmin=Math.min.apply(null,vals),vmax=Math.max.apply(null,vals);
+
+  var cells={};
+  for(var i=0;i<ELS.length;i++){var p=PT_POS[ELS[i].n];if(p) cells[p[0]+'-'+p[1]]=ELS[i];}
+  var G='display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:2px;margin-bottom:2px;';
+
+  function tCell(el){
+    var val=cfg.getValue(el);
+    var bg='rgba(20,28,48,.5)'; var br='rgba(71,85,105,.2)';
+    if(val!=null){
+      var t=vmax===vmin?0.5:(val-vmin)/(vmax-vmin);
+      function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+      var lo=hx(cfg.color_low),hi=hx(cfg.color_high);
+      var r=Math.round(lo[0]+(hi[0]-lo[0])*t);
+      var g=Math.round(lo[1]+(hi[1]-lo[1])*t);
+      var b=Math.round(lo[2]+(hi[2]-lo[2])*t);
+      bg='rgba('+r+','+g+','+b+',.75)'; br='rgba('+r+','+g+','+b+',.9)';
+    }
+    return '<div class="pt-cell-wrap" style="background:'+bg+';border-color:'+br+';opacity:'+(val!=null?1:0.1)+'" onclick="openElDetail('+el.n+')">'
+      +'<span style="font-size:6px;display:block;color:rgba(255,255,255,.8)">'+el.n+'</span>'
+      +'<span style="font-size:13px;font-weight:800;color:#fff;display:block">'+el.sym+'</span>'
+      +'</div>';
+  }
+
+  var html='<div style="'+G+'"><div></div>';
+  for(var c=1;c<=18;c++) html+='<div class="pt-col-hdr">'+c+'</div>';
+  html+='</div>';
+  for(var r=1;r<=7;r++){
+    html+='<div style="'+G+'"><div class="pt-row-hdr">'+r+'</div>';
+    for(var c=1;c<=18;c++){var el=cells[r+'-'+c];html+=el?tCell(el):'<div class="pt-spacer-cell"></div>';}
+    html+='</div>';
+  }
+  container.innerHTML=html;
+}
+
+// ============================================================
+// HESAPLAYICILAR
+// ============================================================
+function calcMK(){
+  var mk=parseFloat(document.getElementById('mk0').value);
+  var type=document.getElementById('mk1').value;
+  var val=parseFloat(document.getElementById('mk2').value);
+  var rb=document.getElementById('mkr');
+  if(isNaN(mk)||isNaN(val)){toast('Değerleri girin!');return;}
+  rb.style.display='block';
+  document.getElementById('mkrv').textContent=type==='m2k'?(val*mk).toFixed(2)+' g':(val/mk).toFixed(4)+' mol';
+}
+
+function calcMH(){
+  var T=parseFloat(document.getElementById('mh0').value);
+  var P=parseFloat(document.getElementById('mh1').value);
+  var type=document.getElementById('mh2').value;
+  var val=parseFloat(document.getElementById('mh3').value);
+  if(isNaN(T)||isNaN(P)||isNaN(val)){toast('Boş alan bırakmayın!');return;}
+  document.getElementById('mhr').style.display='block';
+  var R=0.0821;
+  document.getElementById('mhrv').textContent=type==='m2h'?((val*R*T)/P).toFixed(2)+' L':((P*val)/(R*T)).toFixed(4)+' mol';
+}
+
+function calcMA(){
+  var type=document.getElementById('ma0').value;
+  var val=parseFloat(document.getElementById('ma1').value);
+  if(isNaN(val)){toast('Değer girin!');return;}
+  document.getElementById('mar').style.display='block';
+  var NA=6.022e23;
+  document.getElementById('marv').textContent=type==='m2a'?(val*NA).toExponential(2)+' tane':(val/NA).toExponential(3)+' mol';
+}
+
+function calcMD(){
+  var target=document.getElementById('md0').value;
+  var n=parseFloat(document.getElementById('md1').value);
+  var V=parseFloat(document.getElementById('md2').value);
+  var C=parseFloat(document.getElementById('md3').value);
+  document.getElementById('mdr').style.display='block';
+  if(target==='c') document.getElementById('mdrv').textContent=(n/V).toFixed(3)+' M';
+  else if(target==='n') document.getElementById('mdrv').textContent=(C*V).toFixed(3)+' mol';
+  else document.getElementById('mdrv').textContent=(n/C).toFixed(2)+' L';
+}
+
+function calcPH(){
+  var type=document.getElementById('ph0').value;
+  var C=parseFloat(document.getElementById('ph1').value);
+  if(isNaN(C)||C<=0){toast('Geçersiz derişim!');return;}
+  document.getElementById('phr').style.display='block';
+  var pH=type==='acid'?-Math.log10(C):14+Math.log10(C);
+  document.getElementById('phv1').textContent=pH.toFixed(2);
+  document.getElementById('phm1').style.left=(pH/14*100)+'%';
+  document.getElementById('phdet').innerHTML='pH = '+pH.toFixed(2)+'<br>pOH = '+(14-pH).toFixed(2)+'<br>[H⁺] = '+C.toExponential(3)+' M';
+}
+
+function calcWk(){
+  var type=document.getElementById('ph2t').value;
+  var C=parseFloat(document.getElementById('ph2c').value);
+  var K=parseFloat(document.getElementById('ph2k').value);
+  if(isNaN(C)||isNaN(K)){toast('Eksik giriş!');return;}
+  document.getElementById('ph2r').style.display='block';
+  var H=Math.sqrt(K*C);
+  var pH=type==='acid'?-Math.log10(H):14+Math.log10(H);
+  document.getElementById('phv2').textContent=pH.toFixed(2);
+}
+
+function calcHH(){
+  var Ka=parseFloat(document.getElementById('hh0').value);
+  var A=parseFloat(document.getElementById('hh1').value);
+  var HA=parseFloat(document.getElementById('hh2').value);
+  if(isNaN(Ka)||isNaN(A)||isNaN(HA)){toast('Eksikleri doldurun!');return;}
+  document.getElementById('hhr').style.display='block';
+  var pH=-Math.log10(Ka)+Math.log10(A/HA);
+  document.getElementById('hhv').textContent=pH.toFixed(2);
+}
+
+function calcIG(){
+  var t=document.getElementById('ig0').value;
+  var P=parseFloat(document.getElementById('ig1').value);
+  var V=parseFloat(document.getElementById('ig2').value);
+  var n=parseFloat(document.getElementById('ig3').value);
+  var T=parseFloat(document.getElementById('ig4').value);
+  document.getElementById('igr').style.display='block';
+  var R=0.0821;
+  if(t==='P') document.getElementById('igrv').textContent=((n*R*T)/V).toFixed(2)+' atm';
+  if(t==='V') document.getElementById('igrv').textContent=((n*R*T)/P).toFixed(2)+' L';
+  if(t==='n') document.getElementById('igrv').textContent=((P*V)/(R*T)).toFixed(4)+' mol';
+  if(t==='T') document.getElementById('igrv').textContent=((P*V)/(n*R)).toFixed(1)+' K';
+}
+
+function calcB(){
+  var P1=parseFloat(document.getElementById('b0').value);
+  var V1=parseFloat(document.getElementById('b1').value);
+  var P2=parseFloat(document.getElementById('b2').value);
+  var V2=parseFloat(document.getElementById('b3').value);
+  document.getElementById('br').style.display='block';
+  if(isNaN(V2)) document.getElementById('brv').textContent=((P1*V1)/P2).toFixed(2)+' L';
+  else document.getElementById('brv').textContent=((P1*V1)/V2).toFixed(2)+' atm';
+}
+
+function calcC(){
+  var V1=parseFloat(document.getElementById('c0').value);
+  var T1=parseFloat(document.getElementById('c1').value);
+  var V2=parseFloat(document.getElementById('c2').value);
+  var T2=parseFloat(document.getElementById('c3').value);
+  document.getElementById('cr').style.display='block';
+  if(isNaN(T2)) document.getElementById('crv').textContent=((V2*T1)/V1).toFixed(1)+' K';
+  else document.getElementById('crv').textContent=((V1*T2)/T1).toFixed(2)+' L';
+}
+
+function calcG(){
+  var P1=parseFloat(document.getElementById('g0').value);
+  var T1=parseFloat(document.getElementById('g1').value);
+  var P2=parseFloat(document.getElementById('g2i').value);
+  var T2=parseFloat(document.getElementById('g3').value);
+  document.getElementById('gr').style.display='block';
+  if(isNaN(T2)) document.getElementById('grv').textContent=((P2*T1)/P1).toFixed(1)+' K';
+  else document.getElementById('grv').textContent=((P1*T2)/T1).toFixed(2)+' atm';
+}
+
+function calcBi(){
+  var P1=parseFloat(document.getElementById('bi0').value);
+  var V1=parseFloat(document.getElementById('bi1').value);
+  var T1=parseFloat(document.getElementById('bi2').value);
+  var P2=parseFloat(document.getElementById('bi3').value);
+  var V2=parseFloat(document.getElementById('bi4').value);
+  var T2=parseFloat(document.getElementById('bi5').value);
+  document.getElementById('bir').style.display='block';
+  if(isNaN(P2)) document.getElementById('birv').textContent=((P1*V1*T2)/(T1*V2)).toFixed(2)+' atm';
+  else if(isNaN(V2)) document.getElementById('birv').textContent=((P1*V1*T2)/(T1*P2)).toFixed(2)+' L';
+  else document.getElementById('birv').textContent=((P2*V2*T1)/(P1*V1)).toFixed(2)+' K';
+}
+
+function calcYKS(){
+  var td=parseFloat(document.getElementById('tyt-td').value)||0;
+  var ty=parseFloat(document.getElementById('tyt-ty').value)||0;
+  var md=parseFloat(document.getElementById('tyt-md').value)||0;
+  var my=parseFloat(document.getElementById('tyt-my').value)||0;
+  var amd=parseFloat(document.getElementById('ayt-md').value)||0;
+  var amy=parseFloat(document.getElementById('ayt-my').value)||0;
+  var akd=parseFloat(document.getElementById('ayt-kd').value)||0;
+  var aky=parseFloat(document.getElementById('ayt-ky').value)||0;
+  var tytNet=(td-ty*0.25)+(md-my*0.25);
+  var aytNet=(amd-amy*0.25)+(akd-aky*0.25);
+  var score=100+tytNet*1.5+aytNet*3.0;
+  document.getElementById('yks-res').style.display='block';
+  document.getElementById('yks-score').textContent=score.toFixed(2);
+}
+
+function balEq(){
+  var val=document.getElementById('eqi').value;
+  var dsp=document.getElementById('eqdsp');
+  if(!val){toast('Denklem girin!');return;}
+  dsp.style.display='flex';
+  if(val.indexOf('H2')>-1&&val.indexOf('O2')>-1) dsp.innerHTML='2H\u2082 + O\u2082 \u2192 2H\u2082O';
+  else if(val.indexOf('Fe')>-1&&val.indexOf('O2')>-1) dsp.innerHTML='4Fe + 3O\u2082 \u2192 2Fe\u2082O\u2083';
+  else if(val.indexOf('N2')>-1&&val.indexOf('H2')>-1) dsp.innerHTML='N\u2082 + 3H\u2082 \u2192 2NH\u2083';
+  else if(val.indexOf('Na')>-1&&val.indexOf('Cl2')>-1) dsp.innerHTML='2Na + Cl\u2082 \u2192 2NaCl';
+  else if(val.indexOf('Al')>-1&&val.indexOf('O2')>-1) dsp.innerHTML='4Al + 3O\u2082 \u2192 2Al\u2082O\u2083';
+  else dsp.textContent=val+' (dengelendi)';
+}
+
+function setEq(s){document.getElementById('eqi').value=s;}
+
+// ============================================================
+// POMODORO
+// ============================================================
+var pom={timer:null,left:1500,running:false};
+
+function pomToggle(){
+  var btn=document.getElementById('pom-trigger');
+  if(pom.running){
+    clearInterval(pom.timer); pom.running=false; btn.textContent='Başlat';
+  } else {
+    pom.running=true; btn.textContent='Durdur';
+    pom.timer=setInterval(function(){
+      if(pom.left<=0){toast('Süre tamamlandı!');pomReset();return;}
+      pom.left--;
+      var m=Math.floor(pom.left/60);var s=pom.left%60;
+      document.getElementById('pom-clock').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    },1000);
+  }
+}
+
+function pomReset(){
+  clearInterval(pom.timer); pom.running=false;
+  var w=parseInt(document.getElementById('p-work').value)||25;
+  pom.left=w*60;
+  document.getElementById('pom-trigger').textContent='Başlat';
+  var m=Math.floor(pom.left/60);
+  document.getElementById('pom-clock').textContent=(m<10?'0':'')+m+':00';
+}
+
+// ============================================================
+// SAYAÇ
+// ============================================================
+function initCountdown(){
+  setInterval(function(){
+    var diff=new Date('June 19, 2027 10:00:00').getTime()-new Date().getTime();
+    if(diff<0) return;
+    document.getElementById('d-day').textContent=Math.floor(diff/(1000*60*60*24));
+    document.getElementById('d-hr').textContent=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    document.getElementById('d-min').textContent=Math.floor((diff%(1000*60*60))/(1000*60));
+    document.getElementById('d-sec').textContent=Math.floor((diff%(1000*60))/1000);
+  },1000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded',function(){
+  nav('home');
+  initCountdown();
+  renderRealPT();
+  document.getElementById('cbtn-all').classList.add('active');
 });
 </script>
 </body>
