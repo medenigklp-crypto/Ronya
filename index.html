@@ -30,7 +30,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 .hmb{display:none;background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 10px;color:var(--tx2);cursor:pointer;font-size:15px;}
 @media(max-width:900px){nav{display:none;}.hmb{display:block;}}
 .mnav{display:none;position:fixed;top:58px;left:0;right:0;background:var(--sf);border-bottom:1px solid var(--br);padding:10px;z-index:99;flex-wrap:wrap;gap:4px;}
-.mnav#mn{display:none;position:fixed;top:56px;left:0;right:0;background:#0f1117;flex-direction:column;gap:4px;padding:12px;z-index:100;border-bottom:1px solid var(--br);box-shadow:0 8px 32px rgba(0,0,0,.5);max-height:80vh;overflow-y:auto;}
+.mnav#mn{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0f1117;flex-direction:column;gap:8px;padding:80px 16px 16px;z-index:9999;overflow-y:auto;}
 #mn.open{display:flex;}
 #mn button{padding:12px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;text-align:left;cursor:pointer;}
 .mnav button{background:var(--sf2);border:none;color:var(--tx2);font-size:13px;font-family:'Inter',sans-serif;padding:8px 14px;border-radius:var(--rsm);cursor:pointer;font-weight:500;}
@@ -1703,16 +1703,30 @@ var currentTrend = null;
 // NAVİGASYON
 // ============================================================
 function nav(id){
+  // DEBUG: ekrana yaz
+  var dbg=document.getElementById('dbg');
+  if(!dbg){dbg=document.createElement('div');dbg.id='dbg';dbg.style='position:fixed;top:0;left:0;right:0;background:red;color:white;font-size:14px;padding:8px;z-index:99999;';document.body.appendChild(dbg);}
+  dbg.textContent='nav('+id+') calisti - s-'+id+' aranıyor';
+  
   var mn=document.getElementById('mn');
   if(mn) mn.style.display='none';
+  
   var all=['s-home','s-quiz','s-qact','s-res','s-pt','s-eldetay','s-mol','s-eq','s-ph','s-gaz','s-yks','s-pom','s-board','s-sim','s-3d','s-puan','s-atlas'];
   for(var i=0;i<all.length;i++){
     var el=document.getElementById(all[i]);
     if(el) el.style.display='none';
   }
   var target=document.getElementById('s-'+id);
-  if(target) target.style.display='block';
-  window.scrollTo(0,0);
+  if(target){
+    target.style.display='block';
+    dbg.textContent='OK: s-'+id+' gosterildi';
+    dbg.style.background='green';
+  } else {
+    dbg.textContent='HATA: s-'+id+' bulunamadi!';
+  }
+  if(id==='pt') renderRealPT();
+  document.body.scrollTop=0;
+  document.documentElement.scrollTop=0;
 }
 
 function setTab(tabsId, panelsId, i){
@@ -2198,6 +2212,9 @@ function renderPomRounds(){ var e=document.getElementById('pom-rounds'); if(e) e
 
 
 document.addEventListener('DOMContentLoaded', function(){
+  // Ana sayfa göster
+  document.getElementById('s-home').style.display='block';
+  // PT'yi hazırla
   renderRealPT();
   var cb = document.getElementById('cbtn-all');
   if(cb) cb.classList.add('active');
