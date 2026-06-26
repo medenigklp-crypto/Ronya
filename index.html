@@ -695,8 +695,8 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 
 
 <!-- ELEMENT DETAIL PAGE -->
-<div id="s-eldetay" style="display:none">
-  <div class="pw narrow" id="eldetay-wrap" style="padding-bottom:40px;min-height:100px"></div>
+<div id="s-eldetay" style="display:none;background:#08090f;min-height:100vh;padding-top:60px;">
+  <div class="pw narrow" id="eldetay-wrap" style="padding:16px;min-height:200px;color:#fff;background:#08090f;"></div>
 </div>
 
 <!-- MOL -->
@@ -1942,7 +1942,7 @@ function openElDetail(el){
   if(!dbg){dbg=document.createElement('div');dbg.id='dbg';dbg.style='position:fixed;top:0;left:0;right:0;background:purple;color:white;font-size:13px;padding:8px;z-index:99999;';document.body.appendChild(dbg);}
   dbg.textContent = 'openElDetail: el='+(el?el.name:'NULL')+' wrap='+(wrap?'OK':'NULL');
   if(!el||!wrap){ return; }
-  wrap.innerHTML = '<div style="color:white;font-size:18px;padding:40px 20px;min-height:200px">'+el.name+' ('+el.sym+') - Atom No: '+el.n+'</div>';
+  wrap.innerHTML = '<div style="color:#fff!important;font-size:24px;font-weight:700;padding:30px 20px;background:#1a1a2e;border:3px solid #6366f1;border-radius:12px;margin:10px;">'+el.name+' ('+el.sym+') - Atom No: '+el.n+'</div>';
   nav('eldetay');
   return; // GECICI - asil icerik sonra
   if(!el) return;
