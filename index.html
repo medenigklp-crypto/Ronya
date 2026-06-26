@@ -35,8 +35,8 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 #mn button{padding:12px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;text-align:left;cursor:pointer;}
 .mnav button{background:var(--sf2);border:none;color:var(--tx2);font-size:13px;font-family:'Inter',sans-serif;padding:8px 14px;border-radius:var(--rsm);cursor:pointer;font-weight:500;}
 /* SCREENS */
-.sc{display:none;animation:fi .25s ease;width:100%;}
-.sc.active{display:block;width:100%;position:relative;z-index:1;}
+.sc{}
+.sc.active{}
 @keyframes fi{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 @keyframes pop{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
 @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
@@ -442,7 +442,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
     <button id="nb-puan" onclick="nav('puan')">YKS Puan</button>
     <button id="nb-atlas" onclick="nav('atlas');renderAtlas()">YÖK Atlas</button>
   </nav>
-  <button class="hmb" onclick="var mn=document.getElementById('mn');if(mn.classList.contains('open')){mn.classList.remove('open');mn.style.display='none';}else{mn.classList.add('open');mn.style.display='flex';}">☰</button>
+  <button class="hmb" onclick="var mn=document.getElementById('mn');mn.style.display=mn.style.display==='flex'?'none':'flex'">☰</button>
 </header>
 <div class="mnav" id="mn">
   <button onclick="nav('home')">Ana Sayfa</button>
@@ -462,7 +462,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- HOME -->
-<div id="s-home" class="sc active" style="display:block">
+<div id="s-home" style="display:block">
   <div class="hero">
     <div class="badge">⚗️ YKS TYT · AYT · KPSS — Türkçe</div>
     <h1>Kimya İçin<br><em>Her Şey</em><br>Tek Yerde.</h1>
@@ -505,7 +505,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- QUIZ CONFIG -->
-<div id="s-quiz" class="sc">
+<div id="s-quiz" style="display:none">
   <div class="pw narrow">
     <div class="badge" style="margin-bottom:18px">⚗️ Element Testi</div>
     <h1 class="ptitle">Element Testi</h1>
@@ -553,7 +553,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- QUIZ ACTIVE -->
-<div id="s-qact" class="sc">
+<div id="s-qact" style="display:none">
   <div class="pw narrow">
     <div class="qhdr">
       <span class="qi" id="qcnt">Soru 1/10</span>
@@ -572,7 +572,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- RESULTS -->
-<div id="s-res" class="sc">
+<div id="s-res" style="display:none">
   <div class="pw narrow">
     <div class="rhero">
       <span class="rem" id="rem">🏆</span>
@@ -598,7 +598,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- PERIODIC TABLE -->
-<div id="s-pt" class="sc">
+<div id="s-pt" style="display:none">
   <div style="padding:12px 10px 20px;min-height:100vh;background:radial-gradient(ellipse at 50% 0%, rgba(99,102,241,.06) 0%, transparent 70%)">
     <!-- Arama + Sıcaklık -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -695,12 +695,12 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 
 
 <!-- ELEMENT DETAIL PAGE -->
-<div id="s-eldetay" class="sc">
+<div id="s-eldetay" style="display:none">
   <div class="pw narrow" id="eldetay-wrap" style="padding-bottom:40px;min-height:100px"></div>
 </div>
 
 <!-- MOL -->
-<div id="s-mol" class="sc">
+<div id="s-mol" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">⚖️ Mol Hesaplayıcı</h1>
     <p class="psub">Mol, kütle, hacim, atom sayısı ve derişim hesaplamalarını adım adım çöz.</p>
@@ -770,7 +770,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- DENKLEM -->
-<div id="s-eq" class="sc">
+<div id="s-eq" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">⚡ Denklem Dengeleyici</h1>
     <p class="psub">Kimyasal denklemleri yaz, otomatik olarak dengele. + ile reaktanları ayır, → ile ürünleri belirt.</p>
@@ -799,7 +799,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- pH -->
-<div id="s-ph" class="sc">
+<div id="s-ph" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">🧪 pH Hesaplayıcı</h1>
     <p class="psub">Güçlü/zayıf asit-baz pH hesaplama, pOH ve tampon çözelti hesabı.</p>
@@ -862,7 +862,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- GAZ -->
-<div id="s-gaz" class="sc">
+<div id="s-gaz" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">💨 Gaz Yasaları</h1>
     <p class="psub">İdeal gaz yasası, Boyle, Charles, Gay-Lussac ve birleşik gaz yasaları.</p>
@@ -960,7 +960,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- YKS -->
-<div id="s-yks" class="sc">
+<div id="s-yks" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">⏱️ YKS Geri Sayım</h1>
     <p class="psub">TYT ve AYT sınavlarına canlı geri sayım. Her saniyeyi değerlendir.</p>
@@ -988,7 +988,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- POMODORO -->
-<div id="s-pom" class="sc">
+<div id="s-pom" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">🎯 Odaklan</h1>
     <p class="psub">Pomodoro tekniği ile verimli çalış. Çalış → Mola → Tekrar.</p>
@@ -1021,7 +1021,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- LEADERBOARD -->
-<div id="s-board" class="sc">
+<div id="s-board" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">🏆 Skor Tablosu</h1>
     <p class="psub">En yüksek skorlar listelenir. Testi tamamla, isim gir ve sıralamana bak!</p>
@@ -1034,7 +1034,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 
 
 <!-- SİMÜLASYONLAR -->
-<div id="s-sim" class="sc">
+<div id="s-sim" style="display:none">
   <div class="pw wide">
     <h1 class="ptitle">🔭 Kimya Simülasyonları</h1>
     <p class="psub">Maarif müfredatına uygun 17 interaktif simülasyon. Kategori seçerek filtrele.</p>
@@ -1052,7 +1052,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- 3D ARAÇLAR -->
-<div id="s-3d" class="sc">
+<div id="s-3d" style="display:none">
   <div class="pw wide">
     <h1 class="ptitle">🧬 3D Araçlar</h1>
     <p class="psub">Molekülleri, amino asitleri ve lab ekipmanlarını 3 boyutlu incele.</p>
@@ -1104,7 +1104,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- YKS PUAN HESAPLAMA -->
-<div id="s-puan" class="sc">
+<div id="s-puan" style="display:none">
   <div class="pw narrow">
     <h1 class="ptitle">📊 YKS Puan Hesaplama</h1>
     <p class="psub">TYT ve AYT doğru-yanlış sayılarını gir, SAY · EA · SÖZ · DİL ham puanlarını hesapla.</p>
@@ -1144,7 +1144,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- YÖK ATLAS -->
-<div id="s-atlas" class="sc">
+<div id="s-atlas" style="display:none">
   <div class="pw wide">
     <h1 class="ptitle">🎓 YÖK Atlas</h1>
     <p class="psub">Üniversite taban puanları ve başarı sıralamaları. Sıralamana göre uygun programları bul.</p>
@@ -1704,19 +1704,14 @@ var currentTrend = null;
 // ============================================================
 function nav(id){
   var mn=document.getElementById('mn');
-  if(mn){ mn.classList.remove('open'); mn.style.display='none'; }
-
-  var target = document.getElementById('s-'+id);
-  if(!target){ return; }
-  var scs = document.querySelectorAll('.sc');
-  for(var i=0;i<scs.length;i++){ scs[i].classList.remove('active'); scs[i].style.display='none'; }
-  target.classList.add('active'); target.style.display='block';
-  var nbs = document.querySelectorAll('nav button');
-  for(var i=0;i<nbs.length;i++) nbs[i].classList.remove('active');
-  var nb = document.getElementById('nb-'+id.split('-')[0]);
-  if(nb) nb.classList.add('active');
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
+  if(mn) mn.style.display='none';
+  var all=['s-home','s-quiz','s-qact','s-res','s-pt','s-eldetay','s-mol','s-eq','s-ph','s-gaz','s-yks','s-pom','s-board','s-sim','s-3d','s-puan','s-atlas'];
+  for(var i=0;i<all.length;i++){
+    var el=document.getElementById(all[i]);
+    if(el) el.style.display='none';
+  }
+  var target=document.getElementById('s-'+id);
+  if(target) target.style.display='block';
   window.scrollTo(0,0);
 }
 
