@@ -30,13 +30,13 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 .hmb{display:none;background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 10px;color:var(--tx2);cursor:pointer;font-size:15px;}
 @media(max-width:900px){nav{display:none;}.hmb{display:block;}}
 .mnav{display:none;position:fixed;top:58px;left:0;right:0;background:var(--sf);border-bottom:1px solid var(--br);padding:10px;z-index:99;flex-wrap:wrap;gap:4px;}
-.mnav#mn{display:none;position:fixed;top:56px;left:0;right:0;background:#0f1117;flex-direction:column;gap:4px;padding:12px;z-index:999;border-bottom:1px solid var(--br);box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.mnav#mn{display:none;position:fixed;top:56px;left:0;right:0;background:#0f1117;flex-direction:column;gap:4px;padding:12px;z-index:100;border-bottom:1px solid var(--br);box-shadow:0 8px 32px rgba(0,0,0,.5);max-height:80vh;overflow-y:auto;}
 #mn.open{display:flex;}
 #mn button{padding:12px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;text-align:left;cursor:pointer;}
 .mnav button{background:var(--sf2);border:none;color:var(--tx2);font-size:13px;font-family:'Inter',sans-serif;padding:8px 14px;border-radius:var(--rsm);cursor:pointer;font-weight:500;}
 /* SCREENS */
 .sc{display:none;animation:fi .25s ease;width:100%;}
-.sc.active{display:block;width:100%;}
+.sc.active{display:block;width:100%;position:relative;z-index:1;}
 @keyframes fi{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 @keyframes pop{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
 @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
@@ -442,7 +442,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
     <button id="nb-puan" onclick="nav('puan')">YKS Puan</button>
     <button id="nb-atlas" onclick="nav('atlas');renderAtlas()">YÖK Atlas</button>
   </nav>
-  <button class="hmb" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
+  <button class="hmb" onclick="var mn=document.getElementById('mn');if(mn.classList.contains('open')){mn.classList.remove('open');mn.style.display='none';}else{mn.classList.add('open');mn.style.display='flex';}">☰</button>
 </header>
 <div class="mnav" id="mn">
   <button onclick="nav('home')">Ana Sayfa</button>
@@ -462,7 +462,7 @@ nav button.active{background:var(--sf2);color:var(--ac2);}
 </div>
 
 <!-- HOME -->
-<div id="s-home" class="sc active">
+<div id="s-home" class="sc active" style="display:block">
   <div class="hero">
     <div class="badge">⚗️ YKS TYT · AYT · KPSS — Türkçe</div>
     <h1>Kimya İçin<br><em>Her Şey</em><br>Tek Yerde.</h1>
@@ -1704,13 +1704,13 @@ var currentTrend = null;
 // ============================================================
 function nav(id){
   var mn=document.getElementById('mn');
-  if(mn) mn.classList.remove('open');
+  if(mn){ mn.classList.remove('open'); mn.style.display='none'; }
 
   var target = document.getElementById('s-'+id);
-  if(!target){ console.error('Screen not found: s-'+id); return; }
+  if(!target){ return; }
   var scs = document.querySelectorAll('.sc');
-  for(var i=0;i<scs.length;i++) scs[i].classList.remove('active');
-  target.classList.add('active');
+  for(var i=0;i<scs.length;i++){ scs[i].classList.remove('active'); scs[i].style.display='none'; }
+  target.classList.add('active'); target.style.display='block';
   var nbs = document.querySelectorAll('nav button');
   for(var i=0;i<nbs.length;i++) nbs[i].classList.remove('active');
   var nb = document.getElementById('nb-'+id.split('-')[0]);
