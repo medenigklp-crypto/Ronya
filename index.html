@@ -21,8 +21,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 2
 .logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
 .logo-sub{font-size:11px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;margin-left:6px;}
 .hmb{background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 10px;color:var(--tx2);cursor:pointer;font-size:15px;}
-#mn{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0f1117;flex-direction:column;gap:8px;padding:70px 16px 16px;z-index:9999;overflow-y:auto;}
-#mn button{padding:12px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;text-align:left;cursor:pointer;width:100%;}
+#mn{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0f1117;flex-direction:column;gap:6px;padding:60px 16px 80px;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#mn button{padding:10px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:13px;font-weight:600;text-align:left;cursor:pointer;width:100%;}
+#mn-scroll-hint{text-align:center;font-size:12px;color:var(--tx3);padding:8px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
 .pw{max-width:960px;margin:0 auto;padding:40px 16px;}
 .pw.narrow{max-width:660px;}
 .ptitle{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;}
@@ -156,6 +158,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 2
   <button onclick="nav('board')">🏆 Skor</button>
   <button onclick="nav('risk')">⚠️ Risk Piktogramları</button>
   <button onclick="nav('lab')">🧪 Lab Malzemeleri</button>
+  <button onclick="nav('orbital')">⚛️ Orbitaller</button>
+  <button onclick="nav('video')">🎬 Videolar</button>
+  <button onclick="nav('lab3d')">🔬 3D Lab</button>
+  <div id="mn-scroll-hint">↑ Yukarı kaydır ↑</div>
 </div>
 
 <!-- HOME -->
@@ -187,6 +193,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 2
       <div class="tc" onclick="nav('puan')"><div class="ti">📊</div><div class="tt">YKS Puan</div><div class="td">SAY · EA · SÖZ puan hesaplama.</div></div>
       <div class="tc" onclick="nav('risk')"><div class="ti">⚠️</div><div class="tt">Risk Piktogramları</div><div class="td">MEB müfredatı GHS/CLP güvenlik sembolleri ve anlamları.</div></div>
       <div class="tc" onclick="nav('lab')"><div class="ti">🧪</div><div class="tt">Lab Malzemeleri</div><div class="td">25 laboratuvar aracı — kullanım, materyal ve dikkat noktaları.</div></div>
+      <div class="tc" onclick="nav('orbital')"><div class="ti">⚛️</div><div class="tt">Orbitaller</div><div class="td">s, p, d, f orbital simülasyonları — 3D hareketli gösterim.</div></div>
+      <div class="tc" onclick="nav('video')"><div class="ti">🎬</div><div class="tt">Video Dersler</div><div class="td">Kendi yüklediğin video dosyalarını izle.</div></div>
+      <div class="tc" onclick="nav('lab3d')"><div class="ti">🔬</div><div class="tt">3D Lab Malzemeleri</div><div class="td">27 laboratuvar aracının gerçek 3D simülasyonu — döndür, incele.</div></div>
     </div>
   </div>
 </div>
@@ -559,6 +568,120 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 2
 
 
 
+
+
+
+
+
+<!-- ORBİTALLER -->
+<div id="s-orbital" style="display:none">
+  <div style="max-width:660px;margin:0 auto;padding:16px 16px 40px">
+    <h1 class="ptitle">⚛️ Atom Orbitalleri</h1>
+    <p class="psub">3D orbital simülasyonları. Sürükleyerek döndür.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+      <div onclick="orbPickType('s',this)" id="orbt-s" style="background:var(--sf);border:2px solid rgba(0,212,255,0.3);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s">
+        <div style="font-family:Space Grotesk,sans-serif;font-size:28px;font-weight:800;color:#00d4ff">s</div>
+        <div style="font-size:10px;color:var(--tx3)">1 Orbital · 2e⁻</div>
+      </div>
+      <div onclick="orbPickType('p',this)" id="orbt-p" style="background:var(--sf);border:2px solid rgba(0,212,255,0.3);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s">
+        <div style="font-family:Space Grotesk,sans-serif;font-size:28px;font-weight:800;color:#ff6b6b">p</div>
+        <div style="font-size:10px;color:var(--tx3)">3 Orbital · 6e⁻</div>
+      </div>
+      <div onclick="orbPickType('d',this)" id="orbt-d" style="background:var(--sf);border:2px solid rgba(0,212,255,0.3);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s">
+        <div style="font-family:Space Grotesk,sans-serif;font-size:28px;font-weight:800;color:#22b450">d</div>
+        <div style="font-size:10px;color:var(--tx3)">5 Orbital · 10e⁻</div>
+      </div>
+      <div onclick="orbPickType('f',this)" id="orbt-f" style="background:var(--sf);border:2px solid rgba(0,212,255,0.3);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s">
+        <div style="font-family:Space Grotesk,sans-serif;font-size:28px;font-weight:800;color:#a855f7">f</div>
+        <div style="font-size:10px;color:var(--tx3)">7 Orbital · 14e⁻</div>
+      </div>
+    </div>
+
+    <div id="orb-subs" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;min-height:44px;justify-content:center"></div>
+
+    <div style="background:#050510;border:1px solid rgba(0,212,255,0.2);border-radius:16px;overflow:hidden;margin-bottom:10px">
+      <div style="text-align:center;padding:8px;font-size:13px;color:#00d4ff;font-weight:600" id="orb-sim-title">Bir orbital türü seçin</div>
+      <canvas id="orbCanvas" style="width:100%;display:block;background:#050510;touch-action:none" height="360"></canvas>
+      <div style="text-align:center;padding:6px;font-size:11px;color:rgba(255,255,255,0.3)">👆 Sürükleyerek 3D döndür</div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px">
+      <button onclick="orbToggleSpin()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">🔄 Oto-Döndür</button>
+      <button onclick="orbToggleElec()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">⚡ Elektronlar</button>
+      <button onclick="orbSetSpeed(0.3)" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">🐌 Yavaş</button>
+      <button onclick="orbSetSpeed(1.5)" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">🚀 Hızlı</button>
+      <button onclick="orbResetView()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">🎯 Sıfırla</button>
+    </div>
+
+    <div style="background:var(--sf);border:1px solid var(--br);border-left:3px solid #7b2cbf;border-radius:var(--rlg);padding:18px" id="orb-props">
+      <div style="font-size:13px;color:var(--tx2)">Bir orbital türü seçin.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 3D LAB MALZEMELERİ -->
+<div id="s-lab3d" style="display:none">
+  <div style="max-width:900px;margin:0 auto;padding:15px">
+    <h1 class="ptitle">🔬 3D Lab Malzemeleri</h1>
+    <p class="psub">Malzemeye dokunarak 3D detay görünümüne geç.</p>
+    <div id="lab3d-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>
+  </div>
+
+  <!-- Detay modal -->
+  <div id="lab3d-detail" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:600;overflow-y:auto;padding:20px">
+    <button onclick="lab3dClose()" style="position:fixed;top:15px;right:15px;width:40px;height:40px;background:rgba(255,50,50,0.2);border:1px solid rgba(255,50,50,0.5);border-radius:50%;color:#ff6666;font-size:22px;cursor:pointer;z-index:601;display:flex;align-items:center;justify-content:center">×</button>
+    <div id="lab3d-title" style="text-align:center;font-size:1.5rem;color:#00d4ff;margin:50px 0 15px;text-shadow:0 0 15px rgba(0,212,255,0.4)"></div>
+    <canvas id="lab3d-canvas" width="600" height="500" style="width:100%;max-width:500px;height:auto;border-radius:16px;background:#050510;border:2px solid rgba(0,212,255,0.3);display:block;margin:0 auto 20px;touch-action:none"></canvas>
+    <p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:12px">👆 Sürükle döndür · Pinch zoom</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
+      <button onclick="lab3dToggleSpin()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer">🔄 Oto-Döndür</button>
+      <button onclick="lab3dSetSpeed(0.3)" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer">🐌 Yavaş</button>
+      <button onclick="lab3dSetSpeed(1.5)" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer">🚀 Hızlı</button>
+      <button onclick="lab3dResetView()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer">🎯 Sıfırla</button>
+    </div>
+    <div style="max-width:500px;margin:0 auto;background:var(--sf);border:1px solid var(--br);border-left:3px solid #7b2cbf;border-radius:var(--rlg);padding:18px">
+      <div style="font-size:14px;font-weight:600;color:#00d4ff;margin-bottom:12px">📋 Malzeme Özellikleri</div>
+      <div id="lab3d-props"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VİDEOLAR -->
+<div id="s-video" style="display:none">
+  <div class="pw narrow">
+    <h1 class="ptitle">🎬 Video Dersler</h1>
+    <p class="psub">GitHub reposuna eklediğin video dosyalarını buradan izle.</p>
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="slbl">Video Ekle</div>
+      <p style="font-size:13px;color:var(--tx2);margin-bottom:12px;line-height:1.6">
+        Videoyu GitHub reposuna ekle, aşağıya dosya adını yaz (örn: <code style="background:var(--sf3);padding:2px 6px;border-radius:4px">kimya1.mp4</code>)
+      </p>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input type="text" id="video-url-input" class="inp" placeholder="Dosya adı: video.mp4">
+        <button class="btn bp" onclick="addVideo()">Ekle</button>
+      </div>
+      <div style="font-size:11px;color:var(--tx3)">Video GitHub reponda <code>/videos/</code> klasöründe olmalı</div>
+    </div>
+
+    <div id="video-player-wrap" style="display:none;margin-bottom:16px">
+      <div class="card" style="padding:0;overflow:hidden">
+        <video id="video-player" controls style="width:100%;max-height:320px;background:#000;display:block">
+          Tarayıcın video oynatmayı desteklemiyor.
+        </video>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <div id="video-current-name" style="flex:1;font-size:13px;color:var(--tx2);align-self:center"></div>
+        <button class="btn bs" onclick="closeVideo()">✕ Kapat</button>
+      </div>
+    </div>
+
+    <div id="video-list" style="margin-top:8px"></div>
+  </div>
+</div>
+
 <!-- LAB MALZEMELERİ -->
 <div id="s-lab" style="display:none">
   <div class="pw narrow">
@@ -794,9 +917,12 @@ var TREND_CONFIG={
 // ============================================================
 // NAV - Çok basit, sadece display:none/block
 // ============================================================
-var SCREENS=['s-home','s-quiz','s-qact','s-res','s-pt','s-eldetay','s-mol','s-eq','s-ph','s-gaz','s-yks','s-pom','s-puan','s-board','s-risk','s-lab'];
+var SCREENS=['s-home','s-quiz','s-qact','s-res','s-pt','s-eldetay','s-mol','s-eq','s-ph','s-gaz','s-yks','s-pom','s-puan','s-board','s-risk','s-lab','s-orbital','s-video','s-lab3d'];
 
 function nav(id){
+  if (typeof orbAnimId2 !== 'undefined' && orbAnimId2 && id !== 'orbital') { cancelAnimationFrame(orbAnimId2); orbAnimId2=null; }
+  if (id === 'orbital') { setTimeout(function(){ initOrbitalPage(); }, 100); }
+  if (id === 'lab3d') { setTimeout(function(){ initLab3dPage(); }, 100); }
   var mn=document.getElementById('mn');
   if(mn) mn.style.display='none';
   for(var i=0;i<SCREENS.length;i++){
@@ -1769,6 +1895,862 @@ function closeLabDetail() {
   document.getElementById('lab-detail').style.display = 'none';
 }
 
+
+// ============================================================
+// ============================================================
+// ============================================================
+// ============================================================
+// ============================================================
+// ============================================================
+// ORBİTAL SİMÜLASYON - Gerçek 3D Teardrop Loblar
+// ============================================================
+var orbC=null, orbCtx2=null, orbW=600, orbH=420;
+var orbT=0, orbAutoSpin=true, orbElec=true, orbSpd=1;
+var orbActiveType=null, orbActiveSub=null;
+var orbAnimId2=null;
+var orbRotX=0.4, orbRotY=0.3;
+var orbDrag=false, orbLX=0, orbLY=0;
+
+var ORB_DATA = {
+  s:{subs:[{name:'1s',ml:0,desc:'1s orbitali en düşük enerjili orbitaldir. Küresel simetri. 2 elektron barındırır.'}],l:0,max:2,shape:'Küresel',color:[0,212,255]},
+  p:{subs:[{name:'px',ml:-1,desc:'x ekseni boyunca iki loblu halter şekli. Düğüm düzlemi yz.'},{name:'py',ml:0,desc:'y ekseni boyunca iki loblu. Düğüm düzlemi xz.'},{name:'pz',ml:1,desc:'z ekseni boyunca iki loblu. Düğüm düzlemi xy.'}],l:1,max:6,shape:'Çift Loblu (Halter)',color:[255,107,107]},
+  d:{subs:[{name:'dxy',ml:-2,desc:'xy düzleminde eksenler ARASINDA 4 yapraklı.'},{name:'dyz',ml:-1,desc:'yz düzleminde eksenler arasında 4 yapraklı.'},{name:'dxz',ml:0,desc:'xz düzleminde eksenler arasında 4 yapraklı.'},{name:'dx²-y²',ml:1,desc:'x ve y eksenleri ÜZERİNDE 4 yapraklı.'},{name:'dz²',ml:2,desc:'z ekseninde 2 büyük lob + ortada halka (torus).'}],l:2,max:10,shape:'Klover / Torus',color:[34,180,80]},
+  f:{subs:[{name:'fxyz',ml:-3,desc:'Köşegenler boyunca 8 lob.'},{name:'fz(x²-y²)',ml:-2,desc:'z etrafında 8 lob.'},{name:'fy(3x²-y²)',ml:-1,desc:'6 loplu karmaşık yapı.'},{name:'fz³',ml:0,desc:'z ekseninde 2 büyük lob + ekvatoral 6 küçük lob.'},{name:'fx(3y²-x²)',ml:1,desc:'x boyunca 6 lop.'},{name:'fz(x²-y²)2',ml:2,desc:'4 lob eksenler üzerinde.'},{name:'fx³',ml:3,desc:'8 loplu x ağırlıklı yapı.'}],l:3,max:14,shape:'6-8 Lob',color:[168,85,247]}
+};
+
+function orbRgba(rgb,a){return 'rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+','+a+')';}
+
+function orbPickType(type, el) {
+  orbActiveType=type; orbActiveSub=null;
+  var ids=['s','p','d','f'];
+  for(var i=0;i<ids.length;i++){
+    var card=document.getElementById('orbt-'+ids[i]);
+    if(card){card.style.borderColor='rgba(0,212,255,0.3)';card.style.background='var(--sf)';card.style.boxShadow='none';}
+  }
+  el.style.borderColor='#00d4ff'; el.style.background='rgba(0,212,255,0.15)'; el.style.boxShadow='0 0 20px rgba(0,212,255,0.25)';
+  var d=ORB_DATA[type];
+  var sw=document.getElementById('orb-subs'); sw.innerHTML='';
+  for(var j=0;j<d.subs.length;j++){
+    (function(sub,idx){
+      var btn=document.createElement('button');
+      btn.style.cssText='padding:9px 16px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);border-radius:25px;cursor:pointer;font-size:13px;font-weight:700;font-family:Inter,sans-serif';
+      btn.textContent=sub.name; btn.id='orbs-'+idx;
+      btn.onclick=function(){orbPickSub(type,idx,btn);};
+      sw.appendChild(btn);
+    })(d.subs[j],j);
+  }
+  document.getElementById('orb-sim-title').textContent=type.toUpperCase()+' Orbitalleri';
+  orbUpdateInfo(type,null); orbT=0; orbRotX=0.4; orbRotY=0.3;
+}
+
+function orbPickSub(type,idx,el){
+  orbActiveSub=idx;
+  var btns=document.getElementById('orb-subs').querySelectorAll('button');
+  for(var i=0;i<btns.length;i++){btns[i].style.borderColor='rgba(255,255,255,0.2)';btns[i].style.color='rgba(255,255,255,0.7)';btns[i].style.background='rgba(255,255,255,0.05)';btns[i].style.boxShadow='none';}
+  el.style.borderColor='#00ff88'; el.style.color='#00ff88'; el.style.background='rgba(0,255,136,0.15)'; el.style.boxShadow='0 0 12px rgba(0,255,136,0.3)';
+  document.getElementById('orb-sim-title').textContent=ORB_DATA[type].subs[idx].name+' Orbitali (3D)';
+  orbUpdateInfo(type,idx); orbT=0; orbRotX=0.4; orbRotY=0.3;
+}
+
+function orbUpdateInfo(type,subIdx){
+  var d=ORB_DATA[type]; var sub=subIdx!==null?d.subs[subIdx]:null;
+  var cols={s:'#00d4ff',p:'#ff6b6b',d:'#22b450',f:'#a855f7'}; var col=cols[type];
+  var html='<div style="font-size:14px;font-weight:600;color:'+col+';margin-bottom:10px">📋 Orbital Özellikleri</div>';
+  var rows=[['Tip',type.toUpperCase()],['Alt Orbital',sub?sub.name:'Seçiniz'],['l (Açısal Momentum)',d.l],['mₗ (Manyetik)',sub?sub.ml:d.subs.map(function(s){return s.ml;}).join(', ')],['Maks. Elektron',d.max],['Şekil',d.shape]];
+  for(var i=0;i<rows.length;i++){
+    html+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px">';
+    html+='<span style="color:var(--tx3)">'+rows[i][0]+'</span><span style="color:'+col+';font-weight:700">'+rows[i][1]+'</span></div>';
+  }
+  if(sub){html+='<div style="margin-top:10px;padding:10px;background:rgba(0,212,255,0.06);border-radius:8px;font-size:13px;line-height:1.6;color:var(--tx2)">'+sub.desc+'</div>';}
+  document.getElementById('orb-props').innerHTML=html;
+}
+
+function orbProject(x,y,z){
+  var y1=y*Math.cos(orbRotX)-z*Math.sin(orbRotX);
+  var z1=y*Math.sin(orbRotX)+z*Math.cos(orbRotX);
+  var x2=x*Math.cos(orbRotY)+z1*Math.sin(orbRotY);
+  var z2=-x*Math.sin(orbRotY)+z1*Math.cos(orbRotY);
+  var sc=280/(350+z2);
+  return {x:orbW/2+x2*sc, y:orbH/2+y1*sc, z:z2, scale:sc};
+}
+
+function orbClear(){
+  orbCtx2.clearRect(0,0,orbW,orbH);
+  orbCtx2.fillStyle='#050510'; orbCtx2.fillRect(0,0,orbW,orbH);
+}
+
+function orbAxes(){
+  var axes=[{x:140,y:0,z:0,l:'x',c:'#ff5555'},{x:0,y:-140,z:0,l:'y',c:'#55ff55'},{x:0,y:0,z:140,l:'z',c:'#5555ff'}];
+  for(var i=0;i<axes.length;i++){
+    var p=orbProject(axes[i].x,axes[i].y,axes[i].z), o=orbProject(0,0,0);
+    orbCtx2.strokeStyle='rgba(255,255,255,0.12)'; orbCtx2.lineWidth=1.5;
+    orbCtx2.beginPath(); orbCtx2.moveTo(o.x,o.y); orbCtx2.lineTo(p.x,p.y); orbCtx2.stroke();
+    orbCtx2.fillStyle=axes[i].c; orbCtx2.font='bold 11px sans-serif'; orbCtx2.textAlign='center';
+    orbCtx2.fillText(axes[i].l, p.x+10, p.y-5);
+  }
+}
+
+function orbNucleus(){
+  var p=orbProject(0,0,0), r=8*p.scale;
+  orbCtx2.beginPath(); orbCtx2.arc(p.x,p.y,r+10,0,2*Math.PI); orbCtx2.fillStyle='rgba(255,255,255,0.08)'; orbCtx2.fill();
+  orbCtx2.beginPath(); orbCtx2.arc(p.x-2,p.y-2,r*0.7,0,2*Math.PI); orbCtx2.fillStyle='#ff3333'; orbCtx2.fill();
+  orbCtx2.beginPath(); orbCtx2.arc(p.x+2,p.y+2,r*0.7,0,2*Math.PI); orbCtx2.fillStyle='#3366ff'; orbCtx2.fill();
+  orbCtx2.beginPath(); orbCtx2.arc(p.x,p.y,r*0.5,0,2*Math.PI); orbCtx2.fillStyle='#ff5555'; orbCtx2.fill();
+}
+
+function orbElecDot(x,y,z){
+  if(!orbElec) return;
+  var p=orbProject(x,y,z), r=4*p.scale;
+  orbCtx2.beginPath(); orbCtx2.arc(p.x,p.y,r+5,0,2*Math.PI); orbCtx2.fillStyle='rgba(255,255,0,0.15)'; orbCtx2.fill();
+  orbCtx2.beginPath(); orbCtx2.arc(p.x,p.y,r,0,2*Math.PI); orbCtx2.fillStyle='#ffff00'; orbCtx2.fill();
+}
+
+// Gerçek teardrop lob geometrisi
+function orbLobePoint(cx,cy,cz,length,radius,u,v,dir){
+  var perp1={x:0,y:0,z:0}, perp2={x:0,y:0,z:0};
+  if(Math.abs(dir.y)<0.9){perp1={x:-dir.z,y:0,z:dir.x};}
+  else{perp1={x:1,y:0,z:0};}
+  var len1=Math.sqrt(perp1.x*perp1.x+perp1.y*perp1.y+perp1.z*perp1.z);
+  perp1.x/=len1; perp1.y/=len1; perp1.z/=len1;
+  perp2.x=dir.y*perp1.z-dir.z*perp1.y;
+  perp2.y=dir.z*perp1.x-dir.x*perp1.z;
+  perp2.z=dir.x*perp1.y-dir.y*perp1.x;
+  var dist=length*v*v*(3-2*v);
+  var neckR=radius*0.3, r;
+  if(v<0.5){var tv=v/0.5; r=neckR+(radius-neckR)*Math.sin(tv*Math.PI/2);}
+  else{var tv=(v-0.5)/0.5; r=radius*Math.cos(tv*Math.PI/2);}
+  var x=cx+dir.x*dist+perp1.x*r*Math.cos(u)+perp2.x*r*Math.sin(u);
+  var y=cy+dir.y*dist+perp1.y*r*Math.cos(u)+perp2.y*r*Math.sin(u);
+  var z=cz+dir.z*dist+perp1.z*r*Math.cos(u)+perp2.z*r*Math.sin(u);
+  return orbProject(x,y,z);
+}
+
+function orbDrawLobe(cx,cy,cz,length,radius,rgb,alpha,dir){
+  var slices=24, stacks=20, tris=[];
+  for(var i=0;i<slices;i++){
+    for(var j=0;j<stacks;j++){
+      var u1=(2*Math.PI/slices)*i, u2=(2*Math.PI/slices)*(i+1);
+      var v1=j/stacks, v2=(j+1)/stacks;
+      var co=[orbLobePoint(cx,cy,cz,length,radius,u1,v1,dir),
+              orbLobePoint(cx,cy,cz,length,radius,u2,v1,dir),
+              orbLobePoint(cx,cy,cz,length,radius,u2,v2,dir),
+              orbLobePoint(cx,cy,cz,length,radius,u1,v2,dir)];
+      tris.push({p:[co[0],co[1],co[2]],avgZ:(co[0].z+co[1].z+co[2].z)/3});
+      tris.push({p:[co[0],co[2],co[3]],avgZ:(co[0].z+co[2].z+co[3].z)/3});
+    }
+  }
+  tris.sort(function(a,b){return b.avgZ-a.avgZ;});
+  for(var ti=0;ti<tris.length;ti++){
+    var tr=tris[ti];
+    var depth=Math.max(0.15,Math.min(1,1-(tr.avgZ+120)/350));
+    orbCtx2.beginPath(); orbCtx2.moveTo(tr.p[0].x,tr.p[0].y); orbCtx2.lineTo(tr.p[1].x,tr.p[1].y); orbCtx2.lineTo(tr.p[2].x,tr.p[2].y); orbCtx2.closePath();
+    orbCtx2.fillStyle=orbRgba(rgb,alpha*depth*0.6); orbCtx2.fill();
+    orbCtx2.strokeStyle=orbRgba(rgb,0.3*depth); orbCtx2.lineWidth=0.5; orbCtx2.stroke();
+  }
+}
+
+function orbDrawEllipsoid(cx,cy,cz,rx,ry,rz,rgb,alpha){
+  var slices=20, stacks=14, tris=[];
+  for(var i=0;i<slices;i++){
+    for(var j=0;j<stacks;j++){
+      var u1=(2*Math.PI/slices)*i, u2=(2*Math.PI/slices)*(i+1);
+      var v1=(Math.PI/stacks)*j-Math.PI/2, v2=(Math.PI/stacks)*(j+1)-Math.PI/2;
+      function sp(u,v){
+        var x=rx*Math.cos(v)*Math.cos(u), y=ry*Math.cos(v)*Math.sin(u), z=rz*Math.sin(v);
+        return orbProject(cx+x,cy+y,cz+z);
+      }
+      var co=[sp(u1,v1),sp(u2,v1),sp(u2,v2),sp(u1,v2)];
+      tris.push({p:[co[0],co[1],co[2]],avgZ:(co[0].z+co[1].z+co[2].z)/3});
+      tris.push({p:[co[0],co[2],co[3]],avgZ:(co[0].z+co[2].z+co[3].z)/3});
+    }
+  }
+  tris.sort(function(a,b){return b.avgZ-a.avgZ;});
+  for(var ti=0;ti<tris.length;ti++){
+    var tr=tris[ti];
+    var depth=Math.max(0.15,Math.min(1,1-(tr.avgZ+120)/350));
+    orbCtx2.beginPath(); orbCtx2.moveTo(tr.p[0].x,tr.p[0].y); orbCtx2.lineTo(tr.p[1].x,tr.p[1].y); orbCtx2.lineTo(tr.p[2].x,tr.p[2].y); orbCtx2.closePath();
+    orbCtx2.fillStyle=orbRgba(rgb,alpha*depth*0.55); orbCtx2.fill();
+    orbCtx2.strokeStyle=orbRgba(rgb,0.25*depth); orbCtx2.lineWidth=0.4; orbCtx2.stroke();
+  }
+}
+
+function orbDrawTorus(cx,cy,cz,majorR,minorR,rgb,alpha){
+  var slices=24, stacks=12, tris=[];
+  function tp(u,v){
+    var x=cx+(majorR+minorR*Math.cos(v))*Math.cos(u);
+    var y=cy+(majorR+minorR*Math.cos(v))*Math.sin(u);
+    var z=cz+minorR*Math.sin(v);
+    return orbProject(x,y,z);
+  }
+  for(var i=0;i<slices;i++){
+    for(var j=0;j<stacks;j++){
+      var u1=(2*Math.PI/slices)*i, u2=(2*Math.PI/slices)*(i+1);
+      var v1=(2*Math.PI/stacks)*j, v2=(2*Math.PI/stacks)*(j+1);
+      var co=[tp(u1,v1),tp(u2,v1),tp(u2,v2),tp(u1,v2)];
+      tris.push({p:[co[0],co[1],co[2]],avgZ:(co[0].z+co[1].z+co[2].z)/3});
+      tris.push({p:[co[0],co[2],co[3]],avgZ:(co[0].z+co[2].z+co[3].z)/3});
+    }
+  }
+  tris.sort(function(a,b){return b.avgZ-a.avgZ;});
+  for(var ti=0;ti<tris.length;ti++){
+    var tr=tris[ti];
+    var depth=Math.max(0.15,Math.min(1,1-(tr.avgZ+100)/350));
+    orbCtx2.beginPath(); orbCtx2.moveTo(tr.p[0].x,tr.p[0].y); orbCtx2.lineTo(tr.p[1].x,tr.p[1].y); orbCtx2.lineTo(tr.p[2].x,tr.p[2].y); orbCtx2.closePath();
+    orbCtx2.fillStyle=orbRgba(rgb,alpha*depth*0.5); orbCtx2.fill();
+    orbCtx2.strokeStyle=orbRgba(rgb,0.2*depth); orbCtx2.lineWidth=0.5; orbCtx2.stroke();
+  }
+}
+
+function orbNodalPlane(subIdx){
+  var sz=75, step=12;
+  for(var i=-sz;i<=sz;i+=step){
+    for(var j=-sz;j<=sz;j+=step){
+      var x=0,y=0,z=0;
+      if(subIdx===0){y=i;z=j;} else if(subIdx===1){x=i;z=j;} else{x=i;y=j;}
+      var p=orbProject(x,y,z);
+      orbCtx2.beginPath(); orbCtx2.arc(p.x,p.y,1.5,0,2*Math.PI); orbCtx2.fillStyle='rgba(255,255,255,0.07)'; orbCtx2.fill();
+    }
+  }
+}
+
+function orbNodalLine(x1,y1,z1,x2,y2,z2){
+  var p1=orbProject(x1,y1,z1), p2=orbProject(x2,y2,z2);
+  orbCtx2.strokeStyle='rgba(255,255,255,0.12)'; orbCtx2.lineWidth=1; orbCtx2.setLineDash([4,4]);
+  orbCtx2.beginPath(); orbCtx2.moveTo(p1.x,p1.y); orbCtx2.lineTo(p2.x,p2.y); orbCtx2.stroke();
+  orbCtx2.setLineDash([]);
+}
+
+function orbDrawS(rgb){
+  var pulse=1+Math.sin(orbT*2)*0.04;
+  orbDrawEllipsoid(0,0,0,85*pulse,85*pulse,85*pulse,rgb,0.75);
+  orbNucleus();
+  if(orbElec){orbElecDot(65*Math.cos(orbT*2),65*Math.sin(orbT*2)*0.6,25*Math.sin(orbT*2)); orbElecDot(65*Math.cos(orbT*2+Math.PI),65*Math.sin(orbT*2+Math.PI)*0.6,25*Math.sin(orbT*2+Math.PI));}
+}
+
+function orbDrawP(subIdx,rgb){
+  orbAxes(); orbNucleus();
+  var dirs=[{x:1,y:0,z:0},{x:0,y:1,z:0},{x:0,y:0,z:1}];
+  var dir=dirs[subIdx];
+  orbDrawLobe(0,0,0,75,32,rgb,0.78,dir);
+  orbDrawLobe(0,0,0,75,32,rgb,0.78,{x:-dir.x,y:-dir.y,z:-dir.z});
+  orbNodalPlane(subIdx);
+  if(orbElec){var r=85,a=orbT*1.8; orbElecDot(r*Math.cos(a),r*Math.sin(a)*0.5,0); orbElecDot(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*0.5,0);}
+}
+
+function orbDrawD(subIdx,rgb){
+  orbAxes(); orbNucleus();
+  if(subIdx===4){
+    orbDrawLobe(0,0,0,80,28,rgb,0.8,{x:0,y:0,z:1});
+    orbDrawLobe(0,0,0,80,28,rgb,0.8,{x:0,y:0,z:-1});
+    orbDrawTorus(0,0,0,55,16,rgb,0.45);
+  } else if(subIdx===3){
+    var d4=[{x:1,y:0,z:0},{x:-1,y:0,z:0},{x:0,y:1,z:0},{x:0,y:-1,z:0}];
+    for(var i=0;i<4;i++) orbDrawLobe(0,0,0,70,26,rgb,0.75,d4[i]);
+    orbNodalLine(55,55,0,-55,-55,0); orbNodalLine(-55,55,0,55,-55,0);
+  } else {
+    var planeDirs=[
+      [{x:0.707,y:0.707,z:0},{x:-0.707,y:0.707,z:0},{x:-0.707,y:-0.707,z:0},{x:0.707,y:-0.707,z:0}],
+      [{x:0,y:0.707,z:0.707},{x:0,y:-0.707,z:0.707},{x:0,y:-0.707,z:-0.707},{x:0,y:0.707,z:-0.707}],
+      [{x:0.707,y:0,z:0.707},{x:-0.707,y:0,z:0.707},{x:-0.707,y:0,z:-0.707},{x:0.707,y:0,z:-0.707}]
+    ];
+    var pd=planeDirs[subIdx];
+    for(var i=0;i<pd.length;i++) orbDrawLobe(0,0,0,68,25,rgb,0.72,pd[i]);
+    if(subIdx===0){orbNodalLine(-70,0,0,70,0,0); orbNodalLine(0,-70,0,0,70,0);}
+  }
+  if(orbElec){var r=95,a=orbT*1.5; orbElecDot(r*Math.cos(a),r*Math.sin(a)*0.5,0); orbElecDot(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*0.5,0);}
+}
+
+function orbDrawF(subIdx,rgb){
+  orbAxes(); orbNucleus();
+  var cfgs=[
+    {dirs:[{x:0.577,y:0.577,z:0.577},{x:-0.577,y:0.577,z:0.577},{x:-0.577,y:-0.577,z:0.577},{x:0.577,y:-0.577,z:0.577},{x:0.577,y:0.577,z:-0.577},{x:-0.577,y:0.577,z:-0.577},{x:-0.577,y:-0.577,z:-0.577},{x:0.577,y:-0.577,z:-0.577}],len:62,rad:22},
+    {dirs:[{x:0.707,y:0,z:0.707},{x:-0.707,y:0,z:0.707},{x:0,y:0.707,z:0.707},{x:0,y:-0.707,z:0.707},{x:0.707,y:0,z:-0.707},{x:-0.707,y:0,z:-0.707},{x:0,y:0.707,z:-0.707},{x:0,y:-0.707,z:-0.707}],len:58,rad:20},
+    {dirs:[{x:0.866,y:0.5,z:0},{x:-0.866,y:0.5,z:0},{x:0,y:1,z:0},{x:0.866,y:-0.5,z:0},{x:-0.866,y:-0.5,z:0},{x:0,y:-1,z:0}],len:60,rad:21},
+    {special:'z3',len:80,rad:28},
+    {dirs:[{x:1,y:0,z:0},{x:0.5,y:0.866,z:0},{x:0.5,y:-0.866,z:0},{x:-0.5,y:0.866,z:0},{x:-0.5,y:-0.866,z:0},{x:-1,y:0,z:0}],len:60,rad:21},
+    {dirs:[{x:0.707,y:0,z:0.707},{x:-0.707,y:0,z:0.707},{x:0.707,y:0,z:-0.707},{x:-0.707,y:0,z:-0.707}],len:65,rad:23},
+    {dirs:[{x:1,y:0,z:0},{x:0.707,y:0.707,z:0},{x:0.707,y:0,z:0.707},{x:0.707,y:0,z:-0.707},{x:0.707,y:-0.707,z:0},{x:0,y:1,z:0},{x:0,y:0,z:1},{x:0,y:0,z:-1}],len:58,rad:20}
+  ];
+  var cfg=cfgs[subIdx]||cfgs[0];
+  if(cfg.special==='z3'){
+    orbDrawLobe(0,0,0,80,28,rgb,0.8,{x:0,y:0,z:1}); orbDrawLobe(0,0,0,80,28,rgb,0.8,{x:0,y:0,z:-1});
+    for(var i=0;i<6;i++){var a=(2*Math.PI/6)*i; orbDrawLobe(0,0,0,35,14,rgb,0.5,{x:Math.cos(a),y:Math.sin(a),z:0});}
+  } else {
+    for(var i=0;i<cfg.dirs.length;i++) orbDrawLobe(0,0,0,cfg.len,cfg.rad,rgb,0.68,cfg.dirs[i]);
+  }
+  if(subIdx===2||subIdx===3||subIdx===6) orbDrawEllipsoid(0,0,0,18,18,18,rgb,0.2);
+  if(orbElec){var r=105,a=orbT*1.2; orbElecDot(r*Math.cos(a),r*Math.sin(a)*0.5,0); orbElecDot(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*0.5,0);}
+}
+
+function orbLoop(){
+  if(!orbC||!orbCtx2) return;
+  orbAnimId2=requestAnimationFrame(orbLoop);
+  var rect=orbC.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  if(Math.abs(orbC.width-rect.width*dpr)>2){
+    orbC.width=rect.width*dpr; orbC.height=420*dpr;
+    orbCtx2.scale(dpr,dpr); orbW=rect.width; orbH=420;
+  }
+  orbClear();
+  if(orbAutoSpin&&!orbDrag) orbRotY+=0.008*orbSpd;
+  if(orbActiveSub!==null) orbT+=0.015*orbSpd;
+  if(!orbActiveType||orbActiveSub===null){
+    orbCtx2.fillStyle='rgba(255,255,255,0.3)'; orbCtx2.font='bold 14px sans-serif'; orbCtx2.textAlign='center';
+    orbCtx2.fillText('Bir orbital türü ve alt orbital seçin',orbW/2,orbH/2); return;
+  }
+  var d=ORB_DATA[orbActiveType], rgb=d.color;
+  if(orbActiveType==='s') orbDrawS(rgb);
+  else if(orbActiveType==='p') orbDrawP(orbActiveSub,rgb);
+  else if(orbActiveType==='d') orbDrawD(orbActiveSub,rgb);
+  else orbDrawF(orbActiveSub,rgb);
+  orbCtx2.textAlign='left'; orbCtx2.font='10px sans-serif';
+  orbCtx2.fillStyle='rgba(255,255,255,0.35)'; orbCtx2.fillText('\u25cf Proton  \u25cb N\u00f6tron',8,16);
+  orbCtx2.fillStyle='#ffff00'; orbCtx2.fillText('\u25cf Elektron',8,28);
+  orbCtx2.fillStyle='rgba(255,255,255,0.2)'; orbCtx2.fillText('\ud83d\udc46 S\u00fcr\u00fckleyerek 3D d\u00f6nd\u00fcr',8,orbH-10);
+}
+
+function orbToggleSpin(){orbAutoSpin=!orbAutoSpin;}
+function orbToggleElec(){orbElec=!orbElec;}
+function orbSetSpeed(v){orbSpd=v;}
+function orbResetView(){orbRotX=0.4; orbRotY=0.3;}
+
+function initOrbitalPage(){
+  orbC=document.getElementById('orbCanvas');
+  if(!orbC) return;
+  orbCtx2=orbC.getContext('2d');
+  orbW=orbC.getBoundingClientRect().width||300; orbH=420;
+  orbC.onmousedown=function(e){orbDrag=true;orbLX=e.clientX;orbLY=e.clientY;};
+  orbC.onmousemove=function(e){if(!orbDrag)return;orbRotY+=(e.clientX-orbLX)*0.01;orbRotX+=(e.clientY-orbLY)*0.01;orbLX=e.clientX;orbLY=e.clientY;};
+  orbC.onmouseup=orbC.onmouseleave=function(){orbDrag=false;};
+  orbC.ontouchstart=function(e){orbDrag=true;orbLX=e.touches[0].clientX;orbLY=e.touches[0].clientY;e.preventDefault();};
+  orbC.ontouchmove=function(e){if(!orbDrag)return;orbRotY+=(e.touches[0].clientX-orbLX)*0.015;orbRotX+=(e.touches[0].clientY-orbLY)*0.015;orbLX=e.touches[0].clientX;orbLY=e.touches[0].clientY;e.preventDefault();};
+  orbC.ontouchend=function(){orbDrag=false;};
+  if(orbAnimId2) cancelAnimationFrame(orbAnimId2);
+  orbLoop();
+}
+
+// ============================================================
+// VİDEO SİSTEMİ
+// ============================================================
+var vidList2=[];
+
+function addVidNew(){
+  var url=document.getElementById('vid-url').value.trim();
+  var title=document.getElementById('vid-title').value.trim()||'Video';
+  if(!url){toast('URL girin!');return;}
+  if(url.indexOf('github.com')>-1&&url.indexOf('/blob/')>-1) url=url.replace('github.com','raw.githubusercontent.com').replace('/blob/','/');
+  vidList2.unshift({id:Date.now(),url:url,title:title});
+  document.getElementById('vid-url').value=''; document.getElementById('vid-title').value='';
+  renderVidList2(); toast('Video eklendi!');
+}
+
+function renderVidList2(){
+  var container=document.getElementById('vid-list');
+  if(!container) return;
+  if(vidList2.length===0){container.innerHTML='<div style="text-align:center;padding:40px;color:var(--tx3)">Henüz video eklenmedi.</div>';return;}
+  var html='';
+  for(var i=0;i<vidList2.length;i++){
+    (function(v,idx){
+      html+='<div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);overflow:hidden;margin-bottom:12px">';
+      html+='<video controls playsinline preload="metadata" style="width:100%;display:block;background:#000;max-height:280px"><source src="'+v.url+'" type="video/mp4">Video oynatılamıyor.</video>';
+      html+='<div style="padding:12px 14px;display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="font-size:14px;font-weight:600;color:#fff">'+v.title+'</div></div>';
+      html+='<button onclick="removeVid2('+idx+')" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:var(--rsm);color:#ef4444;padding:6px 12px;cursor:pointer;font-size:12px">Sil</button></div></div>';
+    })(vidList2[i],i);
+  }
+  container.innerHTML=html;
+}
+
+function removeVid2(idx){vidList2.splice(idx,1);renderVidList2();}
+
+// ============================================================
+// 3D LAB MALZEMELERİ
+// ============================================================
+var lab3dC=null, lab3dCtx=null, lab3dW=600, lab3dH=500;
+var lab3dRotX=0.4, lab3dRotY=0.3, lab3dZoom=1;
+var lab3dDrag=false, lab3dLX=0, lab3dLY=0, lab3dStartDist=0;
+var lab3dSpin=true, lab3dSpd=1, lab3dT=0;
+var lab3dActive=null, lab3dAnimId=null;
+
+function lab3dRotate(x,y,z){
+  var y1=y*Math.cos(lab3dRotX)-z*Math.sin(lab3dRotX);
+  var z1=y*Math.sin(lab3dRotX)+z*Math.cos(lab3dRotX);
+  var x2=x*Math.cos(lab3dRotY)+z1*Math.sin(lab3dRotY);
+  var z2=-x*Math.sin(lab3dRotY)+z1*Math.cos(lab3dRotY);
+  return {x:x2,y:y1,z:z2};
+}
+function lab3dProj(x,y,z){
+  var r=lab3dRotate(x,y,z);
+  var sc=280*lab3dZoom/(350+r.z);
+  return {x:lab3dW/2+r.x*sc, y:lab3dH/2+r.y*sc, z:r.z, scale:sc};
+}
+function lab3dRgba(r,g,b,a){return 'rgba('+r+','+g+','+b+','+a+')';}
+
+function lab3dMesh(tris,br,bg,bb,alpha){
+  tris.sort(function(a,b){return b.avgZ-a.avgZ;});
+  for(var i=0;i<tris.length;i++){
+    var tri=tris[i];
+    var depth=Math.max(0.15,Math.min(1,1-(tri.avgZ+150)/400));
+    lab3dCtx.beginPath(); lab3dCtx.moveTo(tri.p[0].x,tri.p[0].y); lab3dCtx.lineTo(tri.p[1].x,tri.p[1].y); lab3dCtx.lineTo(tri.p[2].x,tri.p[2].y); lab3dCtx.closePath();
+    lab3dCtx.fillStyle=lab3dRgba(br,bg,bb,alpha*depth*0.65); lab3dCtx.fill();
+    lab3dCtx.strokeStyle=lab3dRgba(br,bg,bb,0.3*depth); lab3dCtx.lineWidth=0.5; lab3dCtx.stroke();
+  }
+}
+
+function lab3dSphere(cx,cy,cz,rx,ry,rz,sl,st,col,alpha){
+  var tris=[];
+  for(var i=0;i<sl;i++){for(var j=0;j<st;j++){
+    var u1=(2*Math.PI/sl)*i,u2=(2*Math.PI/sl)*(i+1);
+    var v1=(Math.PI/st)*j-Math.PI/2,v2=(Math.PI/st)*(j+1)-Math.PI/2;
+    var pts=[
+      lab3dProj(cx+rx*Math.cos(v1)*Math.cos(u1),cy+ry*Math.cos(v1)*Math.sin(u1),cz+rz*Math.sin(v1)),
+      lab3dProj(cx+rx*Math.cos(v1)*Math.cos(u2),cy+ry*Math.cos(v1)*Math.sin(u2),cz+rz*Math.sin(v1)),
+      lab3dProj(cx+rx*Math.cos(v2)*Math.cos(u2),cy+ry*Math.cos(v2)*Math.sin(u2),cz+rz*Math.sin(v2)),
+      lab3dProj(cx+rx*Math.cos(v2)*Math.cos(u1),cy+ry*Math.cos(v2)*Math.sin(u1),cz+rz*Math.sin(v2))
+    ];
+    tris.push({p:[pts[0],pts[1],pts[2]],avgZ:(pts[0].z+pts[1].z+pts[2].z)/3});
+    tris.push({p:[pts[0],pts[2],pts[3]],avgZ:(pts[0].z+pts[2].z+pts[3].z)/3});
+  }}
+  lab3dMesh(tris,col[0],col[1],col[2],alpha);
+}
+
+function lab3dCylinder(cx,cy,cz,r,h,sl,col,alpha){
+  var tris=[];
+  for(var i=0;i<sl;i++){
+    var a1=(2*Math.PI/sl)*i,a2=(2*Math.PI/sl)*(i+1);
+    var x1=Math.cos(a1)*r,z1=Math.sin(a1)*r,x2=Math.cos(a2)*r,z2=Math.sin(a2)*r;
+    var p1=lab3dProj(cx+x1,cy-h/2,cz+z1),p2=lab3dProj(cx+x2,cy-h/2,cz+z2);
+    var p3=lab3dProj(cx+x2,cy+h/2,cz+z2),p4=lab3dProj(cx+x1,cy+h/2,cz+z1);
+    tris.push({p:[p1,p2,p3],avgZ:(p1.z+p2.z+p3.z)/3});
+    tris.push({p:[p1,p3,p4],avgZ:(p1.z+p3.z+p4.z)/3});
+    var pc=lab3dProj(cx,cy+h/2,cz); tris.push({p:[pc,p4,p3],avgZ:(pc.z+p4.z+p3.z)/3});
+    var pb=lab3dProj(cx,cy-h/2,cz); tris.push({p:[pb,p2,p1],avgZ:(pb.z+p2.z+p1.z)/3});
+  }
+  lab3dMesh(tris,col[0],col[1],col[2],alpha);
+}
+
+function lab3dHollowCyl(cx,cy,cz,r,h,sl,col,alpha){
+  var tris=[];
+  for(var i=0;i<sl;i++){
+    var a1=(2*Math.PI/sl)*i,a2=(2*Math.PI/sl)*(i+1);
+    var x1=Math.cos(a1)*r,z1=Math.sin(a1)*r,x2=Math.cos(a2)*r,z2=Math.sin(a2)*r;
+    var p1=lab3dProj(cx+x1,cy-h/2,cz+z1),p2=lab3dProj(cx+x2,cy-h/2,cz+z2);
+    var p3=lab3dProj(cx+x2,cy+h/2,cz+z2),p4=lab3dProj(cx+x1,cy+h/2,cz+z1);
+    tris.push({p:[p1,p2,p3],avgZ:(p1.z+p2.z+p3.z)/3});
+    tris.push({p:[p1,p3,p4],avgZ:(p1.z+p3.z+p4.z)/3});
+  }
+  lab3dMesh(tris,col[0],col[1],col[2],alpha);
+}
+
+function lab3dCone(cx,cy,cz,r,h,sl,col,alpha,flip){
+  var tris=[];
+  var topY=flip?cy-h:cy+h,baseY=cy;
+  for(var i=0;i<sl;i++){
+    var a1=(2*Math.PI/sl)*i,a2=(2*Math.PI/sl)*(i+1);
+    var x1=Math.cos(a1)*r,z1=Math.sin(a1)*r,x2=Math.cos(a2)*r,z2=Math.sin(a2)*r;
+    var pt=lab3dProj(cx,topY,cz),p1=lab3dProj(cx+x1,baseY,cz+z1),p2=lab3dProj(cx+x2,baseY,cz+z2);
+    tris.push({p:[pt,p2,p1],avgZ:(pt.z+p2.z+p1.z)/3});
+    if(!flip){var pc=lab3dProj(cx,baseY,cz);tris.push({p:[pc,p1,p2],avgZ:(pc.z+p1.z+p2.z)/3});}
+  }
+  lab3dMesh(tris,col[0],col[1],col[2],alpha);
+}
+
+function lab3dTorus(cx,cy,cz,majR,minR,sl,st,col,alpha){
+  var tris=[];
+  for(var i=0;i<sl;i++){for(var j=0;j<st;j++){
+    var u1=(2*Math.PI/sl)*i,u2=(2*Math.PI/sl)*(i+1);
+    var v1=(2*Math.PI/st)*j,v2=(2*Math.PI/st)*(j+1);
+    var pts=[
+      lab3dProj(cx+(majR+minR*Math.cos(v1))*Math.cos(u1),cy+(majR+minR*Math.cos(v1))*Math.sin(u1),cz+minR*Math.sin(v1)),
+      lab3dProj(cx+(majR+minR*Math.cos(v1))*Math.cos(u2),cy+(majR+minR*Math.cos(v1))*Math.sin(u2),cz+minR*Math.sin(v1)),
+      lab3dProj(cx+(majR+minR*Math.cos(v2))*Math.cos(u2),cy+(majR+minR*Math.cos(v2))*Math.sin(u2),cz+minR*Math.sin(v2)),
+      lab3dProj(cx+(majR+minR*Math.cos(v2))*Math.cos(u1),cy+(majR+minR*Math.cos(v2))*Math.sin(u1),cz+minR*Math.sin(v2))
+    ];
+    tris.push({p:[pts[0],pts[1],pts[2]],avgZ:(pts[0].z+pts[1].z+pts[2].z)/3});
+    tris.push({p:[pts[0],pts[2],pts[3]],avgZ:(pts[0].z+pts[2].z+pts[3].z)/3});
+  }}
+  lab3dMesh(tris,col[0],col[1],col[2],alpha);
+}
+
+function lab3dTube(cx,cy,cz,r,path,col,alpha){
+  var tris=[],segs=path.length-1,slices=12;
+  for(var s=0;s<segs;s++){
+    var p1=path[s],p2=path[s+1];
+    var dx=p2.x-p1.x,dy=p2.y-p1.y,dz=p2.z-p1.z;
+    var len=Math.sqrt(dx*dx+dy*dy+dz*dz);
+    if(len<0.001) continue;
+    var nx=dx/len,ny=dy/len,nz=dz/len;
+    var perp1={x:0,y:0,z:0};
+    if(Math.abs(ny)<0.9){perp1={x:-nz,y:0,z:nx};}else{perp1={x:1,y:0,z:0};}
+    var l1=Math.sqrt(perp1.x*perp1.x+perp1.y*perp1.y+perp1.z*perp1.z);
+    perp1.x/=l1;perp1.y/=l1;perp1.z/=l1;
+    var perp2={x:ny*perp1.z-nz*perp1.y,y:nz*perp1.x-nx*perp1.z,z:nx*perp1.y-ny*perp1.x};
+    for(var i=0;i<slices;i++){
+      var a1=(2*Math.PI/slices)*i,a2=(2*Math.PI/slices)*(i+1);
+      var c1=Math.cos(a1),s1=Math.sin(a1),c2=Math.cos(a2),s2=Math.sin(a2);
+      var v1={x:cx+p1.x+r*(perp1.x*c1+perp2.x*s1),y:cy+p1.y+r*(perp1.y*c1+perp2.y*s1),z:cz+p1.z+r*(perp1.z*c1+perp2.z*s1)};
+      var v2={x:cx+p1.x+r*(perp1.x*c2+perp2.x*s2),y:cy+p1.y+r*(perp1.y*c2+perp2.y*s2),z:cz+p1.z+r*(perp1.z*c2+perp2.z*s2)};
+      var v3={x:cx+p2.x+r*(perp1.x*c2+perp2.x*s2),y:cy+p2.y+r*(perp1.y*c2+perp2.y*s2),z:cz+p2.z+r*(perp1.z*c2+perp2.z*s2)};
+      var v4={x:cx+p2.x+r*(perp1.x*c1+perp2.x*s1),y:cy+p2.y+r*(perp1.y*c1+perp2.y*s1),z:cz+p2.z+r*(perp1.z*c1+perp2.z*s1)};
+      var pv1=lab3dProj(v1.x,v1.y,v1.z),pv2=lab3dProj(v2.x,v2.y,v2.z),pv3=lab3dProj(v3.x,v3.y,v3.z),pv4=lab3dProj(v4.x,v4.y,v4.z);
+      tris.push({p:[pv1,pv2,pv3],avgZ:(pv1.z+pv2.z+pv3.z)/3});
+      tris.push({p:[pv1,pv3,pv4],avgZ:(pv1.z+pv3.z+pv4.z)/3});
+    }
+  }
+  lab3dMesh(tris,col[0],col[1],col[2],alpha);
+}
+
+function lab3dDisc(cx,cy,cz,r,col,alpha){
+  var tris=[],sl=16,pc=lab3dProj(cx,cy,cz);
+  for(var i=0;i<sl;i++){
+    var a1=(2*Math.PI/sl)*i,a2=(2*Math.PI/sl)*(i+1);
+    var p1=lab3dProj(cx+Math.cos(a1)*r,cy,cz+Math.sin(a1)*r),p2=lab3dProj(cx+Math.cos(a2)*r,cy,cz+Math.sin(a2)*r);
+    tris.push({p:[pc,p1,p2],avgZ:(pc.z+p1.z+p2.z)/3});
+  }
+  lab3dMesh(tris,col[0],col[1],col[2],alpha);
+}
+
+// Renk sabitleri
+var LGLASS=[180,220,255],LGLASS_D=[120,170,220],LPOR=[245,245,250],LPOR_D=[220,220,230];
+var LMETAL=[180,180,190],LMETAL_D=[120,120,130],LWOOD=[160,110,60];
+var LPLASTIC=[255,255,255],LPLAS_G=[50,180,80],LPLAS_R=[255,80,80],LPLAS_O=[255,140,40];
+var LFLAME=[255,180,50],LFLAME_C=[255,100,30],LAMYANT=[200,200,190],LPAPER=[240,235,220];
+
+var LAB3D_ITEMS = [
+  {name:'Beherglas',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Karıştırma, Saklama, Isıtma',
+   desc:'Sıvı maddelerin karıştırılması, saklanması ve ısıtılması amacıyla kullanılan silindirik cam malzemedir.',
+   draw:function(){
+    lab3dHollowCyl(0,0,0,55,130,24,LGLASS,0.5);
+    lab3dSphere(0,65,0,55,15,55,16,8,LGLASS,0.5);
+    lab3dHollowCyl(0,-65,0,60,8,24,LGLASS,0.55);
+    lab3dTube(0,0,0,5,[{x:55,y:-62,z:0},{x:72,y:-68,z:0}],LGLASS,0.6);
+    for(var i=1;i<=5;i++){
+      var y=45-i*22;
+      var pts=[];
+      for(var a=0;a<10;a++){var ang=(2*Math.PI/10)*a; pts.push(lab3dProj(56*Math.cos(ang),y,56*Math.sin(ang)));}
+      lab3dCtx.strokeStyle='rgba(100,150,200,0.45)'; lab3dCtx.lineWidth=1;
+      lab3dCtx.beginPath(); lab3dCtx.moveTo(pts[0].x,pts[0].y);
+      for(var p=1;p<pts.length;p++) lab3dCtx.lineTo(pts[p].x,pts[p].y);
+      lab3dCtx.closePath(); lab3dCtx.stroke();
+    }
+   }},
+  {name:'Erlenmayer',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Titrasyon, Çözelti Hazırlama',
+   desc:'Titrasyon, çözelti hazırlama ve saklama işlemlerinde kullanılır. Konik gövdesi karıştırmayı kolaylaştırır.',
+   draw:function(){
+    lab3dCone(0,25,0,70,80,24,LGLASS,0.5,true);
+    lab3dHollowCyl(0,-45,0,20,55,16,LGLASS,0.5);
+    lab3dHollowCyl(0,-72,0,24,6,16,LGLASS,0.55);
+    lab3dDisc(0,25,0,70,LGLASS,0.4);
+   }},
+  {name:'Cam Balon',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Çözelti Hazırlama, Isıtma',
+   desc:'Çözelti hazırlama, saklama, ısıtma ve kaynatma amacıyla kullanılır.',
+   draw:function(){
+    lab3dSphere(0,10,0,70,60,70,20,14,LGLASS,0.5);
+    lab3dHollowCyl(0,-60,0,18,50,14,LGLASS,0.5);
+    lab3dHollowCyl(0,-85,0,22,5,14,LGLASS,0.55);
+   }},
+  {name:'Balon Joje',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Derişimli Çözelti Hazırlama',
+   desc:'Derişimi belli çözeltilerin hazırlanmasında kullanılır. Tek çizgiyle hassas hacim belirlenir.',
+   draw:function(){
+    lab3dSphere(0,30,0,45,35,45,18,12,LGLASS,0.5);
+    lab3dCone(0,-5,0,45,35,18,LGLASS,0.5,true);
+    lab3dHollowCyl(0,-55,0,12,65,12,LGLASS,0.5);
+    lab3dHollowCyl(0,-87,0,15,5,12,LGLASS,0.55);
+    lab3dCylinder(0,-92,0,13,12,12,[220,220,230],0.7);
+   }},
+  {name:'Ayırma Hunisi',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Sıvı-Sıvı Karışım Ayırma',
+   desc:'Heterojen sıvı-sıvı karışımların ayrılmasında kullanılır. Musluklu yapısı kontrollü boşaltma sağlar.',
+   draw:function(){
+    lab3dSphere(0,15,0,50,40,50,16,12,LGLASS,0.5);
+    lab3dCone(0,-25,0,50,40,16,LGLASS,0.5,true);
+    lab3dHollowCyl(0,-65,0,8,25,10,LGLASS,0.5);
+    lab3dCylinder(0,-90,0,16,15,10,LGLASS_D,0.6);
+    lab3dCylinder(0,-90,0,4,30,8,[60,60,70],0.8);
+   }},
+  {name:'Mezür',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Sıvı Hacmi Ölçme',
+   desc:'Sıvıların hacmini ölçmek için kullanılan dereceli cam malzemedir.',
+   draw:function(){
+    lab3dHollowCyl(0,0,0,28,160,20,LGLASS,0.5);
+    lab3dCylinder(0,80,0,38,10,16,LGLASS_D,0.6);
+    lab3dHollowCyl(0,-80,0,32,6,16,LGLASS,0.55);
+    for(var i=0;i<16;i++){
+      var y=70-i*10; var isMaj=i%5===0;
+      lab3dCtx.strokeStyle='rgba(80,120,180,'+(isMaj?0.6:0.3)+')'; lab3dCtx.lineWidth=isMaj?1.5:0.8;
+      var p1=lab3dProj(29,y,0),p2=lab3dProj(29+(isMaj?10:5),y,0);
+      lab3dCtx.beginPath(); lab3dCtx.moveTo(p1.x,p1.y); lab3dCtx.lineTo(p2.x,p2.y); lab3dCtx.stroke();
+    }
+   }},
+  {name:'Soğutucu',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Buharı Sıvıya Dönüştürme',
+   desc:'Isıtmayla buharlaşan çözücünün gaz fazından sıvı faza döndürülmesini sağlar.',
+   draw:function(){
+    lab3dHollowCyl(0,0,0,10,130,14,LGLASS,0.4);
+    lab3dHollowCyl(0,0,0,38,90,18,LGLASS,0.3);
+    var coilPts=[];
+    for(var i=0;i<=60;i++){var ang=i*0.4,y=-35+i*1.2; coilPts.push({x:26*Math.cos(ang),y:y,z:26*Math.sin(ang)});}
+    lab3dTube(0,0,0,5,coilPts,LGLASS,0.5);
+    lab3dTube(0,0,0,6,[{x:40,y:-25,z:0},{x:55,y:-25,z:0}],LGLASS,0.5);
+    lab3dTube(0,0,0,6,[{x:40,y:25,z:0},{x:55,y:25,z:0}],LGLASS,0.5);
+   }},
+  {name:'Huni',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Süzme, Sıvı Aktarma',
+   desc:'Süzme işleminde ve sıvıların dar ağızlı kaba boşaltılmasında kullanılır.',
+   draw:function(){
+    lab3dCone(0,-35,0,65,55,20,LGLASS,0.5,true);
+    lab3dHollowCyl(0,55,0,10,80,12,LGLASS,0.5);
+    lab3dCone(0,95,0,10,10,10,LGLASS,0.5,false);
+   }},
+  {name:'Büret',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Titrasyonda Hassas Hacim Ölçümü',
+   desc:'Titrasyon işleminde derişimi bilinmeyen maddelerin hacmini hassas ölçen cam malzemedir.',
+   draw:function(){
+    lab3dHollowCyl(0,0,0,14,170,14,LGLASS,0.5);
+    lab3dCone(0,-85,0,20,22,12,LGLASS,0.5,true);
+    lab3dCylinder(0,85,0,12,18,10,LGLASS_D,0.6);
+    lab3dCylinder(0,85,0,4,25,8,[60,60,70],0.8);
+    lab3dCylinder(0,85,0,18,4,8,[60,60,70],0.8);
+    for(var i=0;i<18;i++){
+      var y=75-i*9; var isMaj=i%5===0;
+      lab3dCtx.strokeStyle='rgba(80,120,180,'+(isMaj?0.6:0.3)+')'; lab3dCtx.lineWidth=isMaj?1.5:0.8;
+      var p1=lab3dProj(15,y,0),p2=lab3dProj(15+(isMaj?7:3),y,0);
+      lab3dCtx.beginPath(); lab3dCtx.moveTo(p1.x,p1.y); lab3dCtx.lineTo(p2.x,p2.y); lab3dCtx.stroke();
+    }
+   }},
+  {name:'Pipet',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Sıvıların Hassas Ölçümü ve Aktarımı',
+   desc:'Sıvıların hassas biçimde ölçülmesi ve aktarılmasına yarayan cam borudur.',
+   draw:function(){
+    lab3dHollowCyl(0,0,0,7,150,14,LGLASS,0.5);
+    lab3dSphere(0,0,0,20,16,20,14,10,LGLASS,0.5);
+    lab3dCone(0,75,0,7,15,10,LGLASS,0.5,false);
+   }},
+  {name:'Termometre',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Sıcaklık Ölçme',
+   desc:'Sıcaklık ölçmek için kullanılan dereceli cam malzemedir.',
+   draw:function(){
+    lab3dHollowCyl(0,0,0,10,150,14,LGLASS,0.5);
+    lab3dSphere(0,80,0,20,22,20,12,10,LGLASS,0.5);
+    lab3dSphere(0,80,0,16,18,16,10,8,[255,50,50],0.6);
+    lab3dHollowCyl(0,35,0,3,75,8,[255,50,50],0.6);
+   }},
+  {name:'Baget',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Maddeleri Karıştırma',
+   desc:'Maddeleri karıştırmak için kullanılan çubuk şeklinde cam malzemedir.',
+   draw:function(){
+    lab3dCylinder(0,0,0,5,150,12,LGLASS,0.6);
+    lab3dSphere(0,-75,0,5,7,5,8,6,LGLASS,0.6);
+    lab3dSphere(0,75,0,5,7,5,8,6,LGLASS,0.6);
+   }},
+  {name:'Deney Tüpü',type:'Cam Malzeme',material:'Borosilikat Cam',usage:'Karıştırma, Isıtma, Soğutma',
+   desc:'Maddelerin karıştırılması, ısıtılması, soğutulması gibi amaçlarla kullanılan cam malzemedir.',
+   draw:function(){
+    var pos=[{x:-30,z:-20},{x:30,z:-20},{x:-30,z:20},{x:30,z:20},{x:0,z:0}];
+    var cols=[[255,100,100],[100,255,100],[100,100,255],[255,200,50],[200,100,255]];
+    for(var idx=0;idx<pos.length;idx++){
+      var h=55; var px=pos[idx].x,pz=pos[idx].z;
+      lab3dHollowCyl(px,-20+h/2,pz,9,h,12,LGLASS,0.5);
+      lab3dSphere(px,-20+h,pz,9,7,9,8,6,LGLASS,0.5);
+      if(idx%2===0) lab3dHollowCyl(px,-20+h*0.35,pz,8,h*0.35,10,cols[idx],0.4);
+    }
+    lab3dCylinder(0,38,0,60,7,14,LWOOD,0.8);
+   }},
+  {name:'Havan',type:'Porselen Malzeme',material:'Porselen',usage:'Katı Maddeleri Ezme',
+   desc:'Katı maddeleri ezmek ve toz hâline getirmek amacıyla kullanılır.',
+   draw:function(){
+    lab3dSphere(0,15,0,55,35,55,20,12,LPOR,0.85);
+    lab3dSphere(0,10,0,42,25,42,18,10,LPOR_D,0.9);
+    lab3dDisc(0,50,0,55,LPOR,0.9);
+    lab3dCylinder(20,-5,0,10,55,10,LPOR,0.85);
+    lab3dSphere(20,-35,0,14,16,14,10,8,LPOR,0.85);
+   }},
+  {name:'Kroze',type:'Porselen/Metal',material:'Porselen veya Metal',usage:'Yüksek Sıcaklıkta Isıtma',
+   desc:'Yüksek sıcaklıkta ısıtma ve yakma işlemlerinde kullanılan porselen veya metal malzemedir.',
+   draw:function(){
+    lab3dHollowCyl(0,0,0,48,60,20,LPOR,0.9);
+    lab3dCylinder(0,30,0,48,12,16,LPOR_D,0.9);
+    lab3dHollowCyl(0,-5,0,40,50,16,[200,200,210],0.95);
+   }},
+  {name:'Damlalık',type:'Plastik Malzeme',material:'Plastik',usage:'Küçük Hacimde Sıvı Aktarma',
+   desc:'Küçük hacimlerde sıvı aktarmak için kullanılan plastik malzemedir.',
+   draw:function(){
+    lab3dSphere(0,-30,0,22,18,22,14,10,LPLASTIC,0.8);
+    lab3dHollowCyl(0,10,0,5,40,10,LGLASS,0.6);
+    lab3dCone(0,30,0,5,10,8,LGLASS,0.6,false);
+   }},
+  {name:'Spatül',type:'Metal/Plastik',material:'Metal veya Plastik',usage:'Toz Katıları Alma',
+   desc:'Toz ya da küçük parçalı katıları almak için kullanılır.',
+   draw:function(){
+    lab3dCylinder(0,0,0,7,75,10,LPLAS_R,0.8);
+    lab3dSphere(0,42,0,16,5,10,10,6,LPLAS_R,0.8);
+   }},
+  {name:'Piset',type:'Plastik Malzeme',material:'Plastik',usage:'Saf Su Kullanımı',
+   desc:'Genellikle saf su ve yıkama çözeltisi kullanımı için tercih edilen plastik şişedir.',
+   draw:function(){
+    lab3dCylinder(0,10,0,32,55,16,LPLAS_G,0.7);
+    lab3dCone(0,-18,0,32,18,14,LPLAS_G,0.7,true);
+    lab3dHollowCyl(0,-35,0,10,22,10,LPLAS_G,0.7);
+    lab3dTube(0,0,0,4,[{x:0,y:-46,z:0},{x:0,y:-75,z:0},{x:18,y:-80,z:0}],[200,200,200],0.6);
+   }},
+  {name:'Puar',type:'Plastik Malzeme',material:'Plastik (Kauçuk)',usage:'Pipetle Sıvı Çekme',
+   desc:'Pipetlerin arkasına takılarak sıvı veya çözeltilerin çekilmesinde kullanılır.',
+   draw:function(){
+    lab3dSphere(0,0,0,38,30,35,16,12,LPLAS_O,0.7);
+    lab3dCylinder(0,-30,0,10,14,10,[200,100,30],0.8);
+    lab3dTube(0,0,0,6,[{x:0,y:-37,z:0},{x:0,y:-55,z:0}],LPLAS_O,0.7);
+   }},
+  {name:'İspirto Ocağı',type:'Cam/Metal',material:'Cam ve Metal',usage:'Isıtma Aracı',
+   desc:'Cam kap içinde ispirto emdirilmiş fitil bulunan ısıtma aracıdır.',
+   draw:function(){
+    lab3dSphere(0,15,0,48,38,48,18,12,[160,140,100],0.4);
+    lab3dHollowCyl(0,-25,0,8,32,10,LMETAL,0.8);
+    lab3dCylinder(0,-42,0,4,22,8,[240,240,220],0.9);
+    var flicker=Math.sin(lab3dT*8)*2;
+    lab3dCone(0,-58+flicker,0,10,28,10,LFLAME,0.6,false);
+    lab3dCone(0,-58+flicker,0,5,16,8,LFLAME_C,0.7,false);
+   }},
+  {name:'Bunzen Bek',type:'Metal Malzeme',material:'Metal',usage:'Isıtma ve Yakma',
+   desc:'Isıtma ve yakma işlemlerinde kullanılan gazlı ocaktır.',
+   draw:function(){
+    lab3dCylinder(0,55,0,60,14,16,LMETAL,0.8);
+    lab3dHollowCyl(0,0,0,14,95,14,LMETAL,0.8);
+    lab3dTube(0,0,0,6,[{x:14,y:20,z:0},{x:35,y:26,z:0}],LMETAL,0.8);
+    var flicker=Math.sin(lab3dT*10)*1.5;
+    lab3dCone(0,-52+flicker,0,9,25,10,[100,150,255],0.5,false);
+    lab3dCone(0,-52+flicker,0,4,13,8,LFLAME_C,0.7,false);
+   }},
+  {name:'Spor (Destek)',type:'Metal Malzeme',material:'Metal',usage:'Deney Düzeneği Kurma',
+   desc:'Deney düzeneklerinin kurulması ve sabitlenmesi için kullanılan metal malzemedir.',
+   draw:function(){
+    lab3dDisc(0,75,0,45,LMETAL_D,0.9);
+    lab3dCylinder(0,75,0,45,4,16,LMETAL_D,0.9);
+    lab3dCylinder(0,15,0,6,120,10,LMETAL,0.8);
+    lab3dCylinder(0,-48,0,5,6,8,LMETAL_D,0.9);
+   }},
+  {name:'Sacayağı',type:'Metal Malzeme',material:'Metal',usage:'Isıtma Desteği',
+   desc:'Isıtma işleminde metalden yapılmış destek malzemesidir.',
+   draw:function(){
+    for(var i=0;i<3;i++){
+      var a=(2*Math.PI/3)*i;
+      var lx=30*Math.cos(a),lz=30*Math.sin(a);
+      lab3dTube(0,0,0,4,[{x:lx*0.3,y:40,z:lz*0.3},{x:lx,y:0,z:lz},{x:lx*1.3,y:-30,z:lz*1.3}],LMETAL,0.8);
+    }
+    lab3dTorus(0,40,0,18,4,16,8,LMETAL,0.8);
+   }},
+  {name:'Amyant Tel',type:'Tel Malzeme',material:'Demir Tel',usage:'Isıtma Desteği',
+   desc:'Bunzen beki aleviyle ısıtmada ısının yavaş ve eşit dağılmasını sağlar.',
+   draw:function(){
+    var sz=50;
+    for(var i=-3;i<=3;i++){
+      var y=i*12;
+      lab3dTube(0,0,0,1.5,[{x:-sz,y:y,z:-sz},{x:sz,y:y,z:sz}],LAMYANT,0.7);
+      lab3dTube(0,0,0,1.5,[{x:-sz,y:y,z:sz},{x:sz,y:y,z:-sz}],LAMYANT,0.7);
+    }
+    var border=[{x:-sz,y:-36,z:-sz},{x:sz,y:-36,z:-sz},{x:sz,y:-36,z:sz},{x:-sz,y:-36,z:sz},{x:-sz,y:-36,z:-sz}];
+    for(var i=0;i<border.length-1;i++) lab3dTube(0,0,0,2,[border[i],border[i+1]],LAMYANT,0.8);
+   }},
+  {name:'Süzgeç Kağıdı',type:'Kağıt Malzeme',material:'Selüloz',usage:'Katı-Sıvı Ayırma',
+   desc:'Katı ve sıvıları ayırmada kullanılan filtre kağıdıdır.',
+   draw:function(){
+    var tris=[],sl=20;
+    for(var i=0;i<sl;i++){
+      var a1=(2*Math.PI/sl)*i,a2=(2*Math.PI/sl)*(i+1);
+      var r1=45+Math.sin(a1*3)*3,r2=45+Math.sin(a2*3)*3;
+      var p0=lab3dProj(0,0,0),p1=lab3dProj(Math.cos(a1)*r1,Math.sin(a1)*r1*0.3,Math.sin(a1)*r1),p2=lab3dProj(Math.cos(a2)*r2,Math.sin(a2)*r2*0.3,Math.sin(a2)*r2);
+      tris.push({p:[p0,p1,p2],avgZ:(p0.z+p1.z+p2.z)/3});
+    }
+    lab3dMesh(tris,240,235,220,0.9);
+   }}
+];
+
+function lab3dRenderThumb(idx){
+  var cv=document.getElementById('lab3d-cv'+idx);
+  if(!cv) return;
+  var ctx=cv.getContext('2d');
+  var savedCtx=lab3dCtx, savedW=lab3dW, savedH=lab3dH, savedRX=lab3dRotX, savedRY=lab3dRotY, savedZ=lab3dZoom;
+  lab3dCtx=ctx; lab3dW=160; lab3dH=130; lab3dRotX=0.4; lab3dRotY=0.3+idx*0.15; lab3dZoom=0.5;
+  ctx.clearRect(0,0,160,130); ctx.fillStyle='#050510'; ctx.fillRect(0,0,160,130);
+  try { LAB3D_ITEMS[idx].draw(); } catch(e){}
+  lab3dCtx=savedCtx; lab3dW=savedW; lab3dH=savedH; lab3dRotX=savedRX; lab3dRotY=savedRY; lab3dZoom=savedZ;
+}
+
+function lab3dBuildGrid(){
+  var grid=document.getElementById('lab3d-grid');
+  if(!grid) return;
+  grid.innerHTML='';
+  for(var i=0;i<LAB3D_ITEMS.length;i++){
+    (function(item,idx){
+      var div=document.createElement('div');
+      div.style.cssText='background:var(--sf);border:2px solid rgba(0,212,255,0.3);border-radius:16px;padding:10px 8px;text-align:center;cursor:pointer;transition:all .2s';
+      div.innerHTML='<div style="font-size:13px;font-weight:700;color:#00d4ff;margin-bottom:6px">'+item.name+'</div>'+
+        '<canvas id="lab3d-cv'+idx+'" width="160" height="130" style="width:100%;border-radius:10px;background:#050510;border:1px solid rgba(0,212,255,0.15)"></canvas>'+
+        '<div style="font-size:10px;color:var(--tx3);margin-top:5px">'+item.type+'</div>';
+      div.onclick=function(){lab3dOpenDetail(idx);};
+      div.onmouseover=function(){this.style.borderColor='#00d4ff';this.style.background='rgba(0,212,255,0.1)';};
+      div.onmouseout=function(){this.style.borderColor='rgba(0,212,255,0.3)';this.style.background='var(--sf)';};
+      grid.appendChild(div);
+    })(LAB3D_ITEMS[i],i);
+  }
+  setTimeout(function(){for(var i=0;i<LAB3D_ITEMS.length;i++) lab3dRenderThumb(i);},200);
+}
+
+function lab3dOpenDetail(idx){
+  lab3dActive=idx;
+  var item=LAB3D_ITEMS[idx];
+  document.getElementById('lab3d-title').textContent=item.name;
+  var rows=[['Adı',item.name],['Türü',item.type],['Malzeme',item.material],['Kullanım',item.usage]];
+  var html='';
+  for(var i=0;i<rows.length;i++){
+    html+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.07);font-size:13px">';
+    html+='<span style="color:var(--tx3)">'+rows[i][0]+'</span><span style="color:#00d4ff;font-weight:700">'+rows[i][1]+'</span></div>';
+  }
+  html+='<div style="margin-top:10px;padding:10px;background:rgba(0,212,255,0.06);border-radius:8px;font-size:13px;line-height:1.6;color:var(--tx2)">'+item.desc+'</div>';
+  document.getElementById('lab3d-props').innerHTML=html;
+  lab3dRotX=0.4; lab3dRotY=0.3; lab3dZoom=1; lab3dT=0;
+  document.getElementById('lab3d-detail').style.display='block';
+  if(lab3dAnimId) cancelAnimationFrame(lab3dAnimId);
+  lab3dLoopDetail();
+}
+
+function lab3dClose(){
+  document.getElementById('lab3d-detail').style.display='none';
+  lab3dActive=null;
+  if(lab3dAnimId) cancelAnimationFrame(lab3dAnimId);
+}
+
+function lab3dLoopDetail(){
+  if(lab3dActive===null) return;
+  lab3dC=document.getElementById('lab3d-canvas');
+  lab3dCtx=lab3dC.getContext('2d');
+  var rect=lab3dC.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  lab3dW=rect.width||600; lab3dH=rect.height||500;
+  lab3dCtx.clearRect(0,0,lab3dW,lab3dH);
+  lab3dCtx.fillStyle='#050510'; lab3dCtx.fillRect(0,0,lab3dW,lab3dH);
+  if(lab3dSpin&&!lab3dDrag){lab3dRotY+=0.008*lab3dSpd; lab3dT+=0.015*lab3dSpd;}
+  else{lab3dT+=0.015*lab3dSpd;}
+  try{LAB3D_ITEMS[lab3dActive].draw();}catch(e){}
+  lab3dCtx.fillStyle='rgba(255,255,255,0.2)'; lab3dCtx.font='11px sans-serif'; lab3dCtx.textAlign='left';
+  lab3dCtx.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr',10,lab3dH-10);
+  lab3dAnimId=requestAnimationFrame(lab3dLoopDetail);
+}
+
+function lab3dToggleSpin(){lab3dSpin=!lab3dSpin;}
+function lab3dSetSpeed(v){lab3dSpd=v;}
+function lab3dResetView(){lab3dRotX=0.4;lab3dRotY=0.3;lab3dZoom=1;}
+
+function initLab3dPage(){
+  lab3dBuildGrid();
+  // Touch events
+  var dc=document.getElementById('lab3d-canvas');
+  if(!dc) return;
+  dc.onmousedown=function(e){lab3dDrag=true;lab3dLX=e.clientX;lab3dLY=e.clientY;};
+  dc.onmousemove=function(e){if(!lab3dDrag)return;lab3dRotY+=(e.clientX-lab3dLX)*0.01;lab3dRotX+=(e.clientY-lab3dLY)*0.01;lab3dLX=e.clientX;lab3dLY=e.clientY;};
+  dc.onmouseup=dc.onmouseleave=function(){lab3dDrag=false;};
+  dc.addEventListener('touchstart',function(e){
+    if(e.touches.length===1){lab3dDrag=true;lab3dLX=e.touches[0].clientX;lab3dLY=e.touches[0].clientY;}
+    else if(e.touches.length===2){var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;lab3dStartDist=Math.sqrt(dx*dx+dy*dy);}
+    e.preventDefault();
+  },{passive:false});
+  dc.addEventListener('touchmove',function(e){
+    if(e.touches.length===1&&lab3dDrag){lab3dRotY+=(e.touches[0].clientX-lab3dLX)*0.015;lab3dRotX+=(e.touches[0].clientY-lab3dLY)*0.015;lab3dLX=e.touches[0].clientX;lab3dLY=e.touches[0].clientY;}
+    else if(e.touches.length===2){var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY,dist=Math.sqrt(dx*dx+dy*dy);if(lab3dStartDist>0){lab3dZoom*=dist/lab3dStartDist;lab3dZoom=Math.max(0.5,Math.min(3,lab3dZoom));}lab3dStartDist=dist;}
+    e.preventDefault();
+  },{passive:false});
+  dc.addEventListener('touchend',function(){lab3dDrag=false;lab3dStartDist=0;});
+  dc.addEventListener('wheel',function(e){e.preventDefault();lab3dZoom+=e.deltaY*-0.001;lab3dZoom=Math.max(0.5,Math.min(3,lab3dZoom));});
+}
+
 // ============================================================
 // INIT
 // ============================================================
@@ -1778,6 +2760,7 @@ document.addEventListener('DOMContentLoaded',function(){
   renderRealPT();
   renderRiskList();
   renderLabList();
+  renderVidList2();
   document.getElementById('cbtn-all').classList.add('active');
 });
 </script>
