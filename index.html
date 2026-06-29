@@ -2867,6 +2867,100 @@ function closeVideo(){
     wrap.style.display = 'none';
   }
 }
+// Sayfa ilk açıldığında hafızadaki videoları yükle ve ekrana çiz
+setTimeout(function() {
+  var savedVids = localStorage.getItem('ronya_saved_videos');
+  if(savedVids) {
+    try {
+      vidList2 = JSON.parse(savedVids);
+    } catch(e) {
+      vidList2 = [];
+    }
+  }
+  renderVidList2();
+}, 500);
+
+// Videoyu hafızaya kaydederek ekleyen güncel fonksiyon
+function addVideo(){
+  var inputEl = document.getElementById('video-url-input');
+  var fileName = inputEl.value.trim();
+  if(!fileName){
+    toast('Lütfen bir dosya adı girin!');
+    return;
+  }
+  var url = fileName;
+  if(!url.startsWith('http') && !url.startsWith('/') && !url.startsWith('data:')){
+    url = 'videos/' + url;
+  }
+  if(url.indexOf('github.com') > -1 && url.indexOf('/blob/') > -1) {
+    url = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+  }
+  
+  vidList2.unshift({
+    id: Date.now(),
+    url: url,
+    title: fileName
+  });
+  
+  // Hafızaya kaydet
+  localStorage.setItem('ronya_saved_videos', JSON.stringify(vidList2));
+  
+  inputEl.value = '';
+  renderVidList2(); 
+  toast('Video başarıyla hafızaya kaydedildi!');
+}
+
+// Videoları ekrana çizen güncel fonksiyon
+function renderVidList2(){
+  var container = document.getElementById('video-list');
+  if(!container) return;
+  if(!window.vidList2 || vidList2.length === 0){
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3)">Henüz video eklenmedi.</div>';
+    return;
+  }
+  var html = '';
+  for(var i=0; i<vidList2.length; i++){
+    var v = vidList2[i];
+    html += '<div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px">';
+    html += '<div style="flex:1" onclick="playSelectedVideo(\'' + v.url + '\', \'' + v.title + '\')">';
+    html += '<div style="font-size:14px;font-weight:600;color:#fff;cursor:pointer">🎬 ' + v.title + '</div>';
+    html += '<div style="font-size:11px;color:var(--ac2);margin-top:4px;cursor:pointer">Oynatmak için tıkla</div></div>';
+    html += '<button onclick="removeVid2(' + i + ')" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:var(--rsm);color:#ef4444;padding:6px 12px;cursor:pointer;font-size:12px">Sil</button>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+// Listeden video silme fonksiyonu (Hafızadan da siler)
+function removeVid2(index){
+  if(confirm('Bu videoyu listeden silmek istediğinize emin misiniz?')){
+    vidList2.splice(index, 1);
+    localStorage.setItem('ronya_saved_videos', JSON.stringify(vidList2));
+    renderVidList2();
+    toast('Video silindi.');
+  }
+}
+
+function playSelectedVideo(url, title){
+  var player = document.getElementById('video-player');
+  var wrap = document.getElementById('video-player-wrap');
+  var nameDiv = document.getElementById('video-current-name');
+  if(player && wrap){
+    player.src = url;
+    nameDiv.textContent = title;
+    wrap.style.display = 'block';
+    player.play().catch(function(e){ console.log("Otot-oynatma engellendi"); });
+  }
+}
+
+function closeVideo(){
+  var player = document.getElementById('video-player');
+  var wrap = document.getElementById('video-player-wrap');
+  if(player && wrap){
+    player.pause();
+    wrap.style.display = 'none';
+  }
+}
 
 </script>
 </body>
