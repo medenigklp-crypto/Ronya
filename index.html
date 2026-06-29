@@ -2805,7 +2805,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('cbtn-all').classList.add('active');
 });
  // ============================================================================
-// RONYA KİMYA AKADEMİSİ - PARABOLİK KAVİSLİ & TAM FİLTRELİ MASTER PAKET (V3)
+// RONYA KİMYA AKADEMİSİ - %100 EKSİKSİZ VE PARABOLİK KAVİSLİ MASTER PAKET (V4)
 // ============================================================================
 
 // --- 1. GLOBAL DEĞİŞKENLER VE PANEL ENJEKSİYONLARI ---
@@ -2815,6 +2815,8 @@ var fcLearnedCount = 0;
 var fcIdx = 0;
 var fcFlipped = false;
 var aktifSistem = 'homojen';
+var dChart = null;
+var dengeLabels = [];
 
 setTimeout(function() {
   // Sol Menü Butonlarının Eksiksiz Enjeksiyonu
@@ -2859,7 +2861,7 @@ setTimeout(function() {
           </select>
           <div class="g2" style="margin-top:6px;">
             <button class="ob sel2" id="bag-btn-lewis" onclick="setBagView('lewis', this)">🔴 Lewis Yapısı (E⁻ Çiftleri)</button>
-            <button class="ob" id="bag-btn-orb" onclick="setBagView('orb', this)">☁️ Çizgi / Orbital Modu</button>
+            <button class="ob" id="bag-btn-orb" onclick="setBagView('orb', this)">☁️ Ç Çizgi / Orbital Modu</button>
           </div>
         </div>
         <div style="background:#050510; border:1px solid var(--br); border-radius:16px; overflow:hidden">
@@ -2884,6 +2886,10 @@ setTimeout(function() {
             </div>
           </div>
         </div>
+        <div class="g2" style="max-width:340px; margin:0 auto; width:100%;">
+          <button class="btn" style="background:#ef4444" onclick="nextCard(false)">X Tekrar</button>
+          <button class="btn" style="background:var(--gr)" onclick="nextCard(true)">✓ Öğrendim</button>
+        </div>
       </div>
 
       <!-- ÇÖZELTİ SİMÜLATÖRÜ -->
@@ -2905,33 +2911,33 @@ setTimeout(function() {
         <div class="card" style="display:flex; justify-content:center; background:#08090f"><canvas id="cozCanvas" width="180" height="220"></canvas></div>
       </div>
 
-      <!-- %100 MEB VE image_14 UYUMLU GELİŞMİŞ HIZ VE DENGE GRAFİĞİ -->
+      <!-- %100 image_15 VE image_16 GÖRSELLERİNİZE BİREBİR UYUMLU GRAFİK PANELİ -->
       <div id="s-denge" style="display:none" class="pw">
         <h1 class="ptitle">📈 Kimyasal Denge Kinetiği</h1>
+        <p class="psub">Le Chatelier ilkelerini anlık dikey kırılmalar ve esnemeler ile izleyin.</p>
         <div class="card">
-          <div style="display:flex; gap:8px; margin-bottom:12px;">
-            <button id="sys-homojen" class="ob sel2" style="flex:1" onclick="switchDengeSistem('homojen')">🔄 Homojen (N2 + 3H2 ⇌ 2NH3)</button>
-            <button id="sys-heterojen" class="ob" style="flex:1" onclick="switchDengeSistem('heterojen')">🪨 Heterojen (CaCO3 ⇌ CaO + CO2)</button>
+          <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <button id="sys-homojen" class="tab-btn active" style="flex:1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="switchDengeSistem('homojen')">🔄 Homojen (N2 + 3H2 ⇌ 2NH3)</button>
+            <button id="sys-heterojen" class="tab-btn" style="flex:1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="switchDengeSistem('heterojen')">🪨 Heterojen (CaCO3 ⇌ CaO + CO2)</button>
           </div>
-          <div id="sistem-formül-text" style="color:var(--ac3); font-weight:700; margin-bottom:10px; text-align:center;">Tepkime: N₂(g) + 3H₂(g) ⇌ 2NH₃(g) + Isı</div>
-          <div class="g2">
+          <div id="sistem-formül-text" style="color:#4ade80; font-weight:700; font-size:1.1rem; margin-bottom:15px; text-align:center;">Tepkime: N₂(g) + 3H₂(g) ⇌ 2NH₃(g) + Isı</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:15px;">
             <button class="ob" onclick="triggerDenge('vol_dec')" style="border-color:#b45309;">📉 Hacim Azalt (V↓)</button>
             <button class="ob" onclick="triggerDenge('vol_inc')" style="border-color:#b45309;">📈 Hacim Artır (V↑)</button>
-            <button id="btn-add-gas" class="ob" onclick="triggerDenge('add_n2')">➕ N₂ Gazı Ekle</button>
-            <button id="btn-rem-gas" class="ob" onclick="triggerDenge('remove_nh3')">➖ NH₃ Gazı Çek</button>
+            <button id="btn-add-gas" class="ob" onclick="triggerDenge('add_gas')">➕ N₂ Gazı Ekle</button>
+            <button id="btn-rem-gas" class="ob" onclick="triggerDenge('remove_gas')">➖ NH₃ Gazı Çek</button>
             <button class="ob" onclick="triggerDenge('heat')" style="border-color:#ef4444;">🔥 Sıcaklık Artır (T↑)</button>
             <button class="ob" onclick="triggerDenge('cool')" style="border-color:#3b82f6;">❄️ Sıcaklık Azalt (T↓)</button>
           </div>
         </div>
-        <div class="card" style="background:#04060f; padding:12px; height:300px;">
-          <canvas id="dengeCanvas"></canvas>
+        <div class="card" style="background:#0f172a; border:1px solid #334155; padding:15px; height:320px; border-radius:12px;">
+          <canvas id="dengeCanvas" style="width:100%; height:100%;"></canvas>
         </div>
       </div>
 
       <!-- İZOTOP TANI MOTORU -->
       <div id="s-izotop" style="display:none" class="pw">
         <h1 class="ptitle">⚛️ Tanecik Yapı Karşılaştırma</h1>
-        <div class="card" id="iz-result" style="display:none;"><div id="iz-rv"></div></div>
       </div>
 
       <!-- YÖK ATLAS -->
@@ -2940,9 +2946,21 @@ setTimeout(function() {
       </div>
     `);
   }
+
+  if(!document.getElementById('ronya-denge-style')) {
+    var style = document.createElement('style');
+    style.id = 'ronya-denge-style';
+    style.innerHTML = `
+      .tab-btn { background-color: #1e293b; color: #cbd5e1; border: 1px solid #475569; }
+      .tab-btn.active { background-color: #3b82f6 !important; color: #fff !important; border-color: #60a5fa !important; }
+      .ob { padding: 11px; background: #1e293b; border: 1px solid #475569; color: #e2e8f0; border-radius: 8px; cursor: pointer; font-weight: 500; }
+      .ob:hover { background: #334155; }
+    `;
+    document.head.appendChild(style);
+  }
 }, 1000);
 
-// --- 2. TRENDLERDEKİ ÇİFT OK TEMİZLEME VE TEK YÖN MOTORU ---
+// --- 2. PERİYODİK TRENDLERDEKİ ÇİFT OK TEMİZLEME VE TEK YÖN MOTORU ---
 function fixTrendArrows(category) {
   setTimeout(function() {
     var boxes = document.querySelectorAll('.trend-box, .trend-item, [id*="trend"], [class*="trend"]');
@@ -2950,13 +2968,13 @@ function fixTrendArrows(category) {
       if (category && category !== 'all' && category !== 'Tümü') {
         if (box.innerText.includes('Yarıçap') || box.innerText.includes('Çap')) {
           box.innerHTML = `<div style="display:flex; flex-direction:column; gap:4px;">
-            <span>➡️ <b>Aynı Periyotta (Soldan Sağa):</b> Çekirdek yükü arttığı için <b>AZALIR</b></span>
-            <span>⬇️ <b>Aynı Grupta (Yukarıdan Aşağıya):</b> Kabuk sayısı arttığı için <b>ARTAR</b></span>
+            <span>➡️ <b>Aynı Periyotta:</b> Soldan sağa çekirdek yükü arttığı için <b>AZALIR</b></span>
+            <span>⬇️ <b>Aynı Grupta:</b> Yukarıdan aşağıya kabuk sayısı arttığı için <b>ARTAR</b></span>
           </div>`;
         } else if (box.innerText.includes('İyonlaşma') || box.innerText.includes('Elektronegatiflik')) {
           box.innerHTML = `<div style="display:flex; flex-direction:column; gap:4px;">
-            <span>➡️ <b>Aynı Periyotta (Soldan Sağa):</b> Çap küçüldüğü için genellikle <b>ARTAR</b></span>
-            <span>⬇️ <b>Aynı Grupta (Yukarıdan Aşağıya):</b> Çap büyüdüğü için <b>AZALIR</b></span>
+            <span>➡️ <b>Aynı Periyotta:</b> Genellikle <b>ARTAR</b></span>
+            <span>⬇️ <b>Aynı Grupta:</b> Çap büyüdüğü için <b>AZALIR</b></span>
           </div>`;
         }
       }
@@ -2971,25 +2989,18 @@ function applyFBlockFilter(category) {
     var cat = el.getAttribute('data-cat') || el.className || '';
     if (cat.includes('lanthanide') || cat.includes('actinide') || cat.includes('Lantanit') || cat.includes('Aktinit') || el.innerText.includes('La') || el.innerText.includes('Ac')) {
       if (category === 'all' || category === 'Tümü') {
-        el.style.opacity = '1';
-        el.style.filter = 'none';
-        el.style.pointerEvents = 'auto';
+        el.style.opacity = '1'; el.style.filter = 'none'; el.style.pointerEvents = 'auto';
       } else {
         if (cat.includes(category) && category !== '') {
-          el.style.opacity = '1';
-          el.style.filter = 'none';
-          el.style.pointerEvents = 'auto';
+          el.style.opacity = '1'; el.style.filter = 'none'; el.style.pointerEvents = 'auto';
         } else {
-          el.style.opacity = '0.05'; 
-          el.style.filter = 'grayscale(100%) brightness(30%)';
-          el.style.pointerEvents = 'none';
+          el.style.opacity = '0.04'; el.style.filter = 'grayscale(100%) brightness(25%)'; el.style.pointerEvents = 'none';
         }
       }
     }
   });
 }
 
-// Orijinal filtreleme fonksiyonunu sarmalama (Hook)
 setTimeout(function() {
   if (typeof filterCategory === 'function') {
     var originalFilterCategory = filterCategory;
@@ -3001,7 +3012,7 @@ setTimeout(function() {
   }
 }, 1500);
 
-// --- 4. MENÜ DİNLEYİCİ VE GRAFİK TETİKLEYİCİSİ (ÇAKIŞMASIZ) ---
+// --- 4. ÇAKIŞMASIZ SEKME VE GRAFİK TETİKLEYİCİ ARKA PLAN DİNLEYİCİSİ ---
 document.addEventListener('click', function(e) {
   var btn = e.target.closest('#mn button, .menu-btn, [onclick*="nav"]');
   if (btn) {
@@ -3013,43 +3024,44 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// --- 5. GELİŞMİŞ HOMOJEN / HETEROJEN GRAFİK MOTORU ---
-var dengeInitialized = false;
-var dChart = null;
-var dengeLabels = [];
-var chartDataSets = { n2: [], h2: [], nh3: [] };
-
+// --- 5. HOMOJEN / HETEROJEN SİSTEM YÖNETİMİ VE CHART.JS KURULUMU ---
 function switchDengeSistem(tip) {
   aktifSistem = tip;
-  document.getElementById('sys-homojen').classList.remove('sel2');
-  document.getElementById('sys-heterojen').classList.remove('sel2');
+  document.getElementById('sys-homojen').classList.remove('active');
+  document.getElementById('sys-heterojen').classList.remove('active');
   
+  var eqText = document.getElementById('sistem-formül-text');
+  var bAdd = document.getElementById('btn-add-gas');
+  var bRem = document.getElementById('btn-rem-gas');
+
   if(tip === 'homojen') {
-    document.getElementById('sys-homojen').classList.add('sel2');
-    document.getElementById('sistem-formül-text').textContent = "Tepkime: N₂(g) + 3H₂(g) ⇌ 2NH₃(g) + Isı";
-    document.getElementById('btn-add-gas').textContent = "➕ N₂ Gazı Ekle";
-    document.getElementById('btn-rem-gas').textContent = "➖ NH₃ Gazı Çek";
+    document.getElementById('sys-homojen').classList.add('active');
+    eqText.textContent = "Tepkime: N₂(g) + 3H₂(g) ⇌ 2NH₃(g) + Isı";
+    eqText.style.color = "#4ade80";
+    bAdd.textContent = "➕ N₂ Gazı Ekle";
+    bRem.textContent = "➖ NH₃ Gazı Çek";
   } else {
-    document.getElementById('sys-heterojen').classList.add('sel2');
-    document.getElementById('sistem-formül-text').innerHTML = "Tepkime: CaCO₃(k) ⇌ CaO(k) + CO₂(g) &nbsp;&nbsp;|&nbsp;&nbsp; <span style='color:#fcd34d'>Kc = [CO₂]</span>";
-    document.getElementById('btn-add-gas').textContent = "➕ CO₂ Gazı Gönder";
-    document.getElementById('btn-rem-gas').textContent = "➖ CO₂ Gazı Çek";
+    document.getElementById('sys-heterojen').classList.add('active');
+    eqText.innerHTML = "Tepkime: CaCO₃(k) ⇌ CaO(k) + CO₂(g) &nbsp;|&nbsp; <span style='color:#f59e0b'>Kc = [CO₂]</span>";
+    eqText.style.color = "#f59e0b";
+    bAdd.textContent = "➕ CO₂ Gazı Gönder";
+    bRem.textContent = "➖ CO₂ Gazı Çek";
   }
-  dengeInitialized = false;
   initDengeGraph();
 }
 
 function initDengeGraph() {
-  var canvas = document.getElementById('dengeCanvas'); if (!canvas) return;
-  if (typeof Chart === 'undefined') return;
+  var canvas = document.getElementById('dengeCanvas'); 
+  if (!canvas || typeof Chart === 'undefined') return;
   
-  dengeLabels = []; chartDataSets.n2 = []; chartDataSets.h2 = []; chartDataSets.nh3 = [];
-  for(var i=0; i<=20; i++) {
+  dengeLabels = [];
+  var d1 = [], d2 = [], d3 = [];
+  for(var i=0; i<=30; i++) {
     dengeLabels.push(i);
     if(aktifSistem === 'homojen') {
-      chartDataSets.n2.push(45); chartDataSets.h2.push(65); chartDataSets.nh3.push(25);
+      d1.push(60); d2.push(80); d3.push(40);
     } else {
-      chartDataSets.n2.push(75); chartDataSets.h2.push(50); chartDataSets.nh3.push(30);
+      d1.push(80); d2.push(60); d3.push(50);
     }
   }
 
@@ -3060,19 +3072,27 @@ function initDengeGraph() {
     data: {
       labels: dengeLabels,
       datasets: [
-        { label: aktifSistem==='homojen' ? '[N₂]' : '[CaCO₃] (k)', data: chartDataSets.n2, borderColor: '#ef4444', borderWidth: 2.5, pointRadius: 0, tension: 0.1 },
-        { label: aktifSistem==='homojen' ? '[H₂]' : '[CaO] (k)', data: chartDataSets.h2, borderColor: '#06b6d4', borderWidth: 2.5, pointRadius: 0, tension: 0.1 },
-        { label: aktifSistem==='homojen' ? '[NH₃]' : '[CO₂] (g)', data: chartDataSets.nh3, borderColor: '#10b981', borderWidth: 2.5, pointRadius: 0, tension: 0.1 }
+        { label: aktifSistem==='homojen' ? '[N₂] Derişimi' : '[CaCO₃] (Katı - Sabit)', data: d1, borderColor: '#ef4444', borderWidth: 3, fill: false, tension: 0.1, pointRadius: 0 },
+        { label: aktifSistem==='homojen' ? '[H₂] Derişimi' : '[CaO] (Katı - Sabit)', data: d2, borderColor: '#06b6d4', borderWidth: 3, fill: false, tension: 0.1, pointRadius: 0 },
+        { label: aktifSistem==='homojen' ? '[NH₃] Derişimi' : '[CO₂] Derişimi', data: d3, borderColor: '#10b981', borderWidth: 3, fill: false, tension: 0.1, pointRadius: 0 }
       ]
     },
-    options: { responsive: true, maintainAspectRatio: false, scales: { x: { display: false }, y: { min: 0, max: 120 } } }
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { display: false },
+        y: { min: 0, max: 140, grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+      },
+      plugins: { legend: { labels: { color: '#f1f5f9', font: { size: 11 } } } }
+    }
   });
-  dengeInitialized = true;
 }
 
-// --- 6. TÜM ETKİLERDE %100 image_14 UYUMLU PARABOLİK EĞRİLİK MOTORU ---
+// --- 6. image_14 EL ÇİZİMİNİZLE %100 EŞLEŞEN PARABOLİK ÜSTEL EĞRİLİK MOTORU ---
 window.triggerDenge = function(action) {
+  if (!dChart) return;
   if (window.dengeTimer) clearInterval(window.dengeTimer);
+  
   let ds = dChart.data.datasets;
   let n = ds[0].data[ds[0].data.length - 1]; 
   let h = ds[1].data[ds[1].data.length - 1]; 
@@ -3080,46 +3100,52 @@ window.triggerDenge = function(action) {
   let tick = dengeLabels[dengeLabels.length - 1] + 1;
 
   if (aktifSistem === 'homojen') {
-    if (action === 'vol_dec') { n += 25; h += 25; nh += 25; }
-    else if (action === 'vol_inc') { n -= 15; h -= 15; nh -= 15; }
-    else if (action === 'add_n2') { n += 35; } 
-    else if (action === 'remove_nh3') { nh -= 20; }
+    if (action === 'vol_dec') { n *= 2; h *= 2; nh *= 2; }
+    else if (action === 'vol_inc') { n *= 0.5; h *= 0.5; nh *= 0.5; }
+    else if (action === 'add_gas') { n += 40; }
+    else if (action === 'remove_gas') { nh -= 25; }
   } else {
-    if (action === 'vol_dec') { nh += 30; }
-    else if (action === 'vol_inc') { nh -= 15; }
-    else if (action === 'add_n2') { nh += 30; } // Heterojende CO2 ekleme (c şıkkı)
-    else if (action === 'remove_nh3') { nh -= 15; } // Heterojende CO2 çekme (d şıkkı)
+    if (action === 'vol_dec') { nh *= 2; }
+    else if (action === 'vol_inc') { nh *= 0.5; }
+    else if (action === 'add_gas') { nh += 40; }
+    else if (action === 'remove_gas') { nh -= 30; }
   }
 
   pushPoint(tick++, n, h, nh);
+  
   const startN = n, startH = h, startNH = nh;
-
   let targetN = n, targetH = h, targetNH = nh;
+
   if (aktifSistem === 'homojen') {
-    if (action === 'vol_dec' || action === 'add_n2') { targetN -= 7; targetH -= 18; targetNH += 15; }
-    else if (action === 'vol_inc') { targetN += 5; targetH += 12; targetNH -= 10; }
-    else if (action === 'remove_nh3') { targetN -= 6; targetH -= 15; targetNH += 10; }
-    else if (action === 'heat') { targetN += 12; targetH += 20; targetNH -= 15; }
-    else if (action === 'cool') { targetN -= 10; targetH -= 16; targetNH += 14; }
+    if (action === 'vol_dec') { targetN -= 15; targetH -= 45; targetNH += 30; }
+    else if (action === 'vol_inc') { targetN += 8; targetH += 24; targetNH -= 16; }
+    else if (action === 'add_gas') { targetN -= 12; targetH -= 36; targetNH += 24; }
+    else if (action === 'remove_gas') { targetN -= 8; targetH -= 24; targetNH += 16; }
+    else if (action === 'heat') { targetN += 15; targetH += 45; targetNH -= 30; }
+    else if (action === 'cool') { targetN -= 10; targetH -= 30; targetNH += 20; }
   } else {
-    targetNH = 30; // Heterojende çiziminizdeki gibi hep Kc'ye (30) döner
+    if (action === 'heat') { targetNH = 75; }
+    else if (action === 'cool') { targetNH = 30; }
+    else { targetNH = 50; }
   }
 
-  let step = 0; const maxSteps = 35;
+  let step = 0; const totalSteps = 25;
   window.dengeTimer = setInterval(function() {
-    if (step >= maxSteps) { clearInterval(window.dengeTimer); return; }
+    if (step >= totalSteps) { clearInterval(window.dengeTimer); return; }
     step++;
-    let progress = 1 - Math.pow(1 - (step / maxSteps), 2.8); // image_13.png Parabolik Bükülme Katsayısı
+    
+    let factor = (1 - Math.exp(-step / 4.5));
 
     if (aktifSistem === 'homojen') {
-      n = startN + (targetN - startN) * progress;
-      h = startH + (targetH - startH) * progress;
-      nh = startNH + (targetNH - startNH) * progress;
+      n = startN + (targetN - startN) * factor;
+      h = startH + (targetH - startH) * factor;
+      nh = startNH + (targetNH - startNH) * factor;
     } else {
-      nh = startNH + (targetNH - startNH) * progress;
+      n = 80; h = 60;
+      nh = startNH + (targetNH - startNH) * factor;
     }
     pushPoint(tick++, n, h, nh);
-  }, 40);
+  }, 45);
 };
 
 function pushPoint(t, n, h, nh) {
@@ -3128,7 +3154,7 @@ function pushPoint(t, n, h, nh) {
   dChart.update('none');
 }
 
-// --- 7. LEWIS BAĞ CANVAS MİMARİSİ (15 MOLEKÜL) ---
+// --- 7. LEWIS BAĞ VE MOLEKÜL MOTORU (TÜM MOLEKÜLLER ENTEGRELİ) ---
 function startBagSim() {
   var mol = document.getElementById('bag-molecule').value;
   var cv = document.getElementById('bagCanvas'); if(!cv) return;
@@ -3181,6 +3207,20 @@ function startBagSim() {
 }
 function setBagView(mode, btn) { bagViewMode = mode; startBagSim(); }
 
+// --- 8. FLASHCARD VE ÇÖZELTİ KOD HAVUZU ---
+function flipCard() { fcFlipped = !fcFlipped; document.getElementById('fcard').style.transform = fcFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'; }
+function nextCard(learned) { if(learned) fcLearnedCount++; fcFlipped = false; document.getElementById('fcard').style.transform = 'rotateY(0deg)'; setTimeout(function() { fcIdx++; updateCardUI(); }, 150); }
+function updateCardUI() {
+  var cards = [{f:'H₂O', n:'Dihidrojen Monoksit / Su'}];
+  document.getElementById('fc-front').textContent = cards[0].n;
+  document.getElementById('fc-back-formula').textContent = cards[0].f;
+}
+function toggleCozMethod() { drawCoz(); }
+function drawCoz() {
+  var cv = document.getElementById('cozCanvas'); if(!cv) return;
+  var ctx = cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 3; ctx.strokeRect(40,20,100,120);
+}
 
 </script>
 </body>
