@@ -3207,6 +3207,12 @@ function setTrend(btn) {
   currentTrend = btn.getAttribute('data-trend');
   renderTrendGrid();
 }
+  mohBase: {
+    label: 'M(OH)x (Metal Hidroksit) Bazlık Kuvveti', unit: '',
+    desc: 'Metal hidroksitlerde bazlık kuvveti metalin elektron verme kolaylığına (çapına) bağlıdır. Çap arttıkça OH⁻ iyonunun suya verilmesi kolaylaşır. Bu nedenle grupta aşağı doğru, periyotta sola doğru bazlık kuvveti artar.',
+    arrow_period: '← Sola Doğru Artar', arrow_group: '↓ Aşağı Doğru Artar', color_low: '#064e3b', color_high: '#06b6d4',
+    getValue: function(el) { if(el.cat.indexOf('Metal')===-1 && el.cat!=='Metal') return null; return (20 - PT_POS[el.n][1]) * 40 + (PT_POS[el.n][0] * 60); }
+  },
 
 </script>
 </body>
