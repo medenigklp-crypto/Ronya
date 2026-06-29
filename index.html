@@ -2961,6 +2961,111 @@ function closeVideo(){
     wrap.style.display = 'none';
   }
 }
+  function renderRealPT(){
+  var container = document.getElementById('pt-real-grid');
+  if(!container) return;
+  var cells = {};
+  for(var i=0; i<ELS.length; i++){
+    var p = PT_POS[ELS[i].n];
+    if(p) cells[p[0]+'-'+p[1]] = ELS[i];
+  }
+
+  var G = 'display:grid;grid-template-columns:20px repeat(18,minmax(0,1fr));gap:2px;margin-bottom:2px;';
+  var html = '<div style="'+G+'"><div></div>';
+  for(var c=1; c<=18; c++) html += '<div class="pt-col-hdr">'+c+'</div>';
+  html += '</div>';
+
+  var SKIP = {};
+  var LEGS = {
+    '1-3':{cat:'Alkali Metal',span:2}, '1-5':{cat:'Toprak Alkali Metal',span:2}, 
+    '1-7':{cat:'Geçiş Metali',span:2}, '1-9':{cat:'Post-Geçiş Metali',span:2}, 
+    '2-3':{cat:'Yarı Metal',span:2}, '2-5':{cat:'Ametal',span:2}, 
+    '2-7':{cat:'Halojen',span:2}, '2-9':{cat:'Soy Gaz',span:2}
+  };
+  var lks = Object.keys(LEGS);
+  for(var li=0; li<lks.length; li++){
+    var lk = lks[li];
+    var lg = LEGS[lk];
+    var lp = lk.split('-');
+    var lr = Number(lp[0]);
+    var lc = Number(lp[1]);
+    for(var ls=1; ls<lg.span; ls++) SKIP[lr+'-'+(lc+ls)] = 1;
+  }
+
+  for(var r=1; r<=7; r++){
+    html += '<div style="'+G+'"><div class="pt-row-hdr">'+r+'</div>';
+    for(var c=1; c<=18; c++){
+      var key = r+'-'+c;
+      if(SKIP[key]) continue;
+      var el = cells[key];
+      var leg = LEGS[key];
+      if(el){
+        var col = CAT_COLORS2[el.cat] || {bg:'var(--sf)', border:'var(--br)'};
+        var q = ptSearchQ.toLowerCase();
+        var ms = !q || el.name.toLowerCase().indexOf(q) > -1 || el.sym.toLowerCase().indexOf(q) > -1;
+        
+        // DÜZELTİLEN KISIM: Parantez mantığı doğru gruplandı
+        var mc = ptCatActive === 'all' || (el.cat === ptCatActive) || (ptCatActive === 'Lantanit & Aktinit' && (el.cat === 'Lantanit' || el.cat === 'Aktinit'));
+        
+        var op = (!ms || !mc) ? '0.08' : '1';
+        html += '<div class="pt-cell-wrap" style="background:'+col.bg+';border-color:'+col.border+';opacity:'+op+'" onclick="openElDetail('+el.n+')">'
+          +'<span style="font-size:6px;font-weight:700;color:'+col.border+';display:block">'+el.n+'</span>'
+          +'<span style="font-size:13px;font-weight:800;color:#fff;display:block">'+el.sym+'</span>'
+          +'<span style="font-size:5px;color:rgba(255,255,255,.7);display:block;overflow:hidden">'+el.name+'</span>'
+          +'</div>';
+      } else if(leg){
+        var cc = CAT_COLORS2[leg.cat] || {bg:'var(--sf)', border:'var(--br)'};
+        html += '<div class="pt-legend-wrap" style="background:'+cc.bg+';border-color:'+cc.border+'55;grid-column:span 2;aspect-ratio:2/1">'
+          +'<div class="pt-lline" style="background:'+cc.border+'"></div>'
+          +'<div class="pt-lcat" style="color:'+cc.border+'">'+leg.cat+'</div>'
+          +'</div>';
+      } else if(r===6 && c===3){
+        html += '<div class="pt-ref-cell">57-71</div>';
+      } else if(r===7 && c===3){
+        html += '<div class="pt-ref-cell">89-103</div>';
+      } else {
+        html += '<div class="pt-spacer-cell"></div>';
+      }
+    }
+    html += '</div>';
+  }
+
+  html += '<div style="height:4px;margin:2px 0;border-top:1px dashed rgba(100,116,139,.2)"></div>';
+  
+  // Alt kısım (Lantanitler) için de opaklık filtresi eklendi
+  html += '<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7px">La</div><div></div><div></div>';
+  for(var c=3; c<=17; c++){
+    var el = cells['9-'+c];
+    if(el){
+      var q = ptSearchQ.toLowerCase();
+      var ms = !q || el.name.toLowerCase().indexOf(q) > -1 || el.sym.toLowerCase().indexOf(q) > -1;
+      var mc = ptCatActive === 'all' || (el.cat === ptCatActive) || (ptCatActive === 'Lantanit & Aktinit' && (el.cat === 'Lantanit' || el.cat === 'Aktinit'));
+      var op = (!ms || !mc) ? '0.08' : '1';
+      html += '<div class="pt-cell-wrap" style="background:'+(CAT_COLORS2[el.cat]||{bg:'var(--sf)'}).bg+';border-color:'+(CAT_COLORS2[el.cat]||{border:'var(--br)'}).border+';opacity:'+op+'" onclick="openElDetail('+el.n+')">'+'<span style="font-size:6px;font-weight:700;color:'+(CAT_COLORS2[el.cat]||{border:'#fff'}).border+';display:block">'+el.n+'</span>'+'<span style="font-size:13px;font-weight:800;color:#fff;display:block">'+el.sym+'</span>'+'</div>';
+    } else {
+      html += '<div class="pt-spacer-cell"></div>';
+    }
+  }
+  html += '<div class="pt-spacer-cell"></div></div>';
+  
+  // Alt kısım (Aktinitler) için de opaklık filtresi eklendi
+  html += '<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7px">Ac</div><div></div><div></div>';
+  for(var c=3; c<=17; c++){
+    var el = cells['10-'+c];
+    if(el){
+      var q = ptSearchQ.toLowerCase();
+      var ms = !q || el.name.toLowerCase().indexOf(q) > -1 || el.sym.toLowerCase().indexOf(q) > -1;
+      var mc = ptCatActive === 'all' || (el.cat === ptCatActive) || (ptCatActive === 'Lantanit & Aktinit' && (el.cat === 'Lantanit' || el.cat === 'Aktinit'));
+      var op = (!ms || !mc) ? '0.08' : '1';
+      html += '<div class="pt-cell-wrap" style="background:'+(CAT_COLORS2[el.cat]||{bg:'var(--sf)'}).bg+';border-color:'+(CAT_COLORS2[el.cat]||{border:'var(--br)'}).border+';opacity:'+op+'" onclick="openElDetail('+el.n+')">'+'<span style="font-size:6px;font-weight:700;color:'+(CAT_COLORS2[el.cat]||{border:'#fff'}).border+';display:block">'+el.n+'</span>'+'<span style="font-size:13px;font-weight:800;color:#fff;display:block">'+el.sym+'</span>'+'</div>';
+    } else {
+      html += '<div class="pt-spacer-cell"></div>';
+    }
+  }
+  html += '<div class="pt-spacer-cell"></div></div>';
+
+  container.innerHTML = html;
+}
 
 </script>
 </body>
