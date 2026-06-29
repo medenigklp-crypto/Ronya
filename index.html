@@ -2827,6 +2827,46 @@ document.addEventListener('DOMContentLoaded',function(){
   renderVidList2(); 
   toast('Video listeye eklendi!');
 }
+function renderVidList2(){
+  var container = document.getElementById('video-list');
+  if(!container) return;
+  if(vidList2.length === 0){
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3)">Henüz video eklenmedi.</div>';
+    return;
+  }
+  var html = '';
+  for(var i=0; i<vidList2.length; i++){
+    var v = vidList2[i];
+    html += '<div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:between;gap:12px">';
+    html += '<div style="flex:1" onclick="playSelectedVideo(\'' + v.url + '\', \'' + v.title + '\')">';
+    html += '<div style="font-size:14px;font-weight:600;color:#fff;cursor:pointer">🎬 ' + v.title + '</div>';
+    html += '<div style="font-size:11px;color:var(--ac2);margin-top:4px;cursor:pointer">Oynatmak için tıkla</div></div>';
+    html += '<button onclick="removeVid2(' + i + ')" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:var(--rsm);color:#ef4444;padding:6px 12px;cursor:pointer;font-size:12px">Sil</button>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function playSelectedVideo(url, title){
+  var player = document.getElementById('video-player');
+  var wrap = document.getElementById('video-player-wrap');
+  var nameDiv = document.getElementById('video-current-name');
+  if(player && wrap){
+    player.src = url;
+    nameDiv.textContent = title;
+    wrap.style.display = 'block';
+    player.play().catch(function(e){ console.log("Oto-oynatma engellendi"); });
+  }
+}
+
+function closeVideo(){
+  var player = document.getElementById('video-player');
+  var wrap = document.getElementById('video-player-wrap');
+  if(player && wrap){
+    player.pause();
+    wrap.style.display = 'none';
+  }
+}
 
 </script>
 </body>
