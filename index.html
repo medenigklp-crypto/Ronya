@@ -3681,6 +3681,508 @@ nav = function(id) {
   if(id==='cozelti') setTimeout(drawCoz, 150);
   if(id==='denge') setTimeout(initDengeGraph, 150);
 };
+// ============================================================
+// RONYA KİMYA AKADEMİSİ - GELİŞMİŞ SİMÜLASYON VE AKADEMİ PAKETİ
+// ============================================================
+
+var bagViewMode = 'lewis';
+var fcActiveCat = 'all';
+var fcLearnedCount = 0;
+
+// 1. Arayüz Elemanlarının Dinamik Olarak Güncellenmesi (Gelişmiş Girdiler)
+setTimeout(function() {
+  // Bağ Simülasyonu Seçenekleri ve Görünüm Sekmeleri
+  var bEl1 = document.getElementById('bag-el1');
+  if (bEl1) {
+    var parent = bEl1.parentNode.parentNode;
+    parent.innerHTML = `
+      <div style="width:100%; margin-bottom:10px;">
+        <div class="slbl">İncelemek İstediğiniz Molekül / Bileşik</div>
+        <select class="sel" id="bag-molecule" onchange="resetBagCanvas()">
+          <option value="H2O">H₂O (Polar Kovalent - Kırık Doğru)</option>
+          <option value="NH3">NH₃ (Polar Kovalent - Üçgen Piramit)</option>
+          <option value="CH4">CH₄ (Polar Kovalent - Düzgün Dörtyüzlü)</option>
+          <option value="BH3">BH₃ (Polar Kovalent - Düzlem Üçgen)</option>
+          <option value="BeH2">BeH₂ (Polar Kovalent - Doğrusal)</option>
+          <option value="H2">H₂ (Apolar Kovalent - Tekli Bağ)</option>
+          <option value="O2">O₂ (Apolar Kovalent - İkili Bağ)</option>
+          <option value="N2">N₂ (Apolar Kovalent - Üçlü Bağ)</option>
+          <option value="CO2">CO₂ (Apolar Kovalent - Doğrusal)</option>
+          <option value="HCN">HCN (Polar Kovalent - Doğrusal)</option>
+          <option value="HF">HF (Polar Kovalent - Tekli Bağ)</option>
+          <option value="C2H6">C₂H₆ (Etan - Tekli Bağlar)</option>
+          <option value="C2H4">C₂H₄ (Eten - İkili Bağlar)</option>
+          <option value="C2H2">C₂H₂ (Etin - Üçlü Bağlar)</option>
+          <option value="NaCl">NaCl (İyonik Bağ - Elektron Transferi)</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:10px; width:100%">
+        <button class="ob sel2" id="bag-btn-lewis" onclick="setBagView('lewis', this)" style="flex:1">🔴 Lewis / Katman Yapısı</button>
+        <button class="ob" id="bag-btn-orb" onclick="setBagView('orb', this)" style="flex:1">☁️ Orbital Gösterimi</button>
+      </div>
+    `;
+  }
+
+  // Hız ve Denge Butonları (Hacim ve Katalizör Entegreli)
+  var dengeBtnArea = document.querySelector('#s-denge .card div');
+  if (dengeBtnArea) {
+    dengeBtnArea.innerHTML = `
+      <button class="ob" onclick="triggerDenge('add_n2')">➕ N₂ Ekle</button>
+      <button class="ob" onclick="triggerDenge('remove_nh3')">➖ NH₃ Çek</button>
+      <button class="ob" onclick="triggerDenge('volume_decrease')">📉 Hacim Azalt (Basınç Artır)</button>
+      <button class="ob" onclick="triggerDenge('catalyst')">⚡ Katalizör Ekle</button>
+      <button class="ob" onclick="triggerDenge('heat')">🔥 Sıcaklık Artır</button>
+      <button class="ob" onclick="triggerDenge('cool')">❄️ Sıcaklık Azalt</button>
+    `;
+  }
+
+  // Çözelti Hazırlama (Denizde Yüzen On Maymun Formülü Altyapısı)
+  var cozPanel = document.querySelector('#s-cozelti .card');
+  if (cozPanel) {
+    cozPanel.innerHTML = `
+      <div class="g3" style="margin-bottom:10px">
+        <div><div class="slbl">Bileşik</div><select class="sel" id="coz-comp" onchange="drawCoz()"><option value="NaOH">NaOH (Ma:40)</option><option value="CuSO4">CuSO₄ (Ma:160)</option><option value="KMnO4">KMnO₄ (Ma:158)</option></select></div>
+        <div><div class="slbl">Hacim (mL)</div><input type="number" id="coz-v" class="inp" value="250" oninput="drawCoz()"></div>
+        <div><div class="slbl">Hesaplama Yöntemi</div><select class="sel" id="coz-method" onchange="toggleCozMethod()"><option value="molar">Doğrudan Molarite</option><option value="formula">Yoğunluk & Kütlece %</option></select></div>
+      </div>
+      <div id="coz-molar-area" style="margin-bottom:10px"><div class="slbl">Hedef Molarite (M)</div><input type="number" id="coz-m" class="inp" value="0.1" oninput="drawCoz()"></div>
+      <div id="coz-formula-area" class="g2" style="margin-bottom:10px; display:none;">
+        <div><div class="slbl">Yoğunluk (d: g/mL)</div><input type="number" id="coz-d" class="inp" value="1.2" oninput="drawCoz()"></div>
+        <div><div class="slbl">Kütlece Yüzde (%)</div><input type="number" id="coz-pct" class="inp" value="20" oninput="drawCoz()"></div>
+      </div>
+      <div id="coz-guide" style="font-size:13px;color:var(--ac3);background:rgba(99,102,241,0.1);padding:10px;border-radius:8px;line-height:1.5"></div>
+    `;
+  }
+
+  // İzotop Tanı Aracına İyon Yükü Girişleri Ekleme
+  var iz1 = document.querySelector('#s-izotop .g2 div:nth-child(1)');
+  var iz2 = document.querySelector('#s-izotop .g2 div:nth-child(2)');
+  if (iz1 && iz2) {
+    iz1.insertAdjacentHTML('beforeend', `<div style="margin-top:6px"><label style="font-size:11px;color:var(--tx3)">İyon Yükü (+/-)</label><input type="number" id="iz-y1" class="inp" value="0" oninput="diagnoseAtoms()"></div>`);
+    iz2.insertAdjacentHTML('beforeend', `<div style="margin-top:6px"><label style="font-size:11px;color:var(--tx3)">İyon Yükü (+/-)</label><input type="number" id="iz-y2" class="inp" value="0" oninput="diagnoseAtoms()"></div>`);
+  }
+
+  // Flashcard Kategori ve İlerleme Çubuğu Enjeksiyonu
+  var fcScreen = document.getElementById('s-flashcard');
+  if (fcScreen) {
+    var psub = fcScreen.querySelector('.psub');
+    psub.insertAdjacentHTML('afterend', `
+      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;overflow-x:auto;">
+        <button class="tab on" id="fcc-all" onclick="setFcCat('all', this)">Tümü</button>
+        <button class="tab" onclick="setFcCat('TYT', this)">TYT Yaygın Adlar</button>
+        <button class="tab" onclick="setFcCat('AYT', this)">AYT Formülleri</button>
+      </div>
+      <div class="pbar" style="max-width:340px;margin:0 auto 12px;"><div class="pfill" id="fc-pfill" style="width:0%"></div></div>
+    `);
+  }
+}, 1000);
+
+// MODÜL Geliştirme Fonksiyonları
+function setBagView(mode, btn) {
+  bagViewMode = mode;
+  var btns = btn.parentNode.querySelectorAll('button');
+  btns[0].classList.remove('sel2'); btns[1].classList.remove('sel2');
+  btn.classList.add('sel2');
+  startBagSim();
+}
+
+function toggleCozMethod() {
+  var m = document.getElementById('coz-method').value;
+  document.getElementById('coz-molar-area').style.display = (m==='molar')?'':'none';
+  document.getElementById('coz-formula-area').style.display = (m==='formula')?'flex':'none';
+  drawCoz();
+}
+
+// 1. GELİŞMİŞ BAĞ SİMÜLASYONU MOTORU (Lewis & Orbital Çift Modlu)
+function startBagSim() {
+  var mol = document.getElementById('bag-molecule').value;
+  var canvas = document.getElementById('bagCanvas');
+  var ctx = canvas.getContext('2d');
+  var title = document.getElementById('bag-title');
+  
+  if(window.bagAnim) cancelAnimationFrame(bagAnim);
+  var frame = 0;
+
+  function atom(x, y, r, txt, col, spec) {
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 2*Math.PI);
+    if(bagViewMode === 'lewis') {
+      ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.fillStyle = 'rgba(255,255,255,0.02)';
+    } else {
+      ctx.strokeStyle = col; ctx.fillStyle = col + '22';
+    }
+    ctx.fill(); ctx.stroke();
+    // Çekirdek
+    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 10, 0, 2*Math.PI); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(txt, x, y);
+  }
+
+  function dot(x, y, col) {
+    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2*Math.PI);
+    ctx.fillStyle = col || '#00ff88'; ctx.fill();
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var p = Math.min(frame / 60, 1);
+    var cx = canvas.width / 2, cy = canvas.height / 2;
+
+    if (mol === "NaCl") {
+      title.textContent = "Sodyum Klorür (NaCl) - İyonik Bağ (Elektron Transferi)";
+      atom(cx - 60, cy, 30, "Na", "#ffb703");
+      atom(cx + 60, cy, 40, "Cl", "#219ebc");
+      drawLinearElectrons(cx - 60, cx + 60, cy, p);
+    } 
+    else if (mol === "H2O") {
+      title.textContent = "Su (H₂O) - Polar Kovalent Bağ (Kırık Doğru Geometri)";
+      atom(cx, cy - 10, 35, "O", "#ff6b6b");
+      atom(cx - 50 * p, cy + 40 * p, 18, "H", "#3b82f6");
+      atom(cx + 50 * p, cy + 40 * p, 18, "H", "#3b82f6");
+      if(bagViewMode==='lewis' && p>=1) {
+        dot(cx - 10, cy - 25, '#f59e0b'); dot(cx - 4, cy - 25, '#f59e0b'); // Ortaklanmamışlar
+        dot(cx + 4, cy - 25, '#f59e0b'); dot(cx + 10, cy - 25, '#f59e0b');
+        dot(cx - 20, cy + 10); dot(cx + 20, cy + 10); // Bağ elektronları
+      }
+    }
+    else if (mol === "NH3") {
+      title.textContent = "Amonyak (NH₃) - Üçgen Piramit Geometrisi";
+      atom(cx, cy - 15, 35, "N", "#ff6b6b");
+      atom(cx - 55 * p, cy + 35 * p, 18, "H", "#3b82f6");
+      atom(cx, cy + 50 * p, 18, "H", "#3b82f6");
+      atom(cx + 55 * p, cy + 35 * p, 18, "H", "#3b82f6");
+      if(bagViewMode==='lewis' && p>=1) { dot(cx - 4, cy - 30, '#f59e0b'); dot(cx + 4, cy - 30, '#f59e0b'); }
+    }
+    else if (mol === "CH4") {
+      title.textContent = "Metan (CH₄) - Düzgün Dörtyüzlü (Doymuş Yapı)";
+      atom(cx, cy, 36, "C", "#a855f7");
+      atom(cx, cy - 55 * p, 16, "H", "#3b82f6");
+      atom(cx - 50 * p, cy + 35 * p, 16, "H", "#3b82f6");
+      atom(cx + 50 * p, cy + 35 * p, 16, "H", "#3b82f6");
+      atom(cx + 20 * p, cy + 15 * p, 16, "H", "#3b82f6");
+    }
+    else if (mol === "BH3") {
+      title.textContent = "Bor Hidrür (BH₃) - Düzlem Üçgen Geometri (Oktet Boşluğu)";
+      atom(cx, cy, 35, "B", "#22c55e");
+      atom(cx, cy - 55 * p, 16, "H", "#3b82f6");
+      atom(cx - 50 * p, cy + 30 * p, 16, "H", "#3b82f6");
+      atom(cx + 50 * p, cy + 30 * p, 16, "H", "#3b82f6");
+    }
+    else if (mol === "BeH2") {
+      title.textContent = "Berilyum Hidrür (BeH₂) - Doğrusal Geometri (180°)";
+      atom(cx, cy, 32, "Be", "#eab308");
+      atom(cx - 65 * p, cy, 16, "H", "#3b82f6");
+      atom(cx + 65 * p, cy, 16, "H", "#3b82f6");
+    }
+    else if (mol === "H2") {
+      title.textContent = "Hidrojen (H₂) - Tekli Apolar Kovalent Bağ";
+      atom(cx - 30 * p, cy, 18, "H", "#3b82f6"); atom(cx + 30 * p, cy, 18, "H", "#3b82f6");
+      if(p>=1) { dot(cx - 4, cy); dot(cx + 4, cy); }
+    }
+    else if (mol === "O2") {
+      title.textContent = "Oksijen (O₂) - İkili Apolar Kovalent Bağ (O=O)";
+      atom(cx - 35 * p, cy, 32, "O", "#ff6b6b"); atom(cx + 35 * p, cy, 32, "O", "#ff6b6b");
+      if(p>=1) { dot(cx, cy - 6); dot(cx, cy + 6); dot(cx - 6, cy - 6); drawDoubleOxyDots(cx); }
+    }
+    else if (mol === "N2") {
+      title.textContent = "Azot (N₂) - Üçlü Apolar Kovalent Bağ (N≡N)";
+      atom(cx - 35 * p, cy, 32, "N", "#a855f7"); atom(cx + 35 * p, cy, 32, "N", "#a855f7");
+      if(p>=1) { dot(cx, cy - 10); dot(cx, cy); dot(cx, cy + 10); }
+    }
+    else if (mol === "CO2") {
+      title.textContent = "Karbondioksit (CO₂) - Doğrusal Molekül (O=C=O)";
+      atom(cx, cy, 34, "C", "#475569");
+      atom(cx - 65 * p, cy, 30, "O", "#ff6b6b"); atom(cx + 65 * p, cy, 30, "O", "#ff6b6b");
+    }
+    else if (mol === "HCN") {
+      title.textContent = "Hidrojen Siyanür (HCN) - Doğrusal (H-C≡N)";
+      atom(cx, cy, 34, "C", "#475569");
+      atom(cx - 60 * p, cy, 16, "H", "#3b82f6"); atom(cx + 60 * p, cy, 34, "N", "#a855f7");
+    }
+    else if (mol === "HF") {
+      title.textContent = "Hidrojen Florür (HF) - Tekli Güçlü Polar Kovalent Bağ";
+      atom(cx - 35 * p, cy, 16, "H", "#3b82f6"); atom(cx + 35 * p, cy, 32, "F", "#f43f5e");
+    }
+    else if (mol === "C2H6" || mol === "C2H4" || mol === "C2H2") {
+      title.textContent = mol + " - Hidrokarbon Bağ Yapısı";
+      atom(cx - 40, cy, 32, "C", "#475569"); atom(cx + 40, cy, 32, "C", "#475569");
+      if(p>=1 && mol === "C2H6") {
+        atom(cx - 85, cy, 16, "H", "#3b82f6"); atom(cx - 40, cy - 50, 16, "H", "#3b82f6"); atom(cx - 40, cy + 50, 16, "H", "#3b82f6");
+        atom(cx + 85, cy, 16, "H", "#3b82f6"); atom(cx + 40, cy - 50, 16, "H", "#3b82f6"); atom(cx + 40, cy + 50, 16, "H", "#3b82f6");
+      }
+    }
+
+    if(p < 1) { frame++; bagAnim = requestAnimationFrame(loop); }
+  }
+  
+  function drawLinearElectrons(x1, x2, y, progress) {
+    var ex = x1 + (x2 - x1) * progress;
+    var ey = y - Math.sin(progress * Math.PI) * 30;
+    dot(ex, ey, '#00ff88');
+  }
+  function drawDoubleOxyDots(cx) {
+    dot(cx - 15, 110, '#f59e0b'); dot(cx - 22, 110, '#f59e0b');
+    dot(cx + 15, 110, '#f59e0b'); dot(cx + 22, 110, '#f59e0b');
+  }
+  loop();
+}
+
+// ============================================================
+// MODÜL 2: FLASHCARD KATEGORİSİ VE İLERLEME SİSTEMİ
+// ============================================================
+var FCARDS_EXT = [
+  {f:'H₂O', n:'Dihidrojen Monoksit / Saf Su', cat:'TYT'},
+  {f:'Na₂CO₃', n:'Sodyum Karbonat / Çamaşır Sodası', cat:'TYT'},
+  {f:'CaO', n:'Kalsiyum Oksit / Sönmemiş Kireç', cat:'TYT'},
+  {f:'HCOOH', n:'Metanoik Asit / Formik Asit', cat:'TYT'},
+  {f:'HCl', n:'Hidroklorik Asit / Tuz Ruhu', cat:'TYT'},
+  {f:'HNO₃', n:'Nitrik Asit / Kezzap', cat:'TYT'},
+  {f:'H₂SO₄', n:'Sülfürik Asit / Zaç Yağı', cat:'TYT'},
+  {f:'HCN', n:'Hidrojen Siyanür', cat:'AYT'},
+  {f:'H₃PO₄', n:'Fosforik Asit', cat:'AYT'},
+  {f:'CH₃COOH', n:'Asetik Asit / Sirke Ruhu', cat:'TYT'}
+];
+
+function setFcCat(cat, btn) {
+  var btns = btn.parentNode.querySelectorAll('button');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
+  btn.classList.add('on');
+  fcActiveCat = cat;
+  fcIdx = 0;
+  updateCardUI();
+}
+
+function updateCardUI() {
+  var filtered = FCARDS_EXT.filter(function(c){ return fcActiveCat === 'all' || c.cat === fcActiveCat; });
+  if(filtered.length === 0) return;
+  if(fcIdx >= filtered.length) fcIdx = 0;
+  
+  var current = filtered[fcIdx];
+  document.getElementById('fc-front').textContent = current.n.split(' / ')[1] || current.n;
+  document.getElementById('fc-back-formula').textContent = current.f;
+  document.getElementById('fc-back-name').textContent = current.n;
+  
+  // Progress Bar güncelleme
+  var progressPct = (fcLearnedCount / FCARDS_EXT.length) * 100;
+  document.getElementById('fc-pfill').style.width = Math.min(progressPct, 100) + '%';
+}
+
+// Eski nextCard fonksiyonunu ezerek yeni kategorili sisteme uyarlayalım
+nextCard = function(learned) {
+  if(fcFlipped) flipCard();
+  if(learned) fcLearnedCount++;
+  setTimeout(function(){
+    fcIdx++;
+    updateCardUI();
+  }, 300);
+};
+
+// ============================================================
+// MODÜL 3: GELİŞMİŞ ÇÖZELTİ SİMÜLATÖRÜ ("Denizde Yüzen On Maymun")
+// ============================================================
+var originalDrawCoz = drawCoz;
+drawCoz = function() {
+  var method = document.getElementById('coz-method').value;
+  var comp = document.getElementById('coz-comp').value;
+  var V = parseFloat(document.getElementById('coz-v').value) || 250;
+  var ma = comp === 'NaOH' ? 40 : comp === 'CuSO4' ? 160 : 158;
+  
+  var M = 0.1;
+  if (method === 'molar') {
+    M = parseFloat(document.getElementById('coz-m').value) || 0.1;
+    var gram = (M * (V / 1000) * ma).toFixed(2);
+    document.getElementById('coz-guide').innerHTML = '<b>Molarite Yöntemi (M = n/V):</b><br>1. Terazide tam <b>' + gram + ' gram</b> katı ' + comp + ' tartın.<br>2. Balon jojeye koyun ve ' + V + ' mL çizgisine kadar saf su ekleyin.';
+  } else {
+    var d = parseFloat(document.getElementById('coz-d').value) || 1.2;
+    var pct = parseFloat(document.getElementById('coz-pct').value) || 20;
+    // M = (d * % * 10) / Ma  (Denizde Yüzen On Maymun)
+    M = (d * pct * 10) / ma;
+    var gramNeeded = (M * (V / 1000) * ma).toFixed(2);
+    document.getElementById('coz-guide').innerHTML = '<b>Denizde Yüzen On Maymun Formülü (M = d·%·10/Ma):</b><br>Hesaplanan Derişim: <b>' + M.toFixed(3) + ' M</b><br>1. Yoğunluk ve % değerine göre tam <b>' + gramNeeded + ' gram</b> madde gerekir.';
+  }
+
+  // Orijinal canvas çizimini tetiklemek için molariteyi manipüle edelim
+  var hiddenMolarInput = document.getElementById('coz-m');
+  if(hiddenMolarInput && method === 'formula') {
+    hiddenMolarInput.value = M;
+  }
+  originalDrawCoz();
+};
+
+// ============================================================
+// MODÜL 4: LE CHATELIER GRAFİĞİ KATALİZÖR ETKİSİ
+// ============================================================
+var originalTriggerDenge2 = triggerDenge;
+triggerDenge = function(action) {
+  if (action === 'catalyst') {
+    if(dengeTimer) clearInterval(dengeTimer);
+    var lastIdx = dengeData.t.length - 1;
+    var n2 = dengeData.n2[lastIdx];
+    var h2 = dengeData.h2[lastIdx];
+    var nh3 = dengeData.nh3[lastIdx];
+
+    // Katalizör derişimleri değiştirmez! Sadece dengeye daha hızlı ulaştırır.
+    toast('Katalizör eklendi! Derişimler değişmez, tepkime hızı artar ve dengeye daha çabuk ulaşılır.');
+    
+    var steps = 15; // Daha hızlı adımlama
+    var stepCount = 0;
+    dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(dengeTimer); return; }
+      var t = dengeData.t[dengeData.t.length - 1] + 1;
+      dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      if(dengeData.t.length > 100) {
+        dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift();
+      }
+      drawDengeGraph();
+      stepCount++;
+    }, 20);
+  } else {
+    originalTriggerDenge2(action);
+  }
+};
+
+// ============================================================
+// MODÜL 5: GELİŞMİŞ İZOTOP VE ÇAP KARŞILAŞTIRMA MOTORU
+// ============================================================
+var originalDiagnoseAtoms = diagnoseAtoms;
+diagnoseAtoms = function() {
+  var p1 = parseInt(document.getElementById('iz-p1').value) || 0;
+  var n1 = parseInt(document.getElementById('iz-n1').value) || 0;
+  var e1 = parseInt(document.getElementById('iz-e1').value) || 0;
+  var y1 = parseInt(document.getElementById('iz-y1').value) || 0; // iyon yükü 1
+  
+  var p2 = parseInt(document.getElementById('iz-p2').value) || 0;
+  var n2 = parseInt(document.getElementById('iz-n2').value) || 0;
+  var e2 = parseInt(document.getElementById('iz-e2').value) || 0;
+  var y2 = parseInt(document.getElementById('iz-y2').value) || 0; // iyon yükü 2
+
+  var k1 = p1 + n1; var k2 = p2 + n2;
+  var resBox = document.getElementById('iz-result');
+  var resText = document.getElementById('iz-rv');
+  resBox.style.display = 'block';
+
+  // İyon yükü doğrulaması (Proton - Elektron = Yük)
+  var calcE1 = p1 - y1;
+  var calcE2 = p2 - y2;
+
+  var capComparison = "";
+  if (p1 === p2) {
+    capComparison = "<br> Çap Kıyaslaması: Elektron sayısı çok olanın veya yükü az olanın çapı daha büyüktür.";
+  }
+
+  if (p1 === p2 && n1 !== n2) {
+    resText.innerHTML = '🧬 <b>İZOTOP TANECİKLERDİR</b><br>Proton sayıları aynı (' + p1 + '), nötron sayıları farklıdır. Elektron sayıları da aynı ise kimyasal özellikleri aynıdır.' + capComparison;
+  } else if (calcE1 === calcE2 && p1 !== p2) {
+    resText.innerHTML = '⚛️ <b>İZOELEKTRONİK TANECİKLERDİR</b><br>Elektron sayıları ve dizilimleri aynı (' + calcE1 + '), proton sayıları farklıdır. Proton sayısı küçük olanın elektron başına düşen çekim kuvveti az olduğu için çapı daha BÜYÜKTÜR.';
+  } else if (p1 !== p2 && k1 === k2) {
+    resText.innerHTML = '⚖️ <b>İZOBAR ATOMLARDIR</b><br>Kütle numaraları aynı (' + k1 + '), çekirdek yükleri farklıdır.';
+  } else if (p1 !== p2 && n1 === n2) {
+    resText.innerHTML = '🧱 <b>İZOTON ATOMLARDIR</b><br>Nötron sayıları aynı (' + n1 + '), proton sayıları farklıdır.';
+  } else {
+    resText.innerHTML = '❌ Kapsamlı bir izotop/izobar/izoton/izoelektronik ilişkisi bulunamadı. Lütfen iyon yüklerini kontrol ediniz.';
+  }
+};
+// ============================================================
+// RESMİ YÖK ATLAS GÜVENLİ GEÇİŞ KAPISI ENJEKSİYON SİSTEMİ
+// ============================================================
+
+setTimeout(function() {
+  var menu = document.getElementById('mn');
+  var appContainer = document.querySelector('.app');
+  
+  if (menu && appContainer) {
+    // 1. Menüye YÖK Atlas Butonunu Ekleme (image_6.png tasarımı)
+    var yokMenuBtn = `<button onclick="nav('yokAtlas')" style="background:#5c4dff !important; color:#ffffff !important; font-weight:700;"><span style="margin-right:8px;">🎓</span> YÖK Atlas</button>`;
+    menu.insertAdjacentHTML('beforeend', yokMenuBtn);
+
+    // 2. YÖK Atlas Geçiş Kapısı Ekranını Oluşturma (image_7.png tasarımı)
+    var yokScreenHtml = `
+      <div id="s-yokAtlas" style="display:none;">
+        <div class="pw narrow">
+          <h1 class="ptitle" style="display:flex; align-items:center; gap:8px; font-size:20px;">
+            <span>🎓</span> Resmi YÖK Atlas Güvenli Geçiş Kapısı
+          </h1>
+          <p class="psub">Öğrencileriniz için resmi ve manipüle edilmemiş en güncel veriler.</p>
+          
+          <!-- Güvenlik Protokolü Uyarısı -->
+          <div style="background:rgba(245,158,11,.08); border:1px solid rgba(245,158,11,.3); border-radius:14px; padding:16px; margin-bottom:20px;">
+            <div style="font-size:13px; color:#f59e0b; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+              <span>⚠️</span> Güvenlik ve Doğruluk Protokolü:
+            </div>
+            <p style="font-size:12px; color:#fcd34d; line-height:1.6; margin:0;">
+              YÖK Atlas veritabanı harici bot isteklerine kapalıdır. Öğrencilerinizin en güncel kontenjan, taban puan ve net sıralama verilerine %100 doğru ulaşması için aşağıdaki resmi, temiz ve engelsiz devlet kanallarını kullanın.
+            </p>
+          </div>
+
+          <!-- YÖK Atlas Tercih Sihirbazı Kartları -->
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
+            
+            <!-- Kart 1: Lisans -->
+            <div onclick="window.open('https://yokatlas.yok.gov.tr/tercih-sihirbazi-lisans-anasayfa.php', '_blank')" 
+                 style="display:flex; align-items:center; gap:16px; background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:16px; cursor:pointer; transition:border-color 0.2s;">
+              <div style="width:48px; height:48px; background:rgba(99,102,241,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">📊</div>
+              <div style="flex:1">
+                <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:4px;">YKS Lisans Tercih Sihirbazı</div>
+                <div style="font-size:12px; color:var(--tx2)">SAY, EA, SÖZ puan türü resmi başarı sıralamaları.</div>
+              </div>
+              <div style="color:var(--tx3); font-size:18px">›</div>
+            </div>
+
+            <!-- Kart 2: Üniversite Atlası -->
+            <div onclick="window.open('https://yokatlas.yok.gov.tr/universite-anasayfa.php', '_blank')" 
+                 style="display:flex; align-items:center; gap:16px; background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:16px; cursor:pointer; transition:border-color 0.2s;">
+              <div style="width:48px; height:48px; background:rgba(6,182,212,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">🏛️</div>
+              <div style="flex:1">
+                <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:4px;">Detaylı Üniversite Atlası</div>
+                <div style="font-size:12px; color:var(--tx2)">Dicle Üniversitesi dahil tüm kurumların akademik kadroları.</div>
+              </div>
+              <div style="color:var(--tx3); font-size:18px">›</div>
+            </div>
+
+            <!-- Kart 3: Net Sihirbazı -->
+            <div onclick="window.open('https://yokatlas.yok.gov.tr/net-sihirbazi-anasayfa.php', '_blank')" 
+                 style="display:flex; align-items:center; gap:16px; background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:16px; cursor:pointer; transition:border-color 0.2s;">
+              <div style="width:48px; height:48px; background:rgba(234,179,8,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">⚡</div>
+              <div style="flex:1">
+                <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:4px;">YKS Net Sihirbazı</div>
+                <div style="font-size:12px; color:var(--tx2)">Bölümlere yerleşen son öğrencinin TYT/AYT net analizleri.</div>
+              </div>
+              <div style="color:var(--tx3); font-size:18px">›</div>
+            </div>
+
+            <!-- Kart 4: Önlisans -->
+            <div onclick="window.open('https://yokatlas.yok.gov.tr/tercih-sihirbazi-onlisans-anasayfa.php', '_blank')" 
+                 style="display:flex; align-items:center; gap:16px; background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:16px; cursor:pointer; transition:border-color 0.2s;">
+              <div style="width:48px; height:48px; background:rgba(168,85,247,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">🎓</div>
+              <div style="flex:1">
+                <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:4px;">Önlisans Tercih Sihirbazı</div>
+                <div style="font-size:12px; color:var(--tx2)">2 yıllık meslek yüksekokulu taban puan grafikleri.</div>
+              </div>
+              <div style="color:var(--tx3); font-size:18px">›</div>
+            </div>
+
+          </div>
+
+          <!-- Medeni Hoca'dan Tercih Stratejisi Bölümü -->
+          <div style="background:var(--sf); border:1px solid var(--br); border-left:3px solid #6366f1; border-radius:14px; padding:16px;">
+            <div style="font-size:11px; color:#818cf8; font-weight:700; text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <span>💡</span> Medeni Hoca\'dan Tercih Stratejisi
+            </div>
+            <p style="font-style:italic; font-size:13px; color:var(--tx2); line-height:1.6; margin:0;">
+              "Sevgili gençler, tercih yaparken sadece taban puanlara değil, girmek istediğiniz bölümlerin öğretim üyesi sayılarına, laboratuvar imkanlarına ve akreditasyon raporlarına YÖK Atlas üzerinden mutlaka göz atın."
+            </p>
+          </div>
+
+        </div>
+      </div>
+    `;
+    appContainer.insertAdjacentHTML('beforeend', yokScreenHtml);
+    
+    // Ekran havuzuna yeni ekranı ekle
+    if (typeof SCREENS !== 'undefined') {
+      SCREENS.push('s-yokAtlas');
+    }
+  }
+}, 1100);
 
 
 </script>
