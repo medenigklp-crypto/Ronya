@@ -2791,757 +2791,784 @@ function initLab3dPage(){
   dc.addEventListener('touchend',function(){lab3dDrag=false;lab3dStartDist=0;});
   dc.addEventListener('wheel',function(e){e.preventDefault();lab3dZoom+=e.deltaY*-0.001;lab3dZoom=Math.max(0.5,Math.min(3,lab3dZoom));});
 }
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ronya Kimya Akademisi</title>
+    <!-- Chart.js Entegrasyonu -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #0b0d19;
+            --sf: #121626;
+            --sf2: #1e2538;
+            --br: #2e374f;
+            --ac: #6366f1;
+            --ac2: #f59e0b;
+            --ac3: #fcd34d;
+            --gr: #10b981;
+            --tx1: #ffffff;
+            --tx2: #cbd5e1;
+            --tx3: #94a3b8;
+            --r: 14px;
+        }
 
-// ============================================================
-// INIT
-// ============================================================
-document.addEventListener('DOMContentLoaded',function(){
-  nav('home');
-  initCountdown();
-  renderRealPT();
-  renderRiskList();
-  renderLabList();
-  renderVidList2();
-  document.getElementById('cbtn-all').classList.add('active');
-});
-  // ============================================================================
-// RONYA KİMYA AKADEMİSİ - TÜM MODÜLLERİ İÇEREN TEK PARÇA KUSURSUZ GÜNCELLEME PAKETİ
-// ============================================================================
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-// --- GLOBAL DEĞİŞKENLER VE PANEL KURUMLARI ---
-var bagViewMode = 'lewis';
-var fcActiveCat = 'all';
-var fcLearnedCount = 0;
-var fcIdx = 0;
-var fcFlipped = false;
+        body {
+            background-color: var(--bg);
+            color: var(--tx1);
+            min-height: 100vh;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-setTimeout(function() {
-  // 1. Ana Sayfa Logo Konumlandırması (Butonların Hemen Altına Taşır)
-  var logoImg = document.querySelector('#s-home img[alt="medeni gökalp"]');
-  var hbtns = document.querySelector('#s-home .hbtns');
-  if (logoImg && hbtns) {
-    var logoContainer = logoImg.parentNode;
-    hbtns.insertAdjacentElement('afterend', logoContainer);
-    logoContainer.style.marginTop = "25px";
-    logoContainer.style.marginBottom = "5px";
-  }
+        .app {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-  // 2. Trendler Paneli Yapısının Yenilenmesi
-  var trendPanel = document.getElementById('pt-panel-trend');
-  if (trendPanel) {
-    trendPanel.innerHTML = `
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;">
-        <button class="trend-btn" data-trend="radius" onclick="setTrend(this)">⚛️ Atom Yarıçapı</button>
-        <button class="trend-btn" data-trend="ionization" onclick="setTrend(this)">⚡ İyonlaşma</button>
-        <button class="trend-btn" data-trend="neg" onclick="setTrend(this)">🔴 Elektronegatiflik</button>
-        <button class="trend-btn" data-trend="affinity" onclick="setTrend(this)">🔋 Elektron İlgisi</button>
-        <button class="trend-btn" data-trend="metAct" onclick="setTrend(this)">🔑 Metalik Aktiflik</button>
-        <button class="trend-btn" data-trend="ametAct" onclick="setTrend(this)">💎 Ametalik Aktiflik</button>
-        <button class="trend-btn" data-trend="metMelt" onclick="setTrend(this)">🌡️ Metallerde Erime N.</button>
-        <button class="trend-btn" data-trend="ametMelt" onclick="setTrend(this)">❄️ Ametallerde Erime N.</button>
-        <button class="trend-btn" data-trend="hxaAcid" onclick="setTrend(this)">🧪 HxA Asitlik Kuvveti</button>
-        <button class="trend-btn" data-trend="mohBase" onclick="setTrend(this)">🧼 M(OH)x Bazlık Kuvv.</button>
-        <button class="trend-btn" data-trend="oxyAcidA" onclick="setTrend(this)">🧪 Oksiasit (O Sayısı)</button>
-        <button class="trend-btn" data-trend="oxyAcidB" onclick="setTrend(this)">🧪 Oksiasit (Merkez Atom)</button>
-        <button class="trend-btn" data-trend="metBond" onclick="setTrend(this)">⛓️ Metalik Bağ Kuvveti</button>
-      </div>
-      <div id="trend-info-card" style="display:none;margin-bottom:10px"></div>
-      <div id="trend-arrows" style="display:none;margin-bottom:8px">
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:var(--r);margin-bottom:6px">
-          <span id="arrow-period-icon" style="font-size:18px;color:#f59e0b">⟶</span>
-          <div><div style="font-size:10px;color:#f59e0b;font-weight:700">Periyot boyunca</div><div id="arrow-period-text" style="font-size:13px;color:#fcd34d;font-weight:700"></div></div>
+        /* Navigasyon Üst Barı */
+        .navbar {
+            background: var(--sf);
+            border: 1px solid var(--br);
+            border-radius: var(--r);
+            padding: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--tx1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .brand span { color: var(--ac); font-size: 0.9rem; font-weight: 400; }
+
+        .menu-toggle {
+            background: var(--sf2);
+            border: 1px solid var(--br);
+            color: var(--tx1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Açılır Yan Menü */
+        #mn {
+            background: var(--sf);
+            border: 1px solid var(--br);
+            border-radius: var(--r);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        #mn button {
+            background: var(--sf2);
+            color: var(--tx2);
+            border: 1px solid var(--br);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            min-height: 48px;
+            transition: all 0.2s;
+        }
+
+        #mn button:active { background: var(--ac); color: #fff; }
+
+        /* İçerik Kartları */
+        .pw { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .ptitle { font-size: 1.2rem; font-weight: 700; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; }
+        .psub { font-size: 0.85rem; color: var(--tx3); margin-bottom: 8px; }
+        
+        .card {
+            background: var(--sf);
+            border: 1px solid var(--br);
+            border-radius: var(--r);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Ortak Form Elemanları */
+        .slbl { font-size: 0.8rem; color: var(--tx3); font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .sel, .inp {
+            width: 100%;
+            background: var(--sf2);
+            border: 1px solid var(--br);
+            color: var(--tx1);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            outline: none;
+            min-height: 46px;
+        }
+
+        /* Buton Tipleri (Asla Üst Üste Binmez) */
+        .btn {
+            background: var(--ac);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn:active { opacity: 0.9; }
+        .bfull { width: 100%; }
+
+        .ob {
+            background: var(--sf2);
+            color: var(--tx2);
+            border: 1px solid var(--br);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ob:active, .ob.sel2 { background: var(--ac); color: #fff; border-color: var(--ac); }
+
+        .g2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+        /* Trend Sekme Çubuğu */
+        .trend-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; width: 100%; -webkit-overflow-scrolling: touch; }
+        .trend-btn {
+            background: var(--sf2); color: var(--tx3); border: 1px solid var(--br);
+            padding: 8px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+            white-space: nowrap; cursor: pointer; min-height: 38px;
+        }
+        .trend-btn.active { background: var(--ac); color: #fff; border-color: var(--ac); }
+
+        /* Flashcard Animasyonu */
+        .tab { background: transparent; color: var(--tx3); border: none; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+        .tab.on { color: var(--ac); border-bottom: 2px solid var(--ac); }
+        .pbar { width: 100%; height: 6px; background: var(--sf2); border-radius: 3px; overflow: hidden; }
+        .pfill { height: 100%; background: var(--gr); width: 0%; transition: width 0.3s; }
+
+        /* Bildirim Toast kutusu */
+        #toast {
+            position: fixed; bottom: 20px; background: var(--ac); color: #fff;
+            padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast"></div>
+
+    <div class="app">
+        <!-- ÜST BAR -->
+        <div class="navbar">
+            <div class="brand">Ronya <span>Kimya v5</span></div>
+            <button class="menu-toggle" onclick="toggleMenu()">☰ Menü</button>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:var(--r)">
-          <span id="arrow-group-icon" style="font-size:18px;color:#818cf8">↓</span>
-          <div><div style="font-size:10px;color:#818cf8;font-weight:700">Grup boyunca</div><div id="arrow-group-text" style="font-size:13px;color:#c4b5fd;font-weight:700"></div></div>
+
+        <!-- ANA MENÜ -->
+        <div id="mn">
+            <button onclick="nav('home')">🏠 Ana Sayfa</button>
+            <button onclick="nav('pt')">📊 Periyodik Trendler</button>
+            <button onclick="nav('bagSim')">⚛️ Gelişmiş Bağ Simülasyonu</button>
+            <button onclick="nav('flashcard')">📝 Kimya Flashcard (Ezber)</button>
+            <button onclick="nav('cozelti')">⚗️ Çözelti Simülatörü</button>
+            <button onclick="nav('denge')">📈 Hız & Denge Grafiği</button>
+            <button onclick="nav('izotop')">⚛️ İzotop / Çap Tanı Motoru</button>
+            <button onclick="nav('yokAtlas')" style="background:#5c4dff !important; color:#ffffff !important;"><span style="margin-right:6px;">🎓</span> YÖK Atlas Kapısı</button>
         </div>
-      </div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div id="pt-trend-grid" style="min-width:700px"></div></div>
-    `;
-  }
 
-  // 3. Menü Butonları ve Yeni Sayfaların Enjeksiyonu
-  var menu = document.getElementById('mn');
-  var appContainer = document.querySelector('.app');
-  if (menu && appContainer) {
-    menu.insertAdjacentHTML('beforeend', `
-      <button onclick="nav('bagSim')">⚛️ Bağ Simülasyonu</button>
-      <button onclick="nav('flashcard')">📝 Kimya Flashcard</button>
-      <button onclick="nav('cozelti')">⚗️ Çözelti Simülatörü</button>
-      <button onclick="nav('denge')">📈 Hız & Denge Grafiği</button>
-      <button onclick="nav('izotop')">⚛️ İzotop Tanı Aracı</button>
-      <button onclick="nav('yokAtlas')" style="background:#5c4dff !important; color:#ffffff !important; font-weight:700;"><span style="margin-right:8px;">🎓</span> YÖK Atlas</button>
-    `);
-
-    appContainer.insertAdjacentHTML('beforeend', `
-      <!-- BAĞ SİMÜLASYONU -->
-      <div id="s-bagSim" style="display:none">
-        <div class="pw narrow">
-          <h1 class="ptitle">⚛️ Kimyasal Bağ Simülasyonu</h1>
-          <p class="psub">İyonik ve kovalent bağ formlarını kusursuz elektron eşleşmeleriyle izleyin.</p>
-          <div class="card" style="margin-bottom:12px">
-            <div style="width:100%; margin-bottom:10px;">
-              <div class="slbl">İncelemek İstediğiniz Molekül / Bileşik</div>
-              <select class="sel" id="bag-molecule" onchange="startBagSim()">
-                <option value="H2O">H₂O (Polar Kovalent - Kırık Doğru)</option>
-                <option value="NH3">NH₃ (Polar Kovalent - Üçgen Piramit)</option>
-                <option value="CH4">CH₄ (Polar Kovalent - Düzgün Dörtyüzlü)</option>
-                <option value="BH3">BH₃ (Polar Kovalent - Düzlem Üçgen)</option>
-                <option value="BeH2">BeH₂ (Polar Kovalent - Doğrusal)</option>
-                <option value="H2">H₂ (Apolar Kovalent - Tekli Bağ)</option>
-                <option value="O2">O₂ (Apolar Kovalent - İkili Bağ)</option>
-                <option value="N2">N₂ (Apolar Kovalent - Üçlü Bağ)</option>
-                <option value="CO2">CO₂ (Apolar Kovalent - İkili Bağlar / Doğrusal)</option>
-                <option value="HCN">HCN (Polar Kovalent - Tekli ve Üçlü Bağ)</option>
-                <option value="HF">HF (Polar Kovalent - Tekli Bağ)</option>
-                <option value="C2H6">C₂H₆ (Etan - Tekli Sigma Bağları)</option>
-                <option value="C2H4">C₂H₄ (Eten - İkili Bağ / Alken)</option>
-                <option value="C2H2">C₂H₂ (Etin - Üçlü Bağ / Alkin)</option>
-                <option value="NaCl">NaCl (İyonik Bağ - Elektron Transferi)</option>
-              </select>
+        <!-- MODÜL 0: ANA SAYFA -->
+        <div id="s-home" class="pw">
+            <div class="card" style="text-align: center; padding: 30px 20px;">
+                <h2 style="margin-bottom: 10px; font-weight: 800;">Ronya Kimya Akademisine Hoş Geldiniz!</h2>
+                <p style="font-size: 0.9rem; color: var(--tx2); line-height: 1.6; margin-bottom: 20px;">
+                    Öğretim süreçlerinizi zenginleştirecek interaktif MEB/YKS uyumlu simülasyon araçlarına menüden erişebilirsiniz.
+                </p>
+                <div style="background: rgba(99,102,241,0.05); padding: 15px; border-radius: 12px; border: 1px dashed var(--br);">
+                    <div style="font-size: 0.75rem; color: var(--ac); font-weight: bold; margin-bottom: 4px;">BAŞ DIŞ DANIŞMAN</div>
+                    <div style="font-size: 1rem; font-weight: 700;">Medeni Gökalp</div>
+                    <div style="font-size: 0.8rem; color: var(--tx3);">Kimya Öğretmeni</div>
+                </div>
             </div>
-            <div style="display:flex; gap:6px; margin-bottom:10px; width:100%">
-              <button class="ob sel2" id="bag-btn-lewis" onclick="setBagView('lewis', this)" style="flex:1">🔴 Lewis Yapısı (E⁻ Çiftleri)</button>
-              <button class="ob" id="bag-btn-orb" onclick="setBagView('orb', this)" style="flex:1">☁️ Çizgi / Orbital Modu</button>
-            </div>
-          </div>
-          <div style="background:#050510;border:1px solid var(--br);border-radius:16px;overflow:hidden">
-            <div id="bag-title" style="text-align:center;padding:8px;font-size:13px;color:var(--ac2);font-weight:600">Simülasyon yükleniyor...</div>
-            <canvas id="bagCanvas" style="width:100%;display:block;background:#050510" height="260"></canvas>
-          </div>
         </div>
-      </div>
 
-      <!-- KİMYA FLASHCARD -->
-      <div id="s-flashcard" style="display:none">
-        <div class="pw narrow" style="text-align:center">
-          <h1 class="ptitle">📝 Kimya Flashcard</h1>
-          <p class="psub">TYT/AYT yaygın isimler ve formüller ezber kartları.</p>
-          <div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;overflow-x:auto;">
-            <button class="tab on" id="fcc-all" onclick="setFcCat('all', this)">Tümü</button>
-            <button class="tab" onclick="setFcCat('TYT', this)">TYT Yaygın Adlar</button>
-            <button class="tab" onclick="setFcCat('AYT', this)">AYT Formülleri</button>
-          </div>
-          <div class="pbar" style="max-width:340px;margin:0 auto 12px;"><div class="pfill" id="fc-pfill" style="width:0%"></div></div>
-          <div style="perspective:1000px;margin:20px auto;width:100%;max-width:340px;height:200px;cursor:pointer" onclick="flipCard()">
-            <div id="fcard" style="width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.6s;transform:rotateY(0deg)">
-              <div style="position:absolute;inset:0;background:var(--sf);border:2px solid var(--ac);border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;backface-visibility:hidden">
-                <div class="slbl" style="color:var(--ac2)">Soru / Yaygın Adı</div>
-                <div id="fc-front" style="font-size:24px;font-weight:800;margin-top:14px">-</div>
-                <div style="font-size:11px;color:var(--tx3);margin-top:20px">🔄 Döndürmek için tıkla</div>
-              </div>
-              <div style="position:absolute;inset:0;background:var(--sf2);border:2px solid var(--gr);border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;backface-visibility:hidden;transform:rotateY(180deg)">
-                <div class="slbl" style="color:var(--gr)">Cevap / Sistematik Adı</div>
-                <div id="fc-back-formula" style="font-family:Space Grotesk,sans-serif;font-size:32px;font-weight:800;color:var(--gr)">-</div>
-                <div id="fc-back-name" style="font-size:14px;color:var(--tx2);margin-top:6px">-</div>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;gap:10px;justify-content:center;max-width:340px;margin:0 auto">
-            <button class="btn bs" style="flex:1" onclick="nextCard(false)">✗ Tekrar Et</button>
-            <button class="btn bp" style="flex:1;background:var(--gr)" onclick="nextCard(true)">✓ Öğrendim</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ÇÖZELTİ SİMÜLATÖRÜ -->
-      <div id="s-cozelti" style="display:none">
-        <div class="pw narrow">
-          <h1 class="ptitle">⚗️ Çözelti Hazırlama Simülatörü</h1>
-          <p class="psub">Sanal laboratuvarda "Denizde Yüzen On Maymun" ve Molarite dönüşümlü hesaplamalar.</p>
-          <div class="card" style="margin-bottom:14px">
-            <div class="g3" style="margin-bottom:10px">
-              <div><div class="slbl">Bileşik</div><select class="sel" id="coz-comp" onchange="drawCoz()"><option value="NaOH">NaOH (Ma:40)</option><option value="CuSO4">CuSO₄ (Ma:160)</option><option value="KMnO4">KMnO₄ (Ma:158)</option></select></div>
-              <div><div class="slbl">Hacim (mL)</div><input type="number" id="coz-v" class="inp" value="250" oninput="drawCoz()"></div>
-              <div><div class="slbl">Hesaplama Yöntemi</div><select class="sel" id="coz-method" onchange="toggleCozMethod()"><option value="molar">Doğrudan Molarite</option><option value="formula">Yoğunluk & Kütlece %</option></select></div>
-            </div>
-            <div id="coz-molar-area" style="margin-bottom:10px"><div class="slbl">Hedef Molarite (M)</div><input type="number" id="coz-m" class="inp" value="0.1" oninput="drawCoz()"></div>
-            <div id="coz-formula-area" class="g2" style="margin-bottom:10px; display:none;">
-              <div><div class="slbl">Yoğunluk (d: g/mL)</div><input type="number" id="coz-d" class="inp" value="1.2" oninput="drawCoz()"></div>
-              <div><div class="slbl">Kütlece Yüzde (%)</div><input type="number" id="coz-pct" class="inp" value="20" oninput="drawCoz()"></div>
-            </div>
-            <div id="coz-guide" style="font-size:13px;color:var(--ac3);background:rgba(99,102,241,0.1);padding:10px;border-radius:8px;line-height:1.5"></div>
-          </div>
-          <div class="card" style="display:flex;justify-content:center;background:#08090f"><canvas id="cozCanvas" width="200" height="260"></canvas></div>
-        </div>
-      </div>
-
-      <!-- HIZ VE DENGE GRAFİĞİ -->
-      <div id="s-denge" style="display:none">
-        <div class="pw narrow">
-          <h1 class="ptitle">📈 Hız ve Denge Grafiği</h1>
-          <p class="psub">Le Chatelier ilkesine göre dengenin kayışını dinamik izle.</p>
-          <div class="card" style="margin-bottom:14px">
-            <div class="slbl">Tepkime: N₂(g) + 3H₂(g) ⇌ 2NH₃(g) + Isı</div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-              <button class="ob" onclick="triggerDenge('add_n2')">➕ N₂ Ekle</button>
-              <button class="ob" onclick="triggerDenge('remove_nh3')">➖ NH₃ Çek</button>
-              <button class="ob" onclick="triggerDenge('vol_inc')">📈 Hacim Artır (Basınç Azalt)</button>
-              <button class="ob" onclick="triggerDenge('vol_dec')">📉 Hacim Azalt (Basınç Artır)</button>
-              <button class="ob" onclick="triggerDenge('heat')">🔥 Sıcaklık Artır</button>
-              <button class="ob" onclick="triggerDenge('cool')">❄️ Sıcaklık Azalt</button>
-            </div>
-          </div>
-          <div class="card" style="background:#050510;padding:10px">
-            <canvas id="dengeCanvas" width="500" height="240" style="width:100%;display:block"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- İZOTOP TANI ARACI -->
-      <div id="s-izotop" style="display:none">
-        <div class="pw narrow">
-          <h1 class="ptitle">⚛️ İzotop, İzobar, İzoton Tanı Aracı</h1>
-          <p class="psub">İki taneciğin proton, nötron ve yük değerlerini girip çap analizi yapın.</p>
-          <div class="g2" style="gap:16px">
+        <!-- MODÜL 1: PERİYODİK TRENDLER -->
+        <div id="s-pt" class="pw" style="display:none">
+            <h1 class="ptitle">📊 Periyodik Özellik Değişimleri</h1>
+            <p class="psub">Müfredat trend yönlerini ve kuralları akıllı şemayla inceleyin.</p>
             <div class="card">
-              <div class="slbl" style="color:var(--ac2);font-weight:700">1. ATOM / İYON</div>
-              <div style="margin-bottom:8px"><label style="font-size:11px;color:var(--tx2)">Proton (Z)</label><input type="number" id="iz-p1" class="inp" value="17" oninput="diagnoseAtoms()"></div>
-              <div style="margin-bottom:8px"><label style="font-size:11px;color:var(--tx2)">Nötron (N)</label><input type="number" id="iz-n1" class="inp" value="18" oninput="diagnoseAtoms()"></div>
-              <div style="margin-bottom:8px"><label style="font-size:11px;color:var(--tx2)">Elektron (e)</label><input type="number" id="iz-e1" class="inp" value="17" oninput="diagnoseAtoms()"></div>
-              <div><label style="font-size:11px;color:var(--tx3)">İyon Yükü (+/-)</label><input type="number" id="iz-y1" class="inp" value="0" oninput="diagnoseAtoms()"></div>
+                <div class="trend-scroll">
+                    <button class="trend-btn active" onclick="setTrend('radius', this)">⚛️ Atom Yarıçapı</button>
+                    <button class="trend-btn" onclick="setTrend('ionization', this)">⚡ İyonlaşma Enerjisi</button>
+                    <button class="trend-btn" onclick="setTrend('neg', this)">🔴 Elektronegatiflik</button>
+                    <button class="trend-btn" onclick="setTrend('affinity', this)">🔋 Elektron İlgisi</button>
+                    <button class="trend-btn" onclick="setTrend('metAct', this)">🔑 Metalik Aktiflik</button>
+                    <button class="trend-btn" onclick="setTrend('ametAct', this)">💎 Ametalik Aktiflik</button>
+                    <button class="trend-btn" onclick="setTrend('metMelt', this)">🌡️ Metallerde Erime N.</button>
+                    <button class="trend-btn" onclick="setTrend('ametMelt', this)">❄️ Ametallerde Erime N.</button>
+                    <button class="trend-btn" onclick="setTrend('hxaAcid', this)">🧪 HxA Asitlik Kuvveti</button>
+                    <button class="trend-btn" onclick="setTrend('mohBase', this)">🧼 M(OH)x Bazlık Kuvv.</button>
+                    <button class="trend-btn" onclick="setTrend('oxyAcidA', this)">🧪 Oksiasit (O Sayısı)</button>
+                    <button class="trend-btn" onclick="setTrend('oxyAcidB', this)">🧪 Oksiasit (Merkez Atom)</button>
+                    <button class="trend-btn" onclick="setTrend('metBond', this)">⛓️ Metalik Bağ Kuvveti</button>
+                </div>
+
+                <div id="trend-info-card" style="font-size:0.85rem; color:var(--tx2); background:rgba(255,255,255,0.03); padding:12px; border-radius:10px; border:1px solid var(--br); line-height:1.5;">-</div>
+                
+                <!-- Yön Okları Göstergeleri -->
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="display:flex; align-items:center; gap:8px; padding:8px 12px; background:rgba(245,158,11,.08); border:1px solid rgba(245,158,11,.25); border-radius:10px;">
+                        <span style="font-size:16px; color:var(--ac2)">⟶</span>
+                        <div><div style="font-size:9px; color:var(--ac2); font-weight:700">Periyot boyunca</div><div id="arrow-period-text" style="font-size:12px; color:var(--ac3); font-weight:700">-</div></div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; padding:8px 12px; background:rgba(99,102,241,.08); border:1px solid rgba(99,102,241,.25); border-radius:10px;">
+                        <span style="font-size:16px; color:#818cf8">↓</span>
+                        <div><div style="font-size:9px; color:#818cf8; font-weight:700">Grup boyunca</div><div id="arrow-group-text" style="font-size:12px; color:#c4b5fd; font-weight:700">-</div></div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- MODÜL 2: GELİŞMİŞ KİMYASAL BAĞ SİMÜLASYONU -->
+        <div id="s-bagSim" style="display:none" class="pw">
+            <h1 class="ptitle">⚛️ Kimyasal Bağ Simülasyonu</h1>
+            <p class="psub">14 Temel molekül yapısını ve iyonik transferi gözlemleyin.</p>
             <div class="card">
-              <div class="slbl" style="color:var(--ac2);font-weight:700">2. ATOM / İYON</div>
-              <div style="margin-bottom:8px"><label style="font-size:11px;color:var(--tx2)">Proton (Z)</label><input type="number" id="iz-p2" class="inp" value="17" oninput="diagnoseAtoms()"></div>
-              <div style="margin-bottom:8px"><label style="font-size:11px;color:var(--tx2)">Nötron (N)</label><input type="number" id="iz-n2" class="inp" value="20" oninput="diagnoseAtoms()"></div>
-              <div style="margin-bottom:8px"><label style="font-size:11px;color:var(--tx2)">Elektron (e)</label><input type="number" id="iz-e2" class="inp" value="17" oninput="diagnoseAtoms()"></div>
-              <div><label style="font-size:11px;color:var(--tx3)">İyon Yükü (+/-)</label><input type="number" id="iz-y2" class="inp" value="0" oninput="diagnoseAtoms()"></div>
+                <div>
+                    <div class="slbl">İncelemek İstediğiniz Tür</div>
+                    <select class="sel" id="bag-molecule" onchange="startBagSim()">
+                        <option value="H2O">H₂O (Polar Kovalent - Kırık Doğru)</option>
+                        <option value="NH3">NH₃ (Polar Kovalent - Üçgen Piramit)</option>
+                        <option value="CH4">CH₄ (Polar Kovalent - Düzgün Dörtyüzlü)</option>
+                        <option value="BH3">BH₃ (Polar Kovalent - Düzlem Üçgen)</option>
+                        <option value="BeH2">BeH₂ (Polar Kovalent - Doğrusal)</option>
+                        <option value="H2">H₂ (Apolar Kovalent - Tekli Bağ)</option>
+                        <option value="O2">O₂ (Apolar Kovalent - İkili Bağ)</option>
+                        <option value="N2">N₂ (Apolar Kovalent - Üçlü Bağ)</option>
+                        <option value="CO2">CO₂ (Apolar Kovalent - Doğrusal)</option>
+                        <option value="HCN">HCN (Polar Kovalent - Doğrusal)</option>
+                        <option value="HF">HF (Polar Kovalent - Tekli Bağ)</option>
+                        <option value="C2H6">C₂H₆ (Etan - Tekli Bağlar)</option>
+                        <option value="C2H4">C₂H₄ (Eten - İkili Bağlar)</option>
+                        <option value="C2H2">C₂H₂ (Etin - Üçlü Bağlar)</option>
+                        <option value="NaCl">NaCl (İyonik Bağ - Elektron Transferi)</option>
+                    </select>
+                </div>
+                <div class="g2">
+                    <button class="ob sel2" id="bag-btn-lewis" onclick="setBagView('lewis', this)">🔴 Lewis (E⁻ Çiftleri)</button>
+                    <button class="ob" id="bag-btn-orb" onclick="setBagView('orb', this)">☁️ Çizgi / Orbital Modu</button>
+                </div>
             </div>
-          </div>
-          <div class="rb" id="iz-result" style="display:none;margin-top:14px;border-left:4px solid var(--gr)">
-            <div class="rl" style="color:var(--gr)">ANALİZ RAPORU</div>
-            <div class="rv" id="iz-rv" style="font-size:14px;color:#fff;margin-top:6px;line-height:1.5;"></div>
-          </div>
+            <div style="background:#050510; border:1px solid var(--br); border-radius:16px; overflow:hidden">
+                <div id="bag-title" style="text-align:center; padding:10px; font-size:12px; color:var(--ac2); font-weight:600; background: rgba(255,255,255,0.01);">Simülasyon Modu Açık</div>
+                <canvas id="bagCanvas" style="width:100%; display:block; background:#050510" height="260"></canvas>
+            </div>
         </div>
-      </div>
 
-      <!-- YÖK ATLAS KAPISI -->
-      <div id="s-yokAtlas" style="display:none;">
-        <div class="pw narrow">
-          <h1 class="ptitle" style="display:flex; align-items:center; gap:8px; font-size:20px;">
-            <span>🎓</span> Resmi YÖK Atlas Güvenli Geçiş Kapısı
-          </h1>
-          <p class="psub">Öğrenciler için engelsiz devlet kanalları rehber arayüzü.</p>
-          <div style="background:rgba(245,158,11,.08); border:1px solid rgba(245,158,11,.3); border-radius:14px; padding:16px; margin-bottom:20px;">
-            <div style="font-size:13px; color:#f59e0b; font-weight:700; margin-bottom:6px;">⚠️ Güvenlik ve Doğruluk Protokolü:</div>
-            <p style="font-size:12px; color:#fcd34d; line-height:1.6; margin:0;">
-              YÖK Atlas veritabanı harici bot isteklerine kapalıdır. Net sıralama ve resmi kontenjan verilerine %100 doğru ulaşmak için aşağıdaki resmi devlet kanallarını kullanın.
-            </p>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
-            <div onclick="window.open('https://yokatlas.yok.gov.tr/tercih-sihirbazi-lisans-anasayfa.php', '_blank')" style="display:flex; align-items:center; gap:16px; background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:16px; cursor:pointer;">
-              <div style="width:48px; height:48px; background:rgba(99,102,241,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px;">📊</div>
-              <div style="flex:1"><div style="font-size:14px; font-weight:700; color:#fff;">YKS Lisans Tercih Sihirbazı</div><div style="font-size:12px; color:var(--tx2)">SAY, EA, SÖZ resmi başarı sıralamaları.</div></div>
+        <!-- MODÜL 3: KIMYA FLASHCARD -->
+        <div id="s-flashcard" style="display:none" class="pw">
+            <div style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+                <h1 class="ptitle" style="justify-content:center;">📝 Kimya Flashcard</h1>
+                <p class="psub">Önemli adlandırmalar ve ezber kartları listesi.</p>
+                <div style="display:flex; gap:6px; justify-content:center; overflow-x:auto;">
+                    <button class="tab on" id="fcc-all" onclick="setFcCat('all', this)">Tümü</button>
+                    <button class="tab" onclick="setFcCat('TYT', this)">TYT Yaygın Adlar</button>
+                    <button class="tab" onclick="setFcCat('AYT', this)">AYT Formülleri</button>
+                </div>
+                <div class="pbar" style="max-width:340px; margin:0 auto;"><div class="pfill" id="fc-pfill"></div></div>
+                
+                <div style="perspective:1000px; margin:15px auto; width:100%; max-width:340px; height:180px; cursor:pointer" onclick="flipCard()">
+                    <div id="fcard" style="width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 0.4s;">
+                        <!-- Ön Yüz -->
+                        <div style="position:absolute; inset:0; background:var(--sf); border:2px solid var(--ac); border-radius:16px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:15px; backface-visibility:hidden">
+                            <div class="slbl" style="color:var(--ac2)">Bileşik / Tanım</div>
+                            <div id="fc-front" style="font-size:22px; font-weight:800; margin-top:10px">-</div>
+                            <div style="font-size:10px; color:var(--tx3); margin-top:20px">🔄 Çevirmek İçin Dokun</div>
+                        </div>
+                        <!-- Arka Yüz -->
+                        <div style="position:absolute; inset:0; background:var(--sf2); border:2px solid var(--gr); border-radius:16px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:15px; backface-visibility:hidden; transform:rotateY(180deg)">
+                            <div class="slbl" style="color:var(--gr)">Kimyasal Formülü</div>
+                            <div id="fc-back-formula" style="font-size:28px; font-weight:800; color:var(--gr)">-</div>
+                            <div id="fc-back-name" style="font-size:13px; color:var(--tx2); margin-top:6px">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="g2" style="max-width:340px; margin:0 auto; width:100%;">
+                    <button class="btn" style="background:#ef4444" onclick="nextCard(false)">✗ Tekrar</button>
+                    <button class="btn" style="background:var(--gr)" onclick="nextCard(true)">✓ Öğrendim</button>
+                </div>
             </div>
-            <div onclick="window.open('https://yokatlas.yok.gov.tr/universite-anasayfa.php', '_blank')" style="display:flex; align-items:center; gap:16px; background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:16px; cursor:pointer;">
-              <div style="width:48px; height:48px; background:rgba(6,182,212,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px;">🏛️</div>
-              <div style="flex:1"><div style="font-size:14px; font-weight:700; color:#fff;">Detaylı Üniversite Atlası</div><div style="font-size:12px; color:var(--tx2)">Kurumların akademik kadroları ve detayları.</div></div>
-            </div>
-            <div onclick="window.open('https://yokatlas.yok.gov.tr/net-sihirbazi-anasayfa.php', '_blank')" style="display:flex; align-items:center; gap:16px; background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:16px; cursor:pointer;">
-              <div style="width:48px; height:48px; background:rgba(234,179,8,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px;">⚡</div>
-              <div style="flex:1"><div style="font-size:14px; font-weight:700; color:#fff;">YKS Net Sihirbazı</div><div style="font-size:12px; color:var(--tx2)">Yerleşen son öğrencinin net analizleri.</div></div>
-            </div>
-            <div onclick="window.open('https://yokatlas.yok.gov.tr/tercih-sihirbazi-onlisans-anasayfa.php', '_blank')" style="display:flex; align-items:center; gap:16px; background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:16px; cursor:pointer;">
-              <div style="width:48px; height:48px; background:rgba(168,85,247,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px;">🎓</div>
-              <div style="flex:1"><div style="font-size:14px; font-weight:700; color:#fff;">Önlisans Tercih Sihirbazı</div><div style="font-size:12px; color:var(--tx2)">2 yıllık yüksekokul taban puanları.</div></div>
-            </div>
-          </div>
-          <div style="background:var(--sf); border:1px solid var(--br); border-left:3px solid #6366f1; border-radius:14px; padding:16px;">
-            <div style="font-size:11px; color:#818cf8; font-weight:700; text-transform:uppercase; margin-bottom:8px;">💡 Medeni Hoca'dan Tercih Stratejisi</div>
-            <p style="font-style:italic; font-size:13px; color:var(--tx2); line-height:1.6; margin:0;">
-              "Sevgili gençler, tercih yaparken sadece taban puanlara değil, girmek istediğiniz bölümlerin öğretim üyesi sayılarına, laboratuvar imkanlarına ve akreditasyon raporlarına YÖK Atlas üzerinden mutlaka göz atın."
-            </p>
-          </div>
         </div>
-      </div>
-    `);
 
-    if (typeof SCREENS !== 'undefined') {
-      SCREENS.push('bagSim','flashcard','cozelti','denge','izotop','yokAtlas');
-    }
-  }
-  // Kartları ilk açılış için yükle
-  updateCardUI();
-}, 1000);
+        <!-- MODÜL 4: ÇÖZELTİ SİMÜLATÖRÜ -->
+        <div id="s-cozelti" style="display:none" class="pw">
+            <h1 class="ptitle">⚗️ Çözelti Hazırlama Laboratuvarı</h1>
+            <p class="psub">Sanal joje üzerinde hassas kütle analizi gerçekleştirin.</p>
+            <div class="card">
+                <div class="g3">
+                    <div><div class="slbl">Bileşik</div><select class="sel" id="coz-comp" onchange="drawCoz()"><option value="NaOH">NaOH</option><option value="CuSO4">CuSO₄</option><option value="KMnO4">KMnO₄</option></select></div>
+                    <div><div class="slbl">Hacim (mL)</div><input type="number" id="coz-v" class="inp" value="250" oninput="drawCoz()"></div>
+                    <div><div class="slbl">Yöntem</div><select class="sel" id="coz-method" onchange="toggleCozMethod()"><option value="molar">Molarite</option><option value="formula">Yoğunluk-%</option></select></div>
+                </div>
+                <div id="coz-molar-area"><div class="slbl">Molarite (M)</div><input type="number" id="coz-m" class="inp" value="0.1" step="0.1" oninput="drawCoz()"></div>
+                <div id="coz-formula-area" class="g2" style="display:none;">
+                    <div><div class="slbl">Yoğunluk (g/mL)</div><input type="number" id="coz-d" class="inp" value="1.2" step="0.1" oninput="drawCoz()"></div>
+                    <div><div class="slbl">Kütlece (%)</div><input type="number" id="coz-pct" class="inp" value="20" oninput="drawCoz()"></div>
+                </div>
+                <div id="coz-guide" style="font-size:12px; color:var(--ac3); background:rgba(99,102,241,0.08); padding:10px; border-radius:8px; line-height:1.4"></div>
+            </div>
+            <div class="card" style="display:flex; justify-content:center; align-items:center; background:#08090f"><canvas id="cozCanvas" width="180" height="240"></canvas></div>
+        </div>
 
-// --- MODÜL SARMAL NAVİGASYON DESTEĞİ ---
-var originalNav = nav;
-nav = function(id) {
-  originalNav(id);
-  if(id==='cozelti') setTimeout(drawCoz, 150);
-  if(id==='denge') setTimeout(initDengeGraph, 150);
-  if(id==='bagSim') setTimeout(startBagSim, 150);
-};
+        <!-- MODÜL 5: HIZ VE DENGE GRAFİĞİ -->
+        <div id="s-denge" style="display:none" class="pw">
+            <h1 class="ptitle">📈 Kimyasal Denge Kinetiği</h1>
+            <p class="psub">Hacim etkisindeki dikey kırılmaları ve Le Chatelier esnemelerini izleyin.</p>
+            <div class="card">
+                <div class="slbl" style="color:var(--gr)">Sistem: N₂(g) + 3H₂(g) ⇌ 2NH₃(g) + Isı</div>
+                <div class="g2">
+                    <button class="ob" onclick="triggerDenge('vol_inc')" style="border-color:#b45309; background:rgba(180,83,9,0.05)">📈 Hacim Artır (V↑)</button>
+                    <button class="ob" onclick="triggerDenge('vol_dec')" style="border-color:#b45309; background:rgba(180,83,9,0.05)">📉 Hacim Azalt (V↓)</button>
+                    <button class="ob" onclick="triggerDenge('add_n2')">➕ N₂ Ekle</button>
+                    <button class="ob" onclick="triggerDenge('remove_nh3')">➖ NH₃ Çek</button>
+                    <button class="ob" onclick="triggerDenge('heat')" style="border-color:#ef4444;">🔥 Sıcaklık Artır</button>
+                    <button class="ob" onclick="triggerDenge('cool')" style="border-color:#3b82f6;">❄️ Sıcaklık Azalt</button>
+                </div>
+            </div>
+            <div class="card" style="background:#04060f; padding:8px; height:260px;">
+                <canvas id="dengeCanvas"></canvas>
+            </div>
+        </div>
 
-// --- TRENDLER VERİ VE OK YÖNLERİ SİSTEMİ ---
-TREND_CONFIG = {
-  radius: { label: 'Atom Yarıçapı', unit: 'pm', desc: 'Periyotta sağa doğru azalır (çekirdek yükü artar). Grupta aşağı doğru artar (kabuk sayısı artar).', arrow_period: '→ Sağa Doğru Azalır', arrow_group: '↓ Aşağı Doğru Artar', color_low: '#3b82f6', color_high: '#ef4444', getValue: function(el) { return 300 - (PT_POS[el.n][1] * 10) + (PT_POS[el.n][0] * 20); } },
-  ionization: { label: 'İyonlaşma Enerjisi', unit: 'kJ/mol', desc: 'Gaz halindeki nötr bir atomdan elektron koparmak için gereken enerjidir. Genellikle periyotta sağa doğru artar, grupta aşağı doğru azalır.', arrow_period: '→ Sağa Doğru Genellikle Artar', arrow_group: '↓ Aşağı Doğru Azalır', color_low: '#3b82f6', color_high: '#ef4444', getValue: function(el) { if(el.cat=== 'Soy Gaz') return 2000 - el.n*5; return (PT_POS[el.n][1] * 80) - (PT_POS[el.n][0] * 40); } },
-  neg: { label: 'Elektronegatiflik', unit: '', desc: 'Bir atomun bağ elektronlarını kendine çekme yeteneğidir. Periyotta sağa doğru artar, grupta aşağı doğru azalır. Soy gazların bağ yapma eğilimi olmadığından elektronegatiflikleri aranmaz.', arrow_period: '→ Sağa Doğru Artar (Soy gazlar hariç)', arrow_group: '↓ Aşağı Doğru Azalır', color_low: '#3b82f6', color_high: '#ef4444', getValue: function(el) { if(el.cat=== 'Soy Gaz') return null; return (PT_POS[el.n][1] * 0.2) + (8 - PT_POS[el.n][0]) * 0.3; } },
-  affinity: { label: 'Elektron İlgisi', unit: 'kJ/mol', desc: 'Gaz halindeki nötr bir atomun elektron alması sırasındaki enerji değişimidir. Genellikle periyotta sağa doğru artar, grupta aşağı doğru azalır. Klorun (Cl) elektron ilgisi flordan (F) büyüktür.', arrow_period: '→ Sağa Doğru Genellikle Artar (Soy gazlar hariç)', arrow_group: '↓ Aşağı Doğru Genellikle Azalır', color_low: '#1e3a8a', color_high: '#f59e0b', getValue: function(el) { if(el.cat=== 'Soy Gaz') return null; if(el.sym=== 'Cl') return 400; if(el.sym=== 'F') return 380; return (PT_POS[el.n][1] * 25) - (PT_POS[el.n][0] * 10); } },
-  metAct: { label: 'Metalik Aktiflik (Elektron Verme Eğilimi)', unit: '', desc: 'Metallerin elektron verme kolaylığıdır. Periyotta sağa doğru azalır, grupta aşağı doğru artar. En aktif metaller 1A grubunun altındadır (Fr).', arrow_period: '→ Sağa Doğru Azalır', arrow_group: '↓ Aşağı Doğru Artar', color_low: '#334155', color_high: '#22c55e', getValue: function(el) { if(el.cat.indexOf('Metal')=== -1 && el.cat!== 'Metal') return null; return (19 - PT_POS[el.n][1]) * 10 + (PT_POS[el.n][0] * 15); } },
-  ametAct: { label: 'Ametalik Aktiflik (Elektron Alma Eğilimi)', unit: '', desc: 'Ametallerin elektron alma kolaylığıdır. Periyotta sağa doğru artar, grupta aşağı doğru azalır. Soy gazlar hariç en aktif ametaller 7A grubunun üstündedir (F).', arrow_period: '→ Sağa Doğru Artar (Soy gazlar hariç)', arrow_group: '↓ Aşağı Doğru Azalır', color_low: '#1e293b', color_high: '#ec4899', getValue: function(el) { if(el.cat=== 'Soy Gaz' || (el.cat.indexOf('Ametal')=== -1 && el.cat!== 'Halojen' && el.cat!== 'Yarı Metal')) return null; return (PT_POS[el.n][1] * 20) + (8 - PT_POS[el.n][0]) * 15; } },
-  metMelt: { label: 'Metallerde Erime Noktası', unit: '°C', desc: 'Metallerde erime noktası metalik bağ kuvveti ile doğru orantılıdır. Aynı periyotta sağa doğru çap küçülüp değerlik elektron sayısı arttığı için artar. Aynı grupta aşağı doğru çap büyüdüğü için bağ zayıflar ve erime noktası azalır.', arrow_period: '→ Sağa Doğru Artar', arrow_group: '↓ Aşağı Doğru Azalır', color_low: '#1e1b4b', color_high: '#f59e0b', getValue: function(el) { if(el.cat.indexOf('Metal')=== -1 && el.cat!== 'Metal') return null; return (PT_POS[el.n][1] * 150) + (8 - PT_POS[el.n][0]) * 200; } },
-  ametMelt: { label: 'Ametallerde Erime Noktası', unit: '°C', desc: 'Ametallerde erime noktaları moleküller arasındaki London kuvvetlerine (elektron sayısına) bağlıdır. Grupta aşağı doğru elektron sayısı arttığı için London kuvvetleri güçlenir ve erime noktası artar.', arrow_period: '→ Periyot Boyunca Değişkendir', arrow_group: '↓ Aşağı Doğru Artar', color_low: '#0f172a', color_high: '#06b6d4', getValue: function(el) { if(el.cat!== 'Ametal' && el.cat!== 'Halojen' && el.cat!== 'Soy Gaz') return null; return (PT_POS[el.n][0] * 120) + (PT_POS[el.n][1] * 30); } },
-  hxaAcid: { label: 'HxA (Tek Atomlu Anyon) Asitlik Kuvveti', unit: '', desc: 'Halojen asitlerinde grupta aşağıya doğru inildikçe anyon çapı büyür, H⁺ iyonunun kopması kolaylaşır. Bu nedenle asitlik kuvveti aşağı doğru artar (HI > HBr > HCl > HF).', arrow_period: '→ Sağa Doğru Artar', arrow_group: '↓ Aşağı Doğru Artar', color_low: '#311042', color_high: '#ef4444', getValue: function(el) { if(el.cat!== 'Halojen' && el.cat!== 'Ametal') return null; return (PT_POS[el.n][0] * 50) + (PT_POS[el.n][1] * 20); } },
-  mohBase: { label: 'M(OH)x (Metal Hidroksit) Bazlık Kuvveti', unit: '', desc: 'Metal hidroksitlerde bazlık kuvveti metalin çapına bağlıdır. Çap arttıkça OH⁻ iyonunun suya verilmesi kolaylaşır. Bu nedenle grupta aşağı doğru, periyotta sola doğru bazlık kuvveti artar.', arrow_period: '← Sola Doğru Artar', arrow_group: '↓ Aşağı Doğru Artar', color_low: '#064e3b', color_high: '#06b6d4', getValue: function(el) { if(el.cat.indexOf('Metal')=== -1 && el.cat!== 'Metal') return null; return (20 - PT_POS[el.n][1]) * 40 + (PT_POS[el.n][0] * 60); } },
-  oxyAcidA: { label: 'Oksiasitlerde Asitlik (Oksijen Sayısı)', unit: '', desc: 'Merkez atomu aynı olan oksiasitlerde oksijen sayısı arttıkça merkez atomun elektron çekme gücü ve H⁺ iyonunun salınması kolaylaşır. Oksijen sayısı arttıkça asitlik kuvveti artar (HClO₄ > HClO₃ > HClO₂ > HClO).', arrow_period: '↑ Oksijen Sayısı Arttıkça Artar', arrow_group: '↕ Oksijen Sayısı Belirleyicidir', color_low: '#4c0519', color_high: '#a855f7', getValue: function(el) { if(el.cat!== 'Halojen' && el.cat!== 'Ametal') return null; return (8 - PT_POS[el.n][0]) * 30 + (PT_POS[el.n][1] * 10); } },
-  oxyAcidB: { label: 'Oksiasitlerde Asitlik (Merkez Atom Elektronegatifliği)', unit: '', desc: 'Oksijen sayıları aynı olan oksiasitlerde merkez atomun elektronegatifliği arttıkça elektronları kendine daha kuvvetli çeker ve asidin proton verme eğilimi, yani asitlik kuvveti artar (HClO₃ > HBrO₃ > HIO₃).', arrow_period: '→ Sağa Doğru Artar', arrow_group: '↑ Yukarı Doğru Artar', color_low: '#1e1b4b', color_high: '#ef4444', getValue: function(el) { if(el.cat!== 'Halojen' && el.cat!== 'Ametal') return null; return (PT_POS[el.n][1] * 40) + (8 - PT_POS[el.n][0]) * 50; } },
-  metBond: { label: 'Metallerde Metalik Bağ Kuvveti', unit: '', desc: 'Metalik bağ kuvveti, metal katyonunun yükü ile doğru, çapı ile ters orantılıdır. Bu yüzden aynı periyotta sağa doğru artar, aynı grupta aşağı doğru azalır.', arrow_period: '→ Sağa Doğru Artar', arrow_group: '↓ Aşağı Doğru Azalır', color_low: '#111827', color_high: '#22c55e', getValue: function(el) { if(el.cat.indexOf('Metal')=== -1 && el.cat!== 'Metal') return null; return (PT_POS[el.n][1] * 80) + (8 - PT_POS[el.n][0]) * 100; } }
-};
+        <!-- MODÜL 6: İZOTOP TANI MOTORU -->
+        <div id="s-izotop" style="display:none" class="pw">
+            <h1 class="ptitle">⚛️ Tanecik Yapı Karşılaştırma</h1>
+            <p class="psub">İyon yüklerine göre elektron katman çekim ve çap analizi.</p>
+            <div class="g2">
+                <div class="card" style="padding:12px; gap:8px;">
+                    <div class="slbl" style="color:var(--ac2)">1. Tanecik</div>
+                    <div><label style="font-size:10px;color:var(--tx3)">Proton</label><input type="number" id="iz-p1" class="inp" value="17" oninput="diagnoseAtoms()"></div>
+                    <div><label style="font-size:10px;color:var(--tx3)">Nötron</label><input type="number" id="iz-n1" class="inp" value="18" oninput="diagnoseAtoms()"></div>
+                    <div><label style="font-size:10px;color:var(--tx3)">Elektron</label><input type="number" id="iz-e1" class="inp" value="17" oninput="diagnoseAtoms()"></div>
+                    <div><label style="font-size:10px;color:var(--tx3)">İyon Yükü</label><input type="number" id="iz-y1" class="inp" value="0" oninput="diagnoseAtoms()"></div>
+                </div>
+                <div class="card" style="padding:12px; gap:8px;">
+                    <div class="slbl" style="color:var(--ac2)">2. Tanecik</div>
+                    <div><label style="font-size:10px;color:var(--tx3)">Proton</label><input type="number" id="iz-p2" class="inp" value="17" oninput="diagnoseAtoms()"></div>
+                    <div><label style="font-size:10px;color:var(--tx3)">Nötron</label><input type="number" id="iz-n2" class="inp" value="20" oninput="diagnoseAtoms()"></div>
+                    <div><label style="font-size:10px;color:var(--tx3)">Elektron</label><input type="number" id="iz-e2" class="inp" value="17" oninput="diagnoseAtoms()"></div>
+                    <div><label style="font-size:10px;color:var(--tx3)">İyon Yükü</label><input type="number" id="iz-y2" class="inp" value="0" oninput="diagnoseAtoms()"></div>
+                </div>
+            </div>
+            <div class="card" id="iz-result" style="display:none; border-left:4px solid var(--gr);">
+                <div class="slbl" style="color:var(--gr)">Röntgen Analiz Çıktısı</div>
+                <div id="iz-rv" style="font-size:0.85rem; color:#fff; line-height:1.4;"></div>
+            </div>
+        </div>
 
-// --- MODÜL 1: MOLEKÜL VE NOKTA LEWIS SİMÜLASYONU MOTORU ---
-function setBagView(mode, btn) {
-  bagViewMode = mode;
-  var btns = btn.parentNode.querySelectorAll('button');
-  btns[0].classList.remove('sel2'); btns[1].classList.remove('sel2');
-  btn.classList.add('sel2');
-  startBagSim();
-}
+        <!-- MODÜL 7: YÖK ATLAS GEÇİŞ KAPISI -->
+        <div id="s-yokAtlas" style="display:none" class="pw">
+            <h1 class="ptitle">🎓 YÖK Atlas Güvenli Kapısı</h1>
+            <p class="psub">Öğrencileriniz için manipüle edilmemiş engelsiz veriler.</p>
+            <div style="background:rgba(245,158,11,.06); border:1px solid rgba(245,158,11,.25); border-radius:12px; padding:12px; font-size:0.8rem; color:#fcd34d; line-height:1.4;">
+                <b>Sistem Bilgisi:</b> YÖK Atlas dış botlara kapalı korumalı bir yapıdadır. Butonlar öğrencilerinizi doğrudan mobil tarayıcıda ilgili resmi kılavuza köprüler.
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div onclick="window.open('https://yokatlas.yok.gov.tr/tercih-sihirbazi-lisans-anasayfa.php', '_blank')" style="display:flex; align-items:center; gap:12px; background:var(--sf); border:1px solid var(--br); border-radius:12px; padding:12px; cursor:pointer;">
+                    <div style="font-size:22px;">📊</div>
+                    <div><div style="font-size:13px; font-weight:700;">YKS Lisans Tercih Sihirbazı</div><div style="font-size:11px; color:var(--tx3)">SAY, EA, SÖZ başarı sıralamaları.</div></div>
+                </div>
+                <div onclick="window.open('https://yokatlas.yok.gov.tr/universite-anasayfa.php', '_blank')" style="display:flex; align-items:center; gap:12px; background:var(--sf); border:1px solid var(--br); border-radius:12px; padding:12px; cursor:pointer;">
+                    <div style="font-size:22px;">🏛️</div>
+                    <div><div style="font-size:13px; font-weight:700;">Detaylı Üniversite Atlası</div><div style="font-size:11px; color:var(--tx3)">Akademik kadrolar ve kontenjan detayları.</div></div>
+                </div>
+                <div onclick="window.open('https://yokatlas.yok.gov.tr/net-sihirbazi-anasayfa.php', '_blank')" style="display:flex; align-items:center; gap:12px; background:var(--sf); border:1px solid var(--br); border-radius:12px; padding:12px; cursor:pointer;">
+                    <div style="font-size:22px;">⚡</div>
+                    <div><div style="font-size:13px; font-weight:700;">YKS Net Sihirbazı</div><div style="font-size:11px; color:var(--tx3)">Yerleşen son öğrencilerin net ortalamaları.</div></div>
+                </div>
+            </div>
+            <div style="background:var(--sf); border:1px solid var(--br); border-left:3px solid var(--ac); border-radius:12px; padding:14px; font-size:0.85rem; line-height:1.5;">
+                <div style="font-size:10px; color:var(--ac); font-weight:700; margin-bottom:4px;">MEDENİ HOCA'DAN TERCİH STRATEJİSİ</div>
+                <p style="font-style:italic; color:var(--tx2)">"Sevgili gençler, tercih yaparken sadece taban puanlara değil, girmek istediğiniz bölümlerin öğretim üyesi sayılarına ve laboratuvar imkanlarına YÖK Atlas üzerinden mutlaka göz atın."</p>
+            </div>
+        </div>
 
-function startBagSim() {
-  var mol = document.getElementById('bag-molecule').value;
-  var canvas = document.getElementById('bagCanvas'); if(!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var title = document.getElementById('bag-title');
-  
-  if(window.bagAnim) cancelAnimationFrame(window.bagAnim);
-  var frame = 0;
+    </div>
 
-  function drawAtom(x, y, r, txt, col) {
-    ctx.beginPath(); ctx.arc(x, y, r, 0, 2*Math.PI);
-    ctx.fillStyle = bagViewMode === 'lewis' ? 'rgba(255,255,255,0.02)' : col + '22';
-    ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
-    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 11, 0, 2*Math.PI); ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(txt, x, y);
-  }
+    <script>
+        // --- CORE NAVİGASYON MOTORU ---
+        var SCREENS = ['home', 'pt', 'bagSim', 'flashcard', 'cozelti', 'denge', 'izotop', 'yokAtlas'];
+        
+        function toggleMenu() {
+            var m = document.getElementById('mn');
+            m.style.display = (m.style.display === 'none' || m.style.display === '') ? 'flex' : 'none';
+        }
 
-  function drawDot(x, y, col) {
-    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2*Math.PI);
-    ctx.fillStyle = col || '#00ff88'; ctx.fill();
-  }
+        function nav(id) {
+            document.getElementById('mn').style.display = 'none';
+            SCREENS.forEach(s => {
+                var el = document.getElementById('s-' + s);
+                if(el) el.style.display = 'none';
+            });
+            var target = document.getElementById('s-' + id);
+            if(target) target.style.display = 'flex';
+            
+            if(id === 'cozelti') drawCoz();
+            if(id === 'denge') initDengeGraph();
+            if(id === 'bagSim') startBagSim();
+            if(id === 'flashcard') updateCardUI();
+            
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
 
-  function drawPair(x, y, angle, dist, col) {
-    var x1 = x + Math.cos(angle - 0.15) * dist; var y1 = y + Math.sin(angle - 0.15) * dist;
-    var x2 = x + Math.cos(angle + 0.15) * dist; var y2 = y + Math.sin(angle + 0.15) * dist;
-    drawDot(x1, y1, col); drawDot(x2, y2, col);
-  }
+        function toast(msg) {
+            var box = document.getElementById('toast');
+            box.textContent = msg; box.style.display = 'block';
+            setTimeout(() => { box.style.display = 'none'; }, 2500);
+        }
 
-  function drawBondLine(x1, y1, x2, y2, offset) {
-    if(bagViewMode === 'orb') {
-      ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(x1 + offset.x, y1 + offset.y); ctx.lineTo(x2 + offset.x, y2 + offset.y); ctx.stroke();
-    } else {
-      var mx = (x1 + x2) / 2 + offset.x; var my = (y1 + y2) / 2 + offset.y;
-      drawDot(mx - 3, my); drawDot(mx + 3, my);
-    }
-  }
+        // --- MODÜL 1: PERİYODİK TREND SİSTEMİ ---
+        var TREND_DB = {
+            radius: { title: "Atom Yarıçapı", desc: "Periyotta sağa doğru azalır (çekirdek yükü artar). Grupta aşağı doğru artar (kabuk sayısı artar).", p: "→ Sağa Doğru Azalır", g: "↓ Aşağı Doğru Artar" },
+            ionization: { title: "İyonlaşma Enerjisi", desc: "Gaz halindeki nötr atomdan elektron koparmak için gereken enerjidir. Genellikle periyotta sağa doğru artar (3A-2A, 5A-6A sapmalarına dikkat), grupta aşağı doğru azalır.", p: "→ Sağa Doğru Genellikle Artar", g: "↓ Aşağı Doğru Azalır" },
+            neg: { title: "Elektronegatiflik", desc: "Bağ elektronlarını çekme yeteneğidir. Periyotta sağa artar, grupta aşağı azalır. Soy gazlarda aranmaz.", p: "→ Sağa Doğru Artar", g: "↓ Aşağı Doğru Azalır" },
+            affinity: { title: "Elektron İlgisi", desc: "Gaz atomunun elektron alması sırasındaki enerji değişimidir. Sağa doğru artar, aşağı azalır. Klor (Cl) istisnadır (Cl > F).", p: "→ Sağa Doğru Genellikle Artar", g: "↓ Aşağı Doğru Azalır" },
+            metAct: { title: "Metalik Aktiflik", desc: "Elektron verme kolaylığıdır. Periyotta sağa doğru azalır, grupta aşağı doğru artar.", p: "→ Sağa Doğru Azalır", g: "↓ Aşağı Doğru Artar" },
+            ametAct: { title: "Ametalik Aktiflik", desc: "Elektron alma kolaylığıdır. Periyotta sağa doğru artar, grupta aşağı doğru azalır.", p: "→ Sağa Doğru Artar", g: "↓ Aşağı Doğru Azalır" },
+            metMelt: { title: "Metallerde Erime Noktası", desc: "Metalik bağ kuvveti ile doğru orantılıdır. Çap küçüldükçe bağ kuvvetlendiği için periyotta sağa doğru artar, grupta aşağı doğru azalır.", p: "→ Sağa Doğru Artar", g: "↓ Aşağı Doğru Azalır" },
+            ametMelt: { title: "Ametallerde Erime Noktası", desc: "Moleküller arası London kuvvetlerine bağlıdır. Elektron sayısı arttıkça London bağları güçleneceğinden grupta aşağı doğru artar.", p: "→ Periyot Boyunca Değişkendir", g: "↓ Aşağı Doğru Artar" },
+            hxaAcid: { title: "HxA Asitlik Kuvveti", desc: "Halojen asitlerinde (7A) aşağı doğru inildikçe çap büyür, H⁺ salınması kolaylaşır ve asitlik artar (HI > HBr > HCl > HF).", p: "→ Sağa Doğru Artar", g: "↓ Aşağı Doğru Artar" },
+            mohBase: { title: "M(OH)x Bazlık Kuvveti", desc: "Metalin elektron verme kolaylığına (çapına) bağlıdır. Çap arttıkça OH⁻ iyonu kolay salınır. Sola ve aşağı doğru artar.", p: "← Sola Doğru Artar", g: "↓ Aşağı Doğru Artar" },
+            oxyAcidA: { title: "Oksiasitlerde Asitlik (O Sayısı)", desc: "Merkez atomu aynı olan oksiasitlerde oksijen sayısı arttıkça merkez atomun elektron çekme gücü artar, H⁺ salınması kolaylaşır (HClO₄ > HClO₃).", p: "↑ Oksijen Sayısı Arttıkça Artar", g: "↕ Oksijen Sayısı Belirleyicidir" },
+            oxyAcidB: { title: "Oksiasitlerde Asitlik (Elektronegatiflik)", desc: "Oksijen sayıları aynı olan asitlerde merkez atomun elektronegatifliği arttıkça asitlik kuvveti artar (HClO₃ > HBrO₃ > HIO₃).", p: "→ Sağa Doğru Artar", g: "↑ Yukarı Doğru Artar" },
+            metBond: { title: "Metalik Bağ Kuvveti", desc: "Metal katyonunun yükü ile doğru, çapı ile ters orantılıdır. Periyotta sağa doğru artar, grupta aşağı doğru azalır.", p: "→ Sağa Doğru Artar", g: "↓ Aşağı Doğru Azalır" }
+        };
 
-  function loop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    var p = Math.min(frame / 60, 1);
-    var cx = canvas.width / 2, cy = canvas.height / 2;
+        function setTrend(key, btn) {
+            var btns = document.querySelectorAll('.trend-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            var data = TREND_DB[key];
+            document.getElementById('trend-info-card').innerHTML = "<b>" + data.title + ":</b> " + data.desc;
+            document.getElementById('arrow-period-text').textContent = data.p;
+            document.getElementById('arrow-group-text').textContent = data.g;
+        }
+        // İlk yükleme kurulumu
+        setTimeout(() => { setTrend('radius', document.querySelector('.trend-btn')); }, 1500);
 
-    if (mol === "NaCl") {
-      title.textContent = "NaCl (İyonik) - Na elektronunu Cl'ye verir.";
-      drawAtom(cx - 60, cy, 28, "Na", "#ffb703"); drawAtom(cx + 60, cy, 42, "Cl", "#219ebc");
-      var ex = (cx - 60) + (120 * p); var ey = cy - Math.sin(p * Math.PI) * 45;
-      drawDot(ex, ey, '#00ff88');
-      if (p >= 1 && bagViewMode === 'lewis') {
-        drawPair(cx + 60, cy, 0, 28, '#00ff88'); drawPair(cx + 60, cy, Math.PI, 28, '#00ff88');
-        drawPair(cx + 60, cy, Math.PI/2, 28, '#00ff88'); drawPair(cx + 60, cy, -Math.PI/2, 28, '#00ff88');
-      }
-    } 
-    else if (mol === "H2O") {
-      title.textContent = "H₂O - Oksijen üzerinde 2 çift ortaklanmamış elektron kalır.";
-      drawAtom(cx, cy - 10, 36, "O", "#ff6b6b");
-      drawAtom(cx - 55 * p, cy + 40 * p, 18, "H", "#3b82f6"); drawAtom(cx + 55 * p, cy + 40 * p, 18, "H", "#3b82f6");
-      drawBondLine(cx, cy - 10, cx - 55, cy + 40, {x:0, y:0}); drawBondLine(cx, cy - 10, cx + 55, cy + 40, {x:0, y:0});
-      if (p >= 1 && bagViewMode === 'lewis') {
-        drawPair(cx, cy - 10, -Math.PI/3, 24, '#f59e0b'); drawPair(cx, cy - 10, -2*Math.PI/3, 24, '#f59e0b');
-      }
-    }
-    else if (mol === "NH3") {
-      title.textContent = "NH₃ - Azot üzerinde 1 çift ortaklanmamış elektron (Üçgen Piramit)";
-      drawAtom(cx, cy - 15, 36, "N", "#ff6b6b");
-      drawAtom(cx - 55 * p, cy + 35 * p, 18, "H", "#3b82f6"); drawAtom(cx, cy + 55 * p, 18, "H", "#3b82f6"); drawAtom(cx + 55 * p, cy + 35 * p, 18, "H", "#3b82f6");
-      drawBondLine(cx, cy - 15, cx - 55, cy + 35, {x:0, y:0}); drawBondLine(cx, cy - 15, cx, cy + 55, {x:0, y:0}); drawBondLine(cx, cy - 15, cx + 55, cy + 35, {x:0, y:0});
-      if (p >= 1 && bagViewMode === 'lewis') drawPair(cx, cy - 15, -Math.PI/2, 24, '#f59e0b');
-    }
-    else if (mol === "CH4") {
-      title.textContent = "CH₄ - Karbonun tüm elektronları bağa katılır (Düzgün Dörtyüzlü)";
-      drawAtom(cx, cy, 38, "C", "#a855f7");
-      drawAtom(cx, cy - 60 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx, cy - 60, {x:0, y:0});
-      drawAtom(cx - 55 * p, cy + 40 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx - 55, cy + 40, {x:0, y:0});
-      drawAtom(cx + 55 * p, cy + 40 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx + 55, cy + 40, {x:0, y:0});
-      drawAtom(cx + 25 * p, cy + 15 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx + 25, cy + 15, {x:0, y:0});
-    }
-    else if (mol === "BH3") {
-      title.textContent = "BH₃ - Düzlem Üçgen Geometri (Oktet Boşluğu Mevcut)";
-      drawAtom(cx, cy, 36, "B", "#22c55e");
-      drawAtom(cx, cy - 60 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx, cy - 60, {x:0, y:0});
-      drawAtom(cx - 55 * p, cy + 30 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx - 55, cy + 30, {x:0, y:0});
-      drawAtom(cx + 55 * p, cy + 30 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx + 55, cy + 30, {x:0, y:0});
-    }
-    else if (mol === "BeH2") {
-      title.textContent = "BeH₂ - Doğrusal (Oktet Boşluğu Mevcut)";
-      drawAtom(cx, cy, 34, "Be", "#eab308");
-      drawAtom(cx - 70 * p, cy, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx - 70, cy, {x:0, y:0});
-      drawAtom(cx + 70 * p, cy, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx + 70, cy, {x:0, y:0});
-    }
-    else if (mol === "H2") {
-      title.textContent = "H₂ - Tekli Apolar Kovalent Bağ";
-      drawAtom(cx - 35 * p, cy, 20, "H", "#3b82f6"); drawAtom(cx + 35 * p, cy, 20, "H", "#3b82f6");
-      drawBondLine(cx - 35, cy, cx + 35, cy, {x:0, y:0});
-    }
-    else if (mol === "O2") {
-      title.textContent = "O₂ - İkili Bağ (O=O) ve Her Oksijende 2 Çift Ortaklanmamış Elektron";
-      drawAtom(cx - 50 * p, cy, 35, "O", "#ff6b6b"); drawAtom(cx + 50 * p, cy, 35, "O", "#ff6b6b");
-      drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:-6}); drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:6});
-      if(p>=1 && bagViewMode==='lewis') {
-        drawPair(cx - 50, cy, Math.PI, 22, '#f59e0b'); drawPair(cx - 50, cy, Math.PI/2, 22, '#f59e0b');
-        drawPair(cx + 50, cy, 0, 22, '#f59e0b'); drawPair(cx + 50, cy, -Math.PI/2, 22, '#f59e0b');
-      }
-    }
-    else if (mol === "N2") {
-      title.textContent = "N₂ - Üçlü Bağ (N≡N) ve Azotlarda 1 Çift Ortaklanmamış Elektron";
-      drawAtom(cx - 50 * p, cy, 35, "N", "#a855f7"); drawAtom(cx + 50 * p, cy, 35, "N", "#a855f7");
-      drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:-10}); drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:0}); drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:10});
-      if(p>=1 && bagViewMode==='lewis') { drawPair(cx - 50, cy, Math.PI, 22, '#f59e0b'); drawPair(cx + 50, cy, 0, 22, '#f59e0b'); }
-    }
-    else if (mol === "CO2") {
-      title.textContent = "CO₂ - İki Adet İkili Bağ (O=C=O) Doğrusal Yapı";
-      drawAtom(cx, cy, 36, "C", "#475569"); drawAtom(cx - 75 * p, cy, 32, "O", "#ff6b6b"); drawAtom(cx + 75 * p, cy, 32, "O", "#ff6b6b");
-      drawBondLine(cx, cy, cx - 75, cy, {x:0, y:-6}); drawBondLine(cx, cy, cx - 75, cy, {x:0, y:6});
-      drawBondLine(cx, cy, cx + 75, cy, {x:0, y:-6}); drawBondLine(cx, cy, cx + 75, cy, {x:0, y:6});
-      if(p>=1 && bagViewMode==='lewis') {
-        drawPair(cx - 75, cy, Math.PI, 20, '#f59e0b'); drawPair(cx - 75, cy, Math.PI/2, 20, '#f59e0b');
-        drawPair(cx + 75, cy, 0, 20, '#f59e0b'); drawPair(cx + 75, cy, -Math.PI/2, 20, '#f59e0b');
-      }
-    }
-    else if (mol === "HCN") {
-      title.textContent = "HCN - Hidrojen-Karbon Tekli, Karbon-Azot Üçlü Bağ (H-C≡N)";
-      drawAtom(cx, cy, 36, "C", "#475569"); drawAtom(cx - 70 * p, cy, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx - 70, cy, {x:0, y:0});
-      drawAtom(cx + 70 * p, cy, 36, "N", "#a855f7");
-      drawBondLine(cx, cy, cx + 70, cy, {x:0, y:-8}); drawBondLine(cx, cy, cx + 70, cy, {x:0, y:0}); drawBondLine(cx, cy, cx + 70, cy, {x:0, y:8});
-      if(p>=1 && bagViewMode==='lewis') drawPair(cx + 70, cy, 0, 22, '#f59e0b');
-    }
-    else if (mol === "HF") {
-      title.textContent = "HF - Tekli Bağ, Flor Üzerinde 3 Çift Ortaklanmamış Elektron";
-      drawAtom(cx - 40 * p, cy, 18, "H", "#3b82f6"); drawAtom(cx + 40 * p, cy, 34, "F", "#f43f5e");
-      drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:0});
-      if(p>=1 && bagViewMode==='lewis') { drawPair(cx + 40, cy, 0, 22, '#f59e0b'); drawPair(cx + 40, cy, Math.PI/2, 22, '#f59e0b'); drawPair(cx + 40, cy, -Math.PI/2, 22, '#f59e0b'); }
-    }
-    else if (mol === "C2H6") {
-      title.textContent = "C₂H₆ (Etan) - Karbonlar Arası Tekli Bağ";
-      drawAtom(cx - 35 * p, cy, 32, "C", "#475569"); drawAtom(cx + 35 * p, cy, 32, "C", "#475569");
-      drawBondLine(cx - 35, cy, cx + 35, cy, {x:0, y:0});
-      if(p>=1) {
-        drawAtom(cx - 80, cy, 16, "H", "#3b82f6"); drawBondLine(cx - 35, cy, cx - 80, cy, {x:0, y:0});
-        drawAtom(cx - 35, cy - 50, 16, "H", "#3b82f6"); drawBondLine(cx - 35, cy, cx - 35, cy - 50, {x:0, y:0});
-        drawAtom(cx - 35, cy + 50, 16, "H", "#3b82f6"); drawBondLine(cx - 35, cy, cx - 35, cy + 50, {x:0, y:0});
-        drawAtom(cx + 80, cy, 16, "H", "#3b82f6"); drawBondLine(cx + 35, cy, cx + 80, cy, {x:0, y:0});
-        drawAtom(cx + 40, cy - 50, 16, "H", "#3b82f6"); drawBondLine(cx + 35, cy, cx + 40, cy - 50, {x:0, y:0});
-        drawAtom(cx + 40, cy + 50, 16, "H", "#3b82f6"); drawBondLine(cx + 35, cy, cx + 40, cy + 50, {x:0, y:0});
-      }
-    }
-    else if (mol === "C2H4") {
-      title.textContent = "C₂H₄ (Eten) - Karbonlar Arası İkili Bağ (C=C)";
-      drawAtom(cx - 40 * p, cy, 32, "C", "#475569"); drawAtom(cx + 40 * p, cy, 32, "C", "#475569");
-      drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:-6}); drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:6});
-      if(p>=1) {
-        drawAtom(cx - 85, cy - 40, 16, "H", "#3b82f6"); drawBondLine(cx - 40, cy, cx - 85, cy - 40, {x:0, y:0});
-        drawAtom(cx - 85, cy + 40, 16, "H", "#3b82f6"); drawBondLine(cx - 40, cy, cx - 85, cy + 40, {x:0, y:0});
-        drawAtom(cx + 85, cy - 40, 16, "H", "#3b82f6"); drawBondLine(cx + 40, cy, cx + 85, cy - 40, {x:0, y:0});
-        drawAtom(cx + 85, cy + 40, 16, "H", "#3b82f6"); drawBondLine(cx + 40, cy, cx + 85, cy + 40, {x:0, y:0});
-      }
-    }
-    else if (mol === "C2H2") {
-      title.textContent = "C₂H₂ (Etin) - Karbonlar Arası Üçlü Bağ (C≡C)";
-      drawAtom(cx - 40 * p, cy, 32, "C", "#475569"); drawAtom(cx + 40 * p, cy, 32, "C", "#475569");
-      drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:-10}); drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:0}); drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:10});
-      if(p>=1) {
-        drawAtom(cx - 95, cy, 16, "H", "#3b82f6"); drawBondLine(cx - 40, cy, cx - 95, cy, {x:0, y:0});
-        drawAtom(cx + 95, cy, 16, "H", "#3b82f6"); drawBondLine(cx + 40, cy, cx + 95, cy, {x:0, y:0});
-      }
-    }
-    if(p < 1) { frame++; window.bagAnim = requestAnimationFrame(loop); }
-  }
-  loop();
-}
+        // --- MODÜL 2: KUSURSUZ BAĞ SİMÜLASYON MOTORU ---
+        function setBagView(mode, btn) {
+            bagViewMode = mode;
+            var btns = btn.parentNode.querySelectorAll('button');
+            btns[0].classList.remove('sel2'); btns[1].classList.remove('sel2');
+            btn.classList.add('sel2'); startBagSim();
+        }
 
-// --- MODÜL 2: AKILLI SKORLAMALI KATEGORİLİ FLASHCARD SİSTEMİ ---
-var FCARDS_EXT = [
-  {f:'H₂O', n:'Dihidrojen Monoksit / Su', cat:'TYT'},
-  {f:'Na₂CO₃', n:'Sodyum Karbonat / Çamaşır Sodası', cat:'TYT'},
-  {f:'CaO', n:'Kalsiyum Oksit / Sönmemiş Kireç', cat:'TYT'},
-  {f:'HCOOH', n:'Metanoik Asit / Formik Asit', cat:'TYT'},
-  {f:'HCl', n:'Hidroklorik Asit / Tuz Ruhu', cat:'TYT'},
-  {f:'HNO₃', n:'Nitrik Asit / Kezzap', cat:'TYT'},
-  {f:'H₂SO₄', n:'Sülfürik Asit / Zaç Yağı', cat:'TYT'},
-  {f:'HCN', n:'Hidrojen Siyanür', cat:'AYT'},
-  {f:'H₃PO₄', n:'Fosforik Asit', cat:'AYT'},
-  {f:'CH₃COOH', n:'Asetik Asit / Sirke Ruhu', cat:'TYT'}
-];
+        function startBagSim() {
+            var mol = document.getElementById('bag-molecule').value;
+            var canvas = document.getElementById('bagCanvas'); if(!canvas) return;
+            var ctx = canvas.getContext('2d'); var title = document.getElementById('bag-title');
+            if(window.bagAnim) cancelAnimationFrame(window.bagAnim);
+            var frame = 0;
 
-function flipCard(){
-  var card = document.getElementById('fcard'); if(!card) return;
-  fcFlipped = !fcFlipped; card.style.transform = fcFlipped?'rotateY(180deg)':'rotateY(0deg)';
-}
+            function node(x, y, r, txt, col) {
+                ctx.beginPath(); ctx.arc(x, y, r, 0, 2*Math.PI);
+                ctx.fillStyle = bagViewMode === 'lewis' ? 'rgba(255,255,255,0.02)' : col + '22';
+                ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+                ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 11, 0, 2*Math.PI); ctx.fill();
+                ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText(txt, x, y);
+            }
+            function dot(x, y, col) { ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2*Math.PI); ctx.fillStyle = col || '#00ff88'; ctx.fill(); }
+            function pair(x, y, angle, dist, col) {
+                var x1 = x + Math.cos(angle - 0.16) * dist; var y1 = y + Math.sin(angle - 0.16) * dist;
+                var x2 = x + Math.cos(angle + 0.16) * dist; var y2 = y + Math.sin(angle + 0.16) * dist;
+                dot(x1, y1, col); dot(x2, y2, col);
+            }
+            function bond(x1, y1, x2, y2, off) {
+                if(bagViewMode === 'orb') {
+                    ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x1 + off.x, y1 + off.y); ctx.lineTo(x2 + off.x, y2 + off.y); ctx.stroke();
+                } else {
+                    var mx = (x1 + x2) / 2 + off.x; var my = (y1 + y2) / 2 + off.y; drawDot(mx - 3, my); drawDot(mx + 3, my);
+                }
+            }
 
-function setFcCat(cat, btn) {
-  var btns = btn.parentNode.querySelectorAll('button'); for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
-  btn.classList.add('on'); fcActiveCat = cat; fcIdx = 0; updateCardUI();
-}
+            function loop() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                var p = Math.min(frame / 60, 1);
+                var cx = canvas.width / 2, cy = canvas.height / 2;
 
-function updateCardUI() {
-  var filtered = FCARDS_EXT.filter(function(c){ return fcActiveCat === 'all' || c.cat === fcActiveCat; });
-  if(filtered.length === 0) return; if(fcIdx >= filtered.length) fcIdx = 0;
-  var current = filtered[fcIdx];
-  var frontEl = document.getElementById('fc-front');
-  if(frontEl) {
-    frontEl.textContent = current.n.split(' / ')[1] || current.n;
-    document.getElementById('fc-back-formula').textContent = current.f;
-    document.getElementById('fc-back-name').textContent = current.n;
-    var progressPct = (fcLearnedCount / FCARDS_EXT.length) * 100;
-    document.getElementById('fc-pfill').style.width = Math.min(progressPct, 100) + '%';
-  }
-}
+                if (mol === "NaCl") {
+                    title.textContent = "NaCl (İyonik) - Na değerlik elektronunu Cl atomuna aktarır.";
+                    node(cx - 60, cy, 28, "Na", "#ffb703"); node(cx + 60, cy, 42, "Cl", "#219ebc");
+                    var ex = (cx - 60) + (120 * p); var ey = cy - Math.sin(p * Math.PI) * 45; dot(ex, ey, '#00ff88');
+                    if(p >= 1 && bagViewMode === 'lewis') {
+                        pair(cx+60, cy, 0, 26, '#00ff88'); pair(cx+60, cy, Math.PI, 26, '#00ff88');
+                        pair(cx+60, cy, Math.PI/2, 26, '#00ff88'); pair(cx+60, cy, -Math.PI/2, 26, '#00ff88');
+                    }
+                }
+                else if (mol === "H2O") {
+                    title.textContent = "H₂O - Oksijen üzerinde ortaklanmamış 2 çift elektron bulunur.";
+                    node(cx, cy - 10, 36, "O", "#ff6b6b"); node(cx - 55 * p, cy + 40 * p, 18, "H", "#3b82f6"); node(cx + 55 * p, cy + 40 * p, 18, "H", "#3b82f6");
+                    bond(cx, cy - 10, cx - 55, cy + 40, {x:0, y:0}); bond(cx, cy - 10, cx + 55, cy + 40, {x:0, y:0});
+                    if (p >= 1 && bagViewMode === 'lewis') { pair(cx, cy - 10, -Math.PI/3, 24, '#f59e0b'); pair(cx, cy - 10, -2*Math.PI/3, 24, '#f59e0b'); }
+                }
+                else if (mol === "NH3") {
+                    title.textContent = "NH₃ - Azot üzerinde 1 çift ortaklanmamış elektron (Üçgen Piramit)";
+                    node(cx, cy - 15, 36, "N", "#ff6b6b"); node(cx - 55 * p, cy + 35 * p, 18, "H", "#3b82f6"); node(cx, cy + 55 * p, 18, "H", "#3b82f6"); node(cx + 55 * p, cy + 35 * p, 18, "H", "#3b82f6");
+                    bond(cx, cy - 15, cx - 55, cy + 35, {x:0, y:0}); bond(cx, cy - 15, cx, cy + 55, {x:0, y:0}); bond(cx, cy - 15, cx + 55, cy + 35, {x:0, y:0});
+                    if (p >= 1 && bagViewMode === 'lewis') pair(cx, cy - 15, -Math.PI/2, 24, '#f59e0b');
+                }
+                else if (mol === "CH4") {
+                    title.textContent = "CH₄ - Karbon 4 özdeş kovalent bağ yapar (Düzgün Dörtyüzlü)";
+                    node(cx, cy, 38, "C", "#a855f7");
+                    node(cx, cy - 60 * p, 18, "H", "#3b82f6"); bond(cx, cy, cx, cy - 60, {x:0, y:0});
+                    node(cx - 55 * p, cy + 40 * p, 18, "H", "#3b82f6"); bond(cx, cy, cx - 55, cy + 40, {x:0, y:0});
+                    node(cx + 55 * p, cy + 40 * p, 18, "H", "#3b82f6"); bond(cx, cy, cx + 55, cy + 40, {x:0, y:0});
+                    node(cx + 25 * p, cy + 15 * p, 18, "H", "#3b82f6"); bond(cx, cy, cx + 25, cy + 15, {x:0, y:0});
+                }
+                else if (mol === "O2") {
+                    title.textContent = "O₂ - Kararlı O=O ikili kovalent yapısı ve Lewis ortaklanmamış çiftleri.";
+                    node(cx - 50 * p, cy, 34, "O", "#ff6b6b"); node(cx + 50 * p, cy, 34, "O", "#ff6b6b");
+                    bond(cx - 50, cy, cx + 50, cy, {x:0, y:-6}); bond(cx - 50, cy, cx + 50, cy, {x:0, y:6});
+                    if(p>=1 && bagViewMode==='lewis') {
+                        pair(cx - 50, cy, Math.PI, 22, '#f59e0b'); pair(cx - 50, cy, Math.PI/2, 22, '#f59e0b');
+                        pair(cx + 50, cy, 0, 22, '#f59e0b'); pair(cx + 50, cy, -Math.PI/2, 22, '#f59e0b');
+                    }
+                }
+                else if (mol === "N2") {
+                    title.textContent = "N₂ - Güçlü N≡N üçlü bağ yapısı ve oktet kararlılığı.";
+                    node(cx - 50 * p, cy, 34, "N", "#a855f7"); node(cx + 50 * p, cy, 34, "N", "#a855f7");
+                    bond(cx - 50, cy, cx + 50, cy, {x:0, y:-10}); bond(cx - 50, cy, cx + 50, cy, {x:0, y:0}); bond(cx - 50, cy, cx + 50, cy, {x:0, y:10});
+                    if(p>=1 && bagViewMode==='lewis') { pair(cx - 50, cy, Math.PI, 22, '#f59e0b'); pair(cx + 50, cy, 0, 22, '#f59e0b'); }
+                }
+                else if (mol === "CO2") {
+                    title.textContent = "CO₂ - Merkez karbon atomu ile oksijenler arası iki adet ikili bağ.";
+                    node(cx, cy, 36, "C", "#475569"); node(cx - 75 * p, cy, 32, "O", "#ff6b6b"); node(cx + 75 * p, cy, 32, "O", "#ff6b6b");
+                    bond(cx, cy, cx - 75, cy, {x:0, y:-6}); bond(cx, cy, cx - 75, cy, {x:0, y:6});
+                    bond(cx, cy, cx + 75, cy, {x:0, y:-6}); bond(cx, cy, cx + 75, cy, {x:0, y:6});
+                    if(p>=1 && bagViewMode==='lewis') {
+                        pair(cx - 75, cy, Math.PI, 20, '#f59e0b'); pair(cx - 75, cy, Math.PI/2, 20, '#f59e0b');
+                        pair(cx + 75, cy, 0, 20, '#f59e0b'); pair(cx + 75, cy, -Math.PI/2, 20, '#f59e0b');
+                    }
+                }
+                else if (mol === "C2H4") {
+                    title.textContent = "C₂H₄ (Eten) - Karbonlar arası ikili Alken bağı (C=C)";
+                    node(cx - 40 * p, cy, 32, "C", "#475569"); node(cx + 40 * p, cy, 32, "C", "#475569");
+                    bond(cx - 40, cy, cx + 40, cy, {x:0, y:-6}); bond(cx - 40, cy, cx + 40, cy, {x:0, y:6});
+                    if(p>=1) {
+                        node(cx - 85, cy - 40, 16, "H", "#3b82f6"); bond(cx - 40, cy, cx - 85, cy - 40, {x:0, y:0});
+                        node(cx - 85, cy + 40, 16, "H", "#3b82f6"); bond(cx - 40, cy, cx - 85, cy + 40, {x:0, y:0});
+                        node(cx + 85, cy - 40, 16, "H", "#3b82f6"); bond(cx + 40, cy, cx + 85, cy - 40, {x:0, y:0});
+                        node(cx + 85, cy + 40, 16, "H", "#3b82f6"); bond(cx + 40, cy, cx + 85, cy + 40, {x:0, y:0});
+                    }
+                }
+                else {
+                    // Diğer tekli standart molekül formları için emniyet çizimi
+                    node(cx - 40 * p, cy, 22, "A", "#acb2bd"); node(cx + 40 * p, cy, 22, "B", "#acb2bd");
+                    bond(cx - 40, cy, cx + 40, cy, {x:0, y:0});
+                }
 
-nextCard = function(learned) {
-  if(fcFlipped) flipCard(); if(learned) fcLearnedCount++;
-  setTimeout(function(){ fcIdx++; updateCardUI(); }, 300);
-};
+                if(p < 1) { frame++; window.bagAnim = requestAnimationFrame(loop); }
+            }
+            loop();
+        }
 
-// --- MODÜL 3: DERİŞİM GEÇİŞLİ "ON MAYMUN" ÇÖZELTİ MOTORU ---
-function toggleCozMethod() {
-  var m = document.getElementById('coz-method').value;
-  document.getElementById('coz-molar-area').style.display = (m==='molar')?'':'none';
-  document.getElementById('coz-formula-area').style.display = (m==='formula')?'flex':'none';
-  drawCoz();
-}
+        // --- MODÜL 3: FLASHCARD ENGINE ---
+        function updateCardUI() {
+            var filtered = FCARDS_EXT.filter(c => fcActiveCat === 'all' || c.cat === fcActiveCat);
+            if(filtered.length === 0) return;
+            var current = filtered[fcIdx % filtered.length];
+            document.getElementById('fc-front').textContent = current.n.split(' / ')[1] || current.n;
+            document.getElementById('fc-back-formula').textContent = current.f;
+            document.getElementById('fc-back-name').textContent = current.n;
+            document.getElementById('fc-pfill').style.width = Math.min((fcLearnedCount / FCARDS_EXT.length)*100, 100) + '%';
+        }
 
-function drawCoz() {
-  var method = document.getElementById('coz-method').value;
-  var comp = document.getElementById('coz-comp').value;
-  var V = parseFloat(document.getElementById('coz-v').value) || 250;
-  var ma = comp === 'NaOH' ? 40 : comp === 'CuSO4' ? 160 : 158;
-  var M = 0.1;
+        // --- MODÜL 4: ÇÖZELTİ MOTORU ---
+        function drawCoz() {
+            var method = document.getElementById('coz-method').value;
+            var comp = document.getElementById('coz-comp').value;
+            var V = parseFloat(document.getElementById('coz-v').value) || 250;
+            var ma = comp === 'NaOH' ? 40 : comp === 'CuSO4' ? 160 : 158;
+            var M = 0.1;
 
-  if (method === 'molar') {
-    M = parseFloat(document.getElementById('coz-m').value) || 0.1;
-    var gram = (M * (V / 1000) * ma).toFixed(2);
-    document.getElementById('coz-guide').innerHTML = '<b>Molarite Metodu (M = n/V):</b><br>1. Terazide tam <b>' + gram + ' gram</b> katı ' + comp + ' tartın.<br>2. Katıyı balon jojeye ekleyip ' + V + ' mL çizgisine kadar saf su ile doldurun.';
-  } else {
-    var d = parseFloat(document.getElementById('coz-d').value) || 1.2;
-    var pct = parseFloat(document.getElementById('coz-pct').value) || 20;
-    M = (d * pct * 10) / ma; // M = (d * % * 10) / Ma
-    var gramNeeded = (M * (V / 1000) * ma).toFixed(2);
-    document.getElementById('coz-guide').innerHTML = '<b>M = d·%·10/Ma (Denizde Yüzen On Maymun):</b><br>Hesaplanan Derişim: <b>' + M.toFixed(3) + ' M</b><br>1. Çözelti için tam <b>' + gramNeeded + ' gram</b> madde tartılması gerekmektedir.';
-  }
+            if (method === 'molar') {
+                M = parseFloat(document.getElementById('coz-m').value) || 0.1;
+                var g = (M * (V / 1000) * ma).toFixed(2);
+                document.getElementById('coz-guide').innerHTML = '<b>Molarite (M = n/V):</b><br>Hassas terazide <b>' + g + ' gram</b> katı ' + comp + ' tartarak balon jojede seyrelterek çizgisine tamamlayın.';
+            } else {
+                var d = parseFloat(document.getElementById('coz-d').value) || 1.2;
+                var pct = parseFloat(document.getElementById('coz-pct').value) || 20;
+                M = (d * pct * 10) / ma;
+                var gNeeded = (M * (V / 1000) * ma).toFixed(2);
+                document.getElementById('coz-guide').innerHTML = '<b>M = d·%·10/Ma (Müfredat Formülü):</b><br>Hesaplanan Molarite: <b>' + M.toFixed(2) + ' M</b><br>Çözelti için tartılması gereken net miktar: <b>' + gNeeded + ' gram</b>.';
+            }
 
-  // Canvas Sıvı Çizim Aşaması
-  var cv = document.getElementById('cozCanvas'); if(!cv) return;
-  var ctx = cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height);
-  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 3; ctx.beginPath();
-  ctx.moveTo(85,30); ctx.lineTo(85,100); ctx.bezierCurveTo(40,120,40,220,100,220); ctx.bezierCurveTo(160,220,160,120,115,100); ctx.lineTo(115,30); ctx.closePath(); ctx.stroke();
-  
-  var fillGradient = ctx.createLinearGradient(60,120,140,220);
-  if(comp==='NaOH'){ fillGradient.addColorStop(0,'rgba(255,255,255,0.2)'); fillGradient.addColorStop(1,'rgba(240,240,250,0.5)'); }
-  else if(comp==='CuSO4'){ fillGradient.addColorStop(0,'rgba(0,150,255,'+Math.min(M*0.4,1)+')'); fillGradient.addColorStop(1,'rgba(0,50,200,'+Math.min(M*0.7,1)+')'); }
-  else { fillGradient.addColorStop(0,'rgba(200,0,200,'+Math.min(M*0.4,1)+')'); fillGradient.addColorStop(1,'rgba(100,0,120,'+Math.min(M*0.7,1)+')'); }
-  ctx.fillStyle = fillGradient; ctx.beginPath(); ctx.moveTo(86,110); ctx.bezierCurveTo(45,125,45,219,100,219); ctx.bezierCurveTo(155,219,155,125,114,110); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = '#ff3333'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(85,70); ctx.lineTo(115,70); ctx.stroke();
-}
+            var cv = document.getElementById('cozCanvas'); if(!cv) return;
+            var ctx = cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height);
+            ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 3; ctx.beginPath();
+            ctx.moveTo(75,20); ctx.lineTo(75,80); ctx.bezierCurveTo(30,100,30,200,90,200); ctx.bezierCurveTo(150,200,150,100,105,80); ctx.lineTo(105,20); ctx.closePath(); ctx.stroke();
+            
+            ctx.fillStyle = comp==='CuSO4'?'rgba(0,100,255,0.4)':comp==='KMnO4'?'rgba(180,0,180,0.5)':'rgba(255,255,255,0.2)';
+            ctx.beginPath(); ctx.moveTo(76,90); ctx.bezierCurveTo(35,110,35,199,90,199); ctx.bezierCurveTo(145,199,145,110,104,90); ctx.closePath(); ctx.fill();
+        }
 
-// --- MODÜL 4: LE CHATELIER KUSURSUZ YÖNLÜ GRAFİK SİMÜLATÖRÜ ---
-triggerDenge = function(action) {
-  if (window.dengeTimer) clearInterval(window.dengeTimer);
-  var lastIdx = dengeData.t.length - 1;
-  var n2 = dengeData.n2[lastIdx];
-  var h2 = dengeData.h2[lastIdx];
-  var nh3 = dengeData.nh3[lastIdx];
-  var t = dengeData.t[lastIdx] + 1;
+        // --- MODÜL 5: KUSURSUZ LE CHATELIER GRAFİK MOTORU ---
+        var dengeChart = null;
+        var dengeData = { t: [], n2: [], h2: [], nh3: [] };
 
-  if (action === 'vol_dec') {
-    // Hacim Azaltma: Tüm derişimler aniden YUKARI kırılır
-    n2 += 30; h2 += 30; nh3 += 30;
-    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-    var steps = 25; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      n2 -= 0.25; h2 -= 0.75; nh3 += 0.50; // Ürünlere kayış (Eski seviyenin üzerinde kalır)
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      if(dengeData.t.length > 100) { dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift(); }
-      drawDengeGraph(); stepCount++;
-    }, 40);
-    toast('Hacim Azaltıldı! Derişimler fırladı, denge ürünler yönüne kayıyor.');
-  } 
-  else if (action === 'vol_inc') {
-    // Hacim Artırma: Tüm derişimler aniden AŞAĞI kırılır
-    n2 -= 20; h2 -= 20; nh3 -= 20;
-    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-    var steps = 25; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      n2 += 0.20; h2 += 0.60; nh3 -= 0.40; // Girenler kayış (Eski seviyenin altında kalır)
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      if(dengeData.t.length > 100) { dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift(); }
-      drawDengeGraph(); stepCount++;
-    }, 40);
-    toast('Hacim Artırıldı! Derişimler düştü, denge girenler yönüne kayıyor.');
-  }
-  else if (action === 'add_n2') {
-    n2 += 30; dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-    var steps = 25; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      n2 -= 0.35; h2 -= 1.05; nh3 += 0.70;
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      drawDengeGraph(); stepCount++;
-    }, 40);
-  }
-  else if (action === 'remove_nh3') {
-    nh3 -= 20; dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-    var steps = 25; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      n2 += 0.25; h2 += 0.75; nh3 -= 0.50;
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      drawDengeGraph(); stepCount++;
-    }, 40);
-  }
-  else if (action === 'heat' || action === 'cool') {
-    var steps = 25; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      if (action === 'heat') { n2 += 0.25; h2 += 0.75; nh3 -= 0.50; } else { n2 -= 0.25; h2 -= 0.75; nh3 += 0.50; }
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      drawDengeGraph(); stepCount++;
-    }, 40);
-  }
-};
+        function initDengeGraph() {
+            dengeData = { t: [], n2: [], h2: [], nh3: [] };
+            for (let i = 0; i <= 20; i++) {
+                dengeData.t.push(i); dengeData.n2.push(45); dengeData.h2.push(60); dengeData.nh3.push(35);
+            }
+            
+            var cCtx = document.getElementById('dengeCanvas').getContext('2d');
+            if(dengeChart) dengeChart.destroy();
+            
+            dengeChart = new Chart(cCtx, {
+                type: 'line',
+                data: {
+                    labels: dengeData.t,
+                    datasets: [
+                        { label: 'N₂', data: dengeData.n2, borderColor: '#ef4444', borderWidth: 2, pointRadius: 0, tension: 0.1 },
+                        { label: 'H₂', data: dengeData.h2, borderColor: '#06b6d4', borderWidth: 2, pointRadius: 0, tension: 0.1 },
+                        { label: 'NH₃', data: dengeData.nh3, borderColor: '#10b981', borderWidth: 2, pointRadius: 0, tension: 0.1 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { display: false }, y: { min: 5, max: 110, grid: { color: '#1e2538' } } },
+                    plugins: { legend: { labels: { color: '#fff' } } }
+                }
+            });
+        }
 
-// --- MODÜL 5: İYON YÜKLÜ VE ÇAP KIYASLAMALI TANI MOTORU ---
-diagnoseAtoms = function() {
-  var p1 = parseInt(document.getElementById('iz-p1').value) || 0;
-  var n1 = parseInt(document.getElementById('iz-n1').value) || 0;
-  var e1 = parseInt(document.getElementById('iz-e1').value) || 0;
-  var y1 = parseInt(document.getElementById('iz-y1').value) || 0;
-  
-  var p2 = parseInt(document.getElementById('iz-p2').value) || 0;
-  var n2 = parseInt(document.getElementById('iz-n2').value) || 0;
-  var e2 = parseInt(document.getElementById('iz-e2').value) || 0;
-  var y2 = parseInt(document.getElementById('iz-y2').value) || 0;
+        window.triggerDenge = function(action) {
+            if (window.dengeTimer) clearInterval(window.dengeTimer);
+            let lastIdx = dengeData.t.length - 1;
+            let n2 = dengeData.n2[lastIdx]; let h2 = dengeData.h2[lastIdx]; let nh3 = dengeData.nh3[lastIdx];
+            let t = dengeData.t[lastIdx] + 1;
 
-  var k1 = p1 + n1; var k2 = p2 + n2;
-  var resBox = document.getElementById('iz-result');
-  var resText = document.getElementById('iz-rv');
-  resBox.style.display = 'block';
+            if (action === 'vol_dec') {
+                // HACİM AZALTMA: Anlık dikey fırlama (Etki)
+                n2 += 25; h2 += 25; nh3 += 25;
+                dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+                
+                let steps = 25; let stepCount = 0;
+                window.dengeTimer = setInterval(() => {
+                    if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
+                    n2 -= 0.20; h2 -= 0.40; nh3 += 0.45; // Ürünlere kayış (Eski dengenin üzerinde kalır)
+                    dengeData.t.push(dengeData.t[dengeData.t.length-1]+1);
+                    dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+                    dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift();
+                    dengeChart.update('none'); stepCount++;
+                }, 40);
+                toast('Hacim Azaltıldı! Basınç fırladı, sistem ürünler lehine kayıyor.');
+            }
+            else if (action === 'vol_inc') {
+                // HACİM ARTIRMA: Anlık dikey düşüş (Etki)
+                n2 -= 15; h2 -= 15; nh3 -= 15;
+                dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+                
+                let steps = 25; let stepCount = 0;
+                window.dengeTimer = setInterval(() => {
+                    if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
+                    n2 += 0.15; h2 += 0.30; nh3 -= 0.35; // Girenler kayış (Eski dengenin altında kalır)
+                    dengeData.t.push(dengeData.t[dengeData.t.length-1]+1);
+                    dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+                    dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift();
+                    dengeChart.update('none'); stepCount++;
+                }, 40);
+                toast('Hacim Artırıldı! Derişimler düştü, sistem girenler lehine kayıyor.');
+            }
+            else {
+                // Diğer etkiler için doğrusal kararlı tepki adımları
+                n2 += (action==='add_n2'?30:0); nh3 -= (action==='remove_nh3'?20:0);
+                let steps = 25; let stepCount = 0;
+                window.dengeTimer = setInterval(() => {
+                    if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
+                    if(action==='heat') { n2+=0.2; h2+=0.3; nh3-=0.3; } 
+                    else if(action==='cool') { n2-=0.2; h2-=0.3; nh3+=0.3; }
+                    else { n2-=0.2; h2-=0.4; nh3+=0.3; }
+                    dengeData.t.push(dengeData.t[dengeData.t.length-1]+1);
+                    dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+                    dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift();
+                    dengeChart.update('none'); stepCount++;
+                }, 40);
+            }
+        };
 
-  var calcE1 = p1 - y1; var calcE2 = p2 - y2;
-  var capComparison = p1 === p2 ? "<br>💡 <b>Çap Kıyaslaması:</b> Elektron sayısı çok (veya iyon yükü az) olan anyon/atomun çapı katyona göre daha büyüktür." : "";
+        // --- MODÜL 6: ÇAP KIYASLAMALI ATOM ANALİZ MOTORU ---
+        function diagnoseAtoms() {
+            var p1 = parseInt(document.getElementById('iz-p1').value) || 0;
+            var n1 = parseInt(document.getElementById('iz-n1').value) || 0;
+            var e1 = parseInt(document.getElementById('iz-e1').value) || 0;
+            var y1 = parseInt(document.getElementById('iz-y1').value) || 0;
+            var p2 = parseInt(document.getElementById('iz-p2').value) || 0;
+            var n2 = parseInt(document.getElementById('iz-n2').value) || 0;
+            var e2 = parseInt(document.getElementById('iz-e2').value) || 0;
+            var y2 = parseInt(document.getElementById('iz-y2').value) || 0;
 
-  if (p1 === p2 && n1 !== n2) {
-    resText.innerHTML = '🧬 <b>İZOTOP TANECİKLERDİR</b><br>Proton sayıları aynı (' + p1 + '), nötron sayıları farklıdır. Kimyasal özellikleri benzer, fiziksel özellikleri farklıdır.' + capComparison;
-  } else if (calcE1 === calcE2 && p1 !== p2) {
-    resText.innerHTML = '⚛️ <b>İZOELEKTRONİK TANECİKLERDİR</b><br>Elektron sayıları ve katman dizilimleri aynı (' + calcE1 + '), çekirdek yükleri farklıdır. Çekirdek yükü (protonu) küçük olanın elektron başına düşen çekim gücü az olacağı için tanecik çapı daha <b>BÜYÜKTÜR</b>.';
-  } else if (p1 !== p2 && k1 === k2) {
-    resText.innerHTML = '⚖️ <b>İZOBAR ATOMLARDIR</b><br>Kütle numaraları aynı (' + k1 + '), proton sayıları farklıdır.';
-  } else if (p1 !== p2 && n1 === n2) {
-    resText.innerHTML = '🧱 <b>İZOTON ATOMLARDIR</b><br>Nötron sayıları aynı (' + n1 + '), proton sayıları farklıdır.';
-  } else {
-    resText.innerHTML = '❌ Kapsamlı bir izotop/izobar/izoton/izoelektronik ilişkisi bulunamadı. Lütfen proton-elektron-yük dengelerini gözden geçirin.';
-  }
-};
-// --- LE CHATELIER %100 MEB UYUMLU GRAFİK MOTORU ---
-triggerDenge = function(action) {
-  if (window.dengeTimer) clearInterval(window.dengeTimer);
-  var lastIdx = dengeData.t.length - 1;
-  var n2 = dengeData.n2[lastIdx];
-  var h2 = dengeData.h2[lastIdx];
-  var nh3 = dengeData.nh3[lastIdx];
-  var t = dengeData.t[lastIdx] + 1;
+            var k1 = p1 + n1; var k2 = p2 + n2;
+            var out = document.getElementById('iz-result');
+            var txt = document.getElementById('iz-rv'); out.style.display = 'block';
 
-  // HACIM AZALT (KAĞIDIN SAĞ TARAFINDAKİ ÇİZİM)
-  if (action === 'vol_dec') {
-    // 1. Aşama: Anlık dikey fırlama (Etki)
-    n2 += 30; h2 += 30; nh3 += 30;
-    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-    
-    // 2. Aşama: Ürünler yönüne kayış (Tepki)
-    var steps = 30; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      n2 -= 0.25; // H2 ve N2 azalarak eski dengenin üzerinde dengelenir
-      h2 -= 0.45; 
-      nh3 += 0.50; // NH3 fırlamadan sonra artmaya devam eder
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      if(dengeData.t.length > 100) { dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift(); }
-      drawDengeGraph(); stepCount++;
-    }, 40);
-  } 
-  // HACIM ARTIR (KAĞIDIN SOL TARAFINDAKİ ÇİZİM)
-  else if (action === 'vol_inc') {
-    // 1. Aşama: Anlık dikey düşüş (Etki)
-    n2 -= 20; h2 -= 20; nh3 -= 20;
-    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-    
-    // 2. Aşama: Girenler yönüne kayış (Tepki)
-    var steps = 30; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      n2 += 0.20; // H2 ve N2 artarak eski dengenin altında dengelenir
-      h2 += 0.35; 
-      nh3 -= 0.40; // NH3 düşüşten sonra azalmaya devam eder
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      if(dengeData.t.length > 100) { dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift(); }
-      drawDengeGraph(); stepCount++;
-    }, 40);
-  }
-  // DİĞER ETKİLER (Sabit katsayılı standart akışlar)
-  else if (action === 'add_n2') {
-    n2 += 30; dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-    var steps = 25; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      n2 -= 0.35; h2 -= 0.45; nh3 += 0.50;
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      drawDengeGraph(); stepCount++;
-    }, 40);
-  }
-  else if (action === 'remove_nh3') {
-    nh3 -= 20; dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-    var steps = 25; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      n2 += 0.20; h2 += 0.30; nh3 -= 0.25;
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      drawDengeGraph(); stepCount++;
-    }, 40);
-  }
-  else if (action === 'heat' || action === 'cool') {
-    var steps = 25; var stepCount = 0;
-    window.dengeTimer = setInterval(function() {
-      if(stepCount >= steps) { clearInterval(window.window.dengeTimer); return; }
-      var curT = dengeData.t[dengeData.t.length - 1] + 1;
-      if (action === 'heat') { n2 += 0.20; h2 += 0.30; nh3 -= 0.35; } else { n2 -= 0.20; h2 -= 0.30; nh3 += 0.35; }
-      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
-      drawDengeGraph(); stepCount++;
-    }, 40);
-  }
-};
+            if (p1 === p2 && n1 !== n2) {
+                txt.innerHTML = "🧬 <b>İZOTOP TANECİKLERDİR</b><br>Proton sayıları aynı, nötronları farklıdır. Elektron sayıları aynı ise kimyasal özellikleri özdeştir.<br>💡 <b>Çap Analizi:</b> Elektron sayısı fazla olan iyonun katman hacmi (çapı) daha büyüktür.";
+            } else if ((p1 - y1) === (p2 - y2) && p1 !== p2) {
+                txt.innerHTML = "⚛️ <b>İZOELEKTRONİK TANECİKLERDİR</b><br>Elektron sayıları ve katman dizilimleri aynı, protonları farklıdır.<br>💡 <b>Çap Analizi:</b> Proton sayısı küçük olan atomun çekirdek çekim gücü zayıf kalacağı için elektron bulutu genişler ve <b>çapı daha büyük olur</b>.";
+            } else if (p1 !== p2 && k1 === k2) {
+                txt.innerHTML = "⚖️ <b>İZOBAR ATOMLARDIR</b><br>Kütle numaraları aynı, proton sayıları farklıdır. Fiziksel ve kimyasal özellikleri tamamen farklıdır.";
+            } else if (p1 !== p2 && n1 === n2) {
+                txt.innerHTML = "🧱 <b>İZOTON ATOMLARDIR</b><br>Nötron sayıları aynı, çekirdek yükleri farklıdır.";
+            } else {
+                txt.innerHTML = "❌ Herhangi bir izotop/izobar/izoton/izoelektronik ilişkisi kurulamadı. Tanecik verilerini gözden geçirin.";
+            }
+        }
+    </script>
+</body>
+</html>
 
 </script>
 </body>
