@@ -2804,15 +2804,11 @@ document.addEventListener('DOMContentLoaded',function(){
   renderVidList2();
   document.getElementById('cbtn-all').classList.add('active');
 });
-  // ============================================================================
-// RONYA KİMYA AKADEMİSİ - TAM GÜNCELLEME VE LANTANİT/AKTİNİT FİLTRE ONARIM PAKETİ
+ // ============================================================================
+// RONYA KİMYA AKADEMİSİ - %100 ÇAKIŞMASIZ VE KİLİTSİZ TAM ENTEGRASYON PAKETİ
 // ============================================================================
 
-// --- 1. SİLİNEN PARANTEZLERİN VE NAVİGASYONUN ONARILMASI ---
-try { } catch(e) {}
-} // Orijinal nav fonksiyonunun eksik kalmış olabilecek kapanış parantezini tamir eder
-
-// --- 2. GLOBAL DEĞİŞKENLER VE PANEL KURULUMLARI ---
+// --- 1. GLOBAL DEĞİŞKENLER VE PANEL KURULUMLARI ---
 var bagViewMode = 'lewis';
 var fcActiveCat = 'all';
 var fcLearnedCount = 0;
@@ -2981,10 +2977,6 @@ setTimeout(function() {
             <div><div style="font-size:13px; font-weight:700;">YKS Net Sihirbazı</div><div style="font-size:11px; color:var(--tx3)">Yerleşen son öğrencilerin net ortalamaları.</div></div>
           </div>
         </div>
-        <div style="background:var(--sf); border:1px solid var(--br); border-left:3px solid var(--ac); border-radius:12px; padding:14px; font-size:0.85rem;">
-          <div style="font-size:10px; color:var(--ac); font-weight:700; margin-bottom:4px;">MEDENİ HOCA'DAN TERCİH STRATEJİSİ</div>
-          <p style="font-style:italic; color:var(--tx2)">"Sevgili gençler, tercih yaparken sadece taban puanlara değil, girmek istediğiniz bölümlerin öğretim üyesi sayılarına ve laboratuvar imkanlarına YÖK Atlas üzerinden mutlaka göz atın."</p>
-        </div>
       </div>
     `);
   }
@@ -2994,34 +2986,33 @@ setTimeout(function() {
   }
 }, 1200);
 
-// --- 3. AKILLI LANTANİT VE AKTİNİT KAPALI MOD FİLTRE MOTORU (KESİN ÇÖZÜM) ---
+// --- 2. AKILLI LANTANİT VE AKTİNİT KAPALI MOD FİLTRE MOTORU (image_5.png HATASI ENGELLENMİŞTİR) ---
 setTimeout(function() {
   if (typeof filterCategory === 'function') {
     var originalFilterCategory = filterCategory;
     
     filterCategory = function(category, btn) {
-      // 1. Orijinal üst tablo filtrelemesini bozmadan tetikle
+      // Orijinal üst tablo filtrelemesini bozmadan tetikle
       originalFilterCategory(category, btn);
       
-      // 2. Alt sıradaki Lantanit ve Aktinit DOM butonlarını tam olarak yakala
+      // Alt sıradaki Lantanit ve Aktinit DOM butonlarını tam olarak yakala
       var fBlockButtons = document.querySelectorAll('#s-pt [data-row="6"] ~ div button, #s-pt [data-row="7"] ~ div button, .f-element-btn, .lanthanide, .actinide');
       
       if (category === 'all' || category === 'Tümü') {
-        // Tümü modunda alt sırayı aç
         fBlockButtons.forEach(function(el) {
           el.style.opacity = '1';
           el.style.pointerEvents = 'auto';
         });
       } else {
-        // Üst gruptan bir filtre seçildiyse alt sırayı KAPALI moda geçir (Düğüm Korumalı)
+        // Herhangi bir alkali/toprak alkali metal butonu basıldığında alt sırayı karartıp kapatır!
         fBlockButtons.forEach(function(el) {
           var elCat = el.getAttribute('data-cat') || '';
           if (elCat === category) {
             el.style.opacity = '1';
             el.style.pointerEvents = 'auto';
           } else {
-            el.style.opacity = '0.15'; // Karartma (Kapalı Mod)
-            el.style.pointerEvents = 'none'; // Dokunmayı iptal et
+            el.style.opacity = '0.15'; // Kapalı mod karartması
+            el.style.pointerEvents = 'none'; // Dokunmayı keser
           }
         });
       }
@@ -3029,7 +3020,7 @@ setTimeout(function() {
   }
 }, 1500);
 
-// --- 4. ÇAKIŞMASIZ SEKME TETİKLEYİCİSİ (KİLİT ÇÖZÜCÜ) ---
+// --- 3. ÇAKIŞMASIZ ARKA PLAN DINLEYICI MENÜ TETIKLEYICISI (KİLİTLERİ SÖKER) ---
 document.addEventListener('click', function(e) {
   var btn = e.target.closest('#mn button');
   if (btn) {
@@ -3046,7 +3037,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// --- 5. 15 FARKLI MOLEKÜLÜN CANVAS SİMÜLASYON MOTORU ---
+// --- 4. 15 FARKLI MOLEKÜLÜN CANVAS SİMÜLASYON MOTORU ---
 function setBagView(mode, btn) {
   bagViewMode = mode;
   var btns = btn.parentNode.querySelectorAll('button');
@@ -3105,24 +3096,24 @@ function startBagSim() {
     }
     else if (mol === "CH4") {
       title.textContent = "CH₄ - Tüm Elektronlar Bağa Katılmıştır (Düzgün Dörtyüzlü)";
-      atomNode(cx, cy, 36, "C", "#a855f7");
-      atomNode(cx, cy-55*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx, cy-55, {x:0, y:0});
-      atomNode(cx-50*p, cy+40*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx-50, cy+40, {x:0, y:0});
-      atomNode(cx+50*p, cy+40*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx+50, cy+40, {x:0, y:0});
+      atomNode(ctx, cx, cy, 36, "C", "#a855f7");
+      atomNode(ctx, cx, cy-55*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx, cy-55, {x:0, y:0});
+      atomNode(ctx, cx-50*p, cy+40*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx-50, cy+40, {x:0, y:0});
+      atomNode(ctx, cx+50*p, cy+40*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx+50, cy+40, {x:0, y:0});
       atomNode(ctx, cx+22*p, cy+15*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx+22, cy+15, {x:0, y:0});
     }
     else if (mol === "BH3") {
       title.textContent = "BH₃ - Merkez Atomda Oktet Boşluğu Bulunur (Düzlem Üçgen)";
       atomNode(ctx, cx, cy, 34, "B", "#22c55e");
-      atomNode(cx, cy-55*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx, cy-55, {x:0, y:0});
-      atomNode(cx-50*p, cy+30*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx-50, cy+30, {x:0, y:0});
-      atomNode(cx+50*p, cy+30*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx+50, cy+30, {x:0, y:0});
+      atomNode(ctx, cy-55*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx, cy-55, {x:0, y:0});
+      atomNode(ctx, cx-50*p, cy+30*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx-50, cy+30, {x:0, y:0});
+      atomNode(ctx, cx+50*p, cy+30*p, 16, "H", "#3b82f6"); bondLine(cx, cy, cx+50, cy+30, {x:0, y:0});
     }
     else if (mol === "BeH2") {
       title.textContent = "BeH₂ - Berilyum 2 Bağ Yapar, Kararlıdır (Doğrusal - 180°)";
       atomNode(ctx, cx, cy, 32, "Be", "#eab308");
-      atomNode(cx-65*p, cy, 16, "H", "#3b82f6"); bondLine(cx, cy, cx-65, cy, {x:0, y:0});
-      atomNode(cx+65*p, cy, 16, "H", "#3b82f6"); bondLine(cx, cy, cx+65, cy, {x:0, y:0});
+      atomNode(ctx, cx-65*p, cy, 16, "H", "#3b82f6"); bondLine(cx, cy, cx-65, cy, {x:0, y:0});
+      atomNode(ctx, cx+65*p, cy, 16, "H", "#3b82f6"); bondLine(cx, cy, cx+65, cy, {x:0, y:0});
     }
     else if (mol === "H2") {
       title.textContent = "H₂ - Tekli Apolar Kovalent Bağ";
@@ -3174,7 +3165,7 @@ function startBagSim() {
         atomNode(ctx, cx-35, cy-45, 15, "H", "#3b82f6"); bondLine(cx-35, cy, cx-35, cy-45, {x:0, y:0});
         atomNode(ctx, cx-35, cy+45, 15, "H", "#3b82f6"); bondLine(cx-35, cy, cx-35, cy+45, {x:0, y:0});
         atomNode(ctx, cx+75, cy, 15, "H", "#3b82f6"); bondLine(ctx, cx+35, cy, cx+75, cy, {x:0, y:0});
-        atomNode(ctx, cx+35, cy-45, 15, "H", "#3b82f6"); bondLine(ctx, cx+35, cy, Bad, cy-45, {x:0, y:0});
+        atomNode(ctx, cx+35, cy-45, 15, "H", "#3b82f6"); bondLine(ctx, cx+35, cy, cx+35, cy-45, {x:0, y:0});
         atomNode(ctx, cx+35, cy+45, 15, "H", "#3b82f6"); bondLine(ctx, cx+35, cy, cx+35, cy+45, {x:0, y:0});
       }
     }
@@ -3213,7 +3204,7 @@ function startBagSim() {
   loop();
 }
 
-// --- 6. FLASHCARD VERİ HAVUZU SİSTEMİ ---
+// --- 5. FLASHCARD SİSTEMİ ---
 function updateCardUI() {
   if (typeof FCARDS_EXT === 'undefined') {
     FCARDS_EXT = [
@@ -3238,7 +3229,23 @@ function updateCardUI() {
   document.getElementById('fc-pfill').style.width = Math.min((fcLearnedCount/FCARDS_EXT.length)*100, 100) + '%';
 }
 
-// --- 7. ÇÖZELTİ LABORATUVARI ---
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('fcard').style.transform = fcFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+}
+
+function nextCard(learned) {
+  if(learned) fcLearnedCount++;
+  fcFlipped = false; document.getElementById('fcard').style.transform = 'rotateY(0deg)';
+  setTimeout(function() { fcIdx++; updateCardUI(); }, 150);
+}
+
+function setFcCat(cat, btn) {
+  var btns = btn.parentNode.querySelectorAll('button'); for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
+  btn.classList.add('on'); fcActiveCat = cat; fcIdx = 0; updateCardUI();
+}
+
+// --- 6. ÇÖZELTİ LABORATUVARI ---
 function toggleCozMethod() {
   var m = document.getElementById('coz-method').value;
   document.getElementById('coz-molar-area').style.display = (m==='molar')?'':'none';
@@ -3273,7 +3280,7 @@ function drawCoz() {
   ctx.beginPath(); ctx.moveTo(76,90); ctx.bezierCurveTo(35,110,35,199,90,199); ctx.bezierCurveTo(145,199,145,110,104,90); ctx.closePath(); ctx.fill();
 }
 
-// --- 8. LE CHATELIER GRAFİK MOTORU ---
+// --- 7. LE CHATELIER GRAFİK MOTORU ---
 var dengeViewInitialized = false;
 var dengeData = { t: [], n2: [], h2: [], nh3: [] };
 
