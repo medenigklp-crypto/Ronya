@@ -1,1 +1,550 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Test Modülü - Ronya Kimya</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#16213e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #08090f;
+  --sf: #0f1117;
+  --sf2: #161922;
+  --br: #1e2535;
+  --ac: #6366f1;
+  --ac2: #818cf8;
+  --gr: #22c55e;
+  --rd: #ef4444;
+  --tx: #f1f5f9;
+  --tx2: #94a3b8;
+  --tx3: #475569;
+  --r: 14px;
+  --rsm: 8px;
+  --rlg: 20px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #08090f !important; color: var(--tx); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 56px;
+  border-bottom: 1px solid var(--br);
+  background: rgba(8,9,15,.95);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #a5b4fc, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+}
+
+.back.back-btn {
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  border-radius: var(--rsm);
+  padding: 8px 14px;
+  color: var(--tx2);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pw { max-width: 700px; margin: 0 auto; padding: 30px 16px; }
+
+.test-baslik {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ac2);
+  margin-bottom: 8px;
+}
+
+.konu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.konu-btn {
+  padding: 14px;
+  border: 2px solid var(--br);
+  border-radius: var(--r);
+  background: var(--sf2);
+  color: var(--tx2);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+
+.konu-btn:hover { border-color: var(--ac); color: var(--tx); }
+
+.test-card {
+  background: var(--sf);
+  border: 1px solid var(--br);
+  border-radius: var(--rlg);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.soru-metin {
+  font-size: 15px;
+  color: var(--tx);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.siklar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sik {
+  padding: 14px 18px;
+  border: 2px solid var(--br);
+  border-radius: var(--r);
+  background: var(--sf2);
+  color: var(--tx);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+
+.sik:hover { border-color: var(--ac); }
+.sik.dogru { border-color: var(--gr); background: rgba(34,197,94,0.1); }
+.sik.yanlis { border-color: var(--rd); background: rgba(239,68,68,0.1); }
+
+.harf { 
+  width: 32px; 
+  height: 32px; 
+  border-radius: 50%; 
+  background: var(--br); 
+  color: var(--tx2); 
+  font-weight: 700; 
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sik.dogru .harf { background: var(--gr); color: #fff; }
+.sik.yanlis .harf { background: var(--rd); color: #fff; }
+
+.stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  flex: 1;
+  min-width: 80px;
+  background: var(--sf);
+  border: 1px solid var(--br);
+  border-radius: var(--r);
+  padding: 14px;
+  text-align: center;
+}
+
+.stat-deger {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ac2);
+}
+
+.stat-baslik {
+  font-size: 11px;
+  color: var(--tx3);
+  margin-top: 4px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary { background: var(--ac); color: #fff; }
+.btn-secondary { background: var(--sf2); color: var(--tx); border: 1px solid var(--br); }
+
+.sonuc-ekrani {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.sonuc-emoji { font-size: 64px; margin-bottom: 16px; }
+.sonuc-baslik { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.sonuc-mesaj { color: var(--tx2); font-size: 14px; margin-bottom: 24px; }
+
+.ses-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  color: var(--tx2);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.ses-toggle.acik { color: var(--ac2); border-color: var(--ac); }
+
+.klavye-bilgi {
+  text-align: center;
+  padding: 12px;
+  background: var(--sf2);
+  border-radius: var(--r);
+  margin-top: 15px;
+  font-size: 12px;
+  color: var(--tx3);
+}
+
+.klavye-bilgi span {
+  display: inline-block;
+  padding: 3px 8px;
+  background: var(--br);
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--tx2);
+  margin: 0 2px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-btn">← Geri</a>
+  <div class="logo" onclick="location.href='index.html'">Ronya Kimya</div>
+  <div style="width: 60px;"></div>
+</header>
+
+<div class="pw">
+
+  <div id="konu-secimi">
+    <div class="test-baslik">📝 Konu Testi</div>
+    <p style="color: var(--tx2); font-size: 13px; margin-bottom: 16px;">Test yapmak istediğin konuyu seç:</p>
+    <div class="konu-grid">
+      <button class="konu-btn" onclick="baslatTest('atom')">⚛️ Atom ve Periyodik</button>
+      <button class="konu-btn" onclick="baslatTest('mol')">⚖️ Mol ve Kimyasal</button>
+      <button class="konu-btn" onclick="baslatTest('gaz')">💨 Gazlar</button>
+      <button class="konu-btn" onclick="baslatTest('cozelti')">🧪 Çözeltiler</button>
+      <button class="konu-btn" onclick="baslatTest('denge')">⚖️ Kimyasal Denge</button>
+      <button class="konu-btn" onclick="baslatTest('asitbaz')">🧪 Asit-Baz</button>
+      <button class="konu-btn" onclick="baslatTest('elektro')">⚡ Elektrokimya</button>
+      <button class="konu-btn" onclick="baslatTest('organik')">🔬 Organik Kimya</button>
+    </div>
+  </div>
+
+  <div id="test-ekrani" style="display: none;">
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-deger" id="soru-no">1</div>
+        <div class="stat-baslik">Soru</div>
+      </div>
+      <div class="stat">
+        <div class="stat-deger" id="dogru-sayisi">0</div>
+        <div class="stat-baslik">Doğru</div>
+      </div>
+      <div class="stat">
+        <div class="stat-deger" id="yanlis-sayisi">0</div>
+        <div class="stat-baslik">Yanlış</div>
+      </div>
+      <div class="stat">
+        <div class="stat-deger" id="skor">0</div>
+        <div class="stat-baslik">Skor</div>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <div class="test-baslik" id="konu-baslik">Atom ve Periyodik</div>
+      <div class="soru-metin" id="soru-metin">Yükleniyor...</div>
+      <div class="siklar" id="siklar"></div>
+      <div class="klavye-bilgi">
+        Klavye kısayolları: <span>A</span> <span>B</span> <span>C</span> <span>D</span> ile cevaplayabilirsiniz
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="testiBitir()">Testi Bitir</button>
+    </div>
+  </div>
+
+  <div id="sonuc-ekrani" style="display: none;">
+    <div class="sonuc-ekrani">
+      <div class="sonuc-emoji" id="sonuc-emoji">🎉</div>
+      <div class="sonuc-baslik" id="sonuc-baslik">Test Tamamlandı!</div>
+      <div class="sonuc-mesaj" id="sonuc-mesaj">Sonuçlarınızı aşağıda görebilirsiniz.</div>
+      
+      <div class="stats" style="max-width: 400px; margin: 0 auto 24px;">
+        <div class="stat">
+          <div class="stat-deger" id="sonuc-dogru">0</div>
+          <div class="stat-baslik">Doğru</div>
+        </div>
+        <div class="stat">
+          <div class="stat-deger" id="sonuc-yanlis">0</div>
+          <div class="stat-baslik">Yanlış</div>
+        </div>
+        <div class="stat">
+          <div class="stat-deger" id="sonuc-skor">0</div>
+          <div class="stat-baslik">Toplam Skor</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <div style="font-size: 13px; color: var(--tx3); margin-bottom: 8px;">En Yüksek Skor: <span id="en-yuksek-skor" style="color: var(--ac2); font-weight: 700;">0</span></div>
+      </div>
+
+      <button class="btn btn-primary" onclick="yeniTest()" style="margin-right: 10px;">Yeni Test</button>
+      <button class="btn btn-secondary" onclick="location.href='index.html'">Ana Sayfa</button>
+    </div>
+  </div>
+
+</div>
+
+<button class="ses-toggle" id="sesBtn" onclick="sesToggle()">🔇</button>
+
+<script>
+const sorular = {
+  'atom': [
+    { soru: "1s orbitali en fazla kaç elektron alabilir?", siklar: ["2", "6", "10", "14"], cevap: 0 },
+    { soru: "Aşağıdaki elementlerden hangisi alkali metaldir?", siklar: ["Mg", "Na", "Al", "Si"], cevap: 1 },
+    { soru: "3. periyotta kaç element vardır?", siklar: ["8", "18", "32", "2"], cevap: 0 },
+    { soru: "p orbitalinin şekli nedir?", siklar: ["Küresel", "Dumbbell", "Klover", "Dairesel"], cevap: 1 },
+    { soru: "Elektron konfigürasyonu 1s² 2s² 2p⁶ 3s² 3p⁴ olan element hangisidir?", siklar: ["Sülfür", "Fosfor", "Silisyum", "Klor"], cevap: 0 }
+  ],
+  'mol': [
+    { soru: "1 mol H₂O kaç gramdır? (H:1, O:16)", siklar: ["16", "17", "18", "20"], cevap: 2 },
+    { soru: "STP şartlarında 1 mol gazın hacmi kaç litredir?", siklar: ["22,4", "24", "1", "12"], cevap: 0 },
+    { soru: "0,5 mol NaCl'te kaç mol Cl⁻ iyonu vardır?", siklar: ["0,25", "0,5", "1", "2"], cevap: 1 }
+  ],
+  'gaz': [
+    { soru: "İdeal gaz denklemi nedir?", siklar: ["PV=nRT", "P=dgh", "E=mc²", "F=ma"], cevap: 0 },
+    { soru: "Bir gazın basıncı artırılırsa, hacmi nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Önce artar"], cevap: 1 }
+  ],
+  'cozelti': [
+    { soru: "0,1 M NaCl çözeltisinin derişimi kaç mol/L'dir?", siklar: ["0,01", "0,1", "1", "10"], cevap: 1 },
+    { soru: "%10'luk NaCl çözeltisi 100 g'de kaç g NaCl içerir?", siklar: ["1", "5", "10", "20"], cevap: 2 }
+  ],
+  'denge': [
+    { soru: "Le Chatelier prensibine göre, dengeye etki uygulanırsa sistem ne yapar?", siklar: ["Etkiyi güçlendirir", "Etkiyi zayıflatır", "Değişmez", "Bozulur"], cevap: 1 },
+    { soru: "N₂ + 3H₂ ⇌ 2NH₃ + ısı' da sıcaklık artırılırsa denge hangi yöne kayar?", siklar: ["Ürünler", "Girenler", "Değişmez", "Önce ürünlere"], cevap: 1 }
+  ],
+  'asitbaz': [
+    { soru: "pH = 7 olan çözelti nedir?", siklar: ["Asidik", "Bazik", "Nötr", "Tampon"], cevap: 2 },
+    { soru: "HCl'in su içindeki iyonlaşma denklemi nedir?", siklar: ["HCl→H⁺+Cl⁻", "HCl+H₂O→H₃O⁺+Cl⁻", "HCl→H₂+Cl₂", "HCl+NaOH→NaCl+H₂O"], cevap: 1 }
+  ],
+  'elektro': [
+    { soru: "Elektrolizde hangi elektrot pozitif yüklüdür?", siklar: ["Katot", "Anot", "Her ikisi", "Hiçbiri"], cevap: 1 },
+    { soru: "Standart hidrojen elektrotunun potansiyeli kaç volt'tur?", siklar: ["0,00", "1,00", "-1,00", "2,00"], cevap: 0 }
+  ],
+  'organik': [
+    { soru: "CH₃-CH₂-OH hangi fonksiyonel gruba aittir?", siklar: ["Aldehit", "Keton", "Alkol", "Eter"], cevap: 2 },
+    { soru: "Metan'ın IUPAC adı nedir?", siklar: ["Metan", "Etan", "Propan", "Bütan"], cevap: 0 },
+    { soru: "Benzene bağlı olan fonksiyonel grubun adı nedir?", siklar: ["Fenil", "Benzil", "Tolil", "Ksilil"], cevap: 0 }
+  ]
+};
+
+let aktifKonu = '';
+let aktifSorular = [];
+let soruIndex = 0;
+let dogruSayisi = 0;
+let yanlisSayisi = 0;
+let skor = 0;
+let sesAcik = false;
+let cevaplandi = false;
+
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function sesToggle() {
+  sesAcik = !sesAcik;
+  const btn = document.getElementById('sesBtn');
+  btn.textContent = sesAcik ? '🔊' : '🔇';
+  btn.classList.toggle('acik', sesAcik);
+  if (sesAcik && !audioCtx) audioCtx = new AudioContext();
+}
+
+function sesCal(tip) {
+  if (!sesAcik || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  if (tip === 'dogru') {
+    osc.frequency.value = 880;
+    gain.gain.value = 0.1;
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+    osc.stop(audioCtx.currentTime + 0.3);
+  } else if (tip === 'yanlis') {
+    osc.frequency.value = 220;
+    gain.gain.value = 0.1;
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    osc.stop(audioCtx.currentTime + 0.5);
+  } else if (tip === 'bitis') {
+    osc.frequency.value = 660;
+    gain.gain.value = 0.1;
+    osc.start();
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+    osc.stop(audioCtx.currentTime + 0.6);
+  }
+}
+
+function baslatTest(konu) {
+  aktifKonu = konu;
+  aktifSorular = [...sorular[konu]].sort(() => Math.random() - 0.5);
+  soruIndex = 0;
+  dogruSayisi = 0;
+  yanlisSayisi = 0;
+  skor = 0;
+  document.getElementById('konu-secimi').style.display = 'none';
+  document.getElementById('test-ekrani').style.display = 'block';
+  document.getElementById('sonuc-ekrani').style.display = 'none';
+  gosterSoru();
+}
+
+function gosterSoru() {
+  if (soruIndex >= aktifSorular.length) {
+    testiBitir();
+    return;
+  }
+  cevaplandi = false;
+  const soru = aktifSorular[soruIndex];
+  document.getElementById('soru-no').textContent = (soruIndex + 1) + '/' + aktifSorular.length;
+  document.getElementById('dogru-sayisi').textContent = dogruSayisi;
+  document.getElementById('yanlis-sayisi').textContent = yanlisSayisi;
+  document.getElementById('skor').textContent = skor;
+  document.getElementById('soru-metin').textContent = soru.soru;
+  const harfler = ['A', 'B', 'C', 'D'];
+  let siklarHTML = '';
+  soru.siklar.forEach((sik, index) => {
+    siklarHTML += `<button class="sik" onclick="cevapKontrol(${index})" data-index="${index}">
+      <span class="harf">${harfler[index]}</span>
+      <span>${sik}</span>
+    </button>`;
+  });
+  document.getElementById('siklar').innerHTML = siklarHTML;
+}
+
+function cevapKontrol(secilen) {
+  if (cevaplandi) return;
+  cevaplandi = true;
+  const soru = aktifSorular[soruIndex];
+  const siklar = document.querySelectorAll('.sik');
+  if (secilen === soru.cevap) {
+    dogruSayisi++;
+    skor += 10;
+    siklar[secilen].classList.add('dogru');
+    sesCal('dogru');
+  } else {
+    yanlisSayisi++;
+    siklar[secilen].classList.add('yanlis');
+    siklar[soru.cevap].classList.add('dogru');
+    sesCal('yanlis');
+  }
+  document.getElementById('dogru-sayisi').textContent = dogruSayisi;
+  document.getElementById('yanlis-sayisi').textContent = yanlisSayisi;
+  document.getElementById('skor').textContent = skor;
+  setTimeout(() => {
+    soruIndex++;
+    gosterSoru();
+  }, 1500);
+}
+
+function testiBitir() {
+  sesCal('bitis');
+  const kayitliSkor = localStorage.getItem('ronya_test_skor') || '0';
+  if (skor > parseInt(kayitliSkor)) {
+    localStorage.setItem('ronya_test_skor', skor.toString());
+  }
+  document.getElementById('test-ekrani').style.display = 'none';
+  document.getElementById('sonuc-ekrani').style.display = 'block';
+  document.getElementById('sonuc-dogru').textContent = dogruSayisi;
+  document.getElementById('sonuc-yanlis').textContent = yanlisSayisi;
+  document.getElementById('sonuc-skor').textContent = skor;
+  document.getElementById('en-yuksek-skor').textContent = localStorage.getItem('ronya_test_skor') || '0';
+  const oran = dogruSayisi / (dogruSayisi + yanlisSayisi) * 100;
+  if (oran >= 80) {
+    document.getElementById('sonuc-emoji').textContent = '🏆';
+    document.getElementById('sonuc-baslik').textContent = 'Mükemmel!';
+    document.getElementById('sonuc-mesaj').textContent = 'Konuyu çok iyi biliyorsun!';
+  } else if (oran >= 60) {
+    document.getElementById('sonuc-emoji').textContent = '👍';
+    document.getElementById('sonuc-baslik').textContent = 'İyi!';
+    document.getElementById('sonuc-mesaj').textContent = 'Biraz daha pratik yapabilirsin.';
+  } else {
+    document.getElementById('sonuc-emoji').textContent = '📚';
+    document.getElementById('sonuc-baslik').textContent = 'Çalışmaya Devam!';
+    document.getElementById('sonuc-mesaj').textContent = 'Konuyu tekrar etmen faydalı olacaktır.';
+  }
+}
+
+function yeniTest() {
+  document.getElementById('sonuc-ekrani').style.display = 'none';
+  document.getElementById('konu-secimi').style.display = 'block';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('test-ekrani').style.display === 'none') return;
+  const harfler = ['A', 'B', 'C', 'D'];
+  const key = e.key.toUpperCase();
+  const index = harfler.indexOf(key);
+  if (index !== -1) {
+    e.preventDefault();
+    cevapKontrol(index);
+  }
+});
+</script>
+
+</body>
+</html>
 
