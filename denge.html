@@ -1,0 +1,684 @@
+
+html_code = '''<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Kimyasal Denge Kinetiği - Ronya Kimya</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#16213e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #08090f;
+  --sf: #0f1117;
+  --sf2: #161922;
+  --sf3: #1c2030;
+  --br: #1e2535;
+  --br2: #252d40;
+  --ac: #6366f1;
+  --ac2: #818cf8;
+  --ac3: #a5b4fc;
+  --gr: #22c55e;
+  --rd: #ef4444;
+  --yw: #f59e0b;
+  --cy: #06b6d4;
+  --tx: #f1f5f9;
+  --tx2: #94a3b8;
+  --tx3: #475569;
+  --r: 14px;
+  --rsm: 8px;
+  --rlg: 20px;
+  --rxl: 28px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #08090f !important; color: var(--tx); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+.app { position: relative; z-index: 1; }
+
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 56px;
+  border-bottom: 1px solid var(--br);
+  background: rgba(8,9,15,.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #a5b4fc, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+}
+
+.back-btn {
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  border-radius: var(--rsm);
+  padding: 8px 14px;
+  color: var(--tx2);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.back-btn:hover { border-color: var(--ac); color: var(--ac2); }
+
+/* Ana Icerik */
+.pw { max-width: 960px; margin: 0 auto; padding: 30px 16px; }
+.ptitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.psub { color: var(--tx2); font-size: 13px; margin-bottom: 20px; line-height: 1.6; }
+
+/* ========== KIMYASAL DENGE KINETIGI STILLERI ========== */
+
+.denge-container {
+  background: var(--sf);
+  border: 1px solid var(--br);
+  border-radius: var(--rlg);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.denge-sistem {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gr);
+  margin-bottom: 20px;
+  padding: 12px;
+  background: var(--sf2);
+  border-radius: var(--r);
+  border: 1px solid var(--br);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.denge-sistem sub, .denge-sistem sup { font-size: 10px; }
+
+.denge-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.denge-btn {
+  padding: 12px 14px;
+  border: 2px solid var(--br);
+  border-radius: var(--r);
+  background: var(--sf2);
+  color: var(--tx);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+}
+
+.denge-btn:hover {
+  border-color: var(--ac);
+  background: rgba(99,102,241,0.1);
+  transform: translateY(-1px);
+}
+
+.denge-btn:active { transform: scale(0.97); }
+
+.denge-btn.active {
+  border-color: var(--ac);
+  background: rgba(99,102,241,0.15);
+  color: var(--ac2);
+}
+
+.denge-btn.orange { border-color: #f97316; color: #fb923c; }
+.denge-btn.orange:hover { background: rgba(249,115,22,0.1); border-color: #f97316; }
+.denge-btn.orange.active { background: rgba(249,115,22,0.15); }
+
+.denge-btn.red { border-color: #ef4444; color: #f87171; }
+.denge-btn.red:hover { background: rgba(239,68,68,0.1); border-color: #ef4444; }
+.denge-btn.red.active { background: rgba(239,68,68,0.15); }
+
+.denge-btn.blue { border-color: #3b82f6; color: #60a5fa; }
+.denge-btn.blue:hover { background: rgba(59,130,246,0.1); border-color: #3b82f6; }
+.denge-btn.blue.active { background: rgba(59,130,246,0.15); }
+
+.denge-btn .icon { font-size: 16px; }
+
+/* Grafik Alani */
+.denge-grafik {
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  border-radius: var(--r);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.denge-grafik-baslik {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tx2);
+  margin-bottom: 12px;
+}
+
+.grafik-canvas {
+  width: 100%;
+  height: 260px;
+  position: relative;
+}
+
+.grafik-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.grafik-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--tx2);
+}
+
+.legend-color {
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.legend-color.n2 { background: #ef4444; }
+.legend-color.h2 { background: #06b6d4; }
+.legend-color.nh3 { background: #22c55e; }
+.legend-color.caco3 { background: #f59e0b; }
+.legend-color.cao { background: #a855f7; }
+.legend-color.co2 { background: #3b82f6; }
+
+/* Aciklama Karti */
+.denge-aciklama {
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  border-radius: var(--r);
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.denge-aciklama-baslik {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ac2);
+  margin-bottom: 6px;
+}
+
+.denge-aciklama-metin {
+  font-size: 12px;
+  color: var(--tx2);
+  line-height: 1.6;
+}
+
+/* Sistem Secimi */
+.sistem-secim {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.sistem-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px;
+  border: 2px solid var(--br);
+  border-radius: var(--r);
+  background: var(--sf2);
+  color: var(--tx2);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+
+.sistem-btn:hover { border-color: var(--ac); color: var(--tx); }
+.sistem-btn.on { border-color: var(--ac); background: rgba(99,102,241,0.1); color: var(--ac2); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f0f23; }
+::-webkit-scrollbar-thumb { background: #2a2a5e; border-radius: 3px; }
+
+/* Responsive */
+@media (max-width: 500px) {
+  .denge-buttons { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- Header -->
+<header>
+  <a href="index.html" class="back-btn">← Geri</a>
+  <div class="logo" onclick="location.href='index.html'">Ronya Kimya</div>
+  <div style="width: 60px;"></div>
+</header>
+
+<!-- Ana Icerik -->
+<div class="pw">
+  <div class="ptitle">📊 Kimyasal Denge Kinetiği</div>
+  <div class="psub">Le Chatelier ilkelerini anlik dikey kirilmalar ve esnemeler ile izleyin</div>
+  
+  <!-- Sistem Secimi -->
+  <div class="sistem-secim">
+    <button class="sistem-btn on" onclick="selectSistem('nh3', this)" id="btn-nh3">N₂ + 3H₂ ⇌ 2NH₃</button>
+    <button class="sistem-btn" onclick="selectSistem('caco3', this)" id="btn-caco3">CaCO₃ ⇌ CaO + CO₂</button>
+  </div>
+  
+  <!-- NH3 Sistemi -->
+  <div id="sistem-nh3" class="denge-container">
+    <div class="denge-sistem">
+      N<sub>2(g)</sub> + 3H<sub>2(g)</sub> ⇌ 2NH<sub>3(g)</sub> + ISI
+    </div>
+    
+    <div class="denge-buttons">
+      <button class="denge-btn orange" onclick="applyDenge('nh3', 'hacim-azalt')">
+        <span class="icon">📉</span> Hacim Azalt (V↓)
+      </button>
+      <button class="denge-btn orange" onclick="applyDenge('nh3', 'hacim-artir')">
+        <span class="icon">📈</span> Hacim Artir (V↑)
+      </button>
+      <button class="denge-btn" onclick="applyDenge('nh3', 'n2-ekle')">
+        <span class="icon">➕</span> N₂ Gazi Ekle
+      </button>
+      <button class="denge-btn" onclick="applyDenge('nh3', 'nh3-cek')">
+        <span class="icon">➖</span> NH₃ Gazi Cek
+      </button>
+      <button class="denge-btn red" onclick="applyDenge('nh3', 'sicaklik-artir')">
+        <span class="icon">🔥</span> Sicaklik Artir (T↑)
+      </button>
+      <button class="denge-btn blue" onclick="applyDenge('nh3', 'sicaklik-azalt')">
+        <span class="icon">❄️</span> Sicaklik Azalt (T↓)
+      </button>
+    </div>
+    
+    <div class="denge-grafik">
+      <div class="denge-grafik-baslik">Derisim - Zaman Grafiği</div>
+      <div class="grafik-canvas">
+        <svg class="grafik-svg" id="grafik-nh3" viewBox="0 0 600 260">
+          <defs>
+            <pattern id="grid" width="30" height="26" patternUnits="userSpaceOnUse">
+              <path d="M 30 0 L 0 0 0 26" fill="none" stroke="#1e2535" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="260" fill="url(#grid)" />
+          
+          <line x1="50" y1="230" x2="580" y2="230" stroke="#475569" stroke-width="1" />
+          <line x1="50" y1="230" x2="50" y2="10" stroke="#475569" stroke-width="1" />
+          
+          <text x="35" y="235" fill="#475569" font-size="9" text-anchor="end">0</text>
+          <text x="35" y="190" fill="#475569" font-size="9" text-anchor="end">40</text>
+          <text x="35" y="145" fill="#475569" font-size="9" text-anchor="end">80</text>
+          <text x="35" y="100" fill="#475569" font-size="9" text-anchor="end">120</text>
+          <text x="35" y="55" fill="#475569" font-size="9" text-anchor="end">160</text>
+          
+          <text x="580" y="250" fill="#475569" font-size="9" text-anchor="end">zaman</text>
+          <text x="15" y="15" fill="#475569" font-size="9" text-anchor="middle" transform="rotate(-90, 15, 15)">Derisim</text>
+          
+          <path id="n2-line" d="M 50 70 Q 150 70 200 70 Q 250 70 300 70 Q 350 70 400 70 Q 450 70 500 70 Q 550 70 580 70" 
+                fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+          
+          <path id="h2-line" d="M 50 110 Q 150 110 200 110 Q 250 110 300 110 Q 350 110 400 110 Q 450 110 500 110 Q 550 110 580 110" 
+                fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round"/>
+          
+          <path id="nh3-line" d="M 50 180 Q 150 180 200 180 Q 250 180 300 180 Q 350 180 400 180 Q 450 180 500 180 Q 550 180 580 180" 
+                fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+          
+          <circle id="n2-dot" cx="580" cy="70" r="4" fill="#ef4444" />
+          <circle id="h2-dot" cx="580" cy="110" r="4" fill="#06b6d4" />
+          <circle id="nh3-dot" cx="580" cy="180" r="4" fill="#22c55e" />
+        </svg>
+      </div>
+      
+      <div class="grafik-legend">
+        <div class="legend-item">
+          <div class="legend-color n2"></div>
+          <span>[N₂] Derisimi</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color h2"></div>
+          <span>[H₂] Derisimi</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color nh3"></div>
+          <span>[NH₃] Derisimi</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="denge-aciklama" id="aciklama-nh3">
+      <div class="denge-aciklama-baslik">ℹ️ Le Chatelier Prensibi</div>
+      <div class="denge-aciklama-metin">
+        Bir denge sistemine dis etki uygulandiginda, sistem bu etkiyi zayiflatacak yonde kayar. 
+        Yukaridaki butonlara basarak farkli kosullarin etkisini gozlemleyin.
+      </div>
+    </div>
+  </div>
+  
+  <!-- CaCO3 Sistemi -->
+  <div id="sistem-caco3" class="denge-container" style="display:none;">
+    <div class="denge-sistem">
+      CaCO<sub>3(k)</sub> ⇌ CaO<sub>(k)</sub> + CO<sub>2(g)</sub>
+    </div>
+    
+    <div class="denge-buttons">
+      <button class="denge-btn orange" onclick="applyDenge('caco3', 'hacim-azalt')">
+        <span class="icon">📉</span> Hacim Azalt (V↓)
+      </button>
+      <button class="denge-btn orange" onclick="applyDenge('caco3', 'hacim-artir')">
+        <span class="icon">📈</span> Hacim Artir (V↑)
+      </button>
+      <button class="denge-btn" onclick="applyDenge('caco3', 'co2-ekle')">
+        <span class="icon">➕</span> CO₂ Gazi Ekle
+      </button>
+      <button class="denge-btn" onclick="applyDenge('caco3', 'co2-cek')">
+        <span class="icon">➖</span> CO₂ Gazi Cek
+      </button>
+      <button class="denge-btn red" onclick="applyDenge('caco3', 'sicaklik-artir')">
+        <span class="icon">🔥</span> Sicaklik Artir (T↑)
+      </button>
+      <button class="denge-btn blue" onclick="applyDenge('caco3', 'sicaklik-azalt')">
+        <span class="icon">❄️</span> Sicaklik Azalt (T↓)
+      </button>
+    </div>
+    
+    <div class="denge-grafik">
+      <div class="denge-grafik-baslik">Derisim - Zaman Grafiği</div>
+      <div class="grafik-canvas">
+        <svg class="grafik-svg" id="grafik-caco3" viewBox="0 0 600 260">
+          <defs>
+            <pattern id="grid2" width="30" height="26" patternUnits="userSpaceOnUse">
+              <path d="M 30 0 L 0 0 0 26" fill="none" stroke="#1e2535" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="260" fill="url(#grid2)" />
+          
+          <line x1="50" y1="230" x2="580" y2="230" stroke="#475569" stroke-width="1" />
+          <line x1="50" y1="230" x2="50" y2="10" stroke="#475569" stroke-width="1" />
+          
+          <text x="35" y="235" fill="#475569" font-size="9" text-anchor="end">0</text>
+          <text x="35" y="190" fill="#475569" font-size="9" text-anchor="end">40</text>
+          <text x="35" y="145" fill="#475569" font-size="9" text-anchor="end">80</text>
+          <text x="35" y="100" fill="#475569" font-size="9" text-anchor="end">120</text>
+          <text x="35" y="55" fill="#475569" font-size="9" text-anchor="end">160</text>
+          
+          <text x="580" y="250" fill="#475569" font-size="9" text-anchor="end">zaman</text>
+          <text x="15" y="15" fill="#475569" font-size="9" text-anchor="middle" transform="rotate(-90, 15, 15)">Derisim</text>
+          
+          <path id="caco3-line" d="M 50 50 Q 150 50 200 50 Q 250 50 300 50 Q 350 50 400 50 Q 450 50 500 50 Q 550 50 580 50" 
+                fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+          
+          <path id="cao-line" d="M 50 90 Q 150 90 200 90 Q 250 90 300 90 Q 350 90 400 90 Q 450 90 500 90 Q 550 90 580 90" 
+                fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round"/>
+          
+          <path id="co2-line" d="M 50 170 Q 150 170 200 170 Q 250 170 300 170 Q 350 170 400 170 Q 450 170 500 170 Q 550 170 580 170" 
+                fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+          
+          <circle id="caco3-dot" cx="580" cy="50" r="4" fill="#f59e0b" />
+          <circle id="cao-dot" cx="580" cy="90" r="4" fill="#a855f7" />
+          <circle id="co2-dot" cx="580" cy="170" r="4" fill="#3b82f6" />
+        </svg>
+      </div>
+      
+      <div class="grafik-legend">
+        <div class="legend-item">
+          <div class="legend-color caco3"></div>
+          <span>[CaCO₃] Derisimi</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color cao"></div>
+          <span>[CaO] Derisimi</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color co2"></div>
+          <span>[CO₂] Derisimi</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="denge-aciklama" id="aciklama-caco3">
+      <div class="denge-aciklama-baslik">ℹ️ Le Chatelier Prensibi</div>
+      <div class="denge-aciklama-metin">
+        CaCO₃ parcalanma reaksiyonu endotermik bir reaksiyondur. Sicaklik arttiginda denge urunler yonune, 
+        sicaklik azaldiginda ise tepkimenin ters yonune kayar. Hacim degisimi sadece gaz fazindaki CO₂'yi etkiler.
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<script>
+let currentSistem = 'nh3';
+
+function selectSistem(sistem, btn) {
+  currentSistem = sistem;
+  document.querySelectorAll('.sistem-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  
+  document.getElementById('sistem-nh3').style.display = sistem === 'nh3' ? 'block' : 'none';
+  document.getElementById('sistem-caco3').style.display = sistem === 'caco3' ? 'block' : 'none';
+}
+
+const dengePaths = {
+  'nh3': {
+    'hacim-azalt': {
+      n2: 'M 50 70 Q 150 70 200 70 Q 220 70 230 85 Q 240 100 300 100 Q 350 100 400 100 Q 450 100 500 100 Q 550 100 580 100',
+      h2: 'M 50 110 Q 150 110 200 110 Q 220 110 230 125 Q 240 140 300 140 Q 350 140 400 140 Q 450 140 500 140 Q 550 140 580 140',
+      nh3: 'M 50 180 Q 150 180 200 180 Q 220 180 230 165 Q 240 150 300 150 Q 350 150 400 150 Q 450 150 500 150 Q 550 150 580 150',
+      aciklama: 'Hacim azaltilinca basinc artar. Denge az mol sayili tarafa (urunler - NH₃) kayar. N₂ ve H₂ derisimleri artar, NH₃ derisimi azalir.'
+    },
+    'hacim-artir': {
+      n2: 'M 50 70 Q 150 70 200 70 Q 220 70 230 55 Q 240 40 300 40 Q 350 40 400 40 Q 450 40 500 40 Q 550 40 580 40',
+      h2: 'M 50 110 Q 150 110 200 110 Q 220 110 230 95 Q 240 80 300 80 Q 350 80 400 80 Q 450 80 500 80 Q 550 80 580 80',
+      nh3: 'M 50 180 Q 150 180 200 180 Q 220 180 230 195 Q 240 210 300 210 Q 350 210 400 210 Q 450 210 500 210 Q 550 210 580 210',
+      aciklama: 'Hacim arttirilinca basinc azalir. Denge cok mol sayili tarafa (girenler - N₂ + H₂) kayar. N₂ ve H₂ derisimleri azalir, NH₃ derisimi artar.'
+    },
+    'n2-ekle': {
+      n2: 'M 50 70 Q 150 70 200 70 Q 220 70 230 40 Q 240 30 300 30 Q 350 30 400 30 Q 450 30 500 30 Q 550 30 580 30',
+      h2: 'M 50 110 Q 150 110 200 110 Q 220 110 230 100 Q 240 90 300 90 Q 350 90 400 90 Q 450 90 500 90 Q 550 90 580 90',
+      nh3: 'M 50 180 Q 150 180 200 180 Q 220 180 230 165 Q 240 150 300 150 Q 350 150 400 150 Q 450 150 500 150 Q 550 150 580 150',
+      aciklama: 'N₂ gazi eklenince denge urunler yonune (NH₃) kayar. N₂ derisimi aniden artar sonra azalir, H₂ derisimi azalir, NH₃ derisimi artar.'
+    },
+    'nh3-cek': {
+      n2: 'M 50 70 Q 150 70 200 70 Q 220 70 230 85 Q 240 100 300 100 Q 350 100 400 100 Q 450 100 500 100 Q 550 100 580 100',
+      h2: 'M 50 110 Q 150 110 200 110 Q 220 110 230 125 Q 240 140 300 140 Q 350 140 400 140 Q 450 140 500 140 Q 550 140 580 140',
+      nh3: 'M 50 180 Q 150 180 200 180 Q 220 180 230 200 Q 240 220 300 220 Q 350 220 400 220 Q 450 220 500 220 Q 550 220 580 220',
+      aciklama: 'NH₃ gazi cekilince denge urunler yonune kayar. NH₃ derisimi aniden azalir, N₂ ve H₂ derisimleri artar, yeni NH₃ olusur.'
+    },
+    'sicaklik-artir': {
+      n2: 'M 50 70 Q 150 70 200 70 Q 220 70 230 55 Q 240 40 300 40 Q 350 40 400 40 Q 450 40 500 40 Q 550 40 580 40',
+      h2: 'M 50 110 Q 150 110 200 110 Q 220 110 230 95 Q 240 80 300 80 Q 350 80 400 80 Q 450 80 500 80 Q 550 80 580 80',
+      nh3: 'M 50 180 Q 150 180 200 180 Q 220 180 230 195 Q 240 210 300 210 Q 350 210 400 210 Q 450 210 500 210 Q 550 210 580 210',
+      aciklama: 'Sicaklik arttirilinca (ekzotermik reaksiyon) denge endotermik tarafa (girenler - N₂ + H₂) kayar. NH₃ derisimi azalir, N₂ ve H₂ artar.'
+    },
+    'sicaklik-azalt': {
+      n2: 'M 50 70 Q 150 70 200 70 Q 220 70 230 85 Q 240 100 300 100 Q 350 100 400 100 Q 450 100 500 100 Q 550 100 580 100',
+      h2: 'M 50 110 Q 150 110 200 110 Q 220 110 230 125 Q 240 140 300 140 Q 350 140 400 140 Q 450 140 500 140 Q 550 140 580 140',
+      nh3: 'M 50 180 Q 150 180 200 180 Q 220 180 230 165 Q 240 150 300 150 Q 350 150 400 150 Q 450 150 500 150 Q 550 150 580 150',
+      aciklama: 'Sicaklik azaltilinca (ekzotermik reaksiyon) denge ekzotermik tarafa (urunler - NH₃) kayar. NH₃ derisimi artar, N₂ ve H₂ azalir.'
+    }
+  },
+  'caco3': {
+    'hacim-azalt': {
+      caco3: 'M 50 50 Q 150 50 200 50 Q 220 50 230 40 Q 240 30 300 30 Q 350 30 400 30 Q 450 30 500 30 Q 550 30 580 30',
+      cao: 'M 50 90 Q 150 90 200 90 Q 220 90 230 80 Q 240 70 300 70 Q 350 70 400 70 Q 450 70 500 70 Q 550 70 580 70',
+      co2: 'M 50 170 Q 150 170 200 170 Q 220 170 230 185 Q 240 200 300 200 Q 350 200 400 200 Q 450 200 500 200 Q 550 200 580 200',
+      aciklama: 'Hacim azaltilinca CO₂ basinci artar. Denge ters yonde (CaCO₃) kayar. CaCO₃ artar, CaO ve CO₂ azalir.'
+    },
+    'hacim-artir': {
+      caco3: 'M 50 50 Q 150 50 200 50 Q 220 50 230 65 Q 240 80 300 80 Q 350 80 400 80 Q 450 80 500 80 Q 550 80 580 80',
+      cao: 'M 50 90 Q 150 90 200 90 Q 220 90 230 105 Q 240 120 300 120 Q 350 120 400 120 Q 450 120 500 120 Q 550 120 580 120',
+      co2: 'M 50 170 Q 150 170 200 170 Q 220 170 230 155 Q 240 140 300 140 Q 350 140 400 140 Q 450 140 500 140 Q 550 140 580 140',
+      aciklama: 'Hacim arttirilinca CO₂ basinci azalir. Denge urunler yonune (CaO + CO₂) kayar. CaCO₃ azalir, CaO ve CO₂ artar.'
+    },
+    'co2-ekle': {
+      caco3: 'M 50 50 Q 150 50 200 50 Q 220 50 230 35 Q 240 20 300 20 Q 350 20 400 20 Q 450 20 500 20 Q 550 20 580 20',
+      cao: 'M 50 90 Q 150 90 200 90 Q 220 90 230 75 Q 240 60 300 60 Q 350 60 400 60 Q 450 60 500 60 Q 550 60 580 60',
+      co2: 'M 50 170 Q 150 170 200 170 Q 220 170 230 150 Q 240 130 300 130 Q 350 130 400 130 Q 450 130 500 130 Q 550 130 580 130',
+      aciklama: 'CO₂ eklenince denge ters yonde (CaCO₃) kayar. CO₂ derisimi aniden artar sonra azalir, CaCO₃ artar, CaO azalir.'
+    },
+    'co2-cek': {
+      caco3: 'M 50 50 Q 150 50 200 50 Q 220 50 230 65 Q 240 80 300 80 Q 350 80 400 80 Q 450 80 500 80 Q 550 80 580 80',
+      cao: 'M 50 90 Q 150 90 200 90 Q 220 90 230 105 Q 240 120 300 120 Q 350 120 400 120 Q 450 120 500 120 Q 550 120 580 120',
+      co2: 'M 50 170 Q 150 170 200 170 Q 220 170 230 190 Q 240 210 300 210 Q 350 210 400 210 Q 450 210 500 210 Q 550 210 580 210',
+      aciklama: 'CO₂ cekilince denge urunler yonune kayar. CO₂ derisimi aniden azalir, CaCO₃ parcalanmaya devam eder, CaO artar.'
+    },
+    'sicaklik-artir': {
+      caco3: 'M 50 50 Q 150 50 200 50 Q 220 50 230 65 Q 240 80 300 80 Q 350 80 400 80 Q 450 80 500 80 Q 550 80 580 80',
+      cao: 'M 50 90 Q 150 90 200 90 Q 220 90 230 75 Q 240 60 300 60 Q 350 60 400 60 Q 450 60 500 60 Q 550 60 580 60',
+      co2: 'M 50 170 Q 150 170 200 170 Q 220 170 230 155 Q 240 140 300 140 Q 350 140 400 140 Q 450 140 500 140 Q 550 140 580 140',
+      aciklama: 'Sicaklik arttirilinca (endotermik parcalanma) denge urunler yonune kayar. CaCO₃ azalir, CaO ve CO₂ artar.'
+    },
+    'sicaklik-azalt': {
+      caco3: 'M 50 50 Q 150 50 200 50 Q 220 50 230 40 Q 240 30 300 30 Q 350 30 400 30 Q 450 30 500 30 Q 550 30 580 30',
+      cao: 'M 50 90 Q 150 90 200 90 Q 220 90 230 100 Q 240 110 300 110 Q 350 110 400 110 Q 450 110 500 110 Q 550 110 580 110',
+      co2: 'M 50 170 Q 150 170 200 170 Q 220 170 230 185 Q 240 200 300 200 Q 350 200 400 200 Q 450 200 500 200 Q 550 200 580 200',
+      aciklama: 'Sicaklik azaltilinca (endotermik parcalanma) denge ters yonde (CaCO₃) kayar. CaCO₃ artar, CaO ve CO₂ azalir.'
+    }
+  }
+};
+
+const baslangicPaths = {
+  'nh3': {
+    n2: 'M 50 70 Q 150 70 200 70 Q 250 70 300 70 Q 350 70 400 70 Q 450 70 500 70 Q 550 70 580 70',
+    h2: 'M 50 110 Q 150 110 200 110 Q 250 110 300 110 Q 350 110 400 110 Q 450 110 500 110 Q 550 110 580 110',
+    nh3: 'M 50 180 Q 150 180 200 180 Q 250 180 300 180 Q 350 180 400 180 Q 450 180 500 180 Q 550 180 580 180'
+  },
+  'caco3': {
+    caco3: 'M 50 50 Q 150 50 200 50 Q 250 50 300 50 Q 350 50 400 50 Q 450 50 500 50 Q 550 50 580 50',
+    cao: 'M 50 90 Q 150 90 200 90 Q 250 90 300 90 Q 350 90 400 90 Q 450 90 500 90 Q 550 90 580 90',
+    co2: 'M 50 170 Q 150 170 200 170 Q 250 170 300 170 Q 350 170 400 170 Q 450 170 500 170 Q 550 170 580 170'
+  }
+};
+
+function applyDenge(sistem, eylem) {
+  const data = dengePaths[sistem][eylem];
+  if (!data) return;
+  
+  const btn = event.target.closest('.denge-btn');
+  document.querySelectorAll(`#sistem-${sistem} .denge-btn`).forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  if (sistem === 'nh3') {
+    document.getElementById('n2-line').setAttribute('d', data.n2);
+    document.getElementById('h2-line').setAttribute('d', data.h2);
+    document.getElementById('nh3-line').setAttribute('d', data.nh3);
+    updateDot('n2-dot', data.n2);
+    updateDot('h2-dot', data.h2);
+    updateDot('nh3-dot', data.nh3);
+  } else {
+    document.getElementById('caco3-line').setAttribute('d', data.caco3);
+    document.getElementById('cao-line').setAttribute('d', data.cao);
+    document.getElementById('co2-line').setAttribute('d', data.co2);
+    updateDot('caco3-dot', data.caco3);
+    updateDot('cao-dot', data.cao);
+    updateDot('co2-dot', data.co2);
+  }
+  
+  const aciklamaEl = document.getElementById(`aciklama-${sistem}`);
+  aciklamaEl.querySelector('.denge-aciklama-metin').textContent = data.aciklama;
+  
+  setTimeout(() => {
+    resetDenge(sistem);
+    document.querySelectorAll(`#sistem-${sistem} .denge-btn`).forEach(b => b.classList.remove('active'));
+  }, 4000);
+}
+
+function updateDot(dotId, path) {
+  const dot = document.getElementById(dotId);
+  if (!dot) return;
+  
+  const parts = path.split(' ');
+  const lastCmd = parts[parts.length - 1];
+  const coords = lastCmd.split(' ');
+  if (coords.length >= 2) {
+    dot.setAttribute('cx', coords[0]);
+    dot.setAttribute('cy', coords[1]);
+  }
+}
+
+function resetDenge(sistem) {
+  const data = baslangicPaths[sistem];
+  if (!data) return;
+  
+  if (sistem === 'nh3') {
+    document.getElementById('n2-line').setAttribute('d', data.n2);
+    document.getElementById('h2-line').setAttribute('d', data.h2);
+    document.getElementById('nh3-line').setAttribute('d', data.nh3);
+    updateDot('n2-dot', data.n2);
+    updateDot('h2-dot', data.h2);
+    updateDot('nh3-dot', data.nh3);
+  } else {
+    document.getElementById('caco3-line').setAttribute('d', data.caco3);
+    document.getElementById('cao-line').setAttribute('d', data.cao);
+    document.getElementById('co2-line').setAttribute('d', data.co2);
+    updateDot('caco3-dot', data.caco3);
+    updateDot('cao-dot', data.cao);
+    updateDot('co2-dot', data.co2);
+  }
+  
+  const aciklamaEl = document.getElementById(`aciklama-${sistem}`);
+  if (sistem === 'nh3') {
+    aciklamaEl.querySelector('.denge-aciklama-metin').textContent = 
+      'Bir denge sistemine dis etki uygulandiginda, sistem bu etkiyi zayiflatacak yonde kayar. Yukaridaki butonlara basarak farkli kosullarin etkisini gozlemleyin.';
+  } else {
+    aciklamaEl.querySelector('.denge-aciklama-metin').textContent = 
+      'CaCO3 parcalanma reaksiyonu endotermik bir reaksiyondur. Sicaklik arttiginda denge urunler yonune, sicaklik azaldiginda ise tepkimenin ters yonune kayar.';
+  }
+}
+</script>
+
+</body>
+</html>'''
+
+with open('/mnt/agents/output/denge.html', 'w', encoding='utf-8') as f:
+    f.write(html_code)
+
+print(f"denge.html olusturuldu! Boyut: {len(html_code)} karakter")
