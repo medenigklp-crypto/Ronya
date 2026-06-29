@@ -4184,6 +4184,361 @@ setTimeout(function() {
   }
 }, 1100);
 
+// ============================================================
+// RONYA KİMYA AKADEMİSİ - %100 KUSURSUZ MÜFREDAT GÜNCELLEME PAKETİ
+// ============================================================
+
+// Arayüz Elemanlarını Yenileme (Ayrı Hacim Butonları ve 15 Molekül)
+setTimeout(function() {
+  var bArea = document.getElementById('bag-molecule')?.parentNode;
+  if (bArea) {
+    bArea.innerHTML = `
+      <div style="width:100%; margin-bottom:10px;">
+        <div class="slbl">İncelemek İstediğiniz Molekül / Bileşik</div>
+        <select class="sel" id="bag-molecule" onchange="startBagSim()">
+          <option value="H2O">H₂O (Polar Kovalent - Kırık Doğru)</option>
+          <option value="NH3">NH₃ (Polar Kovalent - Üçgen Piramit)</option>
+          <option value="CH4">CH₄ (Polar Kovalent - Düzgün Dörtyüzlü)</option>
+          <option value="BH3">BH₃ (Polar Kovalent - Düzlem Üçgen)</option>
+          <option value="BeH2">BeH₂ (Polar Kovalent - Doğrusal)</option>
+          <option value="H2">H₂ (Apolar Kovalent - Tekli Bağ)</option>
+          <option value="O2">O₂ (Apolar Kovalent - İkili Bağ)</option>
+          <option value="N2">N₂ (Apolar Kovalent - Üçlü Bağ)</option>
+          <option value="CO2">CO₂ (Apolar Kovalent - İkili Bağlar / Doğrusal)</option>
+          <option value="HCN">HCN (Polar Kovalent - Tekli ve Üçlü Bağ)</option>
+          <option value="HF">HF (Polar Kovalent - Tekli Bağ)</option>
+          <option value="C2H6">C₂H₆ (Etan - Tekli Sigma Bağları)</option>
+          <option value="C2H4">C₂H₄ (Eten - İkili Bağ / Alken)</option>
+          <option value="C2H2">C₂H₂ (Etin - Üçlü Bağ / Alkin)</option>
+          <option value="NaCl">NaCl (İyonik Bağ - Elektron Transferi)</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:10px; width:100%">
+        <button class="ob sel2" id="bag-btn-lewis" onclick="setBagView('lewis', this)">🔴 Lewis Yapısı (E⁻ Çiftleri)</button>
+        <button class="ob" id="bag-btn-orb" onclick="setBagView('orb', this)">☁️ Çizgi / Orbital Modu</button>
+      </div>
+    `;
+  }
+
+  var dengeBtnArea = document.querySelector('#s-denge .card div');
+  if (dengeBtnArea) {
+    dengeBtnArea.innerHTML = `
+      <button class="ob" onclick="triggerDenge('add_n2')">➕ N₂ Ekle</button>
+      <button class="ob" onclick="triggerDenge('remove_nh3')">➖ NH₃ Çek</button>
+      <button class="ob" onclick="triggerDenge('vol_inc')">📈 Hacim Artır (Basınç Azalt)</button>
+      <button class="ob" onclick="triggerDenge('vol_dec')">📉 Hacim Azalt (Basınç Artır)</button>
+      <button class="ob" onclick="triggerDenge('heat')">🔥 Sıcaklık Artır</button>
+      <button class="ob" onclick="triggerDenge('cool')">❄️ Sıcaklık Azalt</button>
+    `;
+  }
+}, 1100);
+
+// 1. KUSURSUZ KİMYASAL BAĞ SİMÜLASYONU (LEWIS NOKTALARI VE ÇOKLU BAĞLAR)
+function startBagSim() {
+  var mol = document.getElementById('bag-molecule').value;
+  var canvas = document.getElementById('bagCanvas');
+  var ctx = canvas.getContext('2d');
+  var title = document.getElementById('bag-title');
+  
+  if(window.bagAnim) cancelAnimationFrame(bagAnim);
+  var frame = 0;
+
+  function drawAtom(x, y, r, txt, col) {
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 2*Math.PI);
+    ctx.fillStyle = bagViewMode === 'lewis' ? 'rgba(255,255,255,0.02)' : col + '22';
+    ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 11, 0, 2*Math.PI); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(txt, x, y);
+  }
+
+  function drawDot(x, y, col) {
+    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2*Math.PI);
+    ctx.fillStyle = col || '#00ff88'; ctx.fill();
+  }
+
+  function drawPair(x, y, angle, dist, col) {
+    var x1 = x + Math.cos(angle - 0.15) * dist;
+    var y1 = y + Math.sin(angle - 0.15) * dist;
+    var x2 = x + Math.cos(angle + 0.15) * dist;
+    var y2 = y + Math.sin(angle + 0.15) * dist;
+    drawDot(x1, y1, col); drawDot(x2, y2, col);
+  }
+
+  function drawBondLine(x1, y1, x2, y2, offset) {
+    if(bagViewMode === 'orb') {
+      ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x1 + offset.x, y1 + offset.y); ctx.lineTo(x2 + offset.x, y2 + offset.y); ctx.stroke();
+    } else {
+      var mx = (x1 + x2) / 2 + offset.x; var my = (y1 + y2) / 2 + offset.y;
+      drawDot(mx - 3, my); drawDot(mx + 3, my);
+    }
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var p = Math.min(frame / 60, 1);
+    var cx = canvas.width / 2, cy = canvas.height / 2;
+
+    if (mol === "NaCl") {
+      title.textContent = "NaCl (İyonik) - Na elektronunu Cl'ye verir.";
+      drawAtom(cx - 60, cy, 28, "Na", "#ffb703");
+      drawAtom(cx + 60, cy, 42, "Cl", "#219ebc");
+      var ex = (cx - 60) + (120 * p); var ey = cy - Math.sin(p * Math.PI) * 45;
+      drawDot(ex, ey, '#00ff88');
+      if (p >= 1) {
+        drawPair(cx + 60, cy, 0, 28, '#00ff88'); drawPair(cx + 60, cy, Math.PI, 28, '#00ff88');
+        drawPair(cx + 60, cy, Math.PI/2, 28, '#00ff88'); drawPair(cx + 60, cy, -Math.PI/2, 28, '#00ff88');
+      }
+    } 
+    else if (mol === "H2O") {
+      title.textContent = "H₂O - Oksijen üzerinde 2 çift ortaklanmamış elektron kalır.";
+      drawAtom(cx, cy - 10, 36, "O", "#ff6b6b");
+      drawAtom(cx - 55 * p, cy + 40 * p, 18, "H", "#3b82f6");
+      drawAtom(cx + 55 * p, cy + 40 * p, 18, "H", "#3b82f6");
+      drawBondLine(cx, cy - 10, cx - 55, cy + 40, {x:0, y:0});
+      drawBondLine(cx, cy - 10, cx + 55, cy + 40, {x:0, y:0});
+      if (p >= 1 && bagViewMode === 'lewis') {
+        drawPair(cx, cy - 10, -Math.PI/3, 24, '#f59e0b'); drawPair(cx, cy - 10, -2*Math.PI/3, 24, '#f59e0b');
+      }
+    }
+    else if (mol === "NH3") {
+      title.textContent = "NH₃ - Azot üzerinde 1 çift ortaklanmamış elektron (Üçgen Piramit)";
+      drawAtom(cx, cy - 15, 36, "N", "#ff6b6b");
+      drawAtom(cx - 55 * p, cy + 35 * p, 18, "H", "#3b82f6");
+      drawAtom(cx, cy + 55 * p, 18, "H", "#3b82f6");
+      drawAtom(cx + 55 * p, cy + 35 * p, 18, "H", "#3b82f6");
+      drawBondLine(cx, cy - 15, cx - 55, cy + 35, {x:0, y:0});
+      drawBondLine(cx, cy - 15, cx, cy + 55, {x:0, y:0});
+      drawBondLine(cx, cy - 15, cx + 55, cy + 35, {x:0, y:0});
+      if (p >= 1 && bagViewMode === 'lewis') drawPair(cx, cy - 15, -Math.PI/2, 24, '#f59e0b');
+    }
+    else if (mol === "CH4") {
+      title.textContent = "CH₄ - Karbonun tüm elektronları bağa katılır (Düzgün Dörtyüzlü)";
+      drawAtom(cx, cy, 38, "C", "#a855f7");
+      drawAtom(cx, cy - 60 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx, cy - 60, {x:0, y:0});
+      drawAtom(cx - 55 * p, cy + 40 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx - 55, cy + 40, {x:0, y:0});
+      drawAtom(cx + 55 * p, cy + 40 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx + 55, cy + 40, {x:0, y:0});
+      drawAtom(cx + 25 * p, cy + 15 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx + 25, cy + 15, {x:0, y:0});
+    }
+    else if (mol === "BH3") {
+      title.textContent = "BH₃ - Düzlem Üçgen Geometri (Oktet Boşluğu Mevcut)";
+      drawAtom(cx, cy, 36, "B", "#22c55e");
+      drawAtom(cx, cy - 60 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx, cy - 60, {x:0, y:0});
+      drawAtom(cx - 55 * p, cy + 30 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx - 55, cy + 30, {x:0, y:0});
+      drawAtom(cx + 55 * p, cy + 30 * p, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx + 55, cy + 30, {x:0, y:0});
+    }
+    else if (mol === "BeH2") {
+      title.textContent = "BeH₂ - Doğrusal (Oktet Boşluğu Mevcut)";
+      drawAtom(cx, cy, 34, "Be", "#eab308");
+      drawAtom(cx - 70 * p, cy, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx - 70, cy, {x:0, y:0});
+      drawAtom(cx + 70 * p, cy, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx + 70, cy, {x:0, y:0});
+    }
+    else if (mol === "H2") {
+      title.textContent = "H₂ - Tekli Apolar Kovalent Bağ";
+      drawAtom(cx - 35 * p, cy, 20, "H", "#3b82f6"); drawAtom(cx + 35 * p, cy, 20, "H", "#3b82f6");
+      drawBondLine(cx - 35, cy, cx + 35, cy, {x:0, y:0});
+    }
+    else if (mol === "O2") {
+      title.textContent = "O₂ - İkili Bağ (O=O) ve Her Oksijende 2 Çift Ortaklanmamış Elektron";
+      drawAtom(cx - 50 * p, cy, 35, "O", "#ff6b6b"); drawAtom(cx + 50 * p, cy, 35, "O", "#ff6b6b");
+      drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:-6});
+      drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:6});
+      if(p>=1 && bagViewMode==='lewis') {
+        drawPair(cx - 50, cy, Math.PI, 22, '#f59e0b'); drawPair(cx - 50, cy, Math.PI/2, 22, '#f59e0b');
+        drawPair(cx + 50, cy, 0, 22, '#f59e0b'); drawPair(cx + 50, cy, -Math.PI/2, 22, '#f59e0b');
+      }
+    }
+    else if (mol === "N2") {
+      title.textContent = "N₂ - Üçlü Bağ (N≡N) ve Azotlarda 1 Çift Ortaklanmamış Elektron";
+      drawAtom(cx - 50 * p, cy, 35, "N", "#a855f7"); drawAtom(cx + 50 * p, cy, 35, "N", "#a855f7");
+      drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:-10});
+      drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:0});
+      drawBondLine(cx - 50, cy, cx + 50, cy, {x:0, y:10});
+      if(p>=1 && bagViewMode==='lewis') {
+        drawPair(cx - 50, cy, Math.PI, 22, '#f59e0b'); drawPair(cx + 50, cy, 0, 22, '#f59e0b');
+      }
+    }
+    else if (mol === "CO2") {
+      title.textContent = "CO₂ - İki Adet İkili Bağ (O=C=O) Doğrusal Yapı";
+      drawAtom(cx, cy, 36, "C", "#475569");
+      drawAtom(cx - 75 * p, cy, 32, "O", "#ff6b6b"); drawAtom(cx + 75 * p, cy, 32, "O", "#ff6b6b");
+      drawBondLine(cx, cy, cx - 75, cy, {x:0, y:-6}); drawBondLine(cx, cy, cx - 75, cy, {x:0, y:6});
+      drawBondLine(cx, cy, cx + 75, cy, {x:0, y:-6}); drawBondLine(cx, cy, cx + 75, cy, {x:0, y:6});
+      if(p>=1 && bagViewMode==='lewis') {
+        drawPair(cx - 75, cy, Math.PI, 20, '#f59e0b'); drawPair(cx - 75, cy, Math.PI/2, 20, '#f59e0b');
+        drawPair(cx + 75, cy, 0, 20, '#f59e0b'); drawPair(cx + 75, cy, -Math.PI/2, 20, '#f59e0b');
+      }
+    }
+    else if (mol === "HCN") {
+      title.textContent = "HCN - Hidrojen-Karbon Tekli, Karbon-Azot Üçlü Bağ (H-C≡N)";
+      drawAtom(cx, cy, 36, "C", "#475569");
+      drawAtom(cx - 70 * p, cy, 18, "H", "#3b82f6"); drawBondLine(cx, cy, cx - 70, cy, {x:0, y:0});
+      drawAtom(cx + 70 * p, cy, 36, "N", "#a855f7");
+      drawBondLine(cx, cy, cx + 70, cy, {x:0, y:-8}); drawBondLine(cx, cy, cx + 70, cy, {x:0, y:0}); drawBondLine(cx, cy, cx + 70, cy, {x:0, y:8});
+      if(p>=1 && bagViewMode==='lewis') drawPair(cx + 70, cy, 0, 22, '#f59e0b');
+    }
+    else if (mol === "HF") {
+      title.textContent = "HF - Tekli Bağ, Flor Üzerinde 3 Çift Ortaklanmamış Elektron";
+      drawAtom(cx - 40 * p, cy, 18, "H", "#3b82f6"); drawAtom(cx + 40 * p, cy, 34, "F", "#f43f5e");
+      drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:0});
+      if(p>=1 && bagViewMode==='lewis') {
+        drawPair(cx + 40, cy, 0, 22, '#f59e0b'); drawPair(cx + 40, cy, Math.PI/2, 22, '#f59e0b'); drawPair(cx + 40, cy, -Math.PI/2, 22, '#f59e0b');
+      }
+    }
+    else if (mol === "C2H6") {
+      title.textContent = "C₂H₆ (Etan) - Karbonlar Arası Tekli Bağ";
+      drawAtom(cx - 35 * p, cy, 32, "C", "#475569"); drawAtom(cx + 35 * p, cy, 32, "C", "#475569");
+      drawBondLine(cx - 35, cy, cx + 35, cy, {x:0, y:0});
+      if(p>=1) {
+        drawAtom(cx - 80, cy, 16, "H", "#3b82f6"); drawBondLine(cx - 35, cy, cx - 80, cy, {x:0, y:0});
+        drawAtom(cx - 35, cy - 50, 16, "H", "#3b82f6"); drawBondLine(cx - 35, cy, cx - 35, cy - 50, {x:0, y:0});
+        drawAtom(cx - 35, cy + 50, 16, "H", "#3b82f6"); drawBondLine(cx - 35, cy, cx - 35, cy + 50, {x:0, y:0});
+        drawAtom(cx + 80, cy, 16, "H", "#3b82f6"); drawBondLine(cx + 35, cy, cx + 80, cy, {x:0, y:0});
+        drawAtom(cx + 40, cy - 50, 16, "H", "#3b82f6"); drawBondLine(cx + 35, cy, cx + 40, cy - 50, {x:0, y:0});
+        drawAtom(cx + 40, cy + 50, 16, "H", "#3b82f6"); drawBondLine(cx + 35, cy, cx + 40, cy + 50, {x:0, y:0});
+      }
+    }
+    else if (mol === "C2H4") {
+      title.textContent = "C₂H₄ (Eten) - Karbonlar Arası İkili Bağ (C=C)";
+      drawAtom(cx - 40 * p, cy, 32, "C", "#475569"); drawAtom(cx + 40 * p, cy, 32, "C", "#475569");
+      drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:-6}); drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:6});
+      if(p>=1) {
+        drawAtom(cx - 85, cy - 40, 16, "H", "#3b82f6"); drawBondLine(cx - 40, cy, cx - 85, cy - 40, {x:0, y:0});
+        drawAtom(cx - 85, cy + 40, 16, "H", "#3b82f6"); drawBondLine(cx - 40, cy, cx - 85, cy + 40, {x:0, y:0});
+        drawAtom(cx + 85, cy - 40, 16, "H", "#3b82f6"); drawBondLine(cx + 40, cy, cx + 85, cy - 40, {x:0, y:0});
+        drawAtom(cx + 85, cy + 40, 16, "H", "#3b82f6"); drawBondLine(cx + 40, cy, cx + 85, cy + 40, {x:0, y:0});
+      }
+    }
+    else if (mol === "C2H2") {
+      title.textContent = "C₂H₂ (Etin) - Karbonlar Arası Üçlü Bağ (C≡C)";
+      drawAtom(cx - 40 * p, cy, 32, "C", "#475569"); drawAtom(cx + 40 * p, cy, 32, "C", "#475569");
+      drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:-10}); drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:0}); drawBondLine(cx - 40, cy, cx + 40, cy, {x:0, y:10});
+      if(p>=1) {
+        drawAtom(cx - 95, cy, 16, "H", "#3b82f6"); drawBondLine(cx - 40, cy, cx - 95, cy, {x:0, y:0});
+        drawAtom(cx + 95, cy, 16, "H", "#3b82f6"); drawBondLine(cx + 40, cy, cx + 95, cy, {x:0, y:0});
+      }
+    }
+
+    if(p < 1) { frame++; window.bagAnim = requestAnimationFrame(loop); }
+  }
+  loop();
+}
+
+// 2. KDS/YKS FLASHCARD VERİ HAVUZU GÜNCELLEMESİ
+setTimeout(function() {
+  if (typeof FCARDS_EXT !== 'undefined') {
+    // Havuzu temizleyip tam istenen listeye göre yeniden kuruyoruz
+    FCARDS_EXT = [
+      {f:'H₂O', n:'Dihidrojen Monoksit / Su', cat:'TYT'},
+      {f:'Na₂CO₃', n:'Sodyum Karbonat / Çamaşır Sodası', cat:'TYT'},
+      {f:'CaO', n:'Kalsiyum Oksit / Sönmemiş Kireç', cat:'TYT'},
+      {f:'HCOOH', n:'Metanoik Asit / Formik Asit', cat:'TYT'},
+      {f:'HCl', n:'Hidroklorik Asit / Tuz Ruhu', cat:'TYT'},
+      {f:'HNO₃', n:'Nitrik Asit / Kezzap', cat:'TYT'},
+      {f:'H₂SO₄', n:'Sülfürik Asit / Zaç Yağı', cat:'TYT'},
+      {f:'HCN', n:'Hidrojen Siyanür', cat:'AYT'},
+      {f:'H₃PO₄', n:'Fosforik Asit', cat:'AYT'},
+      {f:'CH₃COOH', n:'Asetik Asit / Sirke Ruhu', cat:'TYT'}
+    ];
+    updateCardUI();
+  }
+}, 1600);
+
+// 3. LE CHATELIER GRAFİĞİ HACİM ARTIRMA VE AZALTMA MOTORU
+triggerDenge = function(action) {
+  var lastIdx = dengeData.t.length - 1;
+  var n2 = dengeData.n2[lastIdx];
+  var h2 = dengeData.h2[lastIdx];
+  var nh3 = dengeData.nh3[lastIdx];
+
+  if (action === 'vol_inc') {
+    if(dengeTimer) clearInterval(dengeTimer);
+    // Hacim artarsa TÜM DERİŞİMLER ANİDEN DÜŞER (Düz çizgi aşağı kırılır)
+    n2 -= 20; h2 -= 20; nh3 -= 20;
+    var t = dengeData.t[lastIdx] + 1;
+    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+
+    // Sistem mol sayısı çok olan girenler yönüne kayar (N2 ve H2 artmaya başlar, NH3 daha da azalır)
+    var steps = 30; var stepCount = 0;
+    dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      n2 += 0.4;
+      h2 += 1.2;
+      nh3 -= 0.8;
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      if(dengeData.t.length > 100) {
+        dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift();
+      }
+      drawDengeGraph(); stepCount++;
+    }, 40);
+    toast('Hacim artırıldı! Tüm derişimler aniden düştü, sistem girenler yönüne kayıyor.');
+  } 
+  else if (action === 'vol_dec') {
+    if(dengeTimer) clearInterval(dengeTimer);
+    // Hacim azalırsa TÜM DERİŞİMLER ANİDEN FIRLAR (Düz çizgi yukarı kırılır)
+    n2 += 25; h2 += 25; nh3 += 25;
+    var t = dengeData.t[lastIdx] + 1;
+    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+
+    // Sistem mol sayısı az olan ürünler yönüne kayar (N2 ve H2 azalır, NH3 artar)
+    var steps = 30; var stepCount = 0;
+    dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      n2 -= 0.5;
+      h2 -= 1.5;
+      nh3 += 1.0;
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      if(dengeData.t.length > 100) {
+        dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift();
+      }
+      drawDengeGraph(); stepCount++;
+    }, 40);
+    toast('Hacim azaltıldı! Tüm derişimler fırladı, sistem ürünler yönüne kayıyor.');
+  }
+  else if (action === 'add_n2') {
+    if(dengeTimer) clearInterval(dengeTimer);
+    n2 += 35;
+    var t = dengeData.t[lastIdx] + 1;
+    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+    var steps = 30; var stepCount = 0;
+    dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      n2 -= 0.4; h2 -= 1.2; nh3 += 0.8;
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      drawDengeGraph(); stepCount++;
+    }, 40);
+  }
+  else if (action === 'remove_nh3') {
+    if(dengeTimer) clearInterval(dengeTimer);
+    nh3 -= 20;
+    var t = dengeData.t[lastIdx] + 1;
+    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+    var steps = 30; var stepCount = 0;
+    dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      n2 -= 0.3; h2 -= 0.9; nh3 += 0.6;
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      drawDengeGraph(); stepCount++;
+    }, 40);
+  }
+  else if (action === 'heat' || action === 'cool') {
+    if(dengeTimer) clearInterval(dengeTimer);
+    var steps = 30; var stepCount = 0;
+    dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      if (action === 'heat') { n2 += 0.3; h2 += 0.9; nh3 -= 0.6; }
+      else { n2 -= 0.3; h2 -= 0.9; nh3 += 0.6; }
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      drawDengeGraph(); stepCount++;
+    }, 40);
+  }
+};
 
 </script>
 </body>
