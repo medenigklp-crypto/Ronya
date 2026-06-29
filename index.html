@@ -3461,6 +3461,87 @@ diagnoseAtoms = function() {
     resText.innerHTML = '❌ Kapsamlı bir izotop/izobar/izoton/izoelektronik ilişkisi bulunamadı. Lütfen proton-elektron-yük dengelerini gözden geçirin.';
   }
 };
+// --- LE CHATELIER %100 MEB UYUMLU GRAFİK MOTORU ---
+triggerDenge = function(action) {
+  if (window.dengeTimer) clearInterval(window.dengeTimer);
+  var lastIdx = dengeData.t.length - 1;
+  var n2 = dengeData.n2[lastIdx];
+  var h2 = dengeData.h2[lastIdx];
+  var nh3 = dengeData.nh3[lastIdx];
+  var t = dengeData.t[lastIdx] + 1;
+
+  // HACIM AZALT (KAĞIDIN SAĞ TARAFINDAKİ ÇİZİM)
+  if (action === 'vol_dec') {
+    // 1. Aşama: Anlık dikey fırlama (Etki)
+    n2 += 30; h2 += 30; nh3 += 30;
+    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+    
+    // 2. Aşama: Ürünler yönüne kayış (Tepki)
+    var steps = 30; var stepCount = 0;
+    window.dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      n2 -= 0.25; // H2 ve N2 azalarak eski dengenin üzerinde dengelenir
+      h2 -= 0.45; 
+      nh3 += 0.50; // NH3 fırlamadan sonra artmaya devam eder
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      if(dengeData.t.length > 100) { dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift(); }
+      drawDengeGraph(); stepCount++;
+    }, 40);
+  } 
+  // HACIM ARTIR (KAĞIDIN SOL TARAFINDAKİ ÇİZİM)
+  else if (action === 'vol_inc') {
+    // 1. Aşama: Anlık dikey düşüş (Etki)
+    n2 -= 20; h2 -= 20; nh3 -= 20;
+    dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+    
+    // 2. Aşama: Girenler yönüne kayış (Tepki)
+    var steps = 30; var stepCount = 0;
+    window.dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(window.dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      n2 += 0.20; // H2 ve N2 artarak eski dengenin altında dengelenir
+      h2 += 0.35; 
+      nh3 -= 0.40; // NH3 düşüşten sonra azalmaya devam eder
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      if(dengeData.t.length > 100) { dengeData.t.shift(); dengeData.n2.shift(); dengeData.h2.shift(); dengeData.nh3.shift(); }
+      drawDengeGraph(); stepCount++;
+    }, 40);
+  }
+  // DİĞER ETKİLER (Sabit katsayılı standart akışlar)
+  else if (action === 'add_n2') {
+    n2 += 30; dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+    var steps = 25; var stepCount = 0;
+    window.dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(window.window.dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      n2 -= 0.35; h2 -= 0.45; nh3 += 0.50;
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      drawDengeGraph(); stepCount++;
+    }, 40);
+  }
+  else if (action === 'remove_nh3') {
+    nh3 -= 20; dengeData.t.push(t); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+    var steps = 25; var stepCount = 0;
+    window.dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(window.window.dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      n2 += 0.20; h2 += 0.30; nh3 -= 0.25;
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      drawDengeGraph(); stepCount++;
+    }, 40);
+  }
+  else if (action === 'heat' || action === 'cool') {
+    var steps = 25; var stepCount = 0;
+    window.dengeTimer = setInterval(function() {
+      if(stepCount >= steps) { clearInterval(window.window.dengeTimer); return; }
+      var curT = dengeData.t[dengeData.t.length - 1] + 1;
+      if (action === 'heat') { n2 += 0.20; h2 += 0.30; nh3 -= 0.35; } else { n2 -= 0.20; h2 -= 0.30; nh3 += 0.35; }
+      dengeData.t.push(curT); dengeData.n2.push(n2); dengeData.h2.push(h2); dengeData.nh3.push(nh3);
+      drawDengeGraph(); stepCount++;
+    }, 40);
+  }
+};
 
 </script>
 </body>
