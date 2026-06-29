@@ -18,10 +18,13 @@
   --sf: #0f1117;
   --sf2: #161922;
   --br: #1e2535;
+  --br2: #252d40;
   --ac: #6366f1;
   --ac2: #818cf8;
   --gr: #22c55e;
   --rd: #ef4444;
+  --yw: #f59e0b;
+  --cy: #06b6d4;
   --tx: #f1f5f9;
   --tx2: #94a3b8;
   --tx3: #475569;
@@ -57,7 +60,7 @@ header {
   cursor: pointer;
 }
 
-.back.back-btn {
+.back-btn {
   background: var(--sf2);
   border: 1px solid var(--br);
   border-radius: var(--rsm);
@@ -103,7 +106,205 @@ header {
 }
 
 .konu-btn:hover { border-color: var(--ac); color: var(--tx); }
+.konu-btn.secili { border-color: var(--ac); background: rgba(99,102,241,0.15); color: var(--ac2); }
 
+.soru-sayisi {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.soru-sayisi-btn {
+  flex: 1;
+  min-width: 60px;
+  padding: 10px;
+  border: 2px solid var(--br);
+  border-radius: var(--r);
+  background: var(--sf2);
+  color: var(--tx2);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+
+.soru-sayisi-btn:hover { border-color: var(--ac); }
+.soru-sayisi-btn.secili { border-color: var(--ac); background: rgba(99,102,241,0.15); color: var(--ac2); }
+
+.ozel-soru-panel {
+  background: var(--sf);
+  border: 1px solid var(--br);
+  border-radius: var(--rlg);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.panel-baslik {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--tx);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-baslik .icon { font-size: 18px; }
+
+.form-grup {
+  margin-bottom: 12px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tx3);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  border-radius: var(--rsm);
+  padding: 10px 14px;
+  color: var(--tx);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+}
+
+.form-input:focus, .form-textarea:focus { border-color: var(--ac); }
+
+.form-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.siklar-input {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.sik-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sik-input .harf {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--br);
+  color: var(--tx2);
+  font-weight: 700;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sik-input input {
+  flex: 1;
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  border-radius: var(--rsm);
+  padding: 8px 12px;
+  color: var(--tx);
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+}
+
+.dogru-cevap-secim {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.dogru-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--br);
+  background: var(--sf2);
+  color: var(--tx2);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dogru-btn:hover { border-color: var(--gr); color: var(--gr); }
+.dogru-btn.secili { border-color: var(--gr); background: rgba(34,197,94,0.2); color: var(--gr); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  border: none;
+  gap: 8px;
+}
+
+.btn-primary { background: var(--ac); color: #fff; }
+.btn-secondary { background: var(--sf2); color: var(--tx); border: 1px solid var(--br); }
+.btn-success { background: var(--gr); color: #fff; }
+.btn-warning { background: var(--yw); color: #000; }
+
+.basla-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.eklenen-sorular {
+  margin-top: 12px;
+}
+
+.eklenen-soru {
+  background: var(--sf2);
+  border: 1px solid var(--br2);
+  border-radius: var(--rsm);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.eklenen-soru-text {
+  font-size: 12px;
+  color: var(--tx2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 80%;
+}
+
+.soru-sil {
+  background: none;
+  border: none;
+  color: var(--rd);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Test Ekranı */
 .test-card {
   background: var(--sf);
   border: 1px solid var(--br);
@@ -170,7 +371,7 @@ header {
 
 .stat {
   flex: 1;
-  min-width: 80px;
+  min-width: 70px;
   background: var(--sf);
   border: 1px solid var(--br);
   border-radius: var(--r);
@@ -191,22 +392,7 @@ header {
   margin-top: 4px;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 24px;
-  border-radius: var(--r);
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  border: none;
-}
-
-.btn-primary { background: var(--ac); color: #fff; }
-.btn-secondary { background: var(--sf2); color: var(--tx); border: 1px solid var(--br); }
-
+/* Sonuç Ekranı */
 .sonuc-ekrani {
   text-align: center;
   padding: 40px 20px;
@@ -215,6 +401,73 @@ header {
 .sonuc-emoji { font-size: 64px; margin-bottom: 16px; }
 .sonuc-baslik { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
 .sonuc-mesaj { color: var(--tx2); font-size: 14px; margin-bottom: 24px; }
+
+.sonuc-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 400px;
+  margin: 0 auto 24px;
+}
+
+.sonuc-stat {
+  background: var(--sf);
+  border: 1px solid var(--br);
+  border-radius: var(--r);
+  padding: 16px;
+}
+
+.sonuc-stat-deger {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--ac2);
+}
+
+.sonuc-stat-baslik {
+  font-size: 11px;
+  color: var(--tx3);
+  margin-top: 4px;
+}
+
+.sonuc-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--sf2);
+  border-radius: 100px;
+  margin: 16px 0;
+  overflow: hidden;
+}
+
+.sonuc-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1s ease;
+}
+
+.sonuc-bar-fill.iyi { background: var(--gr); }
+.sonuc-bar-fill.orta { background: var(--yw); }
+.sonuc-bar-fill.kotu { background: var(--rd); }
+
+.klavye-bilgi {
+  text-align: center;
+  padding: 12px;
+  background: var(--sf2);
+  border-radius: var(--r);
+  margin-top: 15px;
+  font-size: 12px;
+  color: var(--tx3);
+}
+
+.klavye-bilgi span {
+  display: inline-block;
+  padding: 3px 8px;
+  background: var(--br);
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--tx2);
+  margin: 0 2px;
+}
 
 .ses-toggle {
   position: fixed;
@@ -236,24 +489,10 @@ header {
 
 .ses-toggle.acik { color: var(--ac2); border-color: var(--ac); }
 
-.klavye-bilgi {
-  text-align: center;
-  padding: 12px;
-  background: var(--sf2);
-  border-radius: var(--r);
-  margin-top: 15px;
-  font-size: 12px;
-  color: var(--tx3);
-}
-
-.klavye-bilgi span {
-  display: inline-block;
-  padding: 3px 8px;
-  background: var(--br);
-  border-radius: 4px;
-  font-weight: 600;
-  color: var(--tx2);
-  margin: 0 2px;
+@media (max-width: 500px) {
+  .konu-grid { grid-template-columns: 1fr; }
+  .siklar-input { grid-template-columns: 1fr; }
+  .sonuc-stats { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -267,25 +506,91 @@ header {
 
 <div class="pw">
 
+  <!-- KONU SEÇİMİ -->
   <div id="konu-secimi">
     <div class="test-baslik">📝 Konu Testi</div>
     <p style="color: var(--tx2); font-size: 13px; margin-bottom: 16px;">Test yapmak istediğin konuyu seç:</p>
+    
     <div class="konu-grid">
-      <button class="konu-btn" onclick="baslatTest('atom')">⚛️ Atom ve Periyodik</button>
-      <button class="konu-btn" onclick="baslatTest('mol')">⚖️ Mol ve Kimyasal</button>
-      <button class="konu-btn" onclick="baslatTest('gaz')">💨 Gazlar</button>
-      <button class="konu-btn" onclick="baslatTest('cozelti')">🧪 Çözeltiler</button>
-      <button class="konu-btn" onclick="baslatTest('denge')">⚖️ Kimyasal Denge</button>
-      <button class="konu-btn" onclick="baslatTest('asitbaz')">🧪 Asit-Baz</button>
-      <button class="konu-btn" onclick="baslatTest('elektro')">⚡ Elektrokimya</button>
-      <button class="konu-btn" onclick="baslatTest('organik')">🔬 Organik Kimya</button>
+      <button class="konu-btn" onclick="konuSec('atom', this)">⚛️ Atom ve Periyodik</button>
+      <button class="konu-btn" onclick="konuSec('mol', this)">⚖️ Mol ve Kimyasal</button>
+      <button class="konu-btn" onclick="konuSec('gaz', this)">💨 Gazlar</button>
+      <button class="konu-btn" onclick="konuSec('cozelti', this)">🧪 Çözeltiler</button>
+      <button class="konu-btn" onclick="konuSec('denge', this)">⚖️ Kimyasal Denge</button>
+      <button class="konu-btn" onclick="konuSec('asitbaz', this)">🧪 Asit-Baz</button>
+      <button class="konu-btn" onclick="konuSec('elektro', this)">⚡ Elektrokimya</button>
+      <button class="konu-btn" onclick="konuSec('organik', this)">🔬 Organik Kimya</button>
     </div>
+
+    <div class="test-baslik" style="margin-top: 20px;">🔢 Soru Sayısı</div>
+    <div class="soru-sayisi">
+      <button class="soru-sayisi-btn secili" onclick="soruSayisiSec(10, this)">10</button>
+      <button class="soru-sayisi-btn" onclick="soruSayisiSec(20, this)">20</button>
+      <button class="soru-sayisi-btn" onclick="soruSayisiSec(30, this)">30</button>
+      <button class="soru-sayisi-btn" onclick="soruSayisiSec(40, this)">40</button>
+    </div>
+
+    <!-- ÖZEL SORU EKLEME -->
+    <div class="ozel-soru-panel">
+      <div class="panel-baslik">
+        <span class="icon">➕</span>
+        Özel Soru Ekle
+      </div>
+      
+      <div class="form-grup">
+        <label class="form-label">Soru Metni</label>
+        <textarea class="form-textarea" id="ozel-soru-metni" placeholder="Soruyu buraya yazın veya PDF'den kopyala-yapıştır yapın..."></textarea>
+      </div>
+      
+      <div class="form-grup">
+        <label class="form-label">Seçenekler</label>
+        <div class="siklar-input">
+          <div class="sik-input">
+            <span class="harf">A</span>
+            <input type="text" id="sik-a" placeholder="A şıkkı">
+          </div>
+          <div class="sik-input">
+            <span class="harf">B</span>
+            <input type="text" id="sik-b" placeholder="B şıkkı">
+          </div>
+          <div class="sik-input">
+            <span class="harf">C</span>
+            <input type="text" id="sik-c" placeholder="C şıkkı">
+          </div>
+          <div class="sik-input">
+            <span class="harf">D</span>
+            <input type="text" id="sik-d" placeholder="D şıkkı">
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-grup">
+        <label class="form-label">Doğru Cevap</label>
+        <div class="dogru-cevap-secim">
+          <button class="dogru-btn" onclick="dogruSec(0, this)">A</button>
+          <button class="dogru-btn" onclick="dogruSec(1, this)">B</button>
+          <button class="dogru-btn" onclick="dogruSec(2, this)">C</button>
+          <button class="dogru-btn" onclick="dogruSec(3, this)">D</button>
+        </div>
+      </div>
+      
+      <button class="btn btn-success" onclick="soruEkle()" style="width: 100%; margin-top: 8px;">
+        ✓ Soruyu Ekle
+      </button>
+      
+      <div class="eklenen-sorular" id="eklenen-sorular"></div>
+    </div>
+
+    <button class="btn btn-primary basla-btn" onclick="baslatTest()">
+      ▶ Testi Başlat
+    </button>
   </div>
 
+  <!-- TEST EKRANI -->
   <div id="test-ekrani" style="display: none;">
     <div class="stats">
       <div class="stat">
-        <div class="stat-deger" id="soru-no">1</div>
+        <div class="stat-deger" id="soru-no">1/20</div>
         <div class="stat-baslik">Soru</div>
       </div>
       <div class="stat">
@@ -307,7 +612,7 @@ header {
       <div class="soru-metin" id="soru-metin">Yükleniyor...</div>
       <div class="siklar" id="siklar"></div>
       <div class="klavye-bilgi">
-        Klavye kısayolları: <span>A</span> <span>B</span> <span>C</span> <span>D</span> ile cevaplayabilirsiniz
+        Klavye: <span>A</span> <span>B</span> <span>C</span> <span>D</span> ile cevaplayabilirsiniz
       </div>
     </div>
 
@@ -316,29 +621,39 @@ header {
     </div>
   </div>
 
+  <!-- SONUÇ EKRANI -->
   <div id="sonuc-ekrani" style="display: none;">
     <div class="sonuc-ekrani">
       <div class="sonuc-emoji" id="sonuc-emoji">🎉</div>
       <div class="sonuc-baslik" id="sonuc-baslik">Test Tamamlandı!</div>
       <div class="sonuc-mesaj" id="sonuc-mesaj">Sonuçlarınızı aşağıda görebilirsiniz.</div>
       
-      <div class="stats" style="max-width: 400px; margin: 0 auto 24px;">
-        <div class="stat">
-          <div class="stat-deger" id="sonuc-dogru">0</div>
-          <div class="stat-baslik">Doğru</div>
+      <div class="sonuc-bar">
+        <div class="sonuc-bar-fill" id="sonuc-bar" style="width: 0%"></div>
+      </div>
+      
+      <div class="sonuc-stats">
+        <div class="sonuc-stat">
+          <div class="sonuc-stat-deger" id="sonuc-dogru">0</div>
+          <div class="sonuc-stat-baslik">Doğru</div>
         </div>
-        <div class="stat">
-          <div class="stat-deger" id="sonuc-yanlis">0</div>
-          <div class="stat-baslik">Yanlış</div>
+        <div class="sonuc-stat">
+          <div class="sonuc-stat-deger" id="sonuc-yanlis">0</div>
+          <div class="sonuc-stat-baslik">Yanlış</div>
         </div>
-        <div class="stat">
-          <div class="stat-deger" id="sonuc-skor">0</div>
-          <div class="stat-baslik">Toplam Skor</div>
+        <div class="sonuc-stat">
+          <div class="sonuc-stat-deger" id="sonuc-skor">0</div>
+          <div class="sonuc-stat-baslik">Toplam Skor</div>
         </div>
       </div>
 
       <div style="margin-bottom: 16px;">
-        <div style="font-size: 13px; color: var(--tx3); margin-bottom: 8px;">En Yüksek Skor: <span id="en-yuksek-skor" style="color: var(--ac2); font-weight: 700;">0</span></div>
+        <div style="font-size: 13px; color: var(--tx3); margin-bottom: 8px;">
+          En Yüksek Skor: <span id="en-yuksek-skor" style="color: var(--ac2); font-weight: 700;">0</span>
+        </div>
+        <div style="font-size: 12px; color: var(--tx3);">
+          Başarı Oranı: <span id="basari-orani" style="color: var(--ac2); font-weight: 700;">%0</span>
+        </div>
       </div>
 
       <button class="btn btn-primary" onclick="yeniTest()" style="margin-right: 10px;">Yeni Test</button>
@@ -351,47 +666,400 @@ header {
 <button class="ses-toggle" id="sesBtn" onclick="sesToggle()">🔇</button>
 
 <script>
-const sorular = {
+// ============================================
+// SORU HAVUZU (Her konuda 40+ soru)
+// ============================================
+const soruHavuzu = {
   'atom': [
-    { soru: "1s orbitali en fazla kaç elektron alabilir?", siklar: ["2", "6", "10", "14"], cevap: 0 },
-    { soru: "Aşağıdaki elementlerden hangisi alkali metaldir?", siklar: ["Mg", "Na", "Al", "Si"], cevap: 1 },
-    { soru: "3. periyotta kaç element vardır?", siklar: ["8", "18", "32", "2"], cevap: 0 },
-    { soru: "p orbitalinin şekli nedir?", siklar: ["Küresel", "Dumbbell", "Klover", "Dairesel"], cevap: 1 },
-    { soru: "Elektron konfigürasyonu 1s² 2s² 2p⁶ 3s² 3p⁴ olan element hangisidir?", siklar: ["Sülfür", "Fosfor", "Silisyum", "Klor"], cevap: 0 }
+    // Kolay (1-10)
+    { soru: "1s orbitali en fazla kaç elektron alabilir?", siklar: ["2", "6", "10", "14"], cevap: 0, zorluk: "kolay" },
+    { soru: "Aşağıdaki elementlerden hangisi alkali metaldir?", siklar: ["Mg", "Na", "Al", "Si"], cevap: 1, zorluk: "kolay" },
+    { soru: "3. periyotta kaç element vardır?", siklar: ["8", "18", "32", "2"], cevap: 0, zorluk: "kolay" },
+    { soru: "p orbitalinin şekli nedir?", siklar: ["Küresel", "Dumbbell", "Klover", "Dairesel"], cevap: 1, zorluk: "kolay" },
+    { soru: "Elektron konfigürasyonu 1s² 2s² 2p⁶ 3s² 3p⁴ olan element hangisidir?", siklar: ["Sülfür", "Fosfor", "Silisyum", "Klor"], cevap: 0, zorluk: "kolay" },
+    { soru: "Atom numarası 20 olan element hangisidir?", siklar: ["K", "Ca", "Sc", "Ti"], cevap: 1, zorluk: "kolay" },
+    { soru: "Noble gazlar hangi grup numarasındadır?", siklar: ["1A", "7A", "8A", "2A"], cevap: 2, zorluk: "kolay" },
+    { soru: "İyonlaşma enerjisi periyotta soldan sağa doğru nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Önce artar sonra azalır"], cevap: 0, zorluk: "kolay" },
+    { soru: "d orbitalleri kaç tanedir?", siklar: ["3", "5", "7", "1"], cevap: 1, zorluk: "kolay" },
+    { soru: "Hidrojen atomunun elektron konfigürasyonu nedir?", siklar: ["1s¹", "1s²", "2s¹", "2p¹"], cevap: 0, zorluk: "kolay" },
+    
+    // Orta (11-25)
+    { soru: "Aşağıdaki elementlerden hangisinin elektron afinitesi en büyüktür?", siklar: ["Na", "Cl", "Ar", "K"], cevap: 1, zorluk: "orta" },
+    { soru: "4. periyodun son elementi olan Kr'nin elektron konfigürasyonu nedir?", siklar: ["[Ar] 3d¹⁰ 4s² 4p⁶", "[Ar] 4s² 3d¹⁰ 4p⁶", "[Ar] 4s² 4p⁶", "[Ar] 3d¹⁰ 4p⁶"], cevap: 1, zorluk: "orta" },
+    { soru: "Elektronegatiflik değeri en yüksek olan element hangisidir?", siklar: ["O", "F", "Cl", "N"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki iyonlardan hangisi izoelektroniktir Ar ile?", siklar: ["K⁺", "Ca²⁺", "Cl⁻", "Hepsii"], cevap: 3, zorluk: "orta" },
+    { soru: "3d orbitalleri dolduktan sonra hangi orbital doldurulur?", siklar: ["4s", "4p", "3p", "4d"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki çiftlerden hangisi izotopdur?", siklar: ["¹⁴C ve ¹⁴N", "¹²C ve ¹⁴C", "²³Na ve ²³Mg", "⁴⁰Ar ve ⁴⁰Ca"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir atomun değerlik elektron sayısı 5 ise, bu atom hangi grupta olabilir?", siklar: ["3A", "5A", "7A", "2A"], cevap: 1, zorluk: "orta" },
+    { soru: "Pauli dışlama ilkesine göre aynı orbitaldeki iki elektronun spinleri nasıl olmalıdır?", siklar: ["Aynı yönlü", "Zıt yönlü", "Önemli değil", "Daima +1/2"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki elementlerden hangisi geçiş metalidir?", siklar: ["Al", "Fe", "Ca", "K"], cevap: 1, zorluk: "orta" },
+    { soru: "n=3, l=2 kuantum sayılarına sahip orbital kaç elektron alabilir?", siklar: ["2", "6", "10", "14"], cevap: 2, zorluk: "orta" },
+    { soru: "Aşağıdaki elementlerden hangisinin atomik yarıçapı en küçüktür?", siklar: ["Li", "Be", "B", "C"], cevap: 3, zorluk: "orta" },
+    { soru: "Hund kuralına göre, p orbitalleri yarım dolu olduğunda elektronlar nasıl yerleşir?", siklar: ["Aynı yönde spinli", "Zıt yönde spinli", "Rastgele", "Çiftlenmiş"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki iyonlardan hangisi paramanyetiktir?", siklar: ["Zn²⁺", "Cu⁺", "Fe²⁺", "Sc³⁺"], cevap: 2, zorluk: "orta" },
+    { soru: "Bir elementin 2. iyonlaşma enerjisi, 1. iyonlaşma enerjisinden genellikle nasıldır?", siklar: ["Daha küçük", "Daha büyük", "Eşit", "İlişkisiz"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki elementlerden hangisi aktinidtir?", siklar: ["La", "Ac", "Ce", "Th"], cevap: 3, zorluk: "orta" },
+    
+    // Zor (26-40)
+    { soru: "Cr elementinin elektron konfigürasyonu nedir? (Anomali)", siklar: ["[Ar] 3d⁴ 4s²", "[Ar] 3d⁵ 4s¹", "[Ar] 3d⁶ 4s⁰", "[Ar] 3d³ 4s²"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki element çiftlerinden hangisinin metalik karakteri daha fazladır?", siklar: ["Na/K", "Mg/Ca", "K/Ca", "Al/Si"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir atomun n=4, l=3 kuantum sayılarına sahip elektronları kaç tanedir (maksimum)?", siklar: ["2", "6", "10", "14"], cevap: 3, zorluk: "zor" },
+    { soru: "Aşağıdaki elementlerden hangisinin 1. iyonlaşma enerjisi beklenenden daha düşüktür? (Anomali)", siklar: ["Be", "B", "C", "N"], cevap: 1, zorluk: "zor" },
+    { soru: "Cu⁺ iyonunun elektron konfigürasyonu nedir?", siklar: ["[Ar] 3d⁹", "[Ar] 3d¹⁰", "[Ar] 3d⁸ 4s¹", "[Ar] 3d⁹ 4s²"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki elementlerden hangisinin elektron konfigürasyonunda yarım dolu d orbitali vardır?", siklar: ["Ti", "V", "Cr", "Mn"], cevap: 2, zorluk: "zor" },
+    { soru: "Slater kuralına göre, 3s elektronu için S (kalkanlama sabiti) değeri yaklaşık kaçtır?", siklar: ["0.35", "0.85", "1.00", "1.20"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki elementlerden hangisinin 2. iyonlaşma enerjisi en büyüktür?", siklar: ["Na", "Mg", "Al", "Si"], cevap: 0, zorluk: "zor" },
+    { soru: "f orbitallerinin sayısı kaçtır ve her biri kaç elektron alır?", siklar: ["3, 2", "5, 2", "7, 2", "5, 6"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki elementlerden hangisinin elektron konfigürasyonu beklenenden farklıdır? (Anomali)", siklar: ["Fe", "Cu", "Zn", "Ni"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir atomun n=3 enerji seviyesinde toplam kaç orbital vardır?", siklar: ["3", "4", "9", "18"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki elementlerden hangisinin iyonik yarıçapı en küçüktür?", siklar: ["O²⁻", "F⁻", "Na⁺", "Mg²⁺"], cevap: 3, zorluk: "zor" },
+    { soru: "Aufbau prensibine göre 5s orbitali 4d orbitalinden önce mi sonra mı dolar?", siklar: ["Önce", "Sonra", "Aynı anda", "Değişken"], cevap: 0, zorluk: "zor" },
+    { soru: "Aşağıdaki elementlerden hangisinin elektron konfigürasyonu [Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶ şeklindedir?", siklar: ["Rn", "At", "Po", "Bi"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir atomun son elektronu n=4, l=2, m=+2, s=+1/2 kuantum sayılarına sahipse, bu atom hangi elementtir?", siklar: ["Ti", "V", "Cr", "Mn"], cevap: 1, zorluk: "zor" }
   ],
+  
   'mol': [
-    { soru: "1 mol H₂O kaç gramdır? (H:1, O:16)", siklar: ["16", "17", "18", "20"], cevap: 2 },
-    { soru: "STP şartlarında 1 mol gazın hacmi kaç litredir?", siklar: ["22,4", "24", "1", "12"], cevap: 0 },
-    { soru: "0,5 mol NaCl'te kaç mol Cl⁻ iyonu vardır?", siklar: ["0,25", "0,5", "1", "2"], cevap: 1 }
+    // Kolay
+    { soru: "1 mol H₂O kaç gramdır? (H:1, O:16)", siklar: ["16", "17", "18", "20"], cevap: 2, zorluk: "kolay" },
+    { soru: "STP şartlarında 1 mol gazın hacmi kaç litredir?", siklar: ["22,4", "24", "1", "12"], cevap: 0, zorluk: "kolay" },
+    { soru: "0,5 mol NaCl'te kaç mol Cl⁻ iyonu vardır?", siklar: ["0,25", "0,5", "1", "2"], cevap: 1, zorluk: "kolay" },
+    { soru: "Avogadro sayısı kaçtır?", siklar: ["6,022×10²³", "6,022×10²²", "6,022×10²⁴", "6,022×10²¹"], cevap: 0, zorluk: "kolay" },
+    { soru: "12 g karbon kaç mol karbondur?", siklar: ["0,5", "1", "2", "12"], cevap: 1, zorluk: "kolay" },
+    { soru: "1 mol CO₂ kaç mol O atomu içerir?", siklar: ["1", "2", "3", "0,5"], cevap: 1, zorluk: "kolay" },
+    { soru: "NaOH'in molar kütlesi kaç g/mol'dür? (Na:23, O:16, H:1)", siklar: ["38", "39", "40", "41"], cevap: 2, zorluk: "kolay" },
+    { soru: "0,1 mol H₂SO₄ kaç mol H⁺ iyonu verir?", siklar: ["0,1", "0,2", "0,3", "0,4"], cevap: 1, zorluk: "kolay" },
+    { soru: "22,4 L O₂ gazı STP'de kaç mol'dür?", siklar: ["0,5", "1", "2", "0,25"], cevap: 1, zorluk: "kolay" },
+    { soru: "1 mol H₂O kaç tane H atomu içerir?", siklar: ["6,022×10²³", "1,204×10²⁴", "3,011×10²³", "2"], cevap: 1, zorluk: "kolay" },
+    
+    // Orta
+    { soru: "2,8 g N₂ gazı kaç mol'dür? (N:14)", siklar: ["0,1", "0,2", "0,5", "1"], cevap: 0, zorluk: "orta" },
+    { soru: "0,2 M 500 mL NaCl çözeltisinde kaç mol NaCl vardır?", siklar: ["0,1", "0,2", "0,5", "1"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki gazlardan hangisi STP'de 11,2 L hacim kaplar? (He:4, O₂:32, CO₂:44, N₂:28)", siklar: ["8 g He", "16 g O₂", "22 g CO₂", "14 g N₂"], cevap: 1, zorluk: "orta" },
+    { soru: "C₃H₈'in yanma reaksiyonunda 1 mol C₃H₈ için kaç mol O₂ gerekir?", siklar: ["3", "4", "5", "10"], cevap: 2, zorluk: "orta" },
+    { soru: "%20'lik 200 g NaCl çözeltisinde kaç g NaCl vardır?", siklar: ["20", "30", "40", "50"], cevap: 2, zorluk: "orta" },
+    { soru: "0,5 M 200 mL HCl çözeltisi ile 0,2 M 500 mL NaOH çözeltisi tam nötrleşir mi?", siklar: ["Evet, tam nötrleşir", "HCl fazla", "NaOH fazla", "Veriler yetersiz"], cevap: 0, zorluk: "orta" },
+    { soru: "Al₂(SO₄)₃'te Al³⁺ ve SO₄²⁻ iyonlarının mol oranı kaçtır?", siklar: ["1:1", "2:3", "3:2", "1:3"], cevap: 1, zorluk: "orta" },
+    { soru: "5,6 g CO gazı kaç mol'dür? (C:12, O:16)", siklar: ["0,1", "0,2", "0,5", "1"], cevap: 1, zorluk: "orta" },
+    { soru: "0,1 mol CaCl₂ çözeltisinde kaç mol Cl⁻ iyonu vardır?", siklar: ["0,1", "0,2", "0,3", "0,4"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki çözeltilerden hangisi en yüksek derişime sahiptir?", siklar: ["0,5 M 100 mL", "0,2 M 250 mL", "0,1 M 500 mL", "Hepsi aynı"], cevap: 0, zorluk: "orta" },
+    { soru: "H₂ + Cl₂ → 2HCl reaksiyonunda 2 mol H₂ ile 3 mol Cl₂ reaksiyona girerse, hangi reaktan fazla kalır?", siklar: ["H₂", "Cl₂", "Hiçbiri", "Veriler yetersiz"], cevap: 1, zorluk: "orta" },
+    { soru: "0,25 mol CaCO₃ kaç g'dır? (Ca:40, C:12, O:16)", siklar: ["20", "25", "30", "35"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki gazlardan hangisi 44,8 L hacim kaplar? (STP, H₂:2, O₂:32, CO₂:44, N₂:28)", siklar: ["4 g H₂", "32 g O₂", "44 g CO₂", "28 g N₂"], cevap: 1, zorluk: "orta" },
+    { soru: "0,1 M 100 mL NaOH çözeltisini 0,5 M yapmak için kaç mL su buharlaştırılmalıdır?", siklar: ["60", "70", "80", "90"], cevap: 2, zorluk: "orta" },
+    { soru: "Fe₂O₃ + 3CO → 2Fe + 3CO₂ reaksiyonunda 160 g Fe₂O₃ için kaç mol CO gerekir? (Fe:56, O:16, C:12)", siklar: ["1", "2", "3", "6"], cevap: 2, zorluk: "orta" },
+    
+    // Zor
+    { soru: "Aşağıdaki çözeltilerden hangisinde en fazla Cl⁻ iyonu vardır?", siklar: ["0,1 M 100 mL NaCl", "0,05 M 200 mL CaCl₂", "0,2 M 50 mL AlCl₃", "0,1 M 100 mL MgCl₂"], cevap: 2, zorluk: "zor" },
+    { soru: "2SO₂ + O₂ → 2SO₃ reaksiyonunda 64 g SO₂ ve 32 g O₂ reaksiyona girerse, kaç g SO₃ oluşur? (S:32, O:16)", siklar: ["64", "80", "96", "128"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir hidrokarbon 8,8 g CO₂ ve 5,4 g H₂O veriyor. Bileşik kaç mol'dür? (C:12, H:1, O:16)", siklar: ["0,1", "0,2", "0,3", "0,4"], cevap: 0, zorluk: "zor" },
+    { soru: "0,1 M 100 mL H₂SO₄ ile 0,2 M 100 mL NaOH karıştırılırsa, son çözeltinin pH'ı yaklaşık kaç olur?", siklar: ["1", "7", "13", "2"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki elementlerden hangisi 11,2 L hacimde (STP) en fazla atom sayısı içerir?", siklar: ["He", "Ne", "Ar", "Hepsi aynı"], cevap: 0, zorluk: "zor" },
+    { soru: "C₆H₁₂O₆'in molar kütlesi 180 g/mol'dür. 9 g C₆H₁₂O₆ kaç mol C atomu içerir?", siklar: ["0,05", "0,1", "0,3", "0,6"], cevap: 2, zorluk: "zor" },
+    { soru: "0,2 M 250 mL Na₂CO₃ çözeltisinde kaç tane Na⁺ iyonu vardır?", siklar: ["3,01×10²²", "6,02×10²²", "3,01×10²³", "6,02×10²³"], cevap: 1, zorluk: "zor" },
+    { soru: "NH₄NO₃'in çözünmesiyle oluşan çözeltide, NH₄⁺ ve NO₃⁻ iyonlarının derişimleri eşit midir?", siklar: ["Evet, her zaman", "Hayır, NH₄⁺ daha fazla", "Hayır, NO₃⁻ daha fazla", "Sıcaklığa bağlı"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir gaz karışımı 2 mol He, 1 mol Ne ve 1 mol Ar içeriyor. Toplam basınç 4 atm ise, He'nin parsiyel basıncı kaç atm'dir?", siklar: ["1", "1,5", "2", "2,5"], cevap: 2, zorluk: "zor" },
+    { soru: "CaC₂ + 2H₂O → C₂H₂ + Ca(OH)₂ reaksiyonunda 64 g CaC₂ için kaç g C₂H₂ oluşur? (Ca:40, C:12, H:1, O:16)", siklar: ["13", "26", "52", "65"], cevap: 1, zorluk: "zor" },
+    { soru: "0,01 M 100 mL AgNO₃ ile 0,01 M 100 mL NaCl karıştırılırsa, kaç mol AgCl çöker?", siklar: ["0,001", "0,002", "0,005", "0,01"], cevap: 0, zorluk: "zor" },
+    { soru: "Aşağıdaki çözeltilerden hangisi 0,1 M NaCl çözeltisiyle izotoniktir?", siklar: ["0,05 M CaCl₂", "0,1 M C₆H₁₂O₆", "0,2 M Ure", "0,033 M AlCl₃"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir amino asit (C₂H₅NO₂) 7,5 g alınıyor. Bu amino asit kaç mol N atomu içerir?", siklar: ["0,05", "0,1", "0,2", "0,25"], cevap: 1, zorluk: "zor" },
+    { soru: "2KClO₃ → 2KCl + 3O₂ reaksiyonunda 24,5 g KClO₃ tamamen ayrışırsa, kaç L O₂ oluşur? (STP, K:39, Cl:35,5, O:16)", siklar: ["3,36", "6,72", "10,08", "13,44"], cevap: 1, zorluk: "zor" },
+    { soru: "0,1 M 50 mL HCl, 0,2 M 25 mL NaOH ve 0,1 M 25 mL KOH ile karıştırılırsa, son çözelti nedir?", siklar: ["Nötr", "Asidik", "Bazik", "Tampon"], cevap: 1, zorluk: "zor" }
   ],
+  
   'gaz': [
-    { soru: "İdeal gaz denklemi nedir?", siklar: ["PV=nRT", "P=dgh", "E=mc²", "F=ma"], cevap: 0 },
-    { soru: "Bir gazın basıncı artırılırsa, hacmi nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Önce artar"], cevap: 1 }
+    // Kolay
+    { soru: "İdeal gaz denklemi nedir?", siklar: ["PV=nRT", "P=dgh", "E=mc²", "F=ma"], cevap: 0, zorluk: "kolay" },
+    { soru: "Bir gazın basıncı artırılırsa, hacmi nasıl değişir? (Sıcaklık sabit)", siklar: ["Artar", "Azalır", "Değişmez", "Önce artar sonra azalır"], cevap: 1, zorluk: "kolay" },
+    { soru: "Charles yasasına göre, sabit basınçta gazın hacmi sıcaklıkla nasıl değişir?", siklar: ["Ters orantılı", "Doğru orantılı", "Değişmez", "Karesel"], cevap: 1, zorluk: "kolay" },
+    { soru: "STP'de 1 mol gazın hacmi kaç litredir?", siklar: ["22,4", "24", "1", "12"], cevap: 0, zorluk: "kolay" },
+    { soru: "Gay-Lussac yasasına göre, sabit hacimde gazın basıncı sıcaklıkla nasıl değişir?", siklar: ["Ters orantılı", "Doğru orantılı", "Değişmez", "Karesel"], cevap: 1, zorluk: "kolay" },
+    { soru: "Bir gazın sıcaklığı Kelvin cinsinden ikiye katlanırsa, hacmi (sabit basınçta) ne olur?", siklar: ["Yarıya iner", "İkiye katlanır", "Değişmez", "Dörde katlanır"], cevap: 1, zorluk: "kolay" },
+    { soru: "Aşağıdaki gazlardan hangisi ideal gaz davranışına en yakındır?", siklar: ["He", "CO₂", "H₂O", "NH₃"], cevap: 0, zorluk: "kolay" },
+    { soru: "Bir gazın mol sayısı artırılırsa, basıncı (sabit T ve V) nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Önce artar"], cevap: 0, zorluk: "kolay" },
+    { soru: "Dalton yasası neyi ifade eder?", siklar: ["Gaz karışımlarının basıncı", "Gazların hızları", "Gazların yoğunlukları", "Gazların sıcaklıkları"], cevap: 0, zorluk: "kolay" },
+    { soru: "0°C kaç Kelvin'dir?", siklar: ["0", "100", "273", "373"], cevap: 2, zorluk: "kolay" },
+    
+    // Orta
+    { soru: "Aynı sıcaklık ve basınçta, eşit hacimdeki iki farklı gazın mol sayıları nasıldır?", siklar: ["Farklı", "Eşit", "Kütleyle orantılı", "Yoğunlukla orantılı"], cevap: 1, zorluk: "orta" },
+    { soru: "Graham difüzyon yasasına göre, gazların difüzyon hızları hangi özellikle ters orantılıdır?", siklar: ["Sıcaklık", "Basınç", "Molar kütlenin karekökü", "Hacim"], cevap: 2, zorluk: "orta" },
+    { soru: "Bir gazın basıncı 2 atm, hacmi 4 L ve sıcaklığı 300 K ise, kaç mol gaz vardır? (R=0,082)", siklar: ["0,1", "0,2", "0,3", "0,4"], cevap: 2, zorluk: "orta" },
+    { soru: "Aşağıdaki gazlardan hangisi en yavaş difüze olur?", siklar: ["H₂", "He", "O₂", "CO₂"], cevap: 3, zorluk: "orta" },
+    { soru: "Sabit sıcaklıkta bir gazın basıncı 2 atm'den 4 atm'ye çıkarılırsa, hacmi ne olur? (Başlangıç hacmi 8 L)", siklar: ["2 L", "4 L", "8 L", "16 L"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir gazın sıcaklığı 27°C'den 127°C'ye çıkarılırsa, basıncı (sabit hacimde) kaç katına çıkar?", siklar: ["1,33", "2", "4", "1,5"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki koşullardan hangisinde gazlar ideal davranıştan en uzaktadır?", siklar: ["Yüksek T, düşük P", "Düşük T, yüksek P", "Yüksek T, yüksek P", "Düşük T, düşük P"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir balon 25°C'de 2 L hacme sahiptir. Sıcaklık 50°C'ye çıkarılırsa (sabit basınçta), yeni hacim kaç L olur?", siklar: ["2,17", "3", "4", "1"], cevap: 0, zorluk: "orta" },
+    { soru: "Van der Waals denkleminde 'a' sabiti neyi ifade eder?", siklar: ["Molekül hacmi", "Moleküller arası çekim kuvveti", "Molekül kütlesi", "Sıcaklık"], cevap: 1, zorluk: "orta" },
+    { soru: "Aynı sıcaklıkta, He ve O₂ gazlarının ortalama kinetik enerjileri nasıldır?", siklar: ["He > O₂", "He < O₂", "He = O₂", "Karşılaştırılamaz"], cevap: 2, zorluk: "orta" },
+    { soru: "Bir gazın sıcaklığı 200 K'den 400 K'ye çıkarılırsa, kök ortalama hızı kaç katına çıkar?", siklar: ["√2", "2", "4", "1"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki gazlardan hangisinin ortalama kinetik enerjisi en yüksektir? (Aynı sıcaklıkta)", siklar: ["He", "Ne", "Ar", "Hepsi eşit"], cevap: 3, zorluk: "orta" },
+    { soru: "Bir gazın basıncı 1 atm, hacmi 22,4 L ve sıcaklığı 273 K ise, bu gaz kaç mol'dür?", siklar: ["0,5", "1", "2", "Veriler yetersiz"], cevap: 1, zorluk: "orta" },
+    { soru: "Gazların yoğunlukları hangi koşullarda artar?", siklar: ["Basınç artar, sıcaklık azalır", "Basınç azalır, sıcaklık artar", "Her ikisi de artar", "Her ikisi de azalır"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki gazlardan hangisinin Van der Waals 'a' sabiti en büyüktür?", siklar: ["He", "Ne", "Ar", "Kr"], cevap: 3, zorluk: "orta" },
+    
+    // Zor
+    { soru: "Bir gaz karışımı 2 mol He ve 3 mol Ne içeriyor. Toplam basınç 5 atm ise, Ne'nin parsiyel basıncı kaç atm'dir?", siklar: ["2", "2,5", "3", "3,5"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir gazın basıncı 2 atm, hacmi 3 L ve sıcaklığı 300 K. Gazın mol sayısı 0,25 mol ise, R değeri kaç olur?", siklar: ["0,08", "0,082", "0,084", "0,086"], cevap: 0, zorluk: "zor" },
+    { soru: "Aşağıdaki gazlardan hangisinin ortalama kare hızı en yüksektir? (Aynı sıcaklıkta)", siklar: ["H₂", "He", "N₂", "O₂"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir gazın sıcaklığı 300 K'den 600 K'ye çıkarılırsa, çarpışma frekansı kaç katına çıkar?", siklar: ["√2", "2", "2√2", "4"], cevap: 0, zorluk: "zor" },
+    { soru: "Van der Waals denklemi: (P + an²/V²)(V-nb) = nRT. 'b' sabiti için aşağıdaki ifadelerden hangisi doğrudur?", siklar: ["Hepsii için aynı", "Küçük moleküller için büyük", "Büyük moleküller için büyük", "Sıcaklığa bağlı"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir gazın basıncı 4 atm, hacmi 5 L. Sıcaklık sabit tutularak hacim 10 L'ye çıkarılırsa, yeni basınç kaç atm olur?", siklar: ["1", "2", "3", "4"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki gazlardan hangisi en yüksek kritik sıcaklığa sahiptir?", siklar: ["H₂", "N₂", "O₂", "CO₂"], cevap: 3, zorluk: "zor" },
+    { soru: "Bir gazın sıcaklığı 27°C, basıncı 2 atm ve yoğunluğu 2 g/L. Gazın molar kütlesi kaç g/mol'dür? (R=0,082)", siklar: ["24,6", "25", "30", "32"], cevap: 0, zorluk: "zor" },
+    { soru: "Graham yasasına göre, H₂ ve O₂ gazlarının difüzyon hızları oranı kaçtır? (H:1, O:16)", siklar: ["1:4", "2:1", "4:1", "1:2"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir gazın basıncı 1 atm, hacmi 2 L ve sıcaklığı 273 K. Gaz 2 atm basınç ve 546 K sıcaklığa getirilirse, yeni hacim kaç L olur?", siklar: ["1", "2", "3", "4"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki gazlardan hangisinin ideal gaz davranışından sapması en fazladır?", siklar: ["He (300 K, 1 atm)", "N₂ (300 K, 1 atm)", "CO₂ (300 K, 10 atm)", "H₂ (300 K, 10 atm)"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir gazın sıcaklığı 200 K'den 800 K'ye çıkarılırsa, ortalama kare hızı kaç katına çıkar?", siklar: ["2", "4", "√2", "2√2"], cevap: 0, zorluk: "zor" },
+    { soru: "Maxwell-Boltzmann dağılımına göre, bir gazın sıcaklığı artırılırsa hız dağılımı nasıl değişir?", siklar: ["Daralır, tepe yüksekler", "Genişler, tepe düşer", "Değişmez", "Sadece kayar"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir gazın basıncı 3 atm, hacmi 4 L ve sıcaklığı 400 K. Gazın mol sayısı 0,5 mol ise, gazın molar kütlesi 32 g/mol ise, yoğunluğu kaç g/L'dir?", siklar: ["2", "3", "4", "5"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki koşullardan hangisinde gerçek gazlar ideal gaz denklemini en iyi sağlar?", siklar: ["Yüksek P, düşük T", "Düşük P, yüksek T", "Yüksek P, yüksek T", "Düşük P, düşük T"], cevap: 1, zorluk: "zor" }
   ],
+  
   'cozelti': [
-    { soru: "0,1 M NaCl çözeltisinin derişimi kaç mol/L'dir?", siklar: ["0,01", "0,1", "1", "10"], cevap: 1 },
-    { soru: "%10'luk NaCl çözeltisi 100 g'de kaç g NaCl içerir?", siklar: ["1", "5", "10", "20"], cevap: 2 }
+    // Kolay
+    { soru: "0,1 M NaCl çözeltisinin derişimi kaç mol/L'dir?", siklar: ["0,01", "0,1", "1", "10"], cevap: 1, zorluk: "kolay" },
+    { soru: "%10'luk NaCl çözeltisi 100 g'de kaç g NaCl içerir?", siklar: ["1", "5", "10", "20"], cevap: 2, zorluk: "kolay" },
+    { soru: "Molarite nedir?", siklar: ["Mol/kütüle", "Mol/hacim", "Kütle/hacim", "Hacim/kütle"], cevap: 1, zorluk: "kolay" },
+    { soru: "0,5 M 200 mL çözeltide kaç mol çözünmüş madde vardır?", siklar: ["0,1", "0,2", "0,5", "1"], cevap: 0, zorluk: "kolay" },
+    { soru: "Molalite nedir?", siklar: ["Mol/L", "Mol/kg çözücü", "g/L", "mol/g"], cevap: 1, zorluk: "kolay" },
+    { soru: "Aşağıdaki çözeltilerden hangisi elektrolit çözeltisidir?", siklar: ["Şeker suyu", "Tuzlu su", "Benzin", "Alkol suyu"], cevap: 1, zorluk: "kolay" },
+    { soru: "Çözünürlük genellikle sıcaklıkla nasıl değişir?", siklar: ["Azalır", "Artar", "Değişmez", "Önce artar sonra azalır"], cevap: 1, zorluk: "kolay" },
+    { soru: "Doymuş çözelti nedir?", siklar: ["Çok çözünen", "Denge halindeki", "Hiç çözünmeyen", "Sürekli karışan"], cevap: 1, zorluk: "kolay" },
+    { soru: "0,1 mol NaCl 500 mL su içinde çözülürse, molarite kaç olur?", siklar: ["0,05", "0,1", "0,2", "0,5"], cevap: 2, zorluk: "kolay" },
+    { soru: "Aşağıdaki maddelerden hangisi suda daha iyi çözünür?", siklar: ["NaCl", "C₆H₁₄", "I₂", "C₆H₆"], cevap: 0, zorluk: "kolay" },
+    
+    // Orta
+    { soru: "0,2 M 100 mL HCl ile 0,1 M 200 mL NaOH karıştırılırsa, son çözelti nedir?", siklar: ["Nötr", "Asidik", "Bazik", "Tampon"], cevap: 1, zorluk: "orta" },
+    { soru: "20 g NaOH 80 g suda çözülürse, çözeltinin kütlece yüzde derişimi kaçtır?", siklar: ["15", "20", "25", "30"], cevap: 1, zorluk: "orta" },
+    { soru: "0,1 M 50 mL NaCl çözeltisi 0,2 M 50 mL NaCl çözeltisiyle karıştırılırsa, son derişim kaç olur?", siklar: ["0,1", "0,15", "0,2", "0,3"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki çözeltilerden hangisi en yüksek buhar basıncına sahiptir?", siklar: ["0,1 M NaCl", "0,1 M C₆H₁₂O₆", "0,2 M NaCl", "0,05 M CaCl₂"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir çözeltinin donma noktası düşüklüğü hangi özellikle doğru orantılıdır?", siklar: ["Çözünenin molar kütlesi", "Çözünenin molalitesi", "Çözücünün molar kütlesi", "Sıcaklık"], cevap: 1, zorluk: "orta" },
+    { soru: "0,1 molal glikoz çözeltisinin donma noktası kaç °C'dir? (Kf=1,86 °C/m)", siklar: ["-0,186", "-0,372", "-1,86", "-3,72"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin kaynama noktası en yüksektir?", siklar: ["0,1 M NaCl", "0,1 M C₆H₁₂O₆", "0,2 M NaCl", "0,1 M CaCl₂"], cevap: 2, zorluk: "orta" },
+    { soru: "Bir çözeltinin osmotik basıncı hangi faktörle doğru orantılıdır?", siklar: ["Sıcaklık", "Hacim", "Basınç", "Yoğunluk"], cevap: 0, zorluk: "orta" },
+    { soru: "0,1 M NaCl ve 0,1 M C₆H₁₂O₆ çözeltileri aynı sıcaklıkta ise, hangisinin osmotik basıncı daha yüksektir?", siklar: ["NaCl", "C₆H₁₂O₆", "Eşit", "Karşılaştırılamaz"], cevap: 0, zorluk: "orta" },
+    { soru: "Bir çözeltinin pH'ı 3 ise, [H⁺] derişimi kaç M'dir?", siklar: ["10⁻³", "10⁻¹¹", "3", "10³"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki çözeltilerden hangisi izotonik değildir? (0,9% NaCl ile)", siklar: ["5% Glikoz", "0,3 M Ure", "0,15 M NaCl", "0,1 M CaCl₂"], cevap: 3, zorluk: "orta" },
+    { soru: "Henry yasasına göre, bir gazın çözünürlüğü basınçla nasıl değişir?", siklar: ["Ters orantılı", "Doğru orantılı", "Değişmez", "Karesel"], cevap: 1, zorluk: "orta" },
+    { soru: "0,2 M 100 mL NaOH çözeltisini 0,5 M yapmak için kaç g NaOH eklenmelidir? (NaOH:40 g/mol)", siklar: ["0,8", "1,2", "1,6", "2,0"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir çözeltinin donma noktası -0,93°C ise, molalitesi kaçtır? (Kf=1,86 °C/m, i=1)", siklar: ["0,25", "0,5", "0,75", "1,0"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin iletkenliği en yüksektir?", siklar: ["0,1 M C₆H₁₂O₆", "0,1 M CH₃COOH", "0,1 M NaCl", "0,1 M NH₃"], cevap: 2, zorluk: "orta" },
+    
+    // Zor
+    { soru: "0,1 M 100 mL AgNO₃ ile 0,1 M 100 mL NaCl karıştırılırsa, çözeltide kalan [Ag⁺] kaç M olur? (Ksp(AgCl)=1,8×10⁻¹⁰)", siklar: ["0", "1,8×10⁻¹⁰", "1,34×10⁻⁵", "0,05"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir çözelti 0,1 M NaCl ve 0,1 M MgCl₂ içeriyor. Çözeltinin iyonik şiddeti kaçtır?", siklar: ["0,2", "0,3", "0,4", "0,6"], cevap: 2, zorluk: "zor" },
+    { soru: "0,01 M HA zayıf asidinin pH'ı 4 ise, Ka değeri kaçtır?", siklar: ["10⁻⁴", "10⁻⁶", "10⁻⁸", "10⁻¹⁰"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir çözeltinin buhar basıncı 20 mmHg, saf çözücünün buhar basıncı 25 mmHg ise, çözeltinin mol kesri kaçtır?", siklar: ["0,2", "0,25", "0,75", "0,8"], cevap: 0, zorluk: "zor" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin donma noktası en düşüktür?", siklar: ["0,1 M NaCl", "0,1 M MgCl₂", "0,1 M AlCl₃", "0,1 M C₆H₁₂O₆"], cevap: 2, zorluk: "zor" },
+    { soru: "0,1 M NH₃ çözeltisinin pH'ı yaklaşık kaçtır? (Kb=1,8×10⁻⁵)", siklar: ["9", "10", "11", "12"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir çözelti 0,1 M Na₂SO₄ ve 0,1 M NaCl içeriyor. [Na⁺] derişimi kaç M'dir?", siklar: ["0,2", "0,3", "0,4", "0,5"], cevap: 1, zorluk: "zor" },
+    { soru: "0,01 M Ca(OH)₂ çözeltisinin pH'ı kaçtır?", siklar: ["10", "11", "12", "13"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin osmotik basıncı en yüksektir?", siklar: ["0,1 M NaCl", "0,1 M CaCl₂", "0,2 M C₆H₁₂O₆", "0,05 M Al₂(SO₄)₃"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir tampon çözelti 0,1 M CH₃COOH ve 0,1 M CH₃COONa içeriyor. pH yaklaşık kaçtır? (pKa=4,76)", siklar: ["3,76", "4,76", "5,76", "6,76"], cevap: 1, zorluk: "zor" },
+    { soru: "0,1 M 50 mL HCl ile 0,1 M 25 mL NaOH karıştırılırsa, pH kaç olur?", siklar: ["1", "1,3", "1,48", "2"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir çözeltinin kaynama noktası 100,52°C ise, molalitesi kaçtır? (Kb=0,52 °C/m, i=1)", siklar: ["0,5", "1", "1,5", "2"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin pH'ı en düşüktür?", siklar: ["0,1 M HCl", "0,1 M H₂SO₄", "0,1 M CH₃COOH", "0,1 M NH₄Cl"], cevap: 1, zorluk: "zor" },
+    { soru: "0,01 M Na₂CO₃ çözeltisinin pH'ı yaklaşık kaçtır? (H₂CO₃: pKa1=6,35, pKa2=10,33)", siklar: ["8,3", "9,3", "10,3", "11,3"], cevap: 3, zorluk: "zor" },
+    { soru: "Bir çözelti 0,1 M HF (Ka=6,6×10⁻⁴) ve 0,2 M NaF içeriyor. pH yaklaşık kaçtır?", siklar: ["2,5", "3,0", "3,5", "4,0"], cevap: 2, zorluk: "zor" }
   ],
+  
   'denge': [
-    { soru: "Le Chatelier prensibine göre, dengeye etki uygulanırsa sistem ne yapar?", siklar: ["Etkiyi güçlendirir", "Etkiyi zayıflatır", "Değişmez", "Bozulur"], cevap: 1 },
-    { soru: "N₂ + 3H₂ ⇌ 2NH₃ + ısı' da sıcaklık artırılırsa denge hangi yöne kayar?", siklar: ["Ürünler", "Girenler", "Değişmez", "Önce ürünlere"], cevap: 1 }
+    // Kolay
+    { soru: "Le Chatelier prensibine göre, dengeye etki uygulanırsa sistem ne yapar?", siklar: ["Etkiyi güçlendirir", "Etkiyi zayıflatır", "Değişmez", "Bozulur"], cevap: 1, zorluk: "kolay" },
+    { soru: "N₂ + 3H₂ ⇌ 2NH₃ + ısı' da sıcaklık artırılırsa denge hangi yöne kayar?", siklar: ["Ürünler", "Girenler", "Değişmez", "Önce ürünlere"], cevap: 1, zorluk: "kolay" },
+    { soru: "Denge sabiti Kc nedir?", siklar: ["Ürün/giren oranı", "Denge derişimlerinin oranı", "Hız sabiti", "Sıcaklık sabiti"], cevap: 1, zorluk: "kolay" },
+    { soru: "Bir denge reaksiyonunda katalizör neyi değiştirir?", siklar: ["Denge konumunu", "Denge sabitini", "Dengeye ulaşma hızını", "Ürün miktarını"], cevap: 2, zorluk: "kolay" },
+    { soru: "H₂ + I₂ ⇌ 2HI reaksiyonunda basınç artırılırsa denge nasıl etkilenir?", siklar: ["Ürünlere kayar", "Girenlere kayar", "Değişmez", "Bozulur"], cevap: 2, zorluk: "kolay" },
+    { soru: "A + B ⇌ C + D reaksiyonunda C ürünü uzaklaştırılırsa denge hangi yöne kayar?", siklar: ["Girenler", "Ürünler", "Değişmez", "Bozulur"], cevap: 1, zorluk: "kolay" },
+    { soru: "Denge sabiti Kc yalnızca hangi faktöre bağlıdır?", siklar: ["Basınç", "Sıcaklık", "Konsantrasyon", "Katalizör"], cevap: 1, zorluk: "kolay" },
+    { soru: "2SO₂ + O₂ ⇌ 2SO₃ reaksiyonunda hacim azaltılırsa denge hangi yöne kayar?", siklar: ["Girenler (3 mol)", "Ürünler (2 mol)", "Değişmez", "Bozulur"], cevap: 1, zorluk: "kolay" },
+    { soru: "Denge reaksiyonunda ürün derişimleri artırılırsa Qc ve Kc arasındaki ilişki nasıldır?", siklar: ["Qc < Kc", "Qc = Kc", "Qc > Kc", "Karşılaştırılamaz"], cevap: 2, zorluk: "kolay" },
+    { soru: "Endotermik bir reaksiyonda sıcaklık artırılırsa Kc nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Önce artar"], cevap: 0, zorluk: "kolay" },
+    
+    // Orta
+    { soru: "N₂O₄ ⇌ 2NO₂ reaksiyonunda Kc=4. Denge anında [N₂O₄]=0,5 M ise, [NO₂] kaç M'dir?", siklar: ["1", "2", "√2", "2√2"], cevap: 2, zorluk: "orta" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisinde basınç değişimi dengeyi etkilemez?", siklar: ["N₂ + 3H₂ ⇌ 2NH₃", "H₂ + I₂ ⇌ 2HI", "2SO₂ + O₂ ⇌ 2SO₃", "N₂O₄ ⇌ 2NO₂"], cevap: 1, zorluk: "orta" },
+    { soru: "PCl₅ ⇌ PCl₃ + Cl₂ reaksiyonunda Kp ve Kc arasındaki ilişki nedir?", siklar: ["Kp=Kc", "Kp=Kc(RT)", "Kp=Kc(RT)⁻¹", "Kp=Kc(RT)²"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir denge reaksiyonunda Qc=2 ve Kc=4 ise, denge hangi yöne kayar?", siklar: ["Girenler", "Ürünler", "Dengededir", "Bozulur"], cevap: 1, zorluk: "orta" },
+    { soru: "CaCO₃(s) ⇌ CaO(s) + CO₂(g) reaksiyonunda Kc ifadesi nedir?", siklar: ["[CaO][CO₂]/[CaCO₃]", "[CO₂]", "[CaO]/[CaCO₃]", "1/[CO₂]"], cevap: 1, zorluk: "orta" },
+    { soru: "N₂ + 3H₂ ⇌ 2NH₃ reaksiyonunda Kc=0,5. Denge anında [N₂]=1, [H₂]=2 ise, [NH₃] kaçtır?", siklar: ["1", "2", "√2", "2√2"], cevap: 2, zorluk: "orta" },
+    { soru: "Bir reaksiyonun ΔH<0 ve ΔS<0 ise, yüksek sıcaklıkta denge hangi yöndedir?", siklar: ["Ürünler", "Girenler", "Sıcaklığa bağlı", "Her zaman ürünler"], cevap: 1, zorluk: "orta" },
+    { soru: "2A + B ⇌ C reaksiyonunda [A] iki katına çıkarılırsa, reaksiyon hızı kaç katına çıkar?", siklar: ["2", "4", "6", "8"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisinde Kp=Kc'dir?", siklar: ["N₂ + 3H₂ ⇌ 2NH₃", "H₂ + I₂ ⇌ 2HI", "2SO₂ + O₂ ⇌ 2SO₃", "PCl₅ ⇌ PCl₃ + Cl₂"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir denge reaksiyonunda katalizör eklenirse, ürün/giren oranı zamanla nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Önce artar sonra azalır"], cevap: 2, zorluk: "orta" },
+    { soru: "N₂O₄ ⇌ 2NO₂ reaksiyonunda renk derinliği NO₂ derişimiyle orantılıdır. Sıcaklık artırılırsa renk nasıl değişir? (Endotermik)", siklar: ["Açılır", "Koyulaşır", "Değişmez", "Önce açılır"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir denge reaksiyonunda ürün derişimi artırılırsa, yeni denge kurulduğunda ürün derişimi başlangıçtan nasıldır?", siklar: ["Daha düşük", "Daha yüksek", "Eşit", "Karşılaştırılamaz"], cevap: 1, zorluk: "orta" },
+    { soru: "Haber-Bosch prosesinde NH₃ verimi nasıl artırılır?", siklar: ["Yüksek T, düşük P", "Düşük T, yüksek P", "Yüksek T, yüksek P", "Düşük T, düşük P"], cevap: 1, zorluk: "orta" },
+    { soru: "A + 2B ⇌ C reaksiyonunda Kc=4. Denge anında [A]=1, [C]=4 ise, [B] kaçtır?", siklar: ["0,5", "1", "2", "4"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir denge reaksiyonunda sıcaklık artırılırsa Kc azalıyorsa, reaksiyonun entalpisi nasıldır?", siklar: ["ΔH>0", "ΔH<0", "ΔH=0", "Belirsiz"], cevap: 1, zorluk: "orta" },
+    
+    // Zor
+    { soru: "N₂ + 3H₂ ⇌ 2NH₃ reaksiyonunda başlangıçta 1 mol N₂ ve 3 mol H₂ var. Denge anında 0,5 mol NH₃ oluşmuşsa, H₂'nin denge derişimi (V=1L) kaçtır?", siklar: ["1,5", "2,0", "2,25", "2,5"], cevap: 2, zorluk: "zor" },
+    { soru: "2A ⇌ B + C reaksiyonunda Kc=0,25. Başlangıçta sadece A var ve [A]₀=2 M. Denge anında [B] kaç M'dir?", siklar: ["0,25", "0,5", "0,67", "1,0"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir denge reaksiyonunda ΔG° = -RT ln Kc. Kc=10 ve T=298 K ise, ΔG° yaklaşık kaç kJ/mol'dür?", siklar: ["-2,3", "-5,7", "-11,4", "-23"], cevap: 1, zorluk: "zor" },
+    { soru: "PCl₅(g) ⇌ PCl₃(g) + Cl₂(g) reaksiyonunda başlangıçta 2 mol PCl₅ var. Denge anında toplam basınç başlangıç basıncının 1,5 katı ise, PCl₅'in ayrışma yüzdesi kaçtır?", siklar: ["25", "33", "50", "67"], cevap: 2, zorluk: "zor" },
+    { soru: "N₂O₄ ⇌ 2NO₂ reaksiyonunda 298 K'de Kp=0,113. Aynı sıcaklıkta Kc kaçtır?", siklar: ["0,0046", "0,046", "0,46", "4,6"], cevap: 0, zorluk: "zor" },
+    { soru: "A + B ⇌ C reaksiyonunda başlangıçta [A]=[B]=1 M. Denge anında [C]=0,6 M ise, Kc kaçtır?", siklar: ["1,5", "2,25", "3,75", "6,0"], cevap: 2, zorluk: "zor" },
+    { soru: "2SO₂ + O₂ ⇌ 2SO₃ reaksiyonunda Kc=100. Denge anında [SO₂]=0,1 ve [O₂]=0,2 ise, [SO₃] kaçtır?", siklar: ["1", "2", "√2", "2√5"], cevap: 3, zorluk: "zor" },
+    { soru: "Bir denge reaksiyonunda sıcaklık artırıldığında Kc artıyor ve renk koyulaşıyor. Reaksiyon hakkında ne söylenebilir?", siklar: ["Endotermik, ürün renkli", "Ekzotermik, ürün renkli", "Endotermik, giren renkli", "Ekzotermik, giren renkli"], cevap: 0, zorluk: "zor" },
+    { soru: "CO + H₂O ⇌ CO₂ + H₂ reaksiyonunda Kc=1. Başlangıçta [CO]=[H₂O]=2 M. Denge anında [CO₂] kaç M'dir?", siklar: ["0,5", "1", "1,5", "2"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir denge reaksiyonunda basınç artırıldığında ürün verimi artıyor. Reaksiyon hakkında ne söylenebilir?", siklar: ["Δn(gaz)>0", "Δn(gaz)<0", "Δn(gaz)=0", "Sıvı fazlı"], cevap: 1, zorluk: "zor" },
+    { soru: "NH₄HS(s) ⇌ NH₃(g) + H₂S(g) reaksiyonunda 298 K'de toplam basınç 0,8 atm ise, Kp kaçtır?", siklar: ["0,08", "0,16", "0,32", "0,64"], cevap: 1, zorluk: "zor" },
+    { soru: "A + 2B ⇌ 2C reaksiyonunda Kc=4. Denge anında [A]=0,5, [B]=1 ise, [C] kaçtır?", siklar: ["1", "√2", "2", "2√2"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir denge reaksiyonunda inert gaz eklenirse (sabit hacimde), denge nasıl etkilenir?", siklar: ["Ürünlere kayar", "Girenlere kayar", "Değişmez", "Bozulur"], cevap: 2, zorluk: "zor" },
+    { soru: "N₂ + 3H₂ ⇌ 2NH₃ reaksiyonunda başlangıçta 2 mol N₂ ve 6 mol H₂ var. Denge anında NH₃ mol sayısı 2 ise, N₂'nin dönüşüm yüzdesi kaçtır?", siklar: ["25", "33", "50", "67"], cevap: 2, zorluk: "zor" },
+    { soru: "2NO₂ ⇌ N₂O₄ reaksiyonunda başlangıçta 2 mol NO₂ var. Denge anında toplam mol 1,5 ise, Kc (V=1L) kaçtır?", siklar: ["0,5", "1", "2", "4"], cevap: 1, zorluk: "zor" }
   ],
+  
   'asitbaz': [
-    { soru: "pH = 7 olan çözelti nedir?", siklar: ["Asidik", "Bazik", "Nötr", "Tampon"], cevap: 2 },
-    { soru: "HCl'in su içindeki iyonlaşma denklemi nedir?", siklar: ["HCl→H⁺+Cl⁻", "HCl+H₂O→H₃O⁺+Cl⁻", "HCl→H₂+Cl₂", "HCl+NaOH→NaCl+H₂O"], cevap: 1 }
+    // Kolay
+    { soru: "pH = 7 olan çözelti nedir?", siklar: ["Asidik", "Bazik", "Nötr", "Tampon"], cevap: 2, zorluk: "kolay" },
+    { soru: "HCl'in su içindeki iyonlaşma denklemi nedir?", siklar: ["HCl→H⁺+Cl⁻", "HCl+H₂O→H₃O⁺+Cl⁻", "HCl→H₂+Cl₂", "HCl+NaOH→NaCl+H₂O"], cevap: 1, zorluk: "kolay" },
+    { soru: "pH + pH = ?", siklar: ["7", "10", "14", "1"], cevap: 2, zorluk: "kolay" },
+    { soru: "Aşağıdaki maddelerden hangisi güçlü asittir?", siklar: ["CH₃COOH", "HCl", "NH₃", "H₂O"], cevap: 1, zorluk: "kolay" },
+    { soru: "NaOH çözeltisinin pH'ı genellikle kaçtır?", siklar: ["1-3", "5-7", "7-9", "12-14"], cevap: 3, zorluk: "kolay" },
+    { soru: "Bir çözeltinin [H⁺]=10⁻³ M ise, pH'ı kaçtır?", siklar: ["3", "7", "11", "14"], cevap: 0, zorluk: "kolay" },
+    { soru: "Aşağıdaki çiftlerden hangisi konjuge asit-baz çiftidir?", siklar: ["HCl-NaOH", "H₂O-OH⁻", "NaCl-HCl", "NH₃-H₂O"], cevap: 1, zorluk: "kolay" },
+    { soru: "H₂SO₄ kaç protonlu asittir?", siklar: ["1", "2", "3", "4"], cevap: 1, zorluk: "kolay" },
+    { soru: "Bir çözeltinin pOH'ı 5 ise, pH'ı kaçtır?", siklar: ["5", "7", "9", "14"], cevap: 2, zorluk: "kolay" },
+    { soru: "Aşağıdaki maddelerden hangisi zayıf bazdır?", siklar: ["NaOH", "KOH", "NH₃", "Ca(OH)₂"], cevap: 2, zorluk: "kolay" },
+    
+    // Orta
+    { soru: "0,1 M CH₃COOH çözeltisinin pH'ı yaklaşık kaçtır? (Ka=1,8×10⁻⁵)", siklar: ["1", "2,87", "4,76", "5"], cevap: 1, zorluk: "orta" },
+    { soru: "0,01 M NaOH çözeltisinin pH'ı kaçtır?", siklar: ["10", "11", "12", "13"], cevap: 2, zorluk: "orta" },
+    { soru: "Aşağıdaki asitlerden hangisinin pKa değeri en büyüktür (en zayıf asit)?", siklar: ["HCl (pKa=-7)", "CH₃COOH (pKa=4,76)", "HCN (pKa=9,2)", "H₂O (pKa=15,7)"], cevap: 3, zorluk: "orta" },
+    { soru: "0,1 M HCl 50 mL ile 0,1 M NaOH 25 mL karıştırılırsa, pH kaç olur?", siklar: ["1", "1,3", "1,48", "2"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir tampon çözelti 0,1 M CH₃COOH ve 0,1 M CH₃COONa içeriyor. pH yaklaşık kaçtır?", siklar: ["3,76", "4,76", "5,76", "6,76"], cevap: 1, zorluk: "orta" },
+    { soru: "H₂CO₃'ün konjuge bazı nedir?", siklar: ["CO₃²⁻", "HCO₃⁻", "OH⁻", "H₂O"], cevap: 1, zorluk: "orta" },
+    { soru: "0,1 M NH₄Cl çözeltisinin pH'ı 1'den büyük mü küçük mü?", siklar: ["Büyük", "Küçük", "Eşit", "Belirsiz"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki tuzlardan hangisinin çözeltisi bazik özellik gösterir?", siklar: ["NaCl", "NH₄Cl", "Na₂CO₃", "KNO₃"], cevap: 2, zorluk: "orta" },
+    { soru: "0,01 M H₂SO₄ çözeltisinin pH'ı yaklaşık kaçtır? (Tam iyonlaşır)", siklar: ["1,3", "1,7", "2", "2,3"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir çözeltinin [H⁺]=2×10⁻⁵ M ise, pH yaklaşık kaçtır?", siklar: ["4,3", "4,7", "5", "5,3"], cevap: 1, zorluk: "orta" },
+    { soru: "Henderson-Hasselbalch denklemi nedir?", siklar: ["pH=pKa+log([Baz]/[Asit])", "pH=pKa+log([Asit]/[Baz])", "pH=pKa-[Asit]/[Baz]", "pH=pKa+[Baz]/[Asit]"], cevap: 0, zorluk: "orta" },
+    { soru: "0,1 M Na₂CO₃ çözeltisinin pH'ı yaklaşık kaçtır? (H₂CO₃ pKa2=10,33)", siklar: ["8,3", "9,3", "10,3", "11,3"], cevap: 3, zorluk: "orta" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin pH'ı en düşüktür?", siklar: ["0,1 M HCl", "0,1 M H₂SO₄", "0,1 M CH₃COOH", "0,1 M NH₄Cl"], cevap: 1, zorluk: "orta" },
+    { soru: "Bir zayıf asidin pH'ı, aynı derişimdeki güçlü asidin pH'ından nasıldır?", siklar: ["Daha düşük", "Daha yüksek", "Eşit", "Karşılaştırılamaz"], cevap: 1, zorluk: "orta" },
+    { soru: "0,1 M HF (Ka=6,6×10⁻⁴) ve 0,2 M NaF tamponunun pH'ı yaklaşık kaçtır?", siklar: ["2,5", "3,0", "3,5", "4,0"], cevap: 2, zorluk: "orta" },
+    
+    // Zor
+    { soru: "0,1 M HA zayıf asidinin pH'ı 3 ise, Ka değeri kaçtır?", siklar: ["10⁻³", "10⁻⁵", "10⁻⁶", "10⁻⁷"], cevap: 1, zorluk: "zor" },
+    { soru: "0,01 M H₂S çözeltisinin [S²⁻] derişimi yaklaşık kaçtır? (Ka1=10⁻⁷, Ka2=10⁻¹⁹)", siklar: ["10⁻⁷", "10⁻¹³", "10⁻¹⁹", "10⁻²⁶"], cevap: 2, zorluk: "zor" },
+    { soru: "0,1 M NH₃ (Kb=1,8×10⁻⁵) ve 0,1 M NH₄Cl tamponunun pH'ı kaçtır?", siklar: ["9,26", "9,56", "9,86", "10,26"], cevap: 0, zorluk: "zor" },
+    { soru: "0,1 M Na₂CO₃ çözeltisinde [CO₃²⁻]/[HCO₃⁻] oranı yaklaşık kaçtır? (H₂CO₃ pKa2=10,33, pH≈11,3)", siklar: ["0,1", "1", "10", "100"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir çözelti 0,1 M CH₃COOH (Ka=1,8×10⁻⁵) ve 0,05 M NaOH içeriyor. pH yaklaşık kaçtır?", siklar: ["4,14", "4,44", "4,76", "5,06"], cevap: 1, zorluk: "zor" },
+    { soru: "0,01 M H₃PO₄ çözeltisinin [H⁺] yaklaşık kaçtır? (Ka1=7,5×10⁻³)", siklar: ["10⁻²", "1,7×10⁻²", "2,5×10⁻²", "5×10⁻³"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin pH'ı tampon bölgededir? (Asidin pKa=5)", siklar: ["0,1 M asit", "0,1 M asit + 0,1 M tuz", "0,1 M baz", "0,1 M tuz"], cevap: 1, zorluk: "zor" },
+    { soru: "0,1 M NaHCO₃ çözeltisinin pH'ı yaklaşık kaçtır? (H₂CO₃ pKa1=6,35, pKa2=10,33)", siklar: ["6,35", "8,34", "10,33", "7,00"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir zayıf asidin %1 iyonlaşması için Ka değeri yaklaşık kaç olmalıdır? (Ca=0,1 M)", siklar: ["10⁻³", "10⁻⁵", "10⁻⁷", "10⁻⁹"], cevap: 1, zorluk: "zor" },
+    { soru: "0,1 M HCl 20 mL ile 0,1 M NH₃ 20 mL karıştırılırsa, pH yaklaşık kaçtır? (NH₄⁺ Ka=5,6×10⁻¹⁰)", siklar: ["3", "4,5", "5,1", "6"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin tampon kapasitesi en yüksektir?", siklar: ["0,01 M asit + 0,01 M tuz", "0,1 M asit + 0,1 M tuz", "0,5 M asit + 0,5 M tuz", "1 M asit + 0,01 M tuz"], cevap: 2, zorluk: "zor" },
+    { soru: "0,01 M Ca(OH)₂ çözeltisinin pOH'ı kaçtır?", siklar: ["1", "1,3", "1,7", "2"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir çözelti 0,1 M CH₃COOH ve 0,2 M CH₃COONa içeriyor. 0,01 mol NaOH eklendikten sonra pH yaklaşık kaçtır?", siklar: ["4,6", "4,76", "4,9", "5,1"], cevap: 2, zorluk: "zor" },
+    { soru: "0,1 M Na₂HPO₄ çözeltisinin pH'ı yaklaşık kaçtır? (H₃PO₄ pKa2=7,2, pKa3=12,3)", siklar: ["7,2", "9,75", "12,3", "6,5"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki çözeltilerden hangisinin pH'ı en yüksektir?", siklar: ["0,1 M Na₂CO₃", "0,1 M NaHCO₃", "0,1 M H₂CO₃", "0,1 M NaCl"], cevap: 0, zorluk: "zor" }
   ],
+  
   'elektro': [
-    { soru: "Elektrolizde hangi elektrot pozitif yüklüdür?", siklar: ["Katot", "Anot", "Her ikisi", "Hiçbiri"], cevap: 1 },
-    { soru: "Standart hidrojen elektrotunun potansiyeli kaç volt'tur?", siklar: ["0,00", "1,00", "-1,00", "2,00"], cevap: 0 }
+    // Kolay
+    { soru: "Elektrolizde hangi elektrot pozitif yüklüdür?", siklar: ["Katot", "Anot", "Her ikisi", "Hiçbiri"], cevap: 1, zorluk: "kolay" },
+    { soru: "Standart hidrojen elektrotunun potansiyeli kaç volt'tur?", siklar: ["0,00", "1,00", "-1,00", "2,00"], cevap: 0, zorluk: "kolay" },
+    { soru: "Elektrolizde katotta ne olur?", siklar: ["Yükseltgenme", "İndirgenme", "Çözünme", "Buharlaşma"], cevap: 1, zorluk: "kolay" },
+    { soru: "Bir galvanik hücrede elektronlar hangi yönde akar?", siklar: ["Katottan anoda", "Anottan katota", "Her iki yönde", "Akım yok"], cevap: 1, zorluk: "kolay" },
+    { soru: "Standart indirgenme potansiyeli en yüksek olan metal en kolay ne yapar?", siklar: ["Yükseltgenir", "İndirgenir", "Çözünür", "Buharlaşır"], cevap: 1, zorluk: "kolay" },
+    { soru: "Elektrolizde anotta ne olur?", siklar: ["İndirgenme", "Yükseltgenme", "Çökelti oluşumu", "Gaz açığa çıkması"], cevap: 1, zorluk: "kolay" },
+    { soru: "Faraday yasasına göre, 1 mol elektron kaç Coulomb'dur?", siklar: ["96485", "1", "6,022×10²³", "1,6×10⁻¹⁹"], cevap: 0, zorluk: "kolay" },
+    { soru: "Zn + Cu²⁺ → Zn²⁺ + Cu reaksiyonunda hangi metal yükseltgenir?", siklar: ["Zn", "Cu", "Her ikisi", "Hiçbiri"], cevap: 0, zorluk: "kolay" },
+    { soru: "Standart koşullarda, E° değeri pozitif olan reaksiyon ne tür bir reaksiyondur?", siklar: ["Kendiliğinden", "Kendiliğinden olmayan", "Dengede", "Bilinmiyor"], cevap: 0, zorluk: "kolay" },
+    { soru: "Elektrolizde suyun ayrışmasıyla katotta hangi gaz açığa çıkar?", siklar: ["O₂", "H₂", "Cl₂", "CO₂"], cevap: 1, zorluk: "kolay" },
+    
+    // Orta
+    { soru: "Zn²⁺/Zn: -0,76 V ve Cu²⁺/Cu: +0,34 V. Zn-Cu pilinin standart EMK'sı kaçtır?", siklar: ["0,42", "1,10", "1,42", "1,76"], cevap: 1, zorluk: "orta" },
+    { soru: "1 Faraday elektrik, CuSO₄ çözeltisinden kaç mol Cu²⁺ indirger?", siklar: ["0,5", "1", "2", "0,25"], cevap: 0, zorluk: "orta" },
+    { soru: "Aşağıdaki metallerden hangisi en kolay yükseltgenir?", siklar: ["Ag", "Cu", "Zn", "Fe"], cevap: 2, zorluk: "orta" },
+    { soru: "Elektrolizde 2 A akım 965 saniye uygulanırsa, kaç Faraday elektrik geçer?", siklar: ["0,01", "0,02", "0,05", "0,1"], cevap: 1, zorluk: "orta" },
+    { soru: "Nernst denklemi neyi ifade eder?", siklar: ["Standart potansiyel", "Konsantrasyona bağlı potansiyel", "Sıcaklığa bağlı potansiyel", "Basınca bağlı potansiyel"], cevap: 1, zorluk: "orta" },
+    { soru: "Fe³⁺ + e⁻ → Fe²⁺ (E°=0,77 V) ve Fe²⁺ + 2e⁻ → Fe (E°=-0,44 V). Fe³⁺/Fe için E° kaçtır?", siklar: ["0,33", "0,11", "-0,04", "-0,11"], cevap: 2, zorluk: "orta" },
+    { soru: "Elektrolizde 1 A akım 9650 saniye uygulanırsa, AgNO₃ çözeltisinden kaç g Ag çöker? (Ag:108)", siklar: ["5,4", "10,8", "21,6", "43,2"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki pillerden hangisinde E° en büyüktür?", siklar: ["Zn-Cu", "Mg-Zn", "Cu-Ag", "Mg-Cu"], cevap: 3, zorluk: "orta" },
+    { soru: "Elektrolizde NaCl eriyiği kullanılırsa, anotta hangi gaz açığa çıkar?", siklar: ["H₂", "O₂", "Cl₂", "Na"], cevap: 2, zorluk: "orta" },
+    { soru: "Bir pilin E° değeri sıfırdan küçükse, reaksiyon hangi yönde ilerler?", siklar: ["Kendiliğinden ilerler", "Ters yönde ilerler", "Dengededir", "Bilinmiyor"], cevap: 1, zorluk: "orta" },
+    { soru: "Korozyon hangi tür bir reaksiyondur?", siklar: ["İndirgenme", "Yükseltgenme", "Nötralleşme", "Hidroliz"], cevap: 1, zorluk: "orta" },
+    { soru: "Elektrolizde Al₂O₃ eriyiğinden 27 g Al elde etmek için kaç Coulomb elektrik gerekir? (Al:27)", siklar: ["96500", "193000", "289500", "386000"], cevap: 2, zorluk: "orta" },
+    { soru: "Aşağıdaki metallerden hangisi pasivleşme gösterir?", siklar: ["Fe", "Zn", "Al", "Mg"], cevap: 2, zorluk: "orta" },
+    { soru: "Bir pilin standart potansiyeli 25°C'de 1,0 V ise, 50°C'de potansiyeli nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Belirsiz"], cevap: 3, zorluk: "orta" },
+    { soru: "Elektrolizde CuSO₄ çözeltisinden 3,2 g Cu çökmesi için kaç mol elektron gerekir? (Cu:64)", siklar: ["0,05", "0,1", "0,2", "0,4"], cevap: 1, zorluk: "orta" },
+    
+    // Zor
+    { soru: "Bir elektroliz hücresinde 2 A akım 4825 saniye uygulanıyor. Çözeltide hem Cu²⁺ hem Ag⁺ var. Hangi metal önce çöker?", siklar: ["Cu", "Ag", "Her ikisi birden", "Hiçbiri"], cevap: 1, zorluk: "zor" },
+    { soru: "Zn + 2Ag⁺ → Zn²⁺ + 2Ag reaksiyonunun E° değeri kaçtır? (Zn²⁺/Zn: -0,76 V, Ag⁺/Ag: +0,80 V)", siklar: ["1,46", "1,56", "1,66", "1,76"], cevap: 1, zorluk: "zor" },
+    { soru: "Elektrolizde 0,5 A akım 19300 saniye uygulanırsa, Al₂O₃'ten kaç g Al elde edilir? (Al:27)", siklar: ["0,9", "1,8", "2,7", "3,6"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir pilin E°=1,5 V ve n=2. ΔG° kaç kJ/mol'dür?", siklar: ["-144,8", "-289,6", "-434,4", "-579,2"], cevap: 1, zorluk: "zor" },
+    { soru: "Nernst denklemi: E = E° - (RT/nF) ln Q. 25°C'de (RT/F) ln10 değeri yaklaşık kaçtır?", siklar: ["0,0257", "0,0592", "0,118", "0,236"], cevap: 1, zorluk: "zor" },
+    { soru: "Elektrolizde 1 L 0,1 M CuSO₄ çözeltisinden tüm Cu²⁺'leri çöktürmek için kaç Coulomb gerekir?", siklar: ["4825", "9650", "19300", "38600"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki çiftlerden hangisi galvanik pil oluşturamaz?", siklar: ["Zn-Cu", "Ag-Au", "Fe-Fe²⁺", "Mg-Al"], cevap: 2, zorluk: "zor" },
+    { soru: "Bir pilin E° değeri 1,0 V ve reaksiyonun entropisi pozitif. Sıcaklık artırılırsa E nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Belirsiz"], cevap: 0, zorluk: "zor" },
+    { soru: "Elektrolizde 2 A akım 9650 s uygulanırsa, hem Cu²⁺ hem Ni²⁺ içeren çözeltiden toplam kaç g metal çöker? (Cu:64, Ni:59)", siklar: ["3,2", "6,4", "9,6", "12,8"], cevap: 1, zorluk: "zor" },
+    { soru: "Cr₂O₇²⁻ + 14H⁺ + 6e⁻ → 2Cr³⁺ + 7H₂O (E°=1,33 V). Bu yarı reaksiyonun standart potansiyelini pH=3'te hesaplayın.", siklar: ["0,92", "1,04", "1,16", "1,28"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir elektroliz hücresinde 5 A akım 1930 saniye uygulanıyor. Çözeltide Fe²⁺ ve Fe³⁺ var. Hangi iyon önce indirgenir?", siklar: ["Fe²⁺", "Fe³⁺", "Her ikisi birden", "Hiçbiri"], cevap: 1, zorluk: "zor" },
+    { soru: "Elektrolizde 0,1 M NaCl çözeltisi kullanılırsa, anotta O₂ mi Cl₂ mi açığa çıkar?", siklar: ["O₂", "Cl₂", "Her ikisi", "Na"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir pilin E°=2,0 V, n=2 ve T=298 K. E=1,9 V ise, reaksiyonun Q değeri yaklaşık kaçtır?", siklar: ["0,1", "1", "10", "100"], cevap: 2, zorluk: "zor" },
+    { soru: "Elektrolizde 1 A akım 96500 s uygulanırsa, CrCl₃ çözeltisinden kaç g Cr çöker? (Cr:52)", siklar: ["8,67", "17,33", "26,0", "34,67"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisinin E° değeri en büyüktür?", siklar: ["Li⁺ + e⁻ → Li", "K⁺ + e⁻ → K", "Na⁺ + e⁻ → Na", "Cs⁺ + e⁻ → Cs"], cevap: 3, zorluk: "zor" }
   ],
+  
   'organik': [
-    { soru: "CH₃-CH₂-OH hangi fonksiyonel gruba aittir?", siklar: ["Aldehit", "Keton", "Alkol", "Eter"], cevap: 2 },
-    { soru: "Metan'ın IUPAC adı nedir?", siklar: ["Metan", "Etan", "Propan", "Bütan"], cevap: 0 },
-    { soru: "Benzene bağlı olan fonksiyonel grubun adı nedir?", siklar: ["Fenil", "Benzil", "Tolil", "Ksilil"], cevap: 0 }
+    // Kolay
+    { soru: "CH₃-CH₂-OH hangi fonksiyonel gruba aittir?", siklar: ["Aldehit", "Keton", "Alkol", "Eter"], cevap: 2, zorluk: "kolay" },
+    { soru: "Metan'ın IUPAC adı nedir?", siklar: ["Metan", "Etan", "Propan", "Bütan"], cevap: 0, zorluk: "kolay" },
+    { soru: "Benzene bağlı olan fonksiyonel grubun adı nedir?", siklar: ["Fenil", "Benzil", "Tolil", "Ksilil"], cevap: 0, zorluk: "kolay" },
+    { soru: "Aşağıdaki bileşiklerden hangisi alkan'dır?", siklar: ["C₂H₄", "C₂H₆", "C₂H₂", "C₆H₆"], cevap: 1, zorluk: "kolay" },
+    { soru: "Alkenlerin genel formülü nedir?", siklar: ["CₙH₂ₙ₊₂", "CₙH₂ₙ", "CₙH₂ₙ₋₂", "CₙHₙ"], cevap: 1, zorluk: "kolay" },
+    { soru: "Aşağıdaki maddelerden hangisi aromatik bileşiktir?", siklar: ["Cyclohexane", "Benzene", "Hexane", "Cyclohexene"], cevap: 1, zorluk: "kolay" },
+    { soru: "CH₃COOH hangi fonksiyonel gruba sahiptir?", siklar: ["Alkol", "Aldehit", "Karbonik asit", "Karboksilik asit"], cevap: 3, zorluk: "kolay" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisi hidrojenasyon reaksiyonudur?", siklar: ["Alkan → Alken", "Alken → Alkan", "Alkol → Aldehit", "Aldehit → Karboksilik asit"], cevap: 1, zorluk: "kolay" },
+    { soru: "Etanol'ün oksidasyonuyla ne oluşur?", siklar: ["Etan", "Etanal", "Etanik asit", "Eten"], cevap: 1, zorluk: "kolay" },
+    { soru: "Aşağıdaki bileşiklerden hangisi izomerdir?", siklar: ["Metan-Etan", "Propan-Butan", "n-Butan-izobutan", "Eten-Etan"], cevap: 2, zorluk: "kolay" },
+    
+    // Orta
+    { soru: "Aşağıdaki reaksiyonlardan hangisi eliminasyon reaksiyonudur?", siklar: ["Alken + H₂ → Alkan", "Alkol → Alken + H₂O", "Alkan + Cl₂ → Kloroalkan", "Aldehit + Ag⁺ → Karboksilik asit"], cevap: 1, zorluk: "orta" },
+    { soru: "SN1 reaksiyon mekanizmasında hızı belirleyen adım nedir?", siklar: ["Nükleofilin saldırısı", "Karboniyum iyonu oluşumu", "Ayrılma", "Yeniden düzenlenme"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki karboniyum iyonlarından hangisi en kararlıdır?", siklar: ["Metil", "1°", "2°", "3°"], cevap: 3, zorluk: "orta" },
+    { soru: "Markovnikov kuralına göre, asimetrik alkenlere H-X ekleme sonucu hangi ürün oluşur?", siklar: ["X daha az hidrojenli karbona bağlanır", "X daha çok hidrojenli karbona bağlanır", "Rastgele", "Her iki ürün eşit"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki bileşiklerden hangisi en kolay nükleofilik aromatik substitusyon yapar?", siklar: ["Klorobenzene", "p-Nitroklorobenzene", "Toluene", "Aniline"], cevap: 1, zorluk: "orta" },
+    { soru: "Grignard reaktifi (RMgX) hangi tür reaksiyonlarda kullanılır?", siklar: ["Oksidasyon", "İndirgenme", "Karbon-karbon bağ oluşumu", "Hidroliz"], cevap: 2, zorluk: "orta" },
+    { soru: "Aşağıdaki aldehitlerden hangisi en kolay nükleofilik saldırıya uğrar?", siklar: ["Formaldehit", "Asetaldehit", "Benzaldehit", "Aseton"], cevap: 0, zorluk: "orta" },
+    { soru: "Diels-Alder reaksiyonu hangi tür bir reaksiyondur?", siklar: ["[2+2] Sikloaddisyon", "[4+2] Sikloaddisyon", "Elektrosiklik", "Sigmatropik"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki bileşiklerden hangisi en kolay enolize olur?", siklar: ["Asetaldehit", "Aseton", "Dietilketon", "Asetofenon"], cevap: 0, zorluk: "orta" },
+    { soru: "E1 ve E2 reaksiyonları arasındaki temel fark nedir?", siklar: ["Sıcaklık", "Basınç", "Mekanizmada adım sayısı", "Katalizör"], cevap: 2, zorluk: "orta" },
+    { soru: "Aşağıdaki reaktiflerden hangisi alkeni epoksit'e çevirir?", siklar: ["KMnO₄", "O₃", "mCPBA", "H₂/Pd"], cevap: 2, zorluk: "orta" },
+    { soru: "Friedel-Crafts alkilasyonunda hangi tür katalizör kullanılır?", siklar: ["Asit", "Baz", "Lewis asidi (AlCl₃)", "Metal"], cevap: 2, zorluk: "orta" },
+    { soru: "Aşağıdaki bileşiklerden hangisi en kolay okside olur?", siklar: ["1° Alkol", "2° Alkol", "3° Alkol", "Eter"], cevap: 0, zorluk: "orta" },
+    { soru: "Wittig reaksiyonu hangi tür bileşikleri üretir?", siklar: ["Alkin", "Alken", "Alkan", "Aromatik"], cevap: 1, zorluk: "orta" },
+    { soru: "Aşağıdaki karboksilik asitlerden hangisi en güçlü asittir?", siklar: ["Asetik asit", "Kloroasetik asit", "Dikloroasetik asit", "Trikloroasetik asit"], cevap: 3, zorluk: "orta" },
+    
+    // Zor
+    { soru: "Aşağıdaki reaksiyonlardan hangisi Hofmann eliminasyonu ile elde edilebilir?", siklar: ["En az substitüe alken", "En çok substitüe alken", "Aromatik bileşik", "Alkin"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir bileşik C₅H₁₀ formülüne sahip ve optik aktif. Bu bileşik hangi yapıda olabilir?", siklar: ["Cyclopentane", "1-Penten", "2-Metil-1-buten", "3-Metil-1-buten"], cevap: 2, zorluk: "zor" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisi pinakol-pinakolon rearrangement'dır?", siklar: ["Diol → Keton", "Alkol → Alken", "Aldehit → Karboksilik asit", "Alken → Epoksit"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir bileşik C₄H₈O formülüne sahip ve iodoform testi pozitif. Bu bileşik hangisi olabilir?", siklar: ["Butanal", "2-Butanon", "Tetrahidrofuran", "Bütanol"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisi Birch reduksiyonudur?", siklar: ["Aromatik → Sikloheksen", "Alken → Alkan", "Keton → Alkol", "Alkin → Alken"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir bileşik C₃H₆O formülüne sahip, Tollens testi pozitif ve iodoform testi negatif. Bu bileşik nedir?", siklar: ["Aseton", "Propanal", "Alil alkol", "Propilen oksit"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisi Claisen kondensasyonudur?", siklar: ["Ester + Ester → β-Keto ester", "Aldehit + Aldehit → Aldol", "Ester + Grignard → Alkol", "Asit + Alkol → Ester"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir bileşik C₆H₁₂ formülüne sahip ve ozonoliz sonucu sadece asetaldehit veriyor. Bu bileşik hangisidir?", siklar: ["Cyclohexane", "1-Hexen", "2,3-Dimetil-2-buten", "3-Hexen"], cevap: 3, zorluk: "zor" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisi Mannich reaksiyonudur?", siklar: ["Aldehit + Amin + Aktif metilen bileşiği", "Aldehit + Alkol → Hemiasetal", "Keton + Hidrazin → Hidrazon", "Ester + Amin → Amid"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir bileşik C₅H₁₀O formülüne sahip, 2,4-DNP testi pozitif ve iodoform testi pozitif. Bu bileşik hangisi olabilir?", siklar: ["Pentanal", "2-Pentanon", "3-Pentanon", "Cyclopentanon"], cevap: 1, zorluk: "zor" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisi Beckmann rearrangement'dır?", siklar: ["Aldoksime → Amid", "Ketoksime → Amid", "Nitril → Amin", "Amin → Nitril"], cevap: 1, zorluk: "zor" },
+    { soru: "Bir bileşik C₇H₈ formülüne sahip ve KMnO₄ ile oksidasyon sonucu benzoik asit veriyor. Bu bileşik nedir?", siklar: ["Toluene", "Stiren", "Cycloheptatriene", "Benzil alkol"], cevap: 0, zorluk: "zor" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisi Perkin reaksiyonudur?", siklar: ["Aromatik aldehit + Anhidrit → α,β-Doğrusal asit", "Aldehit + Keton → Aldol", "Ester + Ester → β-Keto ester", "Aldehit + Amin → İmin"], cevap: 0, zorluk: "zor" },
+    { soru: "Bir bileşik C₄H₆ formülüne sahip ve 1 mol H₂ ile reaksiyona girdiğinde 2 farklı ürün veriyor. Bu bileşik hangisi olabilir?", siklar: ["1,3-Butadien", "1-Bütin", "2-Bütin", "Cyclobutene"], cevap: 0, zorluk: "zor" },
+    { soru: "Aşağıdaki reaksiyonlardan hangisi Cannizzaro reaksiyonudur?", siklar: ["Aldehit (α-H yok) → Alkol + Asit", "Aldehit + Grignard → Alkol", "Keton + Hidrazin → Hidrazon", "Ester + Su → Asit + Alkol"], cevap: 0, zorluk: "zor" }
   ]
 };
 
+// ============================================
+// DEĞİŞKENLER
+// ============================================
 let aktifKonu = '';
+let seciliSoruSayisi = 10;
 let aktifSorular = [];
 let soruIndex = 0;
 let dogruSayisi = 0;
@@ -399,10 +1067,14 @@ let yanlisSayisi = 0;
 let skor = 0;
 let sesAcik = false;
 let cevaplandi = false;
+let ozelSorular = [];
 
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
 
+// ============================================
+// SES FONKSİYONLARI
+// ============================================
 function sesToggle() {
   sesAcik = !sesAcik;
   const btn = document.getElementById('sesBtn');
@@ -439,19 +1111,167 @@ function sesCal(tip) {
   }
 }
 
-function baslatTest(konu) {
+// ============================================
+// KONU SEÇİMİ
+// ============================================
+function konuSec(konu, btn) {
   aktifKonu = konu;
-  aktifSorular = [...sorular[konu]].sort(() => Math.random() - 0.5);
+  document.querySelectorAll('.konu-btn').forEach(b => b.classList.remove('secili'));
+  btn.classList.add('secili');
+}
+
+// ============================================
+// SORU SAYISI SEÇİMİ
+// ============================================
+function soruSayisiSec(sayi, btn) {
+  seciliSoruSayisi = sayi;
+  document.querySelectorAll('.soru-sayisi-btn').forEach(b => b.classList.remove('secili'));
+  btn.classList.add('secili');
+}
+
+// ============================================
+// ÖZEL SORU EKLEME
+// ============================================
+let seciliDogruCevap = -1;
+
+function dogruSec(index, btn) {
+  seciliDogruCevap = index;
+  document.querySelectorAll('.dogru-btn').forEach(b => b.classList.remove('secili'));
+  btn.classList.add('secili');
+}
+
+function soruEkle() {
+  const soruMetni = document.getElementById('ozel-soru-metni').value.trim();
+  const sikA = document.getElementById('sik-a').value.trim();
+  const sikB = document.getElementById('sik-b').value.trim();
+  const sikC = document.getElementById('sik-c').value.trim();
+  const sikD = document.getElementById('sik-d').value.trim();
+  
+  if (!soruMetni || !sikA || !sikB || !sikC || !sikD) {
+    alert('Lütfen tüm alanları doldurun!');
+    return;
+  }
+  if (seciliDogruCevap === -1) {
+    alert('Lütfen doğru cevabı seçin!');
+    return;
+  }
+  
+  const yeniSoru = {
+    soru: soruMetni,
+    siklar: [sikA, sikB, sikC, sikD],
+    cevap: seciliDogruCevap,
+    zorluk: 'ozel'
+  };
+  
+  ozelSorular.push(yeniSoru);
+  gosterEklenenSorular();
+  
+  // Formu temizle
+  document.getElementById('ozel-soru-metni').value = '';
+  document.getElementById('sik-a').value = '';
+  document.getElementById('sik-b').value = '';
+  document.getElementById('sik-c').value = '';
+  document.getElementById('sik-d').value = '';
+  seciliDogruCevap = -1;
+  document.querySelectorAll('.dogru-btn').forEach(b => b.classList.remove('secili'));
+}
+
+function gosterEklenenSorular() {
+  const container = document.getElementById('eklenen-sorular');
+  if (ozelSorular.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+  
+  let html = '<div style="font-size: 12px; color: var(--tx3); margin-bottom: 8px;">Eklenen Sorular (' + ozelSorular.length + '):</div>';
+  ozelSorular.forEach((s, i) => {
+    html += `<div class="eklenen-soru">
+      <span class="eklenen-soru-text">${i+1}. ${s.soru.substring(0, 40)}...</span>
+      <button class="soru-sil" onclick="soruSil(${i})">✕</button>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function soruSil(index) {
+  ozelSorular.splice(index, 1);
+  gosterEklenenSorular();
+}
+
+// ============================================
+// TEST BAŞLATMA
+// ============================================
+function baslatTest() {
+  if (!aktifKonu) {
+    alert('Lütfen bir konu seçin!');
+    return;
+  }
+  
+  // Soruları karıştır ve seç
+  let tumSorular = [...soruHavuzu[aktifKonu]];
+  
+  // Zorluk dağılımı: Kolay 30%, Orta 50%, Zor 20%
+  let kolay = tumSorular.filter(s => s.zorluk === 'kolay');
+  let orta = tumSorular.filter(s => s.zorluk === 'orta');
+  let zor = tumSorular.filter(s => s.zorluk === 'zor');
+  
+  // Karıştır
+  kolay.sort(() => Math.random() - 0.5);
+  orta.sort(() => Math.random() - 0.5);
+  zor.sort(() => Math.random() - 0.5);
+  
+  let secilecek = [];
+  let kSayi = Math.floor(seciliSoruSayisi * 0.3);
+  let oSayi = Math.floor(seciliSoruSayisi * 0.5);
+  let zSayi = seciliSoruSayisi - kSayi - oSayi;
+  
+  secilecek = [
+    ...kolay.slice(0, kSayi),
+    ...orta.slice(0, oSayi),
+    ...zor.slice(0, zSayi)
+  ];
+  
+  // Eksik kalan varsa tamamla
+  while (secilecek.length < seciliSoruSayisi && tumSorular.length > secilecek.length) {
+    let kalan = tumSorular.filter(s => !secilecek.includes(s));
+    if (kalan.length > 0) {
+      secilecek.push(kalan[0]);
+    } else break;
+  }
+  
+  // Özel soruları ekle
+  aktifSorular = [...secilecek, ...ozelSorular];
+  
+  // Tekrar karıştır
+  aktifSorular.sort(() => Math.random() - 0.5);
+  
   soruIndex = 0;
   dogruSayisi = 0;
   yanlisSayisi = 0;
   skor = 0;
+  
   document.getElementById('konu-secimi').style.display = 'none';
   document.getElementById('test-ekrani').style.display = 'block';
   document.getElementById('sonuc-ekrani').style.display = 'none';
+  
+  const konuIsimleri = {
+    'atom': 'Atom ve Periyodik',
+    'mol': 'Mol ve Kimyasal',
+    'gaz': 'Gazlar',
+    'cozelti': 'Çözeltiler',
+    'denge': 'Kimyasal Denge',
+    'asitbaz': 'Asit-Baz',
+    'elektro': 'Elektrokimya',
+    'organik': 'Organik Kimya'
+  };
+  document.getElementById('konu-baslik').textContent = konuIsimleri[aktifKonu];
+  
   gosterSoru();
 }
 
+// ============================================
+// SORU GÖSTERME
+// ============================================
 function gosterSoru() {
   if (soruIndex >= aktifSorular.length) {
     testiBitir();
@@ -464,6 +1284,7 @@ function gosterSoru() {
   document.getElementById('yanlis-sayisi').textContent = yanlisSayisi;
   document.getElementById('skor').textContent = skor;
   document.getElementById('soru-metin').textContent = soru.soru;
+  
   const harfler = ['A', 'B', 'C', 'D'];
   let siklarHTML = '';
   soru.siklar.forEach((sik, index) => {
@@ -475,11 +1296,15 @@ function gosterSoru() {
   document.getElementById('siklar').innerHTML = siklarHTML;
 }
 
+// ============================================
+// CEVAP KONTROL
+// ============================================
 function cevapKontrol(secilen) {
   if (cevaplandi) return;
   cevaplandi = true;
   const soru = aktifSorular[soruIndex];
   const siklar = document.querySelectorAll('.sik');
+  
   if (secilen === soru.cevap) {
     dogruSayisi++;
     skor += 10;
@@ -491,28 +1316,51 @@ function cevapKontrol(secilen) {
     siklar[soru.cevap].classList.add('dogru');
     sesCal('yanlis');
   }
+  
   document.getElementById('dogru-sayisi').textContent = dogruSayisi;
   document.getElementById('yanlis-sayisi').textContent = yanlisSayisi;
   document.getElementById('skor').textContent = skor;
+  
   setTimeout(() => {
     soruIndex++;
     gosterSoru();
   }, 1500);
 }
 
+// ============================================
+// TEST BİTİRME
+// ============================================
 function testiBitir() {
   sesCal('bitis');
-  const kayitliSkor = localStorage.getItem('ronya_test_skor') || '0';
+  
+  const toplamSoru = dogruSayisi + yanlisSayisi;
+  const oran = toplamSoru > 0 ? (dogruSayisi / toplamSoru) * 100 : 0;
+  
+  const kayitliSkor = localStorage.getItem('ronya_test_skor_' + aktifKonu) || '0';
   if (skor > parseInt(kayitliSkor)) {
-    localStorage.setItem('ronya_test_skor', skor.toString());
+    localStorage.setItem('ronya_test_skor_' + aktifKonu, skor.toString());
   }
+  
   document.getElementById('test-ekrani').style.display = 'none';
   document.getElementById('sonuc-ekrani').style.display = 'block';
   document.getElementById('sonuc-dogru').textContent = dogruSayisi;
   document.getElementById('sonuc-yanlis').textContent = yanlisSayisi;
   document.getElementById('sonuc-skor').textContent = skor;
-  document.getElementById('en-yuksek-skor').textContent = localStorage.getItem('ronya_test_skor') || '0';
-  const oran = dogruSayisi / (dogruSayisi + yanlisSayisi) * 100;
+  document.getElementById('en-yuksek-skor').textContent = localStorage.getItem('ronya_test_skor_' + aktifKonu) || '0';
+  document.getElementById('basari-orani').textContent = '%' + oran.toFixed(1);
+  
+  // Bar animasyonu
+  const bar = document.getElementById('sonuc-bar');
+  bar.style.width = '0%';
+  setTimeout(() => { bar.style.width = oran + '%'; }, 100);
+  
+  // Bar rengi
+  bar.className = 'sonuc-bar-fill';
+  if (oran >= 80) bar.classList.add('iyi');
+  else if (oran >= 60) bar.classList.add('orta');
+  else bar.classList.add('kotu');
+  
+  // Sonuç mesajı
   if (oran >= 80) {
     document.getElementById('sonuc-emoji').textContent = '🏆';
     document.getElementById('sonuc-baslik').textContent = 'Mükemmel!';
@@ -528,11 +1376,19 @@ function testiBitir() {
   }
 }
 
+// ============================================
+// YENİ TEST
+// ============================================
 function yeniTest() {
   document.getElementById('sonuc-ekrani').style.display = 'none';
   document.getElementById('konu-secimi').style.display = 'block';
+  ozelSorular = [];
+  gosterEklenenSorular();
 }
 
+// ============================================
+// KLAVYE KISAYOLLARI
+// ============================================
 document.addEventListener('keydown', (e) => {
   if (document.getElementById('test-ekrani').style.display === 'none') return;
   const harfler = ['A', 'B', 'C', 'D'];
@@ -547,4 +1403,3 @@ document.addEventListener('keydown', (e) => {
 
 </body>
 </html>
-
