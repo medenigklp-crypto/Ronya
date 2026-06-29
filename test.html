@@ -10,6 +10,10 @@
 <meta name="theme-color" content="#16213e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 
@@ -25,6 +29,7 @@
   --rd: #ef4444;
   --yw: #f59e0b;
   --cy: #06b6d4;
+  --or: #e8973a;
   --tx: #f1f5f9;
   --tx2: #94a3b8;
   --tx3: #475569;
@@ -133,7 +138,6 @@ header {
 .soru-sayisi-btn:hover { border-color: var(--ac); }
 .soru-sayisi-btn.secili { border-color: var(--ac); background: rgba(99,102,241,0.15); color: var(--ac2); }
 
-/* === ÖZEL SORU PANELİ - GÜNCELLENMİŞ === */
 .ozel-soru-panel {
   background: var(--sf);
   border: 1px solid var(--br);
@@ -154,7 +158,6 @@ header {
 
 .panel-baslik .icon { font-size: 18px; }
 
-/* PDF/Galeri Yükleme Alanı */
 .yukleme-alani {
   border: 2px dashed var(--br2);
   border-radius: var(--r);
@@ -171,28 +174,83 @@ header {
   background: rgba(99,102,241,0.05);
 }
 
-.yukleme-alani .yukle-icon {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
+.yukleme-alani .yukle-icon { font-size: 32px; margin-bottom: 8px; }
+.yukleme-alani .yukle-baslik { font-size: 14px; font-weight: 600; color: var(--tx); margin-bottom: 4px; }
+.yukleme-alani .yukle-aciklama { font-size: 12px; color: var(--tx3); }
+.yukleme-alani input[type="file"] { display: none; }
 
-.yukleme-alani .yukle-baslik {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--tx);
-  margin-bottom: 4px;
-}
-
-.yukleme-alani .yukle-aciklama {
-  font-size: 12px;
-  color: var(--tx3);
-}
-
-.yukleme-alani input[type="file"] {
+.pdf-viewer {
   display: none;
+  margin-bottom: 16px;
+  background: var(--sf2);
+  border-radius: var(--r);
+  border: 1px solid var(--br);
+  overflow: hidden;
 }
 
-/* Resim Önizleme */
+.pdf-viewer.active { display: block; }
+
+.pdf-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--sf);
+  border-bottom: 1px solid var(--br);
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+
+.pdf-toolbar button {
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  border-radius: var(--rsm);
+  padding: 6px 10px;
+  color: var(--tx);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pdf-toolbar button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.pdf-toolbar .pdf-page-info {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: var(--tx2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pdf-canvas-wrap {
+  position: relative;
+  overflow: auto;
+  max-height: 400px;
+  background: #1a1a2e;
+  -webkit-overflow-scrolling: touch;
+}
+
+#pdf-render-canvas { display: block; margin: 0 auto; }
+#pdf-select-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.pdf-sel-box {
+  position: absolute;
+  border: 2.5px solid var(--or);
+  background: rgba(232,151,58,0.15);
+  pointer-events: none;
+  display: none;
+  border-radius: 3px;
+}
+
 .resim-onizleme {
   position: relative;
   margin-bottom: 16px;
@@ -202,10 +260,7 @@ header {
   display: none;
 }
 
-.resim-onizleme img {
-  width: 100%;
-  display: block;
-}
+.resim-onizleme img { width: 100%; display: block; }
 
 .resim-onizleme .resim-kaldir {
   position: absolute;
@@ -224,7 +279,6 @@ header {
   justify-content: center;
 }
 
-/* Kırpma Araçları */
 .kirpma-araclari {
   display: none;
   margin-bottom: 16px;
@@ -258,17 +312,8 @@ header {
   cursor: pointer;
 }
 
-.kirpma-butonlar button.onayla {
-  background: var(--gr);
-  color: #fff;
-  border-color: var(--gr);
-}
-
-.kirpma-butonlar button.iptal {
-  background: var(--rd);
-  color: #fff;
-  border-color: var(--rd);
-}
+.kirpma-butonlar button.onayla { background: var(--gr); color: #fff; border-color: var(--gr); }
+.kirpma-butonlar button.iptal { background: var(--rd); color: #fff; border-color: var(--rd); }
 
 .form-grup { margin-bottom: 12px; }
 
@@ -296,12 +341,8 @@ header {
 
 .form-input:focus, .form-textarea:focus { border-color: var(--ac); }
 
-.form-textarea {
-  min-height: 80px;
-  resize: vertical;
-}
+.form-textarea { min-height: 80px; resize: vertical; }
 
-/* 5 Şık Girişi */
 .siklar-input {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -343,17 +384,18 @@ header {
   display: flex;
   gap: 8px;
   margin-top: 8px;
+  flex-wrap: wrap;
 }
 
 .dogru-btn {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 2px solid var(--br);
   background: var(--sf2);
   color: var(--tx2);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -387,10 +429,7 @@ header {
   margin-bottom: 16px;
 }
 
-/* Eklenen Sorular Listesi */
-.eklenen-sorular {
-  margin-top: 16px;
-}
+.eklenen-sorular { margin-top: 16px; }
 
 .eklenen-sorular-baslik {
   font-size: 13px;
@@ -400,6 +439,7 @@ header {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .eklenen-sorular-baslik .badge {
@@ -422,18 +462,16 @@ header {
 }
 
 .eklenen-soru .soru-resim {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: var(--rsm);
   object-fit: cover;
   border: 1px solid var(--br);
   flex-shrink: 0;
+  cursor: pointer;
 }
 
-.eklenen-soru .soru-bilgi {
-  flex: 1;
-  min-width: 0;
-}
+.eklenen-soru .soru-bilgi { flex: 1; min-width: 0; }
 
 .eklenen-soru .soru-metin-kisa {
   font-size: 12px;
@@ -466,13 +504,17 @@ header {
   background: none;
   border: none;
   color: var(--rd);
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   padding: 4px;
   flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Test Ekranı */
 .test-card {
   background: var(--sf);
   border: 1px solid var(--br);
@@ -515,6 +557,7 @@ header {
   align-items: center;
   gap: 12px;
   text-align: left;
+  font-family: 'Inter', sans-serif;
 }
 
 .sik:hover { border-color: var(--ac); }
@@ -568,7 +611,6 @@ header {
   margin-top: 4px;
 }
 
-/* Sonuç Ekranı */
 .sonuc-ekrani {
   text-align: center;
   padding: 40px 20px;
@@ -669,6 +711,8 @@ header {
   .konu-grid { grid-template-columns: 1fr; }
   .siklar-input { grid-template-columns: 1fr; }
   .sonuc-stats { grid-template-columns: 1fr; }
+  .pdf-toolbar { padding: 8px; gap: 4px; }
+  .pdf-toolbar button { padding: 5px 8px; font-size: 11px; }
 }
 </style>
 </head>
@@ -706,7 +750,7 @@ header {
       <button class="soru-sayisi-btn" onclick="soruSayisiSec(40, this)">40</button>
     </div>
 
-    <!-- ÖZEL SORU EKLEME - GÜNCELLENMİŞ -->
+    <!-- ÖZEL SORU EKLEME -->
     <div class="ozel-soru-panel">
       <div class="panel-baslik">
         <span class="icon">➕</span>
@@ -720,6 +764,27 @@ header {
         <div class="yukle-aciklama">PDF veya JPG/PNG dosyası seçin</div>
       </div>
       <input type="file" id="dosya-input" accept=".pdf,image/*" onchange="dosyaYukle(event)">
+      
+      <!-- PDF Viewer -->
+      <div class="pdf-viewer" id="pdf-viewer">
+        <div class="pdf-toolbar">
+          <button onclick="pdfPrevPage()" id="pdf-btn-prev" disabled>◀</button>
+          <span class="pdf-page-info" id="pdf-page-info">— / —</span>
+          <button onclick="pdfNextPage()" id="pdf-btn-next" disabled>▶</button>
+          <button onclick="pdfZoomOut()">−</button>
+          <button onclick="pdfZoomIn()">+</button>
+          <button onclick="pdfZoomReset()">↺</button>
+          <button onclick="pdfKapat()" style="background:var(--rd);color:#fff;">✕</button>
+        </div>
+        <div class="pdf-canvas-wrap" id="pdf-canvas-wrap">
+          <canvas id="pdf-render-canvas"></canvas>
+          <canvas id="pdf-select-canvas"></canvas>
+          <div class="pdf-sel-box" id="pdf-sel-box"></div>
+        </div>
+        <div style="padding:10px 14px;background:var(--sf);border-top:1px solid var(--br);font-size:12px;color:var(--tx2);text-align:center;">
+          📐 PDF üzerinde sürükleyerek soru alanını seçin
+        </div>
+      </div>
       
       <!-- Resim Önizleme -->
       <div class="resim-onizleme" id="resim-onizleme">
@@ -873,14 +938,256 @@ header {
 
 <button class="ses-toggle" id="sesBtn" onclick="sesToggle()">🔇</button>
 
-<!-- === BÖLÜM 2 BAŞLIYOR === -->
 <script>
+// ============================================
+// PDF.js DEĞİŞKENLERİ
+// ============================================
+let pdfDoc = null;
+let pdfCurrentPage = 1;
+let pdfTotalPages = 0;
+let pdfScale = 1.5;
+let pdfBaseScale = 1.5;
+let pdfSelecting = false;
+let pdfStartX = 0, pdfStartY = 0, pdfCurX = 0, pdfCurY = 0;
+
+const pdfCanvas = document.getElementById('pdf-render-canvas');
+const pdfSelCanvas = document.getElementById('pdf-select-canvas');
+const pdfSelBox = document.getElementById('pdf-sel-box');
+const pdfCtx = pdfCanvas.getContext('2d');
+
+// ============================================
+// PDF YÜKLEME VE GÖRÜNTÜLEME
+// ============================================
+async function dosyaYukle(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  if (file.type === 'application/pdf') {
+    await pdfYukle(file);
+    return;
+  }
+  
+  if (file.type.startsWith('image/')) {
+    resimYukle(file);
+    return;
+  }
+  
+  alert('Desteklenmeyen dosya formatı. Lütfen PDF veya JPG/PNG seçin.');
+}
+
+async function pdfYukle(file) {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    pdfDoc = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+    pdfTotalPages = pdfDoc.numPages;
+    pdfCurrentPage = 1;
+    
+    const page = await pdfDoc.getPage(1);
+    const viewport = page.getViewport({scale: 1});
+    pdfBaseScale = Math.min((window.innerWidth - 32) / viewport.width, 2);
+    pdfScale = pdfBaseScale;
+    
+    document.getElementById('pdf-viewer').classList.add('active');
+    await pdfRenderPage(pdfCurrentPage);
+    
+  } catch (e) {
+    alert('PDF yüklenirken hata: ' + e.message);
+    console.error(e);
+  }
+}
+
+async function pdfRenderPage(num) {
+  if (!pdfDoc) return;
+  
+  const page = await pdfDoc.getPage(num);
+  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  const viewport = page.getViewport({scale: pdfScale * dpr});
+  
+  pdfCanvas.width = viewport.width;
+  pdfCanvas.height = viewport.height;
+  pdfCanvas.style.width = Math.round(viewport.width / dpr) + 'px';
+  pdfCanvas.style.height = Math.round(viewport.height / dpr) + 'px';
+  
+  pdfSelCanvas.width = viewport.width;
+  pdfSelCanvas.height = viewport.height;
+  pdfSelCanvas.style.width = Math.round(viewport.width / dpr) + 'px';
+  pdfSelCanvas.style.height = Math.round(viewport.height / dpr) + 'px';
+  
+  await page.render({
+    canvasContext: pdfCtx,
+    viewport: viewport
+  }).promise;
+  
+  document.getElementById('pdf-page-info').textContent = num + ' / ' + pdfTotalPages;
+  document.getElementById('pdf-btn-prev').disabled = num <= 1;
+  document.getElementById('pdf-btn-next').disabled = num >= pdfTotalPages;
+}
+
+function pdfPrevPage() {
+  if (pdfCurrentPage > 1) {
+    pdfCurrentPage--;
+    pdfRenderPage(pdfCurrentPage);
+  }
+}
+
+function pdfNextPage() {
+  if (pdfCurrentPage < pdfTotalPages) {
+    pdfCurrentPage++;
+    pdfRenderPage(pdfCurrentPage);
+  }
+}
+
+function pdfZoomIn() {
+  pdfScale = Math.min(pdfScale * 1.2, pdfBaseScale * 5);
+  pdfRenderPage(pdfCurrentPage);
+}
+
+function pdfZoomOut() {
+  pdfScale = Math.max(pdfScale / 1.2, pdfBaseScale * 0.3);
+  pdfRenderPage(pdfCurrentPage);
+}
+
+function pdfZoomReset() {
+  pdfScale = pdfBaseScale;
+  pdfRenderPage(pdfCurrentPage);
+}
+
+function pdfKapat() {
+  pdfDoc = null;
+  document.getElementById('pdf-viewer').classList.remove('active');
+  document.getElementById('dosya-input').value = '';
+}
+
+// ============================================
+// PDF ÜZERİNDE SEÇİM (Soru Kırpma)
+// ============================================
+function pdfGetPos(e) {
+  const r = pdfSelCanvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  const rx = src.clientX - r.left;
+  const ry = src.clientY - r.top;
+  const lw = parseFloat(pdfSelCanvas.style.width) || r.width;
+  const lh = parseFloat(pdfSelCanvas.style.height) || r.height;
+  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  return {
+    x: rx * (lw / r.width) * dpr,
+    y: ry * (lh / r.height) * dpr,
+    rx: rx,
+    ry: ry
+  };
+}
+
+function pdfStartSelect(e) {
+  e.preventDefault();
+  pdfSelecting = true;
+  const pos = pdfGetPos(e);
+  pdfStartX = pdfCurX = pos.x;
+  pdfStartY = pdfCurY = pos.y;
+  pdfSelBox.style.cssText = 'display:block;left:' + pos.rx + 'px;top:' + pos.ry + 'px;width:0;height:0;';
+}
+
+function pdfMoveSelect(e) {
+  if (!pdfSelecting) return;
+  e.preventDefault();
+  const pos = pdfGetPos(e);
+  pdfCurX = pos.x;
+  pdfCurY = pos.y;
+  pdfSelBox.style.left = Math.min(pdfStartX, pdfCurX) + 'px';
+  pdfSelBox.style.top = Math.min(pdfStartY, pdfCurY) + 'px';
+  pdfSelBox.style.width = Math.abs(pdfCurX - pdfStartX) + 'px';
+  pdfSelBox.style.height = Math.abs(pdfCurY - pdfStartY) + 'px';
+}
+
+function pdfEndSelect(e) {
+  if (!pdfSelecting) return;
+  pdfSelecting = false;
+  pdfSelBox.style.display = 'none';
+  pdfCropSelection();
+}
+
+pdfSelCanvas.addEventListener('touchstart', pdfStartSelect, {passive: false});
+pdfSelCanvas.addEventListener('touchmove', pdfMoveSelect, {passive: false});
+pdfSelCanvas.addEventListener('touchend', pdfEndSelect, {passive: false});
+
+pdfSelCanvas.addEventListener('mousedown', function(e) {
+  pdfStartSelect(e);
+  document.addEventListener('mousemove', pdfMoveSelect);
+  document.addEventListener('mouseup', function up(e) {
+    document.removeEventListener('mousemove', pdfMoveSelect);
+    document.removeEventListener('mouseup', up);
+    pdfEndSelect(e);
+  });
+});
+
+function pdfCropSelection() {
+  const x = Math.min(pdfStartX, pdfCurX);
+  const y = Math.min(pdfStartY, pdfCurY);
+  const w = Math.abs(pdfCurX - pdfStartX);
+  const h = Math.abs(pdfCurY - pdfStartY);
+  
+  if (w < 30 || h < 30) return;
+  
+  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  const tmp = document.createElement('canvas');
+  tmp.width = Math.round(w);
+  tmp.height = Math.round(h);
+  tmp.getContext('2d').drawImage(
+    pdfCanvas,
+    Math.round(x), Math.round(y),
+    Math.round(w), Math.round(h),
+    0, 0,
+    Math.round(w), Math.round(h)
+  );
+  
+  yuklenenResimBase64 = tmp.toDataURL('image/jpeg', 0.85);
+  yuklenenDosyaTipi = 'pdf';
+  
+  document.getElementById('resim-onizleme').style.display = 'block';
+  document.getElementById('onizleme-img').src = yuklenenResimBase64;
+  
+  pdfKapat();
+  
+  alert('✓ PDF\'den soru seçildi! Şimdi şıkları ve doğru cevabı girin.');
+}
+
+// ============================================
+// RESİM YÜKLEME (Galeri)
+// ============================================
+function resimYukle(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    yuklenenResimBase64 = e.target.result;
+    yuklenenDosyaTipi = 'galeri';
+    
+    document.getElementById('resim-onizleme').style.display = 'block';
+    document.getElementById('onizleme-img').src = yuklenenResimBase64;
+    document.getElementById('kirpma-araclari').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function resimKaldir() {
+  yuklenenResimBase64 = null;
+  yuklenenDosyaTipi = null;
+  document.getElementById('resim-onizleme').style.display = 'none';
+  document.getElementById('kirpma-araclari').style.display = 'none';
+  document.getElementById('dosya-input').value = '';
+}
+
+function kirpmaIptal() {
+  resimKaldir();
+}
+
+function kirpmaOnayla() {
+  document.getElementById('kirpma-araclari').style.display = 'none';
+  alert('Resim soru olarak kaydedildi. Şimdi şıkları ve doğru cevabı girin.');
+}
+
 // ============================================
 // SORU HAVUZU (Her konuda 40+ soru - 5 şık)
 // ============================================
 const soruHavuzu = {
   'atom': [
-    // Kolay (1-10)
     { soru: "1s orbitali en fazla kaç elektron alabilir?", siklar: ["2", "6", "10", "14", "8"], cevap: 0, zorluk: "kolay" },
     { soru: "Aşağıdaki elementlerden hangisi alkali metaldir?", siklar: ["Mg", "Na", "Al", "Si", "Cl"], cevap: 1, zorluk: "kolay" },
     { soru: "3. periyotta kaç element vardır?", siklar: ["8", "18", "32", "2", "10"], cevap: 0, zorluk: "kolay" },
@@ -891,7 +1198,6 @@ const soruHavuzu = {
     { soru: "İyonlaşma enerjisi periyotta soldan sağa doğru nasıl değişir?", siklar: ["Artar", "Azalır", "Değişmez", "Önce artar sonra azalır", "İki kez artar"], cevap: 0, zorluk: "kolay" },
     { soru: "d orbitalleri kaç tanedir?", siklar: ["3", "5", "7", "1", "9"], cevap: 1, zorluk: "kolay" },
     { soru: "Hidrojen atomunun elektron konfigürasyonu nedir?", siklar: ["1s¹", "1s²", "2s¹", "2p¹", "1p¹"], cevap: 0, zorluk: "kolay" },
-    // Orta (11-25)
     { soru: "Aşağıdaki elementlerden hangisinin elektron afinitesi en büyüktür?", siklar: ["Na", "Cl", "Ar", "K", "Ca"], cevap: 1, zorluk: "orta" },
     { soru: "4. periyodun son elementi olan Kr'nin elektron konfigürasyonu nedir?", siklar: ["[Ar] 3d¹⁰ 4s² 4p⁶", "[Ar] 4s² 3d¹⁰ 4p⁶", "[Ar] 4s² 4p⁶", "[Ar] 3d¹⁰ 4p⁶", "[Ar] 4p⁶"], cevap: 1, zorluk: "orta" },
     { soru: "Elektronegatiflik değeri en yüksek olan element hangisidir?", siklar: ["O", "F", "Cl", "N", "Ne"], cevap: 1, zorluk: "orta" },
@@ -907,7 +1213,6 @@ const soruHavuzu = {
     { soru: "Aşağıdaki iyonlardan hangisi paramanyetiktir?", siklar: ["Zn²⁺", "Cu⁺", "Fe²⁺", "Sc³⁺", "Ti⁴⁺"], cevap: 2, zorluk: "orta" },
     { soru: "Bir elementin 2. iyonlaşma enerjisi, 1. iyonlaşma enerjisinden genellikle nasıldır?", siklar: ["Daha küçük", "Daha büyük", "Eşit", "İlişkisiz", "Yarısı"], cevap: 1, zorluk: "orta" },
     { soru: "Aşağıdaki elementlerden hangisi aktinidtir?", siklar: ["La", "Ac", "Ce", "Th", "Pr"], cevap: 3, zorluk: "orta" },
-    // Zor (26-40)
     { soru: "Cr elementinin elektron konfigürasyonu nedir? (Anomali)", siklar: ["[Ar] 3d⁴ 4s²", "[Ar] 3d⁵ 4s¹", "[Ar] 3d⁶ 4s⁰", "[Ar] 3d³ 4s²", "[Ar] 3d⁴ 4s¹"], cevap: 1, zorluk: "zor" },
     { soru: "Aşağıdaki element çiftlerinden hangisinin metalik karakteri daha fazladır?", siklar: ["Na/K", "Mg/Ca", "K/Ca", "Al/Si", "Na/Mg"], cevap: 1, zorluk: "zor" },
     { soru: "Bir atomun n=4, l=3 kuantum sayılarına sahip elektronları kaç tanedir (maksimum)?", siklar: ["2", "6", "10", "14", "18"], cevap: 3, zorluk: "zor" },
@@ -1201,7 +1506,7 @@ const soruHavuzu = {
     { soru: "Aşağıdaki bileşiklerden hangisi en kolay nükleofilik aromatik substitusyon yapar?", siklar: ["Klorobenzene", "p-Nitroklorobenzene", "Toluene", "Aniline", "Fenol"], cevap: 1, zorluk: "orta" },
     { soru: "Grignard reaktifi (RMgX) hangi tür reaksiyonlarda kullanılır?", siklar: ["Oksidasyon", "İndirgenme", "Karbon-karbon bağ oluşumu", "Hidroliz", "Eliminasyon"], cevap: 2, zorluk: "orta" },
     { soru: "Aşağıdaki aldehitlerden hangisi en kolay nükleofilik saldırıya uğrar?", siklar: ["Formaldehit", "Asetaldehit", "Benzaldehit", "Aseton", "Propionaldehit"], cevap: 0, zorluk: "orta" },
-    { soru: "Diels-Alder reaksiyonu hangi tür bir reaksiyondur?", siklar: ["[2+2] Sikloaddisyon", "[4+2] Sikloaddisyon", "Elektrosiklik", "Sigmatropik", "[3+2] Sikloaddisyon"], cevap: 1, zorluk: "orta" },
+    { soru: "Diels-Alder reaksiyonu hangi tür bir reaksiyondur?", siklar: ["[2+2] Sikloaddisyon", "[4+2] Sikloaddisyon", "Elektrosiclik", "Sigmatropik", "[3+2] Sikloaddisyon"], cevap: 1, zorluk: "orta" },
     { soru: "Aşağıdaki bileşiklerden hangisi en kolay enolize olur?", siklar: ["Asetaldehit", "Aseton", "Dietilketon", "Asetofenon", "Benzaldehit"], cevap: 0, zorluk: "orta" },
     { soru: "E1 ve E2 reaksiyonları arasındaki temel fark nedir?", siklar: ["Sıcaklık", "Basınç", "Mekanizmada adım sayısı", "Katalizör", "Çözücü"], cevap: 2, zorluk: "orta" },
     { soru: "Aşağıdaki reaktiflerden hangisi alkeni epoksit'e çevirir?", siklar: ["KMnO₄", "O₃", "mCPBA", "H₂/Pd", "HBr"], cevap: 2, zorluk: "orta" },
@@ -1301,6 +1606,39 @@ function soruSayisiSec(sayi, btn) {
 }
 
 // ============================================
+// localStorage YARDIMCI FONKSİYONLARI
+// ============================================
+function localStorageKaydet(anahtar, deger) {
+  try {
+    localStorage.setItem(anahtar, JSON.stringify(deger));
+    return true;
+  } catch (e) {
+    console.error('localStorage kaydetme hatası:', e);
+    return false;
+  }
+}
+
+function localStorageGetir(anahtar) {
+  try {
+    const veri = localStorage.getItem(anahtar);
+    return veri ? JSON.parse(veri) : null;
+  } catch (e) {
+    console.error('localStorage okuma hatası:', e);
+    return null;
+  }
+}
+
+function localStorageSil(anahtar) {
+  try {
+    localStorage.removeItem(anahtar);
+    return true;
+  } catch (e) {
+    console.error('localStorage silme hatası:', e);
+    return false;
+  }
+}
+
+// ============================================
 // TEST BAŞLATMA
 // ============================================
 function baslatTest() {
@@ -1309,15 +1647,12 @@ function baslatTest() {
     return;
   }
   
-  // Soruları karıştır ve seç
   let tumSorular = [...soruHavuzu[aktifKonu]];
   
-  // Zorluk dağılımı: Kolay 30%, Orta 50%, Zor 20%
   let kolay = tumSorular.filter(s => s.zorluk === 'kolay');
   let orta = tumSorular.filter(s => s.zorluk === 'orta');
   let zor = tumSorular.filter(s => s.zorluk === 'zor');
   
-  // Karıştır
   kolay.sort(() => Math.random() - 0.5);
   orta.sort(() => Math.random() - 0.5);
   zor.sort(() => Math.random() - 0.5);
@@ -1333,7 +1668,6 @@ function baslatTest() {
     ...zor.slice(0, zSayi)
   ];
   
-  // Eksik kalan varsa tamamla
   while (secilecek.length < seciliSoruSayisi && tumSorular.length > secilecek.length) {
     let kalan = tumSorular.filter(s => !secilecek.includes(s));
     if (kalan.length > 0) {
@@ -1341,14 +1675,9 @@ function baslatTest() {
     } else break;
   }
   
-  // localStorage'dan kalıcı özel soruları al ve ekle
   let kaliciSorular = localStorageGetir('ronya_ozel_sorular') || [];
-  // Sadece bu konuya ait olanları filtrele (konu belirtilmemişse hepsi eklenebilir)
-  // Şimdilik tüm kalıcı soruları ekle, konu filtresi sonradan eklenebilir
   
   aktifSorular = [...secilecek, ...kaliciSorular];
-  
-  // Tekrar karıştır
   aktifSorular.sort(() => Math.random() - 0.5);
   
   soruIndex = 0;
@@ -1390,7 +1719,6 @@ function gosterSoru() {
   document.getElementById('yanlis-sayisi').textContent = yanlisSayisi;
   document.getElementById('skor').textContent = skor;
   
-  // Resim varsa göster
   const resimEl = document.getElementById('soru-resim');
   if (soru.resim) {
     resimEl.src = soru.resim;
@@ -1465,18 +1793,15 @@ function testiBitir() {
   document.getElementById('en-yuksek-skor').textContent = localStorage.getItem('ronya_test_skor_' + aktifKonu) || '0';
   document.getElementById('basari-orani').textContent = '%' + oran.toFixed(1);
   
-  // Bar animasyonu
   const bar = document.getElementById('sonuc-bar');
   bar.style.width = '0%';
   setTimeout(() => { bar.style.width = oran + '%'; }, 100);
   
-  // Bar rengi
   bar.className = 'sonuc-bar-fill';
   if (oran >= 80) bar.classList.add('iyi');
   else if (oran >= 60) bar.classList.add('orta');
   else bar.classList.add('kotu');
   
-  // Sonuç mesajı
   if (oran >= 80) {
     document.getElementById('sonuc-emoji').textContent = '🏆';
     document.getElementById('sonuc-baslik').textContent = 'Mükemmel!';
@@ -1498,60 +1823,12 @@ function testiBitir() {
 function yeniTest() {
   document.getElementById('sonuc-ekrani').style.display = 'none';
   document.getElementById('konu-secimi').style.display = 'block';
-  // localStorage'daki sorular kalıcı, silinmez
   gosterEklenenSorular();
 }
 
 // ============================================
-// localStorage YARDIMCI FONKSİYONLARI
+// ÖZEL SORU EKLEME
 // ============================================
-function localStorageKaydet(anahtar, deger) {
-  try {
-    localStorage.setItem(anahtar, JSON.stringify(deger));
-    return true;
-  } catch (e) {
-    console.error('localStorage kaydetme hatası:', e);
-    return false;
-  }
-}
-
-function localStorageGetir(anahtar) {
-  try {
-    const veri = localStorage.getItem(anahtar);
-    return veri ? JSON.parse(veri) : null;
-  } catch (e) {
-    console.error('localStorage okuma hatası:', e);
-    return null;
-  }
-}
-
-function localStorageSil(anahtar) {
-  try {
-    localStorage.removeItem(anahtar);
-    return true;
-  } catch (e) {
-    console.error('localStorage silme hatası:', e);
-    return false;
-  }
-}
-
-// ============================================
-// KLAVYE KISAYOLLARI
-// ============================================
-document.addEventListener('keydown', (e) => {
-  if (document.getElementById('test-ekrani').style.display === 'none') return;
-  const harfler = ['A', 'B', 'C', 'D', 'E'];
-  const key = e.key.toUpperCase();
-  const index = harfler.indexOf(key);
-  if (index !== -1) {
-    e.preventDefault();
-    cevapKontrol(index);
-  }
-});
-// ============================================
-// ÖZEL SORU EKLEME MODÜLÜ - PDF/GALERİ + localStorage
-// ============================================
-
 let seciliDogruCevap = -1;
 let yuklenenResimBase64 = null;
 let yuklenenDosyaTipi = null;
@@ -1560,49 +1837,6 @@ function dogruSec(index, btn) {
   seciliDogruCevap = index;
   document.querySelectorAll('.dogru-btn').forEach(b => b.classList.remove('secili'));
   btn.classList.add('secili');
-}
-
-function dosyaYukle(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  
-  if (file.type === 'application/pdf') {
-    yuklenenDosyaTipi = 'pdf';
-    alert('PDF dosyası seçildi: ' + file.name + '\n\nLütfen soruyu elle yazın veya PDF\'den kopyala-yapıştır yapın.');
-    return;
-  }
-  
-  if (file.type.startsWith('image/')) {
-    yuklenenDosyaTipi = 'galeri';
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      yuklenenResimBase64 = e.target.result;
-      document.getElementById('resim-onizleme').style.display = 'block';
-      document.getElementById('onizleme-img').src = yuklenenResimBase64;
-      document.getElementById('kirpma-araclari').style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-    return;
-  }
-  
-  alert('Desteklenmeyen dosya formatı. Lütfen PDF veya JPG/PNG seçin.');
-}
-
-function resimKaldir() {
-  yuklenenResimBase64 = null;
-  yuklenenDosyaTipi = null;
-  document.getElementById('resim-onizleme').style.display = 'none';
-  document.getElementById('kirpma-araclari').style.display = 'none';
-  document.getElementById('dosya-input').value = '';
-}
-
-function kirpmaIptal() {
-  resimKaldir();
-}
-
-function kirpmaOnayla() {
-  document.getElementById('kirpma-araclari').style.display = 'none';
-  alert('Resim soru olarak kaydedildi. Şimdi şıkları ve doğru cevabı girin.');
 }
 
 function soruEkle() {
@@ -1643,7 +1877,6 @@ function soruEkle() {
   mevcutSorular.push(yeniSoru);
   localStorageKaydet('ronya_ozel_sorular', mevcutSorular);
   
-  // Formu temizle
   document.getElementById('ozel-soru-metni').value = '';
   document.getElementById('sik-a').value = '';
   document.getElementById('sik-b').value = '';
@@ -1678,7 +1911,7 @@ function gosterEklenenSorular() {
     const kaynakText = kaynakTipi === 'pdf' ? 'PDF' : (kaynakTipi === 'galeri' ? 'GALERİ' : 'ELLE');
     
     html += `<div class="eklenen-soru">
-      ${s.resim ? `<img src="${s.resim}" class="soru-resim" alt="Soru">` : ''}
+      ${s.resim ? `<img src="${s.resim}" class="soru-resim" alt="Soru" onclick="window.open('${s.resim}', '_blank')">` : ''}
       <div class="soru-bilgi">
         <div class="soru-metin-kisa">${i+1}. ${s.soru.substring(0, 50)}${s.soru.length > 50 ? '...' : ''}</div>
         <div class="soru-kaynak">
@@ -1703,18 +1936,31 @@ function soruSil(soruId) {
   gosterEklenenSorular();
 }
 
-// Sayfa yüklendiğinde
-document.addEventListener('DOMContentLoaded', function() {
-  gosterEklenenSorular();
-});
-
-// Tümünü sil (konsoldan: tumOzelSorulariSil())
 function tumOzelSorulariSil() {
   if (!confirm('TÜM özel soruları silmek istediğinize emin misiniz?')) return;
   localStorageSil('ronya_ozel_sorular');
   gosterEklenenSorular();
   alert('Tüm özel sorular silindi.');
 }
+
+// Sayfa yüklendiğinde
+document.addEventListener('DOMContentLoaded', function() {
+  gosterEklenenSorular();
+});
+
+// ============================================
+// KLAVYE KISAYOLLARI
+// ============================================
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('test-ekrani').style.display === 'none') return;
+  const harfler = ['A', 'B', 'C', 'D', 'E'];
+  const key = e.key.toUpperCase();
+  const index = harfler.indexOf(key);
+  if (index !== -1) {
+    e.preventDefault();
+    cevapKontrol(index);
+  }
+});
 </script>
 </body>
 </html>
