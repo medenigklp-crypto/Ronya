@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Test Modülü - Ronya Kimya</title>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="manifest" href="manifest.json">
@@ -38,7 +38,7 @@
   --rlg: 20px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { background: #08090f !important; color: var(--tx); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
 header {
@@ -179,6 +179,7 @@ header {
 .yukleme-alani .yukle-aciklama { font-size: 12px; color: var(--tx3); }
 .yukleme-alani input[type="file"] { display: none; }
 
+/* === PDF VIEWER - YENİ TASARIM === */
 .pdf-viewer {
   display: none;
   margin-bottom: 16px;
@@ -215,6 +216,8 @@ header {
 }
 
 .pdf-toolbar button:disabled { opacity: 0.3; cursor: not-allowed; }
+.pdf-toolbar button.secim-modu { background: var(--ac); color: #fff; border-color: var(--ac); }
+.pdf-toolbar button.secim-modu.aktif { background: var(--or); border-color: var(--or); }
 
 .pdf-toolbar .pdf-page-info {
   flex: 1;
@@ -231,6 +234,7 @@ header {
   max-height: 400px;
   background: #1a1a2e;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 #pdf-render-canvas { display: block; margin: 0 auto; }
@@ -249,6 +253,17 @@ header {
   pointer-events: none;
   display: none;
   border-radius: 3px;
+  z-index: 10;
+}
+
+/* Seçim modu aktifken */
+.pdf-canvas-wrap.secim-aktif {
+  touch-action: none;
+  overflow: hidden;
+}
+
+.pdf-canvas-wrap.secim-aktif #pdf-select-canvas {
+  z-index: 5;
 }
 
 .resim-onizleme {
@@ -774,6 +789,7 @@ header {
           <button onclick="pdfZoomOut()">−</button>
           <button onclick="pdfZoomIn()">+</button>
           <button onclick="pdfZoomReset()">↺</button>
+          <button onclick="pdfSecimModuToggle()" id="pdf-secim-btn" class="secim-modu">📐 Seç</button>
           <button onclick="pdfKapat()" style="background:var(--rd);color:#fff;">✕</button>
         </div>
         <div class="pdf-canvas-wrap" id="pdf-canvas-wrap">
@@ -782,7 +798,7 @@ header {
           <div class="pdf-sel-box" id="pdf-sel-box"></div>
         </div>
         <div style="padding:10px 14px;background:var(--sf);border-top:1px solid var(--br);font-size:12px;color:var(--tx2);text-align:center;">
-          📐 PDF üzerinde sürükleyerek soru alanını seçin
+          <span id="pdf-bilgi">Sayfalar arasında gezinmek için ◀ ▶ kullanın</span>
         </div>
       </div>
       
@@ -945,15 +961,17 @@ header {
 let pdfDoc = null;
 let pdfCurrentPage = 1;
 let pdfTotalPages = 0;
-let pdfScale = 1.5;
-let pdfBaseScale = 1.5;
+let pdfScale = 1.0;
+let pdfBaseScale = 1.0;
 let pdfSelecting = false;
+let pdfSecimModu = false;
 let pdfStartX = 0, pdfStartY = 0, pdfCurX = 0, pdfCurY = 0;
 
 const pdfCanvas = document.getElementById('pdf-render-canvas');
 const pdfSelCanvas = document.getElementById('pdf-select-canvas');
 const pdfSelBox = document.getElementById('pdf-sel-box');
 const pdfCtx = pdfCanvas.getContext('2d');
+const pdfWrap = document.getElementById('pdf-canvas-wrap');
 
 // ============================================
 // PDF YÜKLEME VE GÖRÜNTÜLEME
@@ -982,13 +1000,21 @@ async function pdfYukle(file) {
     pdfTotalPages = pdfDoc.numPages;
     pdfCurrentPage = 1;
     
+    // İlk sayfayı render et
     const page = await pdfDoc.getPage(1);
     const viewport = page.getViewport({scale: 1});
-    pdfBaseScale = Math.min((window.innerWidth - 32) / viewport.width, 2);
+    
+    // Ekran genişliğine sığacak scale hesapla (padding dahil)
+    const maxWidth = window.innerWidth - 48; // 24px padding her iki taraf
+    pdfBaseScale = Math.min(maxWidth / viewport.width, 2);
     pdfScale = pdfBaseScale;
     
     document.getElementById('pdf-viewer').classList.add('active');
     await pdfRenderPage(pdfCurrentPage);
+    
+    // Seçim modunu sıfırla
+    pdfSecimModu = false;
+    pdfSecimModuGuncelle();
     
   } catch (e) {
     alert('PDF yüklenirken hata: ' + e.message);
@@ -1001,26 +1027,35 @@ async function pdfRenderPage(num) {
   
   const page = await pdfDoc.getPage(num);
   const dpr = Math.max(window.devicePixelRatio || 1, 2);
-  const viewport = page.getViewport({scale: pdfScale * dpr});
+  const viewport = page.getViewport({scale: pdfScale});
   
-  pdfCanvas.width = viewport.width;
-  pdfCanvas.height = viewport.height;
-  pdfCanvas.style.width = Math.round(viewport.width / dpr) + 'px';
-  pdfCanvas.style.height = Math.round(viewport.height / dpr) + 'px';
+  // Canvas boyutlarını viewport'a göre ayarla (CSS pixel)
+  const cssWidth = Math.round(viewport.width);
+  const cssHeight = Math.round(viewport.height);
   
-  pdfSelCanvas.width = viewport.width;
-  pdfSelCanvas.height = viewport.height;
-  pdfSelCanvas.style.width = Math.round(viewport.width / dpr) + 'px';
-  pdfSelCanvas.style.height = Math.round(viewport.height / dpr) + 'px';
+  pdfCanvas.width = cssWidth * dpr;
+  pdfCanvas.height = cssHeight * dpr;
+  pdfCanvas.style.width = cssWidth + 'px';
+  pdfCanvas.style.height = cssHeight + 'px';
   
+  pdfSelCanvas.width = cssWidth * dpr;
+  pdfSelCanvas.height = cssHeight * dpr;
+  pdfSelCanvas.style.width = cssWidth + 'px';
+  pdfSelCanvas.style.height = cssHeight + 'px';
+  
+  // PDF'i render et (dpr ile çarpılmış viewport)
+  const renderViewport = page.getViewport({scale: pdfScale * dpr});
   await page.render({
     canvasContext: pdfCtx,
-    viewport: viewport
+    viewport: renderViewport
   }).promise;
   
   document.getElementById('pdf-page-info').textContent = num + ' / ' + pdfTotalPages;
   document.getElementById('pdf-btn-prev').disabled = num <= 1;
   document.getElementById('pdf-btn-next').disabled = num >= pdfTotalPages;
+  
+  // Seçim kutusunu temizle
+  pdfSelBox.style.display = 'none';
 }
 
 function pdfPrevPage() {
@@ -1054,8 +1089,38 @@ function pdfZoomReset() {
 
 function pdfKapat() {
   pdfDoc = null;
+  pdfSecimModu = false;
+  pdfSelecting = false;
   document.getElementById('pdf-viewer').classList.remove('active');
   document.getElementById('dosya-input').value = '';
+  pdfWrap.classList.remove('secim-aktif');
+}
+
+// ============================================
+// SEÇİM MODU
+// ============================================
+function pdfSecimModuToggle() {
+  pdfSecimModu = !pdfSecimModu;
+  pdfSecimModuGuncelle();
+}
+
+function pdfSecimModuGuncelle() {
+  const btn = document.getElementById('pdf-secim-btn');
+  const bilgi = document.getElementById('pdf-bilgi');
+  
+  if (pdfSecimModu) {
+    btn.classList.add('aktif');
+    btn.textContent = '✓ Seçili';
+    pdfWrap.classList.add('secim-aktif');
+    bilgi.textContent = 'Sürükleyerek soru alanını seçin, bıraktığınızda kırpılır';
+    bilgi.style.color = 'var(--or)';
+  } else {
+    btn.classList.remove('aktif');
+    btn.textContent = '📐 Seç';
+    pdfWrap.classList.remove('secim-aktif');
+    bilgi.textContent = 'Sayfalar arasında gezinmek için ◀ ▶ kullanın';
+    bilgi.style.color = 'var(--tx2)';
+  }
 }
 
 // ============================================
@@ -1064,31 +1129,31 @@ function pdfKapat() {
 function pdfGetPos(e) {
   const r = pdfSelCanvas.getBoundingClientRect();
   const src = e.touches ? e.touches[0] : e;
-  const rx = src.clientX - r.left;
-  const ry = src.clientY - r.top;
-  const lw = parseFloat(pdfSelCanvas.style.width) || r.width;
-  const lh = parseFloat(pdfSelCanvas.style.height) || r.height;
-  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  const rx = src.clientX - r.left + pdfWrap.scrollLeft;
+  const ry = src.clientY - r.top + pdfWrap.scrollTop;
   return {
-    x: rx * (lw / r.width) * dpr,
-    y: ry * (lh / r.height) * dpr,
+    x: rx,
+    y: ry,
     rx: rx,
     ry: ry
   };
 }
 
 function pdfStartSelect(e) {
+  if (!pdfSecimModu) return;
   e.preventDefault();
+  e.stopPropagation();
   pdfSelecting = true;
   const pos = pdfGetPos(e);
   pdfStartX = pdfCurX = pos.x;
   pdfStartY = pdfCurY = pos.y;
-  pdfSelBox.style.cssText = 'display:block;left:' + pos.rx + 'px;top:' + pos.ry + 'px;width:0;height:0;';
+  pdfSelBox.style.cssText = 'display:block; left:' + pos.rx + 'px; top:' + pos.ry + 'px; width:0px; height:0px;';
 }
 
 function pdfMoveSelect(e) {
-  if (!pdfSelecting) return;
+  if (!pdfSecimModu || !pdfSelecting) return;
   e.preventDefault();
+  e.stopPropagation();
   const pos = pdfGetPos(e);
   pdfCurX = pos.x;
   pdfCurY = pos.y;
@@ -1099,16 +1164,27 @@ function pdfMoveSelect(e) {
 }
 
 function pdfEndSelect(e) {
-  if (!pdfSelecting) return;
+  if (!pdfSecimModu || !pdfSelecting) return;
+  e.preventDefault();
   pdfSelecting = false;
-  pdfSelBox.style.display = 'none';
+  
+  const w = Math.abs(pdfCurX - pdfStartX);
+  const h = Math.abs(pdfCurY - pdfStartY);
+  
+  if (w < 30 || h < 30) {
+    pdfSelBox.style.display = 'none';
+    return;
+  }
+  
   pdfCropSelection();
 }
 
+// Touch events
 pdfSelCanvas.addEventListener('touchstart', pdfStartSelect, {passive: false});
 pdfSelCanvas.addEventListener('touchmove', pdfMoveSelect, {passive: false});
 pdfSelCanvas.addEventListener('touchend', pdfEndSelect, {passive: false});
 
+// Mouse events
 pdfSelCanvas.addEventListener('mousedown', function(e) {
   pdfStartSelect(e);
   document.addEventListener('mousemove', pdfMoveSelect);
@@ -1125,29 +1201,55 @@ function pdfCropSelection() {
   const w = Math.abs(pdfCurX - pdfStartX);
   const h = Math.abs(pdfCurY - pdfStartY);
   
-  if (w < 30 || h < 30) return;
-  
   const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  
+  // Canvas koordinatlarına dönüştür (DPR ile çarp)
+  const canvasX = Math.round(x * dpr);
+  const canvasY = Math.round(y * dpr);
+  const canvasW = Math.round(w * dpr);
+  const canvasH = Math.round(h * dpr);
+  
   const tmp = document.createElement('canvas');
-  tmp.width = Math.round(w);
-  tmp.height = Math.round(h);
+  tmp.width = canvasW;
+  tmp.height = canvasH;
   tmp.getContext('2d').drawImage(
     pdfCanvas,
-    Math.round(x), Math.round(y),
-    Math.round(w), Math.round(h),
+    canvasX, canvasY,
+    canvasW, canvasH,
     0, 0,
-    Math.round(w), Math.round(h)
+    canvasW, canvasH
   );
   
   yuklenenResimBase64 = tmp.toDataURL('image/jpeg', 0.85);
   yuklenenDosyaTipi = 'pdf';
   
+  // Önizleme göster
   document.getElementById('resim-onizleme').style.display = 'block';
   document.getElementById('onizleme-img').src = yuklenenResimBase64;
   
+  // PDF viewer'ı gizle ve seçim modunu kapat
   pdfKapat();
   
-  alert('✓ PDF\'den soru seçildi! Şimdi şıkları ve doğru cevabı girin.');
+  // Toast bildirim (daha az rahatsız edici)
+  pdfToastGoster('✓ PDF\'den soru seçildi! Şimdi şıkları ve doğru cevabı girin.');
+}
+
+function pdfToastGoster(mesaj) {
+  // Mevcut toast'ı kaldır
+  const eski = document.querySelector('.pdf-toast');
+  if (eski) eski.remove();
+  
+  const toast = document.createElement('div');
+  toast.className = 'pdf-toast';
+  toast.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(34,197,94,0.95); color:#fff; padding:16px 24px; border-radius:12px; font-size:14px; font-weight:600; z-index:1000; box-shadow:0 8px 32px rgba(0,0,0,0.4); text-align:center; max-width:280px;';
+  toast.textContent = mesaj;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.transition = 'opacity 0.5s';
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 500);
+  }, 2000);
 }
 
 // ============================================
@@ -1180,7 +1282,7 @@ function kirpmaIptal() {
 
 function kirpmaOnayla() {
   document.getElementById('kirpma-araclari').style.display = 'none';
-  alert('Resim soru olarak kaydedildi. Şimdi şıkları ve doğru cevabı girin.');
+  pdfToastGoster('Resim soru olarak kaydedildi.');
 }
 
 // ============================================
@@ -1888,7 +1990,7 @@ function soruEkle() {
   resimKaldir();
   
   gosterEklenenSorular();
-  alert('✓ Soru başarıyla eklendi ve kalıcı olarak kaydedildi!');
+  pdfToastGoster('✓ Soru başarıyla eklendi!');
 }
 
 function gosterEklenenSorular() {
@@ -1940,7 +2042,7 @@ function tumOzelSorulariSil() {
   if (!confirm('TÜM özel soruları silmek istediğinize emin misiniz?')) return;
   localStorageSil('ronya_ozel_sorular');
   gosterEklenenSorular();
-  alert('Tüm özel sorular silindi.');
+  pdfToastGoster('Tüm özel sorular silindi.');
 }
 
 // Sayfa yüklendiğinde
