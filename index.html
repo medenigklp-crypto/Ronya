@@ -3081,6 +3081,132 @@ setTimeout(function() {
     logoContainer.style.marginBottom = "5px";
   }
 }, 600);
+// Trendler Paneli HTML Yapısını ve Yeni Butonları Dinamik Olarak Yeniler
+setTimeout(function() {
+  var trendPanel = document.getElementById('pt-panel-trend');
+  if (trendPanel) {
+    trendPanel.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;">
+        <button class="trend-btn" data-trend="radius" onclick="setTrend(this)">⚛️ Atom Yarıçapı</button>
+        <button class="trend-btn" data-trend="ionization" onclick="setTrend(this)">⚡ İyonlaşma</button>
+        <button class="trend-btn" data-trend="neg" onclick="setTrend(this)">🔴 Elektronegatiflik</button>
+        <button class="trend-btn" data-trend="affinity" onclick="setTrend(this)">🔋 Elektron İlgisi</button>
+        <button class="trend-btn" data-trend="metAct" onclick="setTrend(this)">🔑 Metalik Aktiflik</button>
+        <button class="trend-btn" data-trend="ametAct" onclick="setTrend(this)">💎 Ametalik Aktiflik</button>
+        <button class="trend-btn" data-trend="metMelt" onclick="setTrend(this)">🌡️ Metallerde Erime N.</button>
+        <button class="trend-btn" data-trend="ametMelt" onclick="setTrend(this)">❄️ Ametallerde Erime N.</button>
+        <button class="trend-btn" data-trend="hxaAcid" onclick="setTrend(this)">🧪 HxA Asitlik Kuvveti</button>
+        <button class="trend-btn" data-trend="mohBase" onclick="setTrend(this)">🧼 M(OH)x Bazlık Kuvv.</button>
+        <button class="trend-btn" data-trend="oxyAcidA" onclick="setTrend(this)">🧪 Oksiasit (O Sayısı)</button>
+        <button class="trend-btn" data-trend="oxyAcidB" onclick="setTrend(this)">🧪 Oksiasit (Merkez Atom)</button>
+        <button class="trend-btn" data-trend="metBond" onclick="setTrend(this)">⛓️ Metalik Bağ Kuvveti</button>
+      </div>
+      <div id="trend-info-card" style="display:none;margin-bottom:10px"></div>
+      <div id="trend-arrows" style="display:none;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:var(--r);margin-bottom:6px">
+          <span id="arrow-period-icon" style="font-size:18px;color:#f59e0b">⟶</span>
+          <div><div style="font-size:10px;color:#f59e0b;font-weight:700">Periyot boyunca</div><div id="arrow-period-text" style="font-size:13px;color:#fcd34d;font-weight:700"></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:var(--r)">
+          <span id="arrow-group-icon" style="font-size:18px;color:#818cf8">↓</span>
+          <div><div style="font-size:10px;color:#818cf8;font-weight:700">Grup boyunca</div><div id="arrow-group-text" style="font-size:13px;color:#c4b5fd;font-weight:700"></div></div>
+        </div>
+      </div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div id="pt-trend-grid" style="min-width:700px"></div></div>
+    `;
+  }
+}, 800);
+
+// Yeni Kimya Müfredatı Veri ve Yön Tanımlamaları
+TREND_CONFIG = {
+  radius: {
+    label: 'Atom Yarıçapı', unit: 'pm',
+    desc: 'Periyotta sağa doğru azalır (çekirdek yükü artar). Grupta aşağı doğru artar (kabuk sayısı artar).',
+    arrow_period: '→ Azalır', arrow_group: '↓ Artar', color_low: '#3b82f6', color_high: '#ef4444',
+    getValue: function(el) { return 300 - (PT_POS[el.n][1] * 10) + (PT_POS[el.n][0] * 20); }
+  },
+  ionization: {
+    label: 'İyonlaşma Enerjisi', unit: 'kJ/mol',
+    desc: 'Gaz halindeki nötr bir atomdan elektron koparmak için gereken enerjidir. Genellikle periyotta sağa doğru artar (3A-2A ve 5A-6A küresel simetri sapmalarına dikkat ediniz), grupta aşağı doğru azalır.',
+    arrow_period: '→ Genellikle Artar', arrow_group: '↓ Azalır', color_low: '#3b82f6', color_high: '#ef4444',
+    getValue: function(el) { if(el.cat==='Soy Gaz') return 2000 - el.n*5; return (PT_POS[el.n][1] * 80) - (PT_POS[el.n][0] * 40); }
+  },
+  neg: {
+    label: 'Elektronegatiflik', unit: '',
+    desc: 'Bir atomun bağ elektronlarını kendine çekme yeteneğidir. Periyotta sağa doğru artar, grupta aşağı doğru azalır. Soy gazların bağ yapma eğilimi olmadığından elektronegatiflikleri aranmaz.',
+    arrow_period: '→ Artar (Soy gazlar hariç)', arrow_group: '↓ Azalır', color_low: '#3b82f6', color_high: '#ef4444',
+    getValue: function(el) { if(el.cat==='Soy Gaz') return null; return (PT_POS[el.n][1] * 0.2) + (8 - PT_POS[el.n][0]) * 0.3; }
+  },
+  affinity: {
+    label: 'Elektron İlgisi', unit: 'kJ/mol',
+    desc: 'Gaz halindeki nötr bir atomun elektron alması sırasındaki enerji değişimidir. Genellikle periyotta sağa doğru artar, grupta aşağı doğru azalır. Klorun (Cl) elektron ilgisi flordan (F) büyüktür. Soy gazların elektron ilgisi yoktur.',
+    arrow_period: '→ Genellikle Artar (Soy gazlar hariç)', arrow_group: '↓ Genellikle Azalır', color_low: '#1e3a8a', color_high: '#f59e0b',
+    getValue: function(el) { if(el.cat==='Soy Gaz') return null; if(el.sym==='Cl') return 400; if(el.sym==='F') return 380; return (PT_POS[el.n][1] * 25) - (PT_POS[el.n][0] * 10); }
+  },
+  metAct: {
+    label: 'Metalik Aktiflik (Elektron Verme Eğilimi)', unit: '',
+    desc: 'Metallerin elektron verme (yükseltgenme) kolaylığıdır. Periyotta sağa doğru azalır, grupta aşağı doğru (çap arttıkça) artar. En aktif metaller 1A grubunun altındadır (Fr).',
+    arrow_period: '→ Azalır', arrow_group: '↓ Artar', color_low: '#334155', color_high: '#22c55e',
+    getValue: function(el) { if(el.cat.indexOf('Metal')===-1 && el.cat!=='Metal') return null; return (19 - PT_POS[el.n][1]) * 10 + (PT_POS[el.n][0] * 15); }
+  },
+  ametAct: {
+    label: 'Ametalik Aktiflik (Elektron Alma Eğilimi)', unit: '',
+    desc: 'Ametallerin elektron alma (indirgenme) kolaylığıdır. Periyotta sağa doğru artar, grupta aşağı doğru azalır. Soy gazlar hariç tutulduğunda en aktif ametaller 7A grubunun üstündedir (F).',
+    arrow_period: '→ Artar (Soy gazlar hariç)', arrow_group: '↓ Azalır', color_low: '#1e293b', color_high: '#ec4899',
+    getValue: function(el) { if(el.cat==='Soy Gaz' || (el.cat.indexOf('Ametal')===-1 && el.cat!=='Halojen' && el.cat!=='Yarı Metal')) return null; return (PT_POS[el.n][1] * 20) + (8 - PT_POS[el.n][0]) * 15; }
+  },
+  metMelt: {
+    label: 'Metallerde Erime Noktası', unit: '°C',
+    desc: 'Metallerde erime noktası metalik bağ kuvveti ile doğru orantılıdır. Aynı periyotta sağa doğru çap küçülüp değerlik elektron sayısı arttığı için artar. Aynı grupta aşağı doğru çap büyüdüğü için bağ zayıflar ve erime noktası azalır.',
+    arrow_period: '→ Artar', arrow_group: '↓ Azalır', color_low: '#1e1b4b', color_high: '#f59e0b',
+    getValue: function(el) { if(el.cat.indexOf('Metal')===-1 && el.cat!=='Metal') return null; return (PT_POS[el.n][1] * 150) + (8 - PT_POS[el.n][0]) * 200; }
+  },
+  ametMelt: {
+    label: 'Ametallerde Erime Noktası', unit: '°C',
+    desc: 'Ametallerde erime ve kaynama noktaları moleküller arasındaki London kuvvetlerine (elektron sayısına) bağlıdır. Grupta aşağı doğru elektron sayısı arttığı için London kuvvetleri güçlenir ve erime noktası artar.',
+    arrow_period: '→ Değişken', arrow_group: '↓ Artar', color_low: '#0f172a', color_high: '#06b6d4',
+    getValue: function(el) { if(el.cat!=='Ametal' && el.cat!=='Halojen' && el.cat!=='Soy Gaz') return null; return (PT_POS[el.n][0] * 120) + (PT_POS[el.n][1] * 30); }
+  },
+  hxaAcid: {
+    label: 'HxA (Tek Atomlu Anyon) Asitlik Kuvveti', unit: '',
+    desc: 'Halojen asitlerinde (7A grubu hidrojenli bileşikleri: HF, HCl, HBr, HI) grupta aşağıya doğru inildikçe anyon çapı büyür, H⁺ iyonunun kopması kolaylaşır. Bu nedenle asitlik kuvveti aşağı doğru artar (HI > HBr > HCl > HF).',
+    arrow_period: '→ Sağa Doğru Artar', arrow_group: '↓ Aşağı Doğru Artar', color_low: '#311042', color_high: '#ef4444',
+    getValue: function(el) { if(el.cat!=='Halojen' && el.cat!=='Ametal') return null; return (PT_POS[el.n][0] * 50) + (PT_POS[el.n][1] * 20); }
+  },
+  mohBase: {
+    label: 'M(OH)x (Metal Hidroksit) Bazlık Kuvveti', unit: '',
+    desc: 'Metal hidroksitlerde bazlık kuvveti metalin elektron verme kolaylığına (çapına) bağlıdır. Çap arttıkça OH⁻ iyonunun suya verilmesi kolaylaşır. Bu nedenle grupta aşağı doğru, periyotta sola doğru bazlık kuvveti artar.',
+    arrow_period: '→ Sola Doğru Artar', arrow_group: '↓ Aşağı Doğru Artar', color_low: '#064e3b', color_high: '#06b6d4',
+    getValue: function(el) { if(el.cat.indexOf('Metal')===-1 && el.cat!=='Metal') return null; return (20 - PT_POS[el.n][1]) * 40 + (PT_POS[el.n][0] * 60); }
+  },
+  oxyAcidA: {
+    label: 'Oksiasitlerde Asitlik (Oksijen Sayısı)', unit: '',
+    desc: 'Merkez atomu aynı olan oksiasitlerde (örn: HClO₄, HClO₃, HClO₂, HClO) oksijen sayısı arttıkça merkez atomun elektron çekme gücü ve H⁺ iyonunun salınması kolaylaşır. Oksijen sayısı arttıkça asitlik kuvveti artar (HClO₄ > HClO₃).',
+    arrow_period: '→ Oksijen Sayısı Arttıkça Artar', arrow_group: '↓ -', color_low: '#4c0519', color_high: '#a855f7',
+    getValue: function(el) { if(el.cat!=='Halojen' && el.cat!=='Ametal') return null; return (8 - PT_POS[el.n][0]) * 30 + (PT_POS[el.n][1] * 10); }
+  },
+  oxyAcidB: {
+    label: 'Oksiasitlerde Asitlik (Merkez Atom Elektronegatifliği)', unit: '',
+    desc: 'Oksijen sayıları aynı olan oksiasitlerde (örn: HClO₃, HBrO₃, HIO₃) merkez atomun elektronegatifliği arttıkça elektronları kendine daha kuvvetli çeker ve asidin proton (H⁺) verme eğilimi, yani asitlik kuvveti artar (HClO₃ > HBrO₃ > HIO₃).',
+    arrow_period: '→ Merkez Atom Elektronegatifliği Arttıkça Artar', arrow_group: '↓ Yukarı Doğru Artar', color_low: '#1e1b4b', color_high: '#ef4444',
+    getValue: function(el) { if(el.cat!=='Halojen' && el.cat!=='Ametal') return null; return (PT_POS[el.n][1] * 40) + (8 - PT_POS[el.n][0]) * 50; }
+  },
+  metBond: {
+    label: 'Metallerde Metalik Bağ Kuvveti', unit: '',
+    desc: 'Metalik bağ kuvveti, metal katyonunun yükü (değerlik elektron sayısı) ile doğru, çapı ile ters orantılıdır. Bu yüzden aynı periyotta sağa doğru (çap küçüldüğü ve yük arttığı için) artar, aynı grupta aşağı doğru (çap büyüdüğü için) azalır.',
+    arrow_period: '→ Artar', arrow_group: '↓ Azalır', color_low: '#111827', color_high: '#22c55e',
+    getValue: function(el) { if(el.cat.indexOf('Metal')===-1 && el.cat!=='Metal') return null; return (PT_POS[el.n][1] * 80) + (8 - PT_POS[el.n][0]) * 100; }
+  }
+};
+
+// Trend Değişim Tetikleyicisi ve Grafik Çizim Algoritması
+function setTrend(btn) {
+  var all = document.querySelectorAll('.trend-btn');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('active');
+  btn.classList.add('active');
+  currentTrend = btn.getAttribute('data-trend');
+  renderTrendGrid();
+}
 
 </script>
 </body>
