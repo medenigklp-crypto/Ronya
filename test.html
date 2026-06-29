@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr">
-<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
+
+  <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Test Modülü - Ronya Kimya</title>
@@ -714,8 +719,23 @@ header {
   .pdf-toolbar { padding: 8px; gap: 4px; }
   .pdf-toolbar button { padding: 5px 8px; font-size: 11px; }
 }
+  .pdf-viewer {
+  display: none;
+  margin-bottom: 16px;
+  background: var(--sf2);
+  border-radius: var(--r);
+  border: 1px solid var(--br);
+  overflow: hidden;
+}
+.pdf-viewer.active { display: block; }
+
 </style>
-</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
+
+  </head>
 <body>
 
 <header>
@@ -725,6 +745,26 @@ header {
 </header>
 
 <div class="pw">
+    <!-- PDF Viewer -->
+    <div class="pdf-viewer" id="pdf-viewer">
+      <div class="pdf-toolbar">
+        <button onclick="pdfPrevPage()" id="pdf-btn-prev" disabled>◀</button>
+        <span class="pdf-page-info" id="pdf-page-info">— / —</span>
+        <button onclick="pdfNextPage()" id="pdf-btn-next" disabled>▶</button>
+        <button onclick="pdfZoomOut()">−</button>
+        <button onclick="pdfZoomIn()">+</button>
+        <button onclick="pdfZoomReset()">↺</button>
+        <button onclick="pdfKapat()" style="background:var(--rd);color:#fff;">✕</button>
+      </div>
+      <div class="pdf-canvas-wrap" id="pdf-canvas-wrap">
+        <canvas id="pdf-render-canvas"></canvas>
+        <canvas id="pdf-select-canvas"></canvas>
+        <div class="pdf-sel-box" id="pdf-sel-box"></div>
+      </div>
+      <div style="padding:10px 14px;background:var(--sf);border-top:1px solid var(--br);font-size:12px;color:var(--tx2);text-align:center;">
+        📐 PDF üzerinde sürükleyerek soru alanını seçin
+      </div>
+    </div>
 
   <!-- KONU SEÇİMİ -->
   <div id="konu-secimi">
