@@ -3066,6 +3066,21 @@ function closeVideo(){
 
   container.innerHTML = html;
 }
+// Logoyu ana sayfa butonlarının hemen altına taşır
+setTimeout(function() {
+  var logoImg = document.querySelector('#s-home img[alt="medeni gökalp"]');
+  var hbtns = document.querySelector('#s-home .hbtns');
+  
+  if (logoImg && hbtns) {
+    var logoContainer = logoImg.parentNode;
+    // Logoyu buton grubunun hemen arkasına ekle
+    hbtns.insertAdjacentElement('afterend', logoContainer);
+    
+    // Düzenli durması için boşluk ayarlarını güncelle
+    logoContainer.style.marginTop = "25px";
+    logoContainer.style.marginBottom = "5px";
+  }
+}, 600);
 
 </script>
 </body>
