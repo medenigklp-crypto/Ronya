@@ -2791,8 +2791,19 @@ function initLab3dPage(){
   dc.addEventListener('touchend',function(){lab3dDrag=false;lab3dStartDist=0;});
   dc.addEventListener('wheel',function(e){e.preventDefault();lab3dZoom+=e.deltaY*-0.001;lab3dZoom=Math.max(0.5,Math.min(3,lab3dZoom));});
 }
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded',function(){
+  nav('home');
 
-
+  initCountdown();
+  renderRealPT();
+  renderRiskList();
+  renderLabList(); üç
+  renderVidList2();
+  document.getElementById('cbtn-all').classList.add('active');
+});
 </script>
 </body>
 </html>
