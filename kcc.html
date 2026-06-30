@@ -1,1 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KÇÇ Hesaplayıcı - Ronya Kimya</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{
+  --bg:#08090f;--sf:#0f1117;--sf2:#161922;
+  --br:#1e2535;--ac:#6366f1;--ac2:#818cf8;
+  --gr:#22c55e;--rd:#ef4444;--yw:#f59e0b;--cy:#06b6d4;
+  --tx:#f1f5f9;--tx2:#94a3b8;--tx3:#475569;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{background:var(--bg);color:var(--tx);padding:20px;max-width:600px;margin:0 auto;}
+h1{font-family:'Space Grotesk',sans-serif;font-size:24px;color:var(--ac);text-align:center;margin-bottom:6px;}
+.sub{color:var(--tx2);text-align:center;font-size:13px;margin-bottom:24px;}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:var(--r);padding:20px;margin-bottom:16px;}
+.card h2{color:var(--ac2);font-size:16px;margin-bottom:12px;font-weight:600;}
+label{display:block;color:var(--tx2);font-size:12px;margin:12px 0 4px;font-weight:500;}
+.inp{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:12px;color:var(--tx);font-size:14px;outline:none;}
+.inp:focus{border-color:var(--ac);}
+.btn{width:100%;padding:14px;background:var(--ac);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px;transition:all .2s;}
+.btn:hover{background:var(--ac2);transform:translateY(-1px);}
+.result{text-align:center;padding:20px;border-radius:8px;margin-top:16px;display:none;}
+.result.ok{background:rgba(34,197,94,.1);color:var(--gr);border:1px solid rgba(34,197,94,.2);}
+.result.no{background:rgba(239,68,68,.1);color:var(--rd);border:1px solid rgba(239,68,68,.2);}
+.result.warn{background:rgba(245,158,11,.1);color:var(--yw);border:1px solid rgba(245,158,11,.2);}
+.formula-box{background:var(--sf2);border-radius:8px;padding:16px;margin:12px 0;font-size:13px;color:var(--tx2);line-height:1.8;}
+.formula-box b{color:var(--tx);}
+.error{color:var(--rd);font-size:12px;padding:8px 0;display:none;}
+.back-btn{background:var(--sf2);border:1px solid var(--br);border-radius:8px;color:var(--tx2);padding:8px 16px;cursor:pointer;font-size:13px;margin-bottom:16px;display:inline-block;}
+.back-btn:hover{background:rgba(99,102,241,.1);color:var(--ac2);}
+</style>
+</head>
+<body>
+
+<button class="back-btn" onclick="location.href='index.html'">← Ana Sayfa</button>
+
+<h1>🧮 KÇÇ Hesaplayıcı</h1>
+<p class="sub">Çözünürlük Çarpımı Sabiti (Ksp) Karşılaştırması</p>
+
+<div class="card">
+  <h2>İyon Derişimleri</h2>
+  
+  <label>Kation Derişimi [Mⁿ⁺] (mol/L)</label>
+  <input type="text" class="inp" id="cCation" placeholder="Örn: 0.01 veya 1.5e-3">
+  
+  <label>Kation Yükü (n)</label>
+  <input type="number" class="inp" id="zCation" placeholder="Örn: 2 (Ca²⁺ için)" step="1" min="1">
+  
+  <label>Anion Derişimi [Xᵐ⁻] (mol/L)</label>
+  <input type="text" class="inp" id="cAnion" placeholder="Örn: 0.02 veya 2e-3">
+  
+  <label>Anion Yükü (m)</label>
+  <input type="number" class="inp" id="zAnion" placeholder="Örn: 1 (Cl⁻ için)" step="1" min="1">
+</div>
+
+<div class="card">
+  <h2>KÇÇ Değeri</h2>
+  <label>Bileşiğin KÇÇ Değeri</label>
+  <input type="text" class="inp" id="kccValue" placeholder="Örn: 1.8e-10 (AgCl için)">
+  
+  <div class="formula-box">
+    <b>Formül:</b> Q = [Mⁿ⁺]ᵐ × [Xᵐ⁻]ⁿ<br>
+    <b>Q < KÇÇ</b> → Çözünür (çözelti)<br>
+    <b>Q = KÇÇ</b> → Doymuş (denge)<br>
+    <b>Q > KÇÇ</b> → Çökelir!
+  </div>
+</div>
+
+<button class="btn" onclick="hesaplaKCC()">Hesapla</button>
+<div class="error" id="errorMsg"></div>
+<div class="result" id="sonuc"></div>
+
+<div class="card" style="margin-top:16px;">
+  <h2>Yaygın Bileşiklerin KÇÇ Değerleri</h2>
+  <table style="width:100%;font-size:12px;color:var(--tx2);border-collapse:collapse;">
+    <tr style="border-bottom:1px solid var(--br);">
+      <th style="text-align:left;padding:8px;">Bileşik</th>
+      <th style="text-align:left;padding:8px;">KÇÇ (25°C)</th>
+    </tr>
+    <tr><td style="padding:8px;">AgCl</td><td style="padding:8px;">1.8 × 10⁻¹⁰</td></tr>
+    <tr><td style="padding:8px;">AgBr</td><td style="padding:8px;">5.0 × 10⁻¹³</td></tr>
+    <tr><td style="padding:8px;">AgI</td><td style="padding:8px;">8.3 × 10⁻¹⁷</td></tr>
+    <tr><td style="padding:8px;">BaSO₄</td><td style="padding:8px;">1.1 × 10⁻¹⁰</td></tr>
+    <tr><td style="padding:8px;">CaCO₃</td><td style="padding:8px;">3.3 × 10⁻⁹</td></tr>
+    <tr><td style="padding:8px;">Ca(OH)₂</td><td style="padding:8px;">5.5 × 10⁻⁶</td></tr>
+    <tr><td style="padding:8px;">Mg(OH)₂</td><td style="padding:8px;">5.6 × 10⁻¹²</td></tr>
+    <tr><td style="padding:8px;">PbCl₂</td><td style="padding:8px;">1.6 × 10⁻⁵</td></tr>
+    <tr><td style="padding:8px;">Fe(OH)₃</td><td style="padding:8px;">2.8 × 10⁻³⁹</td></tr>
+    <tr><td style="padding:8px;">Al(OH)₃</td><td style="padding:8px;">3.0 × 10⁻³⁴</td></tr>
+  </table>
+</div>
+
+<script>
+function parseInput(val) {
+  val = val.replace(',', '.').replace('×10^', 'e').replace('x10^', 'e');
+  val = val.replace(/10\^(-?\d+)/g, '1e$1');
+  return parseFloat(val);
+}
+
+function hesaplaKCC() {
+  const errorEl = document.getElementById('errorMsg');
+  const sonucEl = document.getElementById('sonuc');
+  errorEl.style.display = 'none';
+  sonucEl.style.display = 'none';
+  
+  const cCat = parseInput(document.getElementById('cCation').value);
+  const zCat = parseFloat(document.getElementById('zCation').value);
+  const cAn = parseInput(document.getElementById('cAnion').value);
+  const zAn = parseFloat(document.getElementById('zAnion').value);
+  const kcc = parseInput(document.getElementById('kccValue').value);
+  
+  // Doğrulama
+  const errors = [];
+  if (isNaN(cCat) || cCat < 0) errors.push('Kation derişimi geçersiz');
+  if (isNaN(zCat) || zCat < 1) errors.push('Kation yükü pozitif tam sayı olmalı');
+  if (isNaN(cAn) || cAn < 0) errors.push('Anion derişimi geçersiz');
+  if (isNaN(zAn) || zAn < 1) errors.push('Anion yükü pozitif tam sayı olmalı');
+  if (isNaN(kcc) || kcc <= 0) errors.push('KÇÇ değeri pozitif olmalı');
+  
+  if (errors.length > 0) {
+    errorEl.textContent = '⚠️ ' + errors.join(', ');
+    errorEl.style.display = 'block';
+    return;
+  }
+  
+  // Q = [M]^m × [X]^n
+  const Q = Math.pow(cCat, zAn) * Math.pow(cAn, zCat);
+  
+  let msg, cls;
+  const Qstr = Q.toExponential(3);
+  const ratio = Q / kcc;
+  
+  if (Q < kcc * 0.99) {
+    msg = `<b>✅ ÇÖZÜNÜR</b><br>Q (${Qstr}) < KÇÇ (${kcc.toExponential(2)})<br><br>Çözelti doymamış durumda. Daha fazla tuz çözünebilir.<br><small>Q/KÇÇ = ${ratio.toFixed(3)}</small>`;
+    cls = 'ok';
+  } else if (Math.abs(Q - kcc) <= kcc * 0.05) {
+    msg = `<b>⚖️ DOYMUŞ</b><br>Q (${Qstr}) ≈ KÇÇ (${kcc.toExponential(2)})<br><br>Çözelti denge durumunda. Çökme ve çözünme hızları eşit.`;
+    cls = 'warn';
+  } else {
+    msg = `<b>❌ ÇÖKELİR!</b><br>Q (${Qstr}) > KÇÇ (${kcc.toExponential(2)})<br><br>Çözelti aşırı doymuş! Çökme oluşur.<br><small>Q/KÇÇ = ${ratio.toFixed(1)}</small>`;
+    cls = 'no';
+  }
+  
+  sonucEl.innerHTML = msg;
+  sonucEl.className = 'result ' + cls;
+  sonucEl.style.display = 'block';
+}
+</script>
+
+</body>
+</html>
 
