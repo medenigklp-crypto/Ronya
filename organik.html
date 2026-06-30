@@ -1,1 +1,396 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organik Kimya - Ronya Kimya</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{
+  --bg:#08090f;--sf:#0f1117;--sf2:#161922;--sf3:#1c2030;
+  --br:#1e2535;--br2:#252d40;
+  --ac:#6366f1;--ac2:#818cf8;--ac3:#a5b4fc;
+  --gr:#22c55e;--rd:#ef4444;--yw:#f59e0b;--cy:#06b6d4;
+  --tx:#f1f5f9;--tx2:#94a3b8;--tx3:#475569;
+  --r:14px;--rsm:8px;--rlg:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;border-bottom:1px solid var(--br);background:rgba(8,9,15,.95);position:sticky;top:0;z-index:100;}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
+.pw{max-width:960px;margin:0 auto;padding:20px 16px;}
+.ptitle{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;}
+.psub{color:var(--tx2);font-size:14px;margin-bottom:24px;line-height:1.6;}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:20px;margin-bottom:16px;}
+.card h2{color:var(--ac);font-family:'Space Grotesk',sans-serif;font-size:18px;margin-bottom:12px;}
+.card h3{color:var(--ac2);font-size:14px;margin:16px 0 8px;font-weight:600;}
+.card p,.card li{color:var(--tx2);font-size:13px;line-height:1.7;}
+.card ul{padding-left:20px;margin-bottom:12px;}
+.grp{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+.tag{background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);color:var(--ac2);padding:8px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:all .2s;font-weight:500;}
+.tag:hover{background:rgba(99,102,241,.25);transform:translateY(-1px);}
+.tag:active{transform:scale(0.95);}
+.tag.active{background:var(--ac);color:#fff;}
+.search{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:12px 16px;color:var(--tx);font-size:14px;margin-bottom:16px;outline:none;}
+.search:focus{border-color:var(--ac);}
+.info-box{background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:var(--r);padding:16px;margin:12px 0;}
+.info-box h4{color:var(--cy);font-size:13px;margin-bottom:6px;}
+.info-box p{color:var(--tx2);font-size:12px;line-height:1.6;}
+.formula{font-family:'Courier New',monospace;background:var(--sf2);padding:4px 8px;border-radius:6px;color:var(--ac3);font-size:14px;}
+.example{background:var(--sf2);border-radius:var(--r);padding:12px;margin:8px 0;}
+.example .name{color:var(--tx);font-weight:600;font-size:13px;margin-bottom:4px;}
+.example .desc{color:var(--tx2);font-size:12px;line-height:1.5;}
+.example .form{color:var(--ac2);font-family:'Courier New',monospace;font-size:13px;margin-top:4px;}
+.tabs{display:flex;gap:4px;background:var(--sf2);border-radius:var(--r);padding:4px;margin-bottom:16px;overflow-x:auto;}
+.tab{flex:1;padding:10px;border:none;border-radius:var(--rsm);background:none;color:var(--tx2);font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;}
+.tab.on{background:var(--ac);color:#fff;}
+.tp{display:none;}
+.tp.on{display:block;}
+.back-btn{background:var(--sf2);border:1px solid var(--br);border-radius:var(--rsm);color:var(--tx2);padding:8px 16px;cursor:pointer;font-size:13px;margin-bottom:16px;}
+.back-btn:hover{background:rgba(99,102,241,.1);color:var(--ac2);}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0;}
+th{background:var(--sf2);color:var(--tx3);padding:10px;text-align:left;font-weight:600;border-bottom:1px solid var(--br);}
+td{padding:10px;border-bottom:1px solid var(--br);color:var(--tx2);}
+tr:hover td{background:rgba(99,102,241,.05);}
+@media(max-width:600px){.pw{padding:16px 12px;}.ptitle{font-size:20px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="location.href='index.html'">
+    <span class="logo">Ronya Kimya</span>
+  </div>
+  <button class="back-btn" onclick="location.href='index.html'">← Ana Sayfa</button>
+</header>
+
+<div class="pw">
+  <h1 class="ptitle">🧪 Organik Kimya</h1>
+  <p class="psub">TYT ve AYT müfredatına uygun organik kimya konuları, fonksiyonel gruplar, adlandırma kuralları ve izomeri.</p>
+
+  <input type="text" class="search" id="searchInput" placeholder="Ara: alkol, alkan, izomeri..." onkeyup="searchContent()">
+
+  <!-- SEKMELER -->
+  <div class="tabs">
+    <button class="tab on" onclick="showTab('gruplar')">Fonksiyonel Gruplar</button>
+    <button class="tab" onclick="showTab('adlandirma')">Adlandırma</button>
+    <button class="tab" onclick="showTab('izomeri')">İzomeri</button>
+    <button class="tab" onclick="showTab('reaksiyon')">Reaksiyonlar</button>
+  </div>
+
+  <!-- FONKSİYONEL GRUPLAR -->
+  <div id="gruplar" class="tp on">
+    <div class="card">
+      <h2>Fonksiyonel Gruplar</h2>
+      <p style="margin-bottom:12px;">Organik bileşiklerin kimyasal özelliklerini belirleyen atom veya atom gruplarıdır.</p>
+      
+      <div class="grp">
+        <span class="tag" onclick="showGroup('alkol')">Alkol (-OH)</span>
+        <span class="tag" onclick="showGroup('aldehit')">Aldehit (-CHO)</span>
+        <span class="tag" onclick="showGroup('keton')">Keton (C=O)</span>
+        <span class="tag" onclick="showGroup('asit')">Karboksilik Asit (-COOH)</span>
+        <span class="tag" onclick="showGroup('ester')">Ester (-COOR)</span>
+        <span class="tag" onclick="showGroup('eter')">Eter (-O-)</span>
+        <span class="tag" onclick="showGroup('amin')">Amin (-NH₂)</span>
+        <span class="tag" onclick="showGroup('amit')">Amit (-CONH₂)</span>
+        <span class="tag" onclick="showGroup('nitril')">Nitril (-CN)</span>
+        <span class="tag" onclick="showGroup('halojen')">Halojenür (-X)</span>
+      </div>
+
+      <div id="groupDetail"></div>
+    </div>
+
+    <div class="card">
+      <h2>Özet Tablo</h2>
+      <table>
+        <tr><th>Grup</th><th>Formül</th><th>Örnek</th><th>Son Ek</th></tr>
+        <tr><td>Alkol</td><td class="formula">R-OH</td><td>Metanol CH₃OH</td><td>-ol</td></tr>
+        <tr><td>Aldehit</td><td class="formula">R-CHO</td><td>Metanal HCHO</td><td>-al</td></tr>
+        <tr><td>Keton</td><td class="formula">R-CO-R'</td><td>Aseton CH₃COCH₃</td><td>-on</td></tr>
+        <tr><td>Karboksilik Asit</td><td class="formula">R-COOH</td><td>Asetik asit CH₃COOH</td><td>-oik asit</td></tr>
+        <tr><td>Ester</td><td class="formula">R-COOR'</td><td>Metil asetat CH₃COOCH₃</td><td>-oat</td></tr>
+        <tr><td>Eter</td><td class="formula">R-O-R'</td><td>Dietil eter C₂H₅OC₂H₅</td><td>-eter</td></tr>
+        <tr><td>Amin</td><td class="formula">R-NH₂</td><td>Metilamin CH₃NH₂</td><td>-amin</td></tr>
+        <tr><td>Amit</td><td class="formula">R-CONH₂</td><td>Asetamid CH₃CONH₂</td><td>-amid</td></tr>
+        <tr><td>Nitril</td><td class="formula">R-CN</td><td>Asetonitril CH₃CN</td><td>-nitril</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ADLANDIRMA -->
+  <div id="adlandirma" class="tp">
+    <div class="card">
+      <h2>IUPAC Adlandırma Kuralları</h2>
+      
+      <h3>1. Ana Zinciri Belirle</h3>
+      <p>En uzun karbon zincirini bulun. Zincirdeki karbon sayısına göre önek seçilir:</p>
+      <div class="info-box">
+        <p>1: met-, 2: et-, 3: prop-, 4: but-, 5: pent-, 6: heks-, 7: hept-, 8: okt-, 9: non-, 10: dek-</p>
+      </div>
+
+      <h3>2. Fonksiyonel Grubu Belirle</h3>
+      <p>Öncelik sırası: Karboksilik asit > Ester > Aldehit > Keton > Alkol > Amin > Alken > Alkin > Alkan</p>
+
+      <h3>3. Numaralandırma</h3>
+      <p>Fonksiyonel gruba en yakın uçtan başlayarak numaralandırın. Dallanma ve çift bağ konumlarını belirtin.</p>
+
+      <div class="example">
+        <div class="name">Örnek 1: 2-Metilpropan</div>
+        <div class="desc">3 karbonlu ana zincir, 2. karbona metil (-CH₃) dalı bağlı</div>
+        <div class="form">CH₃-CH(CH₃)-CH₃</div>
+      </div>
+
+      <div class="example">
+        <div class="name">Örnek 2: 2-Butanol</div>
+        <div class="desc">4 karbonlu zincir, 2. karbona OH grubu bağlı</div>
+        <div class="form">CH₃-CH(OH)-CH₂-CH₃</div>
+      </div>
+
+      <div class="example">
+        <div class="name">Örnek 3: 3-Metil-2-pentanon</div>
+        <div class="desc">5 karbonlu zincir, 2. karbona =O, 3. karbona -CH₃</div>
+        <div class="form">CH₃-CO-CH(CH₃)-CH₂-CH₃</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Alkan Adlandırma Örnekleri</h2>
+      <table>
+        <tr><th>Formül</th><th>Ad</th><th>Yapı</th></tr>
+        <tr><td class="formula">CH₄</td><td>Metan</td><td>1C, tekli bağ</td></tr>
+        <tr><td class="formula">C₂H₆</td><td>Etan</td><td>2C, tekli bağ</td></tr>
+        <tr><td class="formula">C₃H₈</td><td>Propan</td><td>3C, tekli bağ</td></tr>
+        <tr><td class="formula">C₄H₁₀</td><td>Bütan</td><td>4C, tekli bağ</td></tr>
+        <tr><td class="formula">C₅H₁₂</td><td>Pentan</td><td>5C, tekli bağ</td></tr>
+        <tr><td class="formula">C₆H₁₄</td><td>Heksan</td><td>6C, tekli bağ</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- İZOMERİ -->
+  <div id="izomeri" class="tp">
+    <div class="card">
+      <h2>İzomeri Türleri</h2>
+      
+      <h3>1. Yapısal (Yapı) İzomeri</h3>
+      <p>Aynı molekül formülü, farklı yapısal formül. Bağlanma şekli farklıdır.</p>
+      <div class="example">
+        <div class="name">Butan (C₄H₁₀) İzomerleri:</div>
+        <div class="form">n-Bütan: CH₃-CH₂-CH₂-CH₃</div>
+        <div class="form">İzobütan (2-metilpropan): CH₃-CH(CH₃)-CH₃</div>
+      </div>
+
+      <h3>2. Geometrik (Uzay) İzomeri</h3>
+      <p>Çift bağ veya halka yapısı etrafında farklı yerleşim. cis-trans izomeri.</p>
+      <div class="info-box">
+        <h4>cis-2-Büten</h4>
+        <p>Metil grupları aynı tarafta</p>
+        <p class="formula">CH₃-CH=CH-CH₃ (cis)</p>
+      </div>
+      <div class="info-box">
+        <h4>trans-2-Büten</h4>
+        <p>Metil grupları zıt tarafta</p>
+        <p class="formula">CH₃-CH=CH-CH₃ (trans)</p>
+      </div>
+
+      <h3>3. Fonksiyonel İzomeri</h3>
+      <p>Aynı molekül formülü, farklı fonksiyonel grup.</p>
+      <div class="example">
+        <div class="name">C₂H₆O İzomerleri:</div>
+        <div class="form">Etanol (alkol): CH₃-CH₂-OH</div>
+        <div class="form">Dimetil eter (eter): CH₃-O-CH₃</div>
+      </div>
+
+      <h3>4. Optik İzomeri</h3>
+      <p>Kiral merkez (4 farklı grup bağlı karbon) içeren moleküller. Birbirinin ayna görüntüsü.</p>
+    </div>
+  </div>
+
+  <!-- REAKSİYONLAR -->
+  <div id="reaksiyon" class="tp">
+    <div class="card">
+      <h2>Temel Organik Reaksiyonlar</h2>
+      
+      <h3>1. Yer Değiştirme (Substitusyon)</h3>
+      <p>Alkanlarda bir H atomunun başka bir atom/grupla değiştirilmesi.</p>
+      <div class="formula" style="margin:8px 0;">CH₄ + Cl₂ → CH₃Cl + HCl (Işık veya ısı gerekli)</div>
+
+      <h3>2. Katılma (Addisyon)</h3>
+      <p>Çift veya üçlü bağın kırılıp atomların katılması.</p>
+      <div class="formula" style="margin:8px 0;">CH₂=CH₂ + H₂ → CH₃-CH₃ (Katalizör: Ni/Pt/Pd)</div>
+      <div class="formula" style="margin:8px 0;">CH₂=CH₂ + Br₂ → CH₂Br-CH₂Br (Brom suyu rengi solur)</div>
+
+      <h3>3. Eliminasyon</h3>
+      <p>Bileşikten küçük molekülün (H₂O, HX) ayrılması.</p>
+      <div class="formula" style="margin:8px 0;">CH₃-CH₂OH → CH₂=CH₂ + H₂O (H₂SO₄, 170°C)</div>
+
+      <h3>4. Kondensasyon</h3>
+      <p>İki molekülün birleşip su ayrılması.</p>
+      <div class="formula" style="margin:8px 0;">CH₃COOH + CH₃OH → CH₃COOCH₃ + H₂O</div>
+
+      <h3>5. Oksidasyon</h3>
+      <p>Alkollerin oksidasyonu:</p>
+      <ul>
+        <li>Birincil alkol → Aldehit → Karboksilik asit</li>
+        <li>İkincil alkol → Keton</li>
+        <li>Üçüncül alkol → Okside olmaz (reaksiyon vermez)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Alkollerin Sınıflandırılması</h2>
+      <table>
+        <tr><th>Tür</th><th>Yapı</th><th>Örnek</th><th>Oksidasyon</th></tr>
+        <tr><td>Birincil (1°)</td><td class="formula">R-CH₂-OH</td><td>Etanol</td><td>Aldehit → Asit</td></tr>
+        <tr><td>İkincil (2°)</td><td class="formula">R₂CH-OH</td><td>İzopropil alkol</td><td>Keton</td></tr>
+        <tr><td>Üçüncül (3°)</td><td class="formula">R₃C-OH</td><td>t-Bütil alkol</td><td>Olmaz</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// Sekme değiştirme
+function showTab(id) {
+  document.querySelectorAll('.tp').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  event.target.classList.add('on');
+}
+
+// Fonksiyonel grup detayları
+const groupData = {
+  alkol: {
+    name: 'Alkol (-OH)',
+    desc: 'Hidroksil grubu (-OH) içeren organik bileşiklerdir. Polar yapıdadırlar ve su ile hidrojen bağı kurabilirler.',
+    examples: [
+      {name:'Metanol',form:'CH₃OH',note:'Zehirlidir, görme kaybına yol açabilir'},
+      {name:'Etanol',form:'C₂H₅OH',note:'İçki alkolidir'},
+      {name:'Glikol',form:'HO-CH₂-CH₂-OH',note:'Antifriz bileşenidir'}
+    ],
+    reactions: 'Oksidasyona uğrar: 1° → Aldehit → Asit, 2° → Keton, 3° → Olmaz'
+  },
+  aldehit: {
+    name: 'Aldehit (-CHO)',
+    desc: 'Karbonil grubu (C=O) uç karbona bağlıdır. Kuvvetli indirgen ajanlardır.',
+    examples: [
+      {name:'Metanal (Formalin)',form:'HCHO',note:'%37-40 çözeltisi formaldehit olarak bilinir'},
+      {name:'Etanal',form:'CH₃CHO',note:'Meyve olgunlaşmasında rol alır'}
+    ],
+    reactions: 'Tollens ve Fehling testi pozitiftir. Kolayca okside olur.'
+  },
+  keton: {
+    name: 'Keton (C=O)',
+    desc: 'Karbonil grubu zincir içinde iki karbon arasındadır.',
+    examples: [
+      {name:'Aseton',form:'CH₃COCH₃',note:'En basit ketondur, oje çıkarıcıda kullanılır'}
+    ],
+    reactions: 'Tollens testi negatiftir (indirgenmez).'
+  },
+  asit: {
+    name: 'Karboksilik Asit (-COOH)',
+    desc: 'Karbonil ve hidroksil grubu aynı karbona bağlıdır. Zayıf asitlerdir.',
+    examples: [
+      {name:'Asetik asit',form:'CH₃COOH',note:'Sirke asididir (%4-8 çözeltisi)'},
+      {name:'Sitrik asit',form:'C₆H₈O₇',note:'Narenciyelerde bulunur'},
+      {name:'Oksalik asit',form:'(COOH)₂',note:'Ispanakta bulunur'}
+    ],
+    reactions: 'Alkole ester verir (esterleşme). Metal karbonatlarla CO₂ çıkarır.'
+  },
+  ester: {
+    name: 'Ester (-COOR)',
+    desc: 'Hoş kokulu bileşiklerdir. Meyve aromalarının kaynağıdır.',
+    examples: [
+      {name:'Metil asetat',form:'CH₃COOCH₃',note:'Tırnak cilası kokusuna benzer'},
+      {name:'Etil asetat',form:'CH₃COOC₂H₅',note:'Muz kokusuna benzer'}
+    ],
+    reactions: 'Asit + Alkol → Ester + Su (kondensasyon)'
+  },
+  eter: {
+    name: 'Eter (-O-)',
+    desc: 'Oksijen atomu iki alkil/aril grubuna bağlıdır. Çok uçucudurlar.',
+    examples: [
+      {name:'Dietil eter',form:'C₂H₅OC₂H₅',note:'Cerrahi anestezide kullanılmıştır'}
+    ],
+    reactions: 'Su ile tepkime vermez, nötr bileşiklerdir.'
+  },
+  amin: {
+    name: 'Amin (-NH₂)',
+    desc: 'Amonyaktaki bir veya daha fazla H atomu alkil/aril grubuyla değiştirilmiştir.',
+    examples: [
+      {name:'Metilamin',form:'CH₃NH₂',note:'Balık kokusuna benzer'},
+      {name:'Anilin',form:'C₆H₅NH₂',note:'Boya endüstrisinde kullanılır'}
+    ],
+    reactions: 'Zayıf bazdır. Karboksilik asitlerle amit oluşturur.'
+  },
+  amit: {
+    name: 'Amit (-CONH₂)',
+    desc: 'Karboksilik asidin -OH grubunun -NH₂ ile değiştirilmesiyle oluşur.',
+    examples: [
+      {name:'Asetamid',form:'CH₃CONH₂',note:'En basit amittir'},
+      {name:'Üre',form:'CO(NH₂)₂',note:'Protein metabolizmasının son ürünüdür'}
+    ],
+    reactions: 'Hidrolizle asit + amin verir.'
+  },
+  nitril: {
+    name: 'Nitril (-CN)',
+    desc: 'Siyanür grubu içeren bileşiklerdir. Zehirlidirler.',
+    examples: [
+      {name:'Asetonitril',form:'CH₃CN',note:'Polar çözücü olarak kullanılır'}
+    ],
+    reactions: 'Hidrolizle karboksilik asit verir.'
+  },
+  halojen: {
+    name: 'Halojenür (-X)',
+    desc: 'Halojen atomu (F, Cl, Br, I) içeren bileşiklerdir.',
+    examples: [
+      {name:'Klorometan',form:'CH₃Cl',note:'Endüstriyel çözücü'},
+      {name:'Kloroform',form:'CHCl₃',note:'Eski anestezik'}
+    ],
+    reactions: 'Nükleofilik yer değiştirme reaksiyonları verir.'
+  }
+};
+
+function showGroup(key) {
+  const d = groupData[key];
+  if (!d) return;
+  
+  let html = `<div style="background:var(--sf2);border-radius:12px;padding:16px;margin-top:12px;">
+    <h3 style="color:var(--ac);margin-bottom:8px;">${d.name}</h3>
+    <p style="color:var(--tx2);font-size:13px;line-height:1.6;margin-bottom:12px;">${d.desc}</p>`;
+  
+  if (d.examples) {
+    html += '<h4 style="color:var(--tx);font-size:13px;margin-bottom:8px;">Örnekler:</h4>';
+    d.examples.forEach(ex => {
+      html += `<div class="example">
+        <div class="name">${ex.name}</div>
+        <div class="form">${ex.form}</div>
+        <div class="desc">${ex.note}</div>
+      </div>`;
+    });
+  }
+  
+  html += `<div style="margin-top:12px;padding:10px;background:rgba(245,158,11,.1);border-radius:8px;">
+    <span style="color:var(--yw);font-size:12px;font-weight:600;">⚡ Reaksiyon:</span>
+    <span style="color:var(--tx2);font-size:12px;"> ${d.reactions}</span>
+  </div></div>`;
+  
+  document.getElementById('groupDetail').innerHTML = html;
+}
+
+// Arama fonksiyonu
+function searchContent() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('.card');
+  
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(q) ? 'block' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>
 
