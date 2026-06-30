@@ -247,6 +247,7 @@ header {
     <div class="denge-sistem">N<sub>2(g)</sub> + 3H<sub>2(g)</sub> ⇌ 2NH<sub>3(g)</sub> + ISI</div>
 
     <div class="denge-buttons">
+      <button class="denge-btn" onclick="applyDenge('nh3', null, this)"><span class="icon">⚖️</span> Başlangıç (Etkisiz)</button>
       <button class="denge-btn orange" onclick="applyDenge('nh3', 'hacim-azalt', this)"><span class="icon">📉</span> Hacim Azalt (V↓)</button>
       <button class="denge-btn orange" onclick="applyDenge('nh3', 'hacim-artir', this)"><span class="icon">📈</span> Hacim Artır (V↑)</button>
       <button class="denge-btn" onclick="applyDenge('nh3', 'n2-ekle', this)"><span class="icon">➕</span> N₂ Gazı Ekle</button>
@@ -294,6 +295,8 @@ header {
       </div>
     </div>
 
+    <div class="denge-grafik" id="mol-container-nh3" style="margin-top:14px;"></div>
+
     <div class="denge-aciklama" id="aciklama-nh3">
       <div class="denge-aciklama-baslik">ℹ️ Le Chatelier Prensibi</div>
       <div class="denge-aciklama-metin" id="metin-nh3">Bir denge sistemine dış etki uygulandığında, sistem bu etkiyi zayıflatacak yönde kayar. Yukarıdaki butonlara basarak farklı koşulların etkisini gözlemleyin.</div>
@@ -306,6 +309,7 @@ header {
     <div class="not-kutu">📌 CaCO₃ ve CaO katıdır; derişimleri (sabit kabul edilir) hiçbir etkiden değişmez — grafikte düz çizgi kalırlar. Sıcaklık dışındaki tüm etkiler (hacim, CO₂ ekleme/çekme) sonunda [CO₂] başlangıç denge değerine geri döner, çünkü K<sub>c</sub> = [CO₂] yalnızca sıcaklıkla değişir.</div>
 
     <div class="denge-buttons">
+      <button class="denge-btn" onclick="applyDenge('caco3', null, this)"><span class="icon">⚖️</span> Başlangıç (Etkisiz)</button>
       <button class="denge-btn orange" onclick="applyDenge('caco3', 'hacim-azalt', this)"><span class="icon">📉</span> Hacim Azalt (V↓)</button>
       <button class="denge-btn orange" onclick="applyDenge('caco3', 'hacim-artir', this)"><span class="icon">📈</span> Hacim Artır (V↑)</button>
       <button class="denge-btn" onclick="applyDenge('caco3', 'co2-ekle', this)"><span class="icon">➕</span> CO₂ Gazı Ekle</button>
@@ -353,6 +357,8 @@ header {
       </div>
     </div>
 
+    <div class="denge-grafik" id="mol-container-caco3" style="margin-top:14px;"></div>
+
     <div class="denge-aciklama" id="aciklama-caco3">
       <div class="denge-aciklama-baslik">ℹ️ Le Chatelier Prensibi</div>
       <div class="denge-aciklama-metin" id="metin-caco3">CaCO₃ parçalanma reaksiyonu endotermik bir reaksiyondur. Sıcaklık arttığında denge ürünler yönüne, sıcaklık azaldığında ise tepkimenin ters yönüne kayar.</div>
@@ -365,6 +371,7 @@ header {
     <div class="not-kutu">📌 Tepken ve ürün mol katsayıları toplamı eşittir (2 = 2). Bu yüzden hacim değişimi dengeyi <b>kaydırmaz</b>; yalnızca tüm derişimler aynı anda anlık olarak değişir (dikey kırılma) ve sonrasında ek bir kayma olmadan o seviyede sabit kalır.</div>
 
     <div class="denge-buttons">
+      <button class="denge-btn" onclick="applyDenge('hcl', null, this)"><span class="icon">⚖️</span> Başlangıç (Etkisiz)</button>
       <button class="denge-btn orange" onclick="applyDenge('hcl', 'hacim-azalt', this)"><span class="icon">📉</span> Hacim Azalt (V↓)</button>
       <button class="denge-btn orange" onclick="applyDenge('hcl', 'hacim-artir', this)"><span class="icon">📈</span> Hacim Artır (V↑)</button>
       <button class="denge-btn" onclick="applyDenge('hcl', 'h2-ekle', this)"><span class="icon">➕</span> H₂ Gazı Ekle</button>
@@ -412,6 +419,8 @@ header {
       </div>
     </div>
 
+    <div class="denge-grafik" id="mol-container-hcl" style="margin-top:14px;"></div>
+
     <div class="denge-aciklama" id="aciklama-hcl">
       <div class="denge-aciklama-baslik">ℹ️ Le Chatelier Prensibi</div>
       <div class="denge-aciklama-metin" id="metin-hcl">H₂ + Cl₂ ⇌ 2HCl ekzotermik bir tepkimedir. Mol sayıları eşit olduğu için hacim değişimi dengeyi kaydırmaz; sadece derişimler aynı anda değişir. Madde ekleme/çekme ve sıcaklık değişimi ise dengeyi kaydırır.</div>
@@ -438,38 +447,75 @@ function yCoord(conc) { return 260 - conc * 240; }
 function xCoord(time) { return 60 + time * 104; }
 
 // Tek bir tür için zaman serisi üretir.
-// initialStart: 0. andaki başlangıç derişimi (ilk denge kurulmadan önce)
-// eq: ilk denge derişimi (t=2 civarı)
-// jump: t=2 anında etki sonucu oluşan ANLIK sıçrama miktarı (+/-)
-// final: yeni dengeye ulaşıldığında (t=4+) varılan nihai derişim
+// eq: dış etki uygulanmadan ÖNCEKİ sabit denge derişimi (t=0'dan itibaren DÜZ çizgi)
+// jump: etki anında oluşan sıçrama derinliği (+/-) — artık ayrı bir "dikey çizgi"
+//       segmenti DEĞİL, tüm eğrinin içine gömülü, kesintisiz tek bir fonksiyonun parçası.
+// final: yeni dengede (t=5) varılan nihai derişim
 // flat: true ise (örn. katılar) bütün süreçte eq değerinde sabit kalır
-function buildSeries(initialStart, eq, jump, final, flat) {
+//
+// Formül: c(dt) = eq + jump*(1-e^-FAST*dt) + (final-eq-jump)*(1-e^-SLOW*dt)
+// Bu TEK formül; "hızlı sıçrama" ve "yavaş yerleşme" bileşenlerini aynı pürüzsüz
+// eğride birleştirir — iki ayrı parça arasında görünür kırılma (elbow) OLMAZ.
+// jump=0 olan türler için formül otomatik olarak tek, yumuşak bir üstel eğriye iner.
+// Her türün kendi eq/jump/final değeri farklı olduğundan her eğrinin şekli/derinliği
+// de doğal olarak birbirinden farklı çıkar.
+// EFFECT_T: dış etkinin uygulandığı an (x ekseninde "Etki" çizgisinin konumu)
+// JUMP_WIDTH: sıçramanın x-genişliği — çok küçük tutularak GERÇEK bir dikey
+//             çizgi görünümü elde edilir (kaynak kitaptaki kırmızı dikey
+//             çizgiyle birebir aynı görünüm). Sıçrama bittiği anda eğri
+//             PÜRÜZSÜZ tek bir üstel fonksiyonla yeni dengeye doğru ilerler.
+const EFFECT_T = 2;
+const JUMP_WIDTH = 0.02;
+const RELAX_RATE = 1.3;
+
+// Tek bir tür için zaman serisi üretir.
+// eq: dış etki uygulanmadan ÖNCEKİ sabit denge derişimi (t=0'dan itibaren DÜZ çizgi)
+// jump: etki anında oluşan GERÇEK dikey sıçrama miktarı (+/-)
+// final: yeni dengede (t=5) varılan nihai derişim
+// flat: true ise (örn. katılar) bütün süreçte eq değerinde sabit kalır
+function buildSeries(eq, jump, final, flat) {
   const pts = [];
-  for (let t = 0; t <= 5; t += 0.05) {
-    let c;
-    if (flat) {
-      c = eq;
-    } else if (t < 2) {
-      c = expApproach(t / 2, initialStart, eq, 3);
-    } else if (t < 2.3) {
-      const jp = (t - 2) / 0.3;
-      c = eq + jump * jp;
-    } else if (t < 4) {
-      const p = (t - 2.3) / 1.7;
-      c = expApproach(p, eq + jump, final, 2.5);
-    } else {
-      c = final;
-    }
+
+  if (flat) {
+    for (let t = 0; t <= 5; t += 0.1) pts.push({ t, c: clamp01(eq) });
+    return pts;
+  }
+
+  // 1) Etkiden önce: tamamen düz çizgi
+  for (let t = 0; t <= EFFECT_T; t += 0.1) pts.push({ t, c: clamp01(eq) });
+
+  // 2) Etki anı: GERÇEK dikey kırılma (çok dar x-genişliğinde düz sıçrama)
+  const jumpEnd = EFFECT_T + JUMP_WIDTH;
+  pts.push({ t: jumpEnd, c: clamp01(eq + jump) });
+
+  // 3) Sıçrama sonrası: tek, pürüzsüz üstel eğriyle yeni dengeye yumuşak geçiş
+  const peak = eq + jump;
+  for (let t = jumpEnd + 0.05; t <= 5; t += 0.05) {
+    const dt = t - jumpEnd;
+    const c = final + (peak - final) * Math.exp(-RELAX_RATE * dt);
     pts.push({ t, c: clamp01(c) });
   }
+
   return pts;
 }
 
+// Yumuşak (Bezier) eğri çizer. Nokta (dot) konumu BUNDAN BAĞIMSIZ olarak
+// lastPoint() ile doğrudan veri dizisinden hesaplanır; bu yüzden eğri
+// stili (düz çizgi / Bezier) ne olursa olsun nokta her zaman çizginin
+// gerçek bitiş koordinatıyla birebir örtüşür.
 function pathFromPoints(points) {
   if (points.length < 2) return '';
   let d = `M ${xCoord(points[0].t)} ${yCoord(points[0].c)}`;
   for (let i = 1; i < points.length; i++) {
-    d += ` L ${xCoord(points[i].t)} ${yCoord(points[i].c)}`;
+    const prev = points[i - 1];
+    const curr = points[i];
+    const x1 = xCoord(prev.t + (curr.t - prev.t) * 0.3);
+    const y1 = yCoord(prev.c);
+    const x2 = xCoord(prev.t + (curr.t - prev.t) * 0.7);
+    const y2 = yCoord(curr.c);
+    const x = xCoord(curr.t);
+    const y = yCoord(curr.c);
+    d += ` C ${x1} ${y1}, ${x2} ${y2}, ${x} ${y}`;
   }
   return d;
 }
@@ -491,10 +537,78 @@ function setLine(lineId, points) {
   document.getElementById(lineId).setAttribute('d', pathFromPoints(points));
 }
 
+// ---------------------------------------------------------------
+// "Mol Sayısı - Zaman Grafiği" için HTML üretici (kopya SVG yazmamak için)
+// ---------------------------------------------------------------
+function buildMolGraphHTML(prefix, seriesList) {
+  const paths = seriesList.map(s =>
+    `<path id="mol-${s.id}-line" d="" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />`
+  ).join('');
+  const dots = seriesList.map((s, i) =>
+    `<circle id="mol-${s.id}-dot" cx="580" cy="${100 + i * 40}" r="4" fill="${s.color}" class="data-point" />`
+  ).join('');
+  const legend = seriesList.map(s =>
+    `<div class="legend-item"><div class="legend-color" style="background:${s.color}"></div><span>${s.label}</span></div>`
+  ).join('');
+
+  return `
+    <div class="denge-grafik-baslik">Mol Sayısı - Zaman Grafiği</div>
+    <div class="grafik-canvas">
+      <svg class="grafik-svg" viewBox="0 0 600 300">
+        <defs><pattern id="grid-mol-${prefix}" width="40" height="30" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 30" fill="none" stroke="#1e2535" stroke-width="0.5"/></pattern></defs>
+        <rect width="600" height="300" fill="url(#grid-mol-${prefix})" />
+        <line x1="60" y1="260" x2="580" y2="260" stroke="#475569" stroke-width="1.5" />
+        <line x1="60" y1="260" x2="60" y2="20" stroke="#475569" stroke-width="1.5" />
+        <text x="55" y="265" fill="#475569" font-size="10" text-anchor="end">0</text>
+        <text x="55" y="220" fill="#475569" font-size="10" text-anchor="end">0.2</text>
+        <text x="55" y="175" fill="#475569" font-size="10" text-anchor="end">0.4</text>
+        <text x="55" y="130" fill="#475569" font-size="10" text-anchor="end">0.6</text>
+        <text x="55" y="85" fill="#475569" font-size="10" text-anchor="end">0.8</text>
+        <text x="55" y="40" fill="#475569" font-size="10" text-anchor="end">1.0</text>
+        <text x="20" y="140" fill="#475569" font-size="11" text-anchor="middle" transform="rotate(-90, 20, 140)">Mol Sayısı (n)</text>
+        <text x="60" y="280" fill="#475569" font-size="10" text-anchor="middle">0</text>
+        <text x="160" y="280" fill="#475569" font-size="10" text-anchor="middle">t₁</text>
+        <text x="260" y="280" fill="#475569" font-size="10" text-anchor="middle">t₂</text>
+        <text x="360" y="280" fill="#475569" font-size="10" text-anchor="middle">t₃</text>
+        <text x="460" y="280" fill="#475569" font-size="10" text-anchor="middle">t₄</text>
+        <text x="560" y="280" fill="#475569" font-size="10" text-anchor="middle">t₅</text>
+        <text x="320" y="295" fill="#475569" font-size="11" text-anchor="middle">Zaman (t)</text>
+        ${paths}
+        <line id="mol-etki-cizgisi-${prefix}" x1="260" y1="20" x2="260" y2="260" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,3" opacity="0" />
+        <text id="mol-etki-etiket-${prefix}" x="260" y="15" fill="#f59e0b" font-size="10" text-anchor="middle" opacity="0">Etki</text>
+        ${dots}
+      </svg>
+    </div>
+    <div class="grafik-legend">${legend}</div>
+  `;
+}
+
+// Etki anının dikey kırılma mantığını (jump=0 / aynı) farklı senaryoya uyarlayan yardımcılar
+function effectsZeroJumpFor(effects, keys) {
+  const out = {};
+  for (const k in effects) {
+    const e = effects[k];
+    const ne = {};
+    for (const sp in e) ne[sp] = { jump: keys.includes(k) ? 0 : e[sp].jump, final: e[sp].final };
+    out[k] = ne;
+  }
+  return out;
+}
+function effectsFlattenFor(effects, keys, eqObj) {
+  const out = {};
+  for (const k in effects) {
+    const e = effects[k];
+    const ne = {};
+    for (const sp in e) ne[sp] = keys.includes(k) ? { jump: 0, final: eqObj[sp] } : { jump: e[sp].jump, final: e[sp].final };
+    out[k] = ne;
+  }
+  return out;
+}
+
 // =========================================================
 // NH3 SİSTEMİ:  N2(g) + 3H2(g) ⇌ 2NH3(g) + ISI  (ekzotermik)
 // =========================================================
-const NH3_EQ = { n2: 0.6, h2: 0.4, nh3: 0.4 };
+const NH3_EQ = { n2: 0.6, h2: 0.45, nh3: 0.32 };
 const NH3_START = { n2: 1.0, h2: 0.8, nh3: 0.0 };
 
 const NH3_EFFECTS = {
@@ -532,9 +646,22 @@ const NH3_EFFECTS = {
 
 function getNH3Curves(effectKey) {
   const eff = effectKey ? NH3_EFFECTS[effectKey] : null;
-  const n2 = buildSeries(NH3_START.n2, NH3_EQ.n2, eff ? eff.n2.jump : 0, eff ? eff.n2.final : NH3_EQ.n2, false);
-  const h2 = buildSeries(NH3_START.h2, NH3_EQ.h2, eff ? eff.h2.jump : 0, eff ? eff.h2.final : NH3_EQ.h2, false);
-  const nh3 = buildSeries(NH3_START.nh3, NH3_EQ.nh3, eff ? eff.nh3.jump : 0, eff ? eff.nh3.final : NH3_EQ.nh3, false);
+  const n2 = buildSeries(NH3_EQ.n2, eff ? eff.n2.jump : 0, eff ? eff.n2.final : NH3_EQ.n2, false);
+  const h2 = buildSeries(NH3_EQ.h2, eff ? eff.h2.jump : 0, eff ? eff.h2.final : NH3_EQ.h2, false);
+  const nh3 = buildSeries(NH3_EQ.nh3, eff ? eff.nh3.jump : 0, eff ? eff.nh3.final : NH3_EQ.nh3, false);
+  return { n2, h2, nh3 };
+}
+
+// MOL SAYISI grafiği: hacim etkilerinde ANİ KIRILMA OLMAZ (mol miktarı
+// hacimden anlık etkilenmez, yalnızca tepkime ilerledikçe değişir).
+// Madde ekleme/çekme etkilerinde derişimle birebir aynı davranır (hacim sabit).
+const NH3_MOL_EFFECTS = effectsZeroJumpFor(NH3_EFFECTS, ['hacim-azalt', 'hacim-artir']);
+
+function getNH3MolCurves(effectKey) {
+  const eff = effectKey ? NH3_MOL_EFFECTS[effectKey] : null;
+  const n2 = buildSeries(NH3_EQ.n2, eff ? eff.n2.jump : 0, eff ? eff.n2.final : NH3_EQ.n2, false);
+  const h2 = buildSeries(NH3_EQ.h2, eff ? eff.h2.jump : 0, eff ? eff.h2.final : NH3_EQ.h2, false);
+  const nh3 = buildSeries(NH3_EQ.nh3, eff ? eff.nh3.jump : 0, eff ? eff.nh3.final : NH3_EQ.nh3, false);
   return { n2, h2, nh3 };
 }
 
@@ -545,23 +672,46 @@ function getNH3Curves(effectKey) {
 // etkilerinde son denge [CO2] başlangıç değerine GERİ DÖNER.
 // Sadece sıcaklık değişimi [CO2]'nin denge değerini kalıcı değiştirir.
 // =========================================================
-const CACO3_EQ = { caco3: 0.7, cao: 0.3, co2: 0.3 };
+const CACO3_EQ = { caco3: 0.7, cao: 0.22, co2: 0.38 };
 const CACO3_START = { co2: 0.0 };
 
 const CACO3_EFFECTS = {
-  'hacim-azalt': { co2: { jump: +0.15, final: 0.3 } },
-  'hacim-artir': { co2: { jump: -0.15, final: 0.3 } },
-  'co2-ekle':    { co2: { jump: +0.30, final: 0.3 } },
-  'co2-cek':     { co2: { jump: -0.20, final: 0.3 } },
-  'sicaklik-artir': { co2: { jump: 0, final: 0.45 } }, // endotermik: T↑ → ürünlere kayar, Kc artar
-  'sicaklik-azalt': { co2: { jump: 0, final: 0.15 } }  // T↓ → girene kayar, Kc azalır
+  'hacim-azalt': { co2: { jump: +0.18, final: 0.38 } },
+  'hacim-artir': { co2: { jump: -0.18, final: 0.38 } },
+  'co2-ekle':    { co2: { jump: +0.32, final: 0.38 } },
+  'co2-cek':     { co2: { jump: -0.22, final: 0.38 } },
+  'sicaklik-artir': { co2: { jump: 0, final: 0.58 } }, // endotermik: T↑ → ürünlere kayar, Kc artar
+  'sicaklik-azalt': { co2: { jump: 0, final: 0.16 } }  // T↓ → girene kayar, Kc azalır
 };
 
 function getCaCO3Curves(effectKey) {
   const eff = effectKey ? CACO3_EFFECTS[effectKey] : null;
-  const caco3 = buildSeries(CACO3_EQ.caco3, CACO3_EQ.caco3, 0, CACO3_EQ.caco3, true);
-  const cao = buildSeries(CACO3_EQ.cao, CACO3_EQ.cao, 0, CACO3_EQ.cao, true);
-  const co2 = buildSeries(CACO3_START.co2, CACO3_EQ.co2, eff ? eff.co2.jump : 0, eff ? eff.co2.final : CACO3_EQ.co2, false);
+  const caco3 = buildSeries(CACO3_EQ.caco3, 0, CACO3_EQ.caco3, true);
+  const cao = buildSeries(CACO3_EQ.cao, 0, CACO3_EQ.cao, true);
+  const co2 = buildSeries(CACO3_EQ.co2, eff ? eff.co2.jump : 0, eff ? eff.co2.final : CACO3_EQ.co2, false);
+  return { caco3, cao, co2 };
+}
+
+// MOL SAYISI grafiği: burada katılar ARTIK SABİT DEĞİL — derişimleri sabit
+// kalsa bile gerçek mol miktarları tepkime yönüne göre artar/azalır.
+// Hacim etkilerinde hiçbir türde anlık kırılma olmaz (mol, hacimden anlık
+// etkilenmez). CO2 ekleme/çekmede ise mol = derişim ile birebir aynıdır
+// (hacim sabit olduğundan).
+const CACO3_MOL_EQ = { caco3: 0.6, cao: 0.18, co2: 0.42 };
+const CACO3_MOL_EFFECTS = {
+  'hacim-azalt': { caco3: { jump: 0, final: 0.75 }, cao: { jump: 0, final: 0.15 }, co2: { jump: 0, final: 0.18 } },
+  'hacim-artir': { caco3: { jump: 0, final: 0.42 }, cao: { jump: 0, final: 0.48 }, co2: { jump: 0, final: 0.42 } },
+  'co2-ekle':    { caco3: { jump: 0, final: 0.78 }, cao: { jump: 0, final: 0.12 }, co2: { jump: +0.30, final: 0.30 } },
+  'co2-cek':     { caco3: { jump: 0, final: 0.45 }, cao: { jump: 0, final: 0.45 }, co2: { jump: -0.20, final: 0.30 } },
+  'sicaklik-artir': { caco3: { jump: 0, final: 0.42 }, cao: { jump: 0, final: 0.48 }, co2: { jump: 0, final: 0.45 } },
+  'sicaklik-azalt': { caco3: { jump: 0, final: 0.78 }, cao: { jump: 0, final: 0.12 }, co2: { jump: 0, final: 0.15 } }
+};
+
+function getCaCO3MolCurves(effectKey) {
+  const eff = effectKey ? CACO3_MOL_EFFECTS[effectKey] : null;
+  const caco3 = buildSeries(CACO3_MOL_EQ.caco3, eff ? eff.caco3.jump : 0, eff ? eff.caco3.final : CACO3_MOL_EQ.caco3, false);
+  const cao = buildSeries(CACO3_MOL_EQ.cao, eff ? eff.cao.jump : 0, eff ? eff.cao.final : CACO3_MOL_EQ.cao, false);
+  const co2 = buildSeries(CACO3_MOL_EQ.co2, eff ? eff.co2.jump : 0, eff ? eff.co2.final : CACO3_MOL_EQ.co2, false);
   return { caco3, cao, co2 };
 }
 
@@ -571,80 +721,110 @@ function getCaCO3Curves(effectKey) {
 // dengeyi kaydırmaz; tüm derişimler aynı oranda anlık değişir ve
 // SONRASINDA EK BİR KAYMA OLMAZ (final = jump sonrası değer).
 // =========================================================
-const HCL_EQ = { h2: 0.5, cl2: 0.5, hcl: 0.6 };
-const HCL_START = { h2: 0.9, cl2: 0.9, hcl: 0.0 };
+const HCL_EQ = { h2: 0.5, cl2: 0.38, hcl: 0.62 };
+const HCL_START = { h2: 0.9, cl2: 0.78, hcl: 0.0 };
 
 const HCL_EFFECTS = {
   'hacim-azalt': { // tüm derişimler orantılı artar, kayma yok
     h2:  { jump: +0.20, final: 0.70 },
-    cl2: { jump: +0.20, final: 0.70 },
-    hcl: { jump: +0.24, final: 0.84 }
+    cl2: { jump: +0.16, final: 0.54 },
+    hcl: { jump: +0.25, final: 0.87 }
   },
   'hacim-artir': { // tüm derişimler orantılı azalır, kayma yok
     h2:  { jump: -0.20, final: 0.30 },
-    cl2: { jump: -0.20, final: 0.30 },
-    hcl: { jump: -0.24, final: 0.36 }
+    cl2: { jump: -0.16, final: 0.22 },
+    hcl: { jump: -0.25, final: 0.37 }
   },
   'h2-ekle': { // sadece H2 anlık artar, sistem ürünlere kayar
     h2:  { jump: +0.35, final: 0.65 },
-    cl2: { jump: 0,      final: 0.30 },
-    hcl: { jump: 0,      final: 0.85 }
+    cl2: { jump: 0,      final: 0.20 },
+    hcl: { jump: 0,      final: 0.88 }
   },
   'hcl-cek': { // sadece HCl anlık azalır, sistem ürünlere kayar (H2,Cl2 tüketilir)
-    h2:  { jump: 0,     final: 0.60 },
-    cl2: { jump: 0,     final: 0.60 },
-    hcl: { jump: -0.30, final: 0.45 }
+    h2:  { jump: 0,     final: 0.62 },
+    cl2: { jump: 0,     final: 0.50 },
+    hcl: { jump: -0.32, final: 0.45 }
   },
   'sicaklik-artir': { // ekzotermik → girenler yönüne kayar
-    h2:  { jump: 0, final: 0.62 },
-    cl2: { jump: 0, final: 0.62 },
+    h2:  { jump: 0, final: 0.64 },
+    cl2: { jump: 0, final: 0.52 },
     hcl: { jump: 0, final: 0.42 }
   },
   'sicaklik-azalt': { // ekzotermik → ürünler yönüne kayar
-    h2:  { jump: 0, final: 0.40 },
-    cl2: { jump: 0, final: 0.40 },
-    hcl: { jump: 0, final: 0.75 }
+    h2:  { jump: 0, final: 0.38 },
+    cl2: { jump: 0, final: 0.26 },
+    hcl: { jump: 0, final: 0.78 }
   }
 };
 
 function getHClCurves(effectKey) {
   const eff = effectKey ? HCL_EFFECTS[effectKey] : null;
-  const h2 = buildSeries(HCL_START.h2, HCL_EQ.h2, eff ? eff.h2.jump : 0, eff ? eff.h2.final : HCL_EQ.h2, false);
-  const cl2 = buildSeries(HCL_START.cl2, HCL_EQ.cl2, eff ? eff.cl2.jump : 0, eff ? eff.cl2.final : HCL_EQ.cl2, false);
-  const hcl = buildSeries(HCL_START.hcl, HCL_EQ.hcl, eff ? eff.hcl.jump : 0, eff ? eff.hcl.final : HCL_EQ.hcl, false);
+  const h2 = buildSeries(HCL_EQ.h2, eff ? eff.h2.jump : 0, eff ? eff.h2.final : HCL_EQ.h2, false);
+  const cl2 = buildSeries(HCL_EQ.cl2, eff ? eff.cl2.jump : 0, eff ? eff.cl2.final : HCL_EQ.cl2, false);
+  const hcl = buildSeries(HCL_EQ.hcl, eff ? eff.hcl.jump : 0, eff ? eff.hcl.final : HCL_EQ.hcl, false);
+  return { h2, cl2, hcl };
+}
+
+// MOL SAYISI grafiği: hacim etkilerinde mol miktarı TAMAMEN SABİT kalır
+// (ne anlık kırılma ne de kayma olur — çünkü hem mol hacimden anlık
+// etkilenmez hem de eşit mol katsayısından dolayı denge zaten kaymaz).
+// Madde ekleme/çekme ve sıcaklık etkilerinde derişimle birebir aynıdır.
+const HCL_MOL_EFFECTS = effectsFlattenFor(HCL_EFFECTS, ['hacim-azalt', 'hacim-artir'], HCL_EQ);
+
+function getHClMolCurves(effectKey) {
+  const eff = effectKey ? HCL_MOL_EFFECTS[effectKey] : null;
+  const h2 = buildSeries(HCL_EQ.h2, eff ? eff.h2.jump : 0, eff ? eff.h2.final : HCL_EQ.h2, false);
+  const cl2 = buildSeries(HCL_EQ.cl2, eff ? eff.cl2.jump : 0, eff ? eff.cl2.final : HCL_EQ.cl2, false);
+  const hcl = buildSeries(HCL_EQ.hcl, eff ? eff.hcl.jump : 0, eff ? eff.hcl.final : HCL_EQ.hcl, false);
   return { h2, cl2, hcl };
 }
 
 // =========================================================
 // GENEL ÇİZİM / SIFIRLAMA
 // =========================================================
-function drawNH3(curves, showEtki) {
+function drawNH3(curves, molCurves, showEtki) {
   setLine('n2-line', curves.n2); setLine('h2-line', curves.h2); setLine('nh3-line', curves.nh3);
   updateDot('n2-dot', curves.n2); updateDot('h2-dot', curves.h2); updateDot('nh3-dot', curves.nh3);
   document.getElementById('etki-cizgisi-nh3').setAttribute('opacity', showEtki ? '0.6' : '0');
   document.getElementById('etki-etiket-nh3').setAttribute('opacity', showEtki ? '1' : '0');
+
+  setLine('mol-n2-line', molCurves.n2); setLine('mol-h2-line', molCurves.h2); setLine('mol-nh3-line', molCurves.nh3);
+  updateDot('mol-n2-dot', molCurves.n2); updateDot('mol-h2-dot', molCurves.h2); updateDot('mol-nh3-dot', molCurves.nh3);
+  document.getElementById('mol-etki-cizgisi-nh3').setAttribute('opacity', showEtki ? '0.6' : '0');
+  document.getElementById('mol-etki-etiket-nh3').setAttribute('opacity', showEtki ? '1' : '0');
 }
-function drawCaCO3(curves, showEtki) {
+function drawCaCO3(curves, molCurves, showEtki) {
   setLine('caco3-line', curves.caco3); setLine('cao-line', curves.cao); setLine('co2-line', curves.co2);
   updateDot('caco3-dot', curves.caco3); updateDot('cao-dot', curves.cao); updateDot('co2-dot', curves.co2);
   document.getElementById('etki-cizgisi-caco3').setAttribute('opacity', showEtki ? '0.6' : '0');
   document.getElementById('etki-etiket-caco3').setAttribute('opacity', showEtki ? '1' : '0');
+
+  setLine('mol-caco3-line', molCurves.caco3); setLine('mol-cao-line', molCurves.cao); setLine('mol-co2-line', molCurves.co2);
+  updateDot('mol-caco3-dot', molCurves.caco3); updateDot('mol-cao-dot', molCurves.cao); updateDot('mol-co2-dot', molCurves.co2);
+  document.getElementById('mol-etki-cizgisi-caco3').setAttribute('opacity', showEtki ? '0.6' : '0');
+  document.getElementById('mol-etki-etiket-caco3').setAttribute('opacity', showEtki ? '1' : '0');
 }
-function drawHCl(curves, showEtki) {
+function drawHCl(curves, molCurves, showEtki) {
   setLine('h2b-line', curves.h2); setLine('cl2-line', curves.cl2); setLine('hcl-line', curves.hcl);
   updateDot('h2b-dot', curves.h2); updateDot('cl2-dot', curves.cl2); updateDot('hcl-dot', curves.hcl);
   document.getElementById('etki-cizgisi-hcl').setAttribute('opacity', showEtki ? '0.6' : '0');
   document.getElementById('etki-etiket-hcl').setAttribute('opacity', showEtki ? '1' : '0');
+
+  setLine('mol-h2b-line', molCurves.h2); setLine('mol-cl2-line', molCurves.cl2); setLine('mol-hcl-line', molCurves.hcl);
+  updateDot('mol-h2b-dot', molCurves.h2); updateDot('mol-cl2-dot', molCurves.cl2); updateDot('mol-hcl-dot', molCurves.hcl);
+  document.getElementById('mol-etki-cizgisi-hcl').setAttribute('opacity', showEtki ? '0.6' : '0');
+  document.getElementById('mol-etki-etiket-hcl').setAttribute('opacity', showEtki ? '1' : '0');
 }
 
 function resetGrafik(sistem) {
-  if (sistem === 'nh3') drawNH3(getNH3Curves(null), false);
-  else if (sistem === 'caco3') drawCaCO3(getCaCO3Curves(null), false);
-  else if (sistem === 'hcl') drawHCl(getHClCurves(null), false);
+  if (sistem === 'nh3') drawNH3(getNH3Curves(null), getNH3MolCurves(null), false);
+  else if (sistem === 'caco3') drawCaCO3(getCaCO3Curves(null), getCaCO3MolCurves(null), false);
+  else if (sistem === 'hcl') drawHCl(getHClCurves(null), getHClMolCurves(null), false);
 }
 
 const aciklamalar = {
   nh3: {
+    'baslangic': 'Sistem dış etki uygulanmadan önceki başlangıç dengesindedir. Tüm derişimler sabittir. Yukarıdaki sekmelerden bir etki seçerek sistemin o etkiye nasıl tepki verdiğini inceleyebilirsiniz.',
     'hacim-azalt': 'Hacim azaltılınca tüm derişimler anlık olarak artar (V↓ → C↑). Basınç arttığı için denge az mol sayılı tarafa (ürünler – NH₃) kayar: N₂ ve H₂ kısmen geri düşer, NH₃ artmaya devam eder.',
     'hacim-artir': 'Hacim arttırılınca tüm derişimler anlık olarak azalır (V↑ → C↓). Basınç azaldığı için denge çok mol sayılı tarafa (girenler – N₂ + H₂) kayar: N₂ ve H₂ kısmen geri toparlanır, NH₃ azalmaya devam eder.',
     'n2-ekle': 'N₂ eklenince yalnızca [N₂] anlık olarak artar. Denge ürünler yönüne kayar: N₂ kısmen tüketilir (yine de başlangıçtan yüksek kalır), H₂ azalır, NH₃ artar.',
@@ -653,14 +833,16 @@ const aciklamalar = {
     'sicaklik-azalt': 'Sıcaklık azaltılınca (tepkime ekzotermik) denge ekzotermik yönde, yani ürünler (NH₃) tarafına kayar. NH₃ artar, N₂ ve H₂ azalır. Kc artar.'
   },
   caco3: {
+    'baslangic': 'Sistem dış etki uygulanmadan önceki başlangıç dengesindedir. Tüm derişimler sabittir. Yukarıdaki sekmelerden bir etki seçerek sistemin o etkiye nasıl tepki verdiğini inceleyebilirsiniz.',
     'hacim-azalt': 'Hacim azaltılınca [CO₂] anlık olarak artar. Sabit sıcaklıkta Kc = [CO₂] sabit kalmak zorunda olduğundan denge geri kayar (daha fazla CaCO₃ oluşur) ve [CO₂] başlangıç denge değerine döner. [CaCO₃] ve [CaO] katı olduğu için değişmez.',
     'hacim-artir': 'Hacim arttırılınca [CO₂] anlık olarak azalır. Denge bunu telafi etmek için ileri kayar (daha fazla CaCO₃ ayrışır) ve [CO₂] yine başlangıç denge değerine geri döner. Katıların derişimi değişmez.',
     'co2-ekle': 'CO₂ eklenince [CO₂] anlık olarak artar. Fazla CO₂, CaO ile birleşip CaCO₃ oluşturur; [CO₂] tekrar başlangıç denge değerine düşer.',
-    'co2-cek': 'CO₂ çekilince [CO₂] anlık olarak azalır. Eksilen CO₂'yi karşılamak için CaCO₃ ayrışmaya devam eder; [CO₂] tekrar başlangıç denge değerine yükselir.',
-    'sicaklik-artir': 'Sıcaklık arttırılınca (endotermik ayrışma) denge ürünler yönüne kayar; bu kez [CO₂] kalıcı olarak YÜKSELİR çünkü Kc'nin kendisi artmıştır.',
+    'co2-cek': 'CO₂ çekilince [CO₂] anlık olarak azalır. Eksilen CO₂ miktarını karşılamak için CaCO₃ ayrışmaya devam eder; [CO₂] tekrar başlangıç denge değerine yükselir.',
+    'sicaklik-artir': 'Sıcaklık arttırılınca (endotermik ayrışma) denge ürünler yönüne kayar; bu kez [CO₂] kalıcı olarak YÜKSELİR çünkü Kc değeri artmıştır.',
     'sicaklik-azalt': 'Sıcaklık azaltılınca (endotermik ayrışma) denge CaCO₃ yönüne kayar; [CO₂] kalıcı olarak DÜŞER çünkü Kc azalmıştır.'
   },
   hcl: {
+    'baslangic': 'Sistem dış etki uygulanmadan önceki başlangıç dengesindedir. Tüm derişimler sabittir. Yukarıdaki sekmelerden bir etki seçerek sistemin o etkiye nasıl tepki verdiğini inceleyebilirsiniz.',
     'hacim-azalt': 'Mol katsayıları toplamı eşit olduğundan (2=2) hacim azalması dengeyi kaydırmaz. Tüm derişimler aynı anda, aynı oranda anlık olarak artar ve o seviyede sabit kalır.',
     'hacim-artir': 'Mol katsayıları toplamı eşit olduğundan (2=2) hacim artması dengeyi kaydırmaz. Tüm derişimler aynı anda, aynı oranda anlık olarak azalır ve o seviyede sabit kalır.',
     'h2-ekle': 'H₂ eklenince yalnızca [H₂] anlık olarak artar. Denge ürünler yönüne kayar: [H₂] kısmen tüketilir, [Cl₂] azalır, [HCl] artar.',
@@ -670,38 +852,46 @@ const aciklamalar = {
   }
 };
 
-const varsayilanMetin = {
-  nh3: 'Bir denge sistemine dış etki uygulandığında, sistem bu etkiyi zayıflatacak yönde kayar. Yukarıdaki butonlara basarak farklı koşulların etkisini gözlemleyin.',
-  caco3: 'CaCO₃ parçalanma reaksiyonu endotermik bir reaksiyondur. Sıcaklık arttığında denge ürünler yönüne, sıcaklık azaldığında ise tepkimenin ters yönüne kayar.',
-  hcl: 'H₂ + Cl₂ ⇌ 2HCl ekzotermik bir tepkimedir. Mol sayıları eşit olduğu için hacim değişimi dengeyi kaydırmaz; sadece derişimler aynı anda değişir. Madde ekleme/çekme ve sıcaklık değişimi ise dengeyi kaydırır.'
-};
-
 function applyDenge(sistem, eylem, btnEl) {
   document.querySelectorAll(`#sistem-${sistem} .denge-btn`).forEach(b => b.classList.remove('active'));
   if (btnEl) btnEl.classList.add('active');
 
-  let curves;
-  if (sistem === 'nh3') { curves = getNH3Curves(eylem); drawNH3(curves, true); }
-  else if (sistem === 'caco3') { curves = getCaCO3Curves(eylem); drawCaCO3(curves, true); }
-  else if (sistem === 'hcl') { curves = getHClCurves(eylem); drawHCl(curves, true); }
+  let curves, molCurves;
+  const showEtki = !!eylem; // "Başlangıç" sekmesinde Etki çizgisi gösterilmez
+  if (sistem === 'nh3') { curves = getNH3Curves(eylem); molCurves = getNH3MolCurves(eylem); drawNH3(curves, molCurves, showEtki); }
+  else if (sistem === 'caco3') { curves = getCaCO3Curves(eylem); molCurves = getCaCO3MolCurves(eylem); drawCaCO3(curves, molCurves, showEtki); }
+  else if (sistem === 'hcl') { curves = getHClCurves(eylem); molCurves = getHClMolCurves(eylem); drawHCl(curves, molCurves, showEtki); }
 
   const aciklamaEl = document.getElementById(`metin-${sistem}`);
-  if (aciklamalar[sistem] && aciklamalar[sistem][eylem]) {
-    aciklamaEl.textContent = aciklamalar[sistem][eylem];
+  const key = eylem || 'baslangic';
+  if (aciklamalar[sistem] && aciklamalar[sistem][key]) {
+    aciklamaEl.textContent = aciklamalar[sistem][key];
   }
-
-  if (resetTimers[sistem]) clearTimeout(resetTimers[sistem]);
-  resetTimers[sistem] = setTimeout(() => {
-    resetGrafik(sistem);
-    document.querySelectorAll(`#sistem-${sistem} .denge-btn`).forEach(b => b.classList.remove('active'));
-    aciklamaEl.textContent = varsayilanMetin[sistem];
-  }, 6000);
+  // NOT: artık otomatik sıfırlanma yok — seçilen sekme kalıcı olarak gösterilir.
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  resetGrafik('nh3');
-  resetGrafik('caco3');
-  resetGrafik('hcl');
+  document.getElementById('mol-container-nh3').innerHTML = buildMolGraphHTML('nh3', [
+    { id: 'n2', color: '#ef4444', label: 'n(N₂)' },
+    { id: 'h2', color: '#06b6d4', label: 'n(H₂)' },
+    { id: 'nh3', color: '#22c55e', label: 'n(NH₃)' }
+  ]);
+  document.getElementById('mol-container-caco3').innerHTML = buildMolGraphHTML('caco3', [
+    { id: 'caco3', color: '#f59e0b', label: 'n(CaCO₃) katı' },
+    { id: 'cao', color: '#a855f7', label: 'n(CaO) katı' },
+    { id: 'co2', color: '#3b82f6', label: 'n(CO₂)' }
+  ]);
+  document.getElementById('mol-container-hcl').innerHTML = buildMolGraphHTML('hcl', [
+    { id: 'h2b', color: '#06b6d4', label: 'n(H₂)' },
+    { id: 'cl2', color: '#eab308', label: 'n(Cl₂)' },
+    { id: 'hcl', color: '#ec4899', label: 'n(HCl)' }
+  ]);
+
+  // Her sistemde varsayılan olarak "Başlangıç (Etkisiz)" sekmesi seçili gelir.
+  ['nh3', 'caco3', 'hcl'].forEach(sistem => {
+    const firstBtn = document.querySelector(`#sistem-${sistem} .denge-btn`);
+    applyDenge(sistem, null, firstBtn);
+  });
 });
 </script>
 
