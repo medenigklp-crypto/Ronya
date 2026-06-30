@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Test Modülü - Ronya Kimya</title>
+<title>Ronya Kimya - Test Modülü</title>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -722,6 +722,167 @@ header {
 
 .ses-toggle.acik { color: var(--ac2); border-color: var(--ac); }
 
+/* YENİ: Organik Kimya Tablosu */
+.org-tablo {
+  background: var(--sf);
+  border: 1px solid var(--br);
+  border-radius: var(--rlg);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.org-tablo.active { display: block; }
+
+.org-tablo-baslik {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--tx);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.org-grup-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.org-grup-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--sf2);
+  border-radius: var(--rsm);
+  border: 1px solid var(--br2);
+}
+
+.org-grup-formul {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ac2);
+  min-width: 80px;
+}
+
+.org-grup-ad {
+  font-size: 13px;
+  color: var(--tx);
+  flex: 1;
+}
+
+.org-grup-ornek {
+  font-size: 11px;
+  color: var(--tx3);
+}
+
+/* YENİ: KÇÇ Hesaplayıcı */
+.kcc-panel {
+  background: var(--sf);
+  border: 1px solid var(--br);
+  border-radius: var(--rlg);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.kcc-panel.active { display: block; }
+
+.kcc-input {
+  width: 100%;
+  background: var(--sf2);
+  border: 1px solid var(--br);
+  border-radius: var(--rsm);
+  padding: 12px 14px;
+  color: var(--tx);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 10px;
+}
+
+.kcc-input:focus { border-color: var(--ac); outline: none; }
+
+.kcc-sonuc {
+  background: var(--sf2);
+  border: 1px solid var(--br2);
+  border-radius: var(--rsm);
+  padding: 14px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--tx);
+  min-height: 50px;
+}
+
+.kcc-sonuc .kcc-deger {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ac2);
+}
+
+/* YENİ: Piktogram Detayları */
+.piktogram-detay {
+  background: var(--sf2);
+  border: 1px solid var(--br2);
+  border-radius: var(--rsm);
+  padding: 12px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--tx2);
+}
+
+.piktogram-detay .ornek-madde {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--br);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--tx);
+  margin: 2px;
+}
+
+/* YENİ: Element Keşif Hikayeleri */
+.kesif-hikaye {
+  background: var(--sf2);
+  border: 1px solid var(--br2);
+  border-radius: var(--rsm);
+  padding: 14px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--tx2);
+  line-height: 1.6;
+  display: none;
+}
+
+.kesif-hikaye.active { display: block; }
+
+.kesif-baslik {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ac2);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Hata mesajı stili */
+.hata-mesaji {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: var(--rsm);
+  padding: 10px 14px;
+  color: var(--rd);
+  font-size: 13px;
+  margin-top: 8px;
+  display: none;
+}
+
+.hata-mesaji.goster { display: block; }
+
 @media (max-width: 500px) {
   .konu-grid { grid-template-columns: 1fr; }
   .siklar-input { grid-template-columns: 1fr; }
@@ -763,6 +924,25 @@ header {
       <button class="soru-sayisi-btn" onclick="soruSayisiSec(20, this)">20</button>
       <button class="soru-sayisi-btn" onclick="soruSayisiSec(30, this)">30</button>
       <button class="soru-sayisi-btn" onclick="soruSayisiSec(40, this)">40</button>
+    </div>
+
+    <!-- YENİ: Organik Kimya Fonksiyonel Grupları Tablosu -->
+    <div class="org-tablo" id="org-tablo">
+      <div class="org-tablo-baslik">🔬 Organik Kimya - Fonksiyonel Gruplar</div>
+      <div class="org-grup-liste" id="org-grup-liste"></div>
+    </div>
+
+    <!-- YENİ: KÇÇ Hesaplayıcı -->
+    <div class="kcc-panel" id="kcc-panel">
+      <div class="test-baslik">🧮 Çözünürlük Çarpımı (KÇÇ) Hesaplayıcı</div>
+      <input type="text" class="kcc-input" id="kcc-katyon" placeholder="[Kasyon] derişimi (örn: 0.01)">
+      <input type="text" class="kcc-input" id="kcc-anyon" placeholder="[Anyon] derişimi (örn: 0.02)">
+      <input type="text" class="kcc-input" id="kcc-stok" placeholder="Stokiyometri (örn: 1,1 veya 1,2)">
+      <button class="btn btn-primary" onclick="kccHesapla()" style="width:100%;">Hesapla</button>
+      <div class="hata-mesaji" id="kcc-hata"></div>
+      <div class="kcc-sonuc" id="kcc-sonuc">
+        KÇÇ değerini hesaplamak için yukarıdaki alanları doldurun.
+      </div>
     </div>
 
     <!-- ÖZEL SORU EKLEME -->
@@ -867,6 +1047,10 @@ header {
       
       <!-- Kalıcı Sorular Listesi -->
       <div class="eklenen-sorular" id="eklenen-sorular"></div>
+      
+      <button class="btn btn-secondary" onclick="tumOzelSorulariSil()" style="width: 100%; margin-top: 8px; background: var(--rd); color: #fff;">
+        🗑️ Tüm Özel Soruları Sil
+      </button>
     </div>
 
     <button class="btn btn-primary basla-btn" onclick="baslatTest()">
@@ -1635,6 +1819,56 @@ const soruHavuzu = {
 };
 
 // ============================================
+// YENİ: Organik Kimya Fonksiyonel Grupları Verisi
+// ============================================
+const orgFonksiyonelGruplar = [
+  { formul: "R-OH", ad: "Alkol", ornek: "Etanol (C₂H₅OH)" },
+  { formul: "R-CHO", ad: "Aldehit", ornek: "Formaldehit (HCHO)" },
+  { formul: "R-CO-R'", ad: "Keton", ornek: "Aseton (CH₃COCH₃)" },
+  { formul: "R-COOH", ad: "Karboksilik Asit", ornek: "Asetik asit (CH₃COOH)" },
+  { formul: "R-COOR'", ad: "Ester", ornek: "Etil asetat (CH₃COOC₂H₅)" },
+  { formul: "R-O-R'", ad: "Eter", ornek: "Dietil eter (C₂H₅OC₂H₅)" },
+  { formul: "R-NH₂", ad: "Amin", ornek: "Metilamin (CH₃NH₂)" },
+  { formul: "R-CN", ad: "Nitril", ornek: "Asetonitril (CH₃CN)" },
+  { formul: "R-X", ad: "Halojenür", ornek: "Klorometan (CH₃Cl)" },
+  { formul: "R-NO₂", ad: "Nitro Bileşik", ornek: "Nitrometan (CH₃NO₂)" },
+  { formul: "R-SO₃H", ad: "Sülfonik Asit", ornek: "Benzen sülfonik asit" },
+  { formul: "Ar-OH", ad: "Fenol", ornek: "Fenol (C₆H₅OH)" }
+];
+
+// ============================================
+// YENİ: Element Keşif Hikayeleri
+// ============================================
+const elementKesifHikayeleri = {
+  "H": "1766'da Henry Cavendish tarafından keşfedildi. 'Yanıcı hava' olarak adlandırıldı.",
+  "He": "1868'de güneş spektrumunda Pierre Janssen tarafından gözlemlendi. 1895'te Ramsay tarafından Dünya'da bulundu.",
+  "Li": "1817'de Johan August Arfwedson tarafından petalit mineralinde keşfedildi.",
+  "C": "Antik çağlardan beri biliniyor. Elmas ve grafit formunda kullanılıyordu.",
+  "N": "1772'de Daniel Rutherford tarafından havadan ayrılarak keşfedildi.",
+  "O": "1774'te Joseph Priestley ve Carl Wilhelm Scheele tarafından bağımsız olarak keşfedildi.",
+  "F": "1886'da Henri Moissan tarafından elektrolizle elde edildi. Çok zehirli ve reaktif.",
+  "Ne": "1898'de William Ramsay ve Morris Travers tarafından havadan izole edildi.",
+  "Na": "1807'de Humphry Davy tarafından elektrolizle keşfedildi.",
+  "Mg": "1808'de Humphry Davy tarafından keşfedildi. İlk olarak magnesit mineralinden elde edildi.",
+  "Al": "1825'te Hans Christian Ørsted tarafından keşfedildi. Başlangıçta çok değerliydi.",
+  "Si": "1824'te Jöns Jacob Berzelius tarafından keşfedildi.",
+  "P": "1669'da Hennig Brand tarafından idrardan elde edildi. İlk kez sentezlenen element.",
+  "S": "Antik çağlardan beri biliniyor. 'Kükürt' olarak biliniyordu.",
+  "Cl": "1774'te Carl Wilhelm Scheele tarafından keşfedildi. Sarı-yeşil gaz.",
+  "Ar": "1894'te Lord Rayleigh ve William Ramsay tarafından keşfedildi.",
+  "K": "1807'de Humphry Davy tarafından elektrolizle keşfedildi.",
+  "Ca": "1808'de Humphry Davy tarafından keşfedildi.",
+  "Fe": "Antik çağlardan beri biliniyor. Demir Çağı adını buradan alıyor.",
+  "Cu": "Antik çağlardan beri biliniyor. İlk işlenen metal olabilir.",
+  "Zn": "Antik çağlardan beri biliniyor. Pirinç alaşımında kullanılıyordu.",
+  "Ag": "Antik çağlardan beri biliniyor. Değerli metal olarak kullanılıyordu.",
+  "Au": "Antik çağlardan beri biliniyor. En erken keşfedilen metallerden biri.",
+  "Hg": "Antik çağlardan beri biliniyor. Sıvı haldeki tek metal.",
+  "Pb": "Antik çağlardan beri biliniyor. Romalılar su borularında kullandı.",
+  "U": "1789'da Martin Heinrich Klaproth tarafından keşfedildi. Uranyum adını Uranüs gezegeninden aldı."
+};
+
+// ============================================
 // DEĞİŞKENLER
 // ============================================
 let aktifKonu = '';
@@ -1690,12 +1924,95 @@ function sesCal(tip) {
 }
 
 // ============================================
-// KONU SEÇİMİ
+// KONU SEÇİMİ (Güncellendi - Organik Kimya tablosu)
 // ============================================
 function konuSec(konu, btn) {
   aktifKonu = konu;
   document.querySelectorAll('.konu-btn').forEach(b => b.classList.remove('secili'));
   btn.classList.add('secili');
+  
+  // Organik Kimya seçildiğinde tabloyu göster
+  const orgTablo = document.getElementById('org-tablo');
+  if (konu === 'organik') {
+    orgTablo.classList.add('active');
+    orgTabloDoldur();
+  } else {
+    orgTablo.classList.remove('active');
+  }
+  
+  // Çözeltiler seçildiğinde KÇÇ panelini göster
+  const kccPanel = document.getElementById('kcc-panel');
+  if (konu === 'cozelti') {
+    kccPanel.classList.add('active');
+  } else {
+    kccPanel.classList.remove('active');
+  }
+}
+
+// ============================================
+// YENİ: Organik Kimya Tablosunu Doldur
+// ============================================
+function orgTabloDoldur() {
+  const liste = document.getElementById('org-grup-liste');
+  let html = '';
+  orgFonksiyonelGruplar.forEach(grup => {
+    html += `<div class="org-grup-item">
+      <div class="org-grup-formul">${grup.formul}</div>
+      <div class="org-grup-ad">${grup.ad}</div>
+      <div class="org-grup-ornek">${grup.ornek}</div>
+    </div>`;
+  });
+  liste.innerHTML = html;
+}
+
+// ============================================
+// YENİ: KÇÇ Hesaplayıcı
+// ============================================
+function kccHesapla() {
+  const hataEl = document.getElementById('kcc-hata');
+  const sonucEl = document.getElementById('kcc-sonuc');
+  
+  hataEl.classList.remove('goster');
+  
+  const katyon = parseFloat(document.getElementById('kcc-katyon').value.replace(',', '.'));
+  const anyon = parseFloat(document.getElementById('kcc-anyon').value.replace(',', '.'));
+  const stokStr = document.getElementById('kcc-stok').value.trim();
+  
+  // Validasyon
+  if (isNaN(katyon) || isNaN(anyon)) {
+    hataEl.textContent = 'Lütfen geçerli sayısal değerler girin (örn: 0.01)';
+    hataEl.classList.add('goster');
+    return;
+  }
+  
+  if (katyon <= 0 || anyon <= 0) {
+    hataEl.textContent = 'Derişimler pozitif olmalıdır.';
+    hataEl.classList.add('goster');
+    return;
+  }
+  
+  let stok = [1, 1];
+  if (stokStr) {
+    const parts = stokStr.split(/[,;]/).map(s => parseInt(s.trim()));
+    if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+      stok = parts;
+    } else {
+      hataEl.textContent = 'Stokiyometri formatı: "1,1" veya "1;2" şeklinde girin.';
+      hataEl.classList.add('goster');
+      return;
+    }
+  }
+  
+  const kcc = Math.pow(katyon, stok[0]) * Math.pow(anyon, stok[1]);
+  
+  sonucEl.innerHTML = `
+    <div style="margin-bottom:8px; font-size:13px; color:var(--tx2);">KÇÇ = [Kasyon]${stok[0]>1?'^'+stok[0]:''} × [Anyon]${stok[1]>1?'^'+stok[1]:''}</div>
+    <div class="kcc-deger">KÇÇ = ${kcc.toExponential(3)}</div>
+    <div style="margin-top:8px; font-size:12px; color:var(--tx3);">
+      İyon çarpımı: ${(katyon * anyon).toExponential(3)}<br>
+      Çökme olasılığı: ${kcc > 1e-5 ? 'Yüksek' : 'Düşük'}
+    </div>
+  `;
 }
 
 // ============================================
@@ -1741,7 +2058,7 @@ function localStorageSil(anahtar) {
 }
 
 // ============================================
-// TEST BAŞLATMA
+// TEST BAŞLATMA (Güncellendi - localStorage entegrasyonu)
 // ============================================
 function baslatTest() {
   if (!aktifKonu) {
@@ -1770,16 +2087,12 @@ function baslatTest() {
     ...zor.slice(0, zSayi)
   ];
   
-  while (secilecek.length < seciliSoruSayisi && tumSorular.length > secilecek.length) {
-    let kalan = tumSorular.filter(s => !secilecek.includes(s));
-    if (kalan.length > 0) {
-      secilecek.push(kalan[0]);
-    } else break;
-  }
-  
+  // localStorage'dan kalıcı soruları al
   let kaliciSorular = localStorageGetir('ronya_ozel_sorular') || [];
+  // Sadece mevcut konuya ait özel soruları filtrele (eğer konu bilgisi varsa)
+  let konuOzelSorular = kaliciSorular.filter(s => !s.konu || s.konu === aktifKonu);
   
-  aktifSorular = [...secilecek, ...kaliciSorular];
+  aktifSorular = [...secilecek, ...konuOzelSorular];
   aktifSorular.sort(() => Math.random() - 0.5);
   
   soruIndex = 0;
@@ -1874,7 +2187,7 @@ function cevapKontrol(secilen) {
 }
 
 // ============================================
-// TEST BİTİRME
+// TEST BİTİRME (Güncellendi - localStorage skor kaydı)
 // ============================================
 function testiBitir() {
   sesCal('bitis');
@@ -1882,17 +2195,25 @@ function testiBitir() {
   const toplamSoru = dogruSayisi + yanlisSayisi;
   const oran = toplamSoru > 0 ? (dogruSayisi / toplamSoru) * 100 : 0;
   
-  const kayitliSkor = localStorage.getItem('ronya_test_skor_' + aktifKonu) || '0';
-  if (skor > parseInt(kayitliSkor)) {
-    localStorage.setItem('ronya_test_skor_' + aktifKonu, skor.toString());
+  // localStorage'dan en yüksek skoru al ve güncelle
+  const kayitliSkor = localStorageGetir('ronya_test_skor_' + aktifKonu) || 0;
+  if (skor > kayitliSkor) {
+    localStorageKaydet('ronya_test_skor_' + aktifKonu, skor);
   }
+  
+  // Genel istatistikleri güncelle
+  let genelIstatistik = localStorageGetir('ronya_genel_istatistik') || { toplamTest: 0, toplamSoru: 0, toplamDogru: 0 };
+  genelIstatistik.toplamTest++;
+  genelIstatistik.toplamSoru += toplamSoru;
+  genelIstatistik.toplamDogru += dogruSayisi;
+  localStorageKaydet('ronya_genel_istatistik', genelIstatistik);
   
   document.getElementById('test-ekrani').style.display = 'none';
   document.getElementById('sonuc-ekrani').style.display = 'block';
   document.getElementById('sonuc-dogru').textContent = dogruSayisi;
   document.getElementById('sonuc-yanlis').textContent = yanlisSayisi;
   document.getElementById('sonuc-skor').textContent = skor;
-  document.getElementById('en-yuksek-skor').textContent = localStorage.getItem('ronya_test_skor_' + aktifKonu) || '0';
+  document.getElementById('en-yuksek-skor').textContent = localStorageGetir('ronya_test_skor_' + aktifKonu) || 0;
   document.getElementById('basari-orani').textContent = '%' + oran.toFixed(1);
   
   const bar = document.getElementById('sonuc-bar');
@@ -1929,7 +2250,7 @@ function yeniTest() {
 }
 
 // ============================================
-// ÖZEL SORU EKLEME
+// ÖZEL SORU EKLEME (Güncellendi - Validasyon)
 // ============================================
 let seciliDogruCevap = -1;
 let yuklenenResimBase64 = null;
@@ -1949,6 +2270,7 @@ function soruEkle() {
   const sikD = document.getElementById('sik-d').value.trim();
   const sikE = document.getElementById('sik-e').value.trim();
   
+  // Gelişmiş validasyon
   if (!soruMetni && !yuklenenResimBase64) {
     alert('Lütfen soru metni yazın veya bir resim yükleyin!');
     return;
@@ -1964,14 +2286,22 @@ function soruEkle() {
     return;
   }
   
+  // Boş şık kontrolü
+  const siklar = [sikA, sikB, sikC, sikD, sikE];
+  if (siklar.some(s => s.length < 1)) {
+    alert('Şıklar boş olamaz!');
+    return;
+  }
+  
   const yeniSoru = {
     id: Date.now(),
     soru: soruMetni || '(Resimli Soru)',
-    siklar: [sikA, sikB, sikC, sikD, sikE],
+    siklar: siklar,
     cevap: seciliDogruCevap,
     zorluk: 'ozel',
     resim: yuklenenResimBase64,
     kaynak: yuklenenDosyaTipi || 'elle',
+    konu: aktifKonu, // Hangi konuya eklendiğini kaydet
     tarih: new Date().toLocaleDateString('tr-TR')
   };
   
@@ -1979,6 +2309,7 @@ function soruEkle() {
   mevcutSorular.push(yeniSoru);
   localStorageKaydet('ronya_ozel_sorular', mevcutSorular);
   
+  // Formu temizle
   document.getElementById('ozel-soru-metni').value = '';
   document.getElementById('sik-a').value = '';
   document.getElementById('sik-b').value = '';
@@ -2019,6 +2350,7 @@ function gosterEklenenSorular() {
         <div class="soru-kaynak">
           <span class="kaynak-tipi ${kaynakClass}">${kaynakText}</span>
           ${s.tarih} • Doğru: ${['A','B','C','D','E'][s.cevap]}
+          ${s.konu ? `• ${s.konu}` : ''}
         </div>
       </div>
       <button class="soru-sil" onclick="soruSil(${s.id})" title="Soruyu sil">✕</button>
@@ -2039,15 +2371,52 @@ function soruSil(soruId) {
 }
 
 function tumOzelSorulariSil() {
-  if (!confirm('TÜM özel soruları silmek istediğinize emin misiniz?')) return;
+  if (!confirm('TÜM özel soruları silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')) return;
   localStorageSil('ronya_ozel_sorular');
   gosterEklenenSorular();
   pdfToastGoster('Tüm özel sorular silindi.');
 }
 
+// ============================================
+// YENİ: Element Keşif Hikayesi Göster
+// ============================================
+function kesifHikayesiGoster(elementSembol) {
+  const hikaye = elementKesifHikayeleri[elementSembol];
+  if (!hikaye) return;
+  
+  // Mevcut hikaye varsa kaldır
+  const eski = document.querySelector('.kesif-hikaye-popup');
+  if (eski) eski.remove();
+  
+  const popup = document.createElement('div');
+  popup.className = 'kesif-hikaye-popup';
+  popup.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--sf); border:1px solid var(--br); border-radius:16px; padding:20px; max-width:320px; z-index:1000; box-shadow:0 16px 48px rgba(0,0,0,0.5);';
+  popup.innerHTML = `
+    <div style="font-family:Space Grotesk; font-size:16px; font-weight:700; color:var(--ac2); margin-bottom:8px;">${elementSembol} - Keşif Hikayesi</div>
+    <div style="font-size:13px; color:var(--tx2); line-height:1.6;">${hikaye}</div>
+    <button onclick="this.parentElement.remove()" style="margin-top:12px; width:100%; padding:10px; background:var(--br); border:none; border-radius:8px; color:var(--tx); font-weight:600; cursor:pointer;">Kapat</button>
+  `;
+  document.body.appendChild(popup);
+}
+
 // Sayfa yüklendiğinde
 document.addEventListener('DOMContentLoaded', function() {
   gosterEklenenSorular();
+  
+  // Önceki oturumdan ses ayarını kontrol et
+  const sesDurumu = localStorageGetir('ronya_ses_durumu');
+  if (sesDurumu === true) {
+    sesAcik = true;
+    const btn = document.getElementById('sesBtn');
+    btn.textContent = '🔊';
+    btn.classList.add('acik');
+    if (!audioCtx) audioCtx = new AudioContext();
+  }
+});
+
+// Ses durumunu kaydet
+document.getElementById('sesBtn').addEventListener('click', function() {
+  localStorageKaydet('ronya_ses_durumu', sesAcik);
 });
 
 // ============================================
