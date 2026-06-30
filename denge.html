@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Kimyasal Denge Kinetiği - Ronya Kimya</title>
+<title>Kimyasal Denge Kinetiği</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 
@@ -11,24 +11,15 @@
   --bg: #08090f;
   --sf: #0f1117;
   --sf2: #161922;
-  --sf3: #1c2030;
   --br: #1e2535;
-  --br2: #252d40;
   --ac: #6366f1;
   --ac2: #818cf8;
-  --ac3: #a5b4fc;
   --gr: #22c55e;
-  --rd: #ef4444;
-  --yw: #f59e0b;
-  --cy: #06b6d4;
-  --or: #f97316;
   --tx: #f1f5f9;
   --tx2: #94a3b8;
-  --tx3: #475569;
   --r: 14px;
   --rsm: 8px;
   --rlg: 20px;
-  --rxl: 28px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,13 +30,11 @@ html, body { background: #08090f !important; color: var(--tx); font-family: 'Int
 header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 20px;
   height: 56px;
   border-bottom: 1px solid var(--br);
   background: rgba(8,9,15,.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -58,24 +47,7 @@ header {
   background: linear-gradient(135deg, #a5b4fc, #6366f1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  cursor: pointer;
 }
-
-.back-btn {
-  background: var(--sf2);
-  border: 1px solid var(--br);
-  border-radius: var(--rsm);
-  padding: 8px 14px;
-  color: var(--tx2);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.back-btn:hover { border-color: var(--ac); color: var(--ac2); }
 
 .pw { max-width: 960px; margin: 0 auto; padding: 30px 16px; }
 
@@ -85,6 +57,7 @@ header {
   font-weight: 800;
   margin-bottom: 6px;
 }
+
 .psub { color: var(--tx2); font-size: 13px; margin-bottom: 20px; line-height: 1.6; }
 
 .sistem-secim {
@@ -93,6 +66,7 @@ header {
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
+
 .sistem-btn {
   flex: 1;
   min-width: 140px;
@@ -107,6 +81,7 @@ header {
   transition: all 0.2s;
   font-family: 'Inter', sans-serif;
 }
+
 .sistem-btn:hover { border-color: var(--ac); color: var(--tx); }
 .sistem-btn.on { border-color: var(--ac); background: rgba(99,102,241,0.1); color: var(--ac2); }
 
@@ -130,6 +105,7 @@ header {
   border: 1px solid var(--br);
   font-family: 'Space Grotesk', sans-serif;
 }
+
 .denge-sistem sub, .denge-sistem sup { font-size: 10px; }
 
 .denge-buttons {
@@ -138,6 +114,7 @@ header {
   gap: 10px;
   margin-bottom: 20px;
 }
+
 .denge-btn {
   padding: 12px 14px;
   border: 2px solid var(--br);
@@ -154,26 +131,33 @@ header {
   gap: 6px;
   font-family: 'Inter', sans-serif;
 }
+
 .denge-btn:hover {
   border-color: var(--ac);
   background: rgba(99,102,241,0.1);
   transform: translateY(-1px);
 }
+
 .denge-btn:active { transform: scale(0.97); }
+
 .denge-btn.active {
   border-color: var(--ac);
   background: rgba(99,102,241,0.15);
   color: var(--ac2);
 }
+
 .denge-btn.orange { border-color: #f97316; color: #fb923c; }
 .denge-btn.orange:hover { background: rgba(249,115,22,0.1); border-color: #f97316; }
 .denge-btn.orange.active { background: rgba(249,115,22,0.15); }
+
 .denge-btn.red { border-color: #ef4444; color: #f87171; }
 .denge-btn.red:hover { background: rgba(239,68,68,0.1); border-color: #ef4444; }
 .denge-btn.red.active { background: rgba(239,68,68,0.15); }
+
 .denge-btn.blue { border-color: #3b82f6; color: #60a5fa; }
 .denge-btn.blue:hover { background: rgba(59,130,246,0.1); border-color: #3b82f6; }
 .denge-btn.blue.active { background: rgba(59,130,246,0.15); }
+
 .denge-btn .icon { font-size: 16px; }
 
 .denge-grafik {
@@ -184,6 +168,7 @@ header {
   position: relative;
   overflow: hidden;
 }
+
 .denge-grafik-baslik {
   text-align: center;
   font-size: 13px;
@@ -191,15 +176,18 @@ header {
   color: var(--tx2);
   margin-bottom: 12px;
 }
+
 .grafik-canvas {
   width: 100%;
   height: 300px;
   position: relative;
 }
+
 .grafik-svg {
   width: 100%;
   height: 100%;
 }
+
 .grafik-legend {
   display: flex;
   justify-content: center;
@@ -207,6 +195,7 @@ header {
   margin-top: 12px;
   flex-wrap: wrap;
 }
+
 .legend-item {
   display: flex;
   align-items: center;
@@ -214,11 +203,13 @@ header {
   font-size: 11px;
   color: var(--tx2);
 }
+
 .legend-color {
   width: 16px;
   height: 3px;
   border-radius: 2px;
 }
+
 .legend-color.n2 { background: #ef4444; }
 .legend-color.h2 { background: #06b6d4; }
 .legend-color.nh3 { background: #22c55e; }
@@ -226,9 +217,7 @@ header {
 .legend-color.cao { background: #a855f7; }
 .legend-color.co2 { background: #3b82f6; }
 
-.data-point {
-  transition: all 0.8s ease;
-}
+.data-point { transition: all 0.8s ease; }
 
 .denge-aciklama {
   background: var(--sf2);
@@ -237,12 +226,14 @@ header {
   padding: 14px;
   margin-top: 12px;
 }
+
 .denge-aciklama-baslik {
   font-size: 13px;
   font-weight: 700;
   color: var(--ac2);
   margin-bottom: 6px;
 }
+
 .denge-aciklama-metin {
   font-size: 12px;
   color: var(--tx2);
@@ -264,9 +255,7 @@ header {
 <div class="app">
 
 <header>
-  <a href="#" class="back-btn">← Geri</a>
-  <div class="logo" onclick="location.href='#'">Ronya Kimya</div>
-  <div style="width: 60px;"></div>
+  <div class="logo">📊 Kimyasal Denge Kinetiği</div>
 </header>
 
 <div class="pw">
@@ -280,15 +269,29 @@ header {
 
   <!-- NH3 Sistemi -->
   <div id="sistem-nh3" class="denge-container">
-    <div class="denge-sistem">N<sub>2(g)</sub> + 3H<sub>2(g)</sub> ⇌ 2NH<sub>3(g)</sub> + ISI</div>
+    <div class="denge-sistem">
+      N<sub>2(g)</sub> + 3H<sub>2(g)</sub> ⇌ 2NH<sub>3(g)</sub> + ISI
+    </div>
 
     <div class="denge-buttons">
-      <button class="denge-btn orange" onclick="applyDenge('nh3', 'hacim-azalt')"><span class="icon">📉</span> Hacim Azalt (V↓)</button>
-      <button class="denge-btn orange" onclick="applyDenge('nh3', 'hacim-artir')"><span class="icon">📈</span> Hacim Artır (V↑)</button>
-      <button class="denge-btn" onclick="applyDenge('nh3', 'n2-ekle')"><span class="icon">➕</span> N₂ Gazi Ekle</button>
-      <button class="denge-btn" onclick="applyDenge('nh3', 'nh3-cek')"><span class="icon">➖</span> NH₃ Gazi Cek</button>
-      <button class="denge-btn red" onclick="applyDenge('nh3', 'sicaklik-artir')"><span class="icon">🔥</span> Sıcaklık Artır (T↑)</button>
-      <button class="denge-btn blue" onclick="applyDenge('nh3', 'sicaklik-azalt')"><span class="icon">❄️</span> Sıcaklık Azalt (T↓)</button>
+      <button class="denge-btn orange" onclick="applyDenge('nh3', 'hacim-azalt', this)">
+        <span class="icon">📉</span> Hacim Azalt (V↓)
+      </button>
+      <button class="denge-btn orange" onclick="applyDenge('nh3', 'hacim-artir', this)">
+        <span class="icon">📈</span> Hacim Artır (V↑)
+      </button>
+      <button class="denge-btn" onclick="applyDenge('nh3', 'n2-ekle', this)">
+        <span class="icon">➕</span> N₂ Gazı Ekle
+      </button>
+      <button class="denge-btn" onclick="applyDenge('nh3', 'nh3-cek', this)">
+        <span class="icon">➖</span> NH₃ Gazı Çek
+      </button>
+      <button class="denge-btn red" onclick="applyDenge('nh3', 'sicaklik-artir', this)">
+        <span class="icon">🔥</span> Sıcaklık Artır (T↑)
+      </button>
+      <button class="denge-btn blue" onclick="applyDenge('nh3', 'sicaklik-azalt', this)">
+        <span class="icon">❄️</span> Sıcaklık Azalt (T↓)
+      </button>
     </div>
 
     <div class="denge-grafik">
@@ -300,58 +303,86 @@ header {
               <path d="M 40 0 L 0 0 0 30" fill="none" stroke="#1e2535" stroke-width="0.5"/>
             </pattern>
           </defs>
+
           <rect width="600" height="300" fill="url(#grid)" />
+
           <line x1="60" y1="260" x2="580" y2="260" stroke="#475569" stroke-width="1.5" />
           <line x1="60" y1="260" x2="60" y2="20" stroke="#475569" stroke-width="1.5" />
+
           <text x="55" y="265" fill="#475569" font-size="10" text-anchor="end">0</text>
           <text x="55" y="220" fill="#475569" font-size="10" text-anchor="end">0.2</text>
           <text x="55" y="175" fill="#475569" font-size="10" text-anchor="end">0.4</text>
           <text x="55" y="130" fill="#475569" font-size="10" text-anchor="end">0.6</text>
           <text x="55" y="85" fill="#475569" font-size="10" text-anchor="end">0.8</text>
           <text x="55" y="40" fill="#475569" font-size="10" text-anchor="end">1.0</text>
+
           <text x="20" y="140" fill="#475569" font-size="11" text-anchor="middle" transform="rotate(-90, 20, 140)">Derişim (M)</text>
-          <text x="60" y="280" fill="#475569" font-size="10" text-anchor="middle">t₀</text>
+
+          <text x="60" y="280" fill="#475569" font-size="10" text-anchor="middle">0</text>
           <text x="160" y="280" fill="#475569" font-size="10" text-anchor="middle">t₁</text>
           <text x="260" y="280" fill="#475569" font-size="10" text-anchor="middle">t₂</text>
           <text x="360" y="280" fill="#475569" font-size="10" text-anchor="middle">t₃</text>
           <text x="460" y="280" fill="#475569" font-size="10" text-anchor="middle">t₄</text>
           <text x="560" y="280" fill="#475569" font-size="10" text-anchor="middle">t₅</text>
+
           <text x="320" y="295" fill="#475569" font-size="11" text-anchor="middle">Zaman (t)</text>
+
           <line x1="60" y1="180" x2="580" y2="180" stroke="#475569" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.3" />
+
           <path id="n2-line" d="" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
           <path id="h2-line" d="" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
           <path id="nh3-line" d="" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
           <line id="etki-cizgisi-nh3" x1="260" y1="20" x2="260" y2="260" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,3" opacity="0" />
           <text id="etki-etiket-nh3" x="260" y="15" fill="#f59e0b" font-size="10" text-anchor="middle" opacity="0">Etki</text>
-          <circle id="n2-dot" cx="580" cy="100" r="4.5" fill="#ef4444" class="data-point" />
-          <circle id="h2-dot" cx="580" cy="140" r="4.5" fill="#06b6d4" class="data-point" />
-          <circle id="nh3-dot" cx="580" cy="220" r="4.5" fill="#22c55e" class="data-point" />
+
+          <circle id="n2-dot" cx="580" cy="100" r="4" fill="#ef4444" class="data-point" />
+          <circle id="h2-dot" cx="580" cy="140" r="4" fill="#06b6d4" class="data-point" />
+          <circle id="nh3-dot" cx="580" cy="220" r="4" fill="#22c55e" class="data-point" />
         </svg>
       </div>
+
       <div class="grafik-legend">
-        <div class="legend-item"><div class="legend-color n2"></div><span>[N₂]</span></div>
-        <div class="legend-item"><div class="legend-color h2"></div><span>[H₂]</span></div>
-        <div class="legend-item"><div class="legend-color nh3"></div><span>[NH₃]</span></div>
+        <div class="legend-item"><div class="legend-color n2"></div><span>[N₂] Derişimi</span></div>
+        <div class="legend-item"><div class="legend-color h2"></div><span>[H₂] Derişimi</span></div>
+        <div class="legend-item"><div class="legend-color nh3"></div><span>[NH₃] Derişimi</span></div>
       </div>
     </div>
 
     <div class="denge-aciklama" id="aciklama-nh3">
       <div class="denge-aciklama-baslik">ℹ️ Le Chatelier Prensibi</div>
-      <div class="denge-aciklama-metin" id="metin-nh3">Bir denge sistemine dış etki uygulandığında, sistem bu etkiyi zayıflatacak yönde kayar. Butonlara basarak gözlemleyin.</div>
+      <div class="denge-aciklama-metin" id="metin-nh3">
+        Bir denge sistemine dış etki uygulandığında, sistem bu etkiyi zayıflatacak yönde kayar.
+        Yukarıdaki butonlara basarak farklı koşulların etkisini gözlemleyin.
+      </div>
     </div>
   </div>
 
   <!-- CaCO3 Sistemi -->
   <div id="sistem-caco3" class="denge-container" style="display:none;">
-    <div class="denge-sistem">CaCO<sub>3(k)</sub> ⇌ CaO<sub>(k)</sub> + CO<sub>2(g)</sub></div>
+    <div class="denge-sistem">
+      CaCO<sub>3(k)</sub> ⇌ CaO<sub>(k)</sub> + CO<sub>2(g)</sub>
+    </div>
 
     <div class="denge-buttons">
-      <button class="denge-btn orange" onclick="applyDenge('caco3', 'hacim-azalt')"><span class="icon">📉</span> Hacim Azalt (V↓)</button>
-      <button class="denge-btn orange" onclick="applyDenge('caco3', 'hacim-artir')"><span class="icon">📈</span> Hacim Artır (V↑)</button>
-      <button class="denge-btn" onclick="applyDenge('caco3', 'co2-ekle')"><span class="icon">➕</span> CO₂ Gazi Ekle</button>
-      <button class="denge-btn" onclick="applyDenge('caco3', 'co2-cek')"><span class="icon">➖</span> CO₂ Gazi Cek</button>
-      <button class="denge-btn red" onclick="applyDenge('caco3', 'sicaklik-artir')"><span class="icon">🔥</span> Sıcaklık Artır (T↑)</button>
-      <button class="denge-btn blue" onclick="applyDenge('caco3', 'sicaklik-azalt')"><span class="icon">❄️</span> Sıcaklık Azalt (T↓)</button>
+      <button class="denge-btn orange" onclick="applyDenge('caco3', 'hacim-azalt', this)">
+        <span class="icon">📉</span> Hacim Azalt (V↓)
+      </button>
+      <button class="denge-btn orange" onclick="applyDenge('caco3', 'hacim-artir', this)">
+        <span class="icon">📈</span> Hacim Artır (V↑)
+      </button>
+      <button class="denge-btn" onclick="applyDenge('caco3', 'co2-ekle', this)">
+        <span class="icon">➕</span> CO₂ Gazı Ekle
+      </button>
+      <button class="denge-btn" onclick="applyDenge('caco3', 'co2-cek', this)">
+        <span class="icon">➖</span> CO₂ Gazı Çek
+      </button>
+      <button class="denge-btn red" onclick="applyDenge('caco3', 'sicaklik-artir', this)">
+        <span class="icon">🔥</span> Sıcaklık Artır (T↑)
+      </button>
+      <button class="denge-btn blue" onclick="applyDenge('caco3', 'sicaklik-azalt', this)">
+        <span class="icon">❄️</span> Sıcaklık Azalt (T↓)
+      </button>
     </div>
 
     <div class="denge-grafik">
@@ -363,44 +394,58 @@ header {
               <path d="M 40 0 L 0 0 0 30" fill="none" stroke="#1e2535" stroke-width="0.5"/>
             </pattern>
           </defs>
+
           <rect width="600" height="300" fill="url(#grid2)" />
+
           <line x1="60" y1="260" x2="580" y2="260" stroke="#475569" stroke-width="1.5" />
           <line x1="60" y1="260" x2="60" y2="20" stroke="#475569" stroke-width="1.5" />
+
           <text x="55" y="265" fill="#475569" font-size="10" text-anchor="end">0</text>
           <text x="55" y="220" fill="#475569" font-size="10" text-anchor="end">0.2</text>
           <text x="55" y="175" fill="#475569" font-size="10" text-anchor="end">0.4</text>
           <text x="55" y="130" fill="#475569" font-size="10" text-anchor="end">0.6</text>
           <text x="55" y="85" fill="#475569" font-size="10" text-anchor="end">0.8</text>
           <text x="55" y="40" fill="#475569" font-size="10" text-anchor="end">1.0</text>
+
           <text x="20" y="140" fill="#475569" font-size="11" text-anchor="middle" transform="rotate(-90, 20, 140)">Derişim (M)</text>
-          <text x="60" y="280" fill="#475569" font-size="10" text-anchor="middle">t₀</text>
+
+          <text x="60" y="280" fill="#475569" font-size="10" text-anchor="middle">0</text>
           <text x="160" y="280" fill="#475569" font-size="10" text-anchor="middle">t₁</text>
           <text x="260" y="280" fill="#475569" font-size="10" text-anchor="middle">t₂</text>
           <text x="360" y="280" fill="#475569" font-size="10" text-anchor="middle">t₃</text>
           <text x="460" y="280" fill="#475569" font-size="10" text-anchor="middle">t₄</text>
           <text x="560" y="280" fill="#475569" font-size="10" text-anchor="middle">t₅</text>
+
           <text x="320" y="295" fill="#475569" font-size="11" text-anchor="middle">Zaman (t)</text>
+
           <line x1="60" y1="180" x2="580" y2="180" stroke="#475569" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.3" />
+
           <path id="caco3-line" d="" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
           <path id="cao-line" d="" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
           <path id="co2-line" d="" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
           <line id="etki-cizgisi-caco3" x1="260" y1="20" x2="260" y2="260" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,3" opacity="0" />
           <text id="etki-etiket-caco3" x="260" y="15" fill="#f59e0b" font-size="10" text-anchor="middle" opacity="0">Etki</text>
-          <circle id="caco3-dot" cx="580" cy="80" r="4.5" fill="#f59e0b" class="data-point" />
-          <circle id="cao-dot" cx="580" cy="120" r="4.5" fill="#a855f7" class="data-point" />
-          <circle id="co2-dot" cx="580" cy="200" r="4.5" fill="#3b82f6" class="data-point" />
+
+          <circle id="caco3-dot" cx="580" cy="80" r="4" fill="#f59e0b" class="data-point" />
+          <circle id="cao-dot" cx="580" cy="120" r="4" fill="#a855f7" class="data-point" />
+          <circle id="co2-dot" cx="580" cy="200" r="4" fill="#3b82f6" class="data-point" />
         </svg>
       </div>
+
       <div class="grafik-legend">
-        <div class="legend-item"><div class="legend-color caco3"></div><span>[CaCO₃]</span></div>
-        <div class="legend-item"><div class="legend-color cao"></div><span>[CaO]</span></div>
-        <div class="legend-item"><div class="legend-color co2"></div><span>[CO₂]</span></div>
+        <div class="legend-item"><div class="legend-color caco3"></div><span>[CaCO₃] Derişimi</span></div>
+        <div class="legend-item"><div class="legend-color cao"></div><span>[CaO] Derişimi</span></div>
+        <div class="legend-item"><div class="legend-color co2"></div><span>[CO₂] Derişimi</span></div>
       </div>
     </div>
 
     <div class="denge-aciklama" id="aciklama-caco3">
       <div class="denge-aciklama-baslik">ℹ️ Le Chatelier Prensibi</div>
-      <div class="denge-aciklama-metin" id="metin-caco3">CaCO₃ parçalanma tepkimesi endotermiktir. Sıcaklık artışı ürünlere, azalışı ise girenlere kaydırır.</div>
+      <div class="denge-aciklama-metin" id="metin-caco3">
+        CaCO₃ parçalanma reaksiyonu endotermik bir reaksiyondur. Sıcaklık arttığında denge ürünler yönüne,
+        sıcaklık azaldığında ise tepkimenin ters yönüne kayar. Hacim değişimi sadece gaz fazındaki CO₂'yi etkiler.
+      </div>
     </div>
   </div>
 </div>
@@ -409,14 +454,16 @@ header {
 
 <script>
 let currentSistem = 'nh3';
+let resetTimerNH3 = null;
+let resetTimerCaCO3 = null;
 
 function selectSistem(sistem, btn) {
   currentSistem = sistem;
   document.querySelectorAll('.sistem-btn').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
+
   document.getElementById('sistem-nh3').style.display = sistem === 'nh3' ? 'block' : 'none';
   document.getElementById('sistem-caco3').style.display = sistem === 'caco3' ? 'block' : 'none';
-  resetGrafik(sistem);
 }
 
 function expApproach(t, start, end, rate) {
@@ -430,139 +477,199 @@ function createCurve(points) {
   if (points.length < 2) return '';
   let d = `M ${xCoord(points[0].t)} ${yCoord(points[0].c)}`;
   for (let i = 1; i < points.length; i++) {
-    const prev = points[i-1], curr = points[i];
+    const prev = points[i-1];
+    const curr = points[i];
     const x1 = xCoord(prev.t + (curr.t - prev.t) * 0.3);
     const y1 = yCoord(prev.c);
     const x2 = xCoord(prev.t + (curr.t - prev.t) * 0.7);
     const y2 = yCoord(curr.c);
-    d += ` C ${x1} ${y1}, ${x2} ${y2}, ${xCoord(curr.t)} ${yCoord(curr.c)}`;
+    const x = xCoord(curr.t);
+    const y = yCoord(curr.c);
+    d += ` C ${x1} ${y1}, ${x2} ${y2}, ${x} ${y}`;
   }
   return d;
 }
 
+// Son noktanın (x,y) koordinatını dogrudan veriyle hesapla (regex'e gerek yok)
+function lastPoint(points) {
+  const p = points[points.length - 1];
+  return { x: xCoord(p.t), y: yCoord(p.c) };
+}
+
 function getNH3InitialCurve() {
-  const n2=[], h2=[], nh3=[];
-  for (let t=0; t<=5; t+=0.05) {
-    let n2c, h2c, nh3c;
+  const n2Points = [], h2Points = [], nh3Points = [];
+  for (let t = 0; t <= 5; t += 0.1) {
+    let n2, h2, nh3;
     if (t < 2) {
-      const p = t/2;
-      n2c = expApproach(p, 1.0, 0.6, 3);
-      h2c = expApproach(p, 0.8, 0.4, 3);
-      nh3c = expApproach(p, 0.0, 0.4, 3);
+      const progress = t / 2;
+      n2 = expApproach(progress, 1.0, 0.6, 3);
+      h2 = expApproach(progress, 0.8, 0.4, 3);
+      nh3 = expApproach(progress, 0.0, 0.4, 3);
     } else {
-      n2c = 0.6; h2c = 0.4; nh3c = 0.4;
+      n2 = 0.6; h2 = 0.4; nh3 = 0.4;
     }
-    n2.push({t, c: n2c}); h2.push({t, c: h2c}); nh3.push({t, c: nh3c});
+    n2Points.push({t, c: n2});
+    h2Points.push({t, c: h2});
+    nh3Points.push({t, c: nh3});
   }
-  return { n2: createCurve(n2), h2: createCurve(h2), nh3: createCurve(nh3) };
+  return {
+    n2: createCurve(n2Points), h2: createCurve(h2Points), nh3: createCurve(nh3Points),
+    n2Pts: n2Points, h2Pts: h2Points, nh3Pts: nh3Points
+  };
 }
 
 function getCaCO3InitialCurve() {
-  const caco3=[], cao=[], co2=[];
-  for (let t=0; t<=5; t+=0.05) {
-    let cc, ca, co;
+  const caco3Points = [], caoPoints = [], co2Points = [];
+  for (let t = 0; t <= 5; t += 0.1) {
+    let caco3, cao, co2;
     if (t < 2) {
-      const p = t/2;
-      cc = expApproach(p, 1.0, 0.7, 3);
-      ca = expApproach(p, 0.0, 0.3, 3);
-      co = expApproach(p, 0.0, 0.3, 3);
+      const progress = t / 2;
+      caco3 = expApproach(progress, 1.0, 0.7, 3);
+      cao = expApproach(progress, 0.0, 0.3, 3);
+      co2 = expApproach(progress, 0.0, 0.3, 3);
     } else {
-      cc = 0.7; ca = 0.3; co = 0.3;
+      caco3 = 0.7; cao = 0.3; co2 = 0.3;
     }
-    caco3.push({t, c: cc}); cao.push({t, c: ca}); co2.push({t, c: co});
+    caco3Points.push({t, c: caco3});
+    caoPoints.push({t, c: cao});
+    co2Points.push({t, c: co2});
   }
-  return { caco3: createCurve(caco3), cao: createCurve(cao), co2: createCurve(co2) };
+  return {
+    caco3: createCurve(caco3Points), cao: createCurve(caoPoints), co2: createCurve(co2Points),
+    caco3Pts: caco3Points, caoPts: caoPoints, co2Pts: co2Points
+  };
 }
 
 function getNH3EffectCurve(effectType) {
-  let n2_eq=0.6, h2_eq=0.4, nh3_eq=0.4;
-  let n2_new, h2_new, nh3_new, n2_jump=0, h2_jump=0, nh3_jump=0;
+  const n2Points = [], h2Points = [], nh3Points = [];
+  let n2_eq = 0.6, h2_eq = 0.4, nh3_eq = 0.4;
+  let n2_new, h2_new, nh3_new;
+  let n2_jump = 0, h2_jump = 0, nh3_jump = 0;
+
   switch(effectType) {
-    case 'hacim-azalt':  n2_new=0.75; h2_new=0.55; nh3_new=0.25; n2_jump=0.15; h2_jump=0.15; nh3_jump=-0.15; break;
-    case 'hacim-artir':  n2_new=0.45; h2_new=0.25; nh3_new=0.55; n2_jump=-0.15; h2_jump=-0.15; nh3_jump=0.15; break;
-    case 'n2-ekle':      n2_new=0.85; h2_new=0.30; nh3_new=0.50; n2_jump=0.40; h2_jump=-0.10; nh3_jump=0.10; break;
-    case 'nh3-cek':      n2_new=0.70; h2_new=0.50; nh3_new=0.20; n2_jump=0.10; h2_jump=0.10; nh3_jump=-0.20; break;
-    case 'sicaklik-artir': n2_new=0.45; h2_new=0.25; nh3_new=0.55; n2_jump=-0.15; h2_jump=-0.15; nh3_jump=0.15; break;
-    case 'sicaklik-azalt': n2_new=0.75; h2_new=0.55; nh3_new=0.25; n2_jump=0.15; h2_jump=0.15; nh3_jump=-0.15; break;
-    default: n2_new=n2_eq; h2_new=h2_eq; nh3_new=nh3_eq;
+    case 'hacim-azalt':
+      n2_new = 0.75; h2_new = 0.55; nh3_new = 0.25;
+      n2_jump = 0.15; h2_jump = 0.15; nh3_jump = -0.15;
+      break;
+    case 'hacim-artir':
+      n2_new = 0.45; h2_new = 0.25; nh3_new = 0.55;
+      n2_jump = -0.15; h2_jump = -0.15; nh3_jump = 0.15;
+      break;
+    case 'n2-ekle':
+      n2_new = 0.85; h2_new = 0.3; nh3_new = 0.5;
+      n2_jump = 0.4; h2_jump = -0.1; nh3_jump = 0.1;
+      break;
+    case 'nh3-cek':
+      n2_new = 0.7; h2_new = 0.5; nh3_new = 0.2;
+      n2_jump = 0.1; h2_jump = 0.1; nh3_jump = -0.2;
+      break;
+    case 'sicaklik-artir':
+      n2_new = 0.45; h2_new = 0.25; nh3_new = 0.55;
+      n2_jump = -0.15; h2_jump = -0.15; nh3_jump = 0.15;
+      break;
+    case 'sicaklik-azalt':
+      n2_new = 0.75; h2_new = 0.55; nh3_new = 0.25;
+      n2_jump = 0.15; h2_jump = 0.15; nh3_jump = -0.15;
+      break;
+    default:
+      n2_new = n2_eq; h2_new = h2_eq; nh3_new = nh3_eq;
   }
-  const n2=[], h2=[], nh3=[];
-  for (let t=0; t<=5; t+=0.05) {
-    let n2c, h2c, nh3c;
+
+  for (let t = 0; t <= 5; t += 0.05) {
+    let n2, h2, nh3;
     if (t < 2) {
-      const p = t/2;
-      n2c = expApproach(p, 1.0, n2_eq, 3);
-      h2c = expApproach(p, 0.8, h2_eq, 3);
-      nh3c = expApproach(p, 0.0, nh3_eq, 3);
+      const progress = t / 2;
+      n2 = expApproach(progress, 1.0, n2_eq, 3);
+      h2 = expApproach(progress, 0.8, h2_eq, 3);
+      nh3 = expApproach(progress, 0.0, nh3_eq, 3);
     } else if (t < 2.3) {
-      const jp = (t-2)/0.3;
-      n2c = n2_eq + n2_jump * jp;
-      h2c = h2_eq + h2_jump * jp;
-      nh3c = nh3_eq + nh3_jump * jp;
+      const jumpProgress = (t - 2) / 0.3;
+      n2 = n2_eq + n2_jump * jumpProgress;
+      h2 = h2_eq + h2_jump * jumpProgress;
+      nh3 = nh3_eq + nh3_jump * jumpProgress;
     } else if (t < 4) {
-      const p = (t-2.3)/1.7;
-      n2c = expApproach(p, n2_eq + n2_jump, n2_new, 2.5);
-      h2c = expApproach(p, h2_eq + h2_jump, h2_new, 2.5);
-      nh3c = expApproach(p, nh3_eq + nh3_jump, nh3_new, 2.5);
+      const progress = (t - 2.3) / 1.7;
+      n2 = expApproach(progress, n2_eq + n2_jump, n2_new, 2.5);
+      h2 = expApproach(progress, h2_eq + h2_jump, h2_new, 2.5);
+      nh3 = expApproach(progress, nh3_eq + nh3_jump, nh3_new, 2.5);
     } else {
-      n2c = n2_new; h2c = h2_new; nh3c = nh3_new;
+      n2 = n2_new; h2 = h2_new; nh3 = nh3_new;
     }
-    n2.push({t, c: Math.max(0, Math.min(1, n2c))});
-    h2.push({t, c: Math.max(0, Math.min(1, h2c))});
-    nh3.push({t, c: Math.max(0, Math.min(1, nh3c))});
+    n2Points.push({t, c: Math.max(0, Math.min(1, n2))});
+    h2Points.push({t, c: Math.max(0, Math.min(1, h2))});
+    nh3Points.push({t, c: Math.max(0, Math.min(1, nh3))});
   }
-  return { n2: createCurve(n2), h2: createCurve(h2), nh3: createCurve(nh3) };
+
+  return {
+    n2: createCurve(n2Points), h2: createCurve(h2Points), nh3: createCurve(nh3Points),
+    n2Pts: n2Points, h2Pts: h2Points, nh3Pts: nh3Points
+  };
 }
 
 function getCaCO3EffectCurve(effectType) {
-  let caco3_eq=0.7, cao_eq=0.3, co2_eq=0.3;
-  let caco3_new, cao_new, co2_new, caco3_jump=0, cao_jump=0, co2_jump=0;
-  switch(effectType) {
-    case 'hacim-azalt':  caco3_new=0.85; cao_new=0.15; co2_new=0.15; caco3_jump=0.15; cao_jump=-0.15; co2_jump=-0.15; break;
-    case 'hacim-artir':  caco3_new=0.55; cao_new=0.45; co2_new=0.45; caco3_jump=-0.15; cao_jump=0.15; co2_jump=0.15; break;
-    case 'co2-ekle':     caco3_new=0.90; cao_new=0.10; co2_new=0.50; caco3_jump=0.20; cao_jump=-0.20; co2_jump=0.20; break;
-    case 'co2-cek':      caco3_new=0.60; cao_new=0.40; co2_new=0.10; caco3_jump=-0.10; cao_jump=0.10; co2_jump=-0.20; break;
-    case 'sicaklik-artir': caco3_new=0.55; cao_new=0.45; co2_new=0.45; caco3_jump=-0.15; cao_jump=0.15; co2_jump=0.15; break;
-    case 'sicaklik-azalt': caco3_new=0.85; cao_new=0.15; co2_new=0.15; caco3_jump=0.15; cao_jump=-0.15; co2_jump=-0.15; break;
-    default: caco3_new=caco3_eq; cao_new=cao_eq; co2_new=co2_eq;
-  }
-  const caco3=[], cao=[], co2=[];
-  for (let t=0; t<=5; t+=0.05) {
-    let cc, ca, co;
-    if (t < 2) {
-      const p = t/2;
-      cc = expApproach(p, 1.0, caco3_eq, 3);
-      ca = expApproach(p, 0.0, cao_eq, 3);
-      co = expApproach(p, 0.0, co2_eq, 3);
-    } else if (t < 2.3) {
-      const jp = (t-2)/0.3;
-      cc = caco3_eq + caco3_jump * jp;
-      ca = cao_eq + cao_jump * jp;
-      co = co2_eq + co2_jump * jp;
-    } else if (t < 4) {
-      const p = (t-2.3)/1.7;
-      cc = expApproach(p, caco3_eq + caco3_jump, caco3_new, 2.5);
-      ca = expApproach(p, cao_eq + cao_jump, cao_new, 2.5);
-      co = expApproach(p, co2_eq + co2_jump, co2_new, 2.5);
-    } else {
-      cc = caco3_new; ca = cao_new; co = co2_new;
-    }
-    caco3.push({t, c: Math.max(0, Math.min(1, cc))});
-    cao.push({t, c: Math.max(0, Math.min(1, ca))});
-    co2.push({t, c: Math.max(0, Math.min(1, co))});
-  }
-  return { caco3: createCurve(caco3), cao: createCurve(cao), co2: createCurve(co2) };
-}
+  const caco3Points = [], caoPoints = [], co2Points = [];
+  let caco3_eq = 0.7, cao_eq = 0.3, co2_eq = 0.3;
+  let caco3_new, cao_new, co2_new;
+  let caco3_jump = 0, cao_jump = 0, co2_jump = 0;
 
-function updateDot(dotId, pathD) {
-  const dot = document.getElementById(dotId);
-  if (!dot || !pathD) return;
-  const commands = pathD.match(/[MC]\s*([\d.-]+)\s+([\d.-]+)/g);
-  if (commands && commands.length > 0) {
-    const lastCmd = commands[commands.length - 1];
-    const coords = lastCmd.match(/([\d.-]+)\s+([\d.-]+)/);
-    if (coords) { dot.setAttribute('cx', coords[1]); dot.setAttribute('cy', coords[2]); }
+  switch(effectType) {
+    case 'hacim-azalt':
+      caco3_new = 0.85; cao_new = 0.15; co2_new = 0.15;
+      caco3_jump = 0.15; cao_jump = -0.15; co2_jump = -0.15;
+      break;
+    case 'hacim-artir':
+      caco3_new = 0.55; cao_new = 0.45; co2_new = 0.45;
+      caco3_jump = -0.15; cao_jump = 0.15; co2_jump = 0.15;
+      break;
+    case 'co2-ekle':
+      caco3_new = 0.9; cao_new = 0.1; co2_new = 0.5;
+      caco3_jump = 0.2; cao_jump = -0.2; co2_jump = 0.2;
+      break;
+    case 'co2-cek':
+      caco3_new = 0.6; cao_new = 0.4; co2_new = 0.1;
+      caco3_jump = -0.1; cao_jump = 0.1; co2_jump = -0.2;
+      break;
+    case 'sicaklik-artir':
+      caco3_new = 0.55; cao_new = 0.45; co2_new = 0.45;
+      caco3_jump = -0.15; cao_jump = 0.15; co2_jump = 0.15;
+      break;
+    case 'sicaklik-azalt':
+      caco3_new = 0.85; cao_new = 0.15; co2_new = 0.15;
+      caco3_jump = 0.15; cao_jump = -0.15; co2_jump = -0.15;
+      break;
+    default:
+      caco3_new = caco3_eq; cao_new = cao_eq; co2_new = co2_eq;
   }
+
+  for (let t = 0; t <= 5; t += 0.05) {
+    let caco3, cao, co2;
+    if (t < 2) {
+      const progress = t / 2;
+      caco3 = expApproach(progress, 1.0, caco3_eq, 3);
+      cao = expApproach(progress, 0.0, cao_eq, 3);
+      co2 = expApproach(progress, 0.0, co2_eq, 3);
+    } else if (t < 2.3) {
+      const jumpProgress = (t - 2) / 0.3;
+      caco3 = caco3_eq + caco3_jump * jumpProgress;
+      cao = cao_eq + cao_jump * jumpProgress;
+      co2 = co2_eq + co2_jump * jumpProgress;
+    } else if (t < 4) {
+      const progress = (t - 2.3) / 1.7;
+      caco3 = expApproach(progress, caco3_eq + caco3_jump, caco3_new, 2.5);
+      cao = expApproach(progress, cao_eq + cao_jump, cao_new, 2.5);
+      co2 = expApproach(progress, co2_eq + co2_jump, co2_new, 2.5);
+    } else {
+      caco3 = caco3_new; cao = cao_new; co2 = co2_new;
+    }
+    caco3Points.push({t, c: Math.max(0, Math.min(1, caco3))});
+    caoPoints.push({t, c: Math.max(0, Math.min(1, cao))});
+    co2Points.push({t, c: Math.max(0, Math.min(1, co2))});
+  }
+
+  return {
+    caco3: createCurve(caco3Points), cao: createCurve(caoPoints), co2: createCurve(co2Points),
+    caco3Pts: caco3Points, caoPts: caoPoints, co2Pts: co2Points
+  };
 }
 
 function updateGrafik(sistem, data) {
@@ -570,21 +677,33 @@ function updateGrafik(sistem, data) {
     document.getElementById('n2-line').setAttribute('d', data.n2);
     document.getElementById('h2-line').setAttribute('d', data.h2);
     document.getElementById('nh3-line').setAttribute('d', data.nh3);
-    updateDot('n2-dot', data.n2);
-    updateDot('h2-dot', data.h2);
-    updateDot('nh3-dot', data.nh3);
+
+    updateDot('n2-dot', data.n2Pts);
+    updateDot('h2-dot', data.h2Pts);
+    updateDot('nh3-dot', data.nh3Pts);
+
     document.getElementById('etki-cizgisi-nh3').setAttribute('opacity', '0.6');
     document.getElementById('etki-etiket-nh3').setAttribute('opacity', '1');
   } else {
     document.getElementById('caco3-line').setAttribute('d', data.caco3);
     document.getElementById('cao-line').setAttribute('d', data.cao);
     document.getElementById('co2-line').setAttribute('d', data.co2);
-    updateDot('caco3-dot', data.caco3);
-    updateDot('cao-dot', data.cao);
-    updateDot('co2-dot', data.co2);
+
+    updateDot('caco3-dot', data.caco3Pts);
+    updateDot('cao-dot', data.caoPts);
+    updateDot('co2-dot', data.co2Pts);
+
     document.getElementById('etki-cizgisi-caco3').setAttribute('opacity', '0.6');
     document.getElementById('etki-etiket-caco3').setAttribute('opacity', '1');
   }
+}
+
+function updateDot(dotId, points) {
+  const dot = document.getElementById(dotId);
+  if (!dot || !points || points.length === 0) return;
+  const p = lastPoint(points);
+  dot.setAttribute('cx', p.x);
+  dot.setAttribute('cy', p.y);
 }
 
 function resetGrafik(sistem) {
@@ -593,9 +712,11 @@ function resetGrafik(sistem) {
     document.getElementById('n2-line').setAttribute('d', data.n2);
     document.getElementById('h2-line').setAttribute('d', data.h2);
     document.getElementById('nh3-line').setAttribute('d', data.nh3);
-    updateDot('n2-dot', data.n2);
-    updateDot('h2-dot', data.h2);
-    updateDot('nh3-dot', data.nh3);
+
+    updateDot('n2-dot', data.n2Pts);
+    updateDot('h2-dot', data.h2Pts);
+    updateDot('nh3-dot', data.nh3Pts);
+
     document.getElementById('etki-cizgisi-nh3').setAttribute('opacity', '0');
     document.getElementById('etki-etiket-nh3').setAttribute('opacity', '0');
   } else {
@@ -603,9 +724,11 @@ function resetGrafik(sistem) {
     document.getElementById('caco3-line').setAttribute('d', data.caco3);
     document.getElementById('cao-line').setAttribute('d', data.cao);
     document.getElementById('co2-line').setAttribute('d', data.co2);
-    updateDot('caco3-dot', data.caco3);
-    updateDot('cao-dot', data.cao);
-    updateDot('co2-dot', data.co2);
+
+    updateDot('caco3-dot', data.caco3Pts);
+    updateDot('cao-dot', data.caoPts);
+    updateDot('co2-dot', data.co2Pts);
+
     document.getElementById('etki-cizgisi-caco3').setAttribute('opacity', '0');
     document.getElementById('etki-etiket-caco3').setAttribute('opacity', '0');
   }
@@ -613,31 +736,34 @@ function resetGrafik(sistem) {
 
 const aciklamalar = {
   'nh3': {
-    'hacim-azalt': 'Hacim azaltılınca basınç artar. Denge az mol sayılı tarafa (ürünler – NH₃) kayar. N₂ ve H₂ kısa süreli artar, sonra NH₃ oluşumuyla azalır.',
-    'hacim-artir': 'Hacim arttırılınca basınç azalır. Denge çok mol sayılı tarafa (girenler – N₂ + H₂) kayar. N₂ ve H₂ kısa süreli azalır, sonra NH₃ parçalanmasıyla artar.',
-    'n2-ekle': 'N₂ eklenince denge ürünler yönüne (NH₃) kayar. N₂ aniden artar, sonra yeni dengeye doğru azalır. H₂ azalır, NH₃ artar.',
-    'nh3-cek': 'NH₃ çekilince denge ürünler yönüne kayar. NH₃ aniden azalır, sonra N₂ ve H₂ tepkimeye girerek NH₃ oluşturur.',
-    'sicaklik-artir': 'Sıcaklık artışı (ekzotermik) dengeyi endotermik tarafa (girenler) kaydırır. NH₃ parçalanır, N₂ ve H₂ artar.',
-    'sicaklik-azalt': 'Sıcaklık azalışı (ekzotermik) dengeyi ekzotermik tarafa (ürünler) kaydırır. NH₃ artar, N₂ ve H₂ azalır.'
+    'hacim-azalt': 'Hacim azaltılınca basınç artar. Denge az mol sayılı tarafa (ürünler - NH₃) kayar. N₂ ve H₂ derişimleri kısa süreli artar (hacim azalmasından), sonra NH₃ oluşurken azalır.',
+    'hacim-artir': 'Hacim arttırılınca basınç azalır. Denge çok mol sayılı tarafa (girenler - N₂ + H₂) kayar. N₂ ve H₂ derişimleri kısa süreli azalır, sonra NH₃ parçalanarak artar.',
+    'n2-ekle': 'N₂ gazı eklenince denge ürünler yönüne (NH₃) kayar. N₂ derişimi aniden artar, sonra yeni dengeye doğru azalır. H₂ azalır, NH₃ artar.',
+    'nh3-cek': 'NH₃ gazı çekilince denge ürünler yönüne kayar. NH₃ derişimi aniden azalır, sonra N₂ ve H₂ reaksiyona girerek NH₃ oluşur.',
+    'sicaklik-artir': 'Sıcaklık arttırılınca (ekzotermik reaksiyon) denge endotermik tarafa (girenler - N₂ + H₂) kayar. NH₃ parçalanır, N₂ ve H₂ artar.',
+    'sicaklik-azalt': 'Sıcaklık azaltılınca (ekzotermik reaksiyon) denge ekzotermik tarafa (ürünler - NH₃) kayar. NH₃ derişimi artar, N₂ ve H₂ azalır.'
   },
   'caco3': {
-    'hacim-azalt': 'Hacim azalışı CO₂ basıncını artırır, denge ters yönde (CaCO₃) kayar. CaCO₃ artar, CaO ve CO₂ azalır.',
-    'hacim-artir': 'Hacim artışı CO₂ basıncını azaltır, denge ürünler yönüne (CaO + CO₂) kayar. CaCO₃ azalır, CaO ve CO₂ artar.',
-    'co2-ekle': 'CO₂ eklenince denge ters yönde (CaCO₃) kayar. CO₂ aniden artar, sonra CaCO₃ oluşumuyla azalır.',
-    'co2-cek': 'CO₂ çekilince denge ürünler yönüne kayar. CO₂ aniden azalır, CaCO₃ parçalanmaya devam eder.',
-    'sicaklik-artir': 'Sıcaklık artışı (endotermik parçalanma) dengeyi ürünlere kaydırır. CaCO₃ azalır, CaO ve CO₂ artar.',
-    'sicaklik-azalt': 'Sıcaklık azalışı (endotermik parçalanma) dengeyi ters yöne (CaCO₃) kaydırır. CaCO₃ artar, CaO ve CO₂ azalır.'
+    'hacim-azalt': 'Hacim azaltılınca CO₂ basıncı artar. Denge ters yönde (CaCO₃) kayar. CaCO₃ artar, CaO ve CO₂ azalır.',
+    'hacim-artir': 'Hacim arttırılınca CO₂ basıncı azalır. Denge ürünler yönüne (CaO + CO₂) kayar. CaCO₃ azalır, CaO ve CO₂ artar.',
+    'co2-ekle': 'CO₂ eklenince denge ters yönde (CaCO₃) kayar. CO₂ derişimi aniden artar, sonra CaCO₃ oluşurken azalır.',
+    'co2-cek': 'CO₂ çekilince denge ürünler yönüne kayar. CO₂ derişimi aniden azalır, CaCO₃ parçalanmaya devam eder.',
+    'sicaklik-artir': 'Sıcaklık arttırılınca (endotermik parçalanma) denge ürünler yönüne kayar. CaCO₃ azalır, CaO ve CO₂ artar.',
+    'sicaklik-azalt': 'Sıcaklık azaltılınca (endotermik parçalanma) denge ters yönde (CaCO₃) kayar. CaCO₃ artar, CaO ve CO₂ azalır.'
   }
 };
 
-function applyDenge(sistem, eylem) {
-  const btn = event.target.closest('.denge-btn');
+function applyDenge(sistem, eylem, btnEl) {
   document.querySelectorAll(`#sistem-${sistem} .denge-btn`).forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  if (btnEl) btnEl.classList.add('active');
 
   let data;
-  if (sistem === 'nh3') data = getNH3EffectCurve(eylem);
-  else data = getCaCO3EffectCurve(eylem);
+  if (sistem === 'nh3') {
+    data = getNH3EffectCurve(eylem);
+  } else {
+    data = getCaCO3EffectCurve(eylem);
+  }
+
   updateGrafik(sistem, data);
 
   const aciklamaEl = document.getElementById(`metin-${sistem}`);
@@ -645,15 +771,21 @@ function applyDenge(sistem, eylem) {
     aciklamaEl.textContent = aciklamalar[sistem][eylem];
   }
 
-  setTimeout(() => {
-    resetGrafik(sistem);
-    document.querySelectorAll(`#sistem-${sistem} .denge-btn`).forEach(b => b.classList.remove('active'));
-    if (sistem === 'nh3') {
-      aciklamaEl.textContent = 'Bir denge sistemine dış etki uygulandığında, sistem bu etkiyi zayıflatacak yönde kayar. Butonlara basarak gözlemleyin.';
-    } else {
-      aciklamaEl.textContent = 'CaCO₃ parçalanma tepkimesi endotermiktir. Sıcaklık artışı ürünlere, azalışı ise girenlere kaydırır.';
-    }
-  }, 6000);
+  if (sistem === 'nh3') {
+    if (resetTimerNH3) clearTimeout(resetTimerNH3);
+    resetTimerNH3 = setTimeout(() => {
+      resetGrafik(sistem);
+      document.querySelectorAll(`#sistem-${sistem} .denge-btn`).forEach(b => b.classList.remove('active'));
+      aciklamaEl.textContent = 'Bir denge sistemine dış etki uygulandığında, sistem bu etkiyi zayıflatacak yönde kayar. Yukarıdaki butonlara basarak farklı koşulların etkisini gözlemleyin.';
+    }, 6000);
+  } else {
+    if (resetTimerCaCO3) clearTimeout(resetTimerCaCO3);
+    resetTimerCaCO3 = setTimeout(() => {
+      resetGrafik(sistem);
+      document.querySelectorAll(`#sistem-${sistem} .denge-btn`).forEach(b => b.classList.remove('active'));
+      aciklamaEl.textContent = 'CaCO₃ parçalanma reaksiyonu endotermik bir reaksiyondur. Sıcaklık arttığında denge ürünler yönüne, sıcaklık azaldığında ise tepkimenin ters yönüne kayar.';
+    }, 6000);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
