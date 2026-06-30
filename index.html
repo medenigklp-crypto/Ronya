@@ -1261,6 +1261,16 @@ function openElDetail(n){
   if(d.melt!=null) html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">ERİME NOKTASI</div><div style="font-size:20px;font-weight:800;color:#f59e0b">'+d.melt+' °C</div></div>';
   if(d.boil!=null) html+='<div style="background:var(--sf);border:1px solid '+c.border+'44;border-radius:var(--r);padding:14px"><div style="font-size:10px;color:'+c.border+';font-weight:700;margin-bottom:6px">KAYNAMA NOKTASI</div><div style="font-size:20px;font-weight:800;color:#ef4444">'+d.boil+' °C</div></div>';
   html+='</div>';
+  // Element hikayesi
+  if(typeof ElementHikayeler!=='undefined'&&ElementHikayeler.hasStory(el.s)){
+    var story=ElementHikayeler.getStory(el.s);
+    html+='<div style="margin-top:12px;padding:12px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:8px;">';
+    html+='<p style="color:#818cf8;font-size:12px;font-weight:600;margin-bottom:6px;">📖 Keşif Hikayesi</p>';
+    html+='<p style="color:#94a3b8;font-size:11px;margin-bottom:4px;"><b>'+story.discoverer+'</b> ('+story.year+')</p>';
+    html+='<p style="color:#f1f5f9;font-size:12px;line-height:1.5;margin-bottom:8px;">'+story.story+'</p>';
+    html+='<p style="color:#06b6d4;font-size:11px;font-style:italic;">💡 '+story.funFact+'</p>';
+    html+='</div>';
+  }
 
   html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">';
   html+=prevEl?'<button onclick="openElDetail('+prevEl.n+')" style="padding:10px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:12px">← '+prevEl.name+'</button>':'<div></div>';
