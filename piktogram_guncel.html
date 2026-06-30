@@ -1,1 +1,168 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Güvenlik Piktogramları - Ronya Kimya</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{
+  --bg:#08090f;--sf:#0f1117;--sf2:#161922;
+  --br:#1e2535;--ac:#6366f1;--rd:#ef4444;--yw:#f59e0b;--cy:#06b6d4;
+  --tx:#f1f5f9;--tx2:#94a3b8;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{background:var(--bg);color:var(--tx);padding:20px;}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;border-bottom:1px solid var(--br);background:rgba(8,9,15,.95);position:sticky;top:0;z-index:100;margin:-20px -20px 20px;}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.pw{max-width:960px;margin:0 auto;}
+.ptitle{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;}
+.psub{color:var(--tx2);font-size:14px;margin-bottom:24px;}
+.search{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:12px 16px;color:var(--tx);font-size:14px;margin-bottom:20px;outline:none;}
+.search:focus{border-color:var(--ac);}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.pcard{background:var(--sf);border:1px solid var(--br);border-radius:var(--r);padding:20px;transition:all .2s;}
+.pcard:hover{border-color:rgba(99,102,241,.3);transform:translateY(-2px);}
+.picon{width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:12px;}
+.picon.patlayici{background:rgba(239,68,68,.15);color:var(--rd);}
+.picon.yanici{background:rgba(245,158,11,.15);color:var(--yw);}
+.picon.oksidan{background:rgba(6,182,212,.15);color:var(--cy);}
+.picon.zehir{background:rgba(168,85,247,.15);color:#a855f7;}
+.picon.asit{background:rgba(239,68,68,.15);color:var(--rd);}
+.picon.radyo{background:rgba(34,197,94,.15);color:var(--gr);}
+.pcard h3{font-size:15px;font-weight:600;margin-bottom:6px;}
+.pcard .code{font-size:11px;color:var(--tx2);background:var(--sf2);padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:8px;}
+.pcard p{color:var(--tx2);font-size:12px;line-height:1.6;margin-bottom:8px;}
+.pcard .examples{font-size:12px;color:var(--tx);background:var(--sf2);padding:10px;border-radius:8px;margin-top:8px;}
+.pcard .examples b{color:var(--ac2);font-size:11px;}
+.back-btn{background:var(--sf2);border:1px solid var(--br);border-radius:8px;color:var(--tx2);padding:8px 16px;cursor:pointer;font-size:13px;}
+.back-btn:hover{background:rgba(99,102,241,.1);color:var(--ac2);}
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="location.href='index.html'">
+    <span class="logo">Ronya Kimya</span>
+  </div>
+  <button class="back-btn" onclick="location.href='index.html'">← Ana Sayfa</button>
+</header>
+
+<div class="pw">
+  <h1 class="ptitle">⚠️ GHS/CLP Güvenlik Piktogramları</h1>
+  <p class="psub">Kimyasal maddelerin tehlike sınıfları ve örnek bileşikler</p>
+
+  <input type="text" class="search" id="searchPik" placeholder="Ara: patlayıcı, asit, zehir..." onkeyup="filterPik()">
+
+  <div class="pgrid" id="pikGrid">
+
+    <div class="pcard" data-keywords="patlayıcı bomba patlama">
+      <div class="picon patlayici">💥</div>
+      <span class="code">GHS01</span>
+      <h3>Patlayıcı</h3>
+      <p>Şok, sürtünme, ısı veya ateşle temasta patlayabilir. Büyük miktarda enerji anında salınır.</p>
+      <div class="examples">
+        <b>Örnekler:</b> TNT, nitrogliserin, amonyum nitrat, dinamit, azot triklorür
+      </div>
+    </div>
+
+    <div class="pcard" data-keywords="yanıcı ateş alev">
+      <div class="picon yanici">🔥</div>
+      <span class="code">GHS02</span>
+      <h3>Yanıcı</h3>
+      <p>Hava ile temasta kolayca yanabilir veya kıvılcım/ısı kaynağında tutuşabilir.</p>
+      <div class="examples">
+        <b>Örnekler:</b> Benzen, aseton, etanol, metanol, tiner, benzin, naftalin
+      </div>
+    </div>
+
+    <div class="pcard" data-keywords="oksitleyici oksidan yangın">
+      <div class="picon oksidan">🧪</div>
+      <span class="code">GHS03</span>
+      <h3>Oksitleyici</h3>
+      <p>Yangını tetikler veya şiddetlendirir. Diğer maddelerle temasta yanmaya neden olabilir.</p>
+      <div class="examples">
+        <b>Örnekler:</b> Potasyum permanganat (KMnO₄), hidrojen peroksit (H₂O₂), potasyum klorat (KClO₃), nitrik asit (HNO₃)
+      </div>
+    </div>
+
+    <div class="pcard" data-keywords="basınçlı gaz tüp silindir">
+      <div class="picon" style="background:rgba(99,102,241,.15);color:var(--ac);">🫙</div>
+      <span class="code">GHS04</span>
+      <h3>Basınçlı Gaz</h3>
+      <p>Yüksek basınç altındadır. Isıtıldığında patlayabilir veya fırlayabilir.</p>
+      <div class="examples">
+        <b>Örnekler:</b> Oksijen tüpü, propan (LPG), azot (N₂), karbondioksit (CO₂), helyum
+      </div>
+    </div>
+
+    <div class="pcard" data-keywords="asit korozif yanık tahriş">
+      <div class="picon asit">☠️</div>
+      <span class="code">GHS05</span>
+      <h3>Korozif / Cilt Yanığı</h3>
+      <p>Ciltte ve gözde ciddi yanıklara, tahrişe veya görme kaybına neden olabilir.</p>
+      <div class="examples">
+        <b>Örnekler:</b> Sülfürik asit (H₂SO₄), hidroklorik asit (HCl), sodyum hidroksit (NaOH), amonyak (NH₃)
+      </div>
+    </div>
+
+    <div class="pcard" data-keywords="zehir toksik ölüm">
+      <div class="picon zehir">☠️</div>
+      <span class="code">GHS06</span>
+      <h3>Akut Toksisite (Zehir)</h3>
+      <p>Yutulduğunda, solunduğunda veya ciltle temasında ölümcül olabilir.</p>
+      <div class="examples">
+        <b>Örnekler:</b> Siyanür (KCN), arsenik (As₂O₃), cıva (Hg), kurşun (Pb), metanol (yüksek dozda)
+      </div>
+    </div>
+
+    <div class="pcard" data-keywords="sağlık zararlı kanser">
+      <div class="picon" style="background:rgba(245,158,11,.15);color:var(--yw);">⚕️</div>
+      <span class="code">GHS08</span>
+      <h3>Sağlık Zararı</h3>
+      <p>Kanserojen, mutajen, üreme toksisitesi veya organ hasarına neden olabilir.</p>
+      <div class="examples">
+        <b>Örnekler:</b> Benzen (kanser), asbest, formaldehit, vinil klorür, kadmiyum
+      </div>
+    </div>
+
+    <div class="pcard" data-keywords="radyoaktif nükleer radyasyon">
+      <div class="picon radyo">☢️</div>
+      <span class="code">GHS07 (Radyoaktif)</span>
+      <h3>Radyoaktif</h3>
+      <p>İyonize radyasyon yayar. Kanser riski, genetik hasar veya radyasyon hastalığına yol açabilir.</p>
+      <div class="examples">
+        <b>Örnekler:</b> Uranyum-235, plütonyum-239, radyum-226, kobalt-60, iyot-131
+      </div>
+    </div>
+
+    <div class="pcard" data-keywords="çevre su balık zehir">
+      <div class="picon" style="background:rgba(34,197,94,.15);color:var(--gr);">🌊</div>
+      <span class="code">GHS09</span>
+      <h3>Çevresel Tehlike</h3>
+      <p>Su yaşamına ve ekosisteme zarar verir. Biyoakümülasyon yapabilir.</p>
+      <div class="examples">
+        <b>Örnekler:</b> Cıva bileşikleri, kadmiyum, DDT, PCB'ler, ağır metaller
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function filterPik() {
+  const q = document.getElementById('searchPik').value.toLowerCase();
+  document.querySelectorAll('.pcard').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    const keywords = card.dataset.keywords || '';
+    card.classList.toggle('hidden', !text.includes(q) && !keywords.includes(q));
+  });
+}
+</script>
+
+</body>
+</html>
 
