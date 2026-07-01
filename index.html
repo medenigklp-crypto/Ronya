@@ -1561,7 +1561,7 @@ function initCountdown(){
 var RISK_DATA = [
   {
     id: 1, name: 'Patlayıcı', color: '#e00', kategori: 'Fiziksel Tehlike',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/GHS-pictogram-explos.svg/120px-GHS-pictogram-explos.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/GHS-pictogram-explos.svg" width="64" height="64">',
     short: 'Kıvılcım, ısınma veya darbeyle patlayabilir.',
     desc: 'Kıvılcım, ısınma, alev, vurma, çarpma ve sürtünmeye maruz kaldığında patlayabilir.',
     onlem: ['Ateş, kıvılcım ve ısıdan uzak tutulmalıdır.','Uygun mesafede durulmalıdır.','Koruyucu giysi giyilmelidir.'],
@@ -1569,7 +1569,7 @@ var RISK_DATA = [
   },
   {
     id: 2, name: 'Oksitleyici', color: '#e00', kategori: 'Fiziksel Tehlike',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/GHS-pictogram-rondflam.svg/120px-GHS-pictogram-rondflam.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/GHS-pictogram-rondflam.svg" width="64" height="64">',
     short: 'Havasız ortamda bile alev alabilir veya yanabilir.',
     desc: 'Havasız ortamda bile alev alabilir veya yanabilir. Yanıcı maddelerle karıştırıldığında patlayabilir.',
     onlem: ['Yanan maddelerle teması önlenmelidir.','Ateş ve kıvılcımdan uzak tutulmalıdır.','Koruyucu giysi giyilmelidir.'],
@@ -1577,7 +1577,7 @@ var RISK_DATA = [
   },
   {
     id: 3, name: 'Zehirli', color: '#e00', kategori: 'Sağlık Tehlikesi',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/GHS-pictogram-skull.svg/120px-GHS-pictogram-skull.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/1/11/GHS-pictogram-skull.svg" width="64" height="64">',
     short: 'Zehirli veya çok zehirlidir. Kanser riski taşır.',
     desc: 'Zehirli veya çok zehirlidir. Ağız, deri ve solunum yolu ile zehirlenmelere yol açar. Kanser riski taşır.',
     onlem: ['Tüm temas yolları önlenmelidir.','Eldiven ve maske kullanılmalıdır.','Zehir danışma merkezine başvurulabilir.'],
@@ -1585,7 +1585,7 @@ var RISK_DATA = [
   },
   {
     id: 4, name: 'Yanıcı, Parlayıcı', color: '#e00', kategori: 'Fiziksel Tehlike',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/GHS-pictogram-flamme.svg/120px-GHS-pictogram-flamme.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/0/04/GHS-pictogram-flamme.svg" width="64" height="64">',
     short: 'Alevlenme noktası 0 C nin altı veya kaynama noktası 35 C altı.',
     desc: 'Yanıcı ve parlayıcıdır. Bu tür maddeler ateş, kıvılcım ve ısıdan uzak tutulmalıdır.',
     onlem: ['Ateş ve kıvılcımdan uzak tutulmalıdır.','Serin ve havalandırılmış yerde saklanmalıdır.','Statik elektriğe karşı önlem alınmalıdır.'],
@@ -1593,7 +1593,7 @@ var RISK_DATA = [
   },
   {
     id: 5, name: 'Korozif', color: '#e00', kategori: 'Sağlık Tehlikesi',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/GHS-pictogram-acid.svg/120px-GHS-pictogram-acid.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/7/76/GHS-pictogram-acid.svg" width="64" height="64">',
     short: 'Canlı dokuyu tahrip eder, metali aşındırır.',
     desc: 'Canlı dokuyu tahrip eden ya da demiri aşındıran maddelerdir. Deriye ve göze hasar verir.',
     onlem: ['Koruyucu giysi ve yüz kalkanı kullanılmalıdır.','Buharı solunmamalıdır.','Metallerden uzak tutulmalıdır.'],
@@ -1601,7 +1601,7 @@ var RISK_DATA = [
   },
   {
     id: 6, name: 'Tahriş Edici', color: '#e00', kategori: 'Sağlık Tehlikesi',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/GHS-pictogram-exclam.svg/120px-GHS-pictogram-exclam.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/0/03/GHS-pictogram-exclam.svg" width="64" height="64">',
     short: 'Deriye ve göze zarar verebilir. Ozon tabakasına zarar verir.',
     desc: 'Deriye ve göze zarar verebilir. Buharı solunmamalıdır ve vücutla temas ettirilmemelidir. Ozon tabakasına zarar verebilir.',
     onlem: ['Deri ve göz teması önlenmelidir.','Koruyucu eldiven ve gözlük kullanılmalıdır.','İyi havalandırılmış ortamda kullanılmalıdır.'],
@@ -1609,7 +1609,7 @@ var RISK_DATA = [
   },
   {
     id: 7, name: 'Sağlık Etkisi', color: '#e00', kategori: 'Sağlık Tehlikesi',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/GHS-pictogram-silhouete.svg/120px-GHS-pictogram-silhouete.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/GHS-pictogram-silhouette.svg" width="64" height="64">',
     short: 'İnsan sağlığına kısa veya uzun dönemli hasarlar verebilir.',
     desc: 'İnsan sağlığına kısa veya uzun dönemli hasarlar verebilir. Kanser riski taşır.',
     onlem: ['Uzun süreli maruziyet önlenmelidir.','KKD kullanılmalıdır.','Düzenli sağlık kontrolü yaptırılmalıdır.'],
@@ -1617,7 +1617,7 @@ var RISK_DATA = [
   },
   {
     id: 8, name: 'Çevreye Zararlı', color: '#e00', kategori: 'Çevre Tehlikesi',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/GHS-pictogram-pollut.svg/120px-GHS-pictogram-pollut.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/GHS-pictogram-pollu.svg" width="64" height="64">',
     short: 'Suya ve doğadaki canlılara zarar verir.',
     desc: 'Suya ve doğadaki canlılara zarar verir. Doğaya dökülmemeli ve salınmamalıdır.',
     onlem: ['Kanalizasyona dökülmemelidir.','Uygun atık bertaraf yöntemleri kullanılmalıdır.','Sızdırmaz kaplarda saklanmalıdır.'],
@@ -1625,7 +1625,7 @@ var RISK_DATA = [
   },
   {
     id: 9, name: 'Gaz (Basınçlı)', color: '#e00', kategori: 'Fiziksel Tehlike',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/GHS-pictogram-bottle.svg/120px-GHS-pictogram-bottle.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/2/27/GHS-pictogram-bottle.svg" width="64" height="64">',
     short: 'Basınç altında gaz içerir. Isıtıldığında patlayabilir.',
     desc: 'Basınç altında gaz içerir. Çıkan gaz soğuk olabilir ve ısıtıldığında patlayabilir.',
     onlem: ['Güneş ışığından uzak tutulmalıdır.','Dik konumda saklanmalıdır.','Düşürülmemelidir.'],
@@ -1633,13 +1633,14 @@ var RISK_DATA = [
   },
   {
     id: 10, name: 'Radyoaktif', color: '#f59e0b', kategori: 'Fiziksel Tehlike',
-    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/GHS-pictogram-rad.svg/120px-GHS-pictogram-rad.svg.png" width="64" height="64">',
+    svgHtml: '<img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/GHS-pictogram-rad.svg" width="64" height="64">',
     short: 'Radyasyon yayar ve kalıcı hasarlara neden olabilir.',
     desc: 'Çevresine radyasyon yayar ve canlı dokularda kalıcı hasarlara neden olabilir.',
     onlem: ['Yalnızca yetkili kişiler kullanmalıdır.','Radyasyon koruyucu ekipman kullanılmalıdır.','Maruz kalma süresi minimumda tutulmalıdır.'],
     ornekler: ['Uranyum bileşikleri','Radyum','Kobalt-60','Iridyum-192']
   }
 ];
+
 
 
 
