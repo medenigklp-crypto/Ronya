@@ -3257,6 +3257,22 @@ function drawCoz() {
   var ctx = cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height);
   ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 3; ctx.strokeRect(40,20,100,120);
 }
+  function addVideo() {
+  var input = document.getElementById('video-url-input');
+  var filename = input.value.trim();
+  if (!filename) return;
+  var url = 'videos/' + filename;
+  var player = document.getElementById('video-player');
+  var wrap = document.getElementById('video-player-wrap');
+  var name = document.getElementById('video-current-name');
+  player.src = url;
+  player.load();
+  player.play();
+  if (wrap) wrap.style.display = 'block';
+  if (name) name.innerText = filename;
+  input.value = '';
+}
+
 </script>
 <script src="storage.js"></script>
 <script src="validation.js"></script>
