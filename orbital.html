@@ -648,14 +648,25 @@ molAnimFrame=requestAnimationFrame(molLoop);
 }
 
 function showMolecule(mol){
-currentMol=mol;
-document.getElementById('molBox').style.display='block';
-var titles={'BeH2':'BeH₂ - Doğrusal (180°)','BH3':'BH₃ - Düzlem Üçgen (120°)','CH4':'CH₄ - Düzgün Dörtyüzlü (109.5°)','NH3':'NH₃ - Üçgen Piramit (107°)','H2O':'H₂O - Açısal (104.5°)'};
-document.getElementById('molTitle').textContent=titles[mol]||'3D Molekül';
-molRotX=.3;molRotY=.4;
-if(!molAnimFrame)molLoop();
-document.getElementById('molBox').scrollIntoView({behavior:'smooth'});
+  currentMol=mol;
+  document.getElementById('molBox').style.display='block';
+  var titles={'BeH2':'BeH₂ - Doğrusal (180°)','BH3':'BH₃ - Düzlem Üçgen (120°)','CH4':'CH₄ - Düzgün Dörtyüzlü (109.5°)','NH3':'NH₃ - Üçgen Piramit (107°)','H2O':'H₂O - Açısal (104.5°)'};
+  document.getElementById('molTitle').textContent=titles[mol]||'3D Molekül';
+  molRotX=.3;molRotY=.4;
+  if(molAnimFrame)cancelAnimationFrame(molAnimFrame);
+  setTimeout(function(){
+    var mc=document.getElementById('molCanvas');
+    var ctx=mc.getContext('2d');
+    var rect=mc.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+    mc.width=rect.width*dpr;mc.height=300*dpr;
+    molW=rect.width;molH=300;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    molCtx=ctx;molCanvas=mc;
+    molLoop();
+  },80);
+  document.getElementById('molBox').scrollIntoView({behavior:'smooth'});
 }
+
 
 function toggleMolSpin(){molAutoSpin=!molAutoSpin;}
 function resetMolView(){molRotX=.3;molRotY=.4;}
