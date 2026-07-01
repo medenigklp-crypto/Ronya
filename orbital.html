@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <body>
-  <button onclick="location.href='index.html'" style="background:none;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:rgba(255,255,255,0.5);padding:7px 10px;cursor:pointer;font-size:15px">☰</button>
-</div>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Ronya Kimya - 3D Atomik Orbitaller & VSEPR</title>
@@ -13,25 +9,25 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#0a0a1a 0%,#1a1a3e 50%,#0f0f2e 100%);color:#fff;min-height:100vh}
 .header{text-align:center;padding:15px;background:rgba(0,0,0,0.4);border-bottom:2px solid #00d4ff}
 .header h1{font-size:1.3rem;color:#00d4ff;text-shadow:0 0 15px rgba(0,212,255,0.5)}
+.back-btn{display:inline-block;margin-top:8px;padding:6px 16px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);border-radius:20px;color:#00d4ff;font-size:0.8rem;cursor:pointer;text-decoration:none}
 .tabs{display:flex;justify-content:center;gap:8px;padding:12px;flex-wrap:wrap}
 .tab-btn{padding:8px 18px;border:2px solid #00d4ff;background:rgba(0,212,255,0.1);color:#00d4ff;border-radius:20px;cursor:pointer;font-size:.85rem;font-weight:bold}
 .tab-btn.active{background:#00d4ff;color:#000}
 .content{max-width:900px;margin:0 auto;padding:0 12px 30px}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
-.vsepr-table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.8rem;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden}
+.vsepr-table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.75rem;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden}
 .vsepr-table th{background:rgba(0,212,255,0.2);color:#00d4ff;padding:10px 6px;text-align:center;border:1px solid rgba(0,212,255,0.3)}
 .vsepr-table td{padding:10px 6px;text-align:center;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.85);vertical-align:middle}
 .vsepr-table tr:nth-child(even){background:rgba(255,255,255,0.02)}
 .vsepr-table tr:hover{background:rgba(0,212,255,0.08)}
-.vsepr-table .compound{font-weight:bold;color:#00ff88;font-size:.9rem}
+.vsepr-table .compound{font-weight:bold;color:#00ff88;font-size:.85rem}
 .vsepr-table .formula{font-family:'Courier New',monospace;color:#ffaa55}
 .vsepr-table .polar{color:#ff5555;font-weight:bold}
 .vsepr-table .apolar{color:#55ff55;font-weight:bold}
 .sim-box{background:rgba(0,0,0,0.5);border-radius:16px;padding:15px;margin-bottom:15px;border:1px solid rgba(0,212,255,0.2)}
 .sim-title{text-align:center;font-size:1.1rem;color:#00d4ff;margin-bottom:10px}
 #orbitalCanvas{display:block;width:100%!important;height:420px!important;border-radius:12px;background:#050510;border:1px solid rgba(0,212,255,0.2);touch-action:none}
-#molCanvas{display:block;width:100%!important;height:420px!important;border-radius:12px;background:#050510;border:1px solid rgba(0,212,255,0.2);touch-action:none}
 .controls{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap}
 .ctrl-btn{padding:8px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:20px;color:#00d4ff;font-size:.78rem;cursor:pointer}
 .ctrl-btn:active{background:rgba(0,212,255,0.3)}
@@ -69,109 +65,139 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .empty{text-align:center;padding:40px 15px;color:rgba(255,255,255,0.3)}
 .mol-3d-box{background:rgba(0,0,0,0.5);border-radius:16px;padding:15px;margin:15px 0;border:1px solid rgba(0,212,255,0.2)}
 .mol-3d-title{text-align:center;font-size:1rem;color:#00d4ff;margin-bottom:8px}
+#molCanvas{display:block;width:100%!important;height:320px!important;border-radius:12px;background:#050510;border:1px solid rgba(0,212,255,0.2);touch-action:none}
+.legend{display:flex;gap:14px;justify-content:center;margin-top:8px;flex-wrap:wrap;font-size:.75rem}
+.legend span{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.6)}
+.legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block}
 </style>
 </head>
 <body>
-<div class="header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;"><div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="location.href='index.html'"><img src="icon.10.png" style="width:40px;height:40px;border-radius:8px"><span style="font-family:Space Grotesk,sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Ronya<span style="font-size:11px;-webkit-text-fill-color:#475569;font-weight:400;font-family:Inter,sans-serif;margin-left:6px">Kimya</span></span></div><button onclick="location.href='index.html'" style="background:none;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:rgba(255,255,255,0.5);padding:7px 10px;cursor:pointer;font-size:15px">☰</button></div>
+<div class="header" style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:68px;text-align:left;background:rgba(0,0,0,0.4);border-bottom:2px solid #00d4ff;flex-wrap:nowrap;">
+  <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="location.href='index.html'">
+    <img src="icon.10.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0">
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;">Ronya<span style="font-size:11px;-webkit-text-fill-color:#94a3b8;font-weight:400;font-family:Inter,sans-serif;margin-left:6px">Kimya</span></span>
+  </div>
+  <button onclick="location.href='index.html'" style="background:none;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:rgba(255,255,255,0.6);padding:8px 11px;cursor:pointer;font-size:18px;flex-shrink:0;">☰</button>
+</div>
 <div class="tabs">
-<button class="tab-btn active" onclick="switchTab('vsepr')">📊 VSEPR Tablosu</button>
-<button class="tab-btn" onclick="switchTab('orbitals')">🔬 Orbitaller</button>
-<button class="tab-btn" onclick="switchTab('videos')">🎬 Videolar</button>
+  <button class="tab-btn active" onclick="switchTab('vsepr',this)">📊 VSEPR Tablosu</button>
+  <button class="tab-btn" onclick="switchTab('orbitals',this)">🔬 Orbitaller</button>
+  <button class="tab-btn" onclick="switchTab('videos',this)">🎬 Videolar</button>
 </div>
 <div class="content">
+
+<!-- VSEPR -->
 <div id="vsepr" class="tab-panel active">
-<div class="sim-box">
-<div class="sim-title">2. Periyottaki Bazı Elementlerin Hidrojenli Bileşikleri</div>
-<table class="vsepr-table">
-<thead><tr><th>Bileşik</th><th>Formül</th><th>VSEPR</th><th>Hibrit</th><th>Bağ Açısı</th><th>Şekil</th><th>Polarlık</th><th>3D</th></tr></thead>
-<tbody>
-<tr><td class="compound">Berilyum Hidroür</td><td class="formula">BeH₂</td><td>AX₂</td><td>sp</td><td>180°</td><td>Doğrusal</td><td class="apolar">Apolar</td><td><button class="ctrl-btn" onclick="showMolecule('BeH2')">👁️</button></td></tr>
-<tr><td class="compound">Bor Hidroür</td><td class="formula">BH₃</td><td>AX₃</td><td>sp²</td><td>120°</td><td>Düzlem üçgen</td><td class="apolar">Apolar</td><td><button class="ctrl-btn" onclick="showMolecule('BH3')">👁️</button></td></tr>
-<tr><td class="compound">Metan</td><td class="formula">CH₄</td><td>AX₄</td><td>sp³</td><td>109.5°</td><td>Düzgün dörtyüzlü</td><td class="apolar">Apolar</td><td><button class="ctrl-btn" onclick="showMolecule('CH4')">👁️</button></td></tr>
-<tr><td class="compound">Amonyak</td><td class="formula">NH₃</td><td>AX₃E</td><td>sp³</td><td>107°</td><td>Üçgen piramit</td><td class="polar">Polar</td><td><button class="ctrl-btn" onclick="showMolecule('NH3')">👁️</button></td></tr>
-<tr><td class="compound">Su</td><td class="formula">H₂O</td><td>AX₂E₂</td><td>sp³</td><td>104.5°</td><td>Açısal (kırık doğru)</td><td class="polar">Polar</td><td><button class="ctrl-btn" onclick="showMolecule('H2O')">👁️</button></td></tr>
-</tbody>
-</table>
+  <div class="sim-box">
+    <div class="sim-title">2. Periyottaki Bazı Elementlerin Hidrojenli Bileşikleri</div>
+    <div style="overflow-x:auto">
+    <table class="vsepr-table">
+      <thead>
+        <tr><th>Bileşik</th><th>Formül</th><th>VSEPR</th><th>Hibrit</th><th>Bağ Açısı</th><th>Şekil</th><th>Polarlık</th><th>3D</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="compound">Berilyum Hidroür</td><td class="formula">BeH₂</td><td>AX₂</td><td>sp</td><td>180°</td><td>Doğrusal</td><td class="apolar">Apolar</td><td><button class="ctrl-btn" onclick="showMolecule('BeH2')">👁️ Gör</button></td></tr>
+        <tr><td class="compound">Bor Hidroür</td><td class="formula">BH₃</td><td>AX₃</td><td>sp²</td><td>120°</td><td>Düzlem üçgen</td><td class="apolar">Apolar</td><td><button class="ctrl-btn" onclick="showMolecule('BH3')">👁️ Gör</button></td></tr>
+        <tr><td class="compound">Metan</td><td class="formula">CH₄</td><td>AX₄</td><td>sp³</td><td>109.5°</td><td>Düzgün dörtyüzlü</td><td class="apolar">Apolar</td><td><button class="ctrl-btn" onclick="showMolecule('CH4')">👁️ Gör</button></td></tr>
+        <tr><td class="compound">Amonyak</td><td class="formula">NH₃</td><td>AX₃E</td><td>sp³</td><td>107°</td><td>Üçgen piramit</td><td class="polar">Polar</td><td><button class="ctrl-btn" onclick="showMolecule('NH3')">👁️ Gör</button></td></tr>
+        <tr><td class="compound">Su</td><td class="formula">H₂O</td><td>AX₂E₂</td><td>sp³</td><td>104.5°</td><td>Açısal (kırık doğru)</td><td class="polar">Polar</td><td><button class="ctrl-btn" onclick="showMolecule('H2O')">👁️ Gör</button></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="mol-3d-box" id="molBox" style="display:none">
+    <div class="mol-3d-title" id="molTitle">3D Molekül Görünümü</div>
+    <canvas id="molCanvas" width="600" height="320"></canvas>
+    <p class="hint-drag">👆 Ekrana dokunarak 3D döndürün</p>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#ff4444"></span>H (Hidrojen)</span>
+      <span><span class="legend-dot" style="background:#4488ff"></span>Merkez Atom</span>
+      <span><span class="legend-dot" style="background:#ffee00"></span>Ortaklanmamış e⁻ çifti</span>
+    </div>
+    <div class="controls">
+      <button class="ctrl-btn" onclick="toggleMolSpin()">🔄 Oto-Döndür</button>
+      <button class="ctrl-btn" onclick="resetMolView()">🎯 Sıfırla</button>
+    </div>
+  </div>
+
+  <div class="props">
+    <h3>📋 VSEPR Kuramı Özellikleri</h3>
+    <div class="prop-row"><span class="prop-label">A:</span><span class="prop-val">Merkez atomu</span></div>
+    <div class="prop-row"><span class="prop-label">X:</span><span class="prop-val">Bağlı atom/atom grupları</span></div>
+    <div class="prop-row"><span class="prop-label">E:</span><span class="prop-val">Ortaklanmamış elektron çiftleri</span></div>
+    <div class="prop-desc">VSEPR kuramına göre merkez atom etrafındaki bağ yapan ya da ortaklanmamış tüm elektron çiftleri birbirini iter. Bu nedenle birbirinden mümkün olduğunca uzakta konumlanır. Sarı noktalar ortaklanmamış elektron çiftlerini gösterir.</div>
+  </div>
 </div>
-<div class="mol-3d-box" id="molBox" style="display:none;">
-<div class="mol-3d-title" id="molTitle">3D Molekül Görünümü</div>
-<canvas id="molCanvas" width="600" height="420"></canvas>
-<p class="hint-drag">👆 Ekrana dokunarak 3D döndürün</p>
-<div class="controls">
-<button class="ctrl-btn" onclick="toggleMolSpin()">🔄 Oto-Döndür</button>
-<button class="ctrl-btn" onclick="resetMolView()">🎯 Sıfırla</button>
-</div>
-</div>
-<div class="props">
-<h3>📋 VSEPR Kuramı Özellikleri</h3>
-<div class="prop-row"><span class="prop-label">A:</span><span class="prop-val">Merkez atomu</span></div>
-<div class="prop-row"><span class="prop-label">X:</span><span class="prop-val">Bağlı atom/atom grupları</span></div>
-<div class="prop-row"><span class="prop-label">E:</span><span class="prop-val">Ortaklanmamış elektron çiftleri</span></div>
-<div class="prop-desc">VSEPR kuramına göre merkez atom etrafındaki bağ yapan ya da ortaklanmamış tüm elektron çiftleri birbirini iter. Bu nedenle bağ yapan ya da ortaklanmamış elektron çiftleri, birbirinden mümkün olduğunca uzakta konumlanır.</div>
-</div>
-</div>
+
+<!-- ORBİTALLER -->
 <div id="orbitals" class="tab-panel">
-<div class="type-grid">
-<div class="type-card" onclick="pickType('s',this)"><h3>s</h3><p>1 Orbital · 2e⁻</p></div>
-<div class="type-card" onclick="pickType('p',this)"><h3>p</h3><p>3 Orbital · 6e⁻</p></div>
-<div class="type-card" onclick="pickType('d',this)"><h3>d</h3><p>5 Orbital · 10e⁻</p></div>
-<div class="type-card" onclick="pickType('f',this)"><h3>f</h3><p>7 Orbital · 14e⁻</p></div>
+  <div class="type-grid">
+    <div class="type-card" onclick="pickType('s',this)"><h3>s</h3><p>1 Orbital · 2e⁻</p></div>
+    <div class="type-card" onclick="pickType('p',this)"><h3 style="color:#ff6b6b">p</h3><p>3 Orbital · 6e⁻</p></div>
+    <div class="type-card" onclick="pickType('d',this)"><h3 style="color:#22b450">d</h3><p>5 Orbital · 10e⁻</p></div>
+    <div class="type-card" onclick="pickType('f',this)"><h3 style="color:#a855f7">f</h3><p>7 Orbital · 14e⁻</p></div>
+  </div>
+  <div class="sub-orbital-grid" id="subGrid"></div>
+  <div class="sim-box">
+    <div class="sim-title" id="simTitle">Bir orbital türü seçin</div>
+    <canvas id="orbitalCanvas" width="600" height="420"></canvas>
+    <p class="hint-drag">👆 Ekrana dokunarak 3D döndürün</p>
+    <div class="controls">
+      <button class="ctrl-btn" onclick="toggleSpin()">🔄 Oto-Döndür</button>
+      <button class="ctrl-btn" onclick="toggleElec()">⚡ Elektronlar</button>
+      <button class="ctrl-btn" onclick="setSpeed(0.3)">🐌 Yavaş</button>
+      <button class="ctrl-btn" onclick="setSpeed(1.5)">🚀 Hızlı</button>
+      <button class="ctrl-btn" onclick="resetView()">🎯 Sıfırla</button>
+    </div>
+  </div>
+  <div class="props">
+    <h3>📋 Orbital Özellikleri</h3>
+    <div class="prop-row"><span class="prop-label">Tip:</span><span class="prop-val" id="pType">-</span></div>
+    <div class="prop-row"><span class="prop-label">Alt Orbital:</span><span class="prop-val" id="pSub">-</span></div>
+    <div class="prop-row"><span class="prop-label">l (Açısal Momentum):</span><span class="prop-val" id="pL">-</span></div>
+    <div class="prop-row"><span class="prop-label">mₗ (Manyetik):</span><span class="prop-val" id="pMl">-</span></div>
+    <div class="prop-row"><span class="prop-label">Maks. Elektron:</span><span class="prop-val" id="pElec">-</span></div>
+    <div class="prop-row"><span class="prop-label">Şekil:</span><span class="prop-val" id="pShape">-</span></div>
+    <div class="prop-desc" id="pDesc">Bir orbital türü seçin, ardından alt orbital butonlarından birine tıklayın.</div>
+  </div>
 </div>
-<div class="sub-orbital-grid" id="subGrid"></div>
-<div class="sim-box">
-<div class="sim-title" id="simTitle">Bir orbital türü seçin</div>
-<canvas id="orbitalCanvas" width="600" height="420"></canvas>
-<p class="hint-drag">👆 Ekrana dokunarak 3D döndürün</p>
-<div class="controls">
-<button class="ctrl-btn" onclick="toggleSpin()">🔄 Oto-Döndür</button>
-<button class="ctrl-btn" onclick="toggleElec()">⚡ Elektronlar</button>
-<button class="ctrl-btn" onclick="setSpeed(0.3)">🐌 Yavaş</button>
-<button class="ctrl-btn" onclick="setSpeed(1.5)">🚀 Hızlı</button>
-<button class="ctrl-btn" onclick="resetView()">🎯 Sıfırla</button>
-</div>
-</div>
-<div class="props">
-<h3>📋 Orbital Özellikleri</h3>
-<div class="prop-row"><span class="prop-label">Tip:</span><span class="prop-val" id="pType">-</span></div>
-<div class="prop-row"><span class="prop-label">Alt Orbital:</span><span class="prop-val" id="pSub">-</span></div>
-<div class="prop-row"><span class="prop-label">l (Açısal Momentum):</span><span class="prop-val" id="pL">-</span></div>
-<div class="prop-row"><span class="prop-label">mₗ (Manyetik):</span><span class="prop-val" id="pMl">-</span></div>
-<div class="prop-row"><span class="prop-label">Maks. Elektron:</span><span class="prop-val" id="pElec">-</span></div>
-<div class="prop-row"><span class="prop-label">Şekil:</span><span class="prop-val" id="pShape">-</span></div>
-<div class="prop-desc" id="pDesc">Bir orbital türü seçin, ardından alt orbital butonlarından birine tıklayın.</div>
-</div>
-</div>
+
+<!-- VİDEOLAR -->
 <div id="videos" class="tab-panel">
-<div class="video-input">
-<h2>🎥 Video Ekle</h2>
-<input type="text" id="vUrl" placeholder="GitHub raw video URL...">
-<input type="text" id="vTitle" placeholder="Video başlığı...">
-<button class="btn-add" onclick="addVid()">➕ Ekle</button>
-<p class="hint">💡 GitHub'daki videonun raw linkini yapıştırın</p>
+  <div class="video-input">
+    <h2>🎥 Video Ekle</h2>
+    <input type="text" id="vUrl" placeholder="GitHub raw video URL...">
+    <input type="text" id="vTitle" placeholder="Video başlığı...">
+    <button class="btn-add" onclick="addVid()">➕ Ekle</button>
+    <p class="hint">💡 GitHub'daki videonun raw linkini yapıştırın</p>
+  </div>
+  <div class="videos-grid" id="vGrid">
+    <div class="empty"><p>Henüz video yok</p><p style="font-size:.75rem;margin-top:5px">Yukarıya URL ekleyin</p></div>
+  </div>
 </div>
-<div class="videos-grid" id="vGrid">
-<div class="empty"><p>Henüz video yok</p><p style="font-size:.75rem;margin-top:5px">Yukarıya URL ekleyin</p></div>
-</div>
-</div>
-</div>
+
+</div><!-- /content -->
+
 <script>
-function switchTab(name){
-document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
-document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
-document.getElementById(name).classList.add('active');
-event.target.classList.add('active');
-if(name==='orbitals'){setTimeout(function(){resizeCanvas();if(activeType&&activeSub!==null)loop();},50);}
+// ===== SEKME =====
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='orbitals'){setTimeout(function(){resizeCanvas();},50);}
 }
 
-// ===== ORBITAL 3D =====
+// ===== ORBİTAL SİMÜLASYON =====
 var canvas=document.getElementById('orbitalCanvas'),c=canvas.getContext('2d');
 var W=600,H=420,activeType=null,activeSub=null,t=0,autoSpin=true,elecOn=true,spd=1,animFrame=null;
 var rotX=.4,rotY=.3,isDragging=false,lastX=0,lastY=0;
 
 function resizeCanvas(){
-var rect=canvas.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
-canvas.width=rect.width*dpr;canvas.height=420*dpr;W=rect.width;H=420;
-c.setTransform(dpr,0,0,dpr,0,0);
+  var rect=canvas.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+  canvas.width=rect.width*dpr;canvas.height=420*dpr;W=rect.width;H=420;
+  c.setTransform(dpr,0,0,dpr,0,0);
 }
 resizeCanvas();
 window.addEventListener('resize',resizeCanvas);
@@ -185,519 +211,388 @@ canvas.addEventListener('touchmove',function(e){if(!isDragging)return;rotY+=(e.t
 canvas.addEventListener('touchend',function(){isDragging=false;});
 
 function rotate3D(x,y,z){
-var y1=y*Math.cos(rotX)-z*Math.sin(rotX),z1=y*Math.sin(rotX)+z*Math.cos(rotX);
-var x2=x*Math.cos(rotY)+z1*Math.sin(rotY),z2=-x*Math.sin(rotY)+z1*Math.cos(rotY);
-return{x:x2,y:y1,z:z2};
+  var y1=y*Math.cos(rotX)-z*Math.sin(rotX),z1=y*Math.sin(rotX)+z*Math.cos(rotX);
+  var x2=x*Math.cos(rotY)+z1*Math.sin(rotY),z2=-x*Math.sin(rotY)+z1*Math.cos(rotY);
+  return{x:x2,y:y1,z:z2};
 }
 function project(x,y,z){
-var r=rotate3D(x,y,z),scale=280/(350+r.z);
-return{x:W/2+r.x*scale,y:H/2+r.y*scale,z:r.z,scale:scale};
+  var r=rotate3D(x,y,z),scale=280/(350+r.z);
+  return{x:W/2+r.x*scale,y:H/2+r.y*scale,z:r.z,scale:scale};
 }
 
 var ORBITALS={
-s:{subs:[{name:'1s',ml:0,desc:'1s orbitali en düşük enerjili orbitaldir. Çekirdek etrafında küresel simetriye sahiptir. 2 elektron barındırır.'}],l:0,max:2,shape:'Küresel',color:[0,212,255]},
-p:{subs:[{name:'px',ml:-1,desc:'px orbitali x-ekseni boyunca uzanan çift loblu (dumbbell) şekildedir.'},{name:'py',ml:0,desc:'py orbitali y-ekseni boyunca uzanan çift loblu şekildedir.'},{name:'pz',ml:1,desc:'pz orbitali z-ekseni boyunca uzanan çift loblu şekildedir.'}],l:1,max:6,shape:'Çift Loblu (Dumbbell)',color:[255,107,107]},
-d:{subs:[{name:'dxy',ml:-2,desc:'dxy orbitali x ve y eksenleri ARASINDA (45°) yer alan dört yapraklı şekildedir.'},{name:'dyz',ml:-1,desc:'dyz orbitali y ve z eksenleri arasında yer alan dört yapraklı şekildedir.'},{name:'dxz',ml:0,desc:'dxz orbitali x ve z eksenleri arasında yer alan dört yapraklı şekildedir.'},{name:'dx²-y²',ml:1,desc:'dx²-y² orbitali x ve y eksenleri ÜZERİNDE yer alan dört yapraklı şekildedir.'},{name:'dz²',ml:2,desc:'dz² orbitali z-ekseni boyunca iki büyük lob ve ortada bir halka (torus) şekildedir.'}],l:2,max:10,shape:'Klover / Torus',color:[34,180,80]},
-f:{subs:[{name:'fxyz',ml:-3,desc:'fxyz orbitali üç eksenin köşegenleri boyunca yönelmiş karmaşık yapıdadır.'},{name:'fz(x²-y²)',ml:-2,desc:'fz(x²-y²) orbitali z-ekseni etrafında dört yapraklı simetrik yapıya sahiptir.'},{name:'fy(3x²-y²)',ml:-1,desc:'fy(3x²-y²) orbitali y-ekseni boyunca uzanan karmaşık yapıdadır.'},{name:'fz³',ml:0,desc:'fz³ orbitali z-ekseni boyunca uzanan, merkezi halkalı karmaşık yapıdadır.'},{name:'fx(3y²-x²)',ml:1,desc:'fx(3y²-x²) orbitali x-ekseni boyunca uzanan karmaşık yapıdadır.'},{name:'fz(x²-y²)',ml:2,desc:'fz(x²-y²) orbitali z-ekseni etrafında dört yapraklı yapıdadır.'},{name:'fx³',ml:3,desc:'fx³ orbitali x-ekseni boyunca uzanan, en karmaşık f orbitalidir.'}],l:3,max:14,shape:'Çok Karmaşık (8 Lob)',color:[168,85,247]}
+  s:{subs:[{name:'1s',ml:0,desc:'1s orbitali en düşük enerjili orbitaldir. Çekirdek etrafında küresel simetriye sahiptir. 2 elektron barındırır.'}],l:0,max:2,shape:'Küresel',color:[0,212,255]},
+  p:{subs:[{name:'px',ml:-1,desc:'px orbitali x-ekseni boyunca uzanan çift loblu (dumbbell) şekildedir.'},{name:'py',ml:0,desc:'py orbitali y-ekseni boyunca uzanan çift loblu şekildedir.'},{name:'pz',ml:1,desc:'pz orbitali z-ekseni boyunca uzanan çift loblu şekildedir.'}],l:1,max:6,shape:'Çift Loblu (Dumbbell)',color:[255,107,107]},
+  d:{subs:[{name:'dxy',ml:-2,desc:'dxy orbitali x ve y eksenleri ARASINDA (45°) yer alan dört yapraklı şekildedir.'},{name:'dyz',ml:-1,desc:'dyz orbitali y ve z eksenleri arasında yer alan dört yapraklı şekildedir.'},{name:'dxz',ml:0,desc:'dxz orbitali x ve z eksenleri arasında yer alan dört yapraklı şekildedir.'},{name:'dx²-y²',ml:1,desc:'dx²-y² orbitali x ve y eksenleri ÜZERİNDE yer alan dört yapraklı şekildedir.'},{name:'dz²',ml:2,desc:'dz² orbitali z-ekseni boyunca iki büyük lob ve ortada bir halka (torus) şekildedir.'}],l:2,max:10,shape:'Klover / Torus',color:[34,180,80]},
+  f:{subs:[{name:'fxyz',ml:-3,desc:'fxyz orbitali üç eksenin köşegenleri boyunca yönelmiş karmaşık yapıdadır.'},{name:'fz(x²-y²)',ml:-2,desc:'fz(x²-y²) orbitali z-ekseni etrafında dört yapraklı simetrik yapıya sahiptir.'},{name:'fy(3x²-y²)',ml:-1,desc:'fy(3x²-y²) orbitali y-ekseni boyunca uzanan karmaşık yapıdadır.'},{name:'fz³',ml:0,desc:'fz³ orbitali z-ekseni boyunca uzanan, merkezi halkalı karmaşık yapıdadır.'},{name:'fx(3y²-x²)',ml:1,desc:'fx(3y²-x²) orbitali x-ekseni boyunca uzanan karmaşık yapıdadır.'},{name:'fz(x²-y²)',ml:2,desc:'fz(x²-y²) orbitali z-ekseni etrafında dört yapraklı yapıdadır.'},{name:'fx³',ml:3,desc:'fx³ orbitali x-ekseni boyunca uzanan, en karmaşık f orbitalidir.'}],l:3,max:14,shape:'Çok Karmaşık (8 Lob)',color:[168,85,247]}
 };
 
 function rgba(rgb,a){return'rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+','+a+')';}
 
 function pickType(type,el){
-activeType=type;activeSub=null;
-document.querySelectorAll('.type-card').forEach(function(c){c.classList.remove('selected');});
-el.classList.add('selected');
-var d=ORBITALS[type];
-document.getElementById('simTitle').textContent=type.toUpperCase()+' Orbitalleri';
-var grid=document.getElementById('subGrid');
-grid.innerHTML='';
-d.subs.forEach(function(sub,i){
-var btn=document.createElement('button');
-btn.className='sub-btn';
-btn.textContent=sub.name;
-btn.onclick=function(){pickSub(type,i,this);};
-grid.appendChild(btn);
-});
-document.getElementById('pType').textContent=type.toUpperCase();
-document.getElementById('pSub').textContent='Seçiniz';
-document.getElementById('pL').textContent=d.l;
-document.getElementById('pMl').textContent=d.subs.map(function(s){return s.ml;}).join(', ');
-document.getElementById('pElec').textContent=d.max;
-document.getElementById('pShape').textContent=d.shape;
-document.getElementById('pDesc').textContent='Yukarıdaki butonlardan bir alt orbital seçin.';
-t=0;rotX=.4;rotY=.3;
+  activeType=type;activeSub=null;
+  document.querySelectorAll('.type-card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+  var d=ORBITALS[type];
+  document.getElementById('simTitle').textContent=type.toUpperCase()+' Orbitalleri';
+  var grid=document.getElementById('subGrid');grid.innerHTML='';
+  d.subs.forEach(function(sub,i){
+    var btn=document.createElement('button');btn.className='sub-btn';btn.textContent=sub.name;
+    btn.onclick=function(){pickSub(type,i,this);};grid.appendChild(btn);
+  });
+  document.getElementById('pType').textContent=type.toUpperCase();
+  document.getElementById('pSub').textContent='Seçiniz';
+  document.getElementById('pL').textContent=d.l;
+  document.getElementById('pMl').textContent=d.subs.map(function(s){return s.ml;}).join(', ');
+  document.getElementById('pElec').textContent=d.max;
+  document.getElementById('pShape').textContent=d.shape;
+  document.getElementById('pDesc').textContent='Yukarıdaki butonlardan bir alt orbital seçin.';
+  t=0;rotX=.4;rotY=.3;
 }
 
 function pickSub(type,idx,el){
-activeSub=idx;
-document.querySelectorAll('.sub-btn').forEach(function(b){b.classList.remove('selected');});
-el.classList.add('selected');
-var d=ORBITALS[type],sub=d.subs[idx];
-document.getElementById('simTitle').textContent=sub.name+' Orbitali (Gerçek 3D)';
-document.getElementById('pSub').textContent=sub.name;
-document.getElementById('pMl').textContent=sub.ml;
-document.getElementById('pDesc').textContent=sub.desc;
-t=0;rotX=.4;rotY=.3;
-if(animFrame)cancelAnimationFrame(animFrame);
-loop();
+  activeSub=idx;
+  document.querySelectorAll('.sub-btn').forEach(function(b){b.classList.remove('selected');});
+  el.classList.add('selected');
+  var d=ORBITALS[type],sub=d.subs[idx];
+  document.getElementById('simTitle').textContent=sub.name+' Orbitali (Gerçek 3D)';
+  document.getElementById('pSub').textContent=sub.name;
+  document.getElementById('pMl').textContent=sub.ml;
+  document.getElementById('pDesc').textContent=sub.desc;
+  t=0;rotX=.4;rotY=.3;
+  if(animFrame)cancelAnimationFrame(animFrame);
+  loop();
 }
 
-function clear(){c.clearRect(0,0,W,H);c.fillStyle='#050510';c.fillRect(0,0,W,H);}
+function clearOrb(){c.clearRect(0,0,W,H);c.fillStyle='#050510';c.fillRect(0,0,W,H);}
 
 function drawAxes(){
-var len=140;
-var axes=[{x:len,y:0,z:0,label:'x',col:'#ff5555'},{x:0,y:-len,z:0,label:'y',col:'#55ff55'},{x:0,y:0,z:len,label:'z',col:'#5555ff'}];
-c.strokeStyle='rgba(255,255,255,0.12)';c.lineWidth=1.5;
-axes.forEach(function(ax){
-var p=project(ax.x,ax.y,ax.z),o=project(0,0,0);
-c.beginPath();c.moveTo(o.x,o.y);c.lineTo(p.x,p.y);c.stroke();
-c.fillStyle=ax.col;c.font='bold 11px sans-serif';c.textAlign='center';
-c.fillText(ax.label,p.x+10,p.y-5);
-});
+  var len=140;
+  [{x:len,y:0,z:0,l:'x',col:'#ff5555'},{x:0,y:-len,z:0,l:'y',col:'#55ff55'},{x:0,y:0,z:len,l:'z',col:'#5555ff'}].forEach(function(ax){
+    var p=project(ax.x,ax.y,ax.z),o=project(0,0,0);
+    c.strokeStyle='rgba(255,255,255,0.12)';c.lineWidth=1.5;
+    c.beginPath();c.moveTo(o.x,o.y);c.lineTo(p.x,p.y);c.stroke();
+    c.fillStyle=ax.col;c.font='bold 11px sans-serif';c.textAlign='center';c.fillText(ax.l,p.x+10,p.y-5);
+  });
 }
 
 function drawNucleus(){
-var p=project(0,0,0),r=8*p.scale;
-c.beginPath();c.arc(p.x,p.y,r+10,0,Math.PI*2);c.fillStyle='rgba(255,255,255,0.08)';c.fill();
-c.beginPath();c.arc(p.x-2,p.y-2,r*.7,0,Math.PI*2);c.fillStyle='#ff3333';c.fill();
-c.beginPath();c.arc(p.x+2,p.y+2,r*.7,0,Math.PI*2);c.fillStyle='#3366ff';c.fill();
-c.beginPath();c.arc(p.x,p.y,r*.5,0,Math.PI*2);c.fillStyle='#ff5555';c.fill();
+  var p=project(0,0,0),r=8*p.scale;
+  c.beginPath();c.arc(p.x,p.y,r+10,0,Math.PI*2);c.fillStyle='rgba(255,255,255,0.08)';c.fill();
+  c.beginPath();c.arc(p.x-2,p.y-2,r*.7,0,Math.PI*2);c.fillStyle='#ff3333';c.fill();
+  c.beginPath();c.arc(p.x+2,p.y+2,r*.7,0,Math.PI*2);c.fillStyle='#3366ff';c.fill();
+  c.beginPath();c.arc(p.x,p.y,r*.5,0,Math.PI*2);c.fillStyle='#ff5555';c.fill();
 }
 
-function draw3DEllipsoid(cx,cy,cz,rx,ry,rz,rgb,alpha,rotLocalX,rotLocalY){
-var slices=20,stacks=14,triangles=[];
-for(var i=0;i<slices;i++){
-for(var j=0;j<stacks;j++){
-var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1);
-var v1=(Math.PI/stacks)*j-Math.PI/2,v2=(Math.PI/stacks)*(j+1)-Math.PI/2;
-var corners=[spherePoint(cx,cy,cz,rx,ry,rz,u1,v1,rotLocalX,rotLocalY),spherePoint(cx,cy,cz,rx,ry,rz,u2,v1,rotLocalX,rotLocalY),spherePoint(cx,cy,cz,rx,ry,rz,u2,v2,rotLocalX,rotLocalY),spherePoint(cx,cy,cz,rx,ry,rz,u1,v2,rotLocalX,rotLocalY)];
-triangles.push({p:[corners[0],corners[1],corners[2]],avgZ:(corners[0].z+corners[1].z+corners[2].z)/3});
-triangles.push({p:[corners[0],corners[2],corners[3]],avgZ:(corners[0].z+corners[2].z+corners[3].z)/3});
+function draw3DEllipsoid(cx,cy,cz,rx,ry,rz,rgb,alpha){
+  var slices=20,stacks=14,tris=[];
+  for(var i=0;i<slices;i++){for(var j=0;j<stacks;j++){
+    var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1);
+    var v1=(Math.PI/stacks)*j-Math.PI/2,v2=(Math.PI/stacks)*(j+1)-Math.PI/2;
+    var co=[sP(cx,cy,cz,rx,ry,rz,u1,v1),sP(cx,cy,cz,rx,ry,rz,u2,v1),sP(cx,cy,cz,rx,ry,rz,u2,v2),sP(cx,cy,cz,rx,ry,rz,u1,v2)];
+    tris.push({p:[co[0],co[1],co[2]],avgZ:(co[0].z+co[1].z+co[2].z)/3});
+    tris.push({p:[co[0],co[2],co[3]],avgZ:(co[0].z+co[2].z+co[3].z)/3});
+  }}
+  tris.sort(function(a,b){return b.avgZ-a.avgZ;});
+  tris.forEach(function(tri){
+    var depth=Math.max(.15,Math.min(1,1-(tri.avgZ+120)/350));
+    c.beginPath();c.moveTo(tri.p[0].x,tri.p[0].y);c.lineTo(tri.p[1].x,tri.p[1].y);c.lineTo(tri.p[2].x,tri.p[2].y);c.closePath();
+    c.fillStyle=rgba(rgb,alpha*depth*.55);c.fill();c.strokeStyle=rgba(rgb,.25*depth);c.lineWidth=.4;c.stroke();
+  });
 }
-}
-triangles.sort(function(a,b){return b.avgZ-a.avgZ;});
-triangles.forEach(function(tri){
-var depth=Math.max(.15,Math.min(1,1-(tri.avgZ+120)/350));
-c.beginPath();c.moveTo(tri.p[0].x,tri.p[0].y);c.lineTo(tri.p[1].x,tri.p[1].y);c.lineTo(tri.p[2].x,tri.p[2].y);c.closePath();
-c.fillStyle=rgba(rgb,alpha*depth*.55);c.fill();
-c.strokeStyle=rgba(rgb,.25*depth);c.lineWidth=.4;c.stroke();
-});
-}
-
-function spherePoint(cx,cy,cz,rx,ry,rz,u,v,rotLX,rotLY){
-var x=rx*Math.cos(v)*Math.cos(u),y=ry*Math.cos(v)*Math.sin(u),z=rz*Math.sin(v);
-if(rotLX||rotLY){
-var y1=y*Math.cos(rotLX||0)-z*Math.sin(rotLX||0),z1=y*Math.sin(rotLX||0)+z*Math.cos(rotLX||0);
-var x2=x*Math.cos(rotLY||0)+z1*Math.sin(rotLY||0),z2=-x*Math.sin(rotLY||0)+z1*Math.cos(rotLY||0);
-x=x2;y=y1;z=z2;
-}
-return project(cx+x,cy+y,cz+z);
+function sP(cx,cy,cz,rx,ry,rz,u,v){
+  return project(cx+rx*Math.cos(v)*Math.cos(u),cy+ry*Math.cos(v)*Math.sin(u),cz+rz*Math.sin(v));
 }
 
-function draw3DLobe(cx,cy,cz,length,radius,rgb,alpha,direction){
-var slices=24,stacks=20,triangles=[];
-for(var i=0;i<slices;i++){
-for(var j=0;j<stacks;j++){
-var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1),v1=j/stacks,v2=(j+1)/stacks;
-var corners=[lobePoint(cx,cy,cz,length,radius,u1,v1,direction),lobePoint(cx,cy,cz,length,radius,u2,v1,direction),lobePoint(cx,cy,cz,length,radius,u2,v2,direction),lobePoint(cx,cy,cz,length,radius,u1,v2,direction)];
-triangles.push({p:[corners[0],corners[1],corners[2]],avgZ:(corners[0].z+corners[1].z+corners[2].z)/3});
-triangles.push({p:[corners[0],corners[2],corners[3]],avgZ:(corners[0].z+corners[2].z+corners[3].z)/3});
+function draw3DLobe(cx,cy,cz,length,radius,rgb,alpha,dir){
+  var slices=24,stacks=20,tris=[];
+  for(var i=0;i<slices;i++){for(var j=0;j<stacks;j++){
+    var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1),v1=j/stacks,v2=(j+1)/stacks;
+    var co=[lP(cx,cy,cz,length,radius,u1,v1,dir),lP(cx,cy,cz,length,radius,u2,v1,dir),lP(cx,cy,cz,length,radius,u2,v2,dir),lP(cx,cy,cz,length,radius,u1,v2,dir)];
+    tris.push({p:[co[0],co[1],co[2]],avgZ:(co[0].z+co[1].z+co[2].z)/3});
+    tris.push({p:[co[0],co[2],co[3]],avgZ:(co[0].z+co[2].z+co[3].z)/3});
+  }}
+  tris.sort(function(a,b){return b.avgZ-a.avgZ;});
+  tris.forEach(function(tri){
+    var depth=Math.max(.15,Math.min(1,1-(tri.avgZ+120)/350));
+    c.beginPath();c.moveTo(tri.p[0].x,tri.p[0].y);c.lineTo(tri.p[1].x,tri.p[1].y);c.lineTo(tri.p[2].x,tri.p[2].y);c.closePath();
+    c.fillStyle=rgba(rgb,alpha*depth*.6);c.fill();c.strokeStyle=rgba(rgb,.3*depth);c.lineWidth=.5;c.stroke();
+  });
 }
-}
-triangles.sort(function(a,b){return b.avgZ-a.avgZ;});
-triangles.forEach(function(tri){
-var depth=Math.max(.15,Math.min(1,1-(tri.avgZ+120)/350));
-c.beginPath();c.moveTo(tri.p[0].x,tri.p[0].y);c.lineTo(tri.p[1].x,tri.p[1].y);c.lineTo(tri.p[2].x,tri.p[2].y);c.closePath();
-c.fillStyle=rgba(rgb,alpha*depth*.6);c.fill();
-c.strokeStyle=rgba(rgb,.3*depth);c.lineWidth=.5;c.stroke();
-});
-}
-
-function lobePoint(cx,cy,cz,length,radius,u,v,dir){
-var perp1={x:0,y:0,z:0},perp2={x:0,y:0,z:0};
-if(Math.abs(dir.y)<.9)perp1={x:-dir.z,y:0,z:dir.x};else perp1={x:1,y:0,z:0};
-var len1=Math.sqrt(perp1.x*perp1.x+perp1.y*perp1.y+perp1.z*perp1.z);
-perp1.x/=len1;perp1.y/=len1;perp1.z/=len1;
-perp2.x=dir.y*perp1.z-dir.z*perp1.y;perp2.y=dir.z*perp1.x-dir.x*perp1.z;perp2.z=dir.x*perp1.y-dir.y*perp1.x;
-var dist=length*v*v*(3-2*v),neckRadius=radius*.3,r;
-if(v<.5)r=neckRadius+(radius-neckRadius)*Math.sin((v/.5)*Math.PI/2);else r=radius*Math.cos(((v-.5)/.5)*Math.PI/2);
-return project(cx+dir.x*dist+perp1.x*r*Math.cos(u)+perp2.x*r*Math.sin(u),cy+dir.y*dist+perp1.y*r*Math.cos(u)+perp2.y*r*Math.sin(u),cz+dir.z*dist+perp1.z*r*Math.cos(u)+perp2.z*r*Math.sin(u));
+function lP(cx,cy,cz,length,radius,u,v,dir){
+  var perp1={x:0,y:0,z:0};
+  if(Math.abs(dir.y)<.9)perp1={x:-dir.z,y:0,z:dir.x};else perp1={x:1,y:0,z:0};
+  var len1=Math.sqrt(perp1.x*perp1.x+perp1.y*perp1.y+perp1.z*perp1.z);
+  perp1.x/=len1;perp1.y/=len1;perp1.z/=len1;
+  var perp2={x:dir.y*perp1.z-dir.z*perp1.y,y:dir.z*perp1.x-dir.x*perp1.z,z:dir.x*perp1.y-dir.y*perp1.x};
+  var dist=length*v*v*(3-2*v),nR=radius*.3,r;
+  if(v<.5)r=nR+(radius-nR)*Math.sin((v/.5)*Math.PI/2);else r=radius*Math.cos(((v-.5)/.5)*Math.PI/2);
+  return project(cx+dir.x*dist+perp1.x*r*Math.cos(u)+perp2.x*r*Math.sin(u),cy+dir.y*dist+perp1.y*r*Math.cos(u)+perp2.y*r*Math.sin(u),cz+dir.z*dist+perp1.z*r*Math.cos(u)+perp2.z*r*Math.sin(u));
 }
 
-function draw3DTorus(cx,cy,cz,majorR,minorR,rgb,alpha){
-var slices=24,stacks=12,triangles=[];
-for(var i=0;i<slices;i++){
-for(var j=0;j<stacks;j++){
-var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1),v1=(Math.PI*2/stacks)*j,v2=(Math.PI*2/stacks)*(j+1);
-var corners=[torusPoint(cx,cy,cz,majorR,minorR,u1,v1),torusPoint(cx,cy,cz,majorR,minorR,u2,v1),torusPoint(cx,cy,cz,majorR,minorR,u2,v2),torusPoint(cx,cy,cz,majorR,minorR,u1,v2)];
-triangles.push({p:[corners[0],corners[1],corners[2]],avgZ:(corners[0].z+corners[1].z+corners[2].z)/3});
-triangles.push({p:[corners[0],corners[2],corners[3]],avgZ:(corners[0].z+corners[2].z+corners[3].z)/3});
+function draw3DTorus(cx,cy,cz,majR,minR,rgb,alpha){
+  var slices=24,stacks=12,tris=[];
+  for(var i=0;i<slices;i++){for(var j=0;j<stacks;j++){
+    var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1),v1=(Math.PI*2/stacks)*j,v2=(Math.PI*2/stacks)*(j+1);
+    var co=[tP(cx,cy,cz,majR,minR,u1,v1),tP(cx,cy,cz,majR,minR,u2,v1),tP(cx,cy,cz,majR,minR,u2,v2),tP(cx,cy,cz,majR,minR,u1,v2)];
+    tris.push({p:[co[0],co[1],co[2]],avgZ:(co[0].z+co[1].z+co[2].z)/3});
+    tris.push({p:[co[0],co[2],co[3]],avgZ:(co[0].z+co[2].z+co[3].z)/3});
+  }}
+  tris.sort(function(a,b){return b.avgZ-a.avgZ;});
+  tris.forEach(function(tri){
+    var depth=Math.max(.15,Math.min(1,1-(tri.avgZ+100)/350));
+    c.beginPath();c.moveTo(tri.p[0].x,tri.p[0].y);c.lineTo(tri.p[1].x,tri.p[1].y);c.lineTo(tri.p[2].x,tri.p[2].y);c.closePath();
+    c.fillStyle=rgba(rgb,alpha*depth*.5);c.fill();c.strokeStyle=rgba(rgb,.2*depth);c.lineWidth=.5;c.stroke();
+  });
 }
-}
-triangles.sort(function(a,b){return b.avgZ-a.avgZ;});
-triangles.forEach(function(tri){
-var depth=Math.max(.15,Math.min(1,1-(tri.avgZ+100)/350));
-c.beginPath();c.moveTo(tri.p[0].x,tri.p[0].y);c.lineTo(tri.p[1].x,tri.p[1].y);c.lineTo(tri.p[2].x,tri.p[2].y);c.closePath();
-c.fillStyle=rgba(rgb,alpha*depth*.5);c.fill();
-c.strokeStyle=rgba(rgb,.2*depth);c.lineWidth=.5;c.stroke();
-});
-}
+function tP(cx,cy,cz,majR,minR,u,v){return project(cx+(majR+minR*Math.cos(v))*Math.cos(u),cy+(majR+minR*Math.cos(v))*Math.sin(u),cz+minR*Math.sin(v));}
 
-function torusPoint(cx,cy,cz,majorR,minorR,u,v){
-return project(cx+(majorR+minorR*Math.cos(v))*Math.cos(u),cy+(majorR+minorR*Math.cos(v))*Math.sin(u),cz+minorR*Math.sin(v));
-}
-
-function drawElectron3D(x,y,z){
-if(!elecOn)return;
-var p=project(x,y,z),r=4*p.scale;
-c.beginPath();c.arc(p.x,p.y,r+5,0,Math.PI*2);c.fillStyle='rgba(255,255,0,0.15)';c.fill();
-c.beginPath();c.arc(p.x,p.y,r,0,Math.PI*2);c.fillStyle='#ffff00';c.fill();
+function drawElec(x,y,z){
+  if(!elecOn)return;
+  var p=project(x,y,z),r=4*p.scale;
+  c.beginPath();c.arc(p.x,p.y,r+5,0,Math.PI*2);c.fillStyle='rgba(255,255,0,0.15)';c.fill();
+  c.beginPath();c.arc(p.x,p.y,r,0,Math.PI*2);c.fillStyle='#ffff00';c.fill();
 }
 
 function drawSOrbital(rgb){
-var pulse=1+Math.sin(t*2)*.04;
-draw3DEllipsoid(0,0,0,85*pulse,85*pulse,85*pulse,rgb,.75);
-drawNucleus();
-if(elecOn){
-var a1=t*2,a2=t*2+Math.PI;
-drawElectron3D(65*Math.cos(a1),65*Math.sin(a1)*.6,25*Math.sin(a1));
-drawElectron3D(65*Math.cos(a2),65*Math.sin(a2)*.6,25*Math.sin(a2));
+  var pulse=1+Math.sin(t*2)*.04;
+  draw3DEllipsoid(0,0,0,85*pulse,85*pulse,85*pulse,rgb,.75);
+  drawNucleus();
+  if(elecOn){drawElec(65*Math.cos(t*2),65*Math.sin(t*2)*.6,25*Math.sin(t*2));drawElec(65*Math.cos(t*2+Math.PI),65*Math.sin(t*2+Math.PI)*.6,25*Math.sin(t*2+Math.PI));}
 }
+function drawPOrbital(si,rgb){
+  drawAxes();drawNucleus();
+  var dirs=[{x:1,y:0,z:0},{x:0,y:1,z:0},{x:0,y:0,z:1}],dir=dirs[si];
+  draw3DLobe(0,0,0,75,32,rgb,.78,dir);draw3DLobe(0,0,0,75,32,rgb,.78,{x:-dir.x,y:-dir.y,z:-dir.z});
+  drawNodalPlane(si);
+  if(elecOn){var a=t*1.8,r=85;drawElec(r*Math.cos(a),r*Math.sin(a)*.5,0);drawElec(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*.5,0);}
 }
-
-function drawPOrbital(subIdx,rgb){
-drawAxes();drawNucleus();
-var lobeLen=75,lobeRad=32,dirs=[{x:1,y:0,z:0},{x:0,y:1,z:0},{x:0,y:0,z:1}];
-var dir=dirs[subIdx];
-draw3DLobe(0,0,0,lobeLen,lobeRad,rgb,.78,dir);
-draw3DLobe(0,0,0,lobeLen,lobeRad,rgb,.78,{x:-dir.x,y:-dir.y,z:-dir.z});
-drawNodalPlane(subIdx);
-if(elecOn){
-var a=t*1.8,r=85;
-drawElectron3D(r*Math.cos(a),r*Math.sin(a)*.5,0);
-drawElectron3D(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*.5,0);
+function drawDOrbital(si,rgb){
+  drawAxes();drawNucleus();
+  if(si===4){draw3DLobe(0,0,0,80,28,rgb,.8,{x:0,y:0,z:1});draw3DLobe(0,0,0,80,28,rgb,.8,{x:0,y:0,z:-1});draw3DTorus(0,0,0,55,16,rgb,.45);}
+  else if(si===3){[{x:1,y:0,z:0},{x:-1,y:0,z:0},{x:0,y:1,z:0},{x:0,y:-1,z:0}].forEach(function(d){draw3DLobe(0,0,0,70,26,rgb,.75,d);});drawNL3D(55,55,0,-55,-55,0);drawNL3D(-55,55,0,55,-55,0);}
+  else{var pD=[[{x:.707,y:.707,z:0},{x:-.707,y:.707,z:0},{x:-.707,y:-.707,z:0},{x:.707,y:-.707,z:0}],[{x:0,y:.707,z:.707},{x:0,y:-.707,z:.707},{x:0,y:-.707,z:-.707},{x:0,y:.707,z:-.707}],[{x:.707,y:0,z:.707},{x:-.707,y:0,z:.707},{x:-.707,y:0,z:-.707},{x:.707,y:0,z:-.707}]];pD[si].forEach(function(d){draw3DLobe(0,0,0,68,25,rgb,.72,d);});if(si===0){drawNL3D(-70,0,0,70,0,0);drawNL3D(0,-70,0,0,70,0);}}
+  if(elecOn){var a=t*1.5,r=95;drawElec(r*Math.cos(a),r*Math.sin(a)*.5,0);drawElec(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*.5,0);}
 }
+function drawFOrbital(si,rgb){
+  drawAxes();drawNucleus();
+  var cfgs=[
+    {dirs:[{x:.577,y:.577,z:.577},{x:-.577,y:.577,z:.577},{x:-.577,y:-.577,z:.577},{x:.577,y:-.577,z:.577},{x:.577,y:.577,z:-.577},{x:-.577,y:.577,z:-.577},{x:-.577,y:-.577,z:-.577},{x:.577,y:-.577,z:-.577}],len:62,rad:22},
+    {dirs:[{x:.707,y:0,z:.707},{x:-.707,y:0,z:.707},{x:0,y:.707,z:.707},{x:0,y:-.707,z:.707},{x:.707,y:0,z:-.707},{x:-.707,y:0,z:-.707},{x:0,y:.707,z:-.707},{x:0,y:-.707,z:-.707}],len:58,rad:20},
+    {dirs:[{x:.866,y:.5,z:0},{x:-.866,y:.5,z:0},{x:0,y:1,z:0},{x:.866,y:-.5,z:0},{x:-.866,y:-.5,z:0},{x:0,y:-1,z:0}],len:60,rad:21},
+    {dirs:[{x:0,y:0,z:1},{x:0,y:0,z:-1}],len:75,rad:26,special:'z3'},
+    {dirs:[{x:1,y:0,z:0},{x:.5,y:.866,z:0},{x:.5,y:-.866,z:0},{x:-.5,y:.866,z:0},{x:-.5,y:-.866,z:0},{x:-1,y:0,z:0}],len:60,rad:21},
+    {dirs:[{x:.707,y:0,z:.707},{x:-.707,y:0,z:.707},{x:.707,y:0,z:-.707},{x:-.707,y:0,z:-.707}],len:65,rad:23},
+    {dirs:[{x:1,y:0,z:0},{x:.707,y:.707,z:0},{x:.707,y:0,z:.707},{x:.707,y:0,z:-.707},{x:.707,y:-.707,z:0},{x:0,y:1,z:0},{x:0,y:0,z:1},{x:0,y:0,z:-1}],len:58,rad:20}
+  ];
+  var cfg=cfgs[si]||cfgs[0];
+  if(cfg.special==='z3'){draw3DLobe(0,0,0,80,28,rgb,.8,{x:0,y:0,z:1});draw3DLobe(0,0,0,80,28,rgb,.8,{x:0,y:0,z:-1});for(var i=0;i<6;i++){var a2=(Math.PI*2/6)*i;draw3DLobe(0,0,0,35,14,rgb,.5,{x:Math.cos(a2),y:Math.sin(a2),z:0});}}
+  else cfg.dirs.forEach(function(d){draw3DLobe(0,0,0,cfg.len,cfg.rad,rgb,.68,d);});
+  if(si===2||si===3||si===6)draw3DEllipsoid(0,0,0,18,18,18,rgb,.2);
+  if(elecOn){var a=t*1.2,r=105;drawElec(r*Math.cos(a),r*Math.sin(a)*.5,0);drawElec(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*.5,0);}
 }
-
-function drawDOrbital(subIdx,rgb){
-drawAxes();drawNucleus();
-if(subIdx===4){
-draw3DLobe(0,0,0,80,28,rgb,.8,{x:0,y:0,z:1});
-draw3DLobe(0,0,0,80,28,rgb,.8,{x:0,y:0,z:-1});
-draw3DTorus(0,0,0,55,16,rgb,.45);
-}else if(subIdx===3){
-draw3DLobe(0,0,0,70,26,rgb,.75,{x:1,y:0,z:0});
-draw3DLobe(0,0,0,70,26,rgb,.75,{x:-1,y:0,z:0});
-draw3DLobe(0,0,0,70,26,rgb,.75,{x:0,y:1,z:0});
-draw3DLobe(0,0,0,70,26,rgb,.75,{x:0,y:-1,z:0});
-drawNodalLine3D(55,55,0,-55,-55,0);drawNodalLine3D(-55,55,0,55,-55,0);
-}else{
-var planeDirs=[[{x:.707,y:.707,z:0},{x:-.707,y:.707,z:0},{x:-.707,y:-.707,z:0},{x:.707,y:-.707,z:0}],[{x:0,y:.707,z:.707},{x:0,y:-.707,z:.707},{x:0,y:-.707,z:-.707},{x:0,y:.707,z:-.707}],[{x:.707,y:0,z:.707},{x:-.707,y:0,z:.707},{x:-.707,y:0,z:-.707},{x:.707,y:0,z:-.707}]];
-planeDirs[subIdx].forEach(function(dir){draw3DLobe(0,0,0,68,25,rgb,.72,dir);});
-if(subIdx===0){drawNodalLine3D(-70,0,0,70,0,0);drawNodalLine3D(0,-70,0,0,70,0);}
+function drawNodalPlane(si){
+  var sz=75,step=12;
+  for(var i=-sz;i<=sz;i+=step){for(var j=-sz;j<=sz;j+=step){
+    var x=0,y=0,z=0;
+    if(si===0){y=i;z=j;}else if(si===1){x=i;z=j;}else{x=i;y=j;}
+    var p=project(x,y,z);c.beginPath();c.arc(p.x,p.y,1.5,0,Math.PI*2);c.fillStyle='rgba(255,255,255,0.07)';c.fill();
+  }}
 }
-if(elecOn){
-var a=t*1.5,r=95;
-drawElectron3D(r*Math.cos(a),r*Math.sin(a)*.5,0);
-drawElectron3D(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*.5,0);
-}
-}
-
-function drawFOrbital(subIdx,rgb){
-drawAxes();drawNucleus();
-var configs=[
-{dirs:[{x:.577,y:.577,z:.577},{x:-.577,y:.577,z:.577},{x:-.577,y:-.577,z:.577},{x:.577,y:-.577,z:.577},{x:.577,y:.577,z:-.577},{x:-.577,y:.577,z:-.577},{x:-.577,y:-.577,z:-.577},{x:.577,y:-.577,z:-.577}],len:62,rad:22},
-{dirs:[{x:.707,y:0,z:.707},{x:-.707,y:0,z:.707},{x:0,y:.707,z:.707},{x:0,y:-.707,z:.707},{x:.707,y:0,z:-.707},{x:-.707,y:0,z:-.707},{x:0,y:.707,z:-.707},{x:0,y:-.707,z:-.707}],len:58,rad:20},
-{dirs:[{x:.866,y:.5,z:0},{x:-.866,y:.5,z:0},{x:0,y:1,z:0},{x:.866,y:-.5,z:0},{x:-.866,y:-.5,z:0},{x:0,y:-1,z:0}],len:60,rad:21},
-{dirs:[{x:0,y:0,z:1},{x:0,y:0,z:-1}],len:75,rad:26,special:'z3'},
-{dirs:[{x:1,y:0,z:0},{x:.5,y:.866,z:0},{x:.5,y:-.866,z:0},{x:-.5,y:.866,z:0},{x:-.5,y:-.866,z:0},{x:-1,y:0,z:0}],len:60,rad:21},
-{dirs:[{x:.707,y:0,z:.707},{x:-.707,y:0,z:.707},{x:.707,y:0,z:-.707},{x:-.707,y:0,z:-.707}],len:65,rad:23},
-{dirs:[{x:1,y:0,z:0},{x:.707,y:.707,z:0},{x:.707,y:0,z:.707},{x:.707,y:0,z:-.707},{x:.707,y:-.707,z:0},{x:0,y:1,z:0},{x:0,y:0,z:1},{x:0,y:0,z:-1}],len:58,rad:20}
-];
-var cfg=configs[subIdx]||configs[0];
-if(cfg.special==='z3'){
-draw3DLobe(0,0,0,80,28,rgb,.8,{x:0,y:0,z:1});
-draw3DLobe(0,0,0,80,28,rgb,.8,{x:0,y:0,z:-1});
-for(var i=0;i<6;i++){var a=(Math.PI*2/6)*i;draw3DLobe(0,0,0,35,14,rgb,.5,{x:Math.cos(a),y:Math.sin(a),z:0});}
-}else cfg.dirs.forEach(function(dir){draw3DLobe(0,0,0,cfg.len,cfg.rad,rgb,.68,dir);});
-if(subIdx===2||subIdx===3||subIdx===6)draw3DEllipsoid(0,0,0,18,18,18,rgb,.2);
-if(elecOn){
-var a=t*1.2,r=105;
-drawElectron3D(r*Math.cos(a),r*Math.sin(a)*.5,0);
-drawElectron3D(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*.5,0);
-}
-}
-
-function drawNodalPlane(subIdx){
-var size=75,step=12;
-for(var i=-size;i<=size;i+=step){
-for(var j=-size;j<=size;j+=step){
-var x=0,y=0,z=0;
-if(subIdx===0){y=i;z=j;}else if(subIdx===1){x=i;z=j;}else{x=i;y=j;}
-var p=project(x,y,z);
-c.beginPath();c.arc(p.x,p.y,1.5,0,Math.PI*2);c.fillStyle='rgba(255,255,255,0.07)';c.fill();
-}
-}
-}
-
-function drawNodalLine3D(x1,y1,z1,x2,y2,z2){
-var p1=project(x1,y1,z1),p2=project(x2,y2,z2);
-c.strokeStyle='rgba(255,255,255,0.12)';c.lineWidth=1;
-c.setLineDash([4,4]);c.beginPath();c.moveTo(p1.x,p1.y);c.lineTo(p2.x,p2.y);c.stroke();
-c.setLineDash([]);
+function drawNL3D(x1,y1,z1,x2,y2,z2){
+  var p1=project(x1,y1,z1),p2=project(x2,y2,z2);
+  c.strokeStyle='rgba(255,255,255,0.12)';c.lineWidth=1;c.setLineDash([4,4]);
+  c.beginPath();c.moveTo(p1.x,p1.y);c.lineTo(p2.x,p2.y);c.stroke();c.setLineDash([]);
 }
 
 function loop(){
-clear();
-if(!activeType||activeSub===null){
-c.fillStyle='rgba(255,255,255,0.3)';c.font='bold 15px sans-serif';c.textAlign='center';
-c.fillText('Bir orbital türü ve alt orbital seçin',W/2,H/2);
-animFrame=requestAnimationFrame(loop);return;
+  clearOrb();
+  if(!activeType||activeSub===null){
+    c.fillStyle='rgba(255,255,255,0.3)';c.font='bold 15px sans-serif';c.textAlign='center';
+    c.fillText('Bir orbital türü ve alt orbital seçin',W/2,H/2);
+    animFrame=requestAnimationFrame(loop);return;
+  }
+  if(autoSpin&&!isDragging){rotY+=.008*spd;t+=.015*spd;}else{t+=.015*spd;}
+  var d=ORBITALS[activeType],rgb=d.color;
+  switch(activeType){case's':drawSOrbital(rgb);break;case'p':drawPOrbital(activeSub,rgb);break;case'd':drawDOrbital(activeSub,rgb);break;case'f':drawFOrbital(activeSub,rgb);break;}
+  c.textAlign='left';c.font='10px sans-serif';
+  c.fillStyle='rgba(255,255,255,0.35)';c.fillText('🔴 Proton  🔵 Nötron',10,18);
+  c.fillStyle='#ffff00';c.fillText('● Elektron',10,34);
+  c.fillStyle='rgba(255,255,255,0.25)';c.fillText('👆 Sürükleyerek 3D döndürün',10,H-10);
+  animFrame=requestAnimationFrame(loop);
 }
-if(autoSpin&&!isDragging){rotY+=.008*spd;t+=.015*spd;}else{t+=.015*spd;}
-var d=ORBITALS[activeType],rgb=d.color;
-switch(activeType){case's':drawSOrbital(rgb);break;case'p':drawPOrbital(activeSub,rgb);break;case'd':drawDOrbital(activeSub,rgb);break;case'f':drawFOrbital(activeSub,rgb);break;}
-c.textAlign='left';c.font='10px sans-serif';c.fillStyle='rgba(255,255,255,0.35)';
-c.fillText('🔴 Proton  🔵 Notron',10,18);c.fillStyle='#ffff00';c.fillText('● Elektron',10,34);
-c.fillStyle='rgba(255,255,255,0.25)';c.fillText('👆 Sürükleyerek 3D döndürün',10,H-10);
-animFrame=requestAnimationFrame(loop);
-}
-
 function toggleSpin(){autoSpin=!autoSpin;}
 function toggleElec(){elecOn=!elecOn;}
 function setSpeed(v){spd=v;}
 function resetView(){rotX=.4;rotY=.3;}
 loop();
 
-// ===== MOLEKÜL 3D - DÜZELTİLMİŞ =====
-var molCanvas=document.getElementById('molCanvas'),molCtx=molCanvas.getContext('2d');
-var molW=600,molH=420;
-var molRotX=.3,molRotY=.4,molAutoSpin=true,molAnimFrame=null;
-var molIsDragging=false,molLastX=0,molLastY=0,currentMol=null;
+// ===== MOLEKÜL 3D =====
+var mC=null,mCtx=null,mW=600,mH=320;
+var mRotX=.3,mRotY=.4,mSpin=true,mAnimId=null;
+var mDrag=false,mLX=0,mLY=0,curMol=null;
 
-function resizeMolCanvas(){
-var rect=molCanvas.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
-molCanvas.width=rect.width*dpr;molCanvas.height=420*dpr;
-molW=rect.width;molH=420;
-molCtx.setTransform(dpr,0,0,dpr,0,0);
-}
-resizeMolCanvas();
-
-function molProject(x,y,z){
-var y1=y*Math.cos(molRotX)-z*Math.sin(molRotX),z1=y*Math.sin(molRotX)+z*Math.cos(molRotX);
-var x2=x*Math.cos(molRotY)+z1*Math.sin(molRotY),z2=-x*Math.sin(molRotY)+z1*Math.cos(molRotY);
-var scale=280/(350+z2);
-return{x:molW/2+x2*scale,y:molH/2+y1*scale,z:z2,scale:scale};
+function initMol(){
+  mC=document.getElementById('molCanvas');mCtx=mC.getContext('2d');
+  var rect=mC.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+  mC.width=rect.width*dpr;mC.height=320*dpr;mW=rect.width;mH=320;
+  mCtx.setTransform(dpr,0,0,dpr,0,0);
+  mC.addEventListener('mousedown',function(e){mDrag=true;mLX=e.clientX;mLY=e.clientY;});
+  mC.addEventListener('mousemove',function(e){if(!mDrag)return;mRotY+=(e.clientX-mLX)*.01;mRotX+=(e.clientY-mLY)*.01;mLX=e.clientX;mLY=e.clientY;});
+  mC.addEventListener('mouseup',function(){mDrag=false;});
+  mC.addEventListener('touchstart',function(e){mDrag=true;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;},{passive:false});
+  mC.addEventListener('touchmove',function(e){if(!mDrag)return;mRotY+=(e.touches[0].clientX-mLX)*.015;mRotX+=(e.touches[0].clientY-mLY)*.015;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;e.preventDefault();},{passive:false});
+  mC.addEventListener('touchend',function(){mDrag=false;});
 }
 
-function drawMolAtom(x,y,z,color,radius,label){
-var p=molProject(x,y,z),r=radius*p.scale;
-// Glow
-molCtx.beginPath();molCtx.arc(p.x,p.y,r+8,0,Math.PI*2);
-molCtx.fillStyle=color.replace(')',' ,0.15)').replace('rgb','rgba');molCtx.fill();
-// Atom body
-var grad=molCtx.createRadialGradient(p.x-r*.3,p.y-r*.3,r*.1,p.x,p.y,r);
-grad.addColorStop(0,'#ffffff');grad.addColorStop(.4,color);grad.addColorStop(1,color.replace(')',' ,0.5)').replace('rgb','rgba'));
-molCtx.beginPath();molCtx.arc(p.x,p.y,r,0,Math.PI*2);molCtx.fillStyle=grad;molCtx.fill();
-// Border
-molCtx.strokeStyle='rgba(255,255,255,0.4)';molCtx.lineWidth=1.5;molCtx.stroke();
-// Label
-if(label){molCtx.fillStyle='#fff';molCtx.font='bold '+Math.max(10,Math.round(14*p.scale))+'px sans-serif';molCtx.textAlign='center';molCtx.textBaseline='middle';molCtx.fillText(label,p.x,p.y);}
+function mProj(x,y,z){
+  var y1=y*Math.cos(mRotX)-z*Math.sin(mRotX),z1=y*Math.sin(mRotX)+z*Math.cos(mRotX);
+  var x2=x*Math.cos(mRotY)+z1*Math.sin(mRotY),z2=-x*Math.sin(mRotY)+z1*Math.cos(mRotY);
+  var sc=220/(300+z2);return{x:mW/2+x2*sc,y:mH/2+y1*sc,z:z2,scale:sc};
 }
 
-function drawMolBond(x1,y1,z1,x2,y2,z2,width,color){
-var p1=molProject(x1,y1,z1),p2=molProject(x2,y2,z2);
-var avgScale=(p1.scale+p2.scale)/2;
-// Bond shadow
-molCtx.strokeStyle='rgba(0,0,0,0.5)';molCtx.lineWidth=(width+2)*avgScale;
-molCtx.lineCap='round';molCtx.beginPath();molCtx.moveTo(p1.x,p1.y);molCtx.lineTo(p2.x,p2.y);molCtx.stroke();
-// Bond body
-molCtx.strokeStyle=color||'rgba(180,180,180,0.8)';molCtx.lineWidth=width*avgScale;
-molCtx.beginPath();molCtx.moveTo(p1.x,p1.y);molCtx.lineTo(p2.x,p2.y);molCtx.stroke();
+// Atom — 3D parlak küre (orbital tarzı)
+function mAtom(x,y,z,col,r,label){
+  var p=mProj(x,y,z),radius=r*p.scale;
+  // Gölge
+  mCtx.beginPath();mCtx.arc(p.x+2,p.y+2,radius,0,Math.PI*2);mCtx.fillStyle='rgba(0,0,0,0.4)';mCtx.fill();
+  // Küre yüzeyi (çokgen mesh)
+  var slices=16,stacks=10,tris=[];
+  for(var i=0;i<slices;i++){for(var j=0;j<stacks;j++){
+    var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1);
+    var v1=(Math.PI/stacks)*j-Math.PI/2,v2=(Math.PI/stacks)*(j+1)-Math.PI/2;
+    var pts=[mP(x,y,z,r,u1,v1),mP(x,y,z,r,u2,v1),mP(x,y,z,r,u2,v2),mP(x,y,z,r,u1,v2)];
+    tris.push({p:[pts[0],pts[1],pts[2]],avgZ:(pts[0].z+pts[1].z+pts[2].z)/3});
+    tris.push({p:[pts[0],pts[2],pts[3]],avgZ:(pts[0].z+pts[2].z+pts[3].z)/3});
+  }}
+  tris.sort(function(a,b){return b.avgZ-a.avgZ;});
+  tris.forEach(function(tri){
+    var depth=Math.max(0.2,Math.min(1,1-(tri.avgZ+150)/400));
+    mCtx.beginPath();mCtx.moveTo(tri.p[0].x,tri.p[0].y);mCtx.lineTo(tri.p[1].x,tri.p[1].y);mCtx.lineTo(tri.p[2].x,tri.p[2].y);mCtx.closePath();
+    var alpha=0.85*depth;
+    mCtx.fillStyle=col.replace('rgb(','rgba(').replace(')',','+alpha+')');mCtx.fill();
+    mCtx.strokeStyle=col.replace('rgb(','rgba(').replace(')',','+(0.3*depth)+')');mCtx.lineWidth=0.4;mCtx.stroke();
+  });
+  // Parlama noktası
+  var px2=p.x-radius*0.3,py2=p.y-radius*0.35;
+  var grad=mCtx.createRadialGradient(px2,py2,radius*0.05,px2,py2,radius*0.65);
+  grad.addColorStop(0,'rgba(255,255,255,0.7)');grad.addColorStop(1,'rgba(255,255,255,0)');
+  mCtx.beginPath();mCtx.arc(p.x,p.y,radius,0,Math.PI*2);mCtx.fillStyle=grad;mCtx.fill();
+  // Etiket
+  if(label){mCtx.fillStyle='#fff';mCtx.font='bold '+Math.round(12*p.scale+6)+'px sans-serif';mCtx.textAlign='center';mCtx.textBaseline='middle';mCtx.fillText(label,p.x,p.y);}
+}
+function mP(cx,cy,cz,r,u,v){return mProj(cx+r*Math.cos(v)*Math.cos(u),cy+r*Math.cos(v)*Math.sin(u),cz+r*Math.sin(v));}
+
+function mBond(x1,y1,z1,x2,y2,z2){
+  var p1=mProj(x1,y1,z1),p2=mProj(x2,y2,z2);
+  var avgSc=(p1.scale+p2.scale)/2;
+  mCtx.strokeStyle='rgba(200,200,200,0.5)';mCtx.lineWidth=6*avgSc;
+  mCtx.lineCap='round';mCtx.beginPath();mCtx.moveTo(p1.x,p1.y);mCtx.lineTo(p2.x,p2.y);mCtx.stroke();
 }
 
-function drawLonePair(x,y,z,label){
-var p=molProject(x,y,z);
-// Electron pair cloud
-molCtx.beginPath();molCtx.arc(p.x,p.y,12*p.scale,0,Math.PI*2);
-molCtx.fillStyle='rgba(255,255,0,0.25)';molCtx.fill();
-molCtx.strokeStyle='rgba(255,255,0,0.5)';molCtx.lineWidth=1;molCtx.stroke();
-// Two electrons
-molCtx.beginPath();molCtx.arc(p.x-4*p.scale,p.y-3*p.scale,3.5*p.scale,0,Math.PI*2);
-molCtx.fillStyle='#ffff00';molCtx.fill();
-molCtx.beginPath();molCtx.arc(p.x+4*p.scale,p.y+3*p.scale,3.5*p.scale,0,Math.PI*2);
-molCtx.fillStyle='#ffff00';molCtx.fill();
-// Label
-if(label){molCtx.fillStyle='rgba(255,255,0,0.8)';molCtx.font='bold 9px sans-serif';molCtx.textAlign='center';molCtx.fillText(label,p.x,p.y-18*p.scale);}
+// Ortaklanmamış elektron çifti — iki parlak sarı nokta yan yana
+function mLonePair(x,y,z){
+  var p=mProj(x,y,z);
+  var sc=p.scale,dotR=7*sc,gap=10*sc;
+  // Hale
+  mCtx.beginPath();mCtx.arc(p.x,p.y,(dotR+gap)*1.2,0,Math.PI*2);
+  mCtx.fillStyle='rgba(255,238,0,0.1)';mCtx.fill();
+  // Sol elektron
+  var g1=mCtx.createRadialGradient(p.x-gap-dotR*0.3,p.y-dotR*0.3,dotR*0.1,p.x-gap,p.y,dotR);
+  g1.addColorStop(0,'#fffaaa');g1.addColorStop(0.5,'#ffee00');g1.addColorStop(1,'rgba(200,160,0,0.8)');
+  mCtx.beginPath();mCtx.arc(p.x-gap,p.y,dotR,0,Math.PI*2);mCtx.fillStyle=g1;mCtx.fill();
+  mCtx.strokeStyle='rgba(255,200,0,0.6)';mCtx.lineWidth=1;mCtx.stroke();
+  // Sağ elektron
+  var g2=mCtx.createRadialGradient(p.x+gap-dotR*0.3,p.y-dotR*0.3,dotR*0.1,p.x+gap,p.y,dotR);
+  g2.addColorStop(0,'#fffaaa');g2.addColorStop(0.5,'#ffee00');g2.addColorStop(1,'rgba(200,160,0,0.8)');
+  mCtx.beginPath();mCtx.arc(p.x+gap,p.y,dotR,0,Math.PI*2);mCtx.fillStyle=g2;mCtx.fill();
+  mCtx.strokeStyle='rgba(255,200,0,0.6)';mCtx.lineWidth=1;mCtx.stroke();
 }
 
-function drawBondAngleLabel(cx,cy,cz,ax1,ay1,az1,ax2,ay2,az2,angleText){
-var p1=molProject(ax1,ay1,az1),p2=molProject(ax2,ay2,az2),pc=molProject(cx,cy,cz);
-var mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
-var dx=mx-pc.x,dy=my-pc.y;
-var len=Math.sqrt(dx*dx+dy*dy);
-if(len>0){dx=dx/len*25;dy=dy/len*25;}
-molCtx.fillStyle='rgba(255,255,255,0.6)';molCtx.font='bold 11px sans-serif';molCtx.textAlign='center';
-molCtx.fillText(angleText,pc.x+dx,pc.y+dy);
+// Molekül çizim fonksiyonları
+function drawBeH2(){
+  mBond(0,0,0,-95,0,0);mBond(0,0,0,95,0,0);
+  mAtom(-120,0,0,'rgb(255,80,80)',22,'H');
+  mAtom(120,0,0,'rgb(255,80,80)',22,'H');
+  mAtom(0,0,0,'rgb(80,160,255)',28,'Be');
 }
-
-// ===== MOLEKÜL ÇİZİM FONKSİYONLARI =====
-function drawMolBeH2(){
-// Doğrusal: Be merkezde, H'ler z-ekseni boyunca
-var bondLen=90;
-drawMolBond(0,0,0, 0,0,-bondLen, 10, '#888');
-drawMolBond(0,0,0, 0,0,bondLen, 10, '#888');
-drawMolAtom(0,0,-bondLen-20,'rgb(255,85,85)',20,'H');
-drawMolAtom(0,0,bondLen+20,'rgb(255,85,85)',20,'H');
-drawMolAtom(0,0,0,'rgb(85,170,255)',26,'Be');
-drawBondAngleLabel(0,0,0,0,0,-bondLen,0,0,bondLen,'180°');
+function drawBH3(){
+  var r=100;
+  for(var i=0;i<3;i++){var a=(Math.PI*2/3)*i-Math.PI/2;mBond(0,0,0,r*Math.cos(a),r*Math.sin(a),0);mAtom(r*1.25*Math.cos(a),r*1.25*Math.sin(a),0,'rgb(255,80,80)',22,'H');}
+  mAtom(0,0,0,'rgb(80,180,255)',28,'B');
 }
-
-function drawMolBH3(){
-// Düzlem üçgen: B merkezde, H'ler xy düzleminde 120° aralıklarla
-var bondLen=95;
-var angles=[-Math.PI/2, Math.PI/6, 5*Math.PI/6];
-angles.forEach(function(a){
-var x=bondLen*Math.cos(a),y=bondLen*Math.sin(a);
-drawMolBond(0,0,0,x,y,0,10,'#888');
-drawMolAtom(x*1.25,y*1.25,0,'rgb(255,85,85)',20,'H');
-});
-drawMolAtom(0,0,0,'rgb(85,170,255)',26,'B');
-// 120° labels
-angles.forEach(function(a,i){
-var nextA=angles[(i+1)%3];
-var mx=(Math.cos(a)+Math.cos(nextA))/2*bondLen*.6;
-var my=(Math.sin(a)+Math.sin(nextA))/2*bondLen*.6;
-molCtx.fillStyle='rgba(255,255,255,0.5)';molCtx.font='bold 10px sans-serif';molCtx.textAlign='center';
-molCtx.fillText('120°',molW/2+mx,molH/2+my);
-});
+function drawCH4(){
+  var tv=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],r=90;
+  tv.forEach(function(v){var l=Math.sqrt(3),nx=v[0]/l,ny=v[1]/l,nz=v[2]/l;mBond(0,0,0,nx*r,ny*r,nz*r);mAtom(nx*(r+28),ny*(r+28),nz*(r+28),'rgb(255,80,80)',22,'H');});
+  mAtom(0,0,0,'rgb(80,200,80)',28,'C');
 }
-
-function drawMolCH4(){
-// Düzgün dörtyüzlü: C merkezde, H'ler tetrahedral konumda
-var r=95;
-var verts=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]];
-verts.forEach(function(v){
-var len=Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
-var nx=v[0]/len,ny=v[1]/len,nz=v[2]/len;
-drawMolBond(0,0,0,nx*r,ny*r,nz*r,10,'#888');
-drawMolAtom(nx*(r+28),ny*(r+28),nz*(r+28),'rgb(255,85,85)',20,'H');
-});
-drawMolAtom(0,0,0,'rgb(85,170,255)',26,'C');
-molCtx.fillStyle='rgba(255,255,255,0.5)';molCtx.font='bold 11px sans-serif';molCtx.textAlign='center';
-molCtx.fillText('109.5°',molW/2,molH/2-50);
+function drawNH3(){
+  var r=88;
+  for(var i=0;i<3;i++){
+    var a=(Math.PI*2/3)*i;
+    var hx=r*Math.cos(a),hy=50,hz=r*Math.sin(a);
+    mBond(0,-12,0,hx,hy,hz);
+    mAtom(hx*1.2,hy*1.15,hz*1.2,'rgb(255,80,80)',22,'H');
+  }
+  // 1 lone pair — azotun üstünde, H'lerin karşı tarafında
+  mLonePair(0,-80,0);
+  mAtom(0,-12,0,'rgb(80,120,255)',28,'N');
 }
-
-function drawMolNH3(){
-// Üçgen piramit: N merkezde, 3 H aşağıda, 1 yalnız çift yukarıda
-var bondLen=90;
-// 3 H atomları - piramitin tabanı (aşağıda)
-for(var i=0;i<3;i++){
-var a=(Math.PI*2/3)*i;
-var x=bondLen*Math.cos(a)*.8;
-var y=-bondLen*.5; // aşağıda
-var z=bondLen*Math.sin(a)*.8;
-drawMolBond(0,0,0,x,y,z,10,'#888');
-drawMolAtom(x*1.3,y*1.3,z*1.3,'rgb(255,85,85)',20,'H');
-}
-// 1 yalnız elektron çifti - piramitin tepesi (yukarıda)
-drawLonePair(0,80,0,'E');
-// N merkez atomu
-drawMolAtom(0,0,0,'rgb(85,170,255)',26,'N');
-// Açı etiketi
-molCtx.fillStyle='rgba(255,255,255,0.5)';molCtx.font='bold 11px sans-serif';molCtx.textAlign='center';
-molCtx.fillText('107°',molW/2,molH/2+60);
-}
-
-function drawMolH2O(){
-// Açısal: O merkezde, 2 H aşağıda, 2 yalnız çift yukarıda
-var bondLen=85;
-// 2 H atomları - aşağıda, 104.5° açıyla
-var hAngle=52.25*Math.PI/180;
-var h1x=-bondLen*Math.sin(hAngle),h1y=-bondLen*Math.cos(hAngle),h1z=0;
-var h2x=bondLen*Math.sin(hAngle),h2y=-bondLen*Math.cos(hAngle),h2z=0;
-drawMolBond(0,0,0,h1x,h1y,h1z,10,'#888');
-drawMolBond(0,0,0,h2x,h2y,h2z,10,'#888');
-drawMolAtom(h1x*1.3,h1y*1.3,h1z*1.3,'rgb(255,85,85)',20,'H');
-drawMolAtom(h2x*1.3,h2y*1.3,h2z*1.3,'rgb(255,85,85)',20,'H');
-// 2 yalnız elektron çifti - yukarıda, 104.5° açıyla (H'lere zıt)
-var lpAngle=180*Math.PI/180;
-var lp1x=-55*Math.sin(hAngle),lp1y=65,lp1z=30;
-var lp2x=55*Math.sin(hAngle),lp2y=65,lp2z=-30;
-drawLonePair(lp1x,lp1y,lp1z,'E');
-drawLonePair(lp2x,lp2y,lp2z,'E');
-// O merkez atomu
-drawMolAtom(0,0,0,'rgb(255,85,85)',26,'O');
-// Açı etiketi
-molCtx.fillStyle='rgba(255,255,255,0.5)';molCtx.font='bold 11px sans-serif';molCtx.textAlign='center';
-molCtx.fillText('104.5°',molW/2,molH/2+55);
+function drawH2O(){
+  // Bağlar ve H atomları
+  mBond(0,0,0,-68,-58,18);mBond(0,0,0,68,-58,-18);
+  mAtom(-85,-74,24,'rgb(255,80,80)',22,'H');
+  mAtom(85,-74,-24,'rgb(255,80,80)',22,'H');
+  // 2 lone pair — oksijen üzerinde, H'lerin karşı tarafında (üst kısım)
+  mLonePair(-30,58,20);
+  mLonePair(30,58,-20);
+  // Oksijen en son çizilir (üstte görünsün)
+  mAtom(0,0,0,'rgb(255,60,60)',30,'O');
 }
 
 function molLoop(){
-if(!molCtx)return;
-molCtx.clearRect(0,0,molW,molH);molCtx.fillStyle='#050510';molCtx.fillRect(0,0,molW,molH);
-if(molAutoSpin&&!molIsDragging)molRotY+=.006;
-if(currentMol==='BeH2')drawMolBeH2();
-else if(currentMol==='BH3')drawMolBH3();
-else if(currentMol==='CH4')drawMolCH4();
-else if(currentMol==='NH3')drawMolNH3();
-else if(currentMol==='H2O')drawMolH2O();
-// Legend
-molCtx.fillStyle='rgba(255,255,255,0.35)';molCtx.font='10px sans-serif';molCtx.textAlign='left';
-molCtx.fillText('🔴 Proton  🔵 Notron',10,18);
-molCtx.fillStyle='rgba(255,255,0,0.8)';molCtx.fillText('● Yalnız Elektron Çifti',10,34);
-molCtx.fillStyle='rgba(255,255,255,0.25)';molCtx.fillText('👆 Sürükleyerek 3D döndürün',10,molH-10);
-molAnimFrame=requestAnimationFrame(molLoop);
+  if(!mCtx)return;
+  mCtx.clearRect(0,0,mW,mH);mCtx.fillStyle='#050510';mCtx.fillRect(0,0,mW,mH);
+  if(mSpin&&!mDrag)mRotY+=.006;
+  if(curMol==='BeH2')drawBeH2();
+  else if(curMol==='BH3')drawBH3();
+  else if(curMol==='CH4')drawCH4();
+  else if(curMol==='NH3')drawNH3();
+  else if(curMol==='H2O')drawH2O();
+  mCtx.fillStyle='rgba(255,255,255,0.2)';mCtx.font='11px sans-serif';mCtx.textAlign='left';
+  mCtx.fillText('👆 Sürükle döndür',8,mH-10);
+  mAnimId=requestAnimationFrame(molLoop);
 }
 
 function showMolecule(mol){
-  currentMol=mol;
+  curMol=mol;
   document.getElementById('molBox').style.display='block';
-  var titles={'BeH2':'BeH₂ - Doğrusal (180°)','BH3':'BH₃ - Düzlem Üçgen (120°)','CH4':'CH₄ - Düzgün Dörtyüzlü (109.5°)','NH3':'NH₃ - Üçgen Piramit (107°)','H2O':'H₂O - Açısal (104.5°)'};
+  var titles={'BeH2':'BeH₂ - Doğrusal (sp, 180°)','BH3':'BH₃ - Düzlem Üçgen (sp², 120°)','CH4':'CH₄ - Düzgün Dörtyüzlü (sp³, 109.5°)','NH3':'NH₃ - Üçgen Piramit (sp³, 107°)','H2O':'H₂O - Açısal / Kırık Doğru (sp³, 104.5°)'};
   document.getElementById('molTitle').textContent=titles[mol]||'3D Molekül';
-  molRotX=.3;molRotY=.4;
-  if(molAnimFrame)cancelAnimationFrame(molAnimFrame);
-  setTimeout(function(){
-    var mc=document.getElementById('molCanvas');
-    var ctx=mc.getContext('2d');
-    var rect=mc.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
-    mc.width=rect.width*dpr;mc.height=300*dpr;
-    molW=rect.width;molH=300;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    molCtx=ctx;molCanvas=mc;
-    molLoop();
-  },80);
+  if(!mC){initMol();molLoop();}else{mRotX=.3;mRotY=.4;}
   document.getElementById('molBox').scrollIntoView({behavior:'smooth'});
 }
-
-
-function toggleMolSpin(){molAutoSpin=!molAutoSpin;}
-function resetMolView(){molRotX=.3;molRotY=.4;}
-
-molCanvas.addEventListener('mousedown',function(e){molIsDragging=true;molLastX=e.clientX;molLastY=e.clientY;});
-molCanvas.addEventListener('mousemove',function(e){if(!molIsDragging)return;molRotY+=(e.clientX-molLastX)*.01;molRotX+=(e.clientY-molLastY)*.01;molLastX=e.clientX;molLastY=e.clientY;});
-molCanvas.addEventListener('mouseup',function(){molIsDragging=false;});
-molCanvas.addEventListener('touchstart',function(e){molIsDragging=true;molLastX=e.touches[0].clientX;molLastY=e.touches[0].clientY;},{passive:false});
-molCanvas.addEventListener('touchmove',function(e){if(!molIsDragging)return;molRotY+=(e.touches[0].clientX-molLastX)*.015;molRotX+=(e.touches[0].clientY-molLastY)*.015;molLastX=e.touches[0].clientX;molLastY=e.touches[0].clientY;e.preventDefault();},{passive:false});
-molCanvas.addEventListener('touchend',function(){molIsDragging=false;});
+function toggleMolSpin(){mSpin=!mSpin;}
+function resetMolView(){mRotX=.3;mRotY=.4;}
+initMol();
 
 // ===== VİDEO =====
 var videos=JSON.parse(localStorage.getItem('chemVids')||'[]');
 function addVid(){
-var url=document.getElementById('vUrl').value.trim(),title=document.getElementById('vTitle').value.trim()||'Video';
-if(!url){alert('URL girin!');return;}
-var u=url;
-if(u.includes('github.com')&&u.includes('/blob/'))u=u.replace('github.com','raw.githubusercontent.com').replace('/blob/','/');
-videos.unshift({id:Date.now(),url:u,title:title,date:new Date().toLocaleDateString('tr-TR')});
-localStorage.setItem('chemVids',JSON.stringify(videos));
-document.getElementById('vUrl').value='';document.getElementById('vTitle').value='';
-renderVids();
+  var url=document.getElementById('vUrl').value.trim(),title=document.getElementById('vTitle').value.trim()||'Video';
+  if(!url){alert('URL girin!');return;}
+  var u=url;
+  if(u.indexOf('github.com')>-1&&u.indexOf('/blob/')>-1)u=u.replace('github.com','raw.githubusercontent.com').replace('/blob/','/');
+  videos.unshift({id:Date.now(),url:u,title:title,date:new Date().toLocaleDateString('tr-TR')});
+  localStorage.setItem('chemVids',JSON.stringify(videos));
+  document.getElementById('vUrl').value='';document.getElementById('vTitle').value='';
+  renderVids();
 }
 function delVid(id){videos=videos.filter(function(v){return v.id!==id;});localStorage.setItem('chemVids',JSON.stringify(videos));renderVids();}
 function renderVids(){
-var g=document.getElementById('vGrid');
-if(!videos.length){g.innerHTML='<div class="empty"><p>Henüz video yok</p><p style="font-size:.75rem;margin-top:5px">Yukarıya URL ekleyin</p></div>';return;}
-g.innerHTML=videos.map(function(v){return'<div class="video-card"><video controls playsinline preload="metadata" style="width:100%;display:block;background:#000"><source src="'+v.url+'" type="video/mp4"></video><div class="video-info"><h4>'+v.title+'</h4><p>'+v.date+'</p></div><div class="video-actions"><button class="btn-del" onclick="delVid('+v.id+')">🗑️ Sil</button></div></div>';}).join('');
+  var g=document.getElementById('vGrid');
+  if(!videos.length){g.innerHTML='<div class="empty"><p>Henüz video yok</p><p style="font-size:.75rem;margin-top:5px">Yukarıya URL ekleyin</p></div>';return;}
+  g.innerHTML=videos.map(function(v){return'<div class="video-card"><video controls playsinline preload="metadata" style="width:100%;display:block;background:#000"><source src="'+v.url+'" type="video/mp4"></video><div class="video-info"><h4>'+v.title+'</h4><p>'+v.date+'</p></div><div class="video-actions"><button class="btn-del" onclick="delVid('+v.id+')">🗑️ Sil</button></div></div>';}).join('');
 }
 renderVids();
 </script>
