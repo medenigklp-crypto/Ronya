@@ -437,12 +437,6 @@ function initMol(){
   var rect=mC.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
   mC.width=rect.width*dpr;mC.height=320*dpr;mW=rect.width;mH=320;
   mCtx.setTransform(dpr,0,0,dpr,0,0);
-  mC.addEventListener('mousedown',function(e){mDrag=true;mLX=e.clientX;mLY=e.clientY;});
-  mC.addEventListener('mousemove',function(e){if(!mDrag)return;mRotY+=(e.clientX-mLX)*.01;mRotX+=(e.clientY-mLY)*.01;mLX=e.clientX;mLY=e.clientY;});
-  mC.addEventListener('mouseup',function(){mDrag=false;});
-  mC.addEventListener('touchstart',function(e){mDrag=true;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;},{passive:false});
-  mC.addEventListener('touchmove',function(e){if(!mDrag)return;mRotY+=(e.touches[0].clientX-mLX)*.015;mRotX+=(e.touches[0].clientY-mLY)*.015;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;e.preventDefault();},{passive:false});
-  mC.addEventListener('touchend',function(){mDrag=false;});
 }
 
 function mProj(x,y,z){
@@ -451,7 +445,7 @@ function mProj(x,y,z){
   var sc=220/(300+z2);return{x:mW/2+x2*sc,y:mH/2+y1*sc,z:z2,scale:sc};
 }
 
-// Atom — 3D parlak küre (orbital tarzı, güçlü parlama halesi ile)
+// Atom — 3D parlak küre (orbital küresiyle BİREBİR aynı doku/gölgeleme formülü)
 function mAtom(x,y,z,col,r,label){
   var p=mProj(x,y,z),radius=r*p.scale;
   var colHex=col.match(/\d+/g);
@@ -463,8 +457,8 @@ function mAtom(x,y,z,col,r,label){
   mCtx.beginPath();mCtx.arc(p.x,p.y,glowR,0,Math.PI*2);mCtx.fillStyle=glow;mCtx.fill();
   // Gölge
   mCtx.beginPath();mCtx.arc(p.x+2,p.y+2,radius,0,Math.PI*2);mCtx.fillStyle='rgba(0,0,0,0.4)';mCtx.fill();
-  // Küre yüzeyi (çokgen mesh)
-  var slices=18,stacks=12,tris=[];
+  // Küre yüzeyi — orbital draw3DEllipsoid ile AYNI mesh + gölgeleme formülü (20 dilim, 14 kat)
+  var slices=20,stacks=14,tris=[];
   for(var i=0;i<slices;i++){for(var j=0;j<stacks;j++){
     var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1);
     var v1=(Math.PI/stacks)*j-Math.PI/2,v2=(Math.PI/stacks)*(j+1)-Math.PI/2;
@@ -474,11 +468,11 @@ function mAtom(x,y,z,col,r,label){
   }}
   tris.sort(function(a,b){return b.avgZ-a.avgZ;});
   tris.forEach(function(tri){
-    var depth=Math.max(0.25,Math.min(1,1-(tri.avgZ+150)/400));
+    // orbital ile ayni derinlik formulu
+    var depth=Math.max(.15,Math.min(1,1-(tri.avgZ+120)/350));
     mCtx.beginPath();mCtx.moveTo(tri.p[0].x,tri.p[0].y);mCtx.lineTo(tri.p[1].x,tri.p[1].y);mCtx.lineTo(tri.p[2].x,tri.p[2].y);mCtx.closePath();
-    var alpha=0.9*depth;
-    mCtx.fillStyle='rgba('+rgb+','+alpha+')';mCtx.fill();
-    mCtx.strokeStyle='rgba('+rgb+','+(0.4*depth)+')';mCtx.lineWidth=0.5;mCtx.stroke();
+    mCtx.fillStyle='rgba('+rgb+','+(0.95*depth*.55+0.35)+')';mCtx.fill();
+    mCtx.strokeStyle='rgba('+rgb+','+(.25*depth+0.15)+')';mCtx.lineWidth=.4;mCtx.stroke();
   });
   // Parlama noktası (specular highlight)
   var px2=p.x-radius*0.32,py2=p.y-radius*0.38;
@@ -548,19 +542,19 @@ function mAxes(){
 // Molekül çizim fonksiyonları
 function drawBeH2(){
   mBond(0,0,0,-95,0,0);mBond(0,0,0,95,0,0);
-  mAtom(-120,0,0,'rgb(255,80,80)',22,'H');
-  mAtom(120,0,0,'rgb(255,80,80)',22,'H');
-  mAtom(0,0,0,'rgb(80,160,255)',28,'Be');
+  mAtom(-120,0,0,'rgb(241,245,249)',22,'H');
+  mAtom(120,0,0,'rgb(241,245,249)',22,'H');
+  mAtom(0,0,0,'rgb(163,230,53)',28,'Be');
 }
 function drawBH3(){
   var r=100;
-  for(var i=0;i<3;i++){var a=(Math.PI*2/3)*i-Math.PI/2;mBond(0,0,0,r*Math.cos(a),r*Math.sin(a),0);mAtom(r*1.25*Math.cos(a),r*1.25*Math.sin(a),0,'rgb(255,80,80)',22,'H');}
-  mAtom(0,0,0,'rgb(80,180,255)',28,'B');
+  for(var i=0;i<3;i++){var a=(Math.PI*2/3)*i-Math.PI/2;mBond(0,0,0,r*Math.cos(a),r*Math.sin(a),0);mAtom(r*1.25*Math.cos(a),r*1.25*Math.sin(a),0,'rgb(241,245,249)',22,'H');}
+  mAtom(0,0,0,'rgb(245,158,11)',28,'B');
 }
 function drawCH4(){
   var tv=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],r=90;
-  tv.forEach(function(v){var l=Math.sqrt(3),nx=v[0]/l,ny=v[1]/l,nz=v[2]/l;mBond(0,0,0,nx*r,ny*r,nz*r);mAtom(nx*(r+28),ny*(r+28),nz*(r+28),'rgb(255,80,80)',22,'H');});
-  mAtom(0,0,0,'rgb(80,200,80)',28,'C');
+  tv.forEach(function(v){var l=Math.sqrt(3),nx=v[0]/l,ny=v[1]/l,nz=v[2]/l;mBond(0,0,0,nx*r,ny*r,nz*r);mAtom(nx*(r+28),ny*(r+28),nz*(r+28),'rgb(241,245,249)',22,'H');});
+  mAtom(0,0,0,'rgb(71,85,105)',28,'C');
 }
 function drawNH3(){
   var r=88;
@@ -568,22 +562,22 @@ function drawNH3(){
     var a=(Math.PI*2/3)*i;
     var hx=r*Math.cos(a),hy=50,hz=r*Math.sin(a);
     mBond(0,-12,0,hx,hy,hz);
-    mAtom(hx*1.2,hy*1.15,hz*1.2,'rgb(255,80,80)',22,'H');
+    mAtom(hx*1.2,hy*1.15,hz*1.2,'rgb(241,245,249)',22,'H');
   }
   // 1 lone pair — azotun üstünde, H'lerin karşı tarafında
   mLonePair(0,-80,0);
-  mAtom(0,-12,0,'rgb(80,120,255)',28,'N');
+  mAtom(0,-12,0,'rgb(59,130,246)',28,'N');
 }
 function drawH2O(){
   // Bağlar ve H atomları
   mBond(0,0,0,-68,-58,18);mBond(0,0,0,68,-58,-18);
-  mAtom(-85,-74,24,'rgb(255,80,80)',22,'H');
-  mAtom(85,-74,-24,'rgb(255,80,80)',22,'H');
+  mAtom(-85,-74,24,'rgb(241,245,249)',22,'H');
+  mAtom(85,-74,-24,'rgb(241,245,249)',22,'H');
   // 2 lone pair — oksijen üzerinde, H'lerin karşı tarafında (üst kısım)
   mLonePair(-30,58,20);
   mLonePair(30,58,-20);
   // Oksijen en son çizilir (üstte görünsün)
-  mAtom(0,0,0,'rgb(255,60,60)',30,'O');
+  mAtom(0,0,0,'rgb(239,68,68)',30,'O');
 }
 
 function molLoop(){
@@ -591,12 +585,16 @@ function molLoop(){
   mCtx.clearRect(0,0,mW,mH);mCtx.fillStyle='#050510';mCtx.fillRect(0,0,mW,mH);
   if(mSpin&&!mDrag)mRotY+=.006;
   mT+=.03;
-  mAxes();
   if(curMol==='BeH2')drawBeH2();
   else if(curMol==='BH3')drawBH3();
   else if(curMol==='CH4')drawCH4();
   else if(curMol==='NH3')drawNH3();
   else if(curMol==='H2O')drawH2O();
+  var angles={'BeH2':'180°','BH3':'120°','CH4':'109.5°','NH3':'107°','H2O':'104.5°'};
+  if(angles[curMol]){
+    mCtx.fillStyle='rgba(255,238,0,0.9)';mCtx.font='bold 14px sans-serif';mCtx.textAlign='center';
+    mCtx.fillText(angles[curMol],mW/2,28);
+  }
   mCtx.fillStyle='rgba(255,255,255,0.2)';mCtx.font='11px sans-serif';mCtx.textAlign='left';
   mCtx.fillText('👆 Sürükle döndür',8,mH-10);
   mAnimId=requestAnimationFrame(molLoop);
@@ -616,6 +614,13 @@ function showMolecule(mol){
     mC.width=rect.width*dpr;mC.height=420*dpr;mW=rect.width;mH=420;
     mCtx.setTransform(dpr,0,0,dpr,0,0);
     mRotX=.3;mRotY=.4;
+    mC.onmousedown=function(e){mDrag=true;mLX=e.clientX;mLY=e.clientY;};
+    mC.onmousemove=function(e){if(!mDrag)return;mRotY+=(e.clientX-mLX)*.01;mRotX+=(e.clientY-mLY)*.01;mLX=e.clientX;mLY=e.clientY;};
+    mC.onmouseup=function(){mDrag=false;};
+    mC.onmouseleave=function(){mDrag=false;};
+    mC.ontouchstart=function(e){mDrag=true;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;e.preventDefault();};
+    mC.ontouchmove=function(e){if(!mDrag)return;mRotY+=(e.touches[0].clientX-mLX)*.015;mRotX+=(e.touches[0].clientY-mLY)*.015;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;e.preventDefault();};
+    mC.ontouchend=function(){mDrag=false;};
     molLoop();
   },80);
   document.getElementById('molBox').scrollIntoView({behavior:'smooth'});
