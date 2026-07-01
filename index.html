@@ -3238,37 +3238,179 @@ function startBagSim() {
     eDot(x + Math.cos(angle - 0.16) * dist, y + Math.sin(angle - 0.16) * dist, col);
     eDot(x + Math.cos(angle + 0.16) * dist, y + Math.sin(angle + 0.16) * dist, col);
   }
-  function bondLine(x1, y1, x2, y2, off) {
-    if(bagViewMode === 'orb') {
-      ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x1 + off.x, y1 + off.y); ctx.lineTo(x2 + off.x, y2 + off.y); ctx.stroke();
+  // bondOrder: 1=tekli, 2=ikili, 3=uclu. offset: paralel cizgiler arasi mesafe icin
+  function bondLine(x1, y1, x2, y2, bondOrder) {
+    bondOrder = bondOrder || 1;
+    if (bagViewMode === 'orb') {
+      var dx = x2-x1, dy = y2-y1, len = Math.sqrt(dx*dx+dy*dy);
+      var nx = -dy/len, ny = dx/len;
+      ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2;
+      if (bondOrder === 1) {
+        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+      } else {
+        var gap = 3.5;
+        for (var i=0;i<bondOrder;i++){
+          var off = (i - (bondOrder-1)/2) * gap;
+          ctx.beginPath(); ctx.moveTo(x1+nx*off,y1+ny*off); ctx.lineTo(x2+nx*off,y2+ny*off); ctx.stroke();
+        }
+      }
     } else {
-      var mx = (x1 + x2) / 2 + off.x; var my = (y1 + y2) / 2 + off.y; eDot(mx - 3, my); eDot(mx + 3, my);
+      // Lewis modu: bag ortasinda bondOrder kadar elektron cifti goster
+      var dx = x2-x1, dy = y2-y1, len = Math.sqrt(dx*dx+dy*dy);
+      var nx = -dy/len, ny = dx/len;
+      var mx = (x1+x2)/2, my = (y1+y2)/2;
+      var gap = 7;
+      for (var i=0;i<bondOrder;i++){
+        var off = (i - (bondOrder-1)/2) * gap;
+        eDot(mx+nx*off-2, my+ny*off, '#00ff88');
+        eDot(mx+nx*off+2, my+ny*off, '#00ff88');
+      }
     }
   }
 
   function loop() {
     ctx.clearRect(0,0,cv.width,cv.height);
     var p = Math.min(frame++/40, 1); var cx = cv.width/2, cy = cv.height/2;
+
     if (mol === "H2O") {
-      title.textContent = "H₂O - Oksijen Üzerinde 2 Çift Ortaklanmamış Elektron (Kırık Doğru)";
-      atomNode(ctx, cx, cy-10, 34, "O", "#ff6b6b"); atomNode(ctx, cx-55*p, cy+35*p, 16, "H", "#3b82f6"); atomNode(ctx, cx+55*p, cy+35*p, 16, "H", "#3b82f6");
-      bondLine(cx, cy-10, cx-55, cy+35, {x:0, y:0}); bondLine(cx, cy-10, cx+55, cy+35, {x:0, y:0});
+      title.textContent = "H₂O - Oksijen Üzerinde 2 Çift Ortaklanmamış Elektron (Kırık Doğru, ~104.5°)";
+      var h1x=cx-55*p, h1y=cy+35*p, h2x=cx+55*p, h2y=cy+35*p;
+      bondLine(cx, cy-10, h1x, h1y, 1); bondLine(cx, cy-10, h2x, h2y, 1);
+      atomNode(ctx, cx, cy-10, 34, "O", "#ff6b6b");
+      atomNode(ctx, h1x, h1y, 16, "H", "#3b82f6"); atomNode(ctx, h2x, h2y, 16, "H", "#3b82f6");
       if (p >= 1 && bagViewMode === 'lewis') { ePair(cx, cy-10, -Math.PI/4, 22, '#f59e0b'); ePair(cx, cy-10, -3*Math.PI/4, 22, '#f59e0b'); }
+
     } else if (mol === "NH3") {
-      title.textContent = "NH₃ - Azot Üzerinde 1 Çift Ortaklanmamış Elektron (Üçgen Piramit)";
-      atomNode(ctx, cx, cy-12, 34, "N", "#ff6b6b"); atomNode(ctx, cx-55*p, cy+35*p, 16, "H", "#3b82f6"); atomNode(ctx, cx, cy+50*p, 16, "H", "#3b82f6"); atomNode(ctx, cx+55*p, cy+35*p, 16, "H", "#3b82f6");
-      bondLine(cx, cy-12, cx-55, cy+35, {x:0, y:0}); bondLine(cx, cy-12, cx, cy+50, {x:0, y:0}); bondLine(cx, cy-12, cx+55, cy+35, {x:0, y:0});
+      title.textContent = "NH₃ - Azot Üzerinde 1 Çift Ortaklanmamış Elektron (Üçgen Piramit, ~107°)";
+      var n1x=cx-55*p, n1y=cy+35*p, n2x=cx, n2y=cy+50*p, n3x=cx+55*p, n3y=cy+35*p;
+      bondLine(cx, cy-12, n1x, n1y, 1); bondLine(cx, cy-12, n2x, n2y, 1); bondLine(cx, cy-12, n3x, n3y, 1);
+      atomNode(ctx, cx, cy-12, 34, "N", "#ff6b6b");
+      atomNode(ctx, n1x, n1y, 16, "H", "#3b82f6"); atomNode(ctx, n2x, n2y, 16, "H", "#3b82f6"); atomNode(ctx, n3x, n3y, 16, "H", "#3b82f6");
       if (p >= 1 && bagViewMode === 'lewis') ePair(cx, cy-12, -Math.PI/2, 22, '#f59e0b');
+
+    } else if (mol === "CH4") {
+      title.textContent = "CH₄ - Ortaklanmamış Elektron Yok (Düzgün Dörtyüzlü, 109.5°)";
+      var pts = [{x:cx,y:cy-60},{x:cx-55,y:cy+18},{x:cx+55,y:cy+18},{x:cx,y:cy+55}];
+      pts.forEach(function(pt){ bondLine(cx, cy, cx+(pt.x-cx)*p, cy+(pt.y-cy)*p, 1); atomNode(ctx, cx+(pt.x-cx)*p, cy+(pt.y-cy)*p, 15, "H", "#3b82f6"); });
+      atomNode(ctx, cx, cy, 30, "C", "#ff6b6b");
+
+    } else if (mol === "BH3") {
+      title.textContent = "BH₃ - Eksik Oktet, Ortaklanmamış Elektron Yok (Düzlem Üçgen, 120°)";
+      var angs=[-90,30,150];
+      angs.forEach(function(a){ var rad=a*Math.PI/180; var tx=cx+Math.cos(rad)*60*p, ty=cy+Math.sin(rad)*60*p;
+        bondLine(cx,cy,tx,ty,1); atomNode(ctx, tx, ty, 15, "H", "#3b82f6"); });
+      atomNode(ctx, cx, cy, 28, "B", "#f59e0b");
+
+    } else if (mol === "BeH2") {
+      title.textContent = "BeH₂ - Eksik Oktet (Doğrusal, 180°)";
+      var lx=cx-60*p, rx=cx+60*p;
+      bondLine(cx,cy,lx,cy,1); bondLine(cx,cy,rx,cy,1);
+      atomNode(ctx, lx, cy, 15, "H", "#3b82f6"); atomNode(ctx, rx, cy, 15, "H", "#3b82f6");
+      atomNode(ctx, cx, cy, 26, "Be", "#f59e0b");
+
+    } else if (mol === "H2") {
+      title.textContent = "H₂ - Apolar Kovalent Tekli Bağ";
+      var lx=cx-35*p, rx=cx+35*p;
+      bondLine(lx,cy,rx,cy,1);
+      atomNode(ctx, lx, cy, 18, "H", "#3b82f6"); atomNode(ctx, rx, cy, 18, "H", "#3b82f6");
+
+    } else if (mol === "O2") {
+      title.textContent = "O₂ - Apolar Kovalent İkili Bağ, Her O'da 2 Ortaklanmamış Çift";
+      var lx=cx-45*p, rx=cx+45*p;
+      bondLine(lx,cy,rx,cy,2);
+      atomNode(ctx, lx, cy, 26, "O", "#ff6b6b"); atomNode(ctx, rx, cy, 26, "O", "#ff6b6b");
+      if (p>=1 && bagViewMode==='lewis'){
+        ePair(lx,cy,Math.PI/2,20,'#f59e0b'); ePair(lx,cy,-Math.PI/2,20,'#f59e0b');
+        ePair(rx,cy,Math.PI/2,20,'#f59e0b'); ePair(rx,cy,-Math.PI/2,20,'#f59e0b');
+      }
+
+    } else if (mol === "N2") {
+      title.textContent = "N₂ - Apolar Kovalent Üçlü Bağ, Her N'de 1 Ortaklanmamış Çift";
+      var lx=cx-45*p, rx=cx+45*p;
+      bondLine(lx,cy,rx,cy,3);
+      atomNode(ctx, lx, cy, 24, "N", "#ff6b6b"); atomNode(ctx, rx, cy, 24, "N", "#ff6b6b");
+      if (p>=1 && bagViewMode==='lewis'){ ePair(lx,cy,Math.PI,20,'#f59e0b'); ePair(rx,cy,0,20,'#f59e0b'); }
+
+    } else if (mol === "CO2") {
+      title.textContent = "CO₂ - Apolar Kovalent, 2 İkili Bağ (Doğrusal, 180°)";
+      var lx=cx-70*p, rx=cx+70*p;
+      bondLine(cx,cy,lx,cy,2); bondLine(cx,cy,rx,cy,2);
+      atomNode(ctx, lx, cy, 22, "O", "#ff6b6b"); atomNode(ctx, rx, cy, 22, "O", "#ff6b6b");
+      atomNode(ctx, cx, cy, 26, "C", "#f59e0b");
+      if (p>=1 && bagViewMode==='lewis'){
+        ePair(lx,cy,Math.PI/2,18,'#f59e0b'); ePair(lx,cy,-Math.PI/2,18,'#f59e0b');
+        ePair(rx,cy,Math.PI/2,18,'#f59e0b'); ePair(rx,cy,-Math.PI/2,18,'#f59e0b');
+      }
+
+    } else if (mol === "HCN") {
+      title.textContent = "HCN - Polar Kovalent, Üçlü Bağ İçerir (Doğrusal)";
+      var hx=cx-90*p, cx2=cx, nx=cx+70*p;
+      bondLine(cx2,cy,hx,cy,1); bondLine(cx2,cy,nx,cy,3);
+      atomNode(ctx, hx, cy, 15, "H", "#3b82f6"); atomNode(ctx, cx2, cy, 24, "C", "#f59e0b"); atomNode(ctx, nx, cy, 22, "N", "#ff6b6b");
+      if (p>=1 && bagViewMode==='lewis') ePair(nx,cy,0,18,'#f59e0b');
+
+    } else if (mol === "HF") {
+      title.textContent = "HF - Polar Kovalent Tekli Bağ, F Üzerinde 3 Ortaklanmamış Çift";
+      var hx=cx-45*p, fx=cx+45*p;
+      bondLine(hx,cy,fx,cy,1);
+      atomNode(ctx, hx, cy, 16, "H", "#3b82f6"); atomNode(ctx, fx, cy, 24, "F", "#ff6b6b");
+      if (p>=1 && bagViewMode==='lewis'){
+        ePair(fx,cy,Math.PI/2,20,'#f59e0b'); ePair(fx,cy,-Math.PI/2,20,'#f59e0b'); ePair(fx,cy,0,20,'#f59e0b');
+      }
+
+    } else if (mol === "C2H6") {
+      title.textContent = "Etan (C₂H₆) - Tekli C-C Bağı, sp³";
+      var c1x=cx-35*p, c2x=cx+35*p;
+      bondLine(c1x,cy,c2x,cy,1);
+      var offs1=[{dx:-40,dy:-35},{dx:-40,dy:35},{dx:-55,dy:0}];
+      var offs2=[{dx:40,dy:-35},{dx:40,dy:35},{dx:55,dy:0}];
+      offs1.forEach(function(o){ var hx=c1x+o.dx*p, hy=cy+o.dy*p; bondLine(c1x,cy,hx,hy,1); atomNode(ctx,hx,hy,13,"H","#3b82f6"); });
+      offs2.forEach(function(o){ var hx=c2x+o.dx*p, hy=cy+o.dy*p; bondLine(c2x,cy,hx,hy,1); atomNode(ctx,hx,hy,13,"H","#3b82f6"); });
+      atomNode(ctx, c1x, cy, 22, "C", "#f59e0b"); atomNode(ctx, c2x, cy, 22, "C", "#f59e0b");
+
+    } else if (mol === "C2H4") {
+      title.textContent = "Eten (C₂H₄) - İkili C=C Bağı, Düzlemsel sp²";
+      var c1x=cx-40*p, c2x=cx+40*p;
+      bondLine(c1x,cy,c2x,cy,2);
+      var offs1=[{dx:-45,dy:-32},{dx:-45,dy:32}];
+      var offs2=[{dx:45,dy:-32},{dx:45,dy:32}];
+      offs1.forEach(function(o){ var hx=c1x+o.dx*p, hy=cy+o.dy*p; bondLine(c1x,cy,hx,hy,1); atomNode(ctx,hx,hy,13,"H","#3b82f6"); });
+      offs2.forEach(function(o){ var hx=c2x+o.dx*p, hy=cy+o.dy*p; bondLine(c2x,cy,hx,hy,1); atomNode(ctx,hx,hy,13,"H","#3b82f6"); });
+      atomNode(ctx, c1x, cy, 22, "C", "#f59e0b"); atomNode(ctx, c2x, cy, 22, "C", "#f59e0b");
+
+    } else if (mol === "C2H2") {
+      title.textContent = "Etin (C₂H₂) - Üçlü C≡C Bağı, Doğrusal sp";
+      var hx1=cx-95*p, c1x=cx-30*p, c2x=cx+30*p, hx2=cx+95*p;
+      bondLine(c1x,cy,c2x,cy,3);
+      bondLine(hx1,cy,c1x,cy,1); bondLine(c2x,cy,hx2,cy,1);
+      atomNode(ctx, hx1, cy, 14, "H", "#3b82f6"); atomNode(ctx, c1x, cy, 20, "C", "#f59e0b");
+      atomNode(ctx, c2x, cy, 20, "C", "#f59e0b"); atomNode(ctx, hx2, cy, 14, "H", "#3b82f6");
+
+    } else if (mol === "NaCl") {
+      title.textContent = "NaCl - İyonik Bağ (Elektron Transferi, Na⁺ ve Cl⁻)";
+      var nax=cx-50*p, clx=cx+50*p;
+      // iyonik bagda cizgi yerine + ve - gosterimi
+      ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      ctx.beginPath(); ctx.moveTo(nax,cy); ctx.lineTo(clx,cy); ctx.stroke(); ctx.setLineDash([]);
+      atomNode(ctx, nax, cy, 22, "Na⁺", "#f59e0b");
+      atomNode(ctx, clx, cy, 26, "Cl⁻", "#ff6b6b");
+      if (p>=1 && bagViewMode==='lewis'){
+        ePair(clx,cy,Math.PI/2,22,'#f59e0b'); ePair(clx,cy,-Math.PI/2,22,'#f59e0b');
+        ePair(clx,cy,Math.PI,22,'#f59e0b'); ePair(clx,cy,0,22,'#f59e0b');
+      }
+
     } else {
-      title.textContent = mol + " Yapısı Çiziliyor.";
+      title.textContent = mol + " Yapısı";
       atomNode(ctx, cx-40*p, cy, 30, "X", "#6366f1"); atomNode(ctx, cx+40*p, cy, 30, "Y", "#10b981");
-      bondLine(cx-40, cy, cx+40, cy, {x:0, y:0});
+      bondLine(cx-40, cy, cx+40, cy, 1);
     }
+
     window.bagAnimLoop = requestAnimationFrame(loop);
     if(p>=1) cancelAnimationFrame(window.bagAnimLoop);
   }
   loop();
 }
+
 
 // --- 7. FLASHCARD VE ÇÖZELTİ KOD HAVUZU ---
 function flipCard() { fcFlipped = !fcFlipped; document.getElementById('fcard').style.transform = fcFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'; }
