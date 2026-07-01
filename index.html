@@ -1216,7 +1216,7 @@ function renderRealPT(){
   }
 
   html+='<div style="height:4px;margin:2px 0;border-top:1px dashed rgba(100,116,139,.2)"></div>';
-  html+='<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7px">La</div><div></div><div></div>';
+  
   var laOp=(ptCatActive==='all'||ptCatActive==='Lantanit & Aktinit')?'1':'0.08';
 html+='<div style="'+G+'"><div class="pt-row-hdr" style="font-size:7px">La</div><div></div><div></div>';
 for(var c=3;c<=17;c++){var el=cells['9-'+c];html+=el?'<div class="pt-cell-wrap" style="background:'+(CAT_COLORS2[el.cat]||{bg:'var(--sf)'}).bg+';border-color:'+(CAT_COLORS2[el.cat]||{border:'var(--br)'}).border+';opacity:'+laOp+'" onclick="openElDetail('+el.n+')">'+'<span style="font-size:6px;font-weight:700;color:'+(CAT_COLORS2[el.cat]||{border:'#fff'}).border+';display:block">'+el.n+'</span>'+'<span style="font-size:13px;font-weight:800;color:#fff;display:block">'+el.sym+'</span>'+'</div>':'<div class="pt-spacer-cell"></div>';}
