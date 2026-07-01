@@ -18,8 +18,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;}
-header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:68px;...}
-.logo{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;...}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid var(--br);background:rgba(8,9,15,.97);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .logo-sub{font-size:11px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;margin-left:5px;}
 .back-btn{background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 14px;color:var(--tx2);cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;}
 .pw{max-width:1100px;margin:0 auto;padding:14px 12px 60px;}
@@ -51,7 +51,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 <body>
 <header>
   <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="location.href='index.html'">
-    <img src="icon.10.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover">
+    <img src="icon.10.png" style="width:38px;height:38px;border-radius:8px;object-fit:cover">
     <div class="logo">Ronya<span class="logo-sub">Kimya</span></div>
   </div>
   <button class="back-btn" onclick="location.href='index.html'">← Ana Sayfa</button>
@@ -126,6 +126,36 @@ var QUICK_MOLS = [
   {name:'Naftalen', smiles:'c1ccc2ccccc2c1'}
 ];
 
+// Genis cevrimdisi isim -> SMILES sozlugu (arama icin, chip olarak gosterilmez)
+var OFFLINE_NAME_DB = {
+  'metan':'C','metan (ch4)':'C','ch4':'C',
+  'etan':'CC','propan':'CCC','bütan':'CCCC','butan':'CCCC',
+  'pentan':'CCCCC','hekzan':'CCCCCC','heksan':'CCCCCC',
+  'metanol':'CO','propanol':'CCCO','izopropanol':'CC(C)O',
+  'asetik asit':'CC(=O)O','asetikasit':'CC(=O)O',
+  'formaldehit':'C=O','formik asit':'C(=O)O',
+  'amonyak':'N','hidrojen peroksit':'OO',
+  'gliserol':'C(C(CO)O)O','gliserin':'C(C(CO)O)O',
+  'etilen':'C=C','eten':'C=C','asetilen':'C#C','etin':'C#C',
+  'propilen':'CC=C','toluen':'Cc1ccccc1',
+  'ksilen':'Cc1ccccc1C','stiren':'C=Cc1ccccc1',
+  'anilin':'Nc1ccccc1','pirimidin':'c1cncnc1',
+  'piridin':'c1ccncc1','furan':'c1ccoc1','tiyofen':'c1ccsc1',
+  'kloroform':'ClC(Cl)Cl','karbon tetraklorür':'ClC(Cl)(Cl)Cl',
+  'dikloretan':'ClCCCl','vinil klorür':'C=CCl',
+  'nikotin':'CN1CCC[C@H]1c1cccnc1',
+  'morfin':'CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5',
+  'kolesterol':'CC(C)CCC[C@@H](C)[C@H]1CC[C@H]2[C@@H]3CC=C4C[C@@H](O)CC[C@]4(C)[C@H]3CC[C@]12C',
+  'sükroz':'OCC1OC(OC2(CO)OC(CO)C(O)C2O)C(O)C(O)C1O',
+  'fruktoz':'C(C1(C(C(C(O1)CO)O)O)O)O',
+  'oksalik asit':'C(=O)(C(=O)O)O',
+  'salisilik asit':'c1ccc(c(c1)C(=O)O)O',
+  'benzaldehit':'c1ccc(cc1)C=O',
+  'benzoik asit':'c1ccc(cc1)C(=O)O',
+  'siklohekzan':'C1CCCCC1','siklopropan':'C1CC1','siklobutan':'C1CCC1',
+  'dimetil eter':'COC','trikloroetilen':'ClC=C(Cl)Cl'
+};
+
 var TR_EN = {
   'aspirin':'aspirin','kafein':'caffeine','glukoz':'glucose','benzen':'benzene',
   'etanol':'ethanol','aseton':'acetone','parasetamol':'paracetamol','ibuprofen':'ibuprofen',
@@ -175,9 +205,22 @@ function loadSmilesOffline(smiles, label){
 
 // 3D yapiyi tamamen cevrimdisi hesapla (Kekule.Calculator.generate3D, OpenBabel WASM tabanli)
 function generate3DOffline(mol2d, smiles){
+  var finished = false;
+  var timeoutId = setTimeout(function(){
+    if(finished) return;
+    finished = true;
+    console.warn('generate3D timeout - tarayici WASM ortaminda takildi');
+    document.getElementById('viewer3d').innerHTML =
+      '<div class="loading">⚠️ Bu tarayıcıda çevrimdışı 3D hesaplama desteklenmiyor.<br><span style="font-size:11px">2D yapı yukarıda kullanılabilir durumda.</span></div>';
+    setStatus('⚠️ 3D hesaplama bu ortamda çalışmadı. 2D yapı geçerli.');
+  }, 8000);
+
   try{
     Kekule.Calculator.generate3D(mol2d, {'forceField':''},
       function(generatedMol){
+        if(finished) return;
+        finished = true;
+        clearTimeout(timeoutId);
         try{
           var molData = Kekule.IO.saveFormatData(generatedMol, 'mol');
           init3DViewer();
@@ -190,14 +233,22 @@ function generate3DOffline(mol2d, smiles){
         }
       },
       function(err){
-        console.warn('Offline 3D generation failed, trying online:', err);
-        setStatus('⚠️ Çevrimdışı 3D hesaplanamadı, internet üzerinden deneniyor...');
-        load3DFromSmiles(smiles);
+        if(finished) return;
+        finished = true;
+        clearTimeout(timeoutId);
+        console.warn('Offline 3D generation failed:', err);
+        document.getElementById('viewer3d').innerHTML =
+          '<div class="loading">⚠️ Çevrimdışı 3D hesaplanamadı.<br><span style="font-size:11px">2D yapı yukarıda kullanılabilir durumda.</span></div>';
+        setStatus('⚠️ 3D hesaplama başarısız oldu. 2D yapı geçerli.');
       }
     );
   }catch(e){
+    clearTimeout(timeoutId);
+    finished = true;
     console.error('generate3D call error:', e);
-    load3DFromSmiles(smiles);
+    document.getElementById('viewer3d').innerHTML =
+      '<div class="loading">⚠️ 3D motoru bu tarayıcıda çalışmadı.<br><span style="font-size:11px">2D yapı yukarıda kullanılabilir durumda.</span></div>';
+    setStatus('⚠️ 3D motoru başlatılamadı. 2D yapı geçerli.');
   }
 }
 
@@ -365,8 +416,16 @@ function searchMolecule(){
     return;
   }
 
-  // 2) SMILES gibi gorunuyorsa (harf+parantez+= iceriyor, bosluk yok) dogrudan cevrimdisi cizmeyi dene
-  var looksLikeSmiles = !/\s/.test(q) && /[A-Za-z]/.test(q) && (q.indexOf('(')>-1 || q.indexOf('=')>-1 || q.indexOf('1')>-1 || /^[A-Za-z0-9@+\-\[\]()=#\\\/%]+$/.test(q));
+  // 2) Genis cevrimdisi isim sozlugunde ara (Turkce/Ingilizce yaygin isimler)
+  var dbSmiles = OFFLINE_NAME_DB[qLower] || OFFLINE_NAME_DB[qLower.replace(/\s+/g,'')];
+  if(dbSmiles){
+    loadSmilesOffline(dbSmiles, q);
+    return;
+  }
+
+  // 3) Gercekten SMILES gibi gorunuyorsa (rakam, parantez, esittir, kose parantez gibi
+  //    SMILES'e ozgu karakterler icermeli - duz kelimeler SMILES sayilmaz)
+  var looksLikeSmiles = !/\s/.test(q) && /[A-Za-z]/.test(q) && /[0-9()=#\[\]@]/.test(q);
   if(looksLikeSmiles && obReady){
     loadSmilesOffline(q, null);
     return;
