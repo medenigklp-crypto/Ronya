@@ -1,5 +1,4 @@
-
-html = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -95,7 +94,7 @@ html = '''<!DOCTYPE html>
         #orbitalCanvas {
             display: block;
             width: 100% !important;
-            height: 420px !important;
+            height: auto !important;
             border-radius: 12px;
             background: #050510;
             border: 1px solid rgba(0,212,255,0.2);
@@ -437,19 +436,13 @@ html = '''<!DOCTYPE html>
     </div>
 
     <script>
-        // ===== SEKME DEĞİŞİMİ =====
         function switchTab(name) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(name).classList.add('active');
             event.target.classList.add('active');
-            // Orbital sekmesine geçince canvas'i yeniden başlat
-            if (name === 'orbitals') {
-                setTimeout(() => { resizeCanvas(); if (activeType && activeSub !== null) loop(); }, 50);
-            }
         }
 
-        // ===== ORBITAL 3D SİSTEMİ =====
         const canvas = document.getElementById('orbitalCanvas');
         const c = canvas.getContext('2d');
         let W = 600, H = 420;
@@ -460,14 +453,15 @@ html = '''<!DOCTYPE html>
         let isDragging = false, lastX = 0, lastY = 0;
 
         function resizeCanvas() {
-            const rect = canvas.parentElement.getBoundingClientRect();
+            const rect = canvas.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
             canvas.width = rect.width * dpr;
-            canvas.height = 420 * dpr;
-            W = rect.width;
-            H = 420;
+            canvas.height = rect.height * dpr;
+            W = rect.width; H = rect.height;
             c.scale(dpr, dpr);
         }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
         canvas.addEventListener('mousedown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; });
         canvas.addEventListener('mousemove', e => { if (!isDragging) return; rotY += (e.clientX - lastX) * 0.01; rotX += (e.clientY - lastY) * 0.01; lastX = e.clientX; lastY = e.clientY; });
@@ -691,4 +685,200 @@ html = '''<!DOCTYPE html>
                 drawNodalLine3D(55,55,0,-55,-55,0); drawNodalLine3D(-55,55,0,55,-55,0);
             } else {
                 const planeDirs = [[{x:0.707,y:0.707,z:0},{x:-0.707,y:0.707,z:0},{x:-0.707,y:-0.707,z:0},{x:0.707,y:-0.707,z:0}],[{x:0,y:0.707,z:0.707},{x:0,y:-0.707,z:0.707},{x:0,y:-0.707,z:-0.707},{x:0,y:0.707,z:-0.707}],[{x:0.707,y:0,z:0.707},{x:-0.707,y:0,z:0.707},{x:-0.707,y:0,z:-0.707},{x:0.707,y:0,z:-0.707}]];
-                planeDirs[subIdx].forEach(dir => draw3DLobe(0,
+                planeDirs[subIdx].forEach(dir => draw3DLobe(0,0,0,68,25,rgb,0.72,dir));
+                if (subIdx === 0) { drawNodalLine3D(-70,0,0,70,0,0); drawNodalLine3D(0,-70,0,0,70,0); }
+            }
+            if (elecOn) {
+                const a=t*1.5, r=95;
+                drawElectron3D(r*Math.cos(a),r*Math.sin(a)*0.5,0);
+                drawElectron3D(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*0.5,0);
+            }
+        }
+
+        function drawFOrbital(subIdx, rgb) {
+            drawAxes(); drawNucleus();
+            const configs = [
+                {dirs:[{x:0.577,y:0.577,z:0.577},{x:-0.577,y:0.577,z:0.577},{x:-0.577,y:-0.577,z:0.577},{x:0.577,y:-0.577,z:0.577},{x:0.577,y:0.577,z:-0.577},{x:-0.577,y:0.577,z:-0.577},{x:-0.577,y:-0.577,z:-0.577},{x:0.577,y:-0.577,z:-0.577}],len:62,rad:22},
+                {dirs:[{x:0.707,y:0,z:0.707},{x:-0.707,y:0,z:0.707},{x:0,y:0.707,z:0.707},{x:0,y:-0.707,z:0.707},{x:0.707,y:0,z:-0.707},{x:-0.707,y:0,z:-0.707},{x:0,y:0.707,z:-0.707},{x:0,y:-0.707,z:-0.707}],len:58,rad:20},
+                {dirs:[{x:0.866,y:0.5,z:0},{x:-0.866,y:0.5,z:0},{x:0,y:1,z:0},{x:0.866,y:-0.5,z:0},{x:-0.866,y:-0.5,z:0},{x:0,y:-1,z:0}],len:60,rad:21},
+                {dirs:[{x:0,y:0,z:1},{x:0,y:0,z:-1}],len:75,rad:26,special:'z3'},
+                {dirs:[{x:1,y:0,z:0},{x:0.5,y:0.866,z:0},{x:0.5,y:-0.866,z:0},{x:-0.5,y:0.866,z:0},{x:-0.5,y:-0.866,z:0},{x:-1,y:0,z:0}],len:60,rad:21},
+                {dirs:[{x:0.707,y:0,z:0.707},{x:-0.707,y:0,z:0.707},{x:0.707,y:0,z:-0.707},{x:-0.707,y:0,z:-0.707}],len:65,rad:23},
+                {dirs:[{x:1,y:0,z:0},{x:0.707,y:0.707,z:0},{x:0.707,y:0,z:0.707},{x:0.707,y:0,z:-0.707},{x:0.707,y:-0.707,z:0},{x:0,y:1,z:0},{x:0,y:0,z:1},{x:0,y:0,z:-1}],len:58,rad:20}
+            ];
+            const cfg = configs[subIdx] || configs[0];
+            if (cfg.special === 'z3') {
+                draw3DLobe(0,0,0,80,28,rgb,0.8,{x:0,y:0,z:1});
+                draw3DLobe(0,0,0,80,28,rgb,0.8,{x:0,y:0,z:-1});
+                for (let i=0;i<6;i++){const a=(Math.PI*2/6)*i;draw3DLobe(0,0,0,35,14,rgb,0.5,{x:Math.cos(a),y:Math.sin(a),z:0});}
+            } else cfg.dirs.forEach(dir=>draw3DLobe(0,0,0,cfg.len,cfg.rad,rgb,0.68,dir));
+            if (subIdx===2||subIdx===3||subIdx===6) draw3DEllipsoid(0,0,0,18,18,18,rgb,0.2);
+            if (elecOn) {
+                const a=t*1.2, r=105;
+                drawElectron3D(r*Math.cos(a),r*Math.sin(a)*0.5,0);
+                drawElectron3D(r*Math.cos(a+Math.PI),r*Math.sin(a+Math.PI)*0.5,0);
+            }
+        }
+
+        function drawNodalPlane(subIdx) {
+            const size=75, step=12;
+            for (let i=-size;i<=size;i+=step) {
+                for (let j=-size;j<=size;j+=step) {
+                    let x=0,y=0,z=0;
+                    if (subIdx===0){y=i;z=j;} else if (subIdx===1){x=i;z=j;} else {x=i;y=j;}
+                    const p=project(x,y,z);
+                    c.beginPath(); c.arc(p.x,p.y,1.5,0,Math.PI*2); c.fillStyle='rgba(255,255,255,0.07)'; c.fill();
+                }
+            }
+        }
+
+        function drawNodalLine3D(x1,y1,z1,x2,y2,z2) {
+            const p1=project(x1,y1,z1), p2=project(x2,y2,z2);
+            c.strokeStyle='rgba(255,255,255,0.12)'; c.lineWidth=1;
+            c.setLineDash([4,4]); c.beginPath(); c.moveTo(p1.x,p1.y); c.lineTo(p2.x,p2.y); c.stroke();
+            c.setLineDash([]);
+        }
+
+        function loop() {
+            clear();
+            if (!activeType || activeSub === null) {
+                c.fillStyle='rgba(255,255,255,0.3)'; c.font='bold 15px sans-serif'; c.textAlign='center';
+                c.fillText('Bir orbital türü ve alt orbital seçin',W/2,H/2);
+                animFrame=requestAnimationFrame(loop); return;
+            }
+            if (autoSpin && !isDragging) { rotY += 0.008*spd; t += 0.015*spd; } else { t += 0.015*spd; }
+            const d=ORBITALS[activeType], rgb=d.color;
+            switch(activeType){case's':drawSOrbital(rgb);break;case'p':drawPOrbital(activeSub,rgb);break;case'd':drawDOrbital(activeSub,rgb);break;case'f':drawFOrbital(activeSub,rgb);break;}
+            c.textAlign='left'; c.font='10px sans-serif'; c.fillStyle='rgba(255,255,255,0.35)';
+            c.fillText('🔴 Proton  🔵 Notron',10,18); c.fillStyle='#ffff00'; c.fillText('● Elektron',10,34);
+            c.fillStyle='rgba(255,255,255,0.25)'; c.fillText('👆 Sürükleyerek 3D döndürün',10,H-10);
+            animFrame=requestAnimationFrame(loop);
+        }
+
+        function toggleSpin(){autoSpin=!autoSpin;}
+        function toggleElec(){elecOn=!elecOn;}
+        function setSpeed(v){spd=v;}
+        function resetView(){rotX=0.4;rotY=0.3;}
+        loop();
+
+        // ===== MOLEKÜL 3D =====
+        let molCanvas=null, molCtx=null, molW=600, molH=300;
+        let molRotX=0.3, molRotY=0.4, molAutoSpin=true, molAnimFrame=null;
+        let molIsDragging=false, molLastX=0, molLastY=0, currentMol=null;
+
+        function initMolCanvas() {
+            molCanvas=document.getElementById('molCanvas');
+            molCtx=molCanvas.getContext('2d');
+            const rect=molCanvas.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+            molCanvas.width=rect.width*dpr; molCanvas.height=rect.height*dpr;
+            molW=rect.width; molH=rect.height; molCtx.scale(dpr,dpr);
+        }
+
+        function molProject(x,y,z) {
+            let y1=y*Math.cos(molRotX)-z*Math.sin(molRotX), z1=y*Math.sin(molRotX)+z*Math.cos(molRotX);
+            let x2=x*Math.cos(molRotY)+z1*Math.sin(molRotY), z2=-x*Math.sin(molRotY)+z1*Math.cos(molRotY);
+            const scale=200/(300+z2);
+            return {x:molW/2+x2*scale,y:molH/2+y1*scale,z:z2,scale:scale};
+        }
+
+        function drawAtom(x,y,z,color,radius,label) {
+            const p=molProject(x,y,z), r=radius*p.scale;
+            molCtx.beginPath(); molCtx.arc(p.x,p.y,r+4,0,Math.PI*2); molCtx.fillStyle='rgba(0,0,0,0.3)'; molCtx.fill();
+            const grad=molCtx.createRadialGradient(p.x-r*0.3,p.y-r*0.3,r*0.1,p.x,p.y,r);
+            grad.addColorStop(0,'#fff'); grad.addColorStop(0.3,color); grad.addColorStop(1,color.replace(')',' ,0.6)').replace('rgb','rgba'));
+            molCtx.beginPath(); molCtx.arc(p.x,p.y,r,0,Math.PI*2); molCtx.fillStyle=grad; molCtx.fill();
+            molCtx.strokeStyle='rgba(255,255,255,0.3)'; molCtx.lineWidth=1; molCtx.stroke();
+            if (label) { molCtx.fillStyle='#fff'; molCtx.font='bold 12px sans-serif'; molCtx.textAlign='center'; molCtx.fillText(label,p.x,p.y+4); }
+        }
+
+        function drawBond(x1,y1,z1,x2,y2,z2,width) {
+            const p1=molProject(x1,y1,z1), p2=molProject(x2,y2,z2);
+            molCtx.strokeStyle='rgba(200,200,200,0.6)'; molCtx.lineWidth=width*((p1.scale+p2.scale)/2);
+            molCtx.lineCap='round'; molCtx.beginPath(); molCtx.moveTo(p1.x,p1.y); molCtx.lineTo(p2.x,p2.y); molCtx.stroke();
+        }
+
+        function drawLonePair(x,y,z) {
+            const p=molProject(x,y,z);
+            molCtx.beginPath(); molCtx.arc(p.x,p.y,8*p.scale,0,Math.PI*2); molCtx.fillStyle='rgba(255,255,0,0.4)'; molCtx.fill();
+            molCtx.beginPath(); molCtx.arc(p.x-3,p.y-2,3*p.scale,0,Math.PI*2); molCtx.fillStyle='rgba(255,255,0,0.7)'; molCtx.fill();
+            molCtx.beginPath(); molCtx.arc(p.x+3,p.y+2,3*p.scale,0,Math.PI*2); molCtx.fillStyle='rgba(255,255,0,0.7)'; molCtx.fill();
+        }
+
+        function drawMoleculeBeH2() {
+            drawBond(0,0,0,-90,0,0,8); drawBond(0,0,0,90,0,0,8);
+            drawAtom(-110,0,0,'#ff5555',18,'H'); drawAtom(110,0,0,'#ff5555',18,'H');
+            drawAtom(0,0,0,'#55aaff',22,'Be');
+        }
+        function drawMoleculeBH3() {
+            const r=100;
+            for(let i=0;i<3;i++){const a=(Math.PI*2/3)*i-Math.PI/2; drawBond(0,0,0,r*Math.cos(a),r*Math.sin(a),0,8); drawAtom(r*Math.cos(a),r*Math.sin(a),0,'#ff5555',18,'H');}
+            drawAtom(0,0,0,'#55aaff',22,'B');
+        }
+        function drawMoleculeCH4() {
+            const tetra=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]], r=90;
+            tetra.forEach(v=>{const len=Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]); const nx=v[0]/len,ny=v[1]/len,nz=v[2]/len; drawBond(0,0,0,nx*r,ny*r,nz*r,8); drawAtom(nx*(r+25),ny*(r+25),nz*(r+25),'#ff5555',18,'H');});
+            drawAtom(0,0,0,'#55aaff',22,'C');
+        }
+        function drawMoleculeNH3() {
+            const r=85;
+            for(let i=0;i<3;i++){const a=(Math.PI*2/3)*i; const x=r*Math.cos(a),y=-r*Math.sin(a)*0.5,z=r*Math.sin(a)*0.6; drawBond(0,15,0,x,y,z,8); drawAtom(x*1.25,y*1.25,z*1.25,'#ff5555',18,'H');}
+            drawLonePair(0,-70,0); drawAtom(0,15,0,'#55aaff',22,'N');
+        }
+        function drawMoleculeH2O() {
+            drawBond(0,0,0,-60,-70,20,8); drawBond(0,0,0,60,-70,-20,8);
+            drawAtom(-75,-85,25,'#ff5555',18,'H'); drawAtom(75,-85,-25,'#ff5555',18,'H');
+            drawLonePair(-40,60,0); drawLonePair(40,60,0); drawAtom(0,0,0,'#ff5555',22,'O');
+        }
+
+        function molLoop() {
+            if (!molCtx) return;
+            molCtx.clearRect(0,0,molW,molH); molCtx.fillStyle='#050510'; molCtx.fillRect(0,0,molW,molH);
+            if (molAutoSpin && !molIsDragging) molRotY += 0.006;
+            if (currentMol==='BeH2') drawMoleculeBeH2(); else if (currentMol==='BH3') drawMoleculeBH3(); else if (currentMol==='CH4') drawMoleculeCH4(); else if (currentMol==='NH3') drawMoleculeNH3(); else if (currentMol==='H2O') drawMoleculeH2O();
+            molAnimFrame=requestAnimationFrame(molLoop);
+        }
+
+        function showMolecule(mol) {
+            currentMol=mol;
+            document.getElementById('molBox').style.display='block';
+            const titles={'BeH2':'BeH₂ - Doğrusal (180°)','BH3':'BH₃ - Düzlem Üçgen (120°)','CH4':'CH₄ - Düzgün Dörtyüzlü (109.5°)','NH3':'NH₃ - Üçgen Piramit (107°)','H2O':'H₂O - Açısal (104.5°)'};
+            document.getElementById('molTitle').textContent=titles[mol]||'3D Molekül';
+            if (!molCanvas) { initMolCanvas(); molLoop(); }
+            molRotX=0.3; molRotY=0.4;
+            document.getElementById('molBox').scrollIntoView({behavior:'smooth'});
+        }
+
+        function toggleMolSpin(){molAutoSpin=!molAutoSpin;}
+        function resetMolView(){molRotX=0.3;molRotY=0.4;}
+
+        const mc = document.getElementById('molCanvas');
+        if (mc) {
+            mc.addEventListener('mousedown',e=>{molIsDragging=true;molLastX=e.clientX;molLastY=e.clientY;});
+            mc.addEventListener('mousemove',e=>{if(!molIsDragging)return;molRotY+=(e.clientX-molLastX)*0.01;molRotX+=(e.clientY-molLastY)*0.01;molLastX=e.clientX;molLastY=e.clientY;});
+            mc.addEventListener('mouseup',()=>molIsDragging=false);
+            mc.addEventListener('touchstart',e=>{molIsDragging=true;molLastX=e.touches[0].clientX;molLastY=e.touches[0].clientY;},{passive:false});
+            mc.addEventListener('touchmove',e=>{if(!molIsDragging)return;molRotY+=(e.touches[0].clientX-molLastX)*0.015;molRotX+=(e.touches[0].clientY-molLastY)*0.015;molLastX=e.touches[0].clientX;molLastY=e.touches[0].clientY;e.preventDefault();},{passive:false});
+            mc.addEventListener('touchend',()=>molIsDragging=false);
+        }
+
+        // ===== VİDEO =====
+        let videos = JSON.parse(localStorage.getItem('chemVids') || '[]');
+        function addVid() {
+            const url=document.getElementById('vUrl').value.trim(), title=document.getElementById('vTitle').value.trim()||'Video';
+            if (!url) { alert('URL girin!'); return; }
+            let u=url; if (u.includes('github.com') && u.includes('/blob/')) u=u.replace('github.com','raw.githubusercontent.com').replace('/blob/','/');
+            videos.unshift({id:Date.now(),url:u,title,date:new Date().toLocaleDateString('tr-TR')});
+            localStorage.setItem('chemVids',JSON.stringify(videos));
+            document.getElementById('vUrl').value=''; document.getElementById('vTitle').value='';
+            renderVids();
+        }
+        function delVid(id){videos=videos.filter(v=>v.id!==id);localStorage.setItem('chemVids',JSON.stringify(videos));renderVids();}
+        function renderVids(){
+            const g=document.getElementById('vGrid');
+            if(!videos.length){g.innerHTML='<div class=\"empty\"><p>Henüz video yok</p><p style=\"font-size:0.75rem;margin-top:5px;\">Yukarıya URL ekleyin</p></div>';return;}
+            g.innerHTML=videos.map(v=>'<div class=\"video-card\"><video controls playsinline preload=\"metadata\" style=\"width:100%;display:block;background:#000;\"><source src=\"'+v.url+'\" type=\"video/mp4\"></video><div class=\"video-info\"><h4>'+v.title+'</h4><p>'+v.date+'</p></div><div class=\"video-actions\"><button class=\"btn-del\" onclick=\"delVid('+v.id+')\">🗑️ Sil</button></div></div>').join('');
+        }
+        renderVids();
+    </script>
+</body>
+</html>
