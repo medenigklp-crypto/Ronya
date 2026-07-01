@@ -28,6 +28,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .sim-box{background:rgba(0,0,0,0.5);border-radius:16px;padding:15px;margin-bottom:15px;border:1px solid rgba(0,212,255,0.2)}
 .sim-title{text-align:center;font-size:1.1rem;color:#00d4ff;margin-bottom:10px}
 #orbitalCanvas{display:block;width:100%!important;height:420px!important;border-radius:12px;background:#050510;border:1px solid rgba(0,212,255,0.2);touch-action:none}
+#molCanvas{display:block;width:100%!important;height:420px!important;border-radius:12px;background:#050510;border:1px solid rgba(0,212,255,0.2);touch-action:none}
 .controls{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap}
 .ctrl-btn{padding:8px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:20px;color:#00d4ff;font-size:.78rem;cursor:pointer}
 .ctrl-btn:active{background:rgba(0,212,255,0.3)}
@@ -65,7 +66,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .empty{text-align:center;padding:40px 15px;color:rgba(255,255,255,0.3)}
 .mol-3d-box{background:rgba(0,0,0,0.5);border-radius:16px;padding:15px;margin:15px 0;border:1px solid rgba(0,212,255,0.2)}
 .mol-3d-title{text-align:center;font-size:1rem;color:#00d4ff;margin-bottom:8px}
-#molCanvas{display:block;width:100%!important;height:300px!important;border-radius:12px;background:#050510;border:1px solid rgba(0,212,255,0.2);touch-action:none}
 </style>
 </head>
 <body>
@@ -92,7 +92,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </div>
 <div class="mol-3d-box" id="molBox" style="display:none;">
 <div class="mol-3d-title" id="molTitle">3D Molekül Görünümü</div>
-<canvas id="molCanvas" width="600" height="300"></canvas>
+<canvas id="molCanvas" width="600" height="420"></canvas>
 <p class="hint-drag">👆 Ekrana dokunarak 3D döndürün</p>
 <div class="controls">
 <button class="ctrl-btn" onclick="toggleMolSpin()">🔄 Oto-Döndür</button>
@@ -153,16 +153,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </div>
 <script>
 function switchTab(name){
-document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
 document.getElementById(name).classList.add('active');
 event.target.classList.add('active');
 if(name==='orbitals'){setTimeout(function(){resizeCanvas();if(activeType&&activeSub!==null)loop();},50);}
 }
 
-const canvas=document.getElementById('orbitalCanvas'),c=canvas.getContext('2d');
-let W=600,H=420,activeType=null,activeSub=null,t=0,autoSpin=true,elecOn=true,spd=1,animFrame=null;
-let rotX=.4,rotY=.3,isDragging=false,lastX=0,lastY=0;
+// ===== ORBITAL 3D =====
+var canvas=document.getElementById('orbitalCanvas'),c=canvas.getContext('2d');
+var W=600,H=420,activeType=null,activeSub=null,t=0,autoSpin=true,elecOn=true,spd=1,animFrame=null;
+var rotX=.4,rotY=.3,isDragging=false,lastX=0,lastY=0;
 
 function resizeCanvas(){
 var rect=canvas.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
@@ -185,13 +186,12 @@ var y1=y*Math.cos(rotX)-z*Math.sin(rotX),z1=y*Math.sin(rotX)+z*Math.cos(rotX);
 var x2=x*Math.cos(rotY)+z1*Math.sin(rotY),z2=-x*Math.sin(rotY)+z1*Math.cos(rotY);
 return{x:x2,y:y1,z:z2};
 }
-
 function project(x,y,z){
 var r=rotate3D(x,y,z),scale=280/(350+r.z);
 return{x:W/2+r.x*scale,y:H/2+r.y*scale,z:r.z,scale:scale};
 }
 
-const ORBITALS={
+var ORBITALS={
 s:{subs:[{name:'1s',ml:0,desc:'1s orbitali en düşük enerjili orbitaldir. Çekirdek etrafında küresel simetriye sahiptir. 2 elektron barındırır.'}],l:0,max:2,shape:'Küresel',color:[0,212,255]},
 p:{subs:[{name:'px',ml:-1,desc:'px orbitali x-ekseni boyunca uzanan çift loblu (dumbbell) şekildedir.'},{name:'py',ml:0,desc:'py orbitali y-ekseni boyunca uzanan çift loblu şekildedir.'},{name:'pz',ml:1,desc:'pz orbitali z-ekseni boyunca uzanan çift loblu şekildedir.'}],l:1,max:6,shape:'Çift Loblu (Dumbbell)',color:[255,107,107]},
 d:{subs:[{name:'dxy',ml:-2,desc:'dxy orbitali x ve y eksenleri ARASINDA (45°) yer alan dört yapraklı şekildedir.'},{name:'dyz',ml:-1,desc:'dyz orbitali y ve z eksenleri arasında yer alan dört yapraklı şekildedir.'},{name:'dxz',ml:0,desc:'dxz orbitali x ve z eksenleri arasında yer alan dört yapraklı şekildedir.'},{name:'dx²-y²',ml:1,desc:'dx²-y² orbitali x ve y eksenleri ÜZERİNDE yer alan dört yapraklı şekildedir.'},{name:'dz²',ml:2,desc:'dz² orbitali z-ekseni boyunca iki büyük lob ve ortada bir halka (torus) şekildedir.'}],l:2,max:10,shape:'Klover / Torus',color:[34,180,80]},
@@ -466,80 +466,184 @@ function setSpeed(v){spd=v;}
 function resetView(){rotX=.4;rotY=.3;}
 loop();
 
-// ===== MOLEKÜL 3D =====
-var molCanvas=null,molCtx=null,molW=600,molH=300;
+// ===== MOLEKÜL 3D - DÜZELTİLMİŞ =====
+var molCanvas=document.getElementById('molCanvas'),molCtx=molCanvas.getContext('2d');
+var molW=600,molH=420;
 var molRotX=.3,molRotY=.4,molAutoSpin=true,molAnimFrame=null;
 var molIsDragging=false,molLastX=0,molLastY=0,currentMol=null;
 
-function initMolCanvas(){
-molCanvas=document.getElementById('molCanvas');
-molCtx=molCanvas.getContext('2d');
+function resizeMolCanvas(){
 var rect=molCanvas.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
-molCanvas.width=rect.width*dpr;molCanvas.height=300*dpr;
-molW=rect.width;molH=300;molCtx.setTransform(dpr,0,0,dpr,0,0);
+molCanvas.width=rect.width*dpr;molCanvas.height=420*dpr;
+molW=rect.width;molH=420;
+molCtx.setTransform(dpr,0,0,dpr,0,0);
 }
+resizeMolCanvas();
 
 function molProject(x,y,z){
 var y1=y*Math.cos(molRotX)-z*Math.sin(molRotX),z1=y*Math.sin(molRotX)+z*Math.cos(molRotX);
 var x2=x*Math.cos(molRotY)+z1*Math.sin(molRotY),z2=-x*Math.sin(molRotY)+z1*Math.cos(molRotY);
-var scale=200/(300+z2);
+var scale=280/(350+z2);
 return{x:molW/2+x2*scale,y:molH/2+y1*scale,z:z2,scale:scale};
 }
 
 function drawMolAtom(x,y,z,color,radius,label){
 var p=molProject(x,y,z),r=radius*p.scale;
-molCtx.beginPath();molCtx.arc(p.x,p.y,r+4,0,Math.PI*2);molCtx.fillStyle='rgba(0,0,0,0.3)';molCtx.fill();
+// Glow
+molCtx.beginPath();molCtx.arc(p.x,p.y,r+8,0,Math.PI*2);
+molCtx.fillStyle=color.replace(')',' ,0.15)').replace('rgb','rgba');molCtx.fill();
+// Atom body
 var grad=molCtx.createRadialGradient(p.x-r*.3,p.y-r*.3,r*.1,p.x,p.y,r);
-grad.addColorStop(0,'#fff');grad.addColorStop(.3,color);grad.addColorStop(1,color);
+grad.addColorStop(0,'#ffffff');grad.addColorStop(.4,color);grad.addColorStop(1,color.replace(')',' ,0.5)').replace('rgb','rgba'));
 molCtx.beginPath();molCtx.arc(p.x,p.y,r,0,Math.PI*2);molCtx.fillStyle=grad;molCtx.fill();
-molCtx.strokeStyle='rgba(255,255,255,0.3)';molCtx.lineWidth=1;molCtx.stroke();
-if(label){molCtx.fillStyle='#fff';molCtx.font='bold 12px sans-serif';molCtx.textAlign='center';molCtx.fillText(label,p.x,p.y+4);}
+// Border
+molCtx.strokeStyle='rgba(255,255,255,0.4)';molCtx.lineWidth=1.5;molCtx.stroke();
+// Label
+if(label){molCtx.fillStyle='#fff';molCtx.font='bold '+Math.max(10,Math.round(14*p.scale))+'px sans-serif';molCtx.textAlign='center';molCtx.textBaseline='middle';molCtx.fillText(label,p.x,p.y);}
 }
 
-function drawMolBond(x1,y1,z1,x2,y2,z2,width){
+function drawMolBond(x1,y1,z1,x2,y2,z2,width,color){
 var p1=molProject(x1,y1,z1),p2=molProject(x2,y2,z2);
-molCtx.strokeStyle='rgba(200,200,200,0.6)';molCtx.lineWidth=width*((p1.scale+p2.scale)/2);
+var avgScale=(p1.scale+p2.scale)/2;
+// Bond shadow
+molCtx.strokeStyle='rgba(0,0,0,0.5)';molCtx.lineWidth=(width+2)*avgScale;
 molCtx.lineCap='round';molCtx.beginPath();molCtx.moveTo(p1.x,p1.y);molCtx.lineTo(p2.x,p2.y);molCtx.stroke();
+// Bond body
+molCtx.strokeStyle=color||'rgba(180,180,180,0.8)';molCtx.lineWidth=width*avgScale;
+molCtx.beginPath();molCtx.moveTo(p1.x,p1.y);molCtx.lineTo(p2.x,p2.y);molCtx.stroke();
 }
 
-function drawMolLonePair(x,y,z){
+function drawLonePair(x,y,z,label){
 var p=molProject(x,y,z);
-molCtx.beginPath();molCtx.arc(p.x,p.y,8*p.scale,0,Math.PI*2);molCtx.fillStyle='rgba(255,255,0,0.4)';molCtx.fill();
-molCtx.beginPath();molCtx.arc(p.x-3,p.y-2,3*p.scale,0,Math.PI*2);molCtx.fillStyle='rgba(255,255,0,0.7)';molCtx.fill();
-molCtx.beginPath();molCtx.arc(p.x+3,p.y+2,3*p.scale,0,Math.PI*2);molCtx.fillStyle='rgba(255,255,0,0.7)';molCtx.fill();
+// Electron pair cloud
+molCtx.beginPath();molCtx.arc(p.x,p.y,12*p.scale,0,Math.PI*2);
+molCtx.fillStyle='rgba(255,255,0,0.25)';molCtx.fill();
+molCtx.strokeStyle='rgba(255,255,0,0.5)';molCtx.lineWidth=1;molCtx.stroke();
+// Two electrons
+molCtx.beginPath();molCtx.arc(p.x-4*p.scale,p.y-3*p.scale,3.5*p.scale,0,Math.PI*2);
+molCtx.fillStyle='#ffff00';molCtx.fill();
+molCtx.beginPath();molCtx.arc(p.x+4*p.scale,p.y+3*p.scale,3.5*p.scale,0,Math.PI*2);
+molCtx.fillStyle='#ffff00';molCtx.fill();
+// Label
+if(label){molCtx.fillStyle='rgba(255,255,0,0.8)';molCtx.font='bold 9px sans-serif';molCtx.textAlign='center';molCtx.fillText(label,p.x,p.y-18*p.scale);}
 }
 
+function drawBondAngleLabel(cx,cy,cz,ax1,ay1,az1,ax2,ay2,az2,angleText){
+var p1=molProject(ax1,ay1,az1),p2=molProject(ax2,ay2,az2),pc=molProject(cx,cy,cz);
+var mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+var dx=mx-pc.x,dy=my-pc.y;
+var len=Math.sqrt(dx*dx+dy*dy);
+if(len>0){dx=dx/len*25;dy=dy/len*25;}
+molCtx.fillStyle='rgba(255,255,255,0.6)';molCtx.font='bold 11px sans-serif';molCtx.textAlign='center';
+molCtx.fillText(angleText,pc.x+dx,pc.y+dy);
+}
+
+// ===== MOLEKÜL ÇİZİM FONKSİYONLARI =====
 function drawMolBeH2(){
-drawMolBond(0,0,0,-90,0,0,8);drawMolBond(0,0,0,90,0,0,8);
-drawMolAtom(-110,0,0,'#ff5555',18,'H');drawMolAtom(110,0,0,'#ff5555',18,'H');
-drawMolAtom(0,0,0,'#55aaff',22,'Be');
+// Doğrusal: Be merkezde, H'ler z-ekseni boyunca
+var bondLen=90;
+drawMolBond(0,0,0, 0,0,-bondLen, 10, '#888');
+drawMolBond(0,0,0, 0,0,bondLen, 10, '#888');
+drawMolAtom(0,0,-bondLen-20,'rgb(255,85,85)',20,'H');
+drawMolAtom(0,0,bondLen+20,'rgb(255,85,85)',20,'H');
+drawMolAtom(0,0,0,'rgb(85,170,255)',26,'Be');
+drawBondAngleLabel(0,0,0,0,0,-bondLen,0,0,bondLen,'180°');
 }
+
 function drawMolBH3(){
-var r=100;
-for(var i=0;i<3;i++){var a=(Math.PI*2/3)*i-Math.PI/2;drawMolBond(0,0,0,r*Math.cos(a),r*Math.sin(a),0,8);drawMolAtom(r*Math.cos(a),r*Math.sin(a),0,'#ff5555',18,'H');}
-drawMolAtom(0,0,0,'#55aaff',22,'B');
+// Düzlem üçgen: B merkezde, H'ler xy düzleminde 120° aralıklarla
+var bondLen=95;
+var angles=[-Math.PI/2, Math.PI/6, 5*Math.PI/6];
+angles.forEach(function(a){
+var x=bondLen*Math.cos(a),y=bondLen*Math.sin(a);
+drawMolBond(0,0,0,x,y,0,10,'#888');
+drawMolAtom(x*1.25,y*1.25,0,'rgb(255,85,85)',20,'H');
+});
+drawMolAtom(0,0,0,'rgb(85,170,255)',26,'B');
+// 120° labels
+angles.forEach(function(a,i){
+var nextA=angles[(i+1)%3];
+var mx=(Math.cos(a)+Math.cos(nextA))/2*bondLen*.6;
+var my=(Math.sin(a)+Math.sin(nextA))/2*bondLen*.6;
+molCtx.fillStyle='rgba(255,255,255,0.5)';molCtx.font='bold 10px sans-serif';molCtx.textAlign='center';
+molCtx.fillText('120°',molW/2+mx,molH/2+my);
+});
 }
+
 function drawMolCH4(){
-var tetra=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],r=90;
-tetra.forEach(function(v){var len=Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),nx=v[0]/len,ny=v[1]/len,nz=v[2]/len;drawMolBond(0,0,0,nx*r,ny*r,nz*r,8);drawMolAtom(nx*(r+25),ny*(r+25),nz*(r+25),'#ff5555',18,'H');});
-drawMolAtom(0,0,0,'#55aaff',22,'C');
+// Düzgün dörtyüzlü: C merkezde, H'ler tetrahedral konumda
+var r=95;
+var verts=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]];
+verts.forEach(function(v){
+var len=Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+var nx=v[0]/len,ny=v[1]/len,nz=v[2]/len;
+drawMolBond(0,0,0,nx*r,ny*r,nz*r,10,'#888');
+drawMolAtom(nx*(r+28),ny*(r+28),nz*(r+28),'rgb(255,85,85)',20,'H');
+});
+drawMolAtom(0,0,0,'rgb(85,170,255)',26,'C');
+molCtx.fillStyle='rgba(255,255,255,0.5)';molCtx.font='bold 11px sans-serif';molCtx.textAlign='center';
+molCtx.fillText('109.5°',molW/2,molH/2-50);
 }
+
 function drawMolNH3(){
-var r=85;
-for(var i=0;i<3;i++){var a=(Math.PI*2/3)*i,x=r*Math.cos(a),y=-r*Math.sin(a)*.5,z=r*Math.sin(a)*.6;drawMolBond(0,15,0,x,y,z,8);drawMolAtom(x*1.25,y*1.25,z*1.25,'#ff5555',18,'H');}
-drawMolLonePair(0,-70,0);drawMolAtom(0,15,0,'#55aaff',22,'N');
+// Üçgen piramit: N merkezde, 3 H aşağıda, 1 yalnız çift yukarıda
+var bondLen=90;
+// 3 H atomları - piramitin tabanı (aşağıda)
+for(var i=0;i<3;i++){
+var a=(Math.PI*2/3)*i;
+var x=bondLen*Math.cos(a)*.8;
+var y=-bondLen*.5; // aşağıda
+var z=bondLen*Math.sin(a)*.8;
+drawMolBond(0,0,0,x,y,z,10,'#888');
+drawMolAtom(x*1.3,y*1.3,z*1.3,'rgb(255,85,85)',20,'H');
 }
+// 1 yalnız elektron çifti - piramitin tepesi (yukarıda)
+drawLonePair(0,80,0,'E');
+// N merkez atomu
+drawMolAtom(0,0,0,'rgb(85,170,255)',26,'N');
+// Açı etiketi
+molCtx.fillStyle='rgba(255,255,255,0.5)';molCtx.font='bold 11px sans-serif';molCtx.textAlign='center';
+molCtx.fillText('107°',molW/2,molH/2+60);
+}
+
 function drawMolH2O(){
-drawMolBond(0,0,0,-60,-70,20,8);drawMolBond(0,0,0,60,-70,-20,8);
-drawMolAtom(-75,-85,25,'#ff5555',18,'H');drawMolAtom(75,-85,-25,'#ff5555',18,'H');
-drawMolLonePair(-40,60,0);drawMolLonePair(40,60,0);drawMolAtom(0,0,0,'#ff5555',22,'O');
+// Açısal: O merkezde, 2 H aşağıda, 2 yalnız çift yukarıda
+var bondLen=85;
+// 2 H atomları - aşağıda, 104.5° açıyla
+var hAngle=52.25*Math.PI/180;
+var h1x=-bondLen*Math.sin(hAngle),h1y=-bondLen*Math.cos(hAngle),h1z=0;
+var h2x=bondLen*Math.sin(hAngle),h2y=-bondLen*Math.cos(hAngle),h2z=0;
+drawMolBond(0,0,0,h1x,h1y,h1z,10,'#888');
+drawMolBond(0,0,0,h2x,h2y,h2z,10,'#888');
+drawMolAtom(h1x*1.3,h1y*1.3,h1z*1.3,'rgb(255,85,85)',20,'H');
+drawMolAtom(h2x*1.3,h2y*1.3,h2z*1.3,'rgb(255,85,85)',20,'H');
+// 2 yalnız elektron çifti - yukarıda, 104.5° açıyla (H'lere zıt)
+var lpAngle=180*Math.PI/180;
+var lp1x=-55*Math.sin(hAngle),lp1y=65,lp1z=30;
+var lp2x=55*Math.sin(hAngle),lp2y=65,lp2z=-30;
+drawLonePair(lp1x,lp1y,lp1z,'E');
+drawLonePair(lp2x,lp2y,lp2z,'E');
+// O merkez atomu
+drawMolAtom(0,0,0,'rgb(255,85,85)',26,'O');
+// Açı etiketi
+molCtx.fillStyle='rgba(255,255,255,0.5)';molCtx.font='bold 11px sans-serif';molCtx.textAlign='center';
+molCtx.fillText('104.5°',molW/2,molH/2+55);
 }
 
 function molLoop(){
 if(!molCtx)return;
 molCtx.clearRect(0,0,molW,molH);molCtx.fillStyle='#050510';molCtx.fillRect(0,0,molW,molH);
 if(molAutoSpin&&!molIsDragging)molRotY+=.006;
-if(currentMol==='BeH2')drawMolBeH2();else if(currentMol==='BH3')drawMolBH3();else if(currentMol==='CH4')drawMolCH4();else if(currentMol==='NH3')drawMolNH3();else if(currentMol==='H2O')drawMolH2O();
+if(currentMol==='BeH2')drawMolBeH2();
+else if(currentMol==='BH3')drawMolBH3();
+else if(currentMol==='CH4')drawMolCH4();
+else if(currentMol==='NH3')drawMolNH3();
+else if(currentMol==='H2O')drawMolH2O();
+// Legend
+molCtx.fillStyle='rgba(255,255,255,0.35)';molCtx.font='10px sans-serif';molCtx.textAlign='left';
+molCtx.fillText('🔴 Proton  🔵 Notron',10,18);
+molCtx.fillStyle='rgba(255,255,0,0.8)';molCtx.fillText('● Yalnız Elektron Çifti',10,34);
+molCtx.fillStyle='rgba(255,255,255,0.25)';molCtx.fillText('👆 Sürükleyerek 3D döndürün',10,molH-10);
 molAnimFrame=requestAnimationFrame(molLoop);
 }
 
@@ -548,23 +652,20 @@ currentMol=mol;
 document.getElementById('molBox').style.display='block';
 var titles={'BeH2':'BeH₂ - Doğrusal (180°)','BH3':'BH₃ - Düzlem Üçgen (120°)','CH4':'CH₄ - Düzgün Dörtyüzlü (109.5°)','NH3':'NH₃ - Üçgen Piramit (107°)','H2O':'H₂O - Açısal (104.5°)'};
 document.getElementById('molTitle').textContent=titles[mol]||'3D Molekül';
-if(!molCanvas){initMolCanvas();molLoop();}
 molRotX=.3;molRotY=.4;
+if(!molAnimFrame)molLoop();
 document.getElementById('molBox').scrollIntoView({behavior:'smooth'});
 }
 
 function toggleMolSpin(){molAutoSpin=!molAutoSpin;}
 function resetMolView(){molRotX=.3;molRotY=.4;}
 
-var mc=document.getElementById('molCanvas');
-if(mc){
-mc.addEventListener('mousedown',function(e){molIsDragging=true;molLastX=e.clientX;molLastY=e.clientY;});
-mc.addEventListener('mousemove',function(e){if(!molIsDragging)return;molRotY+=(e.clientX-molLastX)*.01;molRotX+=(e.clientY-molLastY)*.01;molLastX=e.clientX;molLastY=e.clientY;});
-mc.addEventListener('mouseup',function(){molIsDragging=false;});
-mc.addEventListener('touchstart',function(e){molIsDragging=true;molLastX=e.touches[0].clientX;molLastY=e.touches[0].clientY;},{passive:false});
-mc.addEventListener('touchmove',function(e){if(!molIsDragging)return;molRotY+=(e.touches[0].clientX-molLastX)*.015;molRotX+=(e.touches[0].clientY-molLastY)*.015;molLastX=e.touches[0].clientX;molLastY=e.touches[0].clientY;e.preventDefault();},{passive:false});
-mc.addEventListener('touchend',function(){molIsDragging=false;});
-}
+molCanvas.addEventListener('mousedown',function(e){molIsDragging=true;molLastX=e.clientX;molLastY=e.clientY;});
+molCanvas.addEventListener('mousemove',function(e){if(!molIsDragging)return;molRotY+=(e.clientX-molLastX)*.01;molRotX+=(e.clientY-molLastY)*.01;molLastX=e.clientX;molLastY=e.clientY;});
+molCanvas.addEventListener('mouseup',function(){molIsDragging=false;});
+molCanvas.addEventListener('touchstart',function(e){molIsDragging=true;molLastX=e.touches[0].clientX;molLastY=e.touches[0].clientY;},{passive:false});
+molCanvas.addEventListener('touchmove',function(e){if(!molIsDragging)return;molRotY+=(e.touches[0].clientX-molLastX)*.015;molRotX+=(e.touches[0].clientY-molLastY)*.015;molLastX=e.touches[0].clientX;molLastY=e.touches[0].clientY;e.preventDefault();},{passive:false});
+molCanvas.addEventListener('touchend',function(){molIsDragging=false;});
 
 // ===== VİDEO =====
 var videos=JSON.parse(localStorage.getItem('chemVids')||'[]');
