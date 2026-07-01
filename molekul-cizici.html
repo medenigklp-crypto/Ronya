@@ -1,1 +1,436 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Molekül Çizici - Ronya Kimya</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/kekule/dist/themes/default/kekule.css" />
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+:root{
+  --bg:#08090f;--sf:#0f1117;--sf2:#161922;--sf3:#1c2030;
+  --br:#1e2535;--br2:#252d40;
+  --ac:#6366f1;--ac2:#818cf8;--ac3:#a5b4fc;
+  --gr:#22c55e;--rd:#ef4444;--yw:#f59e0b;--cy:#06b6d4;
+  --tx:#f1f5f9;--tx2:#94a3b8;--tx3:#475569;
+  --r:14px;--rsm:8px;--rlg:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid var(--br);background:rgba(8,9,15,.97);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-sub{font-size:11px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;margin-left:5px;}
+.back-btn{background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 14px;color:var(--tx2);cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;}
+.pw{max-width:1100px;margin:0 auto;padding:14px 12px 60px;}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:14px;margin-bottom:12px;}
+.card-title{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+.search-row{display:flex;gap:8px;margin-bottom:10px;}
+.inp{flex:1;background:var(--sf2);border:1px solid var(--br);border-radius:var(--rsm);padding:10px 14px;color:var(--tx);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+.inp:focus{border-color:var(--ac);}
+.btn{padding:10px 18px;border-radius:var(--r);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none;white-space:nowrap;}
+.bp{background:var(--ac);color:#fff;}
+.bs{background:var(--sf2);color:var(--tx);border:1px solid var(--br);}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
+.chip{background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:100px;padding:6px 12px;font-size:12px;color:var(--ac2);cursor:pointer;font-family:'Inter',sans-serif;}
+.chip:hover{background:rgba(99,102,241,.22);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:820px){.grid2{grid-template-columns:1fr;}}
+#composer_container{width:100%;height:440px;background:#fff;border-radius:12px;overflow:hidden;}
+#viewer3d{width:100%;height:440px;background:#050a14;border-radius:12px;position:relative;}
+.smiles-box{background:var(--sf2);border:1px solid var(--br);border-radius:var(--rsm);padding:10px 12px;font-family:'Courier New',monospace;font-size:13px;color:var(--ac3);word-break:break-all;margin-top:8px;min-height:20px;}
+.status{font-size:12px;color:var(--tx3);text-align:center;padding:10px;}
+.loading{display:flex;align-items:center;justify-content:center;height:100%;color:var(--tx3);font-size:13px;flex-direction:column;gap:8px;}
+.spin{width:24px;height:24px;border:3px solid var(--br2);border-top-color:var(--ac);border-radius:50%;animation:sp 0.8s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.viewer-tools{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.vt-btn{padding:6px 12px;background:var(--sf2);border:1px solid var(--br);border-radius:100px;color:var(--tx2);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;}
+.vt-btn.on{background:rgba(99,102,241,.2);border-color:var(--ac);color:var(--ac2);}
+</style>
+</head>
+<body>
+<header>
+  <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="location.href='index.html'">
+    <img src="icon.10.png" style="width:38px;height:38px;border-radius:8px;object-fit:cover">
+    <div class="logo">Ronya<span class="logo-sub">Kimya</span></div>
+  </div>
+  <button class="back-btn" onclick="location.href='index.html'">← Ana Sayfa</button>
+</header>
+
+<div class="pw">
+  <h1 style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px;">🧬 Molekül Çizici</h1>
+  <p style="color:var(--tx2);font-size:12px;margin-bottom:12px;">2D yapı çiz, PubChem'de ara, 3D modelini incele.</p>
+
+  <div class="card">
+    <div class="card-title">Molekül Ara (PubChem)</div>
+    <div class="search-row">
+      <input type="text" class="inp" id="searchInput" placeholder="ornek: aspirin, glukoz, CCO (etanol)..." onkeydown="if(event.key==='Enter')searchMolecule()">
+      <button class="btn bp" onclick="searchMolecule()">Ara</button>
+    </div>
+    <div class="chips" id="chipRow"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">2D Yapı Editörü</div>
+      <div id="composer_container">
+        <div class="loading"><div class="spin"></div>Editör yükleniyor...</div>
+      </div>
+      <div class="viewer-tools">
+        <button class="vt-btn" onclick="clearEditor()">🗑️ Temizle</button>
+        <button class="vt-btn" onclick="updateFromEditor()">🔄 SMILES Güncelle</button>
+      </div>
+      <div class="smiles-box" id="smilesOut">SMILES burada görünecek...</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">3D Önizleme</div>
+      <div id="viewer3d">
+        <div class="loading">Bir molekül ara veya çiz</div>
+      </div>
+      <div class="viewer-tools">
+        <button class="vt-btn on" id="style-stick" onclick="setStyle('stick')">Çubuk</button>
+        <button class="vt-btn" id="style-sphere" onclick="setStyle('sphere')">Top+Çubuk</button>
+        <button class="vt-btn" id="style-line" onclick="setStyle('line')">Tel Çerçeve</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="status" id="statusMsg"></div>
+</div>
+
+<!-- 3Dmol.js -->
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+<!-- Kekule.js: 2D cizim editoru -->
+<script src="https://cdn.jsdelivr.net/npm/kekule/dist/kekule.min.js"></script>
+
+<script>
+var composer = null;
+var viewer3d = null;
+var currentStyle = 'stick';
+var kekuleReady = false;
+var obReady = false;
+
+var QUICK_MOLS = [
+  {name:'Aspirin', smiles:'CC(=O)OC1=CC=CC=C1C(=O)O'},
+  {name:'Kafein', smiles:'CN1C=NC2=C1C(=O)N(C(=O)N2C)C'},
+  {name:'Glukoz', smiles:'C(C1C(C(C(C(O1)O)O)O)O)O'},
+  {name:'Benzen', smiles:'c1ccccc1'},
+  {name:'Etanol', smiles:'CCO'},
+  {name:'Aseton', smiles:'CC(=O)C'},
+  {name:'Parasetamol', smiles:'CC(=O)NC1=CC=C(C=C1)O'},
+  {name:'İbuprofen', smiles:'CC(C)CC1=CC=C(C=C1)C(C)C(=O)O'},
+  {name:'Sitrik Asit', smiles:'C(C(=O)O)C(CC(=O)O)(C(=O)O)O'},
+  {name:'Üre', smiles:'C(=O)(N)N'},
+  {name:'Fenol', smiles:'c1ccc(cc1)O'},
+  {name:'Naftalen', smiles:'c1ccc2ccccc2c1'}
+];
+
+var TR_EN = {
+  'aspirin':'aspirin','kafein':'caffeine','glukoz':'glucose','benzen':'benzene',
+  'etanol':'ethanol','aseton':'acetone','parasetamol':'paracetamol','ibuprofen':'ibuprofen',
+  'sitrik asit':'citric acid','ure':'urea','üre':'urea','fenol':'phenol','naftalen':'naphthalene',
+  'metanol':'methanol','asetik asit':'acetic acid','glikoz':'glucose','fruktoz':'fructose',
+  'sukroz':'sucrose','sükroz':'sucrose','nikotin':'nicotine','morfin':'morphine','kolesterol':'cholesterol',
+  'penisilin':'penicillin','kloroform':'chloroform','amonyak':'ammonia'
+};
+
+function buildChips(){
+  var row=document.getElementById('chipRow');
+  row.innerHTML='';
+  QUICK_MOLS.forEach(function(m){
+    var c=document.createElement('span');
+    c.className='chip'; c.textContent=m.name;
+    c.onclick=function(){
+      document.getElementById('searchInput').value=m.name;
+      loadSmilesOffline(m.smiles, m.name);
+    };
+    row.appendChild(c);
+  });
+}
+
+// Cizimi tamamen cevrimdisi (SMILES'tan) yukler - internet gerekmez
+function loadSmilesOffline(smiles, label){
+  setStatus((label?label+' - ':'')+'çizim yükleniyor (çevrimdışı)...');
+  if(!composer){ setStatus('⚠️ Editör henüz hazır değil, biraz bekleyin.'); return; }
+  if(!obReady){ setStatus('⚠️ SMILES motoru henüz hazır değil, birkaç saniye bekleyip tekrar deneyin.'); return; }
+  try{
+    var rawMol = Kekule.IO.loadFormatData(smiles, 'smi');
+    if(!rawMol) throw new Error('SMILES ayrıştırılamadı');
+    var generator = new Kekule.Calculator.ObStructure2DGenerator();
+    generator.setSourceMol(rawMol);
+    generator.executeSync(function(){
+      var mol2d = generator.getGeneratedMol() || rawMol;
+      composer.setChemObj(mol2d);
+      composer.zoomToFit? composer.zoomToFit() : null;
+      document.getElementById('smilesOut').textContent = smiles;
+      setStatus('✅ 2D yapı yüklendi. 3D model hesaplanıyor (çevrimdışı)...');
+      generate3DOffline(mol2d, smiles);
+    });
+  }catch(e){
+    console.error('Offline SMILES load error:', e);
+    setStatus('⚠️ Çizim yüklenemedi: '+e.message);
+  }
+}
+
+// 3D yapiyi tamamen cevrimdisi hesapla (Kekule.Calculator.generate3D, OpenBabel WASM tabanli)
+function generate3DOffline(mol2d, smiles){
+  try{
+    Kekule.Calculator.generate3D(mol2d, {'forceField':''},
+      function(generatedMol){
+        try{
+          var molData = Kekule.IO.saveFormatData(generatedMol, 'mol');
+          init3DViewer();
+          viewer3d.addModel(molData, 'mol');
+          renderStyle();
+          setStatus('✅ 3D model hazır (çevrimdışı hesaplandı).');
+        }catch(e){
+          console.error('3D render error:', e);
+          setStatus('⚠️ 3D görselleştirme hatası: '+e.message);
+        }
+      },
+      function(err){
+        console.warn('Offline 3D generation failed, trying online:', err);
+        setStatus('⚠️ Çevrimdışı 3D hesaplanamadı, internet üzerinden deneniyor...');
+        load3DFromSmiles(smiles);
+      }
+    );
+  }catch(e){
+    console.error('generate3D call error:', e);
+    load3DFromSmiles(smiles);
+  }
+}
+
+function setStatus(msg){ document.getElementById('statusMsg').textContent = msg; }
+
+function initComposer(){
+  try{
+    var container = document.getElementById('composer_container');
+    container.innerHTML = '';
+    composer = new Kekule.Editor.Composer(document.getElementById('composer_container'));
+    composer.setDimension('100%', '440px');
+    composer.setPredefinedSetting('basic');
+    composer.setCommonToolButtons(['newDoc','loadData','saveData','undo','redo','zoomIn','zoomOut']);
+    composer.setChemToolButtons(['manipulate','erase','bond','atomAndFormula','ring','charge','textBlock']);
+    composer.setEnableStyleToolbar(false);
+    composer.setEnableOperHistory(true);
+    kekuleReady = true;
+    setStatus('SMILES motoru (OpenBabel) yükleniyor, lütfen bekleyin...');
+    Kekule.OpenBabel.enable(function(error){
+      if(error){
+        console.error('OpenBabel enable error:', error);
+        setStatus('⚠️ SMILES motoru yüklenemedi. El ile çizim yine de çalışır.');
+      } else {
+        obReady = true;
+        setStatus('Editör hazır. Yapı çizebilir veya arama yapabilirsiniz.');
+      }
+    });
+  }catch(e){
+    document.getElementById('composer_container').innerHTML =
+      '<div class="loading">⚠️ Editör yüklenemedi.<br><span style="font-size:11px">'+e.message+'</span></div>';
+  }
+}
+
+function clearEditor(){
+  if(composer){
+    try{ composer.setChemObj(null); }catch(e){}
+  }
+  document.getElementById('smilesOut').textContent='SMILES burada görünecek...';
+}
+
+function updateFromEditor(){
+  if(!composer) return;
+  try{
+    var mols = composer.exportObjs(Kekule.Molecule);
+    if(mols && mols.length){
+      var smiles = Kekule.IO.saveFormatData(mols[0], 'smi');
+      document.getElementById('smilesOut').textContent = smiles || '(bos yapi)';
+      if(smiles) load3DFromSmiles(smiles.trim());
+    } else {
+      document.getElementById('smilesOut').textContent = '(cizim bulunamadi)';
+    }
+  }catch(e){
+    document.getElementById('smilesOut').textContent = '(SMILES alinamadi)';
+  }
+}
+
+function init3DViewer(){
+  var el = document.getElementById('viewer3d');
+  el.innerHTML='';
+  viewer3d = $3Dmol.createViewer(el, {backgroundColor:'#050a14'});
+}
+
+function setStyle(style){
+  currentStyle = style;
+  ['stick','sphere','line'].forEach(function(s){
+    document.getElementById('style-'+s).classList.toggle('on', s===style);
+  });
+  if(viewer3d && viewer3d.getModel()) renderStyle();
+}
+
+function renderStyle(){
+  if(!viewer3d) return;
+  if(currentStyle==='stick') viewer3d.setStyle({}, {stick:{radius:0.15}});
+  else if(currentStyle==='sphere') viewer3d.setStyle({}, {stick:{radius:0.12},sphere:{scale:0.28}});
+  else viewer3d.setStyle({}, {line:{linewidth:2}});
+  viewer3d.zoomTo();
+  viewer3d.render();
+}
+
+// ---- Yardımcı: Birden fazla kaynak dene (direkt + proxy'ler) ----
+var PROXY_CHAIN = [
+  function(url){ return url; }, // direkt
+  function(url){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url); },
+  function(url){ return 'https://corsproxy.io/?url=' + encodeURIComponent(url); },
+  function(url){ return 'https://r.jina.ai/' + url; }
+];
+
+function fetchTextWithFallback(url, idx){
+  idx = idx || 0;
+  if(idx >= PROXY_CHAIN.length) return Promise.reject(new Error('tum-kaynaklar-basarisiz'));
+  var tryUrl = PROXY_CHAIN[idx](url);
+  return fetch(tryUrl).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.text();
+  }).then(function(text){
+    if(!text || text.length < 2) throw new Error('bos-yanit');
+    return text;
+  }).catch(function(e){
+    console.warn('Kaynak '+idx+' basarisiz ('+tryUrl.substring(0,60)+'...): ', e.message);
+    return fetchTextWithFallback(url, idx+1);
+  });
+}
+
+// ---- Yardımcı: JSON verisini kaynak zinciriyle çek ----
+function fetchJSONViaProxy(url){
+  return fetchTextWithFallback(url).then(function(text){
+    try{ return JSON.parse(text); }
+    catch(e){ throw new Error('gecersiz-json'); }
+  });
+}
+
+// ---- Yardımcı: SDF verisini kaynak zinciriyle çek ----
+function fetchTextViaProxy(url){
+  return fetchTextWithFallback(url);
+}
+
+function load3DFromCID(cid){
+  setStatus('3D veri PubChem\'den aliniyor...');
+  var url = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+cid+'/record/SDF/?record_type=3d';
+  fetchTextViaProxy(url).then(function(sdf){
+    if(!sdf || sdf.indexOf('$$$$')===-1) throw new Error('gecersiz-veri');
+    init3DViewer();
+    viewer3d.addModel(sdf, 'sdf');
+    renderStyle();
+    setStatus('3D model yuklendi (PubChem CID: '+cid+')');
+  }).catch(function(e){
+    console.warn('3D fetch failed, trying 2D fallback:', e);
+    var url2d = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+cid+'/record/SDF/?record_type=2d';
+    fetchTextViaProxy(url2d).then(function(sdf){
+      init3DViewer();
+      viewer3d.addModel(sdf, 'sdf');
+      renderStyle();
+      setStatus('⚠️ Bu molekul icin 3D veri yok, 2D koordinatlar gosteriliyor.');
+    }).catch(function(e2){
+      console.error('2D fallback also failed:', e2);
+      setStatus('⚠️ 3D model alinamadi: '+e2.message);
+    });
+  });
+}
+
+function load3DFromSmiles(smiles){
+  var url = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/'+encodeURIComponent(smiles)+'/cids/JSON';
+  fetchJSONViaProxy(url).then(function(data){
+    if(!data || !data.IdentifierList) throw new Error('bulunamadi');
+    var cid = data.IdentifierList.CID[0];
+    load3DFromCID(cid);
+  }).catch(function(e){
+    console.warn('load3DFromSmiles failed (internet erisimi olmayabilir):', e);
+    document.getElementById('viewer3d').innerHTML =
+      '<div class="loading">🌐 3D önizleme için internet erişimi gerekiyor.<br><span style="font-size:11px">2D yapı yukarıda hazır.</span></div>';
+  });
+}
+
+function searchMolecule(){
+  var q = document.getElementById('searchInput').value.trim();
+  if(!q){ setStatus('Bir molekul adi veya SMILES girin.'); return; }
+  var qLower = q.toLowerCase();
+
+  // 1) Once cevrimdisi hazir molekul sozlugunde ara (Turkce/Ingilizce isim eslesmesi)
+  var offlineMatch = QUICK_MOLS.find(function(m){
+    return m.name.toLowerCase()===qLower;
+  });
+  if(offlineMatch){
+    loadSmilesOffline(offlineMatch.smiles, offlineMatch.name);
+    return;
+  }
+
+  // 2) SMILES gibi gorunuyorsa (harf+parantez+= iceriyor, bosluk yok) dogrudan cevrimdisi cizmeyi dene
+  var looksLikeSmiles = !/\s/.test(q) && /[A-Za-z]/.test(q) && (q.indexOf('(')>-1 || q.indexOf('=')>-1 || q.indexOf('1')>-1 || /^[A-Za-z0-9@+\-\[\]()=#\\\/%]+$/.test(q));
+  if(looksLikeSmiles && obReady){
+    loadSmilesOffline(q, null);
+    return;
+  }
+
+  // 3) Cevrimdisi bulunamadi -> PubChem'de dene (internet gerekir)
+  var enName = TR_EN[qLower] || q;
+  setStatus('Cevrimdisi sozlukte yok. PubChem\'de araniyor: '+q+' ...');
+
+  var url = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/'+encodeURIComponent(enName)+'/cids/JSON';
+  fetchJSONViaProxy(url).then(function(data){
+    if(!data || !data.IdentifierList) throw new Error('isim-bulunamadi');
+    var cid = data.IdentifierList.CID[0];
+    loadCompoundFull(cid);
+  }).catch(function(e1){
+    console.warn('Name search failed:', e1);
+    var url2 = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/'+encodeURIComponent(q)+'/cids/JSON';
+    fetchJSONViaProxy(url2).then(function(data2){
+      if(!data2 || !data2.IdentifierList) throw new Error('smiles-bulunamadi');
+      var cid = data2.IdentifierList.CID[0];
+      loadCompoundFull(cid);
+    }).catch(function(e2){
+      console.error('SMILES search also failed:', e2);
+      setStatus('❌ "'+q+'" bulunamadi ve internete erisim engelli görünüyor. Yukaridaki hazir moleküllerden birini seçebilir veya geçerli bir SMILES kodu (örn: CCO) yazabilirsiniz.');
+    });
+  });
+}
+
+function loadCompoundFull(cid){
+  setStatus('Yapi verisi aliniyor (CID: '+cid+')...');
+  var url2d = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+cid+'/record/SDF/?record_type=2d';
+  fetchTextViaProxy(url2d).then(function(sdf){
+    if(composer){
+      try{
+        var mol = Kekule.IO.loadFormatData(sdf, 'mol');
+        composer.setChemObj(mol);
+        composer.zoomToFit? composer.zoomToFit() : null;
+        var smiles = Kekule.IO.saveFormatData(mol, 'smi');
+        document.getElementById('smilesOut').textContent = smiles || '(SMILES alinamadi)';
+      }catch(e){
+        document.getElementById('smilesOut').textContent = '(2D yukleme hatasi: '+e.message+')';
+        console.error('Kekule 2D load error:', e);
+      }
+    }
+  }).catch(function(e){
+    console.error('2D fetch error:', e);
+    document.getElementById('smilesOut').textContent = '(2D veri alinamadi: '+e.message+')';
+  });
+  load3DFromCID(cid);
+}
+
+buildChips();
+
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    if(typeof Kekule !== 'undefined'){
+      initComposer();
+    } else {
+      document.getElementById('composer_container').innerHTML =
+        '<div class="loading">⚠️ Editör yüklenemedi.<br><span style="font-size:11px">Internet baglantinizi kontrol edin ve sayfayi yenileyin.</span></div>';
+    }
+  }, 500);
+});
+</script>
+</body>
+</html>
 
