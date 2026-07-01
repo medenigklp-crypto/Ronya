@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Elektrokimyasal Hücre - Ronya Kimya</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+:root{
+  --bg:#08090f;--sf:#0f1117;--sf2:#161922;--sf3:#1c2030;
+  --br:#1e2535;--br2:#252d40;
+  --ac:#6366f1;--ac2:#818cf8;--ac3:#a5b4fc;
+  --gr:#22c55e;--rd:#ef4444;--yw:#f59e0b;--cy:#06b6d4;
+  --tx:#f1f5f9;--tx2:#94a3b8;--tx3:#475569;
+  --r:14px;--rsm:8px;--rlg:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid var(--br);background:rgba(8,9,15,.97);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-sub{font-size:11px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;margin-left:5px;}
+.back-btn{background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 14px;color:var(--tx2);cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;}
+.pw{max-width:700px;margin:0 auto;padding:14px 12px 60px;}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:14px;margin-bottom:10px;}
+.card-title{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+.sel{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:var(--rsm);padding:9px 12px;color:var(--tx);font-size:13px;font-family:'Inter',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;}
+.sel:focus{border-color:var(--ac);}
+.mode-row{display:flex;gap:6px;margin-bottom:12px;}
+.mode-btn{flex:1;padding:9px;border-radius:var(--r);border:1px solid var(--br);background:var(--sf2);color:var(--tx2);font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;}
+.mode-btn.on{background:rgba(99,102,241,.2);border-color:var(--ac);color:var(--ac2);}
+.tabs-row{display:flex;gap:4px;background:var(--sf2);border-radius:var(--r);padding:4px;margin-bottom:12px;}
+.tab-b{flex:1;padding:8px 4px;border:none;border-radius:var(--rsm);background:none;color:var(--tx3);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;}
+.tab-b.on{background:var(--ac);color:#fff;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.slider-wrap{margin-bottom:10px;}
+.slider-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.slider-lbl{font-size:11px;color:var(--tx2);}
+.slider-val{font-size:12px;font-weight:700;font-family:'Courier New',monospace;color:var(--ac2);}
+input[type=range]{width:100%;height:4px;border-radius:2px;outline:none;border:none;background:var(--br2);cursor:pointer;-webkit-appearance:none;appearance:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--ac);cursor:pointer;}
+.pot-big{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:800;line-height:1;}
+.badge{display:inline-block;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:700;}
+.formula-box{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:var(--rsm);padding:10px;font-family:'Courier New',monospace;font-size:11px;color:var(--ac3);margin:8px 0;line-height:1.7;white-space:pre;}
+.half-rxn{font-family:'Courier New',monospace;font-size:12px;line-height:2.2;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:var(--sf2);color:var(--tx3);padding:8px;text-align:left;font-weight:600;border-bottom:1px solid var(--br);}
+td{padding:7px 8px;border-bottom:1px solid var(--br);color:var(--tx2);}
+tr:hover td{background:rgba(99,102,241,.05);}
+.btn{padding:10px 18px;border-radius:var(--r);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:all .2s;}
+.bp{background:var(--ac);color:#fff;}
+.bs{background:var(--sf2);color:var(--tx);border:1px solid var(--br);}
+.stat-box{background:var(--sf2);border-radius:var(--r);padding:12px;}
+.stat-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.stat-val{font-size:20px;font-weight:800;font-family:'Courier New',monospace;}
+canvas{display:block;width:100%;border-radius:12px;touch-action:none;}
+@media(max-width:480px){.g2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="location.href='index.html'">
+    <img src="icon.10.png" style="width:38px;height:38px;border-radius:8px;object-fit:cover">
+    <div class="logo">Ronya<span class="logo-sub">Kimya</span></div>
+  </div>
+  <button class="back-btn" onclick="location.href='index.html'">← Ana Sayfa</button>
+</header>
+
+<div class="pw">
+  <h1 style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px;">⚡ Elektrokimyasal Hücre</h1>
+  <p style="color:var(--tx2);font-size:12px;margin-bottom:12px;">Galvanik hücre — Nernst denklemi, pil potansiyeli, animasyon</p>
+
+  <div class="mode-row">
+    <button class="mode-btn on" onclick="setMode('different',this)">🔋 Farklı Elektrotlar</button>
+    <button class="mode-btn" onclick="setMode('concentration',this)">💧 Derişim Pili</button>
+  </div>
+
+  <div class="card" style="padding:8px;">
+    <canvas id="cellCanvas" height="360" style="background:#050a14;border-radius:10px;"></canvas>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-size:11px;color:var(--tx3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;">Pil Potansiyeli</div>
+        <div class="pot-big" id="ePilBig">+0.0000 V</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="badge" id="statusBadge" style="background:rgba(34,197,94,.15);color:#22c55e;margin-bottom:6px;">İSTEMLİ ✓</div>
+        <div style="font-size:11px;color:var(--tx3);" id="nQT">n=2 | Q=1.0000 | 25°C</div>
+      </div>
+    </div>
+    <div class="formula-box" id="formulaBox">E = E°cell - (RT/nF)*ln(Q)</div>
+  </div>
+
+  <div class="tabs-row">
+    <button class="tab-b on" onclick="setTab('tepkime',this)">⚗️ Tepkime</button>
+    <button class="tab-b" onclick="setTab('kontrol',this)">🎛️ Kontrol</button>
+    <button class="tab-b" onclick="setTab('analiz',this)">📈 Analiz</button>
+    <button class="tab-b" onclick="setTab('tablo',this)">📊 Tablo</button>
+  </div>
+
+  <!-- TAB: Tepkime -->
+  <div id="tab-tepkime">
+    <div class="card">
+      <div class="card-title">Yarı Tepkimeler</div>
+      <div class="half-rxn" id="halfRxn"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Hücre Gösterimi</div>
+      <div id="cellNotation" style="font-family:'Courier New',monospace;font-size:12px;color:var(--ac3);line-height:1.8;word-break:break-all;"></div>
+    </div>
+  </div>
+
+  <!-- TAB: Kontrol -->
+  <div id="tab-kontrol" style="display:none;">
+    <div id="diffCtrl">
+      <div class="g2">
+        <div class="card">
+          <div class="card-title" style="color:#ef4444;">Sol Elektrot</div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--tx3);margin-bottom:4px;">Metal</div>
+            <select class="sel" id="leftSel" onchange="onElChange()"></select>
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--tx3);margin-bottom:4px;">Elektrolit (tuz)</div>
+            <select class="sel" id="leftElSel" onchange="update()"></select>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">Başlangıç Derişimi</span><span class="slider-val" id="lConcV">1.000 M</span></div>
+            <input type="range" id="lConcS" min="1" max="500" value="100" oninput="update()">
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><span class="slider-val" id="lWaterV">0 mL</span></div>
+            <input type="range" id="lWaterS" min="0" max="200" value="0" oninput="update()">
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><span class="slider-val" id="lEvapV">0 mL</span></div>
+            <input type="range" id="lEvapS" min="0" max="90" value="0" oninput="update()">
+          </div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:2px;">Gerçek: <span id="lReal" style="color:#ef4444;font-weight:700;font-family:'Courier New',monospace;">1.0000 M</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:#22c55e;">Sağ Elektrot</div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--tx3);margin-bottom:4px;">Metal</div>
+            <select class="sel" id="rightSel" onchange="onElChange()"></select>
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--tx3);margin-bottom:4px;">Elektrolit (tuz)</div>
+            <select class="sel" id="rightElSel" onchange="update()"></select>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">Başlangıç Derişimi</span><span class="slider-val" id="rConcV">1.000 M</span></div>
+            <input type="range" id="rConcS" min="1" max="500" value="100" oninput="update()">
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><span class="slider-val" id="rWaterV">0 mL</span></div>
+            <input type="range" id="rWaterS" min="0" max="200" value="0" oninput="update()">
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><span class="slider-val" id="rEvapV">0 mL</span></div>
+            <input type="range" id="rEvapS" min="0" max="90" value="0" oninput="update()">
+          </div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:2px;">Gerçek: <span id="rReal" style="color:#22c55e;font-weight:700;font-family:'Courier New',monospace;">1.0000 M</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="concCtrl" style="display:none;">
+      <div class="card">
+        <div class="card-title">Elektrot Seçimi</div>
+        <select class="sel" id="concSel" onchange="update()"></select>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-title">Hücre I</div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl" id="c1Lbl">Derişim</span><span class="slider-val" id="c1V">0.500 M</span></div>
+            <input type="range" id="c1S" min="1" max="500" value="50" oninput="update()">
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><span class="slider-val" id="cw1V">0 mL</span></div>
+            <input type="range" id="cw1S" min="0" max="200" value="0" oninput="update()">
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><span class="slider-val" id="ce1V">0 mL</span></div>
+            <input type="range" id="ce1S" min="0" max="90" value="0" oninput="update()">
+          </div>
+          <div style="font-size:11px;color:var(--tx3);">Gerçek: <span id="cr1" style="color:var(--ac2);font-weight:700;font-family:'Courier New',monospace;">0.5000 M</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Hücre II</div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl" id="c2Lbl">Derişim</span><span class="slider-val" id="c2V">1.000 M</span></div>
+            <input type="range" id="c2S" min="1" max="500" value="100" oninput="update()">
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><span class="slider-val" id="cw2V">0 mL</span></div>
+            <input type="range" id="cw2S" min="0" max="200" value="0" oninput="update()">
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><span class="slider-val" id="ce2V">0 mL</span></div>
+            <input type="range" id="ce2S" min="0" max="90" value="0" oninput="update()">
+          </div>
+          <div style="font-size:11px;color:var(--tx3);">Gerçek: <span id="cr2" style="color:var(--ac2);font-weight:700;font-family:'Courier New',monospace;">1.0000 M</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Analiz -->
+  <div id="tab-analiz" style="display:none;">
+    <div class="card">
+      <div class="card-title">🌡️ Sıcaklık Kontrolü</div>
+      <div class="slider-wrap">
+        <div class="slider-top"><span class="slider-lbl">Sıcaklık</span><span class="slider-val" id="tempV">25 °C</span></div>
+        <input type="range" id="tempS" min="0" max="100" value="25" oninput="update()">
+      </div>
+      <div style="font-size:11px;color:var(--tx3);" id="tempDetail">T = 25°C = 298.15 K</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📈 E_pil vs Sıcaklık (0–100°C)</div>
+      <svg id="graphSvg" width="100%" viewBox="0 0 380 150" style="overflow:visible;display:block;">
+        <line x1="44" y1="8" x2="44" y2="118" stroke="#252d40" stroke-width="1.5"/>
+        <line x1="44" y1="118" x2="376" y2="118" stroke="#252d40" stroke-width="1.5"/>
+        <text x="44"  y="132" fill="#475569" font-size="8" text-anchor="middle">0°C</text>
+        <text x="127" y="132" fill="#475569" font-size="8" text-anchor="middle">25°C</text>
+        <text x="210" y="132" fill="#475569" font-size="8" text-anchor="middle">50°C</text>
+        <text x="293" y="132" fill="#475569" font-size="8" text-anchor="middle">75°C</text>
+        <text x="376" y="132" fill="#475569" font-size="8" text-anchor="middle">100°C</text>
+        <text id="gMin" x="5" y="121" fill="#475569" font-size="7" text-anchor="middle">-</text>
+        <text id="gMax" x="5" y="12"  fill="#475569" font-size="7" text-anchor="middle">-</text>
+        <polyline id="gLine" points="" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle id="gDot" cx="127" cy="63" r="6" fill="#f59e0b"/>
+        <text id="gDotTxt" x="127" y="52" fill="#f59e0b" font-size="8" text-anchor="middle" font-weight="bold">-</text>
+      </svg>
+    </div>
+
+    <div class="card" id="simCard">
+      <div class="card-title">⏱️ Pil Ömrü Simülasyonu</div>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.6;">Anot çözünür (iyon ↑). Katot birikir (iyon ↓). Sıcaklık arttıkça hız artar.</p>
+      <div class="g2" style="margin-bottom:12px;">
+        <div class="stat-box">
+          <div class="stat-lbl" style="color:#ef4444;" id="anotLbl">ANOT [Zn²⁺]</div>
+          <div class="stat-val" style="color:#ef4444;" id="anotConcD">1.0000 M</div>
+          <div style="font-size:10px;color:var(--tx3);margin-top:3px;">↑ artıyor</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-lbl" style="color:#22c55e;" id="katotLbl">KATOT [Cu²⁺]</div>
+          <div class="stat-val" style="color:#22c55e;" id="katotConcD">1.0000 M</div>
+          <div style="font-size:10px;color:var(--tx3);margin-top:3px;">↓ azalıyor</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;" id="simTimeLbl">Süre: 0 adım | Hız: 1.00x</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn bp" id="simBtn" onclick="toggleSim()" style="flex:1;">▶ Başlat</button>
+        <button class="btn bs" onclick="resetSim()" style="flex:1;">🔄 Sıfırla</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Tablo -->
+  <div id="tab-tablo" style="display:none;">
+    <div class="card">
+      <div class="card-title">Standart İndirgenme Potansiyelleri (25°C, 1M)</div>
+      <div style="overflow-x:auto;">
+        <table id="stdTable">
+          <thead><tr><th>Elektrot</th><th>Yarı Tepkime</th><th style="text-align:right;">E° (V)</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🧮 Formüller</div>
+      <div style="font-size:12px;color:var(--tx2);line-height:2.0;font-family:'Courier New',monospace;">
+        E°hücre = E°katot - E°anot<br>
+        E = E° - (RT/nF)·ln(Q)<br>
+        <span style="font-size:11px;color:var(--tx3);">25°C: E = E° - (0.0592/n)·log(Q)</span><br>
+        <span style="font-size:11px;color:var(--tx3);">R=8.314 J/mol·K, F=96485 C/mol</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var EL=[
+  {name:"Lityum (Li)",   sym:"Li",ion:"Li+",  ionDisp:"Li⁺",  ch:1, E0:-3.04,col:"#a78bfa",salt:"LiCl (Lityum Klorür)"},
+  {name:"Potasyum (K)",  sym:"K", ion:"K+",   ionDisp:"K⁺",   ch:1, E0:-2.93,col:"#818cf8",salt:"KNO3 (Potasyum Nitrat)"},
+  {name:"Kalsiyum (Ca)", sym:"Ca",ion:"Ca2+",  ionDisp:"Ca²⁺", ch:2, E0:-2.87,col:"#60a5fa",salt:"CaCl2 (Kalsiyum Klorür)"},
+  {name:"Sodyum (Na)",   sym:"Na",ion:"Na+",   ionDisp:"Na⁺",  ch:1, E0:-2.71,col:"#34d399",salt:"NaCl (Sodyum Klorür)"},
+  {name:"Magnezyum (Mg)",sym:"Mg",ion:"Mg2+",  ionDisp:"Mg²⁺", ch:2, E0:-2.37,col:"#6ee7b7",salt:"MgSO4 (Magnezyum Sülfat)"},
+  {name:"Alüminyum (Al)",sym:"Al",ion:"Al3+",  ionDisp:"Al³⁺", ch:3, E0:-1.66,col:"#fcd34d",salt:"AlCl3 (Alüminyum Klorür)"},
+  {name:"Çinko (Zn)",    sym:"Zn",ion:"Zn2+",  ionDisp:"Zn²⁺", ch:2, E0:-0.76,col:"#94a3b8",salt:"ZnSO4 (Çinko Sülfat)"},
+  {name:"Demir (Fe)",    sym:"Fe",ion:"Fe2+",  ionDisp:"Fe²⁺", ch:2, E0:-0.44,col:"#b45309",salt:"FeSO4 (Demir Sülfat)"},
+  {name:"Kurşun (Pb)",   sym:"Pb",ion:"Pb2+",  ionDisp:"Pb²⁺", ch:2, E0:-0.13,col:"#9ca3af",salt:"Pb(NO3)2 (Kurşun Nitrat)"},
+  {name:"Hidrojen (H2)", sym:"H2",ion:"H+",   ionDisp:"H⁺",   ch:1, E0:0.00, col:"#e2e8f0",salt:"HCl (Hidroklorik Asit)"},
+  {name:"Bakır (Cu)",    sym:"Cu",ion:"Cu2+",  ionDisp:"Cu²⁺", ch:2, E0:0.34, col:"#f97316",salt:"CuSO4 (Bakır Sülfat)"},
+  {name:"Gümüş (Ag)",    sym:"Ag",ion:"Ag+",   ionDisp:"Ag⁺",  ch:1, E0:0.80, col:"#e2e8f0",salt:"AgNO3 (Gümüş Nitrat)"},
+  {name:"Altın (Au)",    sym:"Au",ion:"Au3+",  ionDisp:"Au³⁺", ch:3, E0:1.50, col:"#fbbf24",salt:"AuCl3 (Altın Klorür)"}
+];
+
+var mode='different';
+var simRunning=false,simTimer=null,simTime=0;
+var anotSim=1.0,katotSim=1.0;
+var particles=[];
+var canvas,ctx,cW=600,cH=360;
+var lastR=null;
+
+function init(){
+  canvas=document.getElementById('cellCanvas');
+  ctx=canvas.getContext('2d');
+  resizeCanvas();
+  window.addEventListener('resize',resizeCanvas);
+
+  ['leftSel','rightSel','concSel'].forEach(function(id){
+    var s=document.getElementById(id);
+    EL.forEach(function(e,i){
+      var o=document.createElement('option');
+      o.value=i;
+      o.textContent=e.sym+' ('+(e.E0>=0?'+':'')+e.E0.toFixed(2)+'V) — '+e.name;
+      s.appendChild(o);
+    });
+  });
+  document.getElementById('leftSel').value=6;
+  document.getElementById('rightSel').value=10;
+  document.getElementById('concSel').value=10;
+  updateElSels();
+
+  var tb=document.querySelector('#stdTable tbody');
+  EL.forEach(function(e){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="color:'+e.col+';font-weight:700;">'+e.sym+'</td>'
+      +'<td style="font-size:11px;font-family:Courier New,monospace;">'+e.ionDisp+' + '+e.ch+'e⁻ → '+e.sym+'</td>'
+      +'<td style="text-align:right;font-family:Courier New,monospace;font-weight:700;color:'+(e.E0>0?'#22c55e':e.E0<0?'#ef4444':'#f59e0b')+'">'+(e.E0>=0?'+':'')+e.E0.toFixed(2)+'</td>';
+    tb.appendChild(tr);
+  });
+
+  spawnParticles();
+  update();
+  requestAnimationFrame(drawLoop);
+}
+
+function resizeCanvas(){
+  var rect=canvas.parentElement.getBoundingClientRect();
+  var dpr=window.devicePixelRatio||1;
+  canvas.width=rect.width*dpr; canvas.height=360*dpr;
+  cW=rect.width; cH=360;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+function updateElSels(){
+  var li=parseInt(document.getElementById('leftSel').value);
+  var ri=parseInt(document.getElementById('rightSel').value);
+  [['leftElSel',li],['rightElSel',ri]].forEach(function(pair){
+    var s=document.getElementById(pair[0]),idx=pair[1];
+    s.innerHTML='';
+    var o=document.createElement('option'); o.value=idx;
+    o.textContent=EL[idx].salt+' (varsayılan)'; o.selected=true; s.appendChild(o);
+    EL.forEach(function(e,i){ if(i===idx)return;
+      var op=document.createElement('option'); op.value=i; op.textContent=e.salt; s.appendChild(op);
+    });
+  });
+}
+
+function onElChange(){ updateElSels(); resetSim(); update(); }
+
+function setMode(m,btn){
+  mode=m;
+  document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  document.getElementById('diffCtrl').style.display=m==='different'?'':'none';
+  document.getElementById('concCtrl').style.display=m==='concentration'?'':'none';
+  document.getElementById('simCard').style.display=m==='different'?'':'none';
+  resetSim(); update();
+}
+
+function setTab(t,btn){
+  document.querySelectorAll('.tab-b').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on');
+  ['tepkime','kontrol','analiz','tablo'].forEach(function(id){
+    document.getElementById('tab-'+id).style.display=id===t?'':'none';
+  });
+}
+
+function gcd(a,b){return b===0?Math.abs(a):gcd(b,a%b);}
+
+function nernst(E0,n,Q,T){
+  if(Q<=0)return E0;
+  return E0-(8.314*(T+273.15)/(n*96485))*Math.log(Q);
+}
+
+function realConc(base,water,evap){
+  var vol=Math.max(10,100+water-evap);
+  return (base*0.1)/(vol/1000);
+}
+
+function getAll(){
+  var T=parseInt(document.getElementById('tempS').value);
+  var li=parseInt(document.getElementById('leftSel').value);
+  var ri=parseInt(document.getElementById('rightSel').value);
+  var ci=parseInt(document.getElementById('concSel').value);
+  var lC0=parseInt(document.getElementById('lConcS').value)/100;
+  var rC0=parseInt(document.getElementById('rConcS').value)/100;
+  var lW=parseInt(document.getElementById('lWaterS').value);
+  var rW=parseInt(document.getElementById('rWaterS').value);
+  var lEv=parseInt(document.getElementById('lEvapS').value);
+  var rEv=parseInt(document.getElementById('rEvapS').value);
+  var c10=parseInt(document.getElementById('c1S').value)/100;
+  var c20=parseInt(document.getElementById('c2S').value)/100;
+  var cw1=parseInt(document.getElementById('cw1S').value);
+  var cw2=parseInt(document.getElementById('cw2S').value);
+  var ce1=parseInt(document.getElementById('ce1S').value);
+  var ce2=parseInt(document.getElementById('ce2S').value);
+
+  var lCR=realConc(lC0,lW,lEv);
+  var rCR=realConc(rC0,rW,rEv);
+  var cR1=realConc(c10,cw1,ce1);
+  var cR2=realConc(c20,cw2,ce2);
+
+  var lEl=EL[li],rEl=EL[ri],cEl=EL[ci];
+  var E_pil,Q,n,E0,anot,aEl,kEl,lRun,rRun;
+
+  if(mode==='different'){
+    var lia=lEl.E0<=rEl.E0;
+    anot=lia?'left':'right';
+    aEl=lia?lEl:rEl; kEl=lia?rEl:lEl;
+    lRun=simRunning?(lia?anotSim:katotSim):lCR;
+    rRun=simRunning?(lia?katotSim:anotSim):rCR;
+    var aC=lia?lRun:rRun, cC=lia?rRun:lRun;
+    n=(aEl.ch*kEl.ch)/gcd(aEl.ch,kEl.ch);
+    E0=kEl.E0-aEl.E0;
+    Q=Math.pow(Math.max(aC,1e-6),kEl.ch)/Math.pow(Math.max(cC,1e-6),aEl.ch);
+    E_pil=nernst(E0,n,Q,T);
+  } else {
+    anot=cR1<=cR2?'left':'right';
+    aEl=cEl; kEl=cEl; lRun=cR1; rRun=cR2;
+    n=cEl.ch; E0=0;
+    var lo=Math.min(cR1,cR2),hi=Math.max(cR1,cR2);
+    Q=lo/Math.max(hi,1e-6);
+    E_pil=nernst(0,n,Q,T);
+  }
+  return {T,li,ri,ci,lEl,rEl,cEl,lCR,rCR,cR1,cR2,lRun,rRun,E_pil,Q,n,E0,anot,aEl,kEl,lC0,rC0,c10,c20};
+}
+
+function update(){
+  var r=getAll(); lastR=r;
+
+  document.getElementById('lConcV').textContent=r.lC0.toFixed(3)+' M';
+  document.getElementById('rConcV').textContent=r.rC0.toFixed(3)+' M';
+  document.getElementById('lWaterV').textContent=document.getElementById('lWaterS').value+' mL';
+  document.getElementById('rWaterV').textContent=document.getElementById('rWaterS').value+' mL';
+  document.getElementById('lEvapV').textContent=document.getElementById('lEvapS').value+' mL';
+  document.getElementById('rEvapV').textContent=document.getElementById('rEvapS').value+' mL';
+  document.getElementById('lReal').textContent=r.lCR.toFixed(4)+' M';
+  document.getElementById('rReal').textContent=r.rCR.toFixed(4)+' M';
+
+  document.getElementById('c1V').textContent=r.c10.toFixed(3)+' M';
+  document.getElementById('c2V').textContent=r.c20.toFixed(3)+' M';
+  document.getElementById('cw1V').textContent=document.getElementById('cw1S').value+' mL';
+  document.getElementById('cw2V').textContent=document.getElementById('cw2S').value+' mL';
+  document.getElementById('ce1V').textContent=document.getElementById('ce1S').value+' mL';
+  document.getElementById('ce2V').textContent=document.getElementById('ce2S').value+' mL';
+  document.getElementById('cr1').textContent=r.cR1.toFixed(4)+' M';
+  document.getElementById('cr2').textContent=r.cR2.toFixed(4)+' M';
+  document.getElementById('c1Lbl').textContent='['+r.cEl.ionDisp+'] Hücre I';
+  document.getElementById('c2Lbl').textContent='['+r.cEl.ionDisp+'] Hücre II';
+  document.getElementById('tempV').textContent=r.T+' °C';
+  document.getElementById('tempDetail').textContent='T = '+r.T+'°C = '+(r.T+273.15).toFixed(2)+' K';
+
+  var ec=r.E_pil>0.001?'#22c55e':r.E_pil<-0.001?'#ef4444':'#f59e0b';
+  var es=r.E_pil>0.001?'İSTEMLİ ✓':r.E_pil<-0.001?'İSTEMSİZ ✗':'DENGE ≈';
+  document.getElementById('ePilBig').textContent=(r.E_pil>=0?'+':'')+r.E_pil.toFixed(4)+' V';
+  document.getElementById('ePilBig').style.color=ec;
+  document.getElementById('statusBadge').textContent=es;
+  document.getElementById('statusBadge').style.color=ec;
+  document.getElementById('statusBadge').style.background=ec+'22';
+  document.getElementById('nQT').textContent='n='+r.n+' | Q='+r.Q.toFixed(4)+' | '+r.T+'°C';
+  document.getElementById('formulaBox').textContent=
+    'E = '+r.E0.toFixed(4)+' - (RT/'+r.n+'F)*ln('+r.Q.toFixed(4)+')\n'
+    +'E = '+(r.E_pil>=0?'+':'')+r.E_pil.toFixed(4)+' V';
+
+  var hr='';
+  if(mode==='different'){
+    hr='<span style="color:#ef4444;">ANOT (-):  '+r.aEl.sym+'(k) → '+r.aEl.ionDisp+'(aq) + '+r.aEl.ch+'e⁻</span>\n'
+      +'<span style="color:#22c55e;">KATOT (+): '+r.kEl.ionDisp+'(aq) + '+r.kEl.ch+'e⁻ → '+r.kEl.sym+'(k)</span>\n'
+      +'<span style="color:var(--tx);">NET:       '+r.aEl.sym+' + '+r.kEl.ionDisp+' ⇌ '+r.aEl.ionDisp+' + '+r.kEl.sym+'</span>';
+    document.getElementById('cellNotation').innerHTML=
+      '<span style="color:#ef4444;">'+r.aEl.sym+'|'+r.aEl.ionDisp+'('+r.lRun.toFixed(3)+'M)</span>'
+      +' || <span style="color:#22c55e;">'+r.kEl.ionDisp+'('+r.rRun.toFixed(3)+'M)|'+r.kEl.sym+'</span>';
+  } else {
+    var lo=Math.min(r.lRun,r.rRun),hi=Math.max(r.lRun,r.rRun);
+    hr='<span style="color:#ef4444;">ANOT (-):  '+r.cEl.sym+'(k) → '+r.cEl.ionDisp+'('+lo.toFixed(3)+'M) + '+r.cEl.ch+'e⁻</span>\n'
+      +'<span style="color:#22c55e;">KATOT (+): '+r.cEl.ionDisp+'('+hi.toFixed(3)+'M) + '+r.cEl.ch+'e⁻ → '+r.cEl.sym+'(k)</span>';
+    document.getElementById('cellNotation').innerHTML=
+      r.cEl.sym+'|'+r.cEl.ionDisp+'('+lo.toFixed(3)+'M)||'+r.cEl.ionDisp+'('+hi.toFixed(3)+'M)|'+r.cEl.sym;
+  }
+  document.getElementById('halfRxn').innerHTML=hr;
+
+  if(mode==='different'){
+    var aEl2=r.anot==='left'?r.lEl:r.rEl;
+    var kEl2=r.anot==='left'?r.rEl:r.lEl;
+    document.getElementById('anotLbl').textContent='ANOT ['+aEl2.ionDisp+']';
+    document.getElementById('katotLbl').textContent='KATOT ['+kEl2.ionDisp+']';
+    document.getElementById('anotConcD').textContent=(simRunning?anotSim:r.lRun).toFixed(4)+' M';
+    document.getElementById('katotConcD').textContent=(simRunning?katotSim:r.rRun).toFixed(4)+' M';
+    document.getElementById('simTimeLbl').textContent='Süre: '+simTime+' adım | Hız: '+(1+(r.T-25)/25).toFixed(2)+'x';
+  }
+
+  updateGraph(r);
+}
+
+function updateGraph(r){
+  var pts=[],vs=[];
+  for(var t=0;t<=100;t+=5){ var e=nernst(r.E0,r.n,r.Q,t); vs.push(e); pts.push({t:t,e:e}); }
+  var minE=Math.min.apply(null,vs),maxE=Math.max.apply(null,vs),rng=maxE-minE||0.01;
+  document.getElementById('gMin').textContent=minE.toFixed(3);
+  document.getElementById('gMax').textContent=maxE.toFixed(3);
+  var poly=pts.map(function(d){ return (44+d.t*3.32)+','+(118-((d.e-minE)/rng)*102); }).join(' ');
+  document.getElementById('gLine').setAttribute('points',poly);
+  var cx=44+r.T*3.32, curE=nernst(r.E0,r.n,r.Q,r.T);
+  var cy=118-((curE-minE)/rng)*102;
+  document.getElementById('gDot').setAttribute('cx',cx);
+  document.getElementById('gDot').setAttribute('cy',cy);
+  document.getElementById('gDotTxt').setAttribute('x',cx);
+  document.getElementById('gDotTxt').setAttribute('y',cy-9);
+  document.getElementById('gDotTxt').textContent=curE.toFixed(3)+'V';
+}
+
+function toggleSim(){
+  if(!simRunning){
+    var r=getAll();
+    anotSim=r.anot==='left'?r.lCR:r.rCR;
+    katotSim=r.anot==='left'?r.rCR:r.lCR;
+    simRunning=true;
+    document.getElementById('simBtn').textContent='⏸ Durdur';
+    document.getElementById('simBtn').style.background='#f59e0b';
+    simTimer=setInterval(function(){
+      var r2=getAll(); var rate=0.001*(1+(r2.T-25)/25);
+      simTime++; anotSim=Math.min(anotSim+rate,5.0); katotSim=Math.max(katotSim-rate,0.001); update();
+    },100);
+  } else {
+    simRunning=false; clearInterval(simTimer);
+    document.getElementById('simBtn').textContent='▶ Başlat';
+    document.getElementById('simBtn').style.background='var(--ac)';
+  }
+}
+
+function resetSim(){
+  simRunning=false; clearInterval(simTimer); simTime=0;
+  document.getElementById('simBtn').textContent='▶ Başlat';
+  document.getElementById('simBtn').style.background='var(--ac)';
+  var r=getAll(); anotSim=r.lCR; katotSim=r.rCR; update();
+}
+
+function spawnParticles(){
+  particles=[];
+  for(var i=0;i<5;i++) particles.push({type:'e',progress:i/5,speed:0.004+Math.random()*0.003});
+  for(var j=0;j<5;j++) particles.push(newIon());
+}
+function newIon(){
+  var d=Math.random()>0.5?1:-1;
+  return{type:'ion',progress:d>0?0:1,speed:(0.003+Math.random()*0.002)*d,pos:Math.random()>0.5,y:0.5+Math.random()*0.12};
+}
+
+function drawLoop(){
+  drawCell();
+  requestAnimationFrame(drawLoop);
+}
+
+function drawBeaker(x1,x2,bTop,bBot,sLvl,col,conc){
+  var alpha=Math.min(0.55,0.06+conc*0.09);
+  var hex=Math.round(alpha*255).toString(16).padStart(2,'0');
+  ctx.fillStyle=col+hex;
+  ctx.beginPath(); ctx.moveTo(x1+3,sLvl); ctx.lineTo(x2-3,sLvl);
+  ctx.lineTo(x2-3,bBot-5); ctx.lineTo(x1+3,bBot-5); ctx.closePath(); ctx.fill();
+
+  ctx.strokeStyle='#2d3f55'; ctx.lineWidth=2.5; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(x1,bTop+8); ctx.lineTo(x1,bBot-5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2,bTop+8); ctx.lineTo(x2,bBot-5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x1,bBot-5); ctx.lineTo(x2,bBot-5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x1-5,bTop); ctx.lineTo(x2+5,bTop); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x1,bTop); ctx.lineTo(x1,bTop+8); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2,bTop); ctx.lineTo(x2,bTop+8); ctx.stroke();
+  var gw=(x2-x1)*0.06;
+  ctx.beginPath(); ctx.moveTo(x2,bTop+5); ctx.lineTo(x2+gw,bTop-2); ctx.stroke();
+
+  ctx.strokeStyle=col+'55'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(x1+3,sLvl); ctx.lineTo(x2-3,sLvl); ctx.stroke();
+
+  ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+  var h=bBot-5-sLvl;
+  for(var i=1;i<=3;i++){
+    var ly=sLvl+h*i/4;
+    ctx.beginPath(); ctx.moveTo(x1+3,ly); ctx.lineTo(x1+3+(x2-x1)*0.18,ly); ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(x1+(x2-x1)*0.15,bTop+15); ctx.lineTo(x1+(x2-x1)*0.15,bBot-20); ctx.stroke();
+}
+
+function drawCell(){
+  if(!ctx) return;
+  ctx.clearRect(0,0,cW,cH); ctx.fillStyle='#050a14'; ctx.fillRect(0,0,cW,cH);
+  var r=lastR; if(!r) return;
+
+  var lEl=r.lEl,rEl=r.rEl;
+  if(mode==='concentration'){lEl=r.cEl; rEl=r.cEl;}
+
+  var pad=cW*0.055;
+  var lx1=pad, lx2=cW*0.43, rx1=cW*0.57, rx2=cW-pad;
+  var lcx=(lx1+lx2)/2, rcx=(rx1+rx2)/2;
+  var bTop=cH*0.17, bBot=cH*0.89, sLvl=cH*0.40;
+  var elTop=cH*0.28, elBot=cH*0.83;
+
+  drawBeaker(lx1,lx2,bTop,bBot,sLvl,lEl.col,r.lRun);
+  drawBeaker(rx1,rx2,bTop,bBot,sLvl,rEl.col,r.rRun);
+
+  var ew=cW*0.021;
+  function drawEl(x,el){
+    var g=ctx.createLinearGradient(x-ew,0,x+ew,0);
+    g.addColorStop(0,el.col+'77'); g.addColorStop(0.5,el.col); g.addColorStop(1,el.col+'77');
+    ctx.fillStyle=g;
+    ctx.beginPath(); ctx.roundRect(x-ew/2,elTop,ew,elBot-elTop,3); ctx.fill();
+    ctx.strokeStyle=el.col+'55'; ctx.lineWidth=0.8; ctx.stroke();
+  }
+  drawEl(lcx,lEl); drawEl(rcx,rEl);
+
+  var fs=cW*0.026;
+  ctx.font='bold '+fs+'px Inter,sans-serif'; ctx.textAlign='center';
+  ctx.fillStyle=r.anot==='left'?'#ef4444':'#22c55e';
+  ctx.fillText(r.anot==='left'?'ANOT (−)':'KATOT (+)',lcx,bTop-10);
+  ctx.fillStyle=r.anot==='right'?'#ef4444':'#22c55e';
+  ctx.fillText(r.anot==='right'?'ANOT (−)':'KATOT (+)',rcx,bTop-10);
+
+  ctx.font='bold '+(cW*0.032)+'px Space Grotesk,sans-serif';
+  ctx.fillStyle=lEl.col; ctx.fillText(lEl.sym,lcx,bBot+cH*0.045);
+  ctx.fillStyle=rEl.col; ctx.fillText(rEl.sym,rcx,bBot+cH*0.045);
+
+  ctx.font=(cW*0.018)+'px Courier New,monospace'; ctx.fillStyle='rgba(255,255,255,0.45)';
+  ctx.fillText('['+lEl.ionDisp+']='+r.lRun.toFixed(2)+'M',lcx,bBot+cH*0.09);
+  ctx.fillText('['+rEl.ionDisp+']='+r.rRun.toFixed(2)+'M',rcx,bBot+cH*0.09);
+
+  var bY=cH*0.245;
+  ctx.strokeStyle='#2d3f55'; ctx.lineWidth=cW*0.024; ctx.lineCap='round';
+  ctx.beginPath();
+  ctx.moveTo(lcx,sLvl-cH*0.035); ctx.lineTo(lcx,bY);
+  ctx.arc(cW/2,bY,(rcx-lcx)/2,Math.PI,0,false);
+  ctx.lineTo(rcx,sLvl-cH*0.035); ctx.stroke();
+  ctx.strokeStyle='#3d5068'; ctx.lineWidth=cW*0.015;
+  ctx.beginPath();
+  ctx.moveTo(lcx+2,sLvl-cH*0.035); ctx.lineTo(lcx+2,bY+2);
+  ctx.arc(cW/2,bY+2,(rcx-lcx)/2-2,Math.PI,0,false);
+  ctx.lineTo(rcx-2,sLvl-cH*0.035); ctx.stroke();
+  ctx.fillStyle='#475569'; ctx.font='bold '+(cW*0.017)+'px Inter,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('TUZ KÖPRÜSÜ',cW/2,bY-7);
+
+  var wireY=cH*0.095, vmr=cW*0.073;
+  ctx.strokeStyle='#3d5068'; ctx.lineWidth=2.5; ctx.lineCap='square';
+  ctx.beginPath(); ctx.moveTo(lcx,elTop); ctx.lineTo(lcx,wireY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(rcx,elTop); ctx.lineTo(rcx,wireY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(lcx,wireY); ctx.lineTo(cW/2-vmr,wireY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cW/2+vmr,wireY); ctx.lineTo(rcx,wireY); ctx.stroke();
+
+  ctx.beginPath(); ctx.arc(cW/2,wireY,vmr,0,Math.PI*2);
+  var vg=ctx.createRadialGradient(cW/2-vmr*0.2,wireY-vmr*0.2,vmr*0.05,cW/2,wireY,vmr);
+  vg.addColorStop(0,'#1e3a5f'); vg.addColorStop(1,'#0a1628');
+  ctx.fillStyle=vg; ctx.fill();
+  ctx.strokeStyle='#38bdf8'; ctx.lineWidth=2; ctx.stroke();
+  ctx.fillStyle='#38bdf8'; ctx.font='bold '+(cW*0.022)+'px Inter,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('V',cW/2,wireY-vmr*0.12);
+  var ec2=r.E_pil>0.001?'#4ade80':r.E_pil<-0.001?'#f87171':'#fbbf24';
+  ctx.fillStyle=ec2; ctx.font='bold '+(cW*0.02)+'px Courier New,monospace';
+  ctx.fillText((r.E_pil>=0?'+':'')+r.E_pil.toFixed(3)+'V',cW/2,wireY+vmr*0.58);
+
+  var fromX=r.anot==='left'?lcx:rcx, toX=r.anot==='left'?rcx:lcx;
+  var toRem=[];
+  particles.forEach(function(p,i){
+    p.progress+=p.speed;
+    if(p.type==='e'){
+      var ex=fromX+(toX-fromX)*Math.min(Math.max(p.progress,0),1);
+      var eg=ctx.createRadialGradient(ex-1,wireY-1,0.5,ex,wireY,cW*0.018);
+      eg.addColorStop(0,'#fff8c0'); eg.addColorStop(1,'#facc15');
+      ctx.beginPath(); ctx.arc(ex,wireY,cW*0.018,0,Math.PI*2); ctx.fillStyle=eg; ctx.fill();
+      ctx.fillStyle='#000'; ctx.font='bold '+(cW*0.013)+'px monospace'; ctx.textAlign='center';
+      ctx.fillText('e⁻',ex,wireY+cW*0.006);
+    } else {
+      var tx=cW*0.43+cW*0.14*(p.progress), py=cH*p.y;
+      var ig=ctx.createRadialGradient(tx-1,py-1,0.5,tx,py,cW*0.016);
+      ig.addColorStop(0,p.pos?'#7dd3fc':'#fca5a5'); ig.addColorStop(1,p.pos?'#0284c7':'#dc2626');
+      ctx.beginPath(); ctx.arc(tx,py,cW*0.016,0,Math.PI*2); ctx.fillStyle=ig; ctx.fill();
+      ctx.fillStyle='#fff'; ctx.font='bold '+(cW*0.013)+'px monospace'; ctx.textAlign='center';
+      ctx.fillText(p.pos?'+':'−',tx,py+cW*0.005);
+    }
+    if(p.progress<-0.05||p.progress>1.05) toRem.push(i);
+  });
+  toRem.reverse().forEach(function(i){particles.splice(i,1);});
+  if(Math.random()<0.04) particles.push({type:'e',progress:0,speed:0.004+Math.random()*0.003});
+  if(Math.random()<0.03) particles.push(newIon());
+  if(particles.length>22) particles.splice(0,1);
+}
+
+window.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
