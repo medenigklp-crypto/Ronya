@@ -39,6 +39,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .slider-val{font-size:12px;font-weight:700;font-family:'Courier New',monospace;color:var(--ac2);}
 input[type=range]{width:100%;height:4px;border-radius:2px;outline:none;border:none;background:var(--br2);cursor:pointer;-webkit-appearance:none;appearance:none;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--ac);cursor:pointer;}
+.num-inp{width:62px;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--rsm);padding:3px 6px;color:var(--ac2);font-size:12px;font-weight:700;font-family:'Courier New',monospace;text-align:right;outline:none;}
+.num-inp:focus{border-color:var(--ac);}
+.unit-lbl{font-size:11px;color:var(--tx3);min-width:14px;}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:1;}
 .pot-big{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:800;line-height:1;}
 .badge{display:inline-block;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:700;}
 .formula-box{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:var(--rsm);padding:10px;font-family:'Courier New',monospace;font-size:11px;color:var(--ac3);margin:8px 0;line-height:1.7;white-space:pre;}
@@ -127,16 +131,16 @@ canvas{display:block;width:100%;border-radius:12px;touch-action:none;}
             <select class="sel" id="leftElSel" onchange="update()"></select>
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">Başlangıç Derişimi</span><span class="slider-val" id="lConcV">1.000 M</span></div>
-            <input type="range" id="lConcS" min="1" max="500" value="100" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">Başlangıç Derişimi</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="lConcV" min="0.01" max="5" step="0.01" value="1.00" onchange="nSync('lConcV','lConcS',100);update()"><span class="unit-lbl">M</span></div></div>
+            <input type="range" id="lConcS" min="1" max="500" value="100" oninput="sSync('lConcS','lConcV',100);update()">
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><span class="slider-val" id="lWaterV">0 mL</span></div>
-            <input type="range" id="lWaterS" min="0" max="200" value="0" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="lWaterV" min="0" max="200" step="1" value="0" onchange="nSync('lWaterV','lWaterS',1);update()"><span class="unit-lbl">mL</span></div></div>
+            <input type="range" id="lWaterS" min="0" max="200" value="0" oninput="sSync('lWaterS','lWaterV',1);update()">
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><span class="slider-val" id="lEvapV">0 mL</span></div>
-            <input type="range" id="lEvapS" min="0" max="90" value="0" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="lEvapV" min="0" max="90" step="1" value="0" onchange="nSync('lEvapV','lEvapS',1);update()"><span class="unit-lbl">mL</span></div></div>
+            <input type="range" id="lEvapS" min="0" max="90" value="0" oninput="sSync('lEvapS','lEvapV',1);update()">
           </div>
           <div style="font-size:11px;color:var(--tx3);margin-top:2px;">Gerçek: <span id="lReal" style="color:#ef4444;font-weight:700;font-family:'Courier New',monospace;">1.0000 M</span></div>
         </div>
@@ -151,16 +155,16 @@ canvas{display:block;width:100%;border-radius:12px;touch-action:none;}
             <select class="sel" id="rightElSel" onchange="update()"></select>
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">Başlangıç Derişimi</span><span class="slider-val" id="rConcV">1.000 M</span></div>
-            <input type="range" id="rConcS" min="1" max="500" value="100" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">Başlangıç Derişimi</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="rConcV" min="0.01" max="5" step="0.01" value="1.00" onchange="nSync('rConcV','rConcS',100);update()"><span class="unit-lbl">M</span></div></div>
+            <input type="range" id="rConcS" min="1" max="500" value="100" oninput="sSync('rConcS','rConcV',100);update()">
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><span class="slider-val" id="rWaterV">0 mL</span></div>
-            <input type="range" id="rWaterS" min="0" max="200" value="0" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="rWaterV" min="0" max="200" step="1" value="0" onchange="nSync('rWaterV','rWaterS',1);update()"><span class="unit-lbl">mL</span></div></div>
+            <input type="range" id="rWaterS" min="0" max="200" value="0" oninput="sSync('rWaterS','rWaterV',1);update()">
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><span class="slider-val" id="rEvapV">0 mL</span></div>
-            <input type="range" id="rEvapS" min="0" max="90" value="0" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="rEvapV" min="0" max="90" step="1" value="0" onchange="nSync('rEvapV','rEvapS',1);update()"><span class="unit-lbl">mL</span></div></div>
+            <input type="range" id="rEvapS" min="0" max="90" value="0" oninput="sSync('rEvapS','rEvapV',1);update()">
           </div>
           <div style="font-size:11px;color:var(--tx3);margin-top:2px;">Gerçek: <span id="rReal" style="color:#22c55e;font-weight:700;font-family:'Courier New',monospace;">1.0000 M</span></div>
         </div>
@@ -176,32 +180,32 @@ canvas{display:block;width:100%;border-radius:12px;touch-action:none;}
         <div class="card">
           <div class="card-title">Hücre I</div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl" id="c1Lbl">Derişim</span><span class="slider-val" id="c1V">0.500 M</span></div>
-            <input type="range" id="c1S" min="1" max="500" value="50" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl" id="c1Lbl">Derişim</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="c1V" min="0.01" max="5" step="0.01" value="0.50" onchange="nSync('c1V','c1S',100);update()"><span class="unit-lbl">M</span></div></div>
+            <input type="range" id="c1S" min="1" max="500" value="50" oninput="sSync('c1S','c1V',100);update()">
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><span class="slider-val" id="cw1V">0 mL</span></div>
-            <input type="range" id="cw1S" min="0" max="200" value="0" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="cw1V" min="0" max="200" step="1" value="0" onchange="nSync('cw1V','cw1S',1);update()"><span class="unit-lbl">mL</span></div></div>
+            <input type="range" id="cw1S" min="0" max="200" value="0" oninput="sSync('cw1S','cw1V',1);update()">
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><span class="slider-val" id="ce1V">0 mL</span></div>
-            <input type="range" id="ce1S" min="0" max="90" value="0" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="ce1V" min="0" max="90" step="1" value="0" onchange="nSync('ce1V','ce1S',1);update()"><span class="unit-lbl">mL</span></div></div>
+            <input type="range" id="ce1S" min="0" max="90" value="0" oninput="sSync('ce1S','ce1V',1);update()">
           </div>
           <div style="font-size:11px;color:var(--tx3);">Gerçek: <span id="cr1" style="color:var(--ac2);font-weight:700;font-family:'Courier New',monospace;">0.5000 M</span></div>
         </div>
         <div class="card">
           <div class="card-title">Hücre II</div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl" id="c2Lbl">Derişim</span><span class="slider-val" id="c2V">1.000 M</span></div>
-            <input type="range" id="c2S" min="1" max="500" value="100" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl" id="c2Lbl">Derişim</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="c2V" min="0.01" max="5" step="0.01" value="1.00" onchange="nSync('c2V','c2S',100);update()"><span class="unit-lbl">M</span></div></div>
+            <input type="range" id="c2S" min="1" max="500" value="100" oninput="sSync('c2S','c2V',100);update()">
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><span class="slider-val" id="cw2V">0 mL</span></div>
-            <input type="range" id="cw2S" min="0" max="200" value="0" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">💧 Su İlavesi</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="cw2V" min="0" max="200" step="1" value="0" onchange="nSync('cw2V','cw2S',1);update()"><span class="unit-lbl">mL</span></div></div>
+            <input type="range" id="cw2S" min="0" max="200" value="0" oninput="sSync('cw2S','cw2V',1);update()">
           </div>
           <div class="slider-wrap">
-            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><span class="slider-val" id="ce2V">0 mL</span></div>
-            <input type="range" id="ce2S" min="0" max="90" value="0" oninput="update()">
+            <div class="slider-top"><span class="slider-lbl">♨️ Buharlaşma</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="ce2V" min="0" max="90" step="1" value="0" onchange="nSync('ce2V','ce2S',1);update()"><span class="unit-lbl">mL</span></div></div>
+            <input type="range" id="ce2S" min="0" max="90" value="0" oninput="sSync('ce2S','ce2V',1);update()">
           </div>
           <div style="font-size:11px;color:var(--tx3);">Gerçek: <span id="cr2" style="color:var(--ac2);font-weight:700;font-family:'Courier New',monospace;">1.0000 M</span></div>
         </div>
@@ -214,8 +218,8 @@ canvas{display:block;width:100%;border-radius:12px;touch-action:none;}
     <div class="card">
       <div class="card-title">🌡️ Sıcaklık Kontrolü</div>
       <div class="slider-wrap">
-        <div class="slider-top"><span class="slider-lbl">Sıcaklık</span><span class="slider-val" id="tempV">25 °C</span></div>
-        <input type="range" id="tempS" min="0" max="100" value="25" oninput="update()">
+        <div class="slider-top"><span class="slider-lbl">Sıcaklık</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="tempV" min="0" max="100" step="1" value="25" onchange="nSync('tempV','tempS',1);update()"><span class="unit-lbl">°C</span></div></div>
+        <input type="range" id="tempS" min="0" max="100" value="25" oninput="sSync('tempS','tempV',1);update()">
       </div>
       <div style="font-size:11px;color:var(--tx3);" id="tempDetail">T = 25°C = 298.15 K</div>
     </div>
@@ -285,6 +289,20 @@ canvas{display:block;width:100%;border-radius:12px;touch-action:none;}
 </div>
 
 <script>
+// Sayi alani -> slider senkronu
+function nSync(numId,sliderId,mult){
+  var v=parseFloat(document.getElementById(numId).value);
+  if(isNaN(v))return;
+  var sl=document.getElementById(sliderId);
+  var clamped=Math.min(parseFloat(sl.max),Math.max(parseFloat(sl.min),Math.round(v*mult)));
+  sl.value=clamped;
+}
+// Slider -> sayi alani senkronu
+function sSync(sliderId,numId,mult){
+  var v=parseInt(document.getElementById(sliderId).value);
+  var inp=document.getElementById(numId);
+  inp.value=(v/mult).toFixed(mult===100?2:0);
+}
 var EL=[
   {name:"Lityum (Li)",   sym:"Li",ion:"Li+",  ionDisp:"Li⁺",  ch:1, E0:-3.04,col:"#a78bfa",salt:"LiCl (Lityum Klorür)"},
   {name:"Potasyum (K)",  sym:"K", ion:"K+",   ionDisp:"K⁺",   ch:1, E0:-2.93,col:"#818cf8",salt:"KNO3 (Potasyum Nitrat)"},
@@ -295,6 +313,7 @@ var EL=[
   {name:"Çinko (Zn)",    sym:"Zn",ion:"Zn2+",  ionDisp:"Zn²⁺", ch:2, E0:-0.76,col:"#94a3b8",salt:"ZnSO4 (Çinko Sülfat)"},
   {name:"Demir (Fe)",    sym:"Fe",ion:"Fe2+",  ionDisp:"Fe²⁺", ch:2, E0:-0.44,col:"#b45309",salt:"FeSO4 (Demir Sülfat)"},
   {name:"Kurşun (Pb)",   sym:"Pb",ion:"Pb2+",  ionDisp:"Pb²⁺", ch:2, E0:-0.13,col:"#9ca3af",salt:"Pb(NO3)2 (Kurşun Nitrat)"},
+  {name:"SHE (Standart H. Elektrodu)",sym:"SHE",ion:"H+",ionDisp:"H⁺",ch:1,E0:0.00,col:"#cbd5e1",salt:"H₂SO₄ / HCl (1M, Pt elektrodu)"},
   {name:"Hidrojen (H2)", sym:"H2",ion:"H+",   ionDisp:"H⁺",   ch:1, E0:0.00, col:"#e2e8f0",salt:"HCl (Hidroklorik Asit)"},
   {name:"Bakır (Cu)",    sym:"Cu",ion:"Cu2+",  ionDisp:"Cu²⁺", ch:2, E0:0.34, col:"#f97316",salt:"CuSO4 (Bakır Sülfat)"},
   {name:"Gümüş (Ag)",    sym:"Ag",ion:"Ag+",   ionDisp:"Ag⁺",  ch:1, E0:0.80, col:"#e2e8f0",salt:"AgNO3 (Gümüş Nitrat)"},
@@ -319,7 +338,7 @@ function init(){
     EL.forEach(function(e,i){
       var o=document.createElement('option');
       o.value=i;
-      o.textContent=e.sym+' ('+(e.E0>=0?'+':'')+e.E0.toFixed(2)+'V) — '+e.name;
+      o.textContent=e.sym+' ('+(e.E0>=0?'+':'')+e.E0.toFixed(2)+'V) - '+e.name;
       s.appendChild(o);
     });
   });
@@ -440,32 +459,32 @@ function getAll(){
     Q=lo/Math.max(hi,1e-6);
     E_pil=nernst(0,n,Q,T);
   }
-  return {T,li,ri,ci,lEl,rEl,cEl,lCR,rCR,cR1,cR2,lRun,rRun,E_pil,Q,n,E0,anot,aEl,kEl,lC0,rC0,c10,c20};
+  return {T:T,li:li,ri:ri,ci:ci,lEl:lEl,rEl:rEl,cEl:cEl,lCR:lCR,rCR:rCR,cR1:cR1,cR2:cR2,lRun:lRun,rRun:rRun,E_pil:E_pil,Q:Q,n:n,E0:E0,anot:anot,aEl:aEl,kEl:kEl,lC0:lC0,rC0:rC0,c10:c10,c20:c20};
 }
 
 function update(){
   var r=getAll(); lastR=r;
 
-  document.getElementById('lConcV').textContent=r.lC0.toFixed(3)+' M';
-  document.getElementById('rConcV').textContent=r.rC0.toFixed(3)+' M';
-  document.getElementById('lWaterV').textContent=document.getElementById('lWaterS').value+' mL';
-  document.getElementById('rWaterV').textContent=document.getElementById('rWaterS').value+' mL';
-  document.getElementById('lEvapV').textContent=document.getElementById('lEvapS').value+' mL';
-  document.getElementById('rEvapV').textContent=document.getElementById('rEvapS').value+' mL';
+  document.getElementById('lConcV').value=r.lC0.toFixed(2);
+  document.getElementById('rConcV').value=r.rC0.toFixed(2);
+  document.getElementById('lWaterV').value=document.getElementById('lWaterS').value;
+  document.getElementById('rWaterV').value=document.getElementById('rWaterS').value;
+  document.getElementById('lEvapV').value=document.getElementById('lEvapS').value;
+  document.getElementById('rEvapV').value=document.getElementById('rEvapS').value;
   document.getElementById('lReal').textContent=r.lCR.toFixed(4)+' M';
   document.getElementById('rReal').textContent=r.rCR.toFixed(4)+' M';
 
-  document.getElementById('c1V').textContent=r.c10.toFixed(3)+' M';
-  document.getElementById('c2V').textContent=r.c20.toFixed(3)+' M';
-  document.getElementById('cw1V').textContent=document.getElementById('cw1S').value+' mL';
-  document.getElementById('cw2V').textContent=document.getElementById('cw2S').value+' mL';
-  document.getElementById('ce1V').textContent=document.getElementById('ce1S').value+' mL';
-  document.getElementById('ce2V').textContent=document.getElementById('ce2S').value+' mL';
+  document.getElementById('c1V').value=r.c10.toFixed(2);
+  document.getElementById('c2V').value=r.c20.toFixed(2);
+  document.getElementById('cw1V').value=document.getElementById('cw1S').value;
+  document.getElementById('cw2V').value=document.getElementById('cw2S').value;
+  document.getElementById('ce1V').value=document.getElementById('ce1S').value;
+  document.getElementById('ce2V').value=document.getElementById('ce2S').value;
   document.getElementById('cr1').textContent=r.cR1.toFixed(4)+' M';
   document.getElementById('cr2').textContent=r.cR2.toFixed(4)+' M';
   document.getElementById('c1Lbl').textContent='['+r.cEl.ionDisp+'] Hücre I';
   document.getElementById('c2Lbl').textContent='['+r.cEl.ionDisp+'] Hücre II';
-  document.getElementById('tempV').textContent=r.T+' °C';
+  document.getElementById('tempV').value=r.T;
   document.getElementById('tempDetail').textContent='T = '+r.T+'°C = '+(r.T+273.15).toFixed(2)+' K';
 
   var ec=r.E_pil>0.001?'#22c55e':r.E_pil<-0.001?'#ef4444':'#f59e0b';
@@ -569,33 +588,79 @@ function drawLoop(){
 }
 
 function drawBeaker(x1,x2,bTop,bBot,sLvl,col,conc){
-  var alpha=Math.min(0.55,0.06+conc*0.09);
+  var cx=(x1+x2)/2, rw=(x2-x1)/2;
+  var rh=rw*0.22; // ellipse y-radius for 3D depth
+
+  // Right-side 3D depth panel
+  var dw=rw*0.13;
+  var sg=ctx.createLinearGradient(cx+rw,0,cx+rw+dw,0);
+  sg.addColorStop(0,'#0d1e32'); sg.addColorStop(1,'#07111e');
+  ctx.fillStyle=sg;
+  ctx.beginPath();
+  ctx.moveTo(cx+rw,bTop+rh); ctx.lineTo(cx+rw+dw,bTop+rh*0.5);
+  ctx.lineTo(cx+rw+dw,bBot-rh*0.5); ctx.lineTo(cx+rw,bBot);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#1e3048'; ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(cx+rw,bTop+rh); ctx.lineTo(cx+rw+dw,bTop+rh*0.5);
+  ctx.lineTo(cx+rw+dw,bBot-rh*0.5); ctx.lineTo(cx+rw,bBot);
+  ctx.stroke();
+
+  // Liquid fill body
+  var alpha=Math.min(0.6,0.07+conc*0.09);
   var hex=Math.round(alpha*255).toString(16).padStart(2,'0');
   ctx.fillStyle=col+hex;
-  ctx.beginPath(); ctx.moveTo(x1+3,sLvl); ctx.lineTo(x2-3,sLvl);
-  ctx.lineTo(x2-3,bBot-5); ctx.lineTo(x1+3,bBot-5); ctx.closePath(); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(x1,sLvl); ctx.lineTo(x1,bBot);
+  ctx.ellipse(cx,bBot,rw,rh,0,Math.PI,0,false);
+  ctx.lineTo(x2,sLvl);
+  ctx.ellipse(cx,sLvl,rw,rh,0,0,Math.PI,true);
+  ctx.closePath(); ctx.fill();
 
-  ctx.strokeStyle='#2d3f55'; ctx.lineWidth=2.5; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(x1,bTop+8); ctx.lineTo(x1,bBot-5); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x2,bTop+8); ctx.lineTo(x2,bBot-5); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x1,bBot-5); ctx.lineTo(x2,bBot-5); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x1-5,bTop); ctx.lineTo(x2+5,bTop); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x1,bTop); ctx.lineTo(x1,bTop+8); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x2,bTop); ctx.lineTo(x2,bTop+8); ctx.stroke();
-  var gw=(x2-x1)*0.06;
-  ctx.beginPath(); ctx.moveTo(x2,bTop+5); ctx.lineTo(x2+gw,bTop-2); ctx.stroke();
+  // Bottom ellipse
+  ctx.beginPath(); ctx.ellipse(cx,bBot,rw,rh,0,0,Math.PI*2);
+  ctx.fillStyle='#091625'; ctx.fill();
+  ctx.strokeStyle='#2a3d54'; ctx.lineWidth=2; ctx.stroke();
 
-  ctx.strokeStyle=col+'55'; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(x1+3,sLvl); ctx.lineTo(x2-3,sLvl); ctx.stroke();
+  // Side walls
+  ctx.strokeStyle='#2a3d54'; ctx.lineWidth=2.5; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(x1,bTop+rh); ctx.lineTo(x1,bBot); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2,bTop+rh); ctx.lineTo(x2,bBot); ctx.stroke();
 
-  ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
-  var h=bBot-5-sLvl;
-  for(var i=1;i<=3;i++){
-    var ly=sLvl+h*i/4;
-    ctx.beginPath(); ctx.moveTo(x1+3,ly); ctx.lineTo(x1+3+(x2-x1)*0.18,ly); ctx.stroke();
+  // Liquid surface ellipse (3D highlight)
+  ctx.beginPath(); ctx.ellipse(cx,sLvl,rw,rh,0,0,Math.PI*2);
+  ctx.fillStyle=col+'2a'; ctx.fill();
+  ctx.strokeStyle=col+'77'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // Top rim ellipse
+  ctx.beginPath(); ctx.ellipse(cx,bTop+rh,rw+3,rh+1.5,0,0,Math.PI*2);
+  ctx.strokeStyle='#3a5270'; ctx.lineWidth=3.5; ctx.stroke();
+  // Inner rim
+  ctx.beginPath(); ctx.ellipse(cx,bTop+rh,rw-2,rh-0.5,0,0,Math.PI*2);
+  ctx.strokeStyle='#243345'; ctx.lineWidth=2; ctx.stroke();
+
+  // Spout
+  var gw=rw*0.16;
+  ctx.strokeStyle='#3a5270'; ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.moveTo(cx+rw+2,bTop+rh); ctx.lineTo(cx+rw+gw,bTop-rh*0.4); ctx.stroke();
+
+  // Glass highlight (vertical shine)
+  ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(x1+rw*0.14,bTop+rh*2); ctx.lineTo(x1+rw*0.14,bBot-rh*1.5); ctx.stroke();
+
+  // Graduation marks
+  ctx.strokeStyle='rgba(255,255,255,0.12)'; ctx.lineWidth=1;
+  var h2=bBot-rh-sLvl;
+  for(var i=1;i<=4;i++){
+    var ly=sLvl+h2*i/5;
+    if(ly>sLvl+4&&ly<bBot-rh-4){
+      ctx.beginPath(); ctx.moveTo(x1+2,ly); ctx.lineTo(x1+2+rw*0.22,ly); ctx.stroke();
+      if(i%2===0){
+        ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.font=(rw*0.22)+'px monospace'; ctx.textAlign='left';
+        ctx.fillText((5-i)*25+'mL',x1+rw*0.28,ly+3);
+      }
+    }
   }
-  ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(x1+(x2-x1)*0.15,bTop+15); ctx.lineTo(x1+(x2-x1)*0.15,bBot-20); ctx.stroke();
 }
 
 function drawCell(){
@@ -606,64 +671,112 @@ function drawCell(){
   var lEl=r.lEl,rEl=r.rEl;
   if(mode==='concentration'){lEl=r.cEl; rEl=r.cEl;}
 
-  var pad=cW*0.055;
-  var lx1=pad, lx2=cW*0.43, rx1=cW*0.57, rx2=cW-pad;
+  var pad=cW*0.05;
+  var lx1=pad, lx2=cW*0.41, rx1=cW*0.59, rx2=cW-pad-cW*0.03;
   var lcx=(lx1+lx2)/2, rcx=(rx1+rx2)/2;
-  var bTop=cH*0.17, bBot=cH*0.89, sLvl=cH*0.40;
-  var elTop=cH*0.28, elBot=cH*0.83;
+  var rw=(lx2-lx1)/2;
+  var rh=rw*0.22; // ellipse depth
+  var bTop=cH*0.22, bBot=cH*0.88, sLvl=cH*0.44;
+  var elTop=cH*0.32, elBot=cH*0.82;
+  var ew=cW*0.022;
 
+  // ---- 3D Beherler ----
   drawBeaker(lx1,lx2,bTop,bBot,sLvl,lEl.col,r.lRun);
   drawBeaker(rx1,rx2,bTop,bBot,sLvl,rEl.col,r.rRun);
 
-  var ew=cW*0.021;
-  function drawEl(x,el){
-    var g=ctx.createLinearGradient(x-ew,0,x+ew,0);
-    g.addColorStop(0,el.col+'77'); g.addColorStop(0.5,el.col); g.addColorStop(1,el.col+'77');
-    ctx.fillStyle=g;
-    ctx.beginPath(); ctx.roundRect(x-ew/2,elTop,ew,elBot-elTop,3); ctx.fill();
-    ctx.strokeStyle=el.col+'55'; ctx.lineWidth=0.8; ctx.stroke();
+  // ---- 3D Elektrotlar ----
+  function draw3DElectrode(x,el){
+    // Gölge
+    ctx.fillStyle='rgba(0,0,0,0.3)';
+    ctx.beginPath(); ctx.ellipse(x+ew*0.6,elBot+4,ew*0.7,ew*0.2,0,0,Math.PI*2); ctx.fill();
+    // Sağ yüz (3D derinlik)
+    var sg2=ctx.createLinearGradient(x+ew/2,0,x+ew/2+ew*0.4,0);
+    sg2.addColorStop(0,el.col+'66'); sg2.addColorStop(1,el.col+'22');
+    ctx.fillStyle=sg2;
+    ctx.fillRect(x+ew/2,elTop+4,ew*0.38,elBot-elTop-4);
+    // Üst yüz (3D top)
+    ctx.fillStyle=el.col+'88';
+    ctx.beginPath(); ctx.ellipse(x,elTop,ew/2,ew*0.12,0,0,Math.PI*2); ctx.fill();
+    // Ön yüz
+    var fg=ctx.createLinearGradient(x-ew/2,0,x+ew/2,0);
+    fg.addColorStop(0,el.col+'88'); fg.addColorStop(0.4,el.col); fg.addColorStop(0.7,el.col+'cc'); fg.addColorStop(1,el.col+'55');
+    ctx.fillStyle=fg;
+    ctx.fillRect(x-ew/2,elTop,ew,elBot-elTop);
+    // Parlama
+    ctx.fillStyle='rgba(255,255,255,0.12)';
+    ctx.fillRect(x-ew/2+2,elTop+8,ew*0.2,elBot-elTop-16);
+    // Üst daire
+    ctx.beginPath(); ctx.ellipse(x,elTop,ew/2,ew*0.12,0,0,Math.PI*2);
+    ctx.strokeStyle=el.col; ctx.lineWidth=1; ctx.stroke();
   }
-  drawEl(lcx,lEl); drawEl(rcx,rEl);
+  draw3DElectrode(lcx,lEl);
+  draw3DElectrode(rcx,rEl);
 
+  // ---- Anot/Katot etiketleri ----
   var fs=cW*0.026;
   ctx.font='bold '+fs+'px Inter,sans-serif'; ctx.textAlign='center';
   ctx.fillStyle=r.anot==='left'?'#ef4444':'#22c55e';
-  ctx.fillText(r.anot==='left'?'ANOT (−)':'KATOT (+)',lcx,bTop-10);
+  ctx.fillText(r.anot==='left'?'ANOT (−)':'KATOT (+)',lcx,bTop-rh-8);
   ctx.fillStyle=r.anot==='right'?'#ef4444':'#22c55e';
-  ctx.fillText(r.anot==='right'?'ANOT (−)':'KATOT (+)',rcx,bTop-10);
+  ctx.fillText(r.anot==='right'?'ANOT (−)':'KATOT (+)',rcx,bTop-rh-8);
 
+  // ---- Elektrot sembolleri ve derişim ----
   ctx.font='bold '+(cW*0.032)+'px Space Grotesk,sans-serif';
-  ctx.fillStyle=lEl.col; ctx.fillText(lEl.sym,lcx,bBot+cH*0.045);
-  ctx.fillStyle=rEl.col; ctx.fillText(rEl.sym,rcx,bBot+cH*0.045);
+  ctx.fillStyle=lEl.col; ctx.fillText(lEl.sym,lcx,bBot+cH*0.05);
+  ctx.fillStyle=rEl.col; ctx.fillText(rEl.sym,rcx,bBot+cH*0.05);
+  ctx.font=(cW*0.018)+'px Courier New,monospace'; ctx.fillStyle='rgba(255,255,255,0.4)';
+  ctx.fillText('['+lEl.ionDisp+']='+r.lRun.toFixed(3)+'M',lcx,bBot+cH*0.095);
+  ctx.fillText('['+rEl.ionDisp+']='+r.rRun.toFixed(3)+'M',rcx,bBot+cH*0.095);
 
-  ctx.font=(cW*0.018)+'px Courier New,monospace'; ctx.fillStyle='rgba(255,255,255,0.45)';
-  ctx.fillText('['+lEl.ionDisp+']='+r.lRun.toFixed(2)+'M',lcx,bBot+cH*0.09);
-  ctx.fillText('['+rEl.ionDisp+']='+r.rRun.toFixed(2)+'M',rcx,bBot+cH*0.09);
+  // ---- Tuz köprüsü — TERS U (∩) ----
+  var lIn=lcx+(lx2-lx1)*0.2;
+  var rIn=rcx-(rx2-rx1)*0.2;
+  var archY=bTop-rh-cH*0.07;  // köprü üst noktası (beherlerin üstünde)
+  var solIn=sLvl+cH*0.05;      // çözelti içine giriş derinliği
 
-  var bY=cH*0.245;
-  ctx.strokeStyle='#2d3f55'; ctx.lineWidth=cW*0.024; ctx.lineCap='round';
+  // Dış tüp (koyu)
+  ctx.strokeStyle='#2a3d54'; ctx.lineWidth=cW*0.028; ctx.lineCap='round'; ctx.lineJoin='round';
   ctx.beginPath();
-  ctx.moveTo(lcx,sLvl-cH*0.035); ctx.lineTo(lcx,bY);
-  ctx.arc(cW/2,bY,(rcx-lcx)/2,Math.PI,0,false);
-  ctx.lineTo(rcx,sLvl-cH*0.035); ctx.stroke();
-  ctx.strokeStyle='#3d5068'; ctx.lineWidth=cW*0.015;
-  ctx.beginPath();
-  ctx.moveTo(lcx+2,sLvl-cH*0.035); ctx.lineTo(lcx+2,bY+2);
-  ctx.arc(cW/2,bY+2,(rcx-lcx)/2-2,Math.PI,0,false);
-  ctx.lineTo(rcx-2,sLvl-cH*0.035); ctx.stroke();
-  ctx.fillStyle='#475569'; ctx.font='bold '+(cW*0.017)+'px Inter,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('TUZ KÖPRÜSÜ',cW/2,bY-7);
+  ctx.moveTo(lIn,solIn);
+  ctx.lineTo(lIn,bTop+rh);
+  ctx.bezierCurveTo(lIn,archY,rIn,archY,rIn,bTop+rh);
+  ctx.lineTo(rIn,solIn);
+  ctx.stroke();
 
-  var wireY=cH*0.095, vmr=cW*0.073;
+  // Orta tüp (cam rengi)
+  ctx.strokeStyle='#3d5a78'; ctx.lineWidth=cW*0.018;
+  ctx.beginPath();
+  ctx.moveTo(lIn,solIn);
+  ctx.lineTo(lIn,bTop+rh);
+  ctx.bezierCurveTo(lIn,archY,rIn,archY,rIn,bTop+rh);
+  ctx.lineTo(rIn,solIn);
+  ctx.stroke();
+
+  // İç parlama (şeffaf)
+  ctx.strokeStyle='rgba(148,210,255,0.12)'; ctx.lineWidth=cW*0.008;
+  ctx.beginPath();
+  ctx.moveTo(lIn-cW*0.005,solIn);
+  ctx.lineTo(lIn-cW*0.005,bTop+rh);
+  ctx.bezierCurveTo(lIn-cW*0.005,archY+4,rIn-cW*0.005,archY+4,rIn-cW*0.005,bTop+rh);
+  ctx.lineTo(rIn-cW*0.005,solIn);
+  ctx.stroke();
+
+  // Etiket
+  ctx.fillStyle='#64748b'; ctx.font='bold '+(cW*0.016)+'px Inter,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('TUZ KÖPRÜSÜ',cW/2,archY-8);
+
+  // ---- Tel (üstte) ve voltmetre ----
+  var wireY=cH*0.095, vmr=cW*0.075;
   ctx.strokeStyle='#3d5068'; ctx.lineWidth=2.5; ctx.lineCap='square';
   ctx.beginPath(); ctx.moveTo(lcx,elTop); ctx.lineTo(lcx,wireY); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(rcx,elTop); ctx.lineTo(rcx,wireY); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(lcx,wireY); ctx.lineTo(cW/2-vmr,wireY); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cW/2+vmr,wireY); ctx.lineTo(rcx,wireY); ctx.stroke();
 
+  // Voltmetre
   ctx.beginPath(); ctx.arc(cW/2,wireY,vmr,0,Math.PI*2);
-  var vg=ctx.createRadialGradient(cW/2-vmr*0.2,wireY-vmr*0.2,vmr*0.05,cW/2,wireY,vmr);
-  vg.addColorStop(0,'#1e3a5f'); vg.addColorStop(1,'#0a1628');
+  var vg=ctx.createRadialGradient(cW/2-vmr*0.25,wireY-vmr*0.25,vmr*0.05,cW/2,wireY,vmr);
+  vg.addColorStop(0,'#1e3a5f'); vg.addColorStop(1,'#08111f');
   ctx.fillStyle=vg; ctx.fill();
   ctx.strokeStyle='#38bdf8'; ctx.lineWidth=2; ctx.stroke();
   ctx.fillStyle='#38bdf8'; ctx.font='bold '+(cW*0.022)+'px Inter,sans-serif'; ctx.textAlign='center';
@@ -672,6 +785,7 @@ function drawCell(){
   ctx.fillStyle=ec2; ctx.font='bold '+(cW*0.02)+'px Courier New,monospace';
   ctx.fillText((r.E_pil>=0?'+':'')+r.E_pil.toFixed(3)+'V',cW/2,wireY+vmr*0.58);
 
+  // ---- Partiküller ----
   var fromX=r.anot==='left'?lcx:rcx, toX=r.anot==='left'?rcx:lcx;
   var toRem=[];
   particles.forEach(function(p,i){
@@ -684,18 +798,21 @@ function drawCell(){
       ctx.fillStyle='#000'; ctx.font='bold '+(cW*0.013)+'px monospace'; ctx.textAlign='center';
       ctx.fillText('e⁻',ex,wireY+cW*0.006);
     } else {
-      var tx=cW*0.43+cW*0.14*(p.progress), py=cH*p.y;
-      var ig=ctx.createRadialGradient(tx-1,py-1,0.5,tx,py,cW*0.016);
+      // İyonlar tuz köprüsü boyunca hareket eder (bezier yaklaşımı)
+      var t2=p.progress, t2c=1-t2;
+      var bx=t2c*t2c*lIn + 2*t2c*t2*(cW/2) + t2*t2*rIn;
+      var by=t2c*t2c*solIn + 2*t2c*t2*(archY+cH*0.02) + t2*t2*solIn;
+      var ig=ctx.createRadialGradient(bx-1,by-1,0.5,bx,by,cW*0.016);
       ig.addColorStop(0,p.pos?'#7dd3fc':'#fca5a5'); ig.addColorStop(1,p.pos?'#0284c7':'#dc2626');
-      ctx.beginPath(); ctx.arc(tx,py,cW*0.016,0,Math.PI*2); ctx.fillStyle=ig; ctx.fill();
+      ctx.beginPath(); ctx.arc(bx,by,cW*0.016,0,Math.PI*2); ctx.fillStyle=ig; ctx.fill();
       ctx.fillStyle='#fff'; ctx.font='bold '+(cW*0.013)+'px monospace'; ctx.textAlign='center';
-      ctx.fillText(p.pos?'+':'−',tx,py+cW*0.005);
+      ctx.fillText(p.pos?'+':'−',bx,by+cW*0.005);
     }
     if(p.progress<-0.05||p.progress>1.05) toRem.push(i);
   });
   toRem.reverse().forEach(function(i){particles.splice(i,1);});
   if(Math.random()<0.04) particles.push({type:'e',progress:0,speed:0.004+Math.random()*0.003});
-  if(Math.random()<0.03) particles.push(newIon());
+  if(Math.random()<0.025) particles.push(newIon());
   if(particles.length>22) particles.splice(0,1);
 }
 
