@@ -374,6 +374,16 @@ header{backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bott
         <button class="trend-btn" data-trend="radius" onclick="setTrend(this)">⚛️ Atom Yarıçapı</button>
         <button class="trend-btn" data-trend="ionization" onclick="setTrend(this)">⚡ İyonlaşma</button>
         <button class="trend-btn" data-trend="neg" onclick="setTrend(this)">🧲 Elektronegatiflik</button>
+        <button class="trend-btn" data-trend="ea" onclick="setTrend(this)">🔋 Elektron İlgisi</button>
+<button class="trend-btn" data-trend="metalic" onclick="setTrend(this)">⚙️ Metalik Aktiflik</button>
+<button class="trend-btn" data-trend="nonmetalic" onclick="setTrend(this)">🔬 Ametalik Aktiflik</button>
+<button class="trend-btn" data-trend="metalbond" onclick="setTrend(this)">🔗 Metalik Bağ</button>
+<button class="trend-btn" data-trend="metalmelt" onclick="setTrend(this)">🌡️ Metallerde Erime</button>
+<button class="trend-btn" data-trend="nonmetalmelt" onclick="setTrend(this)">🌡️ Ametallerde Erime</button>
+<button class="trend-btn" data-trend="hxa" onclick="setTrend(this)">⚗️ HxA Asitlik</button>
+<button class="trend-btn" data-trend="moh" onclick="setTrend(this)">⚗️ M(OH)x Bazlık</button>
+<button class="trend-btn" data-trend="oxyacid" onclick="setTrend(this)">⚗️ Oksiasit Asitliği</button>
+
       </div>
       <div id="trend-info-card" style="display:none;margin-bottom:10px"></div>
       <div id="trend-arrows" style="display:none;margin-bottom:8px">
@@ -984,8 +994,18 @@ var CAT_COLORS2={
 var TREND_CONFIG={
   radius:{label:'Atom Yarıçapı',unit:'pm',desc:'Periyotta sağa doğru azalır (çekirdek yükü artar). Grupta aşağı doğru artar (kabuk sayısı artar).',arrow_period:'→ Azalır',arrow_group:'↓ Artar',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){return 280-(el.n%20)*3;}},
   ionization:{label:'İyonlaşma Enerjisi',unit:'kJ/mol',desc:'Periyotta sağa doğru artar. Grupta aşağı doğru azalır.',arrow_period:'→ Artar',arrow_group:'↓ Azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){return 400+el.n*8;}},
-  neg:{label:'Elektronegatiflik',unit:'',desc:'Periyotta sağa doğru artar. Grupta aşağı doğru azalır. En yüksek: F(3.98).',arrow_period:'→ Artar',arrow_group:'↓ Azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){var d=EL_DATA[el.n]; return (d&&d.neg!=null)?d.neg:null;}}
-};
+  neg:{label:'Elektronegatiflik',unit:'',desc:'Periyotta sağa doğru artar. Grupta aşağı doğru azalır. En yüksek: F(3.98).',arrow_period:'→ Artar',arrow_group:'↓ Azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){var d=EL_DATA[el.n]; return (d&&d.neg!=null)?d.neg:null;}},
+  ea:{label:'Elektron İlgisi',unit:'kJ/mol',desc:'Bir atoma elektron eklendiğinde açığa çıkan enerji. Periyotta sağa doğru artar (soy gazlar hariç). Grupta aşağı doğru azalır.',arrow_period:'→ Artar',arrow_group:'↓ Azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){if(el.cat==='Soy Gaz') return null; var d=EL_DATA[el.n]; return d&&d.neg!=null?d.neg*75:null;}},
+  metalic:{label:'Metalik Aktiflik',unit:'',desc:'Metalin elektron verme eğilimi. Periyotta soldan sağa azalır. Grupta yukarıdan aşağıya artar. En aktif metal: Fr (Fransiyum).',arrow_period:'→ Azalır',arrow_group:'↓ Artar',color_low:'#ef4444',color_high:'#3b82f6',getValue:function(el){if(el.cat==='Ametal'||el.cat==='Halojen'||el.cat==='Soy Gaz'||el.cat==='Yarı Metal') return null; var d=EL_DATA[el.n]; return d&&d.neg!=null?(4-d.neg)*80:null;}},
+  nonmetalic:{label:'Ametalik Aktiflik',unit:'',desc:'Ametalin elektron alma eğilimi. Periyotta soldan sağa artar. Grupta yukarıdan aşağıya azalır. En aktif ametal: F (Flor).',arrow_period:'→ Artar',arrow_group:'↓ Azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){if(el.cat!=='Ametal'&&el.cat!=='Halojen') return null; var d=EL_DATA[el.n]; return d&&d.neg!=null?d.neg*80:null;}},
+  metalbond:{label:'Metalik Bağ Kuvveti',unit:'',desc:'Metal atomları arasındaki bağ kuvveti. Serbest elektron sayısı ve çekirdek yükü arttıkça kuvvetlenir. Geçiş metallerinde en yüksek.',arrow_period:'→ Artar (geçiş metallerine kadar)',arrow_group:'↓ Azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){if(el.cat==='Ametal'||el.cat==='Halojen'||el.cat==='Soy Gaz') return null; var d=EL_DATA[el.n]; return d&&d.boil!=null&&d.boil>0?d.boil/30:null;}},
+  metalmelt:{label:'Metallerde Erime Noktası',unit:'°C',desc:'Metalik bağ kuvveti arttıkça erime noktası yükselir. Geçiş metallerinde en yüksek (W: 3422°C). Alkali metallerde düşük.',arrow_period:'→ Önce artar sonra azalır',arrow_group:'↓ Genellikle azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){if(el.cat==='Ametal'||el.cat==='Halojen'||el.cat==='Soy Gaz'||el.cat==='Yarı Metal') return null; var d=EL_DATA[el.n]; return d&&d.melt!=null?d.melt:null;}},
+  nonmetalmelt:{label:'Ametallerde Erime Noktası',unit:'°C',desc:'Kovalent ağ yapılar (C, Si) en yüksek erime noktasına sahiptir. Moleküler yapılar düşük erime noktası gösterir.',arrow_period:'→ Değişken',arrow_group:'↓ Değişken',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){if(el.cat!=='Ametal'&&el.cat!=='Halojen'&&el.cat!=='Yarı Metal') return null; var d=EL_DATA[el.n]; return d&&d.melt!=null?d.melt:null;}},
+  hxa:{label:'HxA Asitlik Kuvveti',unit:'',desc:'Aynı periyotta: A elektronegatifliği arttıkça asitlik artar (HF > H2O > NH3). Aynı grupta: A atom yarıçapı büyüdükçe H-A bağı zayıflar, asitlik artar (HI > HBr > HCl > HF).',arrow_period:'→ Asitlik artar',arrow_group:'↓ Asitlik artar',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){if(el.cat!=='Ametal'&&el.cat!=='Halojen') return null; var d=EL_DATA[el.n]; if(!d||!d.neg) return null; var per=d.period||3; return d.neg*50+per*10;}},
+  moh:{label:'M(OH)x Bazlık Kuvveti',unit:'',desc:'Metal iyonunun yük yoğunluğu azaldıkça O-H bağı zayıflar, bazlık artar. Periyotta soldan sağa bazlık azalır. Grupta yukarıdan aşağıya bazlık artar. Örnek: NaOH > Mg(OH)2 > Al(OH)3.',arrow_period:'→ Bazlık azalır',arrow_group:'↓ Bazlık artar',color_low:'#ef4444',color_high:'#3b82f6',getValue:function(el){if(el.cat==='Ametal'||el.cat==='Halojen'||el.cat==='Soy Gaz'||el.cat==='Yarı Metal') return null; var d=EL_DATA[el.n]; return d&&d.neg!=null?(4-d.neg)*80:null;}},
+  oxyacid:{label:'Oksiasit Asitlik Kuvveti',unit:'',desc:'a) Merkez atom aynıysa: Oksijen sayısı arttıkça asitlik artar (HClO < HClO2 < HClO3 < HClO4). b) Oksijen sayısı aynıysa: Merkez atom elektronegatifliği arttıkça asitlik artar (HClO4 > HBrO4 > HIO4).',arrow_period:'→ Elektronegatiflik arttıkça asitlik artar',arrow_group:'↓ Elektronegatiflik azaldıkça asitlik azalır',color_low:'#3b82f6',color_high:'#ef4444',getValue:function(el){if(el.cat!=='Ametal'&&el.cat!=='Yarı Metal') return null; var d=EL_DATA[el.n]; return d&&d.neg!=null?d.neg*80:null;}}
+}
+;
 
 // ============================================================
 // NAV - Çok basit, sadece display:none/block
