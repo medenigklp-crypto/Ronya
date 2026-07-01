@@ -1,1 +1,1110 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Kimya Simülasyonları - Ronya Kimya</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+:root{
+  --bg:#08090f;--sf:#0f1117;--sf2:#161922;--sf3:#1c2030;
+  --br:#1e2535;--br2:#252d40;
+  --ac:#6366f1;--ac2:#818cf8;--ac3:#a5b4fc;
+  --gr:#22c55e;--rd:#ef4444;--yw:#f59e0b;--cy:#06b6d4;
+  --tx:#f1f5f9;--tx2:#94a3b8;--tx3:#475569;
+  --r:14px;--rsm:8px;--rlg:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid var(--br);background:rgba(8,9,15,.97);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-sub{font-size:11px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;margin-left:5px;}
+.back-btn{background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:7px 14px;color:var(--tx2);cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;}
+.pw{max-width:820px;margin:0 auto;padding:14px 12px 60px;}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:16px;margin-bottom:12px;}
+.card-title{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+.simtabs{display:flex;gap:4px;overflow-x:auto;background:var(--sf2);border-radius:var(--r);padding:4px;margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+.simtab{flex-shrink:0;padding:9px 12px;border:none;border-radius:var(--rsm);background:none;color:var(--tx3);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;}
+.simtab.on{background:var(--ac);color:#fff;}
+.simpanel{display:none;}
+.simpanel.on{display:block;}
+.sel{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:var(--rsm);padding:9px 12px;color:var(--tx);font-size:13px;font-family:'Inter',sans-serif;outline:none;cursor:pointer;}
+.slider-wrap{margin-bottom:10px;}
+.slider-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.slider-lbl{font-size:12px;color:var(--tx2);}
+.slider-val{font-size:12px;font-weight:700;font-family:'Courier New',monospace;color:var(--ac2);}
+input[type=range]{width:100%;height:4px;border-radius:2px;outline:none;border:none;background:var(--br2);cursor:pointer;-webkit-appearance:none;appearance:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--ac);cursor:pointer;}
+.num-inp{width:70px;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--rsm);padding:3px 6px;color:var(--ac2);font-size:12px;font-weight:700;font-family:'Courier New',monospace;text-align:right;outline:none;}
+.num-inp:focus{border-color:var(--ac);}
+.unit-lbl{font-size:11px;color:var(--tx3);min-width:14px;}
+.topic-card{background:var(--sf);border:1px solid var(--br);border-left:3px solid var(--ac);border-radius:var(--rlg);padding:16px;margin-bottom:12px;}
+.topic-card h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;color:var(--ac2);margin-bottom:10px;}
+.topic-card h4{font-size:12px;font-weight:700;color:var(--tx);margin:12px 0 6px;}
+.topic-card p{font-size:12.5px;color:var(--tx2);line-height:1.75;margin-bottom:6px;}
+.topic-card ul{margin:6px 0 6px 18px;}
+.topic-card li{font-size:12.5px;color:var(--tx2);line-height:1.7;margin-bottom:4px;}
+.topic-card .form{background:var(--sf2);border-radius:8px;padding:8px 12px;font-family:'Courier New',monospace;font-size:12px;color:var(--ac3);display:inline-block;margin:4px 4px 4px 0;}
+canvas{display:block;width:100%;border-radius:12px;background:#050a14;touch-action:none;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.chip{background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:100px;padding:6px 12px;font-size:12px;color:var(--ac2);cursor:pointer;font-family:'Inter',sans-serif;}
+.chip.active{background:var(--ac);color:#fff;border-color:var(--ac);}
+.infobox{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:var(--rsm);padding:12px;font-size:12px;color:var(--ac3);line-height:1.6;margin-top:10px;white-space:pre-line;}
+.badge{display:inline-block;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:700;}
+@media(max-width:480px){.g2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="location.href='index.html'">
+    <img src="icon.10.png" style="width:38px;height:38px;border-radius:8px;object-fit:cover">
+    <div class="logo">Ronya<span class="logo-sub">Kimya</span></div>
+  </div>
+  <button class="back-btn" onclick="location.href='index.html'">← Ana Sayfa</button>
+</header>
+
+<div class="pw">
+  <h1 style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px;">🧪 Kimya Simülasyonları</h1>
+  <p style="color:var(--tx2);font-size:12px;margin-bottom:12px;">Değişkenleri değiştir, sonucu anında gör.</p>
+
+  <div class="simtabs" id="simtabs"></div>
+
+  <!-- ===== 1. ASİT-BAZ ===== -->
+  <div class="simpanel" id="panel-asitbaz">
+    <div class="card">
+      <div class="card-title">Asit/Baz Türü</div>
+      <div class="g2" style="margin-bottom:10px;">
+        <button class="chip active" id="ab-type-sa" onclick="abSetType('strongAcid',this)" style="text-align:center;">Kuvvetli Asit</button>
+        <button class="chip" id="ab-type-wa" onclick="abSetType('weakAcid',this)" style="text-align:center;">Zayıf Asit</button>
+        <button class="chip" id="ab-type-sb" onclick="abSetType('strongBase',this)" style="text-align:center;">Kuvvetli Baz</button>
+        <button class="chip" id="ab-type-wb" onclick="abSetType('weakBase',this)" style="text-align:center;">Zayıf Baz</button>
+      </div>
+      <div style="font-size:11px;color:var(--tx3);margin-bottom:4px;">Madde</div>
+      <select class="sel" id="ab-substance" onchange="abUpdate()" style="margin-bottom:12px;"></select>
+
+      <div class="slider-wrap">
+        <div class="slider-top"><span class="slider-lbl">Çözünen Madde Miktarı (n)</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="ab-nNum" min="0.001" max="0.5" step="0.001" value="0.100" onchange="abNSync()"><span class="unit-lbl">mol</span></div></div>
+        <input type="range" id="ab-n" min="1" max="500" value="100" oninput="abSSync()">
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-top"><span class="slider-lbl">Çözelti Hacmi (V)</span><div style="display:flex;align-items:center;gap:4px;"><input type="number" class="num-inp" id="ab-vNum" min="0.10" max="5" step="0.01" value="1.00" onchange="abNSync()"><span class="unit-lbl">L</span></div></div>
+        <input type="range" id="ab-v" min="10" max="500" value="100" oninput="abSSync()">
+      </div>
+      <div style="font-size:11px;color:var(--tx3);margin-bottom:4px;">İndikatör</div>
+      <select class="sel" id="ab-indicator" onchange="abUpdate()">
+        <option value="litmus">Turnusol</option>
+        <option value="phenol">Fenolftalein</option>
+        <option value="bromthymol">Bromtimol Mavisi</option>
+        <option value="universal">Universal İndikatör</option>
+      </select>
+    </div>
+
+    <div class="card" style="padding:10px;">
+      <canvas id="ab-canvas" height="240"></canvas>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div>
+          <div style="font-size:11px;color:var(--tx3);">pH</div>
+          <div id="ab-phbig" style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;color:var(--ac2)">7.00</div>
+        </div>
+        <div class="badge" id="ab-badge" style="background:rgba(34,197,94,.15);color:#22c55e;">NÖTR</div>
+      </div>
+      <div class="g2" style="margin-bottom:10px;">
+        <div style="background:var(--sf2);border-radius:var(--r);padding:10px;">
+          <div style="font-size:10px;color:var(--tx3);font-weight:700;">DERİŞİM (C)</div>
+          <div style="font-size:16px;font-weight:800;color:var(--ac2);font-family:'Courier New',monospace" id="ab-conc">0.100 M</div>
+        </div>
+        <div style="background:var(--sf2);border-radius:var(--r);padding:10px;">
+          <div style="font-size:10px;color:var(--tx3);font-weight:700;">[H⁺] veya [OH⁻]</div>
+          <div style="font-size:14px;font-weight:800;color:var(--ac2);font-family:'Courier New',monospace" id="ab-hconc">1.0×10⁻¹</div>
+        </div>
+      </div>
+      <div class="infobox" id="ab-formula" style="font-family:'Courier New',monospace;"></div>
+      <div class="infobox" id="ab-info"></div>
+    </div>
+
+    <div class="topic-card">
+      <h3>📚 Konu Anlatımı: Asit-Baz Kuvveti ve pH</h3>
+      <p><b>Arrhenius tanımı:</b> Suda çözündüğünde H⁺ (H₃O⁺) iyonu veren maddeler asit, OH⁻ iyonu veren maddeler bazdır.</p>
+      <h4>Kuvvetli ve Zayıf Asit/Baz Farkı</h4>
+      <p><b>Kuvvetli asit/baz</b> suda %100 iyonlaşır (tek yönlü tepkime). Örnek: HCl → H⁺ + Cl⁻ (tamamlanır, geri dönüşü yok).</p>
+      <p><b>Zayıf asit/baz</b> suda kısmen iyonlaşır; bir denge kurulur ve iyonlaşma sabiti (Ka veya Kb) ile ifade edilir. Ka/Kb ne kadar büyükse asit/baz o kadar kuvvetlidir.</p>
+      <div class="form">HA ⇌ H⁺ + A⁻ &nbsp; Ka = [H⁺][A⁻]/[HA]</div>
+      <h4>Derişim - pH İlişkisi</h4>
+      <p>Derişim (C), çözünen maddenin mol sayısının (n) çözelti hacmine (V) oranıdır:</p>
+      <div class="form">C = n / V (mol/L)</div>
+      <p>Kuvvetli asitte [H⁺] doğrudan derişime eşittir (çok değerlikli asitlerde katsayı ile çarpılır). Zayıf asitte ise [H⁺], Ka ve C'nin karekökü ile ilişkilidir çünkü iyonlaşma tam değildir:</p>
+      <div class="form">Kuvvetli: [H⁺] = n×C</div>
+      <div class="form">Zayıf: [H⁺] = √(Ka × C)</div>
+      <p>Bu yüzden aynı derişimdeki kuvvetli bir asit, zayıf bir asitten daha düşük pH'a (daha asidik) sahiptir — çünkü daha fazla H⁺ iyonu serbest bırakır.</p>
+      <h4>Seyreltmenin Etkisi</h4>
+      <p>Hacim (V) arttıkça (seyreltme) derişim azalır, bu da asitlerde pH'ı yükseltir (nötre yaklaşır), bazlarda pH'ı düşürür.</p>
+    </div>
+  </div>
+
+  <!-- ===== 2. ATOM MODELLERİ ===== -->
+  <div class="simpanel" id="panel-atom">
+    <div class="card">
+      <div class="card-title">Model Seç (Tarihsel Sıra)</div>
+      <div class="chip-row" id="atom-chips"></div>
+      <div class="slider-wrap">
+        <div class="slider-top"><span class="slider-lbl">Animasyon Hızı</span><span class="slider-val" id="atom-speedv">1.0x</span></div>
+        <input type="range" id="atom-speed" min="1" max="30" value="10" oninput="atomSpeedUpdate()">
+      </div>
+    </div>
+    <div class="card" style="padding:10px;">
+      <canvas id="atom-canvas" height="280"></canvas>
+    </div>
+    <div class="card">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;margin-bottom:6px;" id="atom-title">Dalton Modeli</div>
+      <div class="infobox" id="atom-info"></div>
+    </div>
+
+    <div class="topic-card">
+      <h3>📚 Konu Anlatımı: Atom Modellerinin Tarihsel Gelişimi</h3>
+      <h4>1. Dalton Modeli (1803)</h4>
+      <p>Madde, bölünemeyen küçük katı parçacıklardan (atomlardan) oluşur. Aynı elementin atomları özdeştir, farklı elementlerin atomları farklıdır. Kimyasal tepkimeler atomların yeniden düzenlenmesidir; atomlar yoktan var edilemez, yok da edilemez.</p>
+      <h4>2. Thomson Modeli - "Üzümlü Kek" (1904)</h4>
+      <p>Elektronun keşfiyle (J.J. Thomson) atomun içinde negatif yüklü parçacıklar olduğu anlaşıldı. Atom, pozitif yüklü bir hamur içine gömülü negatif elektronlardan oluşan yekpare bir küre olarak tasvir edildi.</p>
+      <h4>3. Rutherford Modeli (1911)</h4>
+      <p>Altın yaprak deneyinde alfa parçacıklarının çoğu atomdan sapmadan geçerken bazılarının büyük açıyla sekmesi, atomun kütlesinin ve pozitif yükünün merkezdeki çok küçük bir çekirdekte toplandığını gösterdi. Elektronlar bu çekirdek etrafında geniş boşlukta dolanır.</p>
+      <h4>4. Bohr Modeli (1913)</h4>
+      <p>Elektronlar çekirdek etrafında belirli, sabit enerjili yörüngelerde (kabuklarda) dolanır. Bir elektron enerji soğurarak üst yörüngeye çıkabilir, enerji yayarak alt yörüngeye düşebilir — bu da atomik spektrum çizgilerini açıklar.</p>
+      <h4>5. Modern Kuantum Modeli (Schrödinger, 1926)</h4>
+      <p>Elektronun kesin konumu ve hızı aynı anda bilinemez (Heisenberg belirsizlik ilkesi). Bunun yerine elektronun belirli bir bölgede bulunma <b>olasılığı</b> tanımlanır — bu bölgelere orbital denir (s, p, d, f). Atomun günümüzdeki en doğru tanımı budur.</p>
+    </div>
+  </div>
+
+  <!-- ===== 3. KATILAR ===== -->
+  <div class="simpanel" id="panel-katilar">
+    <div class="card">
+      <div class="card-title">Katı Türü ve Sıcaklık</div>
+      <div class="chip-row" id="solid-chips"></div>
+      <div class="slider-wrap">
+        <div class="slider-top"><span class="slider-lbl">Sıcaklık</span><span class="slider-val" id="solid-tempv">25 °C</span></div>
+        <input type="range" id="solid-temp" min="-50" max="800" value="25" oninput="solidUpdate()">
+      </div>
+    </div>
+    <div class="card" style="padding:10px;">
+      <canvas id="solid-canvas" height="280"></canvas>
+    </div>
+    <div class="card">
+      <div class="infobox" id="solid-info"></div>
+    </div>
+
+    <div class="topic-card">
+      <h3>📚 Konu Anlatımı: Katılar ve Yapısal Özellikleri</h3>
+      <h4>Kristal Katılar</h4>
+      <p>Tanecikler (atom, iyon veya molekül) üç boyutlu uzayda düzenli ve tekrar eden bir örgü (kristal kafes) oluşturur. Belirli, keskin bir erime noktası vardır — çünkü tüm bağlar aynı kuvvette kırılır. Örnek: NaCl (iyonik kristal), elmas (kovalent kristal).</p>
+      <h4>Amorf (Camsı) Katılar</h4>
+      <p>Tanecik dizilimi düzensizdir, "dondurulmuş bir sıvı" gibi davranır. Belirli bir erime noktası yoktur; ısıtıldıkça kademeli olarak yumuşar (camsı geçiş aralığı). Örnek: cam, plastik, kauçuk.</p>
+      <h4>Metalik Katılar</h4>
+      <p>Metal atomları düzenli bir örgü oluşturur, fakat değerlik elektronları belirli bir atoma bağlı değildir — atomlar arasında serbestçe hareket eden bir "elektron denizi" oluşturur. Bu yüzden metaller elektriği ve ısıyı iyi iletir, dövülebilir ve tellenebilir.</p>
+      <h4>Sıcaklığın Etkisi</h4>
+      <p>Sıcaklık arttıkça tanecikler daha fazla titreşim/kinetik enerjiye sahip olur. Erime noktasına ulaşıldığında, taneciklerin kinetik enerjisi onları bir arada tutan çekim kuvvetlerini yenecek düzeye ulaşır ve katı sıvı hale geçer (faz değişimi).</p>
+      <p><b>Kristal katılarda:</b> erime noktasında ani ve keskin bir faz geçişi olur.<br><b>Amorf katılarda:</b> geniş bir sıcaklık aralığında kademeli yumuşama görülür.</p>
+    </div>
+  </div>
+
+  <!-- ===== 4. VİSKOZİTE ===== -->
+  <div class="simpanel" id="panel-viskozite">
+    <div class="card">
+      <div class="card-title">Sıvı ve Koşullar</div>
+      <div class="chip-row" id="visc-chips"></div>
+      <div class="slider-wrap">
+        <div class="slider-top"><span class="slider-lbl">Sıcaklık</span><span class="slider-val" id="visc-tempv">25 °C</span></div>
+        <input type="range" id="visc-temp" min="0" max="100" value="25" oninput="viscUpdate()">
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-top"><span class="slider-lbl">Molekül Boyutu (zincir uzunluğu)</span><span class="slider-val" id="visc-sizev">Orta</span></div>
+        <input type="range" id="visc-size" min="1" max="10" value="4" oninput="viscUpdate()">
+      </div>
+    </div>
+    <div class="card" style="padding:10px;">
+      <canvas id="visc-canvas" height="300"></canvas>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:12px;color:var(--tx3);">Bilye düşme süresi</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--ac2)" id="visc-time">2.4 sn</span>
+      </div>
+      <div class="infobox" id="visc-info"></div>
+    </div>
+
+    <div class="topic-card">
+      <h3>📚 Konu Anlatımı: Viskozite (Akışkanlık Direnci)</h3>
+      <p>Viskozite, bir sıvının akmaya karşı gösterdiği iç sürtünme direncidir. Yüksek viskoziteli sıvılar (bal, gliserin) yavaş akar; düşük viskoziteli sıvılar (su, aseton) hızlı akar.</p>
+      <h4>Viskoziteyi Etkileyen Faktörler</h4>
+      <ul>
+        <li><b>Sıcaklık:</b> Sıcaklık arttıkça moleküllerin kinetik enerjisi artar, moleküller arası çekim kuvvetlerini (van der Waals, hidrojen bağı) daha kolay yenerler → viskozite <b>azalır</b>.</li>
+        <li><b>Molekül büyüklüğü/şekli:</b> Uzun zincirli moleküller birbirine dolanır ve daha fazla temas yüzeyine sahiptir → moleküller arası sürtünme artar → viskozite <b>artar</b>.</li>
+        <li><b>Moleküller arası çekim kuvvetleri:</b> Hidrojen bağı yapabilen sıvılar (gliserin gibi çok -OH grubu içerenler) daha yüksek viskoziteye sahiptir.</li>
+        <li><b>Basınç:</b> Sıvılarda basıncın etkisi genelde ihmal edilebilir düzeydedir (gazların aksine).</li>
+      </ul>
+      <h4>Stokes Yasası (Bilye Düşme Deneyi)</h4>
+      <p>Bir sıvı içine bırakılan küçük bir bilyenin düşme hızı, sıvının viskozitesiyle ters orantılıdır. Bu simülasyonda kullanılan yöntem tam olarak bu prensibe dayanır — viskometre cihazlarında gerçek hayatta da kullanılır.</p>
+      <div class="form">η ∝ 1 / v (düşme hızı)</div>
+    </div>
+  </div>
+
+  <!-- ===== 5. PERİYODİK TABLODA YER BULMA ===== -->
+  <div class="simpanel" id="panel-yerbul">
+    <div class="card">
+      <div class="card-title">Elektron Dizilimini Gir</div>
+      <div class="slider-wrap">
+        <div class="slider-top"><span class="slider-lbl">Atom Numarası (Z)</span><span class="slider-val" id="yb-zv">11</span></div>
+        <input type="range" id="yb-z" min="1" max="36" value="11" oninput="ybUpdate()">
+      </div>
+    </div>
+    <div class="card" style="padding:10px;">
+      <canvas id="yb-canvas" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="g2" style="margin-bottom:10px;">
+        <div style="background:var(--sf2);border-radius:var(--r);padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--tx3);font-weight:700;">PERİYOT</div>
+          <div style="font-size:26px;font-weight:800;color:var(--ac2);font-family:'Space Grotesk',sans-serif" id="yb-period">3</div>
+        </div>
+        <div style="background:var(--sf2);border-radius:var(--r);padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--tx3);font-weight:700;">GRUP</div>
+          <div style="font-size:26px;font-weight:800;color:var(--ac2);font-family:'Space Grotesk',sans-serif" id="yb-group">1A</div>
+        </div>
+      </div>
+      <div class="infobox" id="yb-info"></div>
+    </div>
+
+    <div class="topic-card">
+      <h3>📚 Konu Anlatımı: Periyodik Tabloda Yer Bulma</h3>
+      <p>Bir elementin periyodik tablodaki yerini (periyot ve grup) bulmak için o elementin <b>elektron dizilimine</b> bakılır.</p>
+      <h4>Periyot Nasıl Bulunur?</h4>
+      <p>Periyot numarası, atomun sahip olduğu <b>enerji kabuğu (katman) sayısına</b> eşittir. Örneğin elektron dizilimi 2-8-1 olan bir atom 3 kabuğa sahiptir → 3. periyottadır.</p>
+      <h4>Grup Nasıl Bulunur?</h4>
+      <p>Ana grup elementlerinde grup numarası, <b>en dış (değerlik) kabuktaki elektron sayısına</b> göre belirlenir:</p>
+      <ul>
+        <li>1 değerlik elektronu → 1A grubu (alkali metaller)</li>
+        <li>2 değerlik elektronu → 2A grubu (toprak alkali metaller)</li>
+        <li>3-7 değerlik elektronu → 3A-7A grupları</li>
+        <li>8 değerlik elektronu (dolu kabuk) → 8A grubu (soy gazlar)</li>
+      </ul>
+      <p>Kabuk kapasiteleri: 1. kabuk maksimum 2, 2. ve 3. kabuklar maksimum 8 (basit modelde), sonraki kabuklar daha fazla elektron alabilir.</p>
+      <h4>Neden Önemli?</h4>
+      <p>Aynı grup elementleri benzer kimyasal özellikler gösterir çünkü değerlik elektron sayıları aynıdır. Aynı periyot elementleri ise artan atom numarasıyla kabuk sayısı sabit kalıp çekirdek yükü arttığı için sistematik özellik değişimi (atom yarıçapı, iyonlaşma enerjisi vb.) gösterir.</p>
+    </div>
+  </div>
+
+  <!-- ===== 6. İYONİK BAĞ ===== -->
+  <div class="simpanel" id="panel-iyonik">
+    <div class="card">
+      <div class="card-title">Metal ve Ametal Seç</div>
+      <div class="g2">
+        <div>
+          <div style="font-size:11px;color:var(--tx3);margin-bottom:4px;">Metal (elektron verir)</div>
+          <select class="sel" id="ion-metal" onchange="ionUpdate()"></select>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--tx3);margin-bottom:4px;">Ametal (elektron alır)</div>
+          <select class="sel" id="ion-nonmetal" onchange="ionUpdate()"></select>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:10px;">
+      <canvas id="ion-canvas" height="260"></canvas>
+      <div style="text-align:center;margin-top:8px;">
+        <button class="chip" onclick="ionReplay()">🔄 Elektron Transferini Tekrarla</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="infobox" id="ion-info"></div>
+    </div>
+
+    <div class="topic-card">
+      <h3>📚 Konu Anlatımı: İyonik Bağın Oluşumu</h3>
+      <p>İyonik bağ, elektronegatiflik farkı büyük olan bir <b>metal</b> ile bir <b>ametal</b> atomu arasında, elektron alışverişi (transferi) sonucu oluşan güçlü elektrostatik çekim bağıdır.</p>
+      <h4>Nasıl Oluşur?</h4>
+      <ul>
+        <li>Metal atomu, kararlı (soy gaz) elektron dizilimine ulaşmak için değerlik elektronlarını <b>verir</b> → pozitif yüklü <b>katyon</b> oluşur.</li>
+        <li>Ametal atomu, kararlı dizilime ulaşmak için elektron <b>alır</b> → negatif yüklü <b>anyon</b> oluşur.</li>
+        <li>Zıt yüklü iyonlar birbirini elektrostatik olarak çeker; bu çekim kuvveti iyonik bağdır.</li>
+      </ul>
+      <h4>Bileşik Formülü Nasıl Bulunur?</h4>
+      <p>Metal ve ametalin yükleri (değerlikleri) çapraz çarpılır — bu, bileşikte kaç metal ve kaç ametal atomu olacağını belirler. Toplam pozitif yük, toplam negatif yükü dengelemelidir (bileşik nötrdür).</p>
+      <div class="form">Örn: Ca²⁺ + Cl⁻ → CaCl₂ (1 Ca, 2 Cl gerekir)</div>
+      <h4>İyonik Bileşiklerin Özellikleri</h4>
+      <ul>
+        <li>Yüksek erime ve kaynama noktası (güçlü elektrostatik çekim nedeniyle)</li>
+        <li>Katı halde elektriği iletmez, sıvı/çözelti halde iletir (iyonlar hareketli olur)</li>
+        <li>Sert ama kırılgan kristal yapı oluşturur</li>
+        <li>Genellikle suda çözünür (polar su molekülleri iyonları ayırabilir)</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ======================================================
+// SEKME YÖNETİMİ
+// ======================================================
+var SIMS = [
+  {id:'asitbaz', name:'🧪 Asit-Baz'},
+  {id:'atom', name:'⚛️ Atom Modelleri'},
+  {id:'katilar', name:'🧊 Katılar'},
+  {id:'viskozite', name:'💧 Viskozite'},
+  {id:'yerbul', name:'🔲 Periyodik Yer'},
+  {id:'iyonik', name:'⚡ İyonik Bağ'}
+];
+function buildTabs(){
+  var wrap = document.getElementById('simtabs');
+  SIMS.forEach(function(s,i){
+    var b = document.createElement('button');
+    b.className = 'simtab'+(i===0?' on':'');
+    b.textContent = s.name;
+    b.onclick = function(){ switchSim(s.id, b); };
+    wrap.appendChild(b);
+  });
+}
+function switchSim(id, btn){
+  document.querySelectorAll('.simtab').forEach(function(t){t.classList.remove('on');});
+  btn.classList.add('on');
+  document.querySelectorAll('.simpanel').forEach(function(p){p.classList.remove('on');});
+  document.getElementById('panel-'+id).classList.add('on');
+  // resize canvas'i tetikle
+  setTimeout(function(){
+    if(id==='asitbaz') abUpdate();
+    if(id==='atom') atomDraw();
+    if(id==='katilar') solidUpdate();
+    if(id==='viskozite') viscUpdate();
+    if(id==='yerbul') ybUpdate();
+    if(id==='iyonik') ionUpdate();
+  }, 30);
+}
+
+function fitCanvas(cv, hCss){
+  var rect = cv.parentElement.getBoundingClientRect();
+  var dpr = window.devicePixelRatio||1;
+  cv.width = rect.width*dpr; cv.height = hCss*dpr;
+  var ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx:ctx, w:rect.width, h:hCss};
+}
+
+// 3D gorunumlu silindirik beher cizimi (cx: merkez x, top: ust y, rw: yaricap, totalH: toplam yukseklik)
+function drawBeaker3D(ctx, cx, top, rw, totalH, liquidColor, concFor0to1){
+  var rh = rw*0.22;
+  var bot = top+totalH;
+  var solLvl = top + rh + totalH*0.32; // sivi seviyesi
+
+  // sag taraf 3D derinlik paneli
+  var dw = rw*0.14;
+  var sg = ctx.createLinearGradient(cx+rw,0,cx+rw+dw,0);
+  sg.addColorStop(0,'#0d1e32'); sg.addColorStop(1,'#07111e');
+  ctx.fillStyle=sg;
+  ctx.beginPath();
+  ctx.moveTo(cx+rw,top+rh); ctx.lineTo(cx+rw+dw,top+rh*0.5);
+  ctx.lineTo(cx+rw+dw,bot-rh*0.5); ctx.lineTo(cx+rw,bot);
+  ctx.closePath(); ctx.fill();
+
+  // sivi govde
+  var alpha = Math.min(0.65, 0.1+Math.min(concFor0to1,1)*0.55);
+  var hexA = Math.round(alpha*255).toString(16).padStart(2,'0');
+  ctx.fillStyle = liquidColor+hexA;
+  ctx.beginPath();
+  ctx.moveTo(cx-rw,solLvl); ctx.lineTo(cx-rw,bot);
+  ctx.ellipse(cx,bot,rw,rh,0,Math.PI,0,false);
+  ctx.lineTo(cx+rw,solLvl);
+  ctx.ellipse(cx,solLvl,rw,rh,0,0,Math.PI,true);
+  ctx.closePath(); ctx.fill();
+
+  // alt elips
+  ctx.beginPath(); ctx.ellipse(cx,bot,rw,rh,0,0,Math.PI*2);
+  ctx.fillStyle='#091625'; ctx.fill();
+  ctx.strokeStyle='#2a3d54'; ctx.lineWidth=2; ctx.stroke();
+
+  // yan duvarlar
+  ctx.strokeStyle='#2a3d54'; ctx.lineWidth=2.5; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(cx-rw,top+rh); ctx.lineTo(cx-rw,bot); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx+rw,top+rh); ctx.lineTo(cx+rw,bot); ctx.stroke();
+
+  // sivi yuzey elipsi
+  ctx.beginPath(); ctx.ellipse(cx,solLvl,rw,rh,0,0,Math.PI*2);
+  ctx.fillStyle=liquidColor+'33'; ctx.fill();
+  ctx.strokeStyle=liquidColor+'88'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // ust cerceve
+  ctx.beginPath(); ctx.ellipse(cx,top+rh,rw+2,rh+1.2,0,0,Math.PI*2);
+  ctx.strokeStyle='#3a5270'; ctx.lineWidth=3; ctx.stroke();
+
+  // gagi
+  ctx.strokeStyle='#3a5270'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(cx+rw+1,top+rh); ctx.lineTo(cx+rw+rw*0.15,top-rh*0.3); ctx.stroke();
+
+  // cam parlamasi
+  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(cx-rw*0.55,top+rh*2); ctx.lineTo(cx-rw*0.55,bot-rh*1.5); ctx.stroke();
+
+  // dereceler
+  ctx.strokeStyle='rgba(255,255,255,0.12)'; ctx.lineWidth=1;
+  for(var i=1;i<=3;i++){
+    var ly = solLvl + (bot-rh-solLvl)*i/4;
+    if(ly>solLvl+4 && ly<bot-rh-4){
+      ctx.beginPath(); ctx.moveTo(cx-rw+2,ly); ctx.lineTo(cx-rw+2+rw*0.22,ly); ctx.stroke();
+    }
+  }
+}
+
+// ======================================================
+// 1. ASİT-BAZ İNDİKATÖR SİMÜLASYONU
+// ======================================================
+var AB_DATA = {
+  strongAcid: [
+    {name:'Hidroklorik Asit (HCl)', formula:'HCl'},
+    {name:'Nitrik Asit (HNO₃)', formula:'HNO₃'},
+    {name:'Sülfürik Asit (H₂SO₄)', formula:'H₂SO₄', n:2},
+    {name:'Perklorik Asit (HClO₄)', formula:'HClO₄'}
+  ],
+  weakAcid: [
+    {name:'Asetik Asit (CH₃COOH)', formula:'CH₃COOH', ka:1.8e-5},
+    {name:'Karbonik Asit (H₂CO₃)', formula:'H₂CO₃', ka:4.3e-7},
+    {name:'Hidrosiyanik Asit (HCN)', formula:'HCN', ka:6.2e-10},
+    {name:'Format Asit (HCOOH)', formula:'HCOOH', ka:1.8e-4},
+    {name:'Fenol (C₆H₅OH)', formula:'C₆H₅OH', ka:1.3e-10}
+  ],
+  strongBase: [
+    {name:'Sodyum Hidroksit (NaOH)', formula:'NaOH'},
+    {name:'Potasyum Hidroksit (KOH)', formula:'KOH'},
+    {name:'Kalsiyum Hidroksit (Ca(OH)₂)', formula:'Ca(OH)₂', n:2}
+  ],
+  weakBase: [
+    {name:'Amonyak (NH₃)', formula:'NH₃', kb:1.8e-5},
+    {name:'Metilamin (CH₃NH₂)', formula:'CH₃NH₂', kb:4.4e-4},
+    {name:'Piridin (C₅H₅N)', formula:'C₅H₅N', kb:1.7e-9}
+  ]
+};
+var abState = {type:'strongAcid'};
+
+function abNSync(){
+  var n = parseFloat(document.getElementById('ab-nNum').value);
+  var v = parseFloat(document.getElementById('ab-vNum').value);
+  if(!isNaN(n)) document.getElementById('ab-n').value = Math.min(500,Math.max(1,Math.round(n*1000)));
+  if(!isNaN(v)) document.getElementById('ab-v').value = Math.min(500,Math.max(10,Math.round(v*100)));
+  abUpdate();
+}
+function abSSync(){
+  document.getElementById('ab-nNum').value = (parseInt(document.getElementById('ab-n').value)/1000).toFixed(3);
+  document.getElementById('ab-vNum').value = (parseInt(document.getElementById('ab-v').value)/100).toFixed(2);
+  abUpdate();
+}
+
+function abSetType(type, btn){
+  abState.type = type;
+  document.querySelectorAll('#panel-asitbaz .g2 .chip').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  abBuildSubstanceSelect();
+  abUpdate();
+}
+
+function abBuildSubstanceSelect(){
+  var sel = document.getElementById('ab-substance');
+  sel.innerHTML = '';
+  AB_DATA[abState.type].forEach(function(s,i){
+    var o = document.createElement('option'); o.value=i; o.textContent=s.name; sel.appendChild(o);
+  });
+}
+
+function indicatorColor(type, ph){
+  if(type==='litmus'){
+    if(ph<7) return '#e0455a'; else if(ph>7) return '#3b6bd4'; else return '#8b5fbf';
+  }
+  if(type==='phenol'){
+    if(ph<8.2) return '#1a1f2e'; else return '#e060c8';
+  }
+  if(type==='bromthymol'){
+    if(ph<6) return '#f0d020'; else if(ph>7.6) return '#3070d0'; else return '#4caf7a';
+  }
+  if(ph<3) return '#e02020'; if(ph<5) return '#f07020'; if(ph<6.5) return '#f0d020';
+  if(ph<7.5) return '#7ad020'; if(ph<9) return '#20a0c0'; if(ph<11) return '#3050d0'; return '#8020c0';
+}
+
+function abCalc(){
+  var s = AB_DATA[abState.type][parseInt(document.getElementById('ab-substance').value)];
+  var n = parseInt(document.getElementById('ab-n').value)/1000; // mol: 0.001 - 0.500
+  var V = parseInt(document.getElementById('ab-v').value)/100;  // L: 0.10 - 5.00
+  var C = n/V; // mol/L
+
+  var ph, formulaText, hLabel, hVal;
+  if(abState.type==='strongAcid'){
+    var nH = s.n || 1;
+    var H = C*nH;
+    ph = -Math.log10(H);
+    formulaText = 'Kuvvetli asit tam iyonlaşır.\n[H⁺] = '+nH+' × C = '+H.toExponential(2)+' M\npH = -log[H⁺] = '+ph.toFixed(2);
+    hLabel='[H⁺]'; hVal=H;
+  } else if(abState.type==='weakAcid'){
+    var H = Math.sqrt(s.ka*C);
+    ph = -Math.log10(H);
+    formulaText = 'Zayıf asit kısmen iyonlaşır (Ka='+s.ka.toExponential(1)+').\n[H⁺] = √(Ka×C) = √('+s.ka.toExponential(1)+'×'+C.toFixed(3)+')\n[H⁺] = '+H.toExponential(2)+' M\npH = -log[H⁺] = '+ph.toFixed(2);
+    hLabel='[H⁺]'; hVal=H;
+  } else if(abState.type==='strongBase'){
+    var nOH = s.n || 1;
+    var OH = C*nOH;
+    var pOH = -Math.log10(OH);
+    ph = 14-pOH;
+    formulaText = 'Kuvvetli baz tam iyonlaşır.\n[OH⁻] = '+nOH+' × C = '+OH.toExponential(2)+' M\npOH = -log[OH⁻] = '+pOH.toFixed(2)+'\npH = 14 - pOH = '+ph.toFixed(2);
+    hLabel='[OH⁻]'; hVal=OH;
+  } else { // weakBase
+    var OH = Math.sqrt(s.kb*C);
+    var pOH = -Math.log10(OH);
+    ph = 14-pOH;
+    formulaText = 'Zayıf baz kısmen iyonlaşır (Kb='+s.kb.toExponential(1)+').\n[OH⁻] = √(Kb×C) = '+OH.toExponential(2)+' M\npOH = -log[OH⁻] = '+pOH.toFixed(2)+'\npH = 14 - pOH = '+ph.toFixed(2);
+    hLabel='[OH⁻]'; hVal=OH;
+  }
+  ph = Math.max(0, Math.min(14, ph));
+  return {ph:ph, C:C, n:n, V:V, hLabel:hLabel, hVal:hVal, formulaText:formulaText, name:s.name};
+}
+
+function abUpdate(){
+  var n = parseInt(document.getElementById('ab-n').value)/1000;
+  var V = parseInt(document.getElementById('ab-v').value)/100;
+  document.getElementById('ab-nNum').value = n.toFixed(3);
+  document.getElementById('ab-vNum').value = V.toFixed(2);
+
+  var r = abCalc();
+  document.getElementById('ab-phbig').textContent = r.ph.toFixed(2);
+  document.getElementById('ab-conc').textContent = r.C.toFixed(3)+' M';
+  document.getElementById('ab-hconc').textContent = r.hVal.toExponential(1).replace('e-','×10⁻').replace('e+','×10⁺');
+  document.getElementById('ab-formula').textContent = r.formulaText;
+
+  var badge = document.getElementById('ab-badge');
+  if(r.ph<6.5){ badge.textContent='ASİT'; badge.style.background='rgba(239,68,68,.15)'; badge.style.color='#ef4444'; }
+  else if(r.ph>7.5){ badge.textContent='BAZ'; badge.style.background='rgba(59,130,246,.15)'; badge.style.color='#3b82f6'; }
+  else { badge.textContent='NÖTR'; badge.style.background='rgba(34,197,94,.15)'; badge.style.color='#22c55e'; }
+
+  var indType = document.getElementById('ab-indicator').value;
+  var col = indicatorColor(indType, r.ph);
+
+  var cv = document.getElementById('ab-canvas');
+  var f = fitCanvas(cv, 240); var ctx=f.ctx, w=f.w, h=f.h;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#050a14'; ctx.fillRect(0,0,w,h);
+
+  drawBeaker3D(ctx, w/2, 26, 66, 210, col, r.C);
+
+  var sy = h-14;
+  var grad = ctx.createLinearGradient(20,0,w-20,0);
+  grad.addColorStop(0,'#e02020'); grad.addColorStop(0.5,'#7ad020'); grad.addColorStop(1,'#8020c0');
+  ctx.fillStyle=grad; ctx.fillRect(20,sy,w-40,6);
+  var mx = 20+(w-40)*(r.ph/14);
+  ctx.beginPath(); ctx.moveTo(mx,sy-4); ctx.lineTo(mx-5,sy-12); ctx.lineTo(mx+5,sy-12); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill();
+
+  var indType2 = document.getElementById('ab-indicator').value;
+  var typeName = {litmus:'Turnusol',phenol:'Fenolftalein',bromthymol:'Bromtimol Mavisi',universal:'Universal İndikatör'}[indType2];
+  var strengthNote = (abState.type==='strongAcid'||abState.type==='strongBase') ? 'Kuvvetli elektrolit olduğu için tamamen iyonlaşır.' : 'Zayıf elektrolit olduğu için kısmen iyonlaşır; denge kurulur.';
+  document.getElementById('ab-info').textContent =
+    r.name+' — Derişim (n/V) arttıkça pH, asitler için düşer, bazlar için yükselir. '+strengthNote+' '+
+    typeName+' indikatörü bu pH değerinde rengini değiştirir.';
+}
+
+
+// ======================================================
+// 2. ATOM MODELLERİ
+// ======================================================
+var ATOM_MODELS = [
+  {id:'dalton', name:'Dalton', title:'Dalton Modeli (1803)', info:'Atomlar bölünemez, katı ve yekpare küreciklerdir. Aynı elementin atomları birbirinin aynısıdır. Elektron ve çekirdek henüz bilinmiyordu.'},
+  {id:'thomson', name:'Thomson', title:'Thomson Modeli - Üzümlü Kek (1904)', info:'Atom, içine negatif elektronların gömülü olduğu pozitif yüklü bir küredir ("üzümlü kek modeli"). Elektronun keşfiyle geliştirildi.'},
+  {id:'rutherford', name:'Rutherford', title:'Rutherford Modeli (1911)', info:'Atomun kütlesinin ve pozitif yükünün küçük bir çekirdekte toplandığını, elektronların boşlukta döndüğünü gösterdi (altın yaprak deneyi).'},
+  {id:'bohr', name:'Bohr', title:'Bohr Modeli (1913)', info:'Elektronlar çekirdek etrafında belirli enerji seviyelerinde (yörüngelerde) dolanır. Enerji seviyeleri arası geçişler ışık soğurma/yayma ile açıklanır.'},
+  {id:'quantum', name:'Kuantum', title:'Modern Kuantum Modeli', info:'Elektronun kesin konumu bilinemez; sadece bulunma olasılığı (orbital) tanımlanır. s,p,d,f orbitalleri elektron yoğunluk bölgeleridir.'}
+];
+var atomState = {type:'dalton', t:0, speed:1};
+function atomBuildChips(){
+  var wrap = document.getElementById('atom-chips');
+  ATOM_MODELS.forEach(function(m,i){
+    var c = document.createElement('span');
+    c.className='chip'+(i===0?' active':''); c.textContent=m.name;
+    c.onclick=function(){
+      document.querySelectorAll('#atom-chips .chip').forEach(function(x){x.classList.remove('active');});
+      c.classList.add('active');
+      atomState.type = m.id;
+      document.getElementById('atom-title').textContent = m.title;
+      document.getElementById('atom-info').textContent = m.info;
+    };
+    wrap.appendChild(c);
+  });
+  document.getElementById('atom-title').textContent = ATOM_MODELS[0].title;
+  document.getElementById('atom-info').textContent = ATOM_MODELS[0].info;
+}
+function atomSpeedUpdate(){
+  var v = parseInt(document.getElementById('atom-speed').value)/10;
+  document.getElementById('atom-speedv').textContent = v.toFixed(1)+'x';
+  atomState.speed = v;
+}
+function atomDraw(){
+  var cv = document.getElementById('atom-canvas');
+  var f = fitCanvas(cv, 280); var ctx=f.ctx, w=f.w, h=f.h;
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#050a14'; ctx.fillRect(0,0,w,h);
+  var cx=w/2, cy=h/2;
+  atomState.t += 0.02*atomState.speed;
+  var t = atomState.t;
+
+  if(atomState.type==='dalton'){
+    var grad = ctx.createRadialGradient(cx-15,cy-15,5,cx,cy,55);
+    grad.addColorStop(0,'#a5b4fc'); grad.addColorStop(1,'#6366f1');
+    ctx.beginPath(); ctx.arc(cx,cy,55,0,7); ctx.fillStyle=grad; ctx.fill();
+    ctx.strokeStyle='#818cf8'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center'; ctx.fillText('Bölünemez Katı Küre',cx,cy+80);
+  }
+  else if(atomState.type==='thomson'){
+    ctx.beginPath(); ctx.arc(cx,cy,60,0,7); ctx.fillStyle='rgba(99,102,241,0.35)'; ctx.fill();
+    ctx.strokeStyle='#818cf8'; ctx.lineWidth=2; ctx.stroke();
+    var pts=[[-30,-20],[20,-30],[35,10],[-10,35],[10,-5],[-35,15],[0,0],[25,25]];
+    pts.forEach(function(p,i){
+      var jx = Math.sin(t+i)*3, jy=Math.cos(t+i*1.3)*3;
+      ctx.beginPath(); ctx.arc(cx+p[0]+jx,cy+p[1]+jy,5,0,7); ctx.fillStyle='#facc15'; ctx.fill();
+    });
+    ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center'; ctx.fillText('Üzümlü Kek Modeli',cx,cy+90);
+  }
+  else if(atomState.type==='rutherford'){
+    ctx.beginPath(); ctx.arc(cx,cy,10,0,7); ctx.fillStyle='#ef4444'; ctx.fill();
+    for(var i=0;i<3;i++){
+      var rad=40+i*22;
+      ctx.beginPath(); ctx.ellipse(cx,cy,rad,rad*0.35,i*0.6,0,7); ctx.strokeStyle='rgba(129,140,248,0.3)'; ctx.lineWidth=1; ctx.stroke();
+      var a = t*(2-i*0.3);
+      var ex = cx+Math.cos(a)*rad, ey=cy+Math.sin(a)*rad*0.35*Math.cos(i*0.6)-Math.sin(a)*rad*Math.sin(i*0.6)*0.35;
+      ex = cx+Math.cos(a+i*0.6)*rad; ey = cy+Math.sin(a+i*0.6)*rad*0.35;
+      ctx.beginPath(); ctx.arc(ex,ey,5,0,7); ctx.fillStyle='#818cf8'; ctx.fill();
+    }
+    ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center'; ctx.fillText('Çekirdek Etrafında Boşlukta Dönen Elektronlar',cx,cy+95);
+  }
+  else if(atomState.type==='bohr'){
+    ctx.beginPath(); ctx.arc(cx,cy,10,0,7); ctx.fillStyle='#ef4444'; ctx.fill();
+    var shells=[35,55,75];
+    shells.forEach(function(r,i){
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.strokeStyle='rgba(129,140,248,0.35)'; ctx.lineWidth=1.5; ctx.stroke();
+      var a = t*(1.6-i*0.3)+i*2;
+      var ex=cx+Math.cos(a)*r, ey=cy+Math.sin(a)*r;
+      ctx.beginPath(); ctx.arc(ex,ey,5,0,7); ctx.fillStyle='#818cf8'; ctx.fill();
+      ctx.beginPath(); ctx.arc(ex,ey,9,0,7); ctx.fillStyle='rgba(129,140,248,0.2)'; ctx.fill();
+    });
+    ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center'; ctx.fillText('Sabit Enerji Seviyeleri (Yörüngeler)',cx,cy+95);
+  }
+  else { // quantum
+    ctx.beginPath(); ctx.arc(cx,cy,8,0,7); ctx.fillStyle='#ef4444'; ctx.fill();
+    for(var i=0;i<220;i++){
+      var ang = Math.random()*Math.PI*2;
+      var rad = 20+Math.random()*Math.random()*65;
+      var ex = cx+Math.cos(ang)*rad, ey=cy+Math.sin(ang)*rad*0.7;
+      var op = Math.max(0.05, 1-rad/85);
+      ctx.beginPath(); ctx.arc(ex,ey,1.6,0,7); ctx.fillStyle='rgba(129,140,248,'+op+')'; ctx.fill();
+    }
+    ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center'; ctx.fillText('Elektron Bulut Modeli (Olasılık Bölgesi)',cx,cy+95);
+  }
+
+  requestAnimationFrame(atomDraw);
+}
+
+// ======================================================
+// 3. KATILAR VE ÖZELLİKLERİ
+// ======================================================
+var SOLID_TYPES = [
+  {name:'Kristal (NaCl)', crystal:true, metallic:false, meltPoint:801, col1:'#3b82f6', col2:'#ef4444'},
+  {name:'Amorf (Cam)', crystal:false, metallic:false, meltPoint:1500, col1:'#a855f7', col2:'#a855f7'},
+  {name:'Metalik (Fe)', crystal:true, metallic:true, meltPoint:1538, col1:'#f59e0b', col2:'#f59e0b'}
+];
+var solidState = {type:0, t:0, electrons:[]};
+function solidBuildChips(){
+  var wrap = document.getElementById('solid-chips');
+  SOLID_TYPES.forEach(function(s,i){
+    var c = document.createElement('span');
+    c.className='chip'+(i===0?' active':''); c.textContent=s.name;
+    c.onclick=function(){
+      document.querySelectorAll('#solid-chips .chip').forEach(function(x){x.classList.remove('active');});
+      c.classList.add('active'); solidState.type=i; solidUpdate();
+    };
+    wrap.appendChild(c);
+  });
+  for(var i=0;i<14;i++) solidState.electrons.push({a:Math.random()*7, r:Math.random()});
+}
+function sphereGradient(ctx,x,y,rad,col){
+  var g = ctx.createRadialGradient(x-rad*0.3,y-rad*0.3,rad*0.1,x,y,rad);
+  g.addColorStop(0,'#ffffff'); g.addColorStop(0.35,col); g.addColorStop(1,col+'55');
+  return g;
+}
+function solidUpdate(){
+  var temp = parseInt(document.getElementById('solid-temp').value);
+  document.getElementById('solid-tempv').textContent = temp+' °C';
+  var s = SOLID_TYPES[solidState.type];
+  var melted = temp >= s.meltPoint;
+  var vib = Math.min(1, Math.max(0.05, (temp+50)/(s.meltPoint+50)));
+
+  var cv = document.getElementById('solid-canvas');
+  var f = fitCanvas(cv, 280); var ctx=f.ctx, w=f.w, h=f.h;
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#050a14'; ctx.fillRect(0,0,w,h);
+
+  var rows=5, cols=7, spacing=Math.min(w/cols,(h-30)/rows)*0.82;
+  var offX = (w-cols*spacing)/2 + spacing/2;
+  var offY = (h-30-rows*spacing)/2 + spacing/2 + 6;
+  var particles = [];
+  for(var r=0;r<rows;r++) for(var c=0;c<cols;c++) particles.push({r:r,c:c});
+
+  var positions = [];
+  particles.forEach(function(p,i){
+    var baseX, baseY;
+    if(!s.crystal){
+      var seed = p.r*8+p.c;
+      baseX = offX+p.c*spacing + (Math.sin(seed*12.9)*spacing*0.35);
+      baseY = offY+p.r*spacing + (Math.cos(seed*7.3)*spacing*0.35);
+    } else {
+      baseX = offX+p.c*spacing; baseY = offY+p.r*spacing;
+    }
+    var jitter = vib*spacing*0.24;
+    var jx = melted ? Math.sin(solidState.t*3+i)*spacing*0.85 : Math.sin(solidState.t*6+i*2)*jitter;
+    var jy = melted ? Math.cos(solidState.t*2.7+i*1.5)*spacing*0.45 : Math.cos(solidState.t*6+i*1.7)*jitter;
+    var x = baseX+jx, y=baseY+jy;
+    x = Math.max(14,Math.min(w-14,x)); y=Math.max(14,Math.min(h-36,y));
+    positions.push({x:x,y:y,r:p.r,c:p.c});
+  });
+
+  // kristal orgude komsu baglarini cizgiyle goster (eriyene kadar)
+  if(s.crystal && !melted){
+    ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1.5;
+    positions.forEach(function(p,i){
+      positions.forEach(function(q,j){
+        if(j<=i) return;
+        if((Math.abs(p.r-q.r)===1 && p.c===q.c) || (Math.abs(p.c-q.c)===1 && p.r===q.r)){
+          ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
+        }
+      });
+    });
+  }
+
+  // metalik: serbest hareket eden elektron denizi (arka planda)
+  if(s.metallic){
+    solidState.electrons.forEach(function(e){
+      e.a += 0.03+vib*0.05;
+      var ex = offX+(e.r%1)*(cols-1)*spacing + Math.sin(e.a)*spacing*1.2;
+      var ey = offY+Math.floor(e.r*rows)*spacing*0.8 + Math.cos(e.a*1.3)*spacing*0.6;
+      ex = Math.max(10,Math.min(w-10,ex)); ey = Math.max(10,Math.min(h-40,ey));
+      ctx.beginPath(); ctx.arc(ex,ey,2.5,0,7); ctx.fillStyle='rgba(250,204,21,0.55)'; ctx.fill();
+    });
+  }
+
+  // parcaciklari 3D gradyan kurecikler olarak ciz (NaCl icin alternatif renk)
+  positions.forEach(function(p,i){
+    var isAlt = (!s.metallic) && s.crystal && ((p.r+p.c)%2===1);
+    var col = isAlt ? s.col2 : s.col1;
+    var rad = spacing*0.26;
+    ctx.beginPath(); ctx.arc(p.x+2,p.y+2,rad,0,7); ctx.fillStyle='rgba(0,0,0,0.3)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(p.x,p.y,rad,0,7);
+    ctx.fillStyle = sphereGradient(ctx,p.x,p.y,rad,col);
+    ctx.globalAlpha = melted?0.85:1;
+    ctx.fill(); ctx.globalAlpha=1;
+    ctx.strokeStyle=col+'99'; ctx.lineWidth=1; ctx.stroke();
+  });
+
+  ctx.fillStyle= melted ? '#ef4444' : '#22c55e';
+  ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+  var stateLabel = melted ? '🔥 SIVI HALE GEÇTİ (erime noktası aşıldı)' : (s.metallic ? '⚡ Metalik Örgü + Serbest Elektron Denizi' : (s.crystal?'🔷 Düzenli Kristal Örgü':'🌫️ Düzensiz Amorf Yapı'));
+  ctx.fillText(stateLabel, w/2, h-10);
+
+  solidState.t += 0.03;
+  document.getElementById('solid-info').textContent =
+    s.name+' erime noktası yaklaşık '+s.meltPoint+'°C. '+
+    (s.metallic ? 'Sarı noktalar serbest hareket eden değerlik elektronlarını (elektron denizini) temsil eder; bu, metallerin iletkenliğinin sebebidir.' :
+    (s.crystal ? 'Beyaz çizgiler komşu tanecikler arası düzenli örgü bağlarını gösterir; erime noktasında bu düzen aniden bozulur.' : 'Parçacık dizilimi başından beri düzensizdir; belirli bir erime noktası yoktur, kademeli yumuşar.'));
+
+  if(!solidState._raf){
+    solidState._raf = true;
+    requestAnimationFrame(function loop(){ solidUpdate(); solidState._raf=false; if(document.getElementById('panel-katilar').classList.contains('on')){ solidState._raf=true; requestAnimationFrame(loop);} });
+  }
+}
+
+// ======================================================
+// 4. VİSKOZİTE
+// ======================================================
+var VISC_LIQUIDS = [
+  {name:'Su', baseVisc:1.0, color:'#3b82f6'},
+  {name:'Zeytinyağı', baseVisc:8.0, color:'#eab308'},
+  {name:'Bal', baseVisc:20.0, color:'#f59e0b'},
+  {name:'Gliserin', baseVisc:14.0, color:'#a855f7'}
+];
+var viscState = {liquid:0, ballY:0, t:0, dropping:false};
+function viscBuildChips(){
+  var wrap = document.getElementById('visc-chips');
+  VISC_LIQUIDS.forEach(function(l,i){
+    var c = document.createElement('span');
+    c.className='chip'+(i===0?' active':''); c.textContent=l.name;
+    c.onclick=function(){
+      document.querySelectorAll('#visc-chips .chip').forEach(function(x){x.classList.remove('active');});
+      c.classList.add('active'); viscState.liquid=i; viscUpdate();
+    };
+    wrap.appendChild(c);
+  });
+}
+function calcViscosity(){
+  var l = VISC_LIQUIDS[viscState.liquid];
+  var temp = parseInt(document.getElementById('visc-temp').value);
+  var size = parseInt(document.getElementById('visc-size').value);
+  // sicaklik arttikca viskozite azalir (uslu fonksiyon), molekul boyutu arttikca artar
+  var tempFactor = Math.exp(-(temp-25)/60);
+  var sizeFactor = 0.5 + size*0.18;
+  return l.baseVisc * tempFactor * sizeFactor;
+}
+function viscUpdate(){
+  var temp = parseInt(document.getElementById('visc-temp').value);
+  document.getElementById('visc-tempv').textContent = temp+' °C';
+  var size = parseInt(document.getElementById('visc-size').value);
+  var sizeLabels = ['Çok Kısa','Kısa','Kısa','Küçük','Orta','Orta','Büyük','Büyük','Uzun','Çok Uzun'];
+  document.getElementById('visc-sizev').textContent = sizeLabels[size-1];
+
+  var visc = calcViscosity();
+  var fallTime = (visc*0.4).toFixed(1);
+  document.getElementById('visc-time').textContent = fallTime+' sn';
+
+  var l = VISC_LIQUIDS[viscState.liquid];
+  var cv = document.getElementById('visc-canvas');
+  var f = fitCanvas(cv, 300); var ctx=f.ctx, w=f.w, h=f.h;
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#050a14'; ctx.fillRect(0,0,w,h);
+
+  // 3D silindirik tup (elips ust/alt)
+  var tcx = w/2, trw = 48, trh = trw*0.28, ttop=24, tbot=h-28;
+  // sag derinlik paneli
+  var dw = trw*0.12;
+  var sg = ctx.createLinearGradient(tcx+trw,0,tcx+trw+dw,0);
+  sg.addColorStop(0,l.color+'22'); sg.addColorStop(1,'#07111e');
+  ctx.fillStyle=sg;
+  ctx.beginPath();
+  ctx.moveTo(tcx+trw,ttop+trh); ctx.lineTo(tcx+trw+dw,ttop+trh*0.5);
+  ctx.lineTo(tcx+trw+dw,tbot-trh*0.5); ctx.lineTo(tcx+trw,tbot);
+  ctx.closePath(); ctx.fill();
+
+  // sivi govde
+  ctx.fillStyle=l.color; ctx.globalAlpha=0.4;
+  ctx.beginPath();
+  ctx.moveTo(tcx-trw,ttop+trh); ctx.lineTo(tcx-trw,tbot);
+  ctx.ellipse(tcx,tbot,trw,trh,0,Math.PI,0,false);
+  ctx.lineTo(tcx+trw,ttop+trh);
+  ctx.ellipse(tcx,ttop+trh,trw,trh,0,0,Math.PI,true);
+  ctx.closePath(); ctx.fill(); ctx.globalAlpha=1;
+
+  // alt/ust elipsler ve duvarlar
+  ctx.beginPath(); ctx.ellipse(tcx,tbot,trw,trh,0,0,Math.PI*2); ctx.fillStyle='#091625'; ctx.fill();
+  ctx.strokeStyle='#334155'; ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.moveTo(tcx-trw,ttop+trh); ctx.lineTo(tcx-trw,tbot); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(tcx+trw,ttop+trh); ctx.lineTo(tcx+trw,tbot); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(tcx,ttop+trh,trw+1,trh+1,0,0,Math.PI*2); ctx.strokeStyle='#3a5270'; ctx.lineWidth=2.5; ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(tcx,tbot,trw,trh,0,0,Math.PI*2); ctx.strokeStyle='#2a3d54'; ctx.lineWidth=2; ctx.stroke();
+
+  // molekul zinciri gorseli (boyutu temsil eden zigzag, tupun yaninda)
+  var chainLen = size;
+  ctx.strokeStyle=l.color; ctx.lineWidth=2.5; ctx.lineCap='round';
+  ctx.beginPath();
+  var chx = 18, chy = h/2 - chainLen*4;
+  ctx.moveTo(chx,chy);
+  for(var i=0;i<chainLen;i++){
+    chy += 8; chx += (i%2===0? 8:-8);
+    ctx.lineTo(chx,chy);
+  }
+  ctx.stroke();
+  // molekul zincirindeki eklem noktalari
+  var px2=18, py2=h/2-chainLen*4;
+  ctx.fillStyle=l.color;
+  ctx.beginPath(); ctx.arc(px2,py2,3,0,7); ctx.fill();
+  for(var j=0;j<chainLen;j++){
+    py2+=8; px2 += (j%2===0?8:-8);
+    ctx.beginPath(); ctx.arc(px2,py2,3,0,7); ctx.fill();
+  }
+
+  // hiz: viskoziteyle ters orantili
+  var speed = 55/(visc+3);
+  viscState.ballY += speed*0.5;
+  var travelRange = (tbot-trh) - (ttop+trh) - 20;
+  if(viscState.ballY > travelRange) viscState.ballY = 0;
+  var by = ttop+trh+12+viscState.ballY;
+
+  // bilye izi (hareket cizgisi)
+  ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1.5; ctx.setLineDash([2,3]);
+  ctx.beginPath(); ctx.moveTo(tcx,ttop+trh+8); ctx.lineTo(tcx,by-11); ctx.stroke(); ctx.setLineDash([]);
+
+  // 3D bilye
+  ctx.beginPath(); ctx.arc(tcx+1,by+1,11,0,7); ctx.fillStyle='rgba(0,0,0,0.3)'; ctx.fill();
+  ctx.beginPath(); ctx.arc(tcx,by,11,0,7);
+  var grad=ctx.createRadialGradient(tcx-4,by-4,1,tcx,by,11);
+  grad.addColorStop(0,'#ffffff'); grad.addColorStop(0.4,'#cbd5e1'); grad.addColorStop(1,'#475569');
+  ctx.fillStyle=grad; ctx.fill();
+  ctx.strokeStyle='#64748b'; ctx.lineWidth=1; ctx.stroke();
+
+  ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+  ctx.fillText(l.name+' · η≈'+visc.toFixed(1)+' cP', tcx, h-8);
+
+  document.getElementById('visc-info').textContent =
+    l.name+' — Sıcaklık arttıkça moleküller arası çekim zayıflar, akışkanlık artar (viskozite azalır). Molekül zinciri uzadıkça moleküller arası sürtünme ve dolanma artar, viskozite yükselir. Hesaplanan bağıl viskozite: '+visc.toFixed(1)+' cP.';
+
+  if(!viscState._raf){
+    viscState._raf = true;
+    requestAnimationFrame(function loop(){
+      if(document.getElementById('panel-viskozite').classList.contains('on')){
+        viscUpdate(); requestAnimationFrame(loop);
+      } else { viscState._raf=false; }
+    });
+  }
+}
+
+// ======================================================
+// 5. PERİYODİK TABLODA YER BULMA
+// ======================================================
+var YB_SYMBOLS = ['','H','He','Li','Be','B','C','N','O','F','Ne','Na','Mg','Al','Si','P','S','Cl','Ar','K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr'];
+function getElectronConfig(z){
+  var shells = [2,8,8,18,18,32,32];
+  var remaining = z, config = [];
+  for(var i=0;i<shells.length && remaining>0;i++){
+    var take = Math.min(shells[i], remaining);
+    config.push(take); remaining -= take;
+  }
+  return config;
+}
+function getPeriodGroup(z){
+  var config = getElectronConfig(z);
+  var period = config.length;
+  var lastShell = config[config.length-1];
+  var groupMap = {1:'1A',2:'2A',3:'3A',4:'4A',5:'5A',6:'6A',7:'7A',8:'8A (Soy Gaz)'};
+  var group = groupMap[lastShell] || (lastShell>2 ? 'B Grubu (Geçiş)' : '?');
+  if(period===1 && z===2) group='8A (Soy Gaz)';
+  return {period:period, group:group, config:config};
+}
+function ybUpdate(){
+  var z = parseInt(document.getElementById('yb-z').value);
+  document.getElementById('yb-zv').textContent = z;
+  var r = getPeriodGroup(z);
+  document.getElementById('yb-period').textContent = r.period;
+  document.getElementById('yb-group').textContent = r.group;
+
+  var cv = document.getElementById('yb-canvas');
+  var f = fitCanvas(cv, 220); var ctx=f.ctx, w=f.w, h=f.h;
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#050a14'; ctx.fillRect(0,0,w,h);
+
+  var cx=w/2, cy=h/2;
+  ctx.beginPath(); ctx.arc(cx,cy,10,0,7); ctx.fillStyle='#ef4444'; ctx.fill();
+  ctx.fillStyle='#fff'; ctx.font='bold 9px sans-serif'; ctx.textAlign='center'; ctx.fillText(''+z,cx,cy+3);
+
+  r.config.forEach(function(cnt,i){
+    var rad = 25+i*22;
+    ctx.beginPath(); ctx.arc(cx,cy,rad,0,7); ctx.strokeStyle='rgba(129,140,248,0.3)'; ctx.lineWidth=1.5; ctx.stroke();
+    for(var e=0;e<cnt;e++){
+      var a = (Math.PI*2/cnt)*e + i*0.4;
+      var ex=cx+Math.cos(a)*rad, ey=cy+Math.sin(a)*rad;
+      ctx.beginPath(); ctx.arc(ex,ey,4,0,7); ctx.fillStyle='#818cf8'; ctx.fill();
+    }
+  });
+
+  var sym = YB_SYMBOLS[z] || '?';
+  ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
+  ctx.fillText(sym+' (Z='+z+') — Kabuklar: '+r.config.join('-'), cx, h-10);
+
+  document.getElementById('yb-info').textContent =
+    'Elektron dizilimi '+r.config.join('-')+' şeklindedir. Kabuk sayısı = periyot numarası ('+r.period+'). '+
+    'Son kabuktaki elektron sayısı grubu belirler: '+r.config[r.config.length-1]+' elektron → Grup '+r.group+'.';
+}
+
+// ======================================================
+// 6. İYONİK BAĞ OLUŞUMU
+// ======================================================
+var ION_METALS = [
+  {name:'Sodyum (Na)', sym:'Na', valence:1, color:'#f59e0b'},
+  {name:'Kalsiyum (Ca)', sym:'Ca', valence:2, color:'#eab308'},
+  {name:'Potasyum (K)', sym:'K', valence:1, color:'#fb923c'},
+  {name:'Magnezyum (Mg)', sym:'Mg', valence:2, color:'#facc15'},
+  {name:'Alüminyum (Al)', sym:'Al', valence:3, color:'#fde047'}
+];
+var ION_NONMETALS = [
+  {name:'Klor (Cl)', sym:'Cl', valence:1, color:'#22c55e'},
+  {name:'Oksijen (O)', sym:'O', valence:2, color:'#ef4444'},
+  {name:'Flor (F)', sym:'F', valence:1, color:'#06b6d4'},
+  {name:'Kükürt (S)', sym:'S', valence:2, color:'#eab308'},
+  {name:'Azot (N)', sym:'N', valence:3, color:'#818cf8'}
+];
+var ionState = {t:0, phase:0};
+function ionBuildSelects(){
+  var ms = document.getElementById('ion-metal'), ns = document.getElementById('ion-nonmetal');
+  ION_METALS.forEach(function(m,i){ var o=document.createElement('option'); o.value=i; o.textContent=m.name; ms.appendChild(o); });
+  ION_NONMETALS.forEach(function(n,i){ var o=document.createElement('option'); o.value=i; o.textContent=n.name; ns.appendChild(o); });
+}
+function ionReplay(){ ionState.t=0; }
+function ionUpdate(){
+  var m = ION_METALS[parseInt(document.getElementById('ion-metal').value)];
+  var n = ION_NONMETALS[parseInt(document.getElementById('ion-nonmetal').value)];
+  var needElectrons = n.valence;
+  var giveElectrons = m.valence;
+  // basit oran: kac metal atomu, kac ametal atomu gerekli (kucuk ortak kat)
+  function gcd(a,b){return b===0?a:gcd(b,a%b);}
+  var g = gcd(giveElectrons, needElectrons);
+  var metalCount = needElectrons/g, nonmetalCount = giveElectrons/g;
+
+  var cv = document.getElementById('ion-canvas');
+  var f = fitCanvas(cv, 260); var ctx=f.ctx, w=f.w, h=f.h;
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#050a14'; ctx.fillRect(0,0,w,h);
+
+  ionState.t += 0.02;
+  var progress = Math.min(1, ionState.t);
+
+  var mx = w*0.3, nx = w*0.7, cy = h/2;
+  ctx.beginPath(); ctx.arc(mx,cy,26,0,7); ctx.fillStyle=m.color+'33'; ctx.fill(); ctx.strokeStyle=m.color; ctx.lineWidth=2; ctx.stroke();
+  ctx.fillStyle='#fff'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center'; ctx.fillText(m.sym, mx, cy+4);
+
+  ctx.beginPath(); ctx.arc(nx,cy,28,0,7); ctx.fillStyle=n.color+'33'; ctx.fill(); ctx.strokeStyle=n.color; ctx.lineWidth=2; ctx.stroke();
+  ctx.fillStyle='#fff'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center'; ctx.fillText(n.sym, nx, cy+4);
+
+  // elektron transferi animasyonu
+  for(var i=0;i<giveElectrons;i++){
+    var ep = Math.max(0, Math.min(1, progress*giveElectrons - i));
+    if(ep<=0) continue;
+    var ex = mx + (nx-mx)*ep;
+    var ey = cy - 40*Math.sin(ep*Math.PI) - i*6;
+    ctx.beginPath(); ctx.arc(ex,ey,4,0,7); ctx.fillStyle='#facc15'; ctx.fill();
+  }
+
+  if(progress>=1){
+    ctx.fillStyle=m.color; ctx.font='bold 11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(m.sym+(giveElectrons>0?'⁺'.repeat(1):'')+(giveElectrons>1?giveElectrons:''), mx, cy-40);
+    ctx.fillStyle=n.color; ctx.fillText(n.sym+'⁻'+(needElectrons>1?needElectrons:''), nx, cy-45);
+    // iyonik cekim cizgisi
+    ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.setLineDash([4,4]); ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(mx+26,cy); ctx.lineTo(nx-28,cy); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+  ctx.fillText(metalCount+' '+m.sym+' + '+nonmetalCount+' '+n.sym+' → '+m.sym+nonmetalCount+n.sym+metalCount+' (iyonik bileşik)', w/2, h-12);
+
+  document.getElementById('ion-info').textContent =
+    m.name+', '+giveElectrons+' elektron vererek +'+giveElectrons+' yüklü katyon oluşturur. '+
+    n.name+', '+needElectrons+' elektron alarak -'+needElectrons+' yüklü anyon oluşturur. '+
+    'Bileşik formülü, yüklerin çapraz eşleşmesiyle bulunur: '+m.sym+(metalCount>1?metalCount:'')+n.sym+(nonmetalCount>1?nonmetalCount:'')+'.';
+
+  if(progress<1 || !ionState._done){
+    requestAnimationFrame(function(){ if(document.getElementById('panel-iyonik').classList.contains('on')) ionUpdate(); });
+    ionState._done = progress>=1;
+  }
+}
+
+// ======================================================
+// INIT
+// ======================================================
+window.addEventListener('load', function(){
+  buildTabs();
+  abBuildSubstanceSelect(); abUpdate();
+  atomBuildChips(); atomDraw();
+  solidBuildChips(); solidUpdate();
+  viscBuildChips(); viscUpdate();
+  ybUpdate();
+  ionBuildSelects(); ionUpdate();
+  window.addEventListener('resize', function(){
+    abUpdate(); solidUpdate(); viscUpdate(); ybUpdate(); ionUpdate();
+  });
+});
+</script>
+</body>
+</html>
 
