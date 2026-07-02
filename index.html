@@ -259,6 +259,12 @@ header {
       
  </div>
         <div class="tgrid">
+         <div class="tc" onclick="nav('bagSim')"><div class="ti">⚛️</div><div class="tt">Lewis Bağ Simülasyonu</div><div class="td">15 molekülün elektron çifti ve bağ gösterimi</div></div>
+<div class="tc" onclick="nav('flashcard')"><div class="ti">📝</div><div class="tt">Kimya Flashcard</div><div class="td">20 kartlık kimyasal bileşik deste</div></div>
+<div class="tc" onclick="nav('cozelti')"><div class="ti">⚗️</div><div class="tt">Çözelti Simülatörü</div><div class="td">Mol, hacim ve molarite hesaplama</div></div>
+<div class="tc" onclick="nav('denge')"><div class="ti">📈</div><div class="tt">Hız & Denge Grafiği</div><div class="td">Denge sistemleri interaktif grafik</div></div>
+<div class="tc" onclick="nav('izotop')"><div class="ti">⚛️</div><div class="tt">İzotop/İzobar/İzoton</div><div class="td">İki atomu karşılaştır, ilişkiyi bul</div></div>
+ 
       <div class="tc" onclick="location.href='gaz-lab.html'"><div class="ti">⚗️</div><div class="tt">Gaz Laboratuvarı</div><div class="td">Piston düzenekleri, kinetik teori, Graham difüzyon, ideal gaz çözücü</div></div>
       <div class="tc" onclick="nav('quiz')"><div class="ti">⚗️</div><div class="tt">Element Testi</div><div class="td">118 element sembol/isim testi. Zayıf nokta takibi.</div></div>
 
@@ -2981,6 +2987,27 @@ setTimeout(function() {
       <div id="s-cozelti" style="display:none" class="pw">
         <h1 class="ptitle">⚗️ Çözelti Laboratuvarı</h1>
         <div class="card"><canvas id="cozCanvas" width="180" height="220"></canvas></div>
+      <div class="card">
+  <div class="g2" style="margin-bottom:10px">
+    <select class="sel" onchange="cozSetSolute(this.value)">
+      <option value="NaCl">NaCl</option><option value="CuSO₄">CuSO₄</option>
+      <option value="KMnO₄">KMnO₄</option><option value="NaOH">NaOH</option>
+      <option value="CH₃COOH">CH₃COOH</option>
+    </select>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+    <button class="ob" onclick="cozAdjustMole(-0.1)">−</button>
+    <span id="coz-mole" style="min-width:60px;text-align:center">0.10 mol</span>
+    <button class="ob" onclick="cozAdjustMole(0.1)">+</button>
+    <span style="margin-left:12px">Hacim:</span>
+    <button class="ob" onclick="cozAdjustVolume(-0.1)">−</button>
+    <span id="coz-volume" style="min-width:50px;text-align:center">1.0 L</span>
+    <button class="ob" onclick="cozAdjustVolume(0.1)">+</button>
+  </div>
+  <div class="rb"><div class="rl">Molarite</div><div class="rv" id="coz-molarity">-</div></div>
+  <div class="rb" style="margin-top:6px"><div class="rl">Gereken Kütle</div><div class="rv" id="coz-mass">-</div></div>
+</div>
+
       </div>
 
       <!-- %100 image_15 VE image_16 GÖRSELLERİNİZE BİREBİR UYUMLU GRAFİK PANELİ -->
@@ -3018,6 +3045,19 @@ setTimeout(function() {
       <!-- İZOTOP TANI MOTORU -->
       <div id="s-izotop" style="display:none" class="pw">
         <h1 class="ptitle">⚛️ Tanecik Yapı Karşılaştırma</h1>
+      <div class="card">
+  <div class="g2">
+    <div><div class="slbl">Atom 1: Z (proton)</div><input type="number" id="iz-z1" class="inp" value="6"></div>
+    <div><div class="slbl">Atom 1: A (kütle no)</div><input type="number" id="iz-a1" class="inp" value="14"></div>
+  </div>
+  <div class="g2" style="margin-top:10px">
+    <div><div class="slbl">Atom 2: Z (proton)</div><input type="number" id="iz-z2" class="inp" value="7"></div>
+    <div><div class="slbl">Atom 2: A (kütle no)</div><input type="number" id="iz-a2" class="inp" value="14"></div>
+  </div>
+  <button class="btn bp bfull" style="margin-top:12px" onclick="izotopHesapla()">İlişkiyi Bul</button>
+  <div id="iz-sonuc" style="margin-top:14px"></div>
+</div>
+
       </div>
 
       <!-- YÖK ATLAS -->
