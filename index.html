@@ -31,15 +31,16 @@
 html,body{background:#08090f!important;color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 .app{position:relative;z-index:1;}
 
-  .logo{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
-.logo-sub{font-size:11px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;margin-left:6px;}
-.hmb{background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:10px 14px;color:var(--tx2);cursor:pointer;font-size:20px;}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
+.logo-sub{font-size:15px;-webkit-text-fill-color:var(--tx3);font-weight:400;font-family:'Inter',sans-serif;margin-left:6px;vertical-align:middle;}
+.hmb{background:none;border:1px solid var(--br);border-radius:var(--rsm);padding:6px 12px;color:var(--tx2);cursor:pointer;font-size:28px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
 #mn{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0f1117;flex-direction:column;gap:6px;padding:60px 16px 80px;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 #mn button{padding:10px 16px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:13px;font-weight:600;text-align:left;cursor:pointer;width:100%;}
 #mn-scroll-hint{text-align:center;font-size:12px;color:var(--tx3);padding:8px;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
 .pw{max-width:960px;margin:0 auto;padding:40px 16px;}
 .pw.narrow{max-width:660px;}
+
 .ptitle{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;}
 .psub{color:var(--tx2);font-size:14px;margin-bottom:24px;line-height:1.6;}
 .card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rlg);padding:20px;}
@@ -166,7 +167,7 @@ header {
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
-    padding: 10px 20px; /* Logonun ve butonun ekran kenarlarına sıfırlanmaması için iç boşluk */
+    padding: 12px 24px; /* Logonun ve butonun ekran kenarlarına sıfırlanmaması için iç boşluk */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -187,12 +188,13 @@ header {
 <body>
 <div class="app">
 <header>
- <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="nav('home')">
-<img src="icon.10.png" alt="logo" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0">
-<div class="logo" style="cursor:pointer">Ronya<span class="logo-sub">Kimya</span></div>
- </div>
- <button class="hmb" onclick="toggleMenu()">☰</button>
+  <div style="display:flex;align-items:center;gap:12px;cursor:pointer" onclick="nav('home')">
+    <img src="icon.10.png" alt="logo" style="width:60px;height:60px;border-radius:14px;object-fit:cover;flex-shrink:0">
+    <div class="logo" style="cursor:pointer">Ronya<span class="logo-sub">Kimya</span></div>
+  </div>
+  <button class="hmb" onclick="toggleMenu()">☰</button>
 </header>
+
 
 
 
