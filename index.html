@@ -222,7 +222,6 @@ header {
   <button onclick="nav('puan')">📊 YKS Puan</button>
   <button onclick="nav('board')">🏆 Skor</button>
   <button onclick="nav('video')">🎬 Videolar</button>
-  <div id="mn-scroll-hint">↑ Yukarı kaydır ↑</div>
 </div>
 
 <!-- HOME -->
@@ -2919,15 +2918,16 @@ setTimeout(function() {
   // Sol Menü Butonlarının Eksiksiz Enjeksiyonu
   var menu = document.getElementById('mn');
   if (menu && !document.getElementById('btn-bagSim')) {
-    menu.insertAdjacentHTML('beforeend', `
-      <button id="btn-bagSim" onclick="nav('bagSim')">⚛️ Lewis Bağ Simülasyonu</button>
-      <button onclick="nav('flashcard')">📝 Kimya Flashcard</button>
-      <button onclick="nav('cozelti')">⚗️ Çözelti Simülatörü</button>
-      <button onclick="nav('denge')">📈 Hız & Denge Grafiği</button>
-      <button onclick="nav('izotop')">⚛️ İzotop/Çap Tanı Motoru</button>
-      <button id="btn-yok-atlas" onclick="window.open('https://yokatlas.yok.gov.tr/','_blank')" style="background:#5c4dff !important; color:#ffffff !important; font-weight:700;"><span style="margin-right:6px;">🎓</span> YÖK Atlas Kapısı</button>
+      menu.insertAdjacentHTML('beforeend', `
+  <button id="btn-bagSim" onclick="nav('bagSim')">⚛️ Lewis Bağ Simülasyonu</button>
+  <button onclick="nav('flashcard')">📝 Kimya Flashcard</button>
+  <button onclick="nav('cozelti')">⚗️ Çözelti Simülatörü</button>
+  <button onclick="nav('denge')">📈 Hız & Denge Grafiği</button>
+  <button onclick="nav('izotop')">⚛️ İzotop/Çap Tanı Motoru</button>
+  <button id="btn-yok-atlas" onclick="window.open('https://yokatlas.yok.gov.tr/','_blank')" style="background:#5c4dff !important; color:#ffffff !important; font-weight:700;"><span style="margin-right:6px;">🎓</span> YÖK Atlas Kapısı</button>
+  <div id="mn-scroll-hint">↑ Yukarı kaydır ↑</div>
+`);
 
-    `);
   }
 
   // Yeni Ekran Konteynırlarının Uygulama Gövdesine Dahil Edilmesi
