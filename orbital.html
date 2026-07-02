@@ -618,9 +618,32 @@ function showMolecule(mol){
     mC.onmousemove=function(e){if(!mDrag)return;mRotY+=(e.clientX-mLX)*.01;mRotX+=(e.clientY-mLY)*.01;mLX=e.clientX;mLY=e.clientY;};
     mC.onmouseup=function(){mDrag=false;};
     mC.onmouseleave=function(){mDrag=false;};
-    mC.ontouchstart=function(e){mDrag=true;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;e.preventDefault();};
-    mC.ontouchmove=function(e){if(!mDrag)return;mRotY+=(e.touches[0].clientX-mLX)*.015;mRotX+=(e.touches[0].clientY-mLY)*.015;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;e.preventDefault();};
-    mC.ontouchend=function(){mDrag=false;};
+    mC.ontouchstart=function(e){
+  if(e.touches.length===2){
+    mDrag=false;
+    var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY;
+    mPinchDist=Math.sqrt(dx*dx+dy*dy);
+  } else {
+    mDrag=true;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;
+  }
+  e.preventDefault();
+};
+mC.ontouchmove=function(e){
+  if(e.touches.length===2){
+    var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY;
+    var dist=Math.sqrt(dx*dx+dy*dy);
+    if(mPinchDist>0){
+      mZoom*=dist/mPinchDist;
+      mZoom=Math.max(0.5,Math.min(3,mZoom));
+    }
+    mPinchDist=dist;
+  } else if(mDrag){
+    mRotY+=(e.touches[0].clientX-mLX)*.015;mRotX+=(e.touches[0].clientY-mLY)*.015;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;
+  }
+  e.preventDefault();
+};
+mC.ontouchend=function(){mDrag=false;mPinchDist=0;};
+
     molLoop();
   },80);
   document.getElementById('molBox').scrollIntoView({behavior:'smooth'});
