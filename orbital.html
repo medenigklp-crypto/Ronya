@@ -431,6 +431,7 @@ loop();
 var mC=null,mCtx=null,mW=600,mH=320;
 var mRotX=.3,mRotY=.4,mSpin=true,mAnimId=null,mT=0;
 var mDrag=false,mLX=0,mLY=0,curMol=null;
+var mZoom=1,mPinchDist=0;
 
 function initMol(){
   mC=document.getElementById('molCanvas');mCtx=mC.getContext('2d');
@@ -442,8 +443,9 @@ function initMol(){
 function mProj(x,y,z){
   var y1=y*Math.cos(mRotX)-z*Math.sin(mRotX),z1=y*Math.sin(mRotX)+z*Math.cos(mRotX);
   var x2=x*Math.cos(mRotY)+z1*Math.sin(mRotY),z2=-x*Math.sin(mRotY)+z1*Math.cos(mRotY);
-  var sc=220/(300+z2);return{x:mW/2+x2*sc,y:mH/2+y1*sc,z:z2,scale:sc};
+  var sc=(220*mZoom)/(300+z2);return{x:mW/2+x2*sc,y:mH/2+y1*sc,z:z2,scale:sc};
 }
+
 
 // Atom — 3D parlak küre (orbital küresiyle BİREBİR aynı doku/gölgeleme formülü)
 function mAtom(x,y,z,col,r,label){
