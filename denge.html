@@ -29,7 +29,7 @@ html, body { background: #08090f !important; color: var(--tx); font-family: 'Int
 header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0 20px;
   height: 56px;
   border-bottom: 1px solid var(--br);
@@ -47,6 +47,7 @@ header {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.logo-sub { font-size: 11px; -webkit-text-fill-color: var(--tx3); font-weight: 400; font-family: 'Inter', sans-serif; margin-left: 6px; }
 
 .pw { max-width: 960px; margin: 0 auto; padding: 30px 16px; }
 
@@ -229,8 +230,13 @@ header {
 <div class="app">
 
 <header>
-  <div class="logo">📊 Kimyasal Denge Kinetiği</div>
+  <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="location.href='index.html'">
+    <img src="icon.10.png" style="width:38px;height:38px;border-radius:8px;object-fit:cover">
+    <div class="logo">Ronya<span class="logo-sub">Kimya</span></div>
+  </div>
+  <button onclick="location.href='index.html'" style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;color:var(--tx2);padding:8px 12px;cursor:pointer;font-size:15px">☰</button>
 </header>
+
 
 <div class="pw">
   <div class="ptitle">📊 Kimyasal Denge Kinetiği</div>
