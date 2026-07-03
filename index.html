@@ -1048,7 +1048,7 @@ function nav(id){
   if (id === 'lab3d') { setTimeout(function(){ initLab3dPage(); }, 100); }
   if (id === 'flashcard') { setTimeout(function(){ updateCardUI(); }, 50); }
   if (id === 'cozelti') { setTimeout(function(){ drawCoz(); }, 50); }
-  if (id === 'board') { setTimeout(function(){ renderLeaderboard(); }, 50); }
+  
   var mn=document.getElementById('mn');
   if(mn) mn.style.display='none';
   for(var i=0;i<SCREENS.length;i++){
@@ -1188,7 +1188,7 @@ function endQuiz(){
   document.getElementById('rswro').textContent=quizSt.wrongs;
   document.getElementById('rstot').textContent=tot;
   document.getElementById('rem').textContent=pct>=80?'🏆':pct>=50?'👍':'💪';
-  saveScoreToLeaderboard(pct, quizSt.score, tot);
+  
 }
 
 /*
