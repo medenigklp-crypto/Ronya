@@ -263,7 +263,6 @@ header {
          <div class="tc" onclick="nav('bagSim')"><div class="ti">⚛️</div><div class="tt">Lewis Bağ Simülasyonu</div><div class="td">15 molekülün elektron çifti ve bağ gösterimi</div></div>
 <div class="tc" onclick="nav('flashcard')"><div class="ti">📝</div><div class="tt">Kimya Flashcard</div><div class="td">20 kartlık kimyasal bileşik deste</div></div>
 <div class="tc" onclick="nav('cozelti')"><div class="ti">⚗️</div><div class="tt">Çözelti Simülatörü</div><div class="td">Mol, hacim ve molarite hesaplama</div></div>
-<div class="tc" onclick="nav('denge')"><div class="ti">📈</div><div class="tt">Hız & Denge Grafiği</div><div class="td">Denge sistemleri interaktif grafik</div></div>
 <div class="tc" onclick="nav('izotop')"><div class="ti">⚛️</div><div class="tt">İzotop/İzobar/İzoton</div><div class="td">İki atomu karşılaştır, ilişkiyi bul</div></div>
       <div class="tc" onclick="location.href='gaz-lab.html'"><div class="ti">⚗️</div><div class="tt">Gaz Laboratuvarı</div><div class="td">Piston düzenekleri, kinetik teori, Graham difüzyon, ideal gaz çözücü</div></div>
       <div class="tc" onclick="nav('quiz')"><div class="ti">⚗️</div><div class="tt">Element Testi</div><div class="td">118 element sembol/isim testi. Zayıf nokta takibi.</div></div>
@@ -2921,7 +2920,6 @@ setTimeout(function() {
   <button id="btn-bagSim" onclick="nav('bagSim')">⚛️ Lewis Bağ Simülasyonu</button>
   <button onclick="nav('flashcard')">📝 Kimya Flashcard</button>
   <button onclick="nav('cozelti')">⚗️ Çözelti Simülatörü</button>
-  <button onclick="nav('denge')">📈 Hız & Denge Grafiği</button>
   <button onclick="nav('izotop')">⚛️ İzotop/Çap Tanı Motoru</button>
   <button id="btn-yok-atlas" onclick="window.open('https://yokatlas.yok.gov.tr/','_blank')" style="background:#5c4dff !important; color:#ffffff !important; font-weight:700;"><span style="margin-right:6px;">🎓</span> YÖK Atlas Kapısı</button>
   <div id="mn-scroll-hint">↑ Yukarı kaydır ↑</div>
@@ -3014,18 +3012,7 @@ setTimeout(function() {
 
       </div>
 
-      <!-- %100 image_15 VE image_16 GÖRSELLERİNİZE BİREBİR UYUMLU GRAFİK PANELİ -->
-      <div id="s-denge" style="display:none" class="pw">
-        <h1 class="ptitle">📈 Kimyasal Denge Kinetiği</h1>
-        <p class="psub">Le Chatelier ilkelerini anlık dikey kırılmalar ve esnemeler ile izleyin.</p>
-        
-        <div class="card">
-          <!-- Üst Sistem Seçim Sekmeleri (Birebir image_15 ve image_16 Tasarımı) -->
-          <div style="display:flex; gap:10px; margin-bottom:15px;">
-            <button id="sys-homojen" class="tab-btn active" style="flex:1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="switchDengeSistem('homojen')">🔄 Homojen (N2 + 3H2 ⇌ 2NH3)</button>
-            <button id="sys-heterojen" class="tab-btn" style="flex:1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="switchDengeSistem('heterojen')">🪨 Heterojen (CaCO3 ⇌ CaO + CO2)</button>
-          </div>
-          
+      
           <!-- Dinamik Denklem Başlığı -->
           <div id="sistem-formül-text" style="color:#4ade80; font-weight:700; font-size:1.1rem; margin-bottom:15px; text-align:center;">Tepkime: N₂(g) + 3H₂(g) ⇌ 2NH₃(g) + Isı</div>
           
