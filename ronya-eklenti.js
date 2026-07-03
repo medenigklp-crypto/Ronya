@@ -1,8 +1,10 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v1
+   RONYA KİMYA — EKLENTİ v2
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi (isim, EN, erime/kaynama,
       elektron dizilimi, kabuklar, açıklama)
+   3) Element testine zorluk seviyesi (İlk 20 / İlk 36 / Tümü)
+   4) Mol hesaplayıcıya formülden otomatik molar kütle
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -346,8 +348,178 @@
     }
   };
 
+  /* ============================================================
+     BÖLÜM 3 — ELEMENT TESTİ ZORLUK SEVİYELERİ
+     Test ayar kartına "Element Aralığı" seçimi enjekte edilir;
+     startQ ve renderQ, seçilen aralığı kullanacak şekilde
+     üzerine yazılır (yanlış şıklar da aynı aralıktan gelir).
+     ============================================================ */
+  var qMode = '20', qPool = [];
+  // "İlk 36" moduna eklenen, YKS'de sık geçen ek elementler
+  var Q_EXTRA = ['Ag','Au','Pt','Hg','I','Ba','Pb','Sn','Bi','Sb','Xe','Pd'];
+
+  function poolFor(mode){
+    if (mode === '20')  return ELS.filter(function(e){ return e.n <= 20; });
+    if (mode === '36')  return ELS.filter(function(e){ return e.n <= 36 || Q_EXTRA.indexOf(e.sym) !== -1; });
+    return ELS.slice();
+  }
+
+  function setupQuizRange(){
+    var card = document.querySelector('#s-quiz .card');
+    if (!card || document.getElementById('qrange-grid')) return;
+    card.insertAdjacentHTML('afterbegin',
+      '<div style="margin-bottom:14px">' +
+        '<div class="slbl">Element Aral\u0131\u011f\u0131</div>' +
+        '<div id="qrange-grid" style="display:flex;gap:8px;flex-wrap:wrap">' +
+          '<button type="button" class="ob sel2" data-r="20">\u0130lk 20 \u00b7 9. S\u0131n\u0131f</button>' +
+          '<button type="button" class="ob" data-r="36">\u0130lk 36 + \u00d6nemli 12</button>' +
+          '<button type="button" class="ob" data-r="118">T\u00fcm\u00fc (118)</button>' +
+        '</div>' +
+        '<div id="qrange-note" style="font-size:11px;color:var(--tx3);margin-top:6px;line-height:1.5"></div>' +
+      '</div>');
+    var btns = document.getElementById('qrange-grid').querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) (function(b){
+      b.onclick = function(){
+        qMode = b.getAttribute('data-r');
+        for (var j = 0; j < btns.length; j++) btns[j].classList.remove('sel2');
+        b.classList.add('sel2');
+        updateRangeNote();
+      };
+    })(btns[i]);
+    updateRangeNote();
+  }
+  function updateRangeNote(){
+    var note = document.getElementById('qrange-note');
+    if (!note) return;
+    var size = poolFor(qMode).length;
+    var cnt = (typeof quizCfg !== 'undefined' && quizCfg.count) ? quizCfg.count : 10;
+    var txt = '';
+    if (qMode === '36')
+      txt = 'Ek elementler: ' + Q_EXTRA.join(', ') + ' (toplam ' + size + ' element). ';
+    if (cnt > size)
+      txt += 'Not: Bu aral\u0131kta ' + size + ' element var; test en fazla ' + size + ' soru olur.';
+    note.textContent = txt;
+  }
+
+  window.startQ = function(){
+    nav('qact');
+    quizSt.cur = 0; quizSt.score = 0; quizSt.wrongs = 0;
+    qPool = poolFor(qMode);
+    var pool = qPool.slice();
+    for (var i = pool.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    }
+    quizSt.items = pool.slice(0, Math.min(quizCfg.count, pool.length));
+    renderQ();
+  };
+
+  window.renderQ = function(){
+    if (quizSt.cur >= quizSt.items.length) { endQuiz(); return; }
+    document.getElementById('nxtbtn').style.display = 'none';
+    var fb = document.getElementById('fbar');
+    fb.className = 'fb'; fb.textContent = '';
+    var el = quizSt.items[quizSt.cur];
+    document.getElementById('qcnt-lbl').textContent = 'Soru ' + (quizSt.cur + 1) + '/' + quizSt.items.length;
+    document.getElementById('lvc').textContent = '\u2713 ' + quizSt.score;
+    document.getElementById('lvw').textContent = '\u2717 ' + quizSt.wrongs;
+    document.getElementById('pf').style.width = (quizSt.cur / quizSt.items.length * 100) + '%';
+
+    var qText, correct;
+    if (quizCfg.type === 'sym2name') {
+      qText = el.sym; correct = el.name;
+      document.getElementById('qlbl').textContent = 'Bu sembol\u00fcn elementi hangisidir?';
+    } else {
+      qText = el.name; correct = el.sym;
+      document.getElementById('qlbl').textContent = 'Bu elementin sembol\u00fc nedir?';
+    }
+    document.getElementById('qdsp').textContent = qText;
+    document.getElementById('qcat').textContent = el.cat;
+    quizSt.correct = correct;
+
+    // Yanlış şıklar seçilen aralıktan gelir (4'ten az element varsa tüm liste)
+    var src = qPool.length >= 4 ? qPool : ELS;
+    var opts = [correct], guard = 0;
+    while (opts.length < 4 && guard++ < 500) {
+      var r = src[Math.floor(Math.random() * src.length)];
+      var cand = quizCfg.type === 'sym2name' ? r.name : r.sym;
+      if (opts.indexOf(cand) === -1) opts.push(cand);
+    }
+    for (var i = opts.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = opts[i]; opts[i] = opts[j]; opts[j] = t;
+    }
+    var grid = document.getElementById('ogrid');
+    grid.innerHTML = '';
+    for (var k = 0; k < opts.length; k++) (function(opt){
+      var btn = document.createElement('button');
+      btn.className = 'ob2'; btn.textContent = opt;
+      btn.onclick = function(){ checkAns(btn, opt); };
+      grid.appendChild(btn);
+    })(opts[k]);
+  };
+
+  /* ============================================================
+     BÖLÜM 4 — FORMÜLDEN OTOMATİK MOLAR KÜTLE
+     Mol↔Kütle sekmesine formül girişi enjekte edilir; yazdıkça
+     Bölüm 2'deki ayrıştırıcı + ELS kütleleriyle hesaplar ve
+     sonucu "Molar Kütle" alanına otomatik yazar.
+     ============================================================ */
+  var MASS = null;
+  function massMap(){
+    if (!MASS) {
+      MASS = {};
+      if (typeof ELS !== 'undefined')
+        for (var i = 0; i < ELS.length; i++) MASS[ELS[i].sym] = ELS[i].mass;
+    }
+    return MASS;
+  }
+
+  function setupMolFormula(){
+    var mk0 = document.getElementById('mk0');
+    if (!mk0 || document.getElementById('mkFormula')) return;
+    var card = mk0.closest('.card');
+    if (!card) return;
+    card.insertAdjacentHTML('afterbegin',
+      '<div style="margin-bottom:12px">' +
+        '<div class="slbl">Form\u00fclden Otomatik <span style="font-weight:400;text-transform:none;letter-spacing:0">(iste\u011fe ba\u011fl\u0131)</span></div>' +
+        '<input type="text" id="mkFormula" class="inp" placeholder="\u00f6rn: H2SO4, Ca(OH)2, CuSO4.5H2O" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+        '<div id="mkFormulaOut" style="font-size:12px;color:var(--tx2);margin-top:6px;min-height:16px;line-height:1.5"></div>' +
+      '</div>');
+    document.getElementById('mkFormula').addEventListener('input', function(){
+      var v = this.value.trim();
+      var out = document.getElementById('mkFormulaOut');
+      if (!v) { out.textContent = ''; return; }
+      try {
+        var counts = parseFormula(v);
+        var mm = massMap(), total = 0, parts = [];
+        var keys = Object.keys(counts);
+        if (!keys.length) throw new Error('Form\u00fcl okunamad\u0131.');
+        for (var i = 0; i < keys.length; i++) {
+          var sym = keys[i];
+          if (mm[sym] === undefined) throw new Error('Bilinmeyen sembol: ' + sym);
+          total += counts[sym] * mm[sym];
+          parts.push((counts[sym] > 1 ? counts[sym] + '\u00d7' : '') + mm[sym]);
+        }
+        mk0.value = +total.toFixed(3);
+        out.innerHTML = '<span style="color:var(--gr)">' + pretty(v.replace(/\s+/g, '')) +
+          ' = ' + parts.join(' + ') + ' = <b>' + total.toFixed(3) + ' g/mol</b></span>' +
+          ' \u2014 a\u015fa\u011f\u0131daki alana yaz\u0131ld\u0131.';
+      } catch (err) {
+        var msg = err.message;
+        if (/Ge\u00e7ersiz karakter/.test(msg))
+          msg += ' \u2014 sembollerde b\u00fcy\u00fck/k\u00fc\u00e7\u00fck harfe dikkat (\u00f6rn: CO \u2260 Co)';
+        out.innerHTML = '<span style="color:var(--yw)">' + msg + '</span>';
+      }
+    });
+  }
+
   // --- Başlat ---
-  function init(){ try { enrichElements(); } catch (e) { /* sessiz */ } }
+  function init(){
+    try { enrichElements(); } catch (e) { /* sessiz */ }
+    try { setupQuizRange(); } catch (e) { /* sessiz */ }
+    try { setupMolFormula(); } catch (e) { /* sessiz */ }
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
