@@ -1,10 +1,14 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v2
+   RONYA KİMYA — EKLENTİ v3
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
-   2) 21–118 arası TAM element verisi (isim, EN, erime/kaynama,
-      elektron dizilimi, kabuklar, açıklama)
-   3) Element testine zorluk seviyesi (İlk 20 / İlk 36 / Tümü)
+   2) 21–118 arası TAM element verisi
+   3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
+      🎯 Yanlışlarım), yeni soru tipleri (Grup, Periyot, e⁻
+      Dizilimi), yazarak cevap modu, zayıf nokta takibi
    4) Mol hesaplayıcıya formülden otomatik molar kütle
+   5) Skor tablosu + istatistik + günlük çalışma serisi
+   6) Pomodoro: otomatik çalışma↔mola döngüsü
+   7) Flashcard: Leitner aralıklı tekrar + 14 iyon kartı
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -349,24 +353,42 @@
   };
 
   /* ============================================================
-     BÖLÜM 3 — ELEMENT TESTİ ZORLUK SEVİYELERİ
-     Test ayar kartına "Element Aralığı" seçimi enjekte edilir;
-     startQ ve renderQ, seçilen aralığı kullanacak şekilde
-     üzerine yazılır (yanlış şıklar da aynı aralıktan gelir).
+     BÖLÜM 3 — GELİŞMİŞ ELEMENT TESTİ
+     • Aralıklar: İlk 20 / 36+12 / Tümü / 🎯 Yanlışlarım
+     • Yeni soru tipleri: Grup, Periyot, e⁻ Dizilimi
+     • Cevap modu: Şıklı veya Yazarak
+     • Zayıf nokta takibi + skor kaydı + günlük seri (localStorage)
      ============================================================ */
-  var qMode = '20', qPool = [];
-  // "İlk 36" moduna eklenen, YKS'de sık geçen ek elementler
+  function sget(k, d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+  function sset(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  var qMode = '20', qPool = [], ansMode = 'choice', qAnswered = false, sessionWeakAdded = 0;
   var Q_EXTRA = ['Ag','Au','Pt','Hg','I','Ba','Pb','Sn','Bi','Sb','Xe','Pd'];
+  var GMAP = {1:'1A', 2:'2A', 13:'3A', 14:'4A', 15:'5A', 16:'6A', 17:'7A', 18:'8A'};
+
+  function weakMap(){ return sget('rk_weak', {}); }
+  function weakList(){ var w = weakMap(); return ELS.filter(function(e){ return w[e.n]; }); }
 
   function poolFor(mode){
-    if (mode === '20')  return ELS.filter(function(e){ return e.n <= 20; });
-    if (mode === '36')  return ELS.filter(function(e){ return e.n <= 36 || Q_EXTRA.indexOf(e.sym) !== -1; });
+    if (mode === '20')   return ELS.filter(function(e){ return e.n <= 20; });
+    if (mode === '36')   return ELS.filter(function(e){ return e.n <= 36 || Q_EXTRA.indexOf(e.sym) !== -1; });
+    if (mode === 'weak') return weakList();
     return ELS.slice();
   }
+  // Soru tipine uygun olmayan elementleri ele (örn. lantanitlere grup sorusu sorulmaz)
+  function typeFilter(pool, type){
+    if (type === 'group')  return pool.filter(function(e){ var d = EL_DATA[e.n]; return d && GMAP[d.group] && e.cat !== 'Lantanit' && e.cat !== 'Aktinit'; });
+    if (type === 'period') return pool.filter(function(e){ var d = EL_DATA[e.n]; return d && d.period; });
+    if (type === 'conf')   return pool.filter(function(e){ var d = EL_DATA[e.n]; return d && d.conf; });
+    return pool;
+  }
 
-  function setupQuizRange(){
+  // --- Ayar ekranı enjeksiyonları ---
+  function setupQuizUI(){
     var card = document.querySelector('#s-quiz .card');
     if (!card || document.getElementById('qrange-grid')) return;
+
+    // 1) Element aralığı (en üste)
     card.insertAdjacentHTML('afterbegin',
       '<div style="margin-bottom:14px">' +
         '<div class="slbl">Element Aral\u0131\u011f\u0131</div>' +
@@ -374,48 +396,167 @@
           '<button type="button" class="ob sel2" data-r="20">\u0130lk 20 \u00b7 9. S\u0131n\u0131f</button>' +
           '<button type="button" class="ob" data-r="36">\u0130lk 36 + \u00d6nemli 12</button>' +
           '<button type="button" class="ob" data-r="118">T\u00fcm\u00fc (118)</button>' +
+          '<button type="button" class="ob" data-r="weak" id="qr-weak">\ud83c\udfaf Yanl\u0131\u015flar\u0131m (0)</button>' +
         '</div>' +
         '<div id="qrange-note" style="font-size:11px;color:var(--tx3);margin-top:6px;line-height:1.5"></div>' +
       '</div>');
     var btns = document.getElementById('qrange-grid').querySelectorAll('button');
     for (var i = 0; i < btns.length; i++) (function(b){
       b.onclick = function(){
-        qMode = b.getAttribute('data-r');
+        var m = b.getAttribute('data-r');
+        if (m === 'weak' && weakList().length === 0) {
+          if (typeof toast === 'function') toast('Yanl\u0131\u015f listen bo\u015f \u2014 \u00f6nce birka\u00e7 test \u00e7\u00f6z!');
+          return;
+        }
+        qMode = m;
         for (var j = 0; j < btns.length; j++) btns[j].classList.remove('sel2');
         b.classList.add('sel2');
         updateRangeNote();
       };
     })(btns[i]);
+
+    // 2) Yeni soru tipleri (mevcut tip satırına eklenir)
+    var typeBtn = document.getElementById('qtype-sym');
+    if (typeBtn && typeBtn.parentElement) {
+      typeBtn.parentElement.insertAdjacentHTML('beforeend',
+        '<button type="button" class="ob" onclick="setQType(\'group\',this)">Grup</button>' +
+        '<button type="button" class="ob" onclick="setQType(\'period\',this)">Periyot</button>' +
+        '<button type="button" class="ob" onclick="setQType(\'conf\',this)">e\u207b Dizilimi</button>');
+    }
+
+    // 3) Cevap modu (Başlat butonundan önce)
+    var startBtn = card.querySelector('button.btn.bp');
+    if (startBtn) startBtn.insertAdjacentHTML('beforebegin',
+      '<div style="margin-bottom:20px">' +
+        '<div class="slbl">Cevap Modu</div>' +
+        '<div id="qans-grid" style="display:flex;gap:8px;flex-wrap:wrap">' +
+          '<button type="button" class="ob sel2" onclick="setAnsMode(\'choice\',this)">\ud83d\udd18 \u015e\u0131kl\u0131</button>' +
+          '<button type="button" class="ob" onclick="setAnsMode(\'write\',this)">\u2328\ufe0f Yazarak</button>' +
+        '</div>' +
+        '<div style="font-size:11px;color:var(--tx3);margin-top:6px">Yazarak modu ezber i\u00e7in daha etkilidir. (e\u207b dizilimi sorular\u0131 her zaman \u015f\u0131kl\u0131d\u0131r.)</div>' +
+      '</div>');
+
     updateRangeNote();
+    refreshWeakBtn();
   }
+
   function updateRangeNote(){
     var note = document.getElementById('qrange-note');
     if (!note) return;
     var size = poolFor(qMode).length;
     var cnt = (typeof quizCfg !== 'undefined' && quizCfg.count) ? quizCfg.count : 10;
     var txt = '';
-    if (qMode === '36')
-      txt = 'Ek elementler: ' + Q_EXTRA.join(', ') + ' (toplam ' + size + ' element). ';
-    if (cnt > size)
-      txt += 'Not: Bu aral\u0131kta ' + size + ' element var; test en fazla ' + size + ' soru olur.';
+    if (qMode === '36') txt = 'Ek elementler: ' + Q_EXTRA.join(', ') + ' (toplam ' + size + ' element). ';
+    if (qMode === 'weak') txt = 'Yanl\u0131\u015f yapt\u0131\u011f\u0131n elementlerden olu\u015fur; do\u011fru bilince listeden d\u00fc\u015fer. ';
+    if (cnt > size && size > 0) txt += 'Not: Bu aral\u0131kta ' + size + ' element var; test en fazla ' + size + ' soru olur.';
     note.textContent = txt;
   }
 
+  function refreshWeakBtn(){
+    var b = document.getElementById('qr-weak');
+    if (!b) return;
+    b.textContent = '\ud83c\udfaf Yanl\u0131\u015flar\u0131m (' + weakList().length + ')';
+    if (qMode === 'weak' && weakList().length === 0) {
+      // Liste boşaldıysa güvenli moda dön
+      qMode = '20';
+      var btns = document.getElementById('qrange-grid').querySelectorAll('button');
+      for (var j = 0; j < btns.length; j++) btns[j].classList.toggle('sel2', btns[j].getAttribute('data-r') === '20');
+      updateRangeNote();
+    }
+  }
+
+  // Orijinal setQType/setQCount'ta seçim tüm ekrandaki butonları
+  // etkiliyordu (görsel hata); burada yalnız kendi satırına kısıtlanır.
+  function selectInRow(btn){
+    var bs = btn.parentElement.querySelectorAll('.ob');
+    for (var i = 0; i < bs.length; i++) bs[i].classList.remove('sel2');
+    btn.classList.add('sel2');
+  }
+  window.setQType = function(t, btn){ quizCfg.type = t; selectInRow(btn); };
+  window.setQCount = function(n, btn){ quizCfg.count = n; selectInRow(btn); updateRangeNote(); };
+  window.setAnsMode = function(m, btn){ ansMode = m; selectInRow(btn); };
+
+  // --- Test akışı ---
   window.startQ = function(){
+    var pool = typeFilter(poolFor(qMode), quizCfg.type);
+    if (pool.length < 1) {
+      if (typeof toast === 'function') toast('Bu ayarlarla soru \u00fcretilemiyor \u2014 aral\u0131\u011f\u0131 veya soru tipini de\u011fi\u015ftir.');
+      return;
+    }
     nav('qact');
     quizSt.cur = 0; quizSt.score = 0; quizSt.wrongs = 0;
-    qPool = poolFor(qMode);
-    var pool = qPool.slice();
-    for (var i = pool.length - 1; i > 0; i--) {
+    sessionWeakAdded = 0;
+    qPool = pool;
+    var p = pool.slice();
+    for (var i = p.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
-      var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+      var t = p[i]; p[i] = p[j]; p[j] = t;
     }
-    quizSt.items = pool.slice(0, Math.min(quizCfg.count, pool.length));
+    quizSt.items = p.slice(0, Math.min(quizCfg.count, p.length));
     renderQ();
   };
 
+  function buildQuestion(el){
+    var d = EL_DATA[el.n] || {};
+    if (quizCfg.type === 'sym2name')
+      return { big: el.sym, sub: el.cat, label: 'Bu sembol\u00fcn elementi hangisidir?', ans: el.name, kind: 'name' };
+    if (quizCfg.type === 'name2sym')
+      return { big: el.name, sub: el.cat, label: 'Bu elementin sembol\u00fc nedir?', ans: el.sym, kind: 'sym' };
+    if (quizCfg.type === 'group')
+      return { big: el.sym, sub: el.name + ' \u00b7 ' + el.cat, label: 'Bu element hangi gruptad\u0131r?', ans: GMAP[d.group], kind: 'group' };
+    if (quizCfg.type === 'period')
+      return { big: el.sym, sub: el.name + ' \u00b7 ' + el.cat, label: 'Bu element ka\u00e7\u0131nc\u0131 periyottad\u0131r?', ans: d.period + '. periyot', kind: 'period' };
+    return { big: el.sym, sub: el.name + ' \u00b7 ' + el.cat, label: 'Bu elementin elektron dizilimi hangisidir?', ans: d.conf, kind: 'conf' };
+  }
+
+  function buildOptions(q){
+    var opts = [q.ans], guard = 0, c, r, cand;
+    if (q.kind === 'group') {
+      var all = ['1A','2A','3A','4A','5A','6A','7A','8A'];
+      while (opts.length < 4) { c = all[Math.floor(Math.random()*8)]; if (opts.indexOf(c) === -1) opts.push(c); }
+    } else if (q.kind === 'period') {
+      while (opts.length < 4) { c = (1 + Math.floor(Math.random()*7)) + '. periyot'; if (opts.indexOf(c) === -1) opts.push(c); }
+    } else {
+      var src = qPool.length >= 4 ? qPool : ELS;
+      while (opts.length < 4 && guard++ < 800) {
+        r = src[Math.floor(Math.random()*src.length)];
+        cand = q.kind === 'name' ? r.name : q.kind === 'sym' ? r.sym : (EL_DATA[r.n]||{}).conf;
+        if (cand && opts.indexOf(cand) === -1) opts.push(cand);
+      }
+      guard = 0;
+      while (opts.length < 4 && guard++ < 800) { // küçük havuz yedeği
+        r = ELS[Math.floor(Math.random()*ELS.length)];
+        cand = q.kind === 'name' ? r.name : q.kind === 'sym' ? r.sym : (EL_DATA[r.n]||{}).conf;
+        if (cand && opts.indexOf(cand) === -1) opts.push(cand);
+      }
+    }
+    for (var i = opts.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random()*(i+1));
+      var t = opts[i]; opts[i] = opts[j]; opts[j] = t;
+    }
+    return opts;
+  }
+
+  function ensureWriteUI(){
+    if (document.getElementById('writeWrap')) return;
+    var grid = document.getElementById('ogrid');
+    if (!grid) return;
+    grid.insertAdjacentHTML('afterend',
+      '<div id="writeWrap" style="display:none;margin-bottom:12px">' +
+        '<div style="display:flex;gap:8px">' +
+          '<input type="text" id="writeInp" class="inp" placeholder="Cevab\u0131n\u0131 yaz..." autocapitalize="off" autocorrect="off" spellcheck="false">' +
+          '<button type="button" class="btn bp" onclick="checkWrite()">Cevapla</button>' +
+        '</div>' +
+      '</div>');
+    document.getElementById('writeInp').addEventListener('keydown', function(e){
+      if (e.key === 'Enter') { e.preventDefault(); window.checkWrite(); }
+    });
+  }
+
   window.renderQ = function(){
     if (quizSt.cur >= quizSt.items.length) { endQuiz(); return; }
+    qAnswered = false;
+    ensureWriteUI();
     document.getElementById('nxtbtn').style.display = 'none';
     var fb = document.getElementById('fbar');
     fb.className = 'fb'; fb.textContent = '';
@@ -425,39 +566,207 @@
     document.getElementById('lvw').textContent = '\u2717 ' + quizSt.wrongs;
     document.getElementById('pf').style.width = (quizSt.cur / quizSt.items.length * 100) + '%';
 
-    var qText, correct;
-    if (quizCfg.type === 'sym2name') {
-      qText = el.sym; correct = el.name;
-      document.getElementById('qlbl').textContent = 'Bu sembol\u00fcn elementi hangisidir?';
-    } else {
-      qText = el.name; correct = el.sym;
-      document.getElementById('qlbl').textContent = 'Bu elementin sembol\u00fc nedir?';
-    }
-    document.getElementById('qdsp').textContent = qText;
-    document.getElementById('qcat').textContent = el.cat;
-    quizSt.correct = correct;
+    var q = buildQuestion(el);
+    quizSt.correct = q.ans; quizSt._el = el; quizSt._kind = q.kind;
+    document.getElementById('qlbl').textContent = q.label;
+    document.getElementById('qdsp').textContent = q.big;
+    document.getElementById('qcat').textContent = q.sub;
 
-    // Yanlış şıklar seçilen aralıktan gelir (4'ten az element varsa tüm liste)
-    var src = qPool.length >= 4 ? qPool : ELS;
-    var opts = [correct], guard = 0;
-    while (opts.length < 4 && guard++ < 500) {
-      var r = src[Math.floor(Math.random() * src.length)];
-      var cand = quizCfg.type === 'sym2name' ? r.name : r.sym;
-      if (opts.indexOf(cand) === -1) opts.push(cand);
-    }
-    for (var i = opts.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = opts[i]; opts[i] = opts[j]; opts[j] = t;
-    }
+    var writing = ansMode === 'write' && q.kind !== 'conf';
     var grid = document.getElementById('ogrid');
-    grid.innerHTML = '';
-    for (var k = 0; k < opts.length; k++) (function(opt){
-      var btn = document.createElement('button');
-      btn.className = 'ob2'; btn.textContent = opt;
-      btn.onclick = function(){ checkAns(btn, opt); };
-      grid.appendChild(btn);
-    })(opts[k]);
+    var ww = document.getElementById('writeWrap');
+    if (writing) {
+      grid.style.display = 'none'; grid.innerHTML = '';
+      if (ww) {
+        ww.style.display = 'block';
+        var inp = document.getElementById('writeInp');
+        inp.disabled = false; inp.value = '';
+        setTimeout(function(){ try { inp.focus(); } catch (e) {} }, 60);
+      }
+    } else {
+      if (ww) ww.style.display = 'none';
+      grid.style.display = '';
+      grid.innerHTML = '';
+      var opts = buildOptions(q);
+      for (var k = 0; k < opts.length; k++) (function(opt){
+        var btn = document.createElement('button');
+        btn.className = 'ob2';
+        btn.textContent = opt;
+        if (q.kind === 'conf') btn.style.fontSize = '12px';
+        btn.onclick = function(){ checkAns(btn, opt); };
+        grid.appendChild(btn);
+      })(opts[k]);
+    }
   };
+
+  // --- Cevap kaydı ve zayıf nokta takibi ---
+  function recordAnswer(ok){
+    var st = sget('rk_stats', {a:0, c:0});
+    st.a++; if (ok) st.c++;
+    sset('rk_stats', st);
+    var el = quizSt._el, w = weakMap();
+    if (ok) {
+      if (w[el.n]) { delete w[el.n]; sset('rk_weak', w); }
+      quizSt.score++;
+    } else {
+      if (!w[el.n]) sessionWeakAdded++;
+      w[el.n] = (w[el.n] || 0) + 1;
+      sset('rk_weak', w);
+      quizSt.wrongs++;
+    }
+  }
+
+  window.checkAns = function(btn, sel){
+    if (qAnswered) return;
+    qAnswered = true;
+    var bs = document.getElementById('ogrid').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].disabled = true;
+    var fb = document.getElementById('fbar');
+    var ok = sel === quizSt.correct;
+    if (ok) {
+      btn.className = 'ob2 cor';
+      fb.className = 'fb show cor'; fb.textContent = '\u2713 Do\u011fru!';
+    } else {
+      btn.className = 'ob2 wro';
+      for (var k = 0; k < bs.length; k++)
+        if (bs[k].textContent === quizSt.correct) bs[k].className = 'ob2 cor';
+      fb.className = 'fb show wro'; fb.textContent = '\u2717 Yanl\u0131\u015f! Do\u011fru: ' + quizSt.correct;
+    }
+    recordAnswer(ok);
+    document.getElementById('nxtbtn').style.display = 'block';
+  };
+
+  // Türkçe karakter/büyük-küçük harf toleranslı karşılaştırma
+  function fold(s){
+    return String(s).toLocaleLowerCase('tr')
+      .replace(/\u00e7/g,'c').replace(/\u011f/g,'g').replace(/\u0131/g,'i')
+      .replace(/\u00f6/g,'o').replace(/\u015f/g,'s').replace(/\u00fc/g,'u')
+      .replace(/[^a-z0-9]/g,'');
+  }
+  function matchAnswer(user, correct, kind){
+    if (kind === 'group' || kind === 'period') {
+      var ud = (String(user).match(/\d+/) || [''])[0];
+      var cd = (String(correct).match(/\d+/) || [''])[0];
+      if (!ud || ud !== cd) return false;
+      if (kind === 'group') {
+        var ul = fold(user).replace(/[0-9]/g,'');
+        return ul === '' || ul === 'a' || ul === 'agrubu';
+      }
+      return true;
+    }
+    return fold(user) === fold(correct);
+  }
+
+  window.checkWrite = function(){
+    if (qAnswered) return;
+    var inp = document.getElementById('writeInp');
+    if (!inp) return;
+    var v = inp.value.trim();
+    if (!v) { if (typeof toast === 'function') toast('Bir cevap yaz!'); return; }
+    qAnswered = true;
+    inp.disabled = true;
+    var ok = matchAnswer(v, quizSt.correct, quizSt._kind);
+    var fb = document.getElementById('fbar');
+    if (ok) { fb.className = 'fb show cor'; fb.textContent = '\u2713 Do\u011fru!'; }
+    else { fb.className = 'fb show wro'; fb.textContent = '\u2717 Yanl\u0131\u015f! Do\u011fru: ' + quizSt.correct; }
+    recordAnswer(ok);
+    document.getElementById('nxtbtn').style.display = 'block';
+  };
+
+  // --- Sonuç ekranı: kayıt + seri ---
+  function dayStr(d){
+    return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2);
+  }
+  function calcStreak(){
+    var days = sget('rk_days', []);
+    if (!days.length) return 0;
+    var set = {}, i;
+    for (i = 0; i < days.length; i++) set[days[i]] = 1;
+    var d = new Date();
+    if (!set[dayStr(d)]) d.setDate(d.getDate() - 1);
+    var n = 0;
+    while (set[dayStr(d)]) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+
+  window.endQuiz = function(){
+    nav('res');
+    var tot = quizSt.score + quizSt.wrongs;
+    var pct = tot > 0 ? Math.round(quizSt.score / tot * 100) : 0;
+    var rp = document.getElementById('rpct');
+    rp.textContent = '%' + pct;
+    rp.className = 'rpct ' + (pct >= 80 ? 'gr' : pct >= 50 ? 'ok' : 'bd');
+    document.getElementById('rscor').textContent = quizSt.score;
+    document.getElementById('rswro').textContent = quizSt.wrongs;
+    document.getElementById('rstot').textContent = tot;
+    document.getElementById('rem').textContent = pct >= 80 ? '\ud83c\udfc6' : pct >= 50 ? '\ud83d\udc4d' : '\ud83d\udcaa';
+    var rt = document.getElementById('rtitle');
+    if (rt) rt.textContent = pct >= 80 ? 'Harika!' : pct >= 50 ? 'Fena de\u011fil!' : 'Devam, olacak!';
+
+    if (tot > 0) {
+      var scores = sget('rk_scores', []);
+      scores.push({ dt: Date.now(), m: qMode, t: quizCfg.type, s: quizSt.score, w: quizSt.wrongs, p: pct });
+      if (scores.length > 100) scores = scores.slice(-100);
+      sset('rk_scores', scores);
+      var days = sget('rk_days', []);
+      var today = dayStr(new Date());
+      if (days.indexOf(today) === -1) { days.push(today); sset('rk_days', days); }
+    }
+
+    // Ek bilgi satırı (seri + zayıf liste)
+    var rs = document.querySelector('#s-res .rstats');
+    if (rs && !document.getElementById('res-extra'))
+      rs.insertAdjacentHTML('afterend', '<div id="res-extra" style="text-align:center;font-size:12px;color:var(--tx2);margin-bottom:4px;line-height:1.7"></div>');
+    var ex = document.getElementById('res-extra');
+    if (ex) {
+      var streak = calcStreak(), html = '';
+      html += streak > 1 ? '\ud83d\udd25 ' + streak + ' g\u00fcnl\u00fck \u00e7al\u0131\u015fma serisi!' : '\ud83d\udd25 Seri ba\u015flad\u0131 \u2014 yar\u0131n da gel!';
+      if (sessionWeakAdded > 0)
+        html += '<br>\ud83c\udfaf ' + sessionWeakAdded + ' element "Yanl\u0131\u015flar\u0131m" listesine eklendi.';
+      else if (qMode === 'weak' && tot > 0 && quizSt.wrongs === 0)
+        html += '<br>\ud83c\udfaf S\u00fcper \u2014 yanl\u0131\u015f listenden ' + quizSt.score + ' element temizlendi!';
+      ex.innerHTML = html;
+    }
+    refreshWeakBtn();
+  };
+
+  // --- Skor tablosu + istatistik ---
+  function statBox(v, l){
+    return '<div><div style="font-family:Space Grotesk,sans-serif;font-size:20px;font-weight:800;color:var(--ac2)">' + v +
+           '</div><div style="font-size:10px;color:var(--tx3)">' + l + '</div></div>';
+  }
+  function renderBoard(){
+    var board = document.getElementById('leaderboard-dom');
+    if (!board) return;
+    var st = sget('rk_stats', {a:0, c:0});
+    var scores = sget('rk_scores', []);
+    var streak = calcStreak();
+    var acc = st.a ? Math.round(st.c / st.a * 100) : 0;
+    var old = document.getElementById('rk-statcard');
+    if (old) old.remove();
+    board.insertAdjacentHTML('beforebegin',
+      '<div class="card" id="rk-statcard" style="margin-bottom:12px">' +
+        '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">' +
+          statBox(st.a, 'Toplam Soru') + statBox('%' + acc, 'Do\u011fruluk') +
+          statBox(streak, '\ud83d\udd25 Seri (g\u00fcn)') + statBox(scores.length, 'Test') +
+        '</div>' +
+      '</div>');
+    var MN = {'20':'\u0130lk 20', '36':'36+12', '118':'T\u00fcm\u00fc', 'weak':'Yanl\u0131\u015flar\u0131m'};
+    var TN = {sym2name:'Sembol\u2192\u0130sim', name2sym:'\u0130sim\u2192Sembol', group:'Grup', period:'Periyot', conf:'e\u207b Dizilimi'};
+    var top = scores.slice().sort(function(a,b){ return b.p - a.p || b.dt - a.dt; }).slice(0, 15);
+    var html = '<div class="brow hdr"><div>S\u0131ra</div><div>Test</div><div>Skor</div></div>';
+    if (!top.length)
+      html += '<div class="brow"><div>\u2014</div><div>Hen\u00fcz kay\u0131t yok \u2014 bir test \u00e7\u00f6z, buras\u0131 dolsun!</div><div></div></div>';
+    for (var i = 0; i < top.length; i++) {
+      var e = top[i], dt = new Date(e.dt);
+      var ds = ('0'+dt.getDate()).slice(-2) + '.' + ('0'+(dt.getMonth()+1)).slice(-2);
+      var rank = i === 0 ? '\ud83e\udd47' : i === 1 ? '\ud83e\udd48' : i === 2 ? '\ud83e\udd49' : (i + 1);
+      html += '<div class="brow"><div>' + rank + '</div>' +
+              '<div>' + (MN[e.m] || e.m) + ' \u00b7 ' + (TN[e.t] || e.t) + ' \u00b7 ' + ds + '</div>' +
+              '<div><b style="color:var(--ac2)">%' + e.p + '</b> <span style="color:var(--tx3);font-size:11px">(' + e.s + '/' + (e.s + e.w) + ')</span></div></div>';
+    }
+    board.innerHTML = html;
+  }
 
   /* ============================================================
      BÖLÜM 4 — FORMÜLDEN OTOMATİK MOLAR KÜTLE
@@ -514,11 +823,158 @@
     });
   }
 
+  /* ============================================================
+     BÖLÜM 5 — POMODORO MOLA DÖNGÜSÜ
+     Süre bitince otomatik olarak ÇALIŞMA ↔ MOLA arasında geçer;
+     "Mola (dk)" ayarı artık gerçekten kullanılır.
+     ============================================================ */
+  var pomo = { t: null, run: false, mode: 'work', left: 25 * 60 };
+  function pomMin(id, def){
+    var el = document.getElementById(id);
+    var v = el ? parseInt(el.value, 10) : NaN;
+    return (v && v > 0) ? v : def;
+  }
+  function pomShow(){
+    var m = Math.floor(pomo.left / 60), s = pomo.left % 60;
+    var c = document.getElementById('pom-clock');
+    if (c) c.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    var lbl = document.getElementById('pom-mode');
+    if (lbl) {
+      lbl.textContent = pomo.mode === 'work' ? '\u00c7ALI\u015eMA' : 'MOLA';
+      lbl.style.color = pomo.mode === 'work' ? '' : '#22c55e';
+    }
+  }
+  window.pomToggle = function(){
+    var btn = document.getElementById('pom-trigger');
+    if (!btn) return;
+    if (pomo.run) {
+      clearInterval(pomo.t);
+      pomo.run = false;
+      btn.textContent = 'Devam Et';
+      return;
+    }
+    pomo.run = true;
+    btn.textContent = 'Durdur';
+    pomo.t = setInterval(function(){
+      pomo.left--;
+      if (pomo.left <= 0) {
+        pomo.mode = pomo.mode === 'work' ? 'rest' : 'work';
+        pomo.left = (pomo.mode === 'work' ? pomMin('p-work', 25) : pomMin('p-rest', 5)) * 60;
+        if (typeof toast === 'function')
+          toast(pomo.mode === 'rest' ? '\u23f0 S\u00fcre doldu \u2014 mola zaman\u0131!' : '\ud83d\udcaa Mola bitti \u2014 \u00e7al\u0131\u015fmaya d\u00f6n!');
+      }
+      pomShow();
+    }, 1000);
+  };
+  window.pomReset = function(){
+    clearInterval(pomo.t);
+    pomo.run = false;
+    pomo.mode = 'work';
+    pomo.left = pomMin('p-work', 25) * 60;
+    var btn = document.getElementById('pom-trigger');
+    if (btn) btn.textContent = 'Ba\u015flat';
+    pomShow();
+  };
+
+  /* ============================================================
+     BÖLÜM 6 — FLASHCARD: ARALIKLI TEKRAR + İYON KARTLARI
+     Basit Leitner sistemi: "Bilmiyorum" denilen kartlar daha sık,
+     "Öğrendim" denilenler giderek daha seyrek gelir (kutu 0-3,
+     localStorage'da saklanır). Desteye YKS'de şart olan 14 çok
+     atomlu iyon kartı eklenir.
+     ============================================================ */
+  var ION_CARDS = [
+    {f:'NH\u2084\u207a', n:'Amonyum', d:'Y\u00fck\u00fc +1. Tek yayg\u0131n \u00e7ok atomlu katyon; t\u00fcm tuzlar\u0131 suda \u00e7\u00f6z\u00fcn\u00fcr.'},
+    {f:'OH\u207b', n:'Hidroksit', d:'Y\u00fck\u00fc \u22121. Bazlar\u0131n karakteristik iyonu.'},
+    {f:'NO\u2083\u207b', n:'Nitrat', d:'Y\u00fck\u00fc \u22121. T\u00fcm nitrat tuzlar\u0131 suda \u00e7\u00f6z\u00fcn\u00fcr.'},
+    {f:'NO\u2082\u207b', n:'Nitrit', d:'Y\u00fck\u00fc \u22121. Nitrat\u0131n bir eksik oksijenlisi.'},
+    {f:'SO\u2084\u00b2\u207b', n:'S\u00fclfat', d:'Y\u00fck\u00fc \u22122. BaSO\u2084 suda \u00e7\u00f6z\u00fcnmeyen beyaz \u00e7\u00f6keltidir.'},
+    {f:'SO\u2083\u00b2\u207b', n:'S\u00fclfit', d:'Y\u00fck\u00fc \u22122. S\u00fclfat\u0131n bir eksik oksijenlisi.'},
+    {f:'CO\u2083\u00b2\u207b', n:'Karbonat', d:'Y\u00fck\u00fc \u22122. Asitlerle tepkimesinde CO\u2082 gaz\u0131 \u00e7\u0131kar.'},
+    {f:'HCO\u2083\u207b', n:'Bikarbonat', d:'Y\u00fck\u00fc \u22121. Kabartma tozu NaHCO\u2083 bu iyonu i\u00e7erir.'},
+    {f:'PO\u2084\u00b3\u207b', n:'Fosfat', d:'Y\u00fck\u00fc \u22123. DNA omurgas\u0131nda ve g\u00fcbrelerde bulunur.'},
+    {f:'CH\u2083COO\u207b', n:'Asetat', d:'Y\u00fck\u00fc \u22121. Sirkedeki asetik asidin iyonu.'},
+    {f:'MnO\u2084\u207b', n:'Permanganat', d:'Y\u00fck\u00fc \u22121. Mor renkli, g\u00fc\u00e7l\u00fc y\u00fckseltgen.'},
+    {f:'Cr\u2082O\u2087\u00b2\u207b', n:'Dikromat', d:'Y\u00fck\u00fc \u22122. Turuncu renkli y\u00fckseltgen.'},
+    {f:'CN\u207b', n:'Siyan\u00fcr', d:'Y\u00fck\u00fc \u22121. \u00c7ok zehirli bir iyondur.'},
+    {f:'ClO\u207b', n:'Hipoklorit', d:'Y\u00fck\u00fc \u22121. \u00c7ama\u015f\u0131r suyunun etken iyonu.'}
+  ];
+  var fcCur = -1;
+
+  function fcBoxes(){ return sget('rk_fc', {}); }
+  function fcMastered(){ var b = fcBoxes(), n = 0, k; for (k in b) if (b[k] >= 3) n++; return n; }
+  function fcHard(){ var b = fcBoxes(), n = 0, k; for (k in b) if (b[k] === 0) n++; return n; }
+
+  function fcPick(){
+    var b = fcBoxes(), pool = [], i, j, box, w;
+    for (i = 0; i < FC_DECK.length; i++) {
+      if (FC_DECK.length > 1 && i === fcCur) continue; // aynı kart üst üste gelmesin
+      box = b[FC_DECK[i].f];
+      if (box === undefined) box = 0; // hiç görülmemiş = öncelikli
+      w = box >= 3 ? 1 : box === 2 ? 2 : box === 1 ? 4 : 6;
+      for (j = 0; j < w; j++) pool.push(i);
+    }
+    return pool.length ? pool[Math.floor(Math.random() * pool.length)] : 0;
+  }
+
+  window.updateCardUI = function(){
+    if (typeof FC_DECK === 'undefined' || !FC_DECK.length) return;
+    if (fcCur < 0 || fcCur >= FC_DECK.length) fcCur = fcPick();
+    var card = FC_DECK[fcCur];
+    var f = document.getElementById('fc-front');
+    if (!f || !card) return;
+    f.textContent = card.f;
+    var back = document.getElementById('fc-back');
+    if (back) back.innerHTML =
+      '<div style="font-size:16px;font-weight:800;margin-bottom:6px">' + card.n + '</div>' +
+      '<div style="font-size:12px;color:var(--tx2);line-height:1.5">' + card.d + '</div>';
+    var prog = document.getElementById('fc-progress');
+    if (prog) prog.textContent = FC_DECK.length + ' kart \u00b7 \u2705 Ustala\u015f\u0131lan: ' + fcMastered() + ' \u00b7 \ud83d\udd01 Tekrar bekleyen: ' + fcHard();
+  };
+
+  window.nextCard = function(learned){
+    if (typeof FC_DECK === 'undefined' || !FC_DECK.length) return;
+    var card = FC_DECK[fcCur];
+    if (card) {
+      var b = fcBoxes();
+      var cur = b[card.f] === undefined ? 0 : b[card.f];
+      b[card.f] = learned ? Math.min(3, cur + 1) : 0;
+      sset('rk_fc', b);
+    }
+    if (typeof fcFlipped !== 'undefined') fcFlipped = false;
+    var el = document.getElementById('fcard');
+    if (el) el.style.transform = 'rotateY(0deg)';
+    setTimeout(function(){ fcCur = fcPick(); updateCardUI(); }, 150);
+  };
+
+  function setupFlashcards(){
+    if (typeof FC_DECK === 'undefined') return;
+    var has = false;
+    for (var i = 0; i < FC_DECK.length; i++) if (FC_DECK[i].f === ION_CARDS[0].f) { has = true; break; }
+    if (!has) for (var k = 0; k < ION_CARDS.length; k++) FC_DECK.push(ION_CARDS[k]);
+  }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
-    try { setupQuizRange(); } catch (e) { /* sessiz */ }
+    try { setupQuizUI(); } catch (e) { /* sessiz */ }
     try { setupMolFormula(); } catch (e) { /* sessiz */ }
+    try { setupFlashcards(); } catch (e) { /* sessiz */ }
+    // nav sarmalayıcı: skor ekranı açılınca tabloyu, test ekranı
+    // açılınca "Yanlışlarım" sayacını güncelle
+    try {
+      if (typeof window.nav === 'function' && !window.__rkNavWrapped) {
+        window.__rkNavWrapped = true;
+        var _nav = window.nav;
+        window.nav = function(id){
+          _nav(id);
+          try {
+            if (id === 'board') renderBoard();
+            if (id === 'quiz') { refreshWeakBtn(); updateRangeNote(); }
+          } catch (e) {}
+        };
+      }
+    } catch (e) { /* sessiz */ }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
