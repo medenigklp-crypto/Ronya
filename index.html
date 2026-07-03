@@ -1187,8 +1187,45 @@ function endQuiz(){
   document.getElementById('rscor').textContent=quizSt.score;
   document.getElementById('rswro').textContent=quizSt.wrongs;
   document.getElementById('rstot').textContent=tot;
-  document.getElementById('rem').textContent=pct>=80?'\ud83c\udfc6':pct>=50?'\ud83d\udc4d':'\ud83d\udcaa';
+  document.getElementById('rem').textContent=pct>=80?'🏆':pct>=50?'👍':'💪';
+  saveScoreToLeaderboard(pct, quizSt.score, tot);
 }
+
+function getStudentName(){
+  var name = localStorage.getItem('ronya_username');
+  if(!name){
+    name = prompt('Skor tablosunda görünecek isminizi girin:', 'Öğrenci') || 'Anonim';
+    localStorage.setItem('ronya_username', name);
+  }
+  return name;
+}
+
+function saveScoreToLeaderboard(pct, correct, total){
+  if(total < 1) return;
+  var name = getStudentName();
+  var board = JSON.parse(localStorage.getItem('ronya_leaderboard') || '[]');
+  board.push({name:name, pct:pct, correct:correct, total:total, date:new Date().toLocaleDateString('tr-TR')});
+  board.sort(function(a,b){ return b.pct - a.pct; });
+  board = board.slice(0, 30);
+  localStorage.setItem('ronya_leaderboard', JSON.stringify(board));
+}
+
+function renderLeaderboard(){
+  var board = JSON.parse(localStorage.getItem('ronya_leaderboard') || '[]');
+  var dom = document.getElementById('leaderboard-dom');
+  if(!dom) return;
+  var html = '<div class="brow hdr"><div>Sıra</div><div>Öğrenci</div><div>Skor</div></div>';
+  if(board.length === 0){
+    html += '<div class="brow" style="grid-template-columns:1fr;text-align:center;color:var(--tx3);padding:20px">Henüz kayıtlı skor yok. Bir test tamamla!</div>';
+  } else {
+    board.forEach(function(b, i){
+      var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+      html += '<div class="brow"><div>'+medal+'</div><div>'+b.name+' <span style="color:var(--tx3);font-size:10px">('+b.date+')</span></div><div style="color:var(--ac2);font-weight:700">%'+b.pct+'</div></div>';
+    });
+  }
+  dom.innerHTML = html;
+}
+
 
 function saveAndRetry(){toast('Kaydedildi!');nav('quiz');}
 
