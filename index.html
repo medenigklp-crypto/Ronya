@@ -205,8 +205,7 @@ header {
   <button onclick="nav('lab3d')">🔬 3D Lab</button>
   <button onclick="nav('mol')">⚖️ Mol Hesaplayıcı</button>
   <button onclick="nav('eq')">⚡ Denklem Dengeleyici</button>
-  <button onclick="nav('gaz')">💨 Gaz Yasaları</button>
-  <button onclick="location.href='gaz-lab.html'">⚗️ Gaz Laboratuvarı</button>
+  <button onclick="nav('gaz')">💨 Gaz Yasaları</<button onclick="location.href='gaz-lab.html'">⚗️ Gaz Laboratuvarı</button>
   <button onclick="nav('ph')">🧪 pH Hesaplayıcı</button>
   <button onclick="location.href='kcc.html'">⚗️ Çözünürlük Dengesi</button>
   <button onclick="location.href='elektro.html'">⚡ Elektrokimyasal Hücre</button>
@@ -1042,20 +1041,6 @@ function nav(id){
   if (id === 'lab3d') { setTimeout(function(){ initLab3dPage(); }, 100); }
   if (id === 'flashcard') { setTimeout(function(){ updateCardUI(); }, 50); }
   if (id === 'cozelti') { setTimeout(function(){ drawCoz(); }, 50); }
-  function nav(id){
-  if (typeof orbAnimId2 !== 'undefined' && orbAnimId2 && id !== 'orbital') { cancelAnimationFrame(orbAnimId2); orbAnimId2=null; }
-  if (id === 'orbital') { setTimeout(function(){ initOrbitalPage(); }, 100); }
-  if (id === 'lab3d') { setTimeout(function(){ initLab3dPage(); }, 100); }
-  if (id === 'flashcard') { setTimeout(function(){ updateCardUI(); }, 50); }
-  if (id === 'cozelti') { setTimeout(function(){ drawCoz(); }, 50); }
-  
-  var mn=document.getElementById('mn');
-  if(mn) mn.style.display='none';
-  for(var i=0;i<SCREENS.length;i++){
-    var sc=document.getElementById(SCREENS[i]);
-    if(sc) sc.style.display='none';
-  }
-
   var mn=document.getElementById('mn');
   if(mn) mn.style.display='none';
   for(var i=0;i<SCREENS.length;i++){
@@ -1187,47 +1172,8 @@ function endQuiz(){
   document.getElementById('rscor').textContent=quizSt.score;
   document.getElementById('rswro').textContent=quizSt.wrongs;
   document.getElementById('rstot').textContent=tot;
-  document.getElementById('rem').textContent=pct>=80?'🏆':pct>=50?'👍':'💪';
-  
+  document.getElementById('rem').textContent=pct>=80?'\ud83c\udfc6':pct>=50?'\ud83d\udc4d':'\ud83d\udcaa';
 }
-
-/*
-function getStudentName(){
-  var name = localStorage.getItem('ronya_username');
-  if(!name){
-    name = prompt('Skor tablosunda görünecek isminizi girin:', 'Öğrenci') || 'Anonim';
-    localStorage.setItem('ronya_username', name);
-  }
-  return name;
-}
-
-function saveScoreToLeaderboard(pct, correct, total){
-  if(total < 1) return;
-  var name = getStudentName();
-  var board = JSON.parse(localStorage.getItem('ronya_leaderboard') || '[]');
-  board.push({name:name, pct:pct, correct:correct, total:total, date:new Date().toLocaleDateString('tr-TR')});
-  board.sort(function(a,b){ return b.pct - a.pct; });
-  board = board.slice(0, 30);
-  localStorage.setItem('ronya_leaderboard', JSON.stringify(board));
-}
-
-function renderLeaderboard(){
-  var board = JSON.parse(localStorage.getItem('ronya_leaderboard') || '[]');
-  var dom = document.getElementById('leaderboard-dom');
-  if(!dom) return;
-  var html = '<div class="brow hdr"><div>Sıra</div><div>Öğrenci</div><div>Skor</div></div>';
-  if(board.length === 0){
-    html += '<div class="brow" style="grid-template-columns:1fr;text-align:center;color:var(--tx3);padding:20px">Henüz kayıtlı skor yok. Bir test tamamla!</div>';
-  } else {
-    board.forEach(function(b, i){
-      var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-      html += '<div class="brow"><div>'+medal+'</div><div>'+b.name+' <span style="color:var(--tx3);font-size:10px">('+b.date+')</span></div><div style="color:var(--ac2);font-weight:700">%'+b.pct+'</div></div>';
-    });
-  }
-  dom.innerHTML = html;
-}
-*/
-
 
 function saveAndRetry(){toast('Kaydedildi!');nav('quiz');}
 
@@ -3065,7 +3011,20 @@ setTimeout(function() {
       </div>
 
       
-         
+          <!-- Dinamik Denklem Başlığı -->
+          <div id="sistem-formül-text" style="color:#4ade80; font-weight:700; font-size:1.1rem; margin-bottom:15px; text-align:center;">Tepkime: N₂(g) + 3H₂(g) ⇌ 2NH₃(g) + Isı</div>
+          
+          <!-- Aksiyon Butonları Izgarası -->
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:15px;">
+            <button class="ob" onclick="triggerDenge('vol_dec')" style="border-color:#b45309;">📉 Hacim Azalt (V↓)</button>
+            <button class="ob" onclick="triggerDenge('vol_inc')" style="border-color:#b45309;">📈 Hacim Artır (V↑)</button>
+            <button id="btn-add-gas" class="ob" onclick="triggerDenge('add_gas')">➕ N₂ Gazı Ekle</button>
+            <button id="btn-rem-gas" class="ob" onclick="triggerDenge('remove_gas')">➖ NH₃ Gazı Çek</button>
+            <button class="ob" onclick="triggerDenge('heat')" style="border-color:#ef4444;">🔥 Sıcaklık Artır (T↑)</button>
+            <button class="ob" onclick="triggerDenge('cool')" style="border-color:#3b82f6;">❄️ Sıcaklık Azalt (T↓)</button>
+          </div>
+        </div>
+        
         <!-- Grafik Kapsayıcı Alanı -->
         <div class="card" style="background:#0f172a; border:1px solid #334155; padding:15px; height:320px; border-radius:12px;">
           <canvas id="dengeCanvas" style="width:100%; height:100%;"></canvas>
