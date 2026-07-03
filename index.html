@@ -1042,6 +1042,20 @@ function nav(id){
   if (id === 'lab3d') { setTimeout(function(){ initLab3dPage(); }, 100); }
   if (id === 'flashcard') { setTimeout(function(){ updateCardUI(); }, 50); }
   if (id === 'cozelti') { setTimeout(function(){ drawCoz(); }, 50); }
+  function nav(id){
+  if (typeof orbAnimId2 !== 'undefined' && orbAnimId2 && id !== 'orbital') { cancelAnimationFrame(orbAnimId2); orbAnimId2=null; }
+  if (id === 'orbital') { setTimeout(function(){ initOrbitalPage(); }, 100); }
+  if (id === 'lab3d') { setTimeout(function(){ initLab3dPage(); }, 100); }
+  if (id === 'flashcard') { setTimeout(function(){ updateCardUI(); }, 50); }
+  if (id === 'cozelti') { setTimeout(function(){ drawCoz(); }, 50); }
+  if (id === 'board') { setTimeout(function(){ renderLeaderboard(); }, 50); }
+  var mn=document.getElementById('mn');
+  if(mn) mn.style.display='none';
+  for(var i=0;i<SCREENS.length;i++){
+    var sc=document.getElementById(SCREENS[i]);
+    if(sc) sc.style.display='none';
+  }
+
   var mn=document.getElementById('mn');
   if(mn) mn.style.display='none';
   for(var i=0;i<SCREENS.length;i++){
