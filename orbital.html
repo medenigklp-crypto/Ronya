@@ -6,7 +6,7 @@
 <title>Ronya Kimya - 3D Atomik Orbitaller & VSEPR</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#0a0a1a 0%,#1a1a3e 50%,#0f0f2e 100%);color:#fff;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#0a0a1a 0%,#1a1a3e 50%,#0f0f2e 100%);color:#fff;min-height:100vh;touch-action:pan-y}
 .header{text-align:center;padding:15px;background:rgba(0,0,0,0.4);border-bottom:2px solid #00d4ff}
 .header h1{font-size:1.3rem;color:#00d4ff;text-shadow:0 0 15px rgba(0,212,255,0.5)}
 .back-btn{display:inline-block;margin-top:8px;padding:6px 16px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);border-radius:20px;color:#00d4ff;font-size:0.8rem;cursor:pointer;text-decoration:none}
@@ -63,7 +63,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .video-actions{padding:0 10px 10px}
 .btn-del{padding:5px 12px;background:rgba(255,50,50,0.15);border:1px solid rgba(255,50,50,0.4);border-radius:8px;color:#ff6666;font-size:.78rem;cursor:pointer}
 .empty{text-align:center;padding:40px 15px;color:rgba(255,255,255,0.3)}
-.mol-3d-box{background:rgba(0,0,0,0.5);border-radius:16px;padding:15px;margin:15px 0;border:1px solid rgba(0,212,255,0.2)}
+.mol-3d-box{background:rgba(0,0,0,0.5);border-radius:16px;padding:15px;margin:15px 0;border:1px solid rgba(0,212,255,0.2);touch-action:none}
 .mol-3d-title{text-align:center;font-size:1rem;color:#00d4ff;margin-bottom:8px}
 #molCanvas{display:block;width:100%!important;height:320px!important;border-radius:12px;background:#050510;border:1px solid rgba(0,212,255,0.2);touch-action:none}
 .legend{display:flex;gap:14px;justify-content:center;margin-top:8px;flex-wrap:wrap;font-size:.75rem}
@@ -109,7 +109,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div class="mol-3d-box" id="molBox" style="display:none">
     <div class="mol-3d-title" id="molTitle">3D Molekül Görünümü</div>
     <canvas id="molCanvas" width="600" height="320"></canvas>
-    <p class="hint-drag">👆 Ekrana dokunarak 3D döndürün</p>
+    <p class="hint-drag">👆 Sürükle döndür · 🤏 İki parmak yakınlaştır/uzaklaştır</p>
     <div class="legend">
       <span><span class="legend-dot" style="background:#ff4444"></span>H (Hidrojen)</span>
       <span><span class="legend-dot" style="background:#4488ff"></span>Merkez Atom</span>
@@ -446,20 +446,16 @@ function mProj(x,y,z){
   var sc=(220*mZoom)/(300+z2);return{x:mW/2+x2*sc,y:mH/2+y1*sc,z:z2,scale:sc};
 }
 
-
 // Atom — 3D parlak küre (orbital küresiyle BİREBİR aynı doku/gölgeleme formülü)
 function mAtom(x,y,z,col,r,label){
   var p=mProj(x,y,z),radius=r*p.scale;
   var colHex=col.match(/\d+/g);
   var rgb=colHex?colHex.slice(0,3).join(','):'255,255,255';
-  // Dış parlama halesi (orbital nucleus glow tarzı)
   var glowR=radius*2.2;
   var glow=mCtx.createRadialGradient(p.x,p.y,radius*0.5,p.x,p.y,glowR);
   glow.addColorStop(0,'rgba('+rgb+',0.35)');glow.addColorStop(1,'rgba('+rgb+',0)');
   mCtx.beginPath();mCtx.arc(p.x,p.y,glowR,0,Math.PI*2);mCtx.fillStyle=glow;mCtx.fill();
-  // Gölge
   mCtx.beginPath();mCtx.arc(p.x+2,p.y+2,radius,0,Math.PI*2);mCtx.fillStyle='rgba(0,0,0,0.4)';mCtx.fill();
-  // Küre yüzeyi — orbital draw3DEllipsoid ile AYNI mesh + gölgeleme formülü (20 dilim, 14 kat)
   var slices=20,stacks=14,tris=[];
   for(var i=0;i<slices;i++){for(var j=0;j<stacks;j++){
     var u1=(Math.PI*2/slices)*i,u2=(Math.PI*2/slices)*(i+1);
@@ -470,20 +466,16 @@ function mAtom(x,y,z,col,r,label){
   }}
   tris.sort(function(a,b){return b.avgZ-a.avgZ;});
   tris.forEach(function(tri){
-    // orbital ile ayni derinlik formulu
     var depth=Math.max(.15,Math.min(1,1-(tri.avgZ+120)/350));
     mCtx.beginPath();mCtx.moveTo(tri.p[0].x,tri.p[0].y);mCtx.lineTo(tri.p[1].x,tri.p[1].y);mCtx.lineTo(tri.p[2].x,tri.p[2].y);mCtx.closePath();
     mCtx.fillStyle='rgba('+rgb+','+(0.95*depth*.55+0.35)+')';mCtx.fill();
     mCtx.strokeStyle='rgba('+rgb+','+(.25*depth+0.15)+')';mCtx.lineWidth=.4;mCtx.stroke();
   });
-  // Parlama noktası (specular highlight)
   var px2=p.x-radius*0.32,py2=p.y-radius*0.38;
   var grad=mCtx.createRadialGradient(px2,py2,radius*0.05,px2,py2,radius*0.7);
   grad.addColorStop(0,'rgba(255,255,255,0.85)');grad.addColorStop(1,'rgba(255,255,255,0)');
   mCtx.beginPath();mCtx.arc(p.x,p.y,radius,0,Math.PI*2);mCtx.fillStyle=grad;mCtx.fill();
-  // Dış kontur parlaklığı
   mCtx.beginPath();mCtx.arc(p.x,p.y,radius,0,Math.PI*2);mCtx.strokeStyle='rgba('+rgb+',0.9)';mCtx.lineWidth=1.2;mCtx.stroke();
-  // Etiket
   if(label){
     mCtx.shadowColor='rgba(0,0,0,0.8)';mCtx.shadowBlur=4;
     mCtx.fillStyle='#fff';mCtx.font='bold '+Math.round(12*p.scale+6)+'px sans-serif';mCtx.textAlign='center';mCtx.textBaseline='middle';mCtx.fillText(label,p.x,p.y);
@@ -495,42 +487,34 @@ function mP(cx,cy,cz,r,u,v){return mProj(cx+r*Math.cos(v)*Math.cos(u),cy+r*Math.
 function mBond(x1,y1,z1,x2,y2,z2){
   var p1=mProj(x1,y1,z1),p2=mProj(x2,y2,z2);
   var avgSc=(p1.scale+p2.scale)/2;
-  // Dış parlak gölge
   mCtx.strokeStyle='rgba(150,180,255,0.15)';mCtx.lineWidth=10*avgSc;mCtx.lineCap='round';
   mCtx.beginPath();mCtx.moveTo(p1.x,p1.y);mCtx.lineTo(p2.x,p2.y);mCtx.stroke();
-  // Gradient bag govdesi (metalik parlaklik)
   var grad=mCtx.createLinearGradient(p1.x,p1.y,p2.x,p2.y);
   grad.addColorStop(0,'rgba(220,230,255,0.8)');grad.addColorStop(0.5,'rgba(140,160,200,0.55)');grad.addColorStop(1,'rgba(220,230,255,0.8)');
   mCtx.strokeStyle=grad;mCtx.lineWidth=5.5*avgSc;mCtx.lineCap='round';
   mCtx.beginPath();mCtx.moveTo(p1.x,p1.y);mCtx.lineTo(p2.x,p2.y);mCtx.stroke();
-  // Ic parlak cizgi
   mCtx.strokeStyle='rgba(255,255,255,0.5)';mCtx.lineWidth=1.5*avgSc;
   mCtx.beginPath();mCtx.moveTo(p1.x,p1.y);mCtx.lineTo(p2.x,p2.y);mCtx.stroke();
 }
 
-// Ortaklanmamış elektron çifti — iki parlak sarı nokta yan yana (nabız animasyonlu)
 function mLonePair(x,y,z){
   var p=mProj(x,y,z);
   var pulse=1+Math.sin(mT*2.2)*0.12;
   var sc=p.scale,dotR=7*sc*pulse,gap=10*sc;
-  // Hale (genişletilmiş, parlak)
   var haloR=(dotR+gap)*1.4;
   var halo=mCtx.createRadialGradient(p.x,p.y,dotR*0.3,p.x,p.y,haloR);
   halo.addColorStop(0,'rgba(255,238,0,0.22)');halo.addColorStop(1,'rgba(255,238,0,0)');
   mCtx.beginPath();mCtx.arc(p.x,p.y,haloR,0,Math.PI*2);mCtx.fillStyle=halo;mCtx.fill();
-  // Sol elektron
   var g1=mCtx.createRadialGradient(p.x-gap-dotR*0.3,p.y-dotR*0.3,dotR*0.1,p.x-gap,p.y,dotR);
   g1.addColorStop(0,'#ffffff');g1.addColorStop(0.35,'#fffaaa');g1.addColorStop(0.7,'#ffee00');g1.addColorStop(1,'rgba(200,160,0,0.9)');
   mCtx.beginPath();mCtx.arc(p.x-gap,p.y,dotR,0,Math.PI*2);mCtx.fillStyle=g1;mCtx.fill();
   mCtx.strokeStyle='rgba(255,220,50,0.8)';mCtx.lineWidth=1;mCtx.stroke();
-  // Sağ elektron
   var g2=mCtx.createRadialGradient(p.x+gap-dotR*0.3,p.y-dotR*0.3,dotR*0.1,p.x+gap,p.y,dotR);
   g2.addColorStop(0,'#ffffff');g2.addColorStop(0.35,'#fffaaa');g2.addColorStop(0.7,'#ffee00');g2.addColorStop(1,'rgba(200,160,0,0.9)');
   mCtx.beginPath();mCtx.arc(p.x+gap,p.y,dotR,0,Math.PI*2);mCtx.fillStyle=g2;mCtx.fill();
   mCtx.strokeStyle='rgba(255,220,50,0.8)';mCtx.lineWidth=1;mCtx.stroke();
 }
 
-// Arka plan eksen cizgileri (orbital ekranindaki gibi hafif x/y/z eksenleri)
 function mAxes(){
   var len=110;
   [{x:len,y:0,z:0,l:'x',c:'#ff5555'},{x:0,y:-len,z:0,l:'y',c:'#55ff55'},{x:0,y:0,z:len,l:'z',c:'#5555ff'}].forEach(function(ax){
@@ -566,19 +550,15 @@ function drawNH3(){
     mBond(0,-12,0,hx,hy,hz);
     mAtom(hx*1.2,hy*1.15,hz*1.2,'rgb(241,245,249)',22,'H');
   }
-  // 1 lone pair — azotun üstünde, H'lerin karşı tarafında
   mLonePair(0,-80,0);
   mAtom(0,-12,0,'rgb(59,130,246)',28,'N');
 }
 function drawH2O(){
-  // Bağlar ve H atomları
   mBond(0,0,0,-68,-58,18);mBond(0,0,0,68,-58,-18);
   mAtom(-85,-74,24,'rgb(241,245,249)',22,'H');
   mAtom(85,-74,-24,'rgb(241,245,249)',22,'H');
-  // 2 lone pair — oksijen üzerinde, H'lerin karşı tarafında (üst kısım)
   mLonePair(-30,58,20);
   mLonePair(30,58,-20);
-  // Oksijen en son çizilir (üstte görünsün)
   mAtom(0,0,0,'rgb(239,68,68)',30,'O');
 }
 
@@ -609,6 +589,7 @@ function showMolecule(mol){
   document.getElementById('molTitle').textContent=titles[mol]||'3D Molekül';
   if(mAnimId)cancelAnimationFrame(mAnimId);
   mC=null;mCtx=null;
+  mZoom=1;mPinchDist=0;
   setTimeout(function(){
     mC=document.getElementById('molCanvas');
     mCtx=mC.getContext('2d');
@@ -621,37 +602,39 @@ function showMolecule(mol){
     mC.onmouseup=function(){mDrag=false;};
     mC.onmouseleave=function(){mDrag=false;};
     mC.ontouchstart=function(e){
-  if(e.touches.length===2){
-    mDrag=false;
-    var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY;
-    mPinchDist=Math.sqrt(dx*dx+dy*dy);
-  } else {
-    mDrag=true;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;
-  }
-  e.preventDefault();
-};
-mC.ontouchmove=function(e){
-  if(e.touches.length===2){
-    var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY;
-    var dist=Math.sqrt(dx*dx+dy*dy);
-    if(mPinchDist>0){
-      mZoom*=dist/mPinchDist;
-      mZoom=Math.max(0.5,Math.min(3,mZoom));
-    }
-    mPinchDist=dist;
-  } else if(mDrag){
-    mRotY+=(e.touches[0].clientX-mLX)*.015;mRotX+=(e.touches[0].clientY-mLY)*.015;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;
-  }
-  e.preventDefault();
-};
-mC.ontouchend=function(){mDrag=false;mPinchDist=0;};
-
+      if(e.touches.length===2){
+        mDrag=false;
+        var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY;
+        mPinchDist=Math.sqrt(dx*dx+dy*dy);
+      } else {
+        mDrag=true;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;
+      }
+      e.preventDefault();
+    };
+    mC.ontouchmove=function(e){
+      if(e.touches.length===2){
+        var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(mPinchDist>0){
+          mZoom*=dist/mPinchDist;
+          mZoom=Math.max(0.5,Math.min(3,mZoom));
+        }
+        mPinchDist=dist;
+      } else if(mDrag){
+        mRotY+=(e.touches[0].clientX-mLX)*.015;mRotX+=(e.touches[0].clientY-mLY)*.015;mLX=e.touches[0].clientX;mLY=e.touches[0].clientY;
+      }
+      e.preventDefault();
+    };
+    mC.ontouchend=function(e){
+      if(e.touches.length<2) mPinchDist=0;
+      if(e.touches.length===0) mDrag=false;
+    };
     molLoop();
   },80);
   document.getElementById('molBox').scrollIntoView({behavior:'smooth'});
 }
 function toggleMolSpin(){mSpin=!mSpin;}
-function resetMolView(){mRotX=.3;mRotY=.4;}
+function resetMolView(){mRotX=.3;mRotY=.4;mZoom=1;}
 
 // ===== VİDEO =====
 var videos=JSON.parse(localStorage.getItem('chemVids')||'[]');
