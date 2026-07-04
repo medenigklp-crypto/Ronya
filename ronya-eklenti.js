@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v5
+   RONYA KİMYA — EKLENTİ v6
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -20,6 +20,8 @@
    16) Yükseltgenme basamağı bulucu (mol ekranında)
    17) İlerleme grafiği (son 20 testin doğruluk eğrisi)
    18) Element karşılaştırma ekranı (menüde)
+   19) 🔋 3D Elektroliz Laboratuvarı: simülasyon + Faraday
+       hesaplayıcı + seri hücreler + kaplama senaryoları
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -1831,6 +1833,643 @@
     out.innerHTML = html;
   };
 
+  /* ============================================================
+     BÖLÜM 9 — 3D ELEKTROLİZ LABORATUVARI
+     • Gerçek 3D simülasyon (sürükle-döndür): iyon göçü, gaz
+       kabarcıkları, metal birikmesi, çözünen anot, elektron akışı
+     • 6 elektroliz sistemi (erimiş/sulu NaCl, CuSO₄ Pt/Cu anot,
+       saf su, erimiş Al₂O₃) — su rekabeti doğru öğretilir
+     • Faraday hesaplayıcısı (adım adım çözümlü) + seri hücreler
+     • Kaplama senaryoları (3 interaktif senaryo) + 🔋 rozet
+     ============================================================ */
+
+  // ---------- 9a. Sistem tanımları ----------
+  var ELZ_MODES = {
+    naclA: {
+      name: 'Sulu NaCl (derişik)',
+      cat: { prod: 'H₂↑', type: 'gas', gasCol: '#e2e8f0', half: '2H₂O + 2e⁻ → H₂(g) + 2OH⁻', why: 'Su, Na⁺ iyonundan daha kolay indirgenir — Na⁺ seyirci kalır!' },
+      an:  { prod: 'Cl₂↑', type: 'gas', gasCol: '#bde04a', half: '2Cl⁻ → Cl₂(g) + 2e⁻', why: 'Derişik çözeltide Cl⁻ yükseltgenir. Seyreltik olsaydı su yükseltgenir, O₂ çıkardı.' },
+      overall: '2NaCl + 2H₂O → H₂(g) + Cl₂(g) + 2NaOH',
+      ions: [ {s:'Na⁺', c:'#60a5fa', ch:1, n:7, dis:false}, {s:'Cl⁻', c:'#a3e635', ch:-1, n:7, dis:true}, {s:'H₂O', c:'#64748b', ch:0, n:6} ],
+      notes: ['Katotta Na(s) DEĞİL H₂ çıkar — suyun indirgenme isteği Na⁺\u2019dan büyüktür.', 'Çözelti giderek bazikleşir (NaOH oluşur) — klor-alkali endüstrisinin temeli.', 'YKS tuzağı: sulu çözeltide 1A ve 2A metalleri ile Al asla elektrotta toplanmaz.']
+    },
+    naclM: {
+      name: 'Erimiş NaCl',
+      cat: { prod: 'Na(s)', type: 'dep', depCol: '#cbd5e1', half: 'Na⁺ + e⁻ → Na(s)', why: 'Su yok — Na⁺ tek aday olduğu için indirgenir.' },
+      an:  { prod: 'Cl₂↑', type: 'gas', gasCol: '#bde04a', half: '2Cl⁻ → Cl₂(g) + 2e⁻', why: 'Cl⁻ tek anyon, yükseltgenir.' },
+      overall: '2NaCl(s) --elektroliz--> 2Na(s) + Cl₂(g)',
+      ions: [ {s:'Na⁺', c:'#60a5fa', ch:1, n:8, dis:true}, {s:'Cl⁻', c:'#a3e635', ch:-1, n:8, dis:true} ],
+      notes: ['Aktif metaller (Na, K, Ca, Mg, Al) sadece ERİMİŞ tuzlarının elektroliziyle elde edilir (Down hücresi).', 'Erime için yüksek sıcaklık gerekir (NaCl: 801°C).']
+    },
+    cuso4Pt: {
+      name: 'Sulu CuSO₄ (Pt anot)',
+      cat: { prod: 'Cu(s)', type: 'dep', depCol: '#e78a5a', half: 'Cu²⁺ + 2e⁻ → Cu(s)', why: 'Cu²⁺ sudan daha kolay indirgenir — katot bakırla kaplanır.' },
+      an:  { prod: 'O₂↑', type: 'gas', gasCol: '#bae6fd', half: '2H₂O → O₂(g) + 4H⁺ + 4e⁻', why: 'SO₄²⁻ yükseltgenemez (kararlı) — su yükseltgenir.' },
+      overall: '2CuSO₄ + 2H₂O → 2Cu(s) + O₂(g) + 2H₂SO₄',
+      ions: [ {s:'Cu²⁺', c:'#38bdf8', ch:1, n:7, dis:true}, {s:'SO₄²⁻', c:'#c084fc', ch:-1, n:7, dis:false}, {s:'H₂O', c:'#64748b', ch:0, n:6} ],
+      notes: ['Çözeltinin mavi rengi zamanla açılır (Cu²⁺ azalır) ve ortam asitleşir.', 'SO₄²⁻ ve NO₃⁻ gibi oksianyonlar sulu çözeltide yükseltgenmez.']
+    },
+    cuso4Cu: {
+      name: 'CuSO₄ + Cu anot (rafinasyon)',
+      cat: { prod: 'Cu(s)', type: 'dep', depCol: '#e78a5a', half: 'Cu²⁺ + 2e⁻ → Cu(s)', why: 'Saf bakır katotta birikir.' },
+      an:  { prod: 'Cu²⁺', type: 'diss', half: 'Cu(s) → Cu²⁺ + 2e⁻', why: 'AKTİF anot: elektrot kendisi çözünür, gaz çıkmaz!' },
+      overall: 'Cu(anot, saf olmayan) → Cu(katot, %99.99 saf)',
+      ions: [ {s:'Cu²⁺', c:'#38bdf8', ch:1, n:8, dis:true}, {s:'SO₄²⁻', c:'#c084fc', ch:-1, n:6, dis:false} ],
+      notes: ['Bakır rafinasyonu: anot incelir, katot kalınlaşır; Cu²⁺ derişimi SABİT kalır.', 'Anot altındaki çamurda altın-gümüş gibi soy safsızlıklar birikir (anot çamuru).']
+    },
+    water: {
+      name: 'Saf su (+ H₂SO₄)',
+      cat: { prod: 'H₂↑ (2V)', type: 'gas', gasCol: '#e2e8f0', rate: 2, half: '2H₂O + 2e⁻ → H₂(g) + 2OH⁻', why: 'Hidrojen hacmi oksijenin tam 2 katıdır!' },
+      an:  { prod: 'O₂↑ (1V)', type: 'gas', gasCol: '#bae6fd', rate: 1, half: '2H₂O → O₂(g) + 4H⁺ + 4e⁻', why: '' },
+      overall: '2H₂O --elektroliz--> 2H₂(g) + O₂(g)',
+      ions: [ {s:'H⁺', c:'#fca5a5', ch:1, n:5, dis:true}, {s:'SO₄²⁻', c:'#c084fc', ch:-1, n:4, dis:false}, {s:'H₂O', c:'#64748b', ch:0, n:8} ],
+      notes: ['Saf su iletken değildir — az miktarda H₂SO₄ veya NaOH eklenir (Hoffman voltametresi).', 'Gaz hacimleri oranı V(H₂):V(O₂) = 2:1 — YKS\u2019nin klasiği.']
+    },
+    al2o3: {
+      name: 'Erimiş Al₂O₃ (Hall-Héroult)',
+      cat: { prod: 'Al(s)', type: 'dep', depCol: '#d8dee8', half: 'Al³⁺ + 3e⁻ → Al(s)', why: 'Sıvı alüminyum hücrenin dibinde toplanır.' },
+      an:  { prod: 'O₂/CO₂↑', type: 'gas', gasCol: '#fcd34d', half: '2O²⁻ → O₂(g) + 4e⁻', why: 'Karbon (grafit) anot, çıkan O₂ ile yanarak CO₂ verir — anotlar tükenir.' },
+      overall: '2Al₂O₃ --elektroliz--> 4Al(s) + 3O₂(g)',
+      ions: [ {s:'Al³⁺', c:'#e2e8f0', ch:1, n:8, dis:true}, {s:'O²⁻', c:'#f87171', ch:-1, n:8, dis:true} ],
+      notes: ['Al₂O₃\u2019ün erime noktasını düşürmek için kriyolit (Na₃AlF₆) eklenir (2050°C → ~950°C).', 'Alüminyum üretimi çok elektrik tüketir; bu yüzden tesisler ucuz enerji bölgelerine kurulur.']
+    }
+  };
+
+  // ---------- 9b. 3D motor durumu ----------
+  var elz = { rotX: 0.32, rotY: -0.55, spin: false, drag: false, lx: 0, ly: 0,
+              anim: null, t: 0, cur: 1.2, mode: 'naclA',
+              ions: [], bubbles: [], depC: 0, depA: 9, W: 300, H: 340, cv: null, ctx: null };
+
+  function elzProj(x, y, z){
+    var y1 = y * Math.cos(elz.rotX) - z * Math.sin(elz.rotX);
+    var z1 = y * Math.sin(elz.rotX) + z * Math.cos(elz.rotX);
+    var x2 = x * Math.cos(elz.rotY) + z1 * Math.sin(elz.rotY);
+    var z2 = -x * Math.sin(elz.rotY) + z1 * Math.cos(elz.rotY);
+    var s = 330 / (460 + z2);
+    return { x: elz.W / 2 + x2 * s, y: elz.H / 2 + y1 * s + 14, z: z2, s: s };
+  }
+
+  // Kutu → 6 yüz (quad listesine ekler)
+  function elzBox(quads, cx, cy, cz, hx, hy, hz, fill, alpha, stroke){
+    var C = [
+      [cx-hx,cy-hy,cz-hz],[cx+hx,cy-hy,cz-hz],[cx+hx,cy+hy,cz-hz],[cx-hx,cy+hy,cz-hz],
+      [cx-hx,cy-hy,cz+hz],[cx+hx,cy-hy,cz+hz],[cx+hx,cy+hy,cz+hz],[cx-hx,cy+hy,cz+hz]
+    ];
+    var F2 = [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]];
+    var shade = [0.9, 0.9, 1.0, 0.7, 0.8, 0.8];
+    for (var f = 0; f < 6; f++) {
+      var pts = [], zsum = 0;
+      for (var k = 0; k < 4; k++) {
+        var p = elzProj(C[F2[f][k]][0], C[F2[f][k]][1], C[F2[f][k]][2]);
+        pts.push(p); zsum += p.z;
+      }
+      quads.push({ pts: pts, z: zsum / 4, fill: fill, a: alpha * shade[f], stroke: stroke });
+    }
+  }
+
+  function elzSetup3D(){
+    elz.cv = document.getElementById('elzCv');
+    if (!elz.cv) return;
+    elz.ctx = elz.cv.getContext('2d');
+    elz.cv.onmousedown = function(e){ elz.drag = true; elz.lx = e.clientX; elz.ly = e.clientY; };
+    elz.cv.onmousemove = function(e){
+      if (!elz.drag) return;
+      elz.rotY += (e.clientX - elz.lx) * 0.008; elz.rotX += (e.clientY - elz.ly) * 0.008;
+      elz.rotX = Math.max(-0.2, Math.min(1.1, elz.rotX));
+      elz.lx = e.clientX; elz.ly = e.clientY;
+    };
+    elz.cv.onmouseup = elz.cv.onmouseleave = function(){ elz.drag = false; };
+    elz.cv.addEventListener('touchstart', function(e){ elz.drag = true; elz.lx = e.touches[0].clientX; elz.ly = e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    elz.cv.addEventListener('touchmove', function(e){
+      if (!elz.drag) return;
+      elz.rotY += (e.touches[0].clientX - elz.lx) * 0.012; elz.rotX += (e.touches[0].clientY - elz.ly) * 0.012;
+      elz.rotX = Math.max(-0.2, Math.min(1.1, elz.rotX));
+      elz.lx = e.touches[0].clientX; elz.ly = e.touches[0].clientY; e.preventDefault();
+    }, {passive:false});
+    elz.cv.addEventListener('touchend', function(){ elz.drag = false; });
+  }
+
+  function elzSpawnIons(){
+    var m = ELZ_MODES[elz.mode];
+    elz.ions = []; elz.bubbles = []; elz.depC = 0; elz.depA = 9;
+    m.ions.forEach(function(t){
+      for (var i = 0; i < t.n; i++)
+        elz.ions.push({ x: -50 + Math.random()*100, y: 6 + Math.random()*78, z: -42 + Math.random()*84,
+                        s: t.s, c: t.c, ch: t.ch, dis: !!t.dis, cool: Math.random()*2 });
+    });
+  }
+
+  window.elzSetMode = function(mode, btn){
+    elz.mode = mode;
+    if (btn) {
+      var bs = btn.parentElement.querySelectorAll('button');
+      for (var i = 0; i < bs.length; i++) { bs[i].classList.remove('sel2'); }
+      btn.classList.add('sel2');
+    }
+    elzSpawnIons();
+    elzInfo();
+  };
+
+  function elzInfo(){
+    var m = ELZ_MODES[elz.mode];
+    var el = document.getElementById('elz-half');
+    if (!el) return;
+    var html = '<div class="g2" style="margin-bottom:10px">';
+    html += '<div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);border-radius:var(--r);padding:12px">' +
+      '<div style="font-size:10px;font-weight:800;color:#60a5fa;margin-bottom:6px">\u2296 KATOT \u00b7 \u0130ND\u0130RGENME</div>' +
+      '<div style="font-family:Space Grotesk,sans-serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:6px">' + m.cat.half + '</div>' +
+      (m.cat.why ? '<div style="font-size:11.5px;color:var(--tx2);line-height:1.5">' + m.cat.why + '</div>' : '') + '</div>';
+    html += '<div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:var(--r);padding:12px">' +
+      '<div style="font-size:10px;font-weight:800;color:#f87171;margin-bottom:6px">\u2295 ANOT \u00b7 Y\u00dcKSELTGENME</div>' +
+      '<div style="font-family:Space Grotesk,sans-serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:6px">' + m.an.half + '</div>' +
+      (m.an.why ? '<div style="font-size:11.5px;color:var(--tx2);line-height:1.5">' + m.an.why + '</div>' : '') + '</div>';
+    html += '</div>';
+    html += '<div style="background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:10px 12px;text-align:center;font-family:Space Grotesk,sans-serif;font-size:13px;font-weight:700;color:var(--ac2);margin-bottom:10px">' + m.overall + '</div>';
+    html += '<div style="font-size:12px;color:var(--tx2);line-height:1.8">';
+    m.notes.forEach(function(nt){ html += '\ud83d\udccc ' + nt + '<br>'; });
+    html += '</div>';
+    el.innerHTML = html;
+  }
+
+  function elzLoop(){
+    var scr = document.getElementById('s-elz');
+    if (!scr || scr.style.display === 'none' || !elz.cv) { elzStop(); return; }
+    elz.anim = requestAnimationFrame(elzLoop);
+    var rect = elz.cv.getBoundingClientRect();
+    var dpr = window.devicePixelRatio || 1;
+    if (Math.abs(elz.cv.width - rect.width * dpr) > 2) { elz.cv.width = rect.width * dpr; elz.cv.height = 340 * dpr; }
+    var x = elz.ctx;
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    elz.W = rect.width || 300; elz.H = 340;
+    x.clearRect(0, 0, elz.W, elz.H);
+    x.fillStyle = '#050510'; x.fillRect(0, 0, elz.W, elz.H);
+    if (elz.spin && !elz.drag) elz.rotY += 0.005;
+    elz.t += 0.016;
+
+    var m = ELZ_MODES[elz.mode];
+    var quads = [], sprites = [];
+    var CATX = -72, ANX = 72;
+
+    // Sıvı (tank içi)
+    elzBox(quads, 0, 50, 0, 108, 52, 58, '56,130,246', 0.07, 'rgba(120,180,255,.22)');
+    // Elektrotlar (anot Cu modunda incelir)
+    var anHx = elz.mode === 'cuso4Cu' ? Math.max(3, elz.depA) : 7;
+    elzBox(quads, CATX, 30, 0, 7, 66, 20, '154,164,178', 0.85, 'rgba(200,210,225,.5)');
+    elzBox(quads, ANX, 30, 0, anHx, 66, 20, '154,164,178', 0.85, 'rgba(200,210,225,.5)');
+    // Katot birikintisi (iç yüzde büyür)
+    if (m.cat.type === 'dep' && elz.depC > 0.3) {
+      var col = m.cat.depCol;
+      var rgb = col === '#e78a5a' ? '231,138,90' : '216,222,232';
+      elzBox(quads, CATX + 7 + elz.depC/2, 55, 0, elz.depC/2, 40, 18, rgb, 0.9, null);
+    }
+    // Güç kaynağı
+    elzBox(quads, 0, -86, 0, 34, 14, 14, '30,36,54', 0.95, 'rgba(129,140,248,.6)');
+
+    // İyon hareketi
+    var spd = 0.35 * elz.cur;
+    for (var i = 0; i < elz.ions.length; i++) {
+      var io = elz.ions[i];
+      io.cool -= 0.016;
+      var tx = io.ch > 0 ? CATX + 14 : io.ch < 0 ? ANX - 14 : io.x;
+      if (io.ch !== 0) io.x += (tx - io.x) * 0.004 * elz.cur + (Math.random() - 0.5) * spd;
+      else io.x += (Math.random() - 0.5) * spd * 0.8;
+      io.y += (Math.random() - 0.5) * spd * 0.7;
+      io.z += (Math.random() - 0.5) * spd * 0.8;
+      io.x = Math.max(-100, Math.min(100, io.x));
+      io.y = Math.max(4, Math.min(92, io.y));
+      io.z = Math.max(-50, Math.min(50, io.z));
+      // Elektroda varış
+      if (io.ch !== 0 && io.cool <= 0 && Math.abs(io.x - tx) < 5) {
+        var side = io.ch > 0 ? m.cat : m.an;
+        if (io.dis) {
+          if (side.type === 'dep') elz.depC = Math.min(8, elz.depC + 0.18);
+          if (side.type === 'gas') elzBubble(io.ch > 0 ? CATX + 10 : ANX - 10, io.y, io.z, side.gasCol);
+          if (elz.mode === 'cuso4Cu' && io.ch > 0) { // rafinasyon: anot çözünür, yeni Cu²⁺ doğar
+            elz.depA = Math.max(3, elz.depA - 0.06);
+            io.x = ANX - 16; io.y = 10 + Math.random()*80; io.z = -40 + Math.random()*80;
+          } else {
+            io.x = -40 + Math.random()*80; io.y = 8 + Math.random()*80; io.z = -40 + Math.random()*80;
+          }
+          io.cool = 1.6;
+        } else {
+          io.x -= io.ch > 0 ? 10 : -10; // boşalamayan iyon geri döner (seyirci)
+          io.cool = 1.2;
+        }
+      }
+      var p = elzProj(io.x, io.y, io.z);
+      sprites.push({ x: p.x, y: p.y, z: p.z, r: (io.ch === 0 ? 3.2 : 5) * p.s, c: io.c, lbl: io.s, faint: io.ch === 0 });
+    }
+    // Su modunda ve gaz üreten elektrotlarda sürekli kabarcık (su rekabeti görseli)
+    if (m.cat.type === 'gas' && Math.random() < 0.03 * elz.cur * (m.cat.rate || 1)) elzBubble(CATX + 10, 30 + Math.random()*55, -18 + Math.random()*36, m.cat.gasCol);
+    if (m.an.type === 'gas' && Math.random() < 0.03 * elz.cur * (m.an.rate || 1)) elzBubble(ANX - 10, 30 + Math.random()*55, -18 + Math.random()*36, m.an.gasCol);
+    // Kabarcıklar yükselir
+    for (var b = elz.bubbles.length - 1; b >= 0; b--) {
+      var bb = elz.bubbles[b];
+      bb.y -= 0.55 * elz.cur; bb.x += (Math.random() - 0.5) * 0.4; bb.r = Math.min(4.2, bb.r + 0.02);
+      if (bb.y < 0) { elz.bubbles.splice(b, 1); continue; }
+      var pb = elzProj(bb.x, bb.y, bb.z);
+      sprites.push({ x: pb.x, y: pb.y, z: pb.z, r: bb.r * pb.s, c: bb.c, bubble: true });
+    }
+
+    // Çizim: quad + sprite birlikte derinlik sırasına göre
+    var all = quads.map(function(q){ q.q = 1; return q; }).concat(sprites);
+    all.sort(function(a, b){ return b.z - a.z; });
+    for (var d2 = 0; d2 < all.length; d2++) {
+      var o = all[d2];
+      if (o.q) {
+        x.beginPath();
+        x.moveTo(o.pts[0].x, o.pts[0].y);
+        for (var k2 = 1; k2 < 4; k2++) x.lineTo(o.pts[k2].x, o.pts[k2].y);
+        x.closePath();
+        x.fillStyle = 'rgba(' + o.fill + ',' + o.a + ')'; x.fill();
+        if (o.stroke) { x.strokeStyle = o.stroke; x.lineWidth = 0.7; x.stroke(); }
+      } else if (o.bubble) {
+        x.beginPath(); x.arc(o.x, o.y, Math.max(0.5, o.r), 0, 2*Math.PI);
+        x.strokeStyle = o.c; x.lineWidth = 1.2; x.stroke();
+        x.fillStyle = 'rgba(255,255,255,.12)'; x.fill();
+      } else {
+        x.beginPath(); x.arc(o.x, o.y, Math.max(1, o.r), 0, 2*Math.PI);
+        x.fillStyle = o.c; x.globalAlpha = o.faint ? 0.35 : 0.95; x.fill(); x.globalAlpha = 1;
+        if (!o.faint && o.r > 3.5) {
+          x.fillStyle = '#0b0e18'; x.font = 'bold ' + Math.max(6, o.r * 1.15) + 'px sans-serif';
+          x.textAlign = 'center'; x.textBaseline = 'middle';
+          x.fillText(o.lbl, o.x, o.y);
+          x.textBaseline = 'alphabetic';
+        }
+      }
+    }
+
+    // Kablolar + elektron akışı (anot → kaynak → katot)
+    var wire = [ [ANX, -36, 0], [ANX, -86, 0], [34, -86, 0] ];
+    var wire2 = [ [-34, -86, 0], [CATX, -86, 0], [CATX, -36, 0] ];
+    function drawWire(w){
+      x.strokeStyle = 'rgba(148,163,184,.6)'; x.lineWidth = 2;
+      x.beginPath();
+      for (var i2 = 0; i2 < w.length; i2++) {
+        var p2 = elzProj(w[i2][0], w[i2][1], w[i2][2]);
+        if (i2 === 0) x.moveTo(p2.x, p2.y); else x.lineTo(p2.x, p2.y);
+      }
+      x.stroke();
+    }
+    drawWire(wire); drawWire(wire2);
+    function dotOn(w, f){
+      var segs = w.length - 1, fi = f * segs, si = Math.min(segs - 1, Math.floor(fi)), ft = fi - si;
+      var ax = w[si][0] + (w[si+1][0] - w[si][0]) * ft;
+      var ay = w[si][1] + (w[si+1][1] - w[si][1]) * ft;
+      var az = w[si][2] + (w[si+1][2] - w[si][2]) * ft;
+      return elzProj(ax, ay, az);
+    }
+    for (var ed = 0; ed < 3; ed++) {
+      var f2 = ((elz.t * 0.25 * elz.cur) + ed / 3) % 1;
+      var pA = dotOn(wire, f2), pC = dotOn(wire2, f2);
+      x.beginPath(); x.arc(pA.x, pA.y, 3, 0, 2*Math.PI); x.fillStyle = '#facc15'; x.fill();
+      x.beginPath(); x.arc(pC.x, pC.y, 3, 0, 2*Math.PI); x.fill();
+    }
+    var eLbl = dotOn(wire2, 0.5);
+    x.fillStyle = '#facc15'; x.font = 'bold 10px sans-serif'; x.textAlign = 'center';
+    x.fillText('e\u207b \u2192', eLbl.x, eLbl.y - 8);
+
+    // Etiketler
+    var pcat = elzProj(CATX, -46, 0), pan = elzProj(ANX, -46, 0), psrc = elzProj(0, -86, 0);
+    x.font = 'bold 11px sans-serif'; x.textAlign = 'center';
+    x.fillStyle = '#60a5fa'; x.fillText('\u2296 KATOT', pcat.x, pcat.y);
+    x.fillStyle = '#f87171'; x.fillText('\u2295 ANOT', pan.x, pan.y);
+    x.fillStyle = '#c7d2fe'; x.font = 'bold 10px sans-serif'; x.fillText('DC G\u00dc\u00c7 KAYNA\u011eI', psrc.x, psrc.y - 22);
+    // Ürün etiketleri
+    var pc2 = elzProj(CATX, 100, 0), pa2 = elzProj(ANX, 100, 0);
+    x.font = 'bold 12px sans-serif';
+    x.fillStyle = '#e2e8f0'; x.fillText(m.cat.prod, pc2.x, pc2.y + 14);
+    x.fillStyle = m.an.type === 'diss' ? '#38bdf8' : '#e2e8f0'; x.fillText(m.an.prod, pa2.x, pa2.y + 14);
+    x.fillStyle = 'rgba(255,255,255,.22)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckleyerek 3D d\u00f6nd\u00fcr', 8, elz.H - 8);
+    x.textAlign = 'right';
+    x.fillText('I = ' + elz.cur.toFixed(1) + ' A', elz.W - 8, elz.H - 8);
+    x.textAlign = 'left';
+  }
+
+  function elzBubble(bx, by, bz, c){
+    if (elz.bubbles.length > 60) return;
+    elz.bubbles.push({ x: bx, y: by, z: bz, r: 1.2 + Math.random()*1.5, c: c || '#e2e8f0' });
+  }
+
+  function elzStart(){
+    if (!document.getElementById('s-elz')) return;
+    if (!elz.cv) elzSetup3D();
+    if (!elz.ions.length) elzSpawnIons();
+    elzInfo();
+    if (elz.anim) cancelAnimationFrame(elz.anim);
+    elzLoop();
+  }
+  function elzStop(){ if (elz.anim) { cancelAnimationFrame(elz.anim); elz.anim = null; } }
+  window.elzToggleSpin = function(){ elz.spin = !elz.spin; };
+  window.elzResetView = function(){ elz.rotX = 0.32; elz.rotY = -0.55; };
+  window.elzSetCur = function(v){ elz.cur = v / 10; };
+
+  // ---------- 9c. Faraday hesaplayıcısı ----------
+  var ELZ_SP = [
+    {k:'Ag', l:'G\u00fcm\u00fc\u015f \u2014 Ag\u207a+e\u207b', M:108, n:1},
+    {k:'Cu', l:'Bak\u0131r \u2014 Cu\u00b2\u207a+2e\u207b', M:63.5, n:2},
+    {k:'Al', l:'Al\u00fcminyum \u2014 Al\u00b3\u207a+3e\u207b', M:27, n:3},
+    {k:'Zn', l:'\u00c7inko \u2014 Zn\u00b2\u207a+2e\u207b', M:65, n:2},
+    {k:'Ni', l:'Nikel \u2014 Ni\u00b2\u207a+2e\u207b', M:59, n:2},
+    {k:'Cr', l:'Krom \u2014 Cr\u00b3\u207a+3e\u207b', M:52, n:3},
+    {k:'Au', l:'Alt\u0131n \u2014 Au\u00b3\u207a+3e\u207b', M:197, n:3},
+    {k:'Na', l:'Sodyum \u2014 Na\u207a+e\u207b', M:23, n:1},
+    {k:'Pb', l:'Kur\u015fun \u2014 Pb\u00b2\u207a+2e\u207b', M:207, n:2},
+    {k:'H2', l:'H\u2082 gaz\u0131 \u2014 2H\u207a+2e\u207b', M:2, n:2, gas:1},
+    {k:'O2', l:'O\u2082 gaz\u0131 \u2014 4e\u207b', M:32, n:4, gas:1},
+    {k:'Cl2', l:'Cl\u2082 gaz\u0131 \u2014 2e\u207b', M:71, n:2, gas:1}
+  ];
+  var ELZ_F = 96500;
+
+  function elzSp(k){ for (var i = 0; i < ELZ_SP.length; i++) if (ELZ_SP[i].k === k) return ELZ_SP[i]; return ELZ_SP[0]; }
+  function elzSecs(){
+    var v = parseFloat((document.getElementById('fd-t') || {}).value);
+    var u = (document.getElementById('fd-tu') || {}).value || 's';
+    if (isNaN(v)) return NaN;
+    return u === 'sa' ? v * 3600 : u === 'dk' ? v * 60 : v;
+  }
+  function elzTimeStr(sec){
+    if (sec >= 3600) return (sec/3600).toFixed(2) + ' saat (' + Math.round(sec) + ' s)';
+    if (sec >= 60) return (sec/60).toFixed(2) + ' dakika (' + Math.round(sec) + ' s)';
+    return sec.toFixed(1) + ' saniye';
+  }
+
+  window.fdModeChanged = function(){
+    var u = (document.getElementById('fd-u') || {}).value;
+    var sp = elzSp((document.getElementById('fd-sp') || {}).value);
+    var show = function(id, on){ var e = document.getElementById(id); if (e) e.style.display = on ? '' : 'none'; };
+    show('fd-row-i', u !== 'I');
+    show('fd-row-t', u !== 't');
+    show('fd-row-m', u !== 'm');
+    var ml = document.getElementById('fd-m-lbl');
+    if (ml) ml.textContent = sp.gas ? 'Gaz Hacmi (L, NK)' : 'K\u00fctle (g)';
+  };
+
+  window.faradayRun = function(){
+    var u = (document.getElementById('fd-u') || {}).value;
+    var sp = elzSp((document.getElementById('fd-sp') || {}).value);
+    var out = document.getElementById('fd-out');
+    if (!out) return;
+    var I = parseFloat((document.getElementById('fd-i') || {}).value);
+    var t = elzSecs();
+    var mv = parseFloat((document.getElementById('fd-m') || {}).value);
+    var steps = [], res = '';
+    try {
+      if (u === 'm') {
+        if (isNaN(I) || isNaN(t)) throw new Error('Ak\u0131m ve s\u00fcreyi gir.');
+        var Q = I * t, moleE = Q / ELZ_F, mol = moleE / sp.n, m2 = mol * sp.M;
+        steps.push('Q = I \u00d7 t = ' + I + ' \u00d7 ' + Math.round(t) + ' = ' + Q.toFixed(0) + ' C');
+        steps.push('mol e\u207b = Q / F = ' + Q.toFixed(0) + ' / 96500 = ' + moleE.toFixed(4) + ' mol');
+        steps.push('mol madde = mol e\u207b / n = ' + moleE.toFixed(4) + ' / ' + sp.n + ' = ' + mol.toFixed(4) + ' mol');
+        steps.push('m = mol \u00d7 M = ' + mol.toFixed(4) + ' \u00d7 ' + sp.M + ' = ' + m2.toFixed(3) + ' g');
+        res = '<b>' + m2.toFixed(3) + ' g</b>';
+        if (sp.gas) { steps.push('V(NK) = mol \u00d7 22.4 = ' + (mol * 22.4).toFixed(3) + ' L'); res += ' \u00b7 <b>' + (mol*22.4).toFixed(3) + ' L (NK)</b>'; }
+      } else {
+        if (isNaN(mv)) throw new Error(sp.gas ? 'Gaz hacmini (L, NK) gir.' : 'K\u00fctleyi gir.');
+        var mol2 = sp.gas ? mv / 22.4 : mv / sp.M;
+        var moleE2 = mol2 * sp.n, Q2 = moleE2 * ELZ_F;
+        steps.push(sp.gas ? 'mol = V / 22.4 = ' + mv + ' / 22.4 = ' + mol2.toFixed(4) + ' mol'
+                          : 'mol = m / M = ' + mv + ' / ' + sp.M + ' = ' + mol2.toFixed(4) + ' mol');
+        steps.push('mol e\u207b = mol \u00d7 n = ' + mol2.toFixed(4) + ' \u00d7 ' + sp.n + ' = ' + moleE2.toFixed(4) + ' mol');
+        steps.push('Q = mol e\u207b \u00d7 F = ' + moleE2.toFixed(4) + ' \u00d7 96500 = ' + Q2.toFixed(0) + ' C');
+        if (u === 't') {
+          if (isNaN(I)) throw new Error('Ak\u0131m\u0131 gir.');
+          var tt = Q2 / I;
+          steps.push('t = Q / I = ' + Q2.toFixed(0) + ' / ' + I + ' = ' + tt.toFixed(1) + ' s');
+          res = '<b>' + elzTimeStr(tt) + '</b>';
+        } else {
+          if (isNaN(t)) throw new Error('S\u00fcreyi gir.');
+          var ii = Q2 / t;
+          steps.push('I = Q / t = ' + Q2.toFixed(0) + ' / ' + Math.round(t) + ' = ' + ii.toFixed(3) + ' A');
+          res = '<b>' + ii.toFixed(3) + ' A</b>';
+        }
+      }
+      var html = '<div class="rb"><div class="rl">Sonu\u00e7</div><div class="rv" style="font-size:20px">' + res + '</div></div>';
+      html += '<div style="background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:12px;margin-top:8px">' +
+        '<div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Ad\u0131m Ad\u0131m \u00c7\u00f6z\u00fcm (F = 96500 C/mol)</div>';
+      steps.forEach(function(s2, i2){ html += '<div style="font-size:12.5px;color:var(--tx2);padding:3px 0;font-family:Space Grotesk,sans-serif"><span style="color:var(--ac2);font-weight:700">' + (i2+1) + '.</span> ' + s2 + '</div>'; });
+      html += '</div>';
+      out.innerHTML = html;
+    } catch (err) {
+      out.innerHTML = '<div style="font-size:13px;color:var(--yw)">' + err.message + '</div>';
+    }
+  };
+
+  window.seriRun = function(){
+    var A = elzSp((document.getElementById('sr-a') || {}).value);
+    var B = elzSp((document.getElementById('sr-b') || {}).value);
+    var mA = parseFloat((document.getElementById('sr-m') || {}).value);
+    var out = document.getElementById('sr-out');
+    if (!out) return;
+    if (isNaN(mA)) { out.innerHTML = '<div style="font-size:13px;color:var(--yw)">Birinci h\u00fccredeki k\u00fctleyi gir.</div>'; return; }
+    var mB = mA * (B.M / B.n) / (A.M / A.n);
+    var html = '<div class="rb"><div class="rl">' + B.k + ' k\u00fctlesi</div><div class="rv" style="font-size:20px">' + mB.toFixed(3) + ' g' +
+      (B.gas ? ' \u00b7 ' + ((mB / B.M) * 22.4).toFixed(3) + ' L (NK)' : '') + '</div></div>';
+    html += '<div style="font-size:12px;color:var(--tx2);margin-top:8px;line-height:1.7">Seri ba\u011fl\u0131 h\u00fccrelerden AYNI y\u00fck (Q) ge\u00e7er \u2192 k\u00fctleler <b>e\u015fde\u011fer k\u00fctlelerle (M/n)</b> orant\u0131l\u0131d\u0131r:<br>' +
+      'm(' + B.k + ') = ' + mA + ' \u00d7 (' + B.M + '/' + B.n + ') / (' + A.M + '/' + A.n + ') = <b>' + mB.toFixed(3) + ' g</b></div>';
+    out.innerHTML = html;
+  };
+
+  // ---------- 9d. Kaplama senaryoları ----------
+  var ELZ_SCEN = [
+    { id: 'ag', icon: '\ud83e\udd44', title: 'Demir ka\u015f\u0131\u011f\u0131 g\u00fcm\u00fc\u015fle kapla',
+      intro: 'Bir demir ka\u015f\u0131\u011f\u0131 g\u00fcm\u00fc\u015fle kaplamak istiyorsun. D\u00fczene\u011fi do\u011fru kur:',
+      qs: [
+        { q: 'Ka\u015f\u0131k hangi elektrot olmal\u0131?', opts: ['Katot (\u2212)', 'Anot (+)', 'Fark etmez', 'Tuz k\u00f6pr\u00fcs\u00fc'], a: 0,
+          why: 'Kaplanacak e\u015fya HER ZAMAN katottur \u2014 metal iyonlar\u0131 (Ag\u207a) katotta indirgenerek e\u015fyan\u0131n \u00fczerinde birikir.' },
+        { q: 'Anot ne olmal\u0131?', opts: ['G\u00fcm\u00fc\u015f \u00e7ubuk', 'Demir \u00e7ubuk', 'Bak\u0131r tel', 'Grafit'], a: 0,
+          why: 'Aktif g\u00fcm\u00fc\u015f anot \u00e7\u00f6z\u00fcnerek (Ag \u2192 Ag\u207a + e\u207b) \u00e7\u00f6zeltideki Ag\u207a deri\u015fimini sabit tutar \u2014 kaplama kal\u0131n ve d\u00fczg\u00fcn olur.' },
+        { q: '\u00c7\u00f6zelti ne olmal\u0131?', opts: ['AgNO\u2083 \u00e7\u00f6zeltisi', 'FeSO\u2084 \u00e7\u00f6zeltisi', 'NaCl \u00e7\u00f6zeltisi', 'Saf su'], a: 0,
+          why: '\u00c7\u00f6zelti mutlaka KAPLAYAN metalin iyonunu i\u00e7ermelidir (Ag\u207a).' }
+      ] },
+    { id: 'cu', icon: '\ud83d\udfe0', title: 'Bak\u0131r rafinasyonu (saf bak\u0131r \u00fcret)',
+      intro: 'Saf olmayan (blister) bak\u0131rdan %99.99 saf bak\u0131r elde edeceksin:',
+      qs: [
+        { q: 'Saf olmayan bak\u0131r hangi elektrot olur?', opts: ['Anot (+)', 'Katot (\u2212)', '\u00c7\u00f6zeltiye at\u0131l\u0131r', 'Tuz k\u00f6pr\u00fcs\u00fc'], a: 0,
+          why: 'Saf olmayan bak\u0131r ANOTTUR \u2014 \u00e7\u00f6z\u00fcnerek Cu\u00b2\u207a verir; saf bak\u0131r ise ince levha halinde katottur ve orada birikir.' },
+        { q: '\u00c7\u00f6zelti ne olmal\u0131?', opts: ['CuSO\u2084 \u00e7\u00f6zeltisi', 'NaCl \u00e7\u00f6zeltisi', 'AgNO\u2083 \u00e7\u00f6zeltisi', 'H\u2082SO\u2084 (deri\u015fik)'], a: 0,
+          why: 'Cu\u00b2\u207a i\u00e7eren \u00e7\u00f6zelti gerekir; elektroliz boyunca Cu\u00b2\u207a deri\u015fimi sabit kal\u0131r (anottan gelen = katotta biriken).' },
+        { q: 'Anot \u00e7amuru nedir?', opts: ['Alt\u0131n-g\u00fcm\u00fc\u015f gibi soy safs\u0131zl\u0131klar', '\u00c7\u00f6z\u00fcnen bak\u0131r', 'S\u00fclfat tuzlar\u0131', 'Grafit tozu'], a: 0,
+          why: 'Bak\u0131rdan daha SOY (aktifli\u011fi d\u00fc\u015f\u00fck) metaller y\u00fckseltgenemez, anodun dibine \u00e7\u00f6ker \u2014 bu \u00e7amurdan alt\u0131n ve g\u00fcm\u00fc\u015f geri kazan\u0131l\u0131r.' }
+      ] },
+    { id: 'au', icon: '\ud83d\udc8d', title: 'Kolyeyi alt\u0131nla kapla',
+      intro: 'G\u00fcm\u00fc\u015f bir kolyeyi alt\u0131nla kaplayacaks\u0131n:',
+      qs: [
+        { q: 'Kolye nereye ba\u011flan\u0131r?', opts: ['G\u00fc\u00e7 kayna\u011f\u0131n\u0131n (\u2212) ucuna', 'G\u00fc\u00e7 kayna\u011f\u0131n\u0131n (+) ucuna', '\u0130ki elektrot aras\u0131na', 'Toprak hatt\u0131na'], a: 0,
+          why: '(\u2212) u\u00e7 = katot. Elektronlar kolyeye akar, Au\u00b3\u207a orada indirgenip birikir.' },
+        { q: 'Kolyeyi yanl\u0131\u015fl\u0131kla (+) uca ba\u011flarsan ne olur?', opts: ['Kaplama olmaz, kolye \u00e7\u00f6z\u00fcnebilir', 'Daha h\u0131zl\u0131 kaplan\u0131r', 'Hi\u00e7bir \u015fey de\u011fi\u015fmez', 'Kolye k\u0131r\u0131l\u0131r'], a: 0,
+          why: '(+) u\u00e7 = anot = y\u00fckseltgenme. Kolye kaplanmak yerine \u00e7\u00f6z\u00fcnmeye ba\u015flar \u2014 tam tersi etki!' },
+        { q: 'Kaplanan alt\u0131n k\u00fctlesi neye ba\u011fl\u0131d\u0131r?', opts: ['Ak\u0131m \u00d7 s\u00fcre (ge\u00e7en y\u00fck)', 'Sadece \u00e7\u00f6zelti s\u0131cakl\u0131\u011f\u0131na', 'Kolyenin rengine', 'Kab\u0131n hacmine'], a: 0,
+          why: 'Faraday yasas\u0131: m = M\u00b7I\u00b7t / (n\u00b7F). Ge\u00e7en y\u00fck (Q = I\u00b7t) artt\u0131k\u00e7a biriken k\u00fctle artar.' }
+      ] }
+  ];
+  var elzScenIdx = 0, elzScenAns = {};
+
+  function elzScenHTML(){
+    var sc = ELZ_SCEN[elzScenIdx];
+    var done = sget('rk_flags', {}).elzs || [];
+    var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
+      '<button type="button" class="ob" onclick="elzScenNav(-1)" ' + (elzScenIdx === 0 ? 'disabled style="opacity:.3"' : '') + '>\u2190</button>' +
+      '<div style="font-size:11px;color:var(--tx3);font-weight:700">Senaryo ' + (elzScenIdx + 1) + '/' + ELZ_SCEN.length + ' \u00b7 Tamamlanan: ' + done.length + '/3</div>' +
+      '<button type="button" class="ob" onclick="elzScenNav(1)" ' + (elzScenIdx === ELZ_SCEN.length - 1 ? 'disabled style="opacity:.3"' : '') + '>\u2192</button></div>';
+    html += '<div style="font-family:Space Grotesk,sans-serif;font-size:17px;font-weight:800;color:#fff;margin-bottom:4px">' + sc.icon + ' ' + sc.title + '</div>';
+    html += '<p style="font-size:13px;color:var(--tx2);margin-bottom:14px;line-height:1.6">' + sc.intro + '</p>';
+    for (var i = 0; i < sc.qs.length; i++) {
+      var q = sc.qs[i], picked = elzScenAns[sc.id + i];
+      html += '<div style="margin-bottom:14px">' +
+        '<div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:8px">' + (i + 1) + ') ' + q.q + '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
+      for (var o = 0; o < q.opts.length; o++) {
+        var cls = 'ob2', dis = '';
+        if (picked !== undefined) {
+          dis = 'disabled';
+          if (o === q.a) cls = 'ob2 cor';
+          else if (o === picked) cls = 'ob2 wro';
+        }
+        html += '<button type="button" class="' + cls + '" ' + dis + ' onclick="elzScenPick(' + i + ',' + o + ')" style="font-size:12.5px">' + q.opts[o] + '</button>';
+      }
+      html += '</div>';
+      if (picked !== undefined)
+        html += '<div style="font-size:12px;color:' + (picked === q.a ? '#22c55e' : '#f87171') + ';margin-top:6px;line-height:1.6">' +
+          (picked === q.a ? '\u2713 ' : '\u2717 ') + q.why + '</div>';
+      html += '</div>';
+    }
+    var allDone = sc.qs.every(function(_, i2){ return elzScenAns[sc.id + i2] !== undefined; });
+    if (allDone) {
+      var allCorrect = sc.qs.every(function(q2, i3){ return elzScenAns[sc.id + i3] === q2.a; });
+      html += '<div style="background:' + (allCorrect ? 'rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)' : 'rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3)') + ';border-radius:var(--r);padding:12px;font-size:13px;font-weight:600;color:' + (allCorrect ? '#22c55e' : '#f59e0b') + '">' +
+        (allCorrect ? '\ud83c\udf89 M\u00fckemmel \u2014 d\u00fczenek do\u011fru kuruldu!' : 'Senaryo bitti \u2014 a\u00e7\u0131klamalar\u0131 oku, sonra tekrar dene!') +
+        ' <button type="button" class="ob" style="margin-left:8px" onclick="elzScenReset()">\u21bb Tekrar</button></div>';
+    }
+    return html;
+  }
+  window.elzScenPick = function(qi, oi){
+    var sc = ELZ_SCEN[elzScenIdx];
+    if (elzScenAns[sc.id + qi] !== undefined) return;
+    elzScenAns[sc.id + qi] = oi;
+    var allDone = sc.qs.every(function(_, i2){ return elzScenAns[sc.id + i2] !== undefined; });
+    var allCorrect = allDone && sc.qs.every(function(q2, i3){ return elzScenAns[sc.id + i3] === q2.a; });
+    if (allCorrect) {
+      var fl = sget('rk_flags', {});
+      fl.elzs = fl.elzs || [];
+      if (fl.elzs.indexOf(sc.id) === -1) { fl.elzs.push(sc.id); sset('rk_flags', fl); }
+      try { checkBadges(true); } catch (e) {}
+    }
+    var box = document.getElementById('elz-scen');
+    if (box) box.innerHTML = elzScenHTML();
+  };
+  window.elzScenNav = function(d){
+    elzScenIdx = Math.max(0, Math.min(ELZ_SCEN.length - 1, elzScenIdx + d));
+    var box = document.getElementById('elz-scen');
+    if (box) box.innerHTML = elzScenHTML();
+  };
+  window.elzScenReset = function(){
+    var sc = ELZ_SCEN[elzScenIdx];
+    for (var i = 0; i < sc.qs.length; i++) delete elzScenAns[sc.id + i];
+    var box = document.getElementById('elz-scen');
+    if (box) box.innerHTML = elzScenHTML();
+  };
+
+  // ---------- 9e. Ekran kurulumu ----------
+  function setupElz(){
+    if (document.getElementById('s-elz')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var spOpts = '';
+    ELZ_SP.forEach(function(s){ spOpts += '<option value="' + s.k + '">' + s.l + ' (M=' + s.M + ', n=' + s.n + ')</option>'; });
+    var modeBtns = '';
+    Object.keys(ELZ_MODES).forEach(function(k, i){
+      modeBtns += '<button type="button" class="ob' + (i === 0 ? ' sel2' : '') + '" style="flex-shrink:0" onclick="elzSetMode(\'' + k + '\',this)">' + ELZ_MODES[k].name + '</button>';
+    });
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-elz" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udd0b Elektroliz Laboratuvar\u0131</h1>' +
+        '<p class="psub">3D sim\u00fclasyon, Faraday hesaplar\u0131 ve kaplama senaryolar\u0131 \u2014 galvanik h\u00fccrenin z\u0131tt\u0131: elektrik enerjisiyle Y\u00dcR\u00dcT\u00dcLEN tepkimeler.</p>' +
+        '<div class="tabs" id="elz-tabs">' +
+          '<button class="tab on" onclick="tswitch(\'elz-tabs\',\'elz-tps\',0)">\u26a1 3D Sim\u00fclasyon</button>' +
+          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',1)">\ud83e\uddee Faraday</button>' +
+          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',2)">\ud83e\udd48 Kaplama</button>' +
+        '</div>' +
+        '<div id="elz-tps">' +
+          // --- TAB 1: 3D ---
+          '<div class="tp on">' +
+            '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:10px"><div style="display:flex;gap:6px;min-width:max-content">' + modeBtns + '</div></div>' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:10px">' +
+              '<canvas id="elzCv" style="width:100%;display:block;touch-action:none" height="340"></canvas>' +
+            '</div>' +
+            '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:14px">' +
+              '<button type="button" class="ob" onclick="elzToggleSpin()">\ud83d\udd04 Oto-D\u00f6nd\u00fcr</button>' +
+              '<button type="button" class="ob" onclick="elzResetView()">\ud83c\udfaf S\u0131f\u0131rla</button>' +
+              '<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:6px 14px">' +
+                '<span style="font-size:11px;color:var(--tx3);font-weight:700">Ak\u0131m</span>' +
+                '<input type="range" min="3" max="30" value="12" oninput="elzSetCur(this.value)" style="width:110px">' +
+              '</div>' +
+            '</div>' +
+            '<div id="elz-half"></div>' +
+            '<div class="card" style="margin-top:12px"><div class="slbl">Galvanik \u2194 Elektrolitik</div>' +
+              '<div style="font-size:12px;color:var(--tx2);line-height:1.9">' +
+                '\u26a1 <b>Galvanik (pil):</b> \u0130stemli tepkime \u2192 elektrik \u00fcretir. Anot (\u2212), Katot (+).<br>' +
+                '\ud83d\udd0b <b>Elektrolitik:</b> Elektrik \u2192 istemsiz tepkimeyi zorlar. Anot (+), Katot (\u2212).<br>' +
+                '\ud83d\udccc Her ikisinde de: <b>anot = y\u00fckseltgenme, katot = indirgenme</b> \u2014 de\u011fi\u015fen sadece i\u015faretlerdir!' +
+              '</div></div>' +
+          '</div>' +
+          // --- TAB 2: Faraday ---
+          '<div class="tp">' +
+            '<div class="card" style="margin-bottom:12px">' +
+              '<div class="fbox">m = M \u00b7 I \u00b7 t / (n \u00b7 F)</div>' +
+              '<div class="g2" style="margin-bottom:10px">' +
+                '<div><div class="slbl">Bilinmeyen</div><select class="sel" id="fd-u" onchange="fdModeChanged()"><option value="m">K\u00fctle / Hacim</option><option value="t">S\u00fcre t</option><option value="I">Ak\u0131m I</option></select></div>' +
+                '<div><div class="slbl">T\u00fcr</div><select class="sel" id="fd-sp" onchange="fdModeChanged()">' + spOpts + '</select></div>' +
+              '</div>' +
+              '<div class="g2" style="margin-bottom:10px">' +
+                '<div id="fd-row-i"><div class="slbl">Ak\u0131m I (A)</div><input type="number" id="fd-i" class="inp" placeholder="\u00f6rn: 5"></div>' +
+                '<div id="fd-row-t"><div class="slbl">S\u00fcre</div><div style="display:flex;gap:6px"><input type="number" id="fd-t" class="inp" placeholder="..."><select class="sel" id="fd-tu" style="width:76px"><option value="s">s</option><option value="dk">dk</option><option value="sa">sa</option></select></div></div>' +
+              '</div>' +
+              '<div id="fd-row-m" style="display:none;margin-bottom:10px"><div class="slbl" id="fd-m-lbl">K\u00fctle (g)</div><input type="number" id="fd-m" class="inp" placeholder="..."></div>' +
+              '<button type="button" class="btn bp bfull" onclick="faradayRun()">Hesapla</button>' +
+              '<div id="fd-out" style="margin-top:12px"></div>' +
+            '</div>' +
+            '<div class="card">' +
+              '<div class="slbl">\ud83d\udd17 Seri Ba\u011fl\u0131 H\u00fccreler</div>' +
+              '<p style="font-size:12px;color:var(--tx2);margin-bottom:10px;line-height:1.6">Ayn\u0131 devrede seri ba\u011fl\u0131 iki h\u00fccre \u2014 birinde biriken k\u00fctleden di\u011ferini bul.</p>' +
+              '<div class="g2" style="margin-bottom:10px">' +
+                '<div><div class="slbl">1. H\u00fccre</div><select class="sel" id="sr-a">' + spOpts + '</select></div>' +
+                '<div><div class="slbl">Biriken (g)</div><input type="number" id="sr-m" class="inp" placeholder="\u00f6rn: 10.8"></div>' +
+              '</div>' +
+              '<div style="margin-bottom:10px"><div class="slbl">2. H\u00fccre</div><select class="sel" id="sr-b">' + spOpts + '</select></div>' +
+              '<button type="button" class="btn bp bfull" onclick="seriRun()">Hesapla</button>' +
+              '<div id="sr-out" style="margin-top:12px"></div>' +
+            '</div>' +
+          '</div>' +
+          // --- TAB 3: Kaplama ---
+          '<div class="tp"><div class="card" id="elz-scen"></div></div>' +
+        '</div>' +
+      '</div></div>');
+
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-elz') === -1) SCREENS.push('s-elz');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-elz'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-elz" onclick="nav(\'elz\')">\ud83d\udd0b Elektroliz Laboratuvar\u0131</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-elz'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-elz" onclick="nav(\'elz\')"><div class="ti">\ud83d\udd0b</div><div class="tt">Elektroliz Laboratuvar\u0131</div><div class="td">3D sim\u00fclasyon, Faraday hesaplar\u0131, kaplama senaryolar\u0131.</div></div>');
+
+    // Rozet: 🔋 Elektrolizci
+    try {
+      BADGES.push({ id: 'elz', e: '\ud83d\udd0b', n: 'Elektrolizci', d: '3 kaplama senaryosunu do\u011fru tamamla',
+                    f: function(s){ return ((s.flags.elzs || []).length) >= 3; } });
+    } catch (e) {}
+
+    var box = document.getElementById('elz-scen');
+    if (box) box.innerHTML = elzScenHTML();
+    fdModeChanged();
+    // Faraday'da seçim değişince satır görünürlüğü doğru kalsın
+    var fsp = document.getElementById('fd-sp');
+    if (fsp) fsp.addEventListener('change', window.fdModeChanged);
+  }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -1841,6 +2480,7 @@
     try { setupDayElement(); } catch (e) { /* sessiz */ }
     try { setupOxFinder(); } catch (e) { /* sessiz */ }
     try { setupCompareScreen(); } catch (e) { /* sessiz */ }
+    try { setupElz(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
@@ -1853,6 +2493,7 @@
             if (id === 'board') renderBoard();
             if (id === 'quiz') { refreshWeakBtn(); updateRangeNote(); }
             if (id !== 'eldetay') bohrStop();
+            if (id === 'elz') setTimeout(elzStart, 80); else elzStop();
           } catch (e) {}
         };
       }
