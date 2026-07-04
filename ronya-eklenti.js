@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v6
+   RONYA KİMYA — EKLENTİ v7
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -20,8 +20,10 @@
    16) Yükseltgenme basamağı bulucu (mol ekranında)
    17) İlerleme grafiği (son 20 testin doğruluk eğrisi)
    18) Element karşılaştırma ekranı (menüde)
-   19) 🔋 3D Elektroliz Laboratuvarı: simülasyon + Faraday
-       hesaplayıcı + seri hücreler + kaplama senaryoları
+   19) 🔋 3D Elektroliz Laboratuvarı (10 sistemli 3D sim +
+       Faraday + kaplama senaryoları)
+   20) 🔗 Seri Kaplar canlı simülatörü: 2-3 kap, 17 elektrolit,
+       kaydırıcı/manuel I-t, kap başına katot-anot ürün miktarı
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -1892,13 +1894,45 @@
       overall: '2Al₂O₃ --elektroliz--> 4Al(s) + 3O₂(g)',
       ions: [ {s:'Al³⁺', c:'#e2e8f0', ch:1, n:8, dis:true}, {s:'O²⁻', c:'#f87171', ch:-1, n:8, dis:true} ],
       notes: ['Al₂O₃\u2019ün erime noktasını düşürmek için kriyolit (Na₃AlF₆) eklenir (2050°C → ~950°C).', 'Alüminyum üretimi çok elektrik tüketir; bu yüzden tesisler ucuz enerji bölgelerine kurulur.']
+    },
+    agno3_pt: {
+      name: 'Sulu AgNO₃ (Pt anot)',
+      cat: { prod: 'Ag(s)', type: 'dep', depCol: '#d7dbe2', half: 'Ag⁺ + e⁻ → Ag(s)', why: 'Ag⁺ sudan çok daha kolay indirgenir — katot gümüşle kaplanır.' },
+      an:  { prod: 'O₂↑', type: 'gas', gasCol: '#bae6fd', half: '2H₂O → O₂(g) + 4H⁺ + 4e⁻', why: 'NO₃⁻ yükseltgenmez — su yükseltgenir.' },
+      overall: '4AgNO₃ + 2H₂O → 4Ag(s) + O₂(g) + 4HNO₃',
+      ions: [ {s:'Ag⁺', c:'#e5e7eb', ch:1, n:7, dis:true}, {s:'NO₃⁻', c:'#f0abfc', ch:-1, n:7, dis:false}, {s:'H₂O', c:'#64748b', ch:0, n:6} ],
+      notes: ['Gümüş kaplamacılığın temeli — kaplanacak eşya katoda bağlanır.', 'NO₃⁻ ve SO₄²⁻ sulu çözeltide asla yükseltgenmez.']
+    },
+    mgcl2_3d: {
+      name: 'Erimiş MgCl₂',
+      cat: { prod: 'Mg(s)', type: 'dep', depCol: '#cdd5df', half: 'Mg²⁺ + 2e⁻ → Mg(s)', why: 'Su yok — Mg²⁺ tek aday, indirgenir.' },
+      an:  { prod: 'Cl₂↑', type: 'gas', gasCol: '#bde04a', half: '2Cl⁻ → Cl₂(g) + 2e⁻', why: '' },
+      overall: 'MgCl₂(s) --elektroliz--> Mg(s) + Cl₂(g)',
+      ions: [ {s:'Mg²⁺', c:'#93c5fd', ch:1, n:8, dis:true}, {s:'Cl⁻', c:'#a3e635', ch:-1, n:8, dis:true} ],
+      notes: ['Magnezyum, deniz suyundan elde edilen MgCl₂\u2019nin erimiş elektroliziyle üretilir (Dow yöntemi).']
+    },
+    ki: {
+      name: 'Sulu KI',
+      cat: { prod: 'H₂↑', type: 'gas', gasCol: '#e2e8f0', half: '2H₂O + 2e⁻ → H₂(g) + 2OH⁻', why: 'K⁺ (1A grubu) sulu çözeltide asla indirgenmez — su kazanır.' },
+      an:  { prod: 'I₂(k)', type: 'dep', depCol: '#7c3aed', half: '2I⁻ → I₂(k) + 2e⁻', why: 'I⁻ sudan kolay yükseltgenir; iyot anotta KATI olarak birikir, çevresi kahverengileşir.' },
+      overall: '2KI + 2H₂O → H₂(g) + I₂(k) + 2KOH',
+      ions: [ {s:'K⁺', c:'#c4b5fd', ch:1, n:7, dis:false}, {s:'I⁻', c:'#a78bfa', ch:-1, n:7, dis:true}, {s:'H₂O', c:'#64748b', ch:0, n:6} ],
+      notes: ['Anot çevresine nişasta damlatılırsa mavi-mor renk gözlenir (iyot testi).', 'Katot çevresi bazikleşir — fenolftalein pembeye döner.']
+    },
+    na2so4: {
+      name: 'Sulu Na₂SO₄',
+      cat: { prod: 'H₂↑ (2V)', type: 'gas', gasCol: '#e2e8f0', rate: 2, half: '2H₂O + 2e⁻ → H₂(g) + 2OH⁻', why: 'Na⁺ indirgenmez — su kazanır.' },
+      an:  { prod: 'O₂↑ (1V)', type: 'gas', gasCol: '#bae6fd', rate: 1, half: '2H₂O → O₂(g) + 4H⁺ + 4e⁻', why: 'SO₄²⁻ yükseltgenmez — su kazanır.' },
+      overall: 'Net: 2H₂O → 2H₂(g) + O₂(g)   (Na₂SO₄ sadece iletkenliği sağlar)',
+      ions: [ {s:'Na⁺', c:'#60a5fa', ch:1, n:6, dis:false}, {s:'SO₄²⁻', c:'#c084fc', ch:-1, n:6, dis:false}, {s:'H₂O', c:'#64748b', ch:0, n:8} ],
+      notes: ['HER İKİ iyon da seyircidir — net tepkime suyun elektrolizidir. YKS\u2019nin favori tuzağı!', 'Katot çevresi bazik (OH⁻), anot çevresi asidik (H⁺) olur.']
     }
   };
 
   // ---------- 9b. 3D motor durumu ----------
   var elz = { rotX: 0.32, rotY: -0.55, spin: false, drag: false, lx: 0, ly: 0,
               anim: null, t: 0, cur: 1.2, mode: 'naclA',
-              ions: [], bubbles: [], depC: 0, depA: 9, W: 300, H: 340, cv: null, ctx: null };
+              ions: [], bubbles: [], depC: 0, depA: 9, depAn: 0, W: 300, H: 340, cv: null, ctx: null };
 
   function elzProj(x, y, z){
     var y1 = y * Math.cos(elz.rotX) - z * Math.sin(elz.rotX);
@@ -1907,6 +1941,11 @@
     var z2 = -x * Math.sin(elz.rotY) + z1 * Math.cos(elz.rotY);
     var s = 330 / (460 + z2);
     return { x: elz.W / 2 + x2 * s, y: elz.H / 2 + y1 * s + 14, z: z2, s: s };
+  }
+
+  function elzRgb(hex){
+    hex = (hex || '#94a3b8').replace('#', '');
+    return parseInt(hex.slice(0,2),16) + ',' + parseInt(hex.slice(2,4),16) + ',' + parseInt(hex.slice(4,6),16);
   }
 
   // Kutu → 6 yüz (quad listesine ekler)
@@ -1951,7 +1990,7 @@
 
   function elzSpawnIons(){
     var m = ELZ_MODES[elz.mode];
-    elz.ions = []; elz.bubbles = []; elz.depC = 0; elz.depA = 9;
+    elz.ions = []; elz.bubbles = []; elz.depC = 0; elz.depA = 9; elz.depAn = 0;
     m.ions.forEach(function(t){
       for (var i = 0; i < t.n; i++)
         elz.ions.push({ x: -50 + Math.random()*100, y: 6 + Math.random()*78, z: -42 + Math.random()*84,
@@ -2017,11 +2056,10 @@
     elzBox(quads, CATX, 30, 0, 7, 66, 20, '154,164,178', 0.85, 'rgba(200,210,225,.5)');
     elzBox(quads, ANX, 30, 0, anHx, 66, 20, '154,164,178', 0.85, 'rgba(200,210,225,.5)');
     // Katot birikintisi (iç yüzde büyür)
-    if (m.cat.type === 'dep' && elz.depC > 0.3) {
-      var col = m.cat.depCol;
-      var rgb = col === '#e78a5a' ? '231,138,90' : '216,222,232';
-      elzBox(quads, CATX + 7 + elz.depC/2, 55, 0, elz.depC/2, 40, 18, rgb, 0.9, null);
-    }
+    if (m.cat.type === 'dep' && elz.depC > 0.3)
+      elzBox(quads, CATX + 7 + elz.depC/2, 55, 0, elz.depC/2, 40, 18, elzRgb(m.cat.depCol), 0.9, null);
+    if (m.an.type === 'dep' && elz.depAn > 0.3)
+      elzBox(quads, ANX - anHx - elz.depAn/2, 55, 0, elz.depAn/2, 40, 18, elzRgb(m.an.depCol), 0.9, null);
     // Güç kaynağı
     elzBox(quads, 0, -86, 0, 34, 14, 14, '30,36,54', 0.95, 'rgba(129,140,248,.6)');
 
@@ -2042,7 +2080,7 @@
       if (io.ch !== 0 && io.cool <= 0 && Math.abs(io.x - tx) < 5) {
         var side = io.ch > 0 ? m.cat : m.an;
         if (io.dis) {
-          if (side.type === 'dep') elz.depC = Math.min(8, elz.depC + 0.18);
+          if (side.type === 'dep') { if (io.ch > 0) elz.depC = Math.min(8, elz.depC + 0.18); else elz.depAn = Math.min(8, elz.depAn + 0.18); }
           if (side.type === 'gas') elzBubble(io.ch > 0 ? CATX + 10 : ANX - 10, io.y, io.z, side.gasCol);
           if (elz.mode === 'cuso4Cu' && io.ch > 0) { // rafinasyon: anot çözünür, yeni Cu²⁺ doğar
             elz.depA = Math.max(3, elz.depA - 0.06);
@@ -2390,6 +2428,7 @@
           '<button class="tab on" onclick="tswitch(\'elz-tabs\',\'elz-tps\',0)">\u26a1 3D Sim\u00fclasyon</button>' +
           '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',1)">\ud83e\uddee Faraday</button>' +
           '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',2)">\ud83e\udd48 Kaplama</button>' +
+          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',3)">\ud83d\udd17 Seri Kaplar</button>' +
         '</div>' +
         '<div id="elz-tps">' +
           // --- TAB 1: 3D ---
@@ -2444,6 +2483,32 @@
           '</div>' +
           // --- TAB 3: Kaplama ---
           '<div class="tp"><div class="card" id="elz-scen"></div></div>' +
+          // --- TAB 4: Seri Kaplar ---
+          '<div class="tp">' +
+            '<div class="card" style="margin-bottom:12px">' +
+              '<p style="font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.6">Seri ba\u011fl\u0131 kaplardan <b>ayn\u0131 y\u00fck (Q = I\u00b7t)</b> ge\u00e7er. Ak\u0131m\u0131 ve s\u00fcreyi kayd\u0131rarak veya elle girerek her kab\u0131n elektrotlar\u0131nda neyin, ne kadar olu\u015ftu\u011funu canl\u0131 izle.</p>' +
+              '<div style="margin-bottom:12px"><div class="slbl">Kap Say\u0131s\u0131</div><div style="display:flex;gap:8px">' +
+                '<button type="button" class="ob sel2" onclick="ssSetCount(2,this)">2 Kap</button>' +
+                '<button type="button" class="ob" onclick="ssSetCount(3,this)">3 Kap</button>' +
+              '</div></div>' +
+              '<div id="ss-cells"></div>' +
+              '<div style="margin-top:4px;margin-bottom:10px">' +
+                '<div class="slbl">Ak\u0131m I (A)</div>' +
+                '<div style="display:flex;gap:10px;align-items:center">' +
+                  '<input type="range" id="ss-i-sl" min="1" max="200" value="50" oninput="ssSync(\'i\',\'sl\')" style="flex:1">' +
+                  '<input type="number" id="ss-i-num" class="inp" value="5.0" step="0.1" style="width:86px" oninput="ssSync(\'i\',\'num\')">' +
+                '</div></div>' +
+              '<div>' +
+                '<div class="slbl">S\u00fcre t</div>' +
+                '<div style="display:flex;gap:10px;align-items:center">' +
+                  '<input type="range" id="ss-t-sl" min="1" max="180" value="30" oninput="ssSync(\'t\',\'sl\')" style="flex:1">' +
+                  '<input type="number" id="ss-t-num" class="inp" value="30" style="width:70px" oninput="ssSync(\'t\',\'num\')">' +
+                  '<select class="sel" id="ss-tu" style="width:66px" onchange="ssSync(\'t\',\'num\')"><option value="dk">dk</option><option value="s">s</option><option value="sa">sa</option></select>' +
+                '</div></div>' +
+            '</div>' +
+            '<div id="ss-q" style="font-size:12px;color:var(--tx2);line-height:1.7;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:10px 12px;margin-bottom:10px"></div>' +
+            '<div id="ss-res"></div>' +
+          '</div>' +
         '</div>' +
       '</div></div>');
 
@@ -2465,10 +2530,150 @@
     var box = document.getElementById('elz-scen');
     if (box) box.innerHTML = elzScenHTML();
     fdModeChanged();
+    ssBuild(); ssRun();
     // Faraday'da seçim değişince satır görünürlüğü doğru kalsın
     var fsp = document.getElementById('fd-sp');
     if (fsp) fsp.addEventListener('change', window.fdModeChanged);
   }
+
+  // ---------- 9f. Seri Kaplar Canlı Simülatörü ----------
+  // Seri bağlı 2-3 elektroliz kabı: hepsinden AYNI yük (Q) geçer.
+  // Her kabın katot ve anot ürünleri, I ve t değiştikçe canlı hesaplanır.
+  var ELZ_CELLS = [
+    {k:'nacl_m',   name:'Erimi\u015f NaCl',              cat:{p:'Na(s)', M:23, n:1},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'mgcl2',    name:'Erimi\u015f MgCl\u2082',        cat:{p:'Mg(s)', M:24, n:2},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'cacl2',    name:'Erimi\u015f CaCl\u2082',        cat:{p:'Ca(s)', M:40, n:2},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'al2o3',    name:'Erimi\u015f Al\u2082O\u2083',   cat:{p:'Al(s)', M:27, n:3},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'nacl_a',   name:'Sulu NaCl (deri\u015fik)',      cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'water',    name:'Su (H\u2082SO\u2084\u2019l\u00fc)', cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'na2so4',   name:'Sulu Na\u2082SO\u2084',         cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'ki',       name:'Sulu KI',                        cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'I\u2082(k)', M:254, n:2}},
+    {k:'cuso4_pt', name:'Sulu CuSO\u2084 (Pt anot)',     cat:{p:'Cu(s)', M:63.5, n:2},          an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'cuso4_cu', name:'CuSO\u2084 (Cu anot)',          cat:{p:'Cu(s)', M:63.5, n:2},          an:{p:'Cu \u00e7\u00f6z\u00fcn\u00fcr', M:63.5, n:2, diss:1}},
+    {k:'agno3_pt', name:'Sulu AgNO\u2083 (Pt anot)',     cat:{p:'Ag(s)', M:108, n:1},           an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'agno3_ag', name:'AgNO\u2083 (Ag anot)',          cat:{p:'Ag(s)', M:108, n:1},           an:{p:'Ag \u00e7\u00f6z\u00fcn\u00fcr', M:108, n:1, diss:1}},
+    {k:'znso4',    name:'Sulu ZnSO\u2084 (Pt)',          cat:{p:'Zn(s)', M:65, n:2},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'niso4',    name:'Sulu NiSO\u2084 (Pt)',          cat:{p:'Ni(s)', M:59, n:2},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'crcl3',    name:'Sulu CrCl\u2083 (deri\u015fik)', cat:{p:'Cr(s)', M:52, n:3},           an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'aucl3',    name:'Sulu AuCl\u2083 (deri\u015fik)', cat:{p:'Au(s)', M:197, n:3},          an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'pbno3',    name:'Sulu Pb(NO\u2083)\u2082 (Pt)',  cat:{p:'Pb(s)', M:207, n:2},           an:{p:'O\u2082(g)', M:32, n:4, gas:1}}
+  ];
+  var ssCount = 2;
+  var ssSel = ['agno3_pt', 'cuso4_pt', 'water'];
+
+  function ssCellDef(k){
+    for (var i = 0; i < ELZ_CELLS.length; i++) if (ELZ_CELLS[i].k === k) return ELZ_CELLS[i];
+    return ELZ_CELLS[0];
+  }
+  function ssFmt(v){
+    if (v >= 100) return v.toFixed(1);
+    if (v >= 1) return v.toFixed(2);
+    return v.toFixed(3);
+  }
+
+  function ssBuild(){
+    var wrap = document.getElementById('ss-cells');
+    if (!wrap) return;
+    var opts = '';
+    for (var c = 0; c < ELZ_CELLS.length; c++)
+      opts += '<option value="' + ELZ_CELLS[c].k + '">' + ELZ_CELLS[c].name + '</option>';
+    var html = '';
+    for (var i = 0; i < ssCount; i++) {
+      html += '<div style="margin-bottom:8px"><div class="slbl">Kap ' + (i + 1) + '</div>' +
+        '<select class="sel" id="ss-c' + i + '" onchange="ssSelChanged(' + i + ', this.value)">' + opts + '</select></div>';
+    }
+    wrap.innerHTML = html;
+    for (var j = 0; j < ssCount; j++) {
+      var sel = document.getElementById('ss-c' + j);
+      if (sel) sel.value = ssSel[j];
+    }
+  }
+  window.ssSelChanged = function(i, v){ ssSel[i] = v; ssRun(); };
+  window.ssSetCount = function(n, btn){ ssCount = n; if (btn) selectInRow(btn); ssBuild(); ssRun(); };
+
+  function ssSecs(){
+    var v = parseFloat((document.getElementById('ss-t-num') || {}).value);
+    var u = (document.getElementById('ss-tu') || {}).value || 'dk';
+    if (isNaN(v) || v <= 0) return NaN;
+    return u === 'sa' ? v * 3600 : u === 'dk' ? v * 60 : v;
+  }
+  // Kaydırıcı ↔ sayı kutusu senkronu
+  window.ssSync = function(which, from){
+    var sl = document.getElementById('ss-' + which + '-sl');
+    var num = document.getElementById('ss-' + which + '-num');
+    if (!sl || !num) return;
+    if (which === 'i') {
+      if (from === 'sl') num.value = (sl.value / 10).toFixed(1);
+      else { var v = parseFloat(num.value); if (!isNaN(v)) sl.value = Math.max(1, Math.min(200, Math.round(v * 10))); }
+    } else { // t (kaydırıcı dakika cinsinden)
+      if (from === 'sl') {
+        num.value = sl.value;
+        var tu = document.getElementById('ss-tu');
+        if (tu) tu.value = 'dk';
+      } else {
+        var sec = ssSecs();
+        if (!isNaN(sec)) sl.value = Math.max(1, Math.min(180, Math.round(sec / 60)));
+      }
+    }
+    ssRun();
+  };
+
+  function ssRun(){
+    var res = document.getElementById('ss-res');
+    var qline = document.getElementById('ss-q');
+    if (!res) return;
+    var I = parseFloat((document.getElementById('ss-i-num') || {}).value);
+    var t = ssSecs();
+    if (isNaN(I) || I <= 0 || isNaN(t)) {
+      res.innerHTML = '<div style="font-size:13px;color:var(--yw)">Ak\u0131m ve s\u00fcreyi gir.</div>';
+      if (qline) qline.innerHTML = '';
+      return;
+    }
+    var Q = I * t, molE = Q / ELZ_F;
+    if (qline) qline.innerHTML = 'Ortak y\u00fck: <b style="color:var(--ac2)">Q = ' + I + ' \u00d7 ' + Math.round(t) + ' = ' + Q.toFixed(0) + ' C</b> \u2192 mol e\u207b = Q/F = <b style="color:var(--ac2)">' + molE.toFixed(4) + ' mol</b> \u2014 her kaptan ayn\u0131s\u0131 ge\u00e7er.';
+
+    // Tüm ürünleri hesapla (çubuk ölçeği için maksimum kütle)
+    var cells = [], maxM = 0;
+    for (var i = 0; i < ssCount; i++) {
+      var def = ssCellDef(ssSel[i]);
+      function calc(side){
+        var mol = molE / side.n, m2 = mol * side.M;
+        return { p: side.p, m: m2, V: side.gas ? mol * 22.4 : null, diss: !!side.diss, gas: !!side.gas };
+      }
+      var kt = calc(def.cat), an = calc(def.an);
+      maxM = Math.max(maxM, kt.m, an.m);
+      cells.push({ name: def.name, kt: kt, an: an });
+    }
+
+    function line(icon, iconCol, side){
+      var bar = maxM > 0 ? Math.max(3, side.m / maxM * 100) : 0;
+      var barCol = side.diss ? '#f87171' : iconCol;
+      var txt = side.diss
+        ? '<b style="color:#f87171">\u2212' + ssFmt(side.m) + ' g</b> <span style="color:var(--tx3);font-size:11px">(elektrot incelir)</span>'
+        : '<b>' + ssFmt(side.m) + ' g</b>' + (side.V !== null ? ' <span style="color:var(--tx3)">\u00b7 ' + ssFmt(side.V) + ' L (NK)</span>' : '');
+      return '<div style="padding:7px 0;border-bottom:1px solid var(--br)">' +
+        '<div style="display:flex;justify-content:space-between;gap:8px;font-size:12.5px;align-items:center">' +
+          '<span style="color:' + iconCol + ';font-weight:700;white-space:nowrap">' + icon + '</span>' +
+          '<span style="color:#fff;font-weight:600;flex:1">' + side.p + '</span>' +
+          '<span style="text-align:right;color:var(--tx)">' + txt + '</span>' +
+        '</div>' +
+        '<div style="height:4px;background:var(--sf3);border-radius:100px;margin-top:5px;overflow:hidden">' +
+          '<div style="height:100%;width:' + bar + '%;background:' + barCol + ';border-radius:100px;transition:width .15s"></div>' +
+        '</div></div>';
+    }
+
+    var html = '';
+    for (var j = 0; j < cells.length; j++) {
+      if (j > 0) html += '<div style="text-align:center;color:var(--tx3);font-size:10px;margin:4px 0">\u2502 seri ba\u011flant\u0131 \u00b7 ayn\u0131 Q \u2502</div>';
+      html += '<div style="background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:12px">' +
+        '<div style="font-family:Space Grotesk,sans-serif;font-size:13px;font-weight:800;color:var(--ac2);margin-bottom:6px">\u26a1 Kap ' + (j + 1) + ' \u00b7 ' + cells[j].name + '</div>' +
+        line('\u2296 Katot', '#60a5fa', cells[j].kt) +
+        line('\u2295 Anot', '#f87171', cells[j].an) +
+        '</div>';
+    }
+    res.innerHTML = html;
+  }
+  window.ssRun = ssRun;
 
   // --- Başlat ---
   function init(){
