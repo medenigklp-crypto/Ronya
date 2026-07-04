@@ -2875,9 +2875,26 @@
       var bd = mol.bonds[i], A = mol.atoms[bd.a], B = mol.atoms[bd.b];
       var tA = { x: A.x + (B.x-A.x)*0.15, y: A.y + (B.y-A.y)*0.15, z: A.z + (B.z-A.z)*0.15 };
       var tB = { x: A.x + (B.x-A.x)*0.85, y: A.y + (B.y-A.y)*0.85, z: A.z + (B.z-A.z)*0.85 };
-      var pa = hcProj(st, tA.x, tA.y, tA.z, W, H2);
-      var pb = hcProj(st, tB.x, tB.y, tB.z, W, H2);
-      items.push({ z: (pa.z + pb.z) / 2, b: 1, pa: pa, pb: pb, o: bd.o });
+      if (bd.o === 2) {
+        // BİLİMSEL DÜZELTME: C=C'nin iki çizgisi molekül DÜZLEMİNDE durur —
+        // sp² hidrojenleriyle aynı düzlemde döner, yandan bakınca tek çizgiye kapanır.
+        var bv = vSub(B, A);
+        var pp = vCross(bv, v3(0, 0, 1));
+        var perp = vLen(pp) > 1e-4 ? vNorm(pp) : v3(0, 1, 0);
+        for (var sgn = -1; sgn <= 1; sgn += 2) {
+          var oA = vAdd(tA, vScale(perp, 3.2 * sgn));
+          var oB = vAdd(tB, vScale(perp, 3.2 * sgn));
+          var pa2 = hcProj(st, oA.x, oA.y, oA.z, W, H2);
+          var pb2 = hcProj(st, oB.x, oB.y, oB.z, W, H2);
+          items.push({ z: (pa2.z + pb2.z) / 2, b: 1, pa: pa2, pb: pb2, o: 1, col: '251,113,133', lw: 2.4 });
+        }
+      } else {
+        var pa = hcProj(st, tA.x, tA.y, tA.z, W, H2);
+        var pb = hcProj(st, tB.x, tB.y, tB.z, W, H2);
+        items.push({ z: (pa.z + pb.z) / 2, b: 1, pa: pa, pb: pb, o: bd.o,
+                     col: bd.o === 3 ? '251,191,36' : '186,212,240',
+                     lw: bd.o === 1 ? 3.1 : 2.3 });
+      }
     }
     // Atomlar
     for (i = 0; i < mol.atoms.length; i++) {
@@ -2894,12 +2911,11 @@
         var dx = it.pb.x - it.pa.x, dy = it.pb.y - it.pa.y;
         var ll = Math.sqrt(dx*dx + dy*dy) || 1;
         var px2 = -dy / ll, py2 = dx / ll;
-        var col = it.o === 3 ? '251,191,36' : it.o === 2 ? '251,113,133' : '186,212,240';
-        var cnt = it.o, gap = (it.o === 2 ? 3.1 : 3.4) * sAvg;
+        var cnt = it.o, gap = 3.4 * sAvg;
         for (var lj = 0; lj < cnt; lj++) {
           var off = (lj - (cnt - 1) / 2) * gap;
-          x.strokeStyle = 'rgba(' + col + ',' + (0.9 * depth) + ')';
-          x.lineWidth = (cnt === 1 ? 3.1 : 2.3) * sAvg;
+          x.strokeStyle = 'rgba(' + it.col + ',' + (0.9 * depth) + ')';
+          x.lineWidth = it.lw * sAvg;
           x.lineCap = 'round';
           x.beginPath();
           x.moveTo(it.pa.x + px2*off, it.pa.y + py2*off);
