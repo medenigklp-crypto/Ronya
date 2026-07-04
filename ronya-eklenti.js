@@ -636,37 +636,38 @@
     return { big: el.sym, sub: el.name + ' \u00b7 ' + el.cat, label: 'Bu elementin elektron dizilimi hangisidir?', ans: d.conf, kind: 'conf' };
   }
 
+  var OPT_N = 5; // YKS formatı: 5 şık
   function buildOptions(q, item){
     var opts = [q.ans], guard = 0, c, r, cand;
     if (q.kind === 'group') {
       var all = ['1A','2A','3A','4A','5A','6A','7A','8A'];
-      while (opts.length < 4) { c = all[Math.floor(Math.random()*8)]; if (opts.indexOf(c) === -1) opts.push(c); }
+      while (opts.length < OPT_N) { c = all[Math.floor(Math.random()*8)]; if (opts.indexOf(c) === -1) opts.push(c); }
     } else if (q.kind === 'period') {
-      while (opts.length < 4) { c = (1 + Math.floor(Math.random()*7)) + '. periyot'; if (opts.indexOf(c) === -1) opts.push(c); }
+      while (opts.length < OPT_N) { c = (1 + Math.floor(Math.random()*7)) + '. periyot'; if (opts.indexOf(c) === -1) opts.push(c); }
     } else if (q.kind === 'cmpn' || q.kind === 'cmpf') {
       // Önce aynı sınıftan (asit/baz/tuz/oksit) çeldirici dene — daha zor olur
       var same = COMPOUNDS.filter(function(x){ return x.c === item.cmp.c && x.f !== item.cmp.f; });
-      var src2 = same.length >= 3 ? same : COMPOUNDS;
-      while (opts.length < 4 && guard++ < 800) {
+      var src2 = same.length >= OPT_N - 1 ? same : COMPOUNDS;
+      while (opts.length < OPT_N && guard++ < 800) {
         r = src2[Math.floor(Math.random()*src2.length)];
         cand = q.kind === 'cmpn' ? r.n : pretty(r.f);
         if (cand && opts.indexOf(cand) === -1) opts.push(cand);
       }
       guard = 0;
-      while (opts.length < 4 && guard++ < 800) {
+      while (opts.length < OPT_N && guard++ < 800) {
         r = COMPOUNDS[Math.floor(Math.random()*COMPOUNDS.length)];
         cand = q.kind === 'cmpn' ? r.n : pretty(r.f);
         if (cand && opts.indexOf(cand) === -1) opts.push(cand);
       }
     } else {
-      var src = qPool.length >= 4 ? qPool : ELS;
-      while (opts.length < 4 && guard++ < 800) {
+      var src = qPool.length >= OPT_N ? qPool : ELS;
+      while (opts.length < OPT_N && guard++ < 800) {
         r = src[Math.floor(Math.random()*src.length)];
         cand = q.kind === 'name' ? r.name : q.kind === 'sym' ? r.sym : (EL_DATA[r.n]||{}).conf;
         if (cand && opts.indexOf(cand) === -1) opts.push(cand);
       }
       guard = 0;
-      while (opts.length < 4 && guard++ < 800) {
+      while (opts.length < OPT_N && guard++ < 800) {
         r = ELS[Math.floor(Math.random()*ELS.length)];
         cand = q.kind === 'name' ? r.name : q.kind === 'sym' ? r.sym : (EL_DATA[r.n]||{}).conf;
         if (cand && opts.indexOf(cand) === -1) opts.push(cand);
