@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v4
+   RONYA KİMYA — EKLENTİ v5
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -14,6 +14,12 @@
    10) Bohr atom modeli animasyonu (element detayında)
    11) Sonuç paylaşım kartı + ilerleme yedekleme
    12) Çevrimdışı çalışma (sw.js dosyası da repoya konmalı)
+   13) Denklem dengeleme alıştırması (katsayıları sen yaz)
+   14) Günün elementi kartı (ana sayfada)
+   15) Rozet sistemi (10 rozet, skor ekranında)
+   16) Yükseltgenme basamağı bulucu (mol ekranında)
+   17) İlerleme grafiği (son 20 testin doğruluk eğrisi)
+   18) Element karşılaştırma ekranı (menüde)
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -324,6 +330,7 @@
       if (ints[v2] <= 0) throw new Error('Pozitif katsay\u0131 bulunamad\u0131 \u2014 tepkime bu haliyle dengelenemez.');
     }
 
+    balanceEquation._last = { ints: ints, species: species, nReact: nReact };
     // Çıktıyı biçimlendir
     function side(from, to){
       var parts = [];
@@ -755,7 +762,11 @@
     if (!quizSt._el) return; // bileşik soruları zayıf listeye girmez
     var el = quizSt._el, w = weakMap();
     if (ok) {
-      if (w[el.n]) { delete w[el.n]; sset('rk_weak', w); }
+      if (w[el.n]) {
+        delete w[el.n];
+        sset('rk_weak', w);
+        if (Object.keys(w).length === 0) { var fl = sget('rk_flags', {}); fl.cleaned = 1; sset('rk_flags', fl); }
+      }
     } else {
       if (!w[el.n]) sessionWeakAdded++;
       w[el.n] = (w[el.n] || 0) + 1;
@@ -889,6 +900,7 @@
     }
     examOn = false;
     refreshWeakBtn();
+    try { checkBadges(true); } catch (e) {}
   };
 
   // 📤 Paylaşılabilir sonuç kartı (canvas → PNG)
@@ -987,6 +999,8 @@
         '</div>');
       document.getElementById('rk-imp').addEventListener('change', rkImportFile);
     }
+    try { renderBadges(); } catch (e) {}
+    try { renderChart(); } catch (e) {}
   }
 
   var RK_KEYS = ['rk_weak', 'rk_stats', 'rk_scores', 'rk_days', 'rk_fc'];
@@ -1302,12 +1316,531 @@
     loop();
   }
 
+  /* ============================================================
+     BÖLÜM 8 — DENGELEME ALIŞTIRMASI, GÜNÜN ELEMENTİ, ROZETLER,
+     YÜKSELTGENME BASAMAĞI, İLERLEME GRAFİĞİ, KARŞILAŞTIRMA
+     ============================================================ */
+
+  // ---------- 8a. Denklem Dengeleme Alıştırması ----------
+  var BAL_BANK = [
+    'Fe + O2 -> Fe2O3', 'H2 + O2 -> H2O', 'N2 + H2 -> NH3',
+    'CH4 + O2 -> CO2 + H2O', 'C3H8 + O2 -> CO2 + H2O', 'C2H6 + O2 -> CO2 + H2O',
+    'Al + O2 -> Al2O3', 'Mg + O2 -> MgO', 'Na + Cl2 -> NaCl',
+    'KClO3 -> KCl + O2', 'H2O2 -> H2O + O2', 'P4 + O2 -> P2O5',
+    'Zn + HCl -> ZnCl2 + H2', 'Al + HCl -> AlCl3 + H2', 'Fe + HCl -> FeCl2 + H2',
+    'NaOH + H2SO4 -> Na2SO4 + H2O', 'NH3 + O2 -> NO + H2O',
+    'C2H5OH + O2 -> CO2 + H2O', 'Al2(SO4)3 + Ca(OH)2 -> Al(OH)3 + CaSO4'
+  ];
+  var balCur = null, balScored = false, balShown = false;
+
+  function setupBalanceGame(){
+    var eqCard = document.querySelector('#s-eq .card');
+    if (!eqCard || document.getElementById('bal-game')) return;
+    eqCard.insertAdjacentHTML('afterend',
+      '<div class="card" id="bal-game" style="margin-top:14px">' +
+        '<div class="slbl">\ud83c\udfaf Dengeleme Al\u0131\u015ft\u0131rmas\u0131</div>' +
+        '<p style="font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.6">Katsay\u0131lar\u0131 sen yaz, sistem kontrol etsin. Bo\u015f b\u0131rak\u0131lan kutu <b>1</b> say\u0131l\u0131r.</p>' +
+        '<div id="bal-eq" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:600;margin-bottom:12px;line-height:2"></div>' +
+        '<div id="bal-fb" style="display:none;border-radius:var(--r);padding:10px 12px;font-size:13px;font-weight:600;margin-bottom:10px;line-height:1.6"></div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+          '<button type="button" class="btn bp" onclick="checkBal()">Kontrol Et</button>' +
+          '<button type="button" class="btn bs" onclick="showBalAns()">Cevab\u0131 G\u00f6ster</button>' +
+          '<button type="button" class="btn bs" onclick="newBalQ()">Yeni Soru \u21bb</button>' +
+        '</div>' +
+        '<div id="bal-stat" style="font-size:11px;color:var(--tx3);margin-top:10px"></div>' +
+      '</div>');
+    newBalQ();
+  }
+
+  function balSpecies(eq){
+    var s = eq.replace(/\s+/g, '');
+    var sides = s.split('->');
+    var species = [], nReact = 0;
+    sides[0].split('+').forEach(function(f){ if (f) { species.push(f); nReact++; } });
+    sides[1].split('+').forEach(function(f){ if (f) species.push(f); });
+    return { species: species, nReact: nReact };
+  }
+
+  window.newBalQ = function(){
+    var eq = balCur ? balCur.eq : null;
+    var pick;
+    do { pick = BAL_BANK[Math.floor(Math.random() * BAL_BANK.length)]; } while (BAL_BANK.length > 1 && pick === eq);
+    var sp = balSpecies(pick);
+    balCur = { eq: pick, species: sp.species, nReact: sp.nReact };
+    balScored = false; balShown = false;
+    var html = '';
+    for (var i = 0; i < sp.species.length; i++) {
+      if (i === sp.nReact) html += '<span style="color:var(--ac2);font-size:20px;margin:0 4px">\u2192</span>';
+      else if (i > 0) html += '<span style="color:var(--tx3)">+</span>';
+      html += '<input type="number" min="1" step="1" placeholder="1" id="bal-i-' + i + '" class="inp" style="width:52px;padding:8px 6px;text-align:center;font-weight:700">' +
+              '<span>' + pretty(sp.species[i]) + '</span>';
+    }
+    var box = document.getElementById('bal-eq');
+    if (box) box.innerHTML = html;
+    var fb = document.getElementById('bal-fb');
+    if (fb) fb.style.display = 'none';
+    balStatLine();
+  };
+
+  function balStatLine(){
+    var b = sget('rk_bal', {a:0, c:0});
+    var s = document.getElementById('bal-stat');
+    if (s) s.textContent = 'Bu mod\u00fclde: ' + b.c + ' do\u011fru / ' + b.a + ' deneme' + (b.c >= 10 ? ' \u00b7 \u2696\ufe0f Dengeleyici rozeti kazan\u0131ld\u0131!' : ' \u00b7 10 do\u011fru = \u2696\ufe0f rozet');
+  }
+  function balFb(msg, kind){
+    var fb = document.getElementById('bal-fb');
+    if (!fb) return;
+    fb.style.display = 'block';
+    if (kind === 'ok') { fb.style.background = 'rgba(34,197,94,.1)'; fb.style.border = '1px solid rgba(34,197,94,.3)'; fb.style.color = '#22c55e'; }
+    else if (kind === 'warn') { fb.style.background = 'rgba(245,158,11,.1)'; fb.style.border = '1px solid rgba(245,158,11,.3)'; fb.style.color = '#f59e0b'; }
+    else { fb.style.background = 'rgba(239,68,68,.1)'; fb.style.border = '1px solid rgba(239,68,68,.3)'; fb.style.color = '#ef4444'; }
+    fb.innerHTML = msg;
+  }
+
+  window.checkBal = function(){
+    if (!balCur) return;
+    var coefs = [], i;
+    for (i = 0; i < balCur.species.length; i++) {
+      var el2 = document.getElementById('bal-i-' + i);
+      var v = el2 && el2.value !== '' ? parseInt(el2.value, 10) : 1;
+      if (!(v > 0)) { balFb('Katsay\u0131lar pozitif tam say\u0131 olmal\u0131.', 'err'); return; }
+      coefs.push(v);
+    }
+    var firstTry = !balScored && !balShown;
+    if (firstTry) { var b0 = sget('rk_bal', {a:0, c:0}); b0.a++; sset('rk_bal', b0); }
+    // Element sayımı
+    var maps, elems = {}, e2;
+    try { maps = balCur.species.map(function(sp){ return parseFormula(sp); }); }
+    catch (err) { balFb('Form\u00fcl ayr\u0131\u015ft\u0131r\u0131lamad\u0131.', 'err'); return; }
+    maps.forEach(function(m){ Object.keys(m).forEach(function(e){ elems[e] = 1; }); });
+    var bad = null;
+    Object.keys(elems).forEach(function(e){
+      if (bad) return;
+      var L = 0, R = 0;
+      for (var si = 0; si < maps.length; si++) {
+        var cnt = (maps[si][e] || 0) * coefs[si];
+        if (si < balCur.nReact) L += cnt; else R += cnt;
+      }
+      if (L !== R) bad = { e: e, L: L, R: R };
+    });
+    balScored = true;
+    if (bad) {
+      balFb('\u2717 Dengeli de\u011fil \u2014 <b>' + bad.e + '</b>: solda ' + bad.L + ', sa\u011fda ' + bad.R + ' atom var. Tekrar dene!', 'err');
+      balStatLine();
+      return;
+    }
+    // OBEB kontrolü (en küçük tam sayılar mı?)
+    var g = 0;
+    coefs.forEach(function(v){ g = gcd(g, v); });
+    if (g > 1) {
+      balFb('\u26a0\ufe0f Dengeli ama en k\u00fc\u00e7\u00fck tam say\u0131lar de\u011fil \u2014 t\u00fcm katsay\u0131lar\u0131 ' + g + '\'e b\u00f6lerek sadele\u015ftir.', 'warn');
+      return;
+    }
+    balFb('\u2713 M\u00fckemmel! Denklem en k\u00fc\u00e7\u00fck tam say\u0131larla dengelendi.', 'ok');
+    if (firstTry) {
+      var b1 = sget('rk_bal', {a:0, c:0});
+      b1.c++; sset('rk_bal', b1);
+      try { checkBadges(true); } catch (e) {}
+    }
+    balStatLine();
+  };
+
+  window.showBalAns = function(){
+    if (!balCur) return;
+    balShown = true;
+    try {
+      balanceEquation(balCur.eq);
+      var last = balanceEquation._last;
+      if (last && last.ints) {
+        for (var i = 0; i < last.ints.length; i++) {
+          var el2 = document.getElementById('bal-i-' + i);
+          if (el2) el2.value = last.ints[i];
+        }
+        balFb('Cevap g\u00f6sterildi (skora say\u0131lmaz). \u0130ncele, sonra "Yeni Soru" ile devam et.', 'warn');
+      }
+    } catch (e) {}
+  };
+
+  // ---------- 8b. Günün Elementi ----------
+  function setupDayElement(){
+    var tg = document.querySelector('#s-home .tgrid');
+    if (!tg || document.getElementById('day-el')) return;
+    var day = Math.floor(Date.now() / 86400000);
+    var n = ((day * 37) % 118) + 1;
+    var el = null;
+    for (var i = 0; i < ELS.length; i++) if (ELS[i].n === n) { el = ELS[i]; break; }
+    if (!el) return;
+    var d = EL_DATA[n] || {};
+    var col = (typeof CAT_COLORS2 !== 'undefined' && CAT_COLORS2[el.cat]) ? CAT_COLORS2[el.cat] : { bg: 'rgba(30,41,59,.8)', border: '#6366f1' };
+    tg.insertAdjacentHTML('beforebegin',
+      '<div id="day-el" onclick="openElDetail(' + n + ')" style="background:' + col.bg + ';border:1px solid ' + col.border + ';border-radius:var(--rlg);padding:16px;margin-bottom:14px;cursor:pointer;display:flex;gap:14px;align-items:center">' +
+        '<div style="background:' + col.border + '22;border:2px solid ' + col.border + ';border-radius:12px;padding:8px 14px;text-align:center;flex-shrink:0">' +
+          '<div style="font-size:10px;color:' + col.border + ';font-weight:700">' + el.n + '</div>' +
+          '<div style="font-family:Space Grotesk,sans-serif;font-size:30px;font-weight:800;color:' + col.border + ';line-height:1">' + el.sym + '</div>' +
+        '</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-size:10px;font-weight:700;color:' + col.border + ';text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px">\ud83d\udcc5 G\u00fcn\u00fcn Elementi</div>' +
+          '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff">' + el.name + '</div>' +
+          '<div style="font-size:12px;color:var(--tx2);line-height:1.5;margin-top:2px">' + (d.desc || el.cat) + '</div>' +
+          '<div style="font-size:11px;color:' + col.border + ';font-weight:600;margin-top:4px">Detay\u0131n\u0131 g\u00f6r \u2192</div>' +
+        '</div>' +
+      '</div>');
+  }
+
+  // ---------- 8c. Rozet Sistemi ----------
+  var BADGES = [
+    {id:'ilk',   e:'\ud83d\ude80', n:'\u0130lk Ad\u0131m',        d:'\u0130lk testini bitir',                f:function(s){ return s.scores.length >= 1; }},
+    {id:'tam',   e:'\ud83c\udfc5', n:'Kusursuz',                   d:'Bir testte %100 yap',                    f:function(s){ return s.scores.some(function(x){ return x.p === 100; }); }},
+    {id:'s100',  e:'\ud83d\udcaf', n:'Soru Canavar\u0131',         d:'Toplam 100 soru \u00e7\u00f6z',          f:function(s){ return s.stats.a >= 100; }},
+    {id:'s500',  e:'\ud83d\udc09', n:'Efsane',                     d:'Toplam 500 soru \u00e7\u00f6z',          f:function(s){ return s.stats.a >= 500; }},
+    {id:'seri3', e:'\ud83d\udd25', n:'K\u0131v\u0131lc\u0131m',    d:'3 g\u00fcnl\u00fck seri yakala',         f:function(s){ return s.streak >= 3; }},
+    {id:'seri7', e:'\u2604\ufe0f', n:'Ate\u015f Serisi',           d:'7 g\u00fcnl\u00fck seri yakala',         f:function(s){ return s.streak >= 7; }},
+    {id:'prova', e:'\ud83c\udf93', n:'Prova Sava\u015f\u00e7\u0131s\u0131', d:'Bir YKS provas\u0131 bitir',    f:function(s){ return s.scores.some(function(x){ return x.m === 'exam'; }); }},
+    {id:'cmpu',  e:'\u2697\ufe0f', n:'Bile\u015fik Ustas\u0131',   d:'Bile\u015fik testinde %80+ yap',         f:function(s){ return s.scores.some(function(x){ return (x.t === 'cmp2name' || x.t === 'name2cmp') && x.p >= 80; }); }},
+    {id:'temiz', e:'\ud83e\uddf9', n:'Temiz Sayfa',                d:'Yanl\u0131\u015f listeni tamamen temizle', f:function(s){ return !!s.flags.cleaned; }},
+    {id:'denge', e:'\u2696\ufe0f', n:'Dengeleyici',                d:'10 denklemi do\u011fru dengele',         f:function(s){ return s.bal.c >= 10; }}
+  ];
+  function badgeState(){
+    return {
+      scores: sget('rk_scores', []),
+      stats: sget('rk_stats', {a:0, c:0}),
+      streak: calcStreak(),
+      flags: sget('rk_flags', {}),
+      bal: sget('rk_bal', {a:0, c:0})
+    };
+  }
+  function earnedBadges(){
+    var s = badgeState(), out = [];
+    for (var i = 0; i < BADGES.length; i++) {
+      try { if (BADGES[i].f(s)) out.push(BADGES[i].id); } catch (e) {}
+    }
+    return out;
+  }
+  function checkBadges(showToast){
+    var earned = earnedBadges();
+    var seen = sget('rk_badges', []);
+    var fresh = earned.filter(function(id){ return seen.indexOf(id) === -1; });
+    if (fresh.length) {
+      sset('rk_badges', earned);
+      if (showToast && typeof toast === 'function') {
+        var b = null;
+        for (var i = 0; i < BADGES.length; i++) if (BADGES[i].id === fresh[0]) { b = BADGES[i]; break; }
+        if (b) toast('\ud83c\udfc5 Yeni rozet: ' + b.e + ' ' + b.n + '!');
+      }
+    }
+  }
+  function renderBadges(){
+    var anchor = document.getElementById('rk-statcard');
+    if (!anchor) return;
+    var old = document.getElementById('rk-badges');
+    if (old) old.remove();
+    var earned = earnedBadges();
+    var html = '<div class="card" id="rk-badges" style="margin-bottom:12px"><div class="slbl">Rozetler (' + earned.length + '/' + BADGES.length + ')</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px">';
+    for (var i = 0; i < BADGES.length; i++) {
+      var b = BADGES[i], has = earned.indexOf(b.id) !== -1;
+      html += '<div title="' + b.d + '" style="text-align:center;padding:10px 4px;border-radius:var(--r);border:1px solid ' +
+        (has ? 'rgba(99,102,241,.4);background:rgba(99,102,241,.1)' : 'var(--br);background:var(--sf2);opacity:.35;filter:grayscale(1)') + '">' +
+        '<div style="font-size:24px">' + b.e + '</div>' +
+        '<div style="font-size:10px;font-weight:700;color:#fff;margin-top:3px">' + b.n + '</div>' +
+        '<div style="font-size:8.5px;color:var(--tx3);margin-top:2px;line-height:1.3">' + b.d + '</div>' +
+      '</div>';
+    }
+    html += '</div></div>';
+    anchor.insertAdjacentHTML('afterend', html);
+  }
+
+  // ---------- 8d. İlerleme Grafiği ----------
+  function renderChart(){
+    var anchor = document.getElementById('rk-badges') || document.getElementById('rk-statcard');
+    if (!anchor) return;
+    var old = document.getElementById('rk-chart');
+    if (old) old.remove();
+    var scores = sget('rk_scores', []).slice().sort(function(a,b){ return a.dt - b.dt; }).slice(-20);
+    var html = '<div class="card" id="rk-chart" style="margin-bottom:12px"><div class="slbl">\u0130lerleme \u2014 Son ' + scores.length + ' Test</div>';
+    if (scores.length < 2) {
+      html += '<p style="font-size:12px;color:var(--tx3)">Grafik i\u00e7in en az 2 test gerekli.</p></div>';
+      anchor.insertAdjacentHTML('afterend', html);
+      return;
+    }
+    html += '<canvas id="rk-chart-cv" style="width:100%;display:block" height="150"></canvas></div>';
+    anchor.insertAdjacentHTML('afterend', html);
+    var cv = document.getElementById('rk-chart-cv');
+    setTimeout(function(){
+      var rect = cv.getBoundingClientRect();
+      var dpr = window.devicePixelRatio || 1;
+      var W = rect.width || 300, H = 150;
+      cv.width = W * dpr; cv.height = H * dpr;
+      var x = cv.getContext('2d');
+      x.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var padL = 30, padR = 10, padT = 10, padB = 18;
+      var iw = W - padL - padR, ih = H - padT - padB;
+      function px(i){ return padL + (scores.length === 1 ? iw/2 : iw * i / (scores.length - 1)); }
+      function py(p){ return padT + ih * (1 - p / 100); }
+      // Kılavuz çizgileri
+      [0, 50, 100].forEach(function(v){
+        x.strokeStyle = 'rgba(148,163,184,.15)'; x.lineWidth = 1;
+        x.beginPath(); x.moveTo(padL, py(v)); x.lineTo(W - padR, py(v)); x.stroke();
+        x.fillStyle = 'rgba(148,163,184,.5)'; x.font = '9px sans-serif'; x.textAlign = 'right';
+        x.fillText('%' + v, padL - 4, py(v) + 3);
+      });
+      // Çizgi
+      x.strokeStyle = '#818cf8'; x.lineWidth = 2; x.lineJoin = 'round';
+      x.beginPath();
+      for (var i = 0; i < scores.length; i++) {
+        if (i === 0) x.moveTo(px(i), py(scores[i].p));
+        else x.lineTo(px(i), py(scores[i].p));
+      }
+      x.stroke();
+      // Noktalar
+      for (var j = 0; j < scores.length; j++) {
+        var p = scores[j].p;
+        x.beginPath(); x.arc(px(j), py(p), 3.5, 0, 2 * Math.PI);
+        x.fillStyle = p >= 80 ? '#22c55e' : p >= 50 ? '#f59e0b' : '#ef4444';
+        x.fill();
+      }
+      // Son değer etiketi
+      var lastS = scores[scores.length - 1];
+      x.fillStyle = '#a5b4fc'; x.font = 'bold 11px sans-serif'; x.textAlign = 'center';
+      x.fillText('%' + lastS.p, px(scores.length - 1), py(lastS.p) - 8);
+    }, 30);
+  }
+
+  // ---------- 8e. Yükseltgenme Basamağı Bulucu ----------
+  var PEROXIDES = ['H2O2', 'Na2O2', 'K2O2', 'Li2O2', 'BaO2', 'CaO2'];
+  var ANION_TABLE = {S:-2, Se:-2, N:-3, P:-3, C:-4};
+  var METAL_CATS = {'Alkali Metal':1, 'Toprak Alkali Metal':1, 'Ge\u00e7i\u015f Metali':1, 'Metal':1, 'Lantanit':1, 'Aktinit':1};
+
+  function setupOxFinder(){
+    var tabs = document.getElementById('moltps');
+    if (!tabs || document.getElementById('ox-card')) return;
+    tabs.insertAdjacentHTML('afterend',
+      '<div class="card" id="ox-card" style="margin-top:14px">' +
+        '<div class="slbl">\ud83e\uddee Y\u00fckseltgenme Basama\u011f\u0131 Bulucu</div>' +
+        '<div class="g2" style="margin-bottom:10px">' +
+          '<div><div class="slbl">Form\u00fcl</div><input type="text" id="ox-f" class="inp" placeholder="\u00f6rn: KMnO4" autocapitalize="off" autocorrect="off" spellcheck="false"></div>' +
+          '<div><div class="slbl">\u0130yon Y\u00fck\u00fc (n\u00f6tr=0)</div><input type="number" id="ox-q" class="inp" value="0" step="1"></div>' +
+        '</div>' +
+        '<button type="button" class="btn bp bfull" onclick="oxRun()">Hesapla</button>' +
+        '<div id="ox-out" style="margin-top:12px"></div>' +
+      '</div>');
+    document.getElementById('ox-f').addEventListener('keydown', function(e){
+      if (e.key === 'Enter') { e.preventDefault(); window.oxRun(); }
+    });
+  }
+
+  function oxFmt(fr){
+    var sign = fr.n > 0 ? '+' : fr.n < 0 ? '\u2212' : '';
+    var an = Math.abs(fr.n);
+    return fr.n === 0 ? '0' : (fr.d === 1 ? sign + an : sign + an + '/' + fr.d);
+  }
+
+  window.oxRun = function(){
+    var fi = document.getElementById('ox-f');
+    var out = document.getElementById('ox-out');
+    if (!fi || !out) return;
+    var v = fi.value.trim();
+    var charge = parseInt((document.getElementById('ox-q') || {value:'0'}).value, 10) || 0;
+    if (!v) { out.innerHTML = ''; return; }
+    try {
+      var counts = parseFormula(v);
+      var syms = Object.keys(counts);
+      if (!syms.length) throw new Error('Form\u00fcl okunamad\u0131.');
+      var elMap = {};
+      for (var i = 0; i < ELS.length; i++) elMap[ELS[i].sym] = ELS[i];
+      for (var s0 = 0; s0 < syms.length; s0++)
+        if (!elMap[syms[s0]]) throw new Error('Bilinmeyen sembol: ' + syms[s0]);
+
+      var plain = v.replace(/\s+/g, '');
+      var isPerox = PEROXIDES.indexOf(plain) !== -1;
+      var hasO = 'O' in counts, hasF = 'F' in counts;
+      var known = {}, unknown = [];
+
+      // Tek elementli tür (O2, Fe, P4...) → 0 (nötrse)
+      if (syms.length === 1 && charge === 0) {
+        out.innerHTML = oxChips([{ sym: syms[0], val: F(0,1) }], 'Elementel halde y\u00fckseltgenme basama\u011f\u0131 0\'d\u0131r.');
+        return;
+      }
+
+      syms.forEach(function(sym){
+        var cat = elMap[sym].cat;
+        var othersAllMetal = syms.every(function(s2){ return s2 === sym || METAL_CATS[elMap[s2].cat]; });
+        if (sym === 'F') known[sym] = -1;
+        else if (sym === 'O') known[sym] = isPerox ? -1 : -2;
+        else if (sym === 'H') known[sym] = othersAllMetal ? -1 : 1;
+        else if (cat === 'Alkali Metal') known[sym] = 1;
+        else if (cat === 'Toprak Alkali Metal') known[sym] = 2;
+        else if (sym === 'Al') known[sym] = 3;
+        else if (sym === 'Zn') known[sym] = 2;
+        else if (sym === 'Ag') known[sym] = 1;
+        else if ((sym === 'Cl' || sym === 'Br' || sym === 'I') && !hasO && !hasF) known[sym] = -1;
+        else unknown.push(sym);
+      });
+
+      // Birden fazla bilinmeyen: metal olmayan anyonlara tablo değeri dene (FeS, Mg3N2 gibi)
+      if (unknown.length > 1 && !hasO && !hasF) {
+        var left = [];
+        unknown.forEach(function(sym){
+          if (ANION_TABLE[sym] !== undefined && unknown.length - 1 === unknown.filter(function(u){ return u === sym || METAL_CATS[elMap[u].cat]; }).length - 0) {}
+          if (ANION_TABLE[sym] !== undefined) known[sym] = ANION_TABLE[sym];
+          else left.push(sym);
+        });
+        unknown = left;
+      }
+      if (unknown.length > 1)
+        throw new Error('Bu form\u00fclde birden fazla belirsiz element var \u2014 tek bilinmeyenli form\u00fcller destekleniyor (\u00f6rn: KMnO4, H2SO4, FeCl3).');
+
+      var sum = 0;
+      syms.forEach(function(sym){ if (known[sym] !== undefined) sum += known[sym] * counts[sym]; });
+
+      var results = [];
+      if (unknown.length === 1) {
+        var u = unknown[0];
+        results = syms.map(function(sym){
+          return { sym: sym, val: sym === u ? F(charge - sum, counts[u]) : F(known[sym], 1) };
+        });
+      } else {
+        // Bilinmeyen yok: toplam yüke uymuyorsa O'yu (ya da H'yi) serbest bırakıp yeniden çöz (OF2 gibi)
+        if (sum !== charge && (hasO || 'H' in counts)) {
+          var u2 = hasO ? 'O' : 'H';
+          var sum2 = 0;
+          syms.forEach(function(sym){ if (sym !== u2) sum2 += known[sym] * counts[sym]; });
+          results = syms.map(function(sym){
+            return { sym: sym, val: sym === u2 ? F(charge - sum2, counts[u2]) : F(known[sym], 1) };
+          });
+        } else if (sum !== charge) {
+          throw new Error('Kurallar bu form\u00fclde toplam y\u00fckle \u00e7eli\u015fti \u2014 y\u00fck de\u011ferini kontrol et.');
+        } else {
+          results = syms.map(function(sym){ return { sym: sym, val: F(known[sym], 1) }; });
+        }
+      }
+      var note = '';
+      results.forEach(function(r){ if (r.val.d !== 1) note = 'Kesirli sonu\u00e7 = ortalama de\u011ferlik (kar\u0131\u015f\u0131k y\u00fckseltgenme basamakl\u0131 bile\u015fik, \u00f6rn. Fe\u2083O\u2084).'; });
+      out.innerHTML = oxChips(results, note);
+    } catch (err) {
+      out.innerHTML = '<div style="font-size:13px;color:var(--yw);line-height:1.6">' + err.message + '</div>';
+    }
+  };
+
+  function oxChips(results, note){
+    var html = '<div style="display:flex;flex-wrap:wrap;gap:8px">';
+    results.forEach(function(r){
+      var v = r.val.n / r.val.d;
+      var col = v > 0 ? '#ef4444' : v < 0 ? '#3b82f6' : '#94a3b8';
+      html += '<div style="background:' + col + '18;border:1px solid ' + col + '55;border-radius:var(--r);padding:8px 14px;text-align:center">' +
+        '<div style="font-family:Space Grotesk,sans-serif;font-size:18px;font-weight:800;color:#fff">' + r.sym + '</div>' +
+        '<div style="font-size:15px;font-weight:800;color:' + col + '">' + oxFmt(r.val) + '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+    if (note) html += '<div style="font-size:11px;color:var(--tx3);margin-top:8px;line-height:1.5">' + note + '</div>';
+    return html;
+  }
+
+  // ---------- 8f. Element Karşılaştırma ----------
+  function setupCompareScreen(){
+    if (document.getElementById('s-cmp')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var opts = '';
+    for (var i = 0; i < ELS.length; i++)
+      opts += '<option value="' + ELS[i].n + '">' + ELS[i].n + ' \u2014 ' + ELS[i].name + ' (' + ELS[i].sym + ')</option>';
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-cmp" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\u2696\ufe0f Element Kar\u015f\u0131la\u015ft\u0131rma</h1>' +
+        '<p class="psub">\u0130ki element se\u00e7, \u00f6zelliklerini ve periyodik e\u011filimlerini yan yana g\u00f6r.</p>' +
+        '<div class="card" style="margin-bottom:12px"><div class="g2">' +
+          '<div><div class="slbl">Element 1</div><select class="sel" id="cmp-a">' + opts + '</select></div>' +
+          '<div><div class="slbl">Element 2</div><select class="sel" id="cmp-b">' + opts + '</select></div>' +
+        '</div>' +
+        '<button type="button" class="btn bp bfull" style="margin-top:12px" onclick="runCompare()">Kar\u015f\u0131la\u015ft\u0131r</button></div>' +
+        '<div id="cmp-out"></div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-cmp') === -1) SCREENS.push('s-cmp');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-cmp'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-cmp" onclick="nav(\'cmp\')">\u2696\ufe0f Element Kar\u015f\u0131la\u015ft\u0131r</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-cmp'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-cmp" onclick="nav(\'cmp\')"><div class="ti">\u2696\ufe0f</div><div class="tt">Element Kar\u015f\u0131la\u015ft\u0131r</div><div class="td">\u0130ki elementi yan yana incele: EN, yar\u0131\u00e7ap, erime, dizilim.</div></div>');
+    var sa = document.getElementById('cmp-a'), sb = document.getElementById('cmp-b');
+    if (sa) sa.value = '11';
+    if (sb) sb.value = '17';
+    runCompare();
+  }
+
+  window.runCompare = function(){
+    var sa = document.getElementById('cmp-a'), sb = document.getElementById('cmp-b');
+    var out = document.getElementById('cmp-out');
+    if (!sa || !sb || !out) return;
+    var na = +sa.value, nb = +sb.value;
+    var A = null, B = null;
+    for (var i = 0; i < ELS.length; i++) { if (ELS[i].n === na) A = ELS[i]; if (ELS[i].n === nb) B = ELS[i]; }
+    if (!A || !B) return;
+    var da = EL_DATA[na] || {}, db = EL_DATA[nb] || {};
+
+    function row(label, v1, v2, win){ // win: 0=yok, 1=sol, 2=sağ
+      function cell(v, w){
+        return '<div style="padding:9px 10px;font-size:12.5px;' + (w ? 'color:#22c55e;font-weight:700' : 'color:var(--tx)') + '">' + (v === null || v === undefined || v === '' ? '\u2014' : v) + '</div>';
+      }
+      return '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--br);align-items:center">' +
+        '<div style="padding:9px 10px;font-size:10.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px">' + label + '</div>' +
+        cell(v1, win === 1) + cell(v2, win === 2) + '</div>';
+    }
+    function numWin(x, y, higherWins){
+      if (x === null || x === undefined || y === null || y === undefined || x === y) return 0;
+      return (x > y) === !!higherWins ? 1 : 2;
+    }
+    // Yarıçap eğilimi: periyot büyükse büyük; aynı periyotta grup küçükse büyük
+    var radWin = 0;
+    if (da.period && db.period) {
+      if (da.period !== db.period) radWin = da.period > db.period ? 1 : 2;
+      else if (da.group && db.group && da.group !== db.group) radWin = da.group < db.group ? 1 : 2;
+    }
+
+    var html = '<div class="card" style="padding:0;overflow:hidden">';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--sf2);border-bottom:1px solid var(--br)">' +
+      '<div style="padding:12px 10px;font-size:10px;font-weight:700;color:var(--tx3)">\u00d6ZELL\u0130K</div>' +
+      '<div style="padding:12px 10px;font-family:Space Grotesk,sans-serif;font-weight:800;color:#fff;cursor:pointer" onclick="openElDetail(' + na + ')">' + A.sym + ' \u00b7 ' + A.name + '</div>' +
+      '<div style="padding:12px 10px;font-family:Space Grotesk,sans-serif;font-weight:800;color:#fff;cursor:pointer" onclick="openElDetail(' + nb + ')">' + B.sym + ' \u00b7 ' + B.name + '</div></div>';
+    html += row('Kategori', A.cat, B.cat, 0);
+    html += row('Atom K\u00fctlesi', A.mass + ' g/mol', B.mass + ' g/mol', 0);
+    html += row('Periyot / Grup', (da.period || '?') + ' / ' + (da.group || '?'), (db.period || '?') + ' / ' + (db.group || '?'), 0);
+    html += row('Elektronegatiflik', da.neg, db.neg, numWin(da.neg, db.neg, true));
+    html += row('Atom Yar\u0131\u00e7ap\u0131 (e\u011filim)', radWin === 1 ? 'Daha b\u00fcy\u00fck' : radWin === 2 ? 'Daha k\u00fc\u00e7\u00fck' : '\u2248', radWin === 2 ? 'Daha b\u00fcy\u00fck' : radWin === 1 ? 'Daha k\u00fc\u00e7\u00fck' : '\u2248', radWin);
+    html += row('Erime Noktas\u0131', da.melt !== null && da.melt !== undefined ? da.melt + ' \u00b0C' : null, db.melt !== null && db.melt !== undefined ? db.melt + ' \u00b0C' : null, numWin(da.melt, db.melt, true));
+    html += row('Kaynama Noktas\u0131', da.boil !== null && da.boil !== undefined ? da.boil + ' \u00b0C' : null, db.boil !== null && db.boil !== undefined ? db.boil + ' \u00b0C' : null, numWin(da.boil, db.boil, true));
+    html += row('e\u207b Dizilimi', da.conf, db.conf, 0);
+    html += row('Kabuklar', da.shells, db.shells, 0);
+    html += '</div>';
+
+    // Sözel değerlendirme
+    var verdicts = [];
+    if (da.neg != null && db.neg != null && da.neg !== db.neg)
+      verdicts.push('\ud83e\uddf2 Elektronegatifli\u011fi daha y\u00fcksek: <b>' + (da.neg > db.neg ? A.sym : B.sym) + '</b> \u2014 elektronlar\u0131 daha \u00e7ok \u00e7eker.');
+    if (radWin) verdicts.push('\u269b\ufe0f Atom yar\u0131\u00e7ap\u0131 daha b\u00fcy\u00fck: <b>' + (radWin === 1 ? A.sym : B.sym) + '</b> (periyodik e\u011filime g\u00f6re).');
+    var aM = METAL_CATS[A.cat], bM = METAL_CATS[B.cat];
+    if (aM && bM && da.neg != null && db.neg != null && da.neg !== db.neg)
+      verdicts.push('\u26a1 Metalik aktifli\u011fi daha y\u00fcksek: <b>' + (da.neg < db.neg ? A.sym : B.sym) + '</b> \u2014 elektron vermeye daha yatk\u0131n.');
+    if (!aM && !bM && da.neg != null && db.neg != null && da.neg !== db.neg)
+      verdicts.push('\u26a1 Ametalik aktifli\u011fi daha y\u00fcksek: <b>' + (da.neg > db.neg ? A.sym : B.sym) + '</b> \u2014 elektron almaya daha yatk\u0131n.');
+    if (verdicts.length)
+      html += '<div class="card" style="margin-top:12px"><div class="slbl">De\u011ferlendirme</div><div style="font-size:13px;color:var(--tx2);line-height:2">' + verdicts.join('<br>') + '</div></div>';
+
+    out.innerHTML = html;
+  };
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
     try { setupMolFormula(); } catch (e) { /* sessiz */ }
     try { setupFlashcards(); } catch (e) { /* sessiz */ }
+    try { setupBalanceGame(); } catch (e) { /* sessiz */ }
+    try { setupDayElement(); } catch (e) { /* sessiz */ }
+    try { setupOxFinder(); } catch (e) { /* sessiz */ }
+    try { setupCompareScreen(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
