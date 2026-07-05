@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seri Kaplar Elektroliz Simülasyonu</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0e1a; font-family: 'Segoe UI', sans-serif; color: #e2e8f0; overflow-x: hidden; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.header { text-align: center; margin-bottom: 30px; }
+.header h1 { font-size: 2rem; color: #00d4ff; text-shadow: 0 0 20px rgba(0,212,255,0.5); margin-bottom: 8px; }
+.header p { color: #94a3b8; font-size: 14px; }
+.controls { background: rgba(15,23,42,0.9); border: 1px solid rgba(0,212,255,0.2); border-radius: 16px; padding: 20px; margin-bottom: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-group label { font-size: 12px; color: #60a5fa; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.control-group input, .control-group select { background: rgba(30,41,59,0.8); border: 1px solid rgba(99,102,241,0.3); border-radius: 8px; padding: 10px 12px; color: #e2e8f0; font-size: 14px; outline: none; }
+.control-group input:focus, .control-group select:focus { border-color: #00d4ff; }
+.sim-area { background: rgba(5,5,16,0.95); border: 2px solid rgba(0,212,255,0.25); border-radius: 20px; padding: 25px; position: relative; min-height: 500px; }
+.cells-container { display: flex; justify-content: center; align-items: flex-end; gap: 30px; flex-wrap: wrap; padding: 20px 0; position: relative; }
+.cell { width: 180px; position: relative; display: flex; flex-direction: column; align-items: center; }
+.cell-label { font-size: 13px; font-weight: 700; color: #00d4ff; margin-bottom: 8px; text-align: center; padding: 4px 12px; background: rgba(0,212,255,0.1); border-radius: 20px; border: 1px solid rgba(0,212,255,0.3); }
+.cell-body { width: 100%; height: 200px; background: rgba(30,41,59,0.6); border: 2px solid rgba(99,102,241,0.4); border-radius: 12px 12px 20px 20px; position: relative; overflow: hidden; }
+.liquid { position: absolute; bottom: 0; left: 0; right: 0; height: 75%; background: rgba(56,189,248,0.15); border-top: 2px solid rgba(56,189,248,0.3); transition: all 0.5s ease; }
+.electrode { position: absolute; width: 14px; height: 70%; bottom: 10%; border-radius: 7px; transition: all 0.3s ease; }
+.electrode.cathode { left: 25px; background: rgba(59,130,246,0.8); box-shadow: 0 0 15px rgba(59,130,246,0.5), inset 0 0 10px rgba(59,130,246,0.3); }
+.electrode.anode { right: 25px; background: rgba(239,68,68,0.8); box-shadow: 0 0 15px rgba(239,68,68,0.5), inset 0 0 10px rgba(239,68,68,0.3); }
+.electrode-label { position: absolute; font-size: 10px; font-weight: 700; color: #fff; padding: 2px 6px; border-radius: 4px; top: 5px; }
+.electrode-label.cathode-label { left: 18px; background: rgba(59,130,246,0.9); }
+.electrode-label.anode-label { right: 18px; background: rgba(239,68,68,0.9); }
+.bubble { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.6); box-shadow: 0 0 6px rgba(255,255,255,0.4); animation: rise 3s ease-in infinite; }
+@keyframes rise { 0% { transform: translateY(0) scale(0.5); opacity: 0.8; } 100% { transform: translateY(-120px) scale(1.2); opacity: 0; } }
+.deposit { position: absolute; bottom: 10%; left: 22px; width: 20px; height: 0; background: rgba(250,204,21,0.8); border-radius: 4px 4px 0 0; transition: height 0.5s ease; box-shadow: 0 0 10px rgba(250,204,21,0.4); }
+.ion { position: absolute; font-size: 11px; font-weight: 700; padding: 2px 5px; border-radius: 50%; transition: all 0.8s ease; z-index: 10; }
+.ion.positive { color: #60a5fa; background: rgba(59,130,246,0.2); border: 1px solid rgba(59,130,246,0.4); }
+.ion.negative { color: #f87171; background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); }
+.ion.neutral { color: #94a3b8; background: rgba(148,163,184,0.2); border: 1px solid rgba(148,163,184,0.4); }
+.electron-flow { position: absolute; top: -40px; left: 0; right: 0; height: 30px; display: flex; align-items: center; justify-content: center; }
+.electron-dot { width: 8px; height: 8px; background: #facc15; border-radius: 50%; box-shadow: 0 0 8px rgba(250,204,21,0.8); position: absolute; animation: flow-right 2s linear infinite; }
+@keyframes flow-right { 0% { left: 10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { left: 90%; opacity: 0; } }
+.power-source { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.95); border: 2px solid rgba(250,204,21,0.5); border-radius: 12px; padding: 8px 20px; display: flex; align-items: center; gap: 10px; z-index: 100; }
+.power-source .bolt { font-size: 20px; color: #facc15; animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.1); } }
+.power-source span { font-size: 13px; font-weight: 700; color: #facc15; }
+.results { margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+.result-card { background: rgba(15,23,42,0.9); border: 1px solid rgba(99,102,241,0.3); border-radius: 12px; padding: 15px; }
+.result-card h3 { font-size: 14px; color: #00d4ff; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.result-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
+.result-row:last-child { border-bottom: none; }
+.result-row .label { color: #94a3b8; }
+.result-row .value { color: #e2e8f0; font-weight: 600; }
+.stars { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: -1; }
+.star { position: absolute; width: 2px; height: 2px; background: rgba(255,255,255,0.5); border-radius: 50%; animation: twinkle 3s ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+.action-btn { background: rgba(0,212,255,0.15); border: 2px solid rgba(0,212,255,0.4); color: #00d4ff; padding: 12px 30px; border-radius: 100px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: block; margin: 20px auto; }
+.action-btn:hover { background: rgba(0,212,255,0.25); box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+.action-btn.running { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); color: #f87171; }
+.particle-legend { display: flex; gap: 20px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+.particle-legend .item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #94a3b8; }
+.particle-legend .dot { width: 10px; height: 10px; border-radius: 50%; }
+@media (max-width: 768px) { .cells-container { gap: 15px; } .cell { width: 140px; } .cell-body { height: 160px; } .header h1 { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+    <div class="header">
+        <h1>⚡ Seri Kaplar Elektroliz Simülasyonu</h1>
+        <p>Aynı devreden geçen yük (Q = I·t) ile seri bağlı kaplardaki ürünleri canlı izleyin</p>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>Kap Sayısı</label>
+            <select id="cellCount" onchange="updateCells()">
+                <option value="2">2 Kap</option>
+                <option value="3" selected>3 Kap</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>Akım (A)</label>
+            <input type="number" id="current" value="5" step="0.1" min="0.1" max="50">
+        </div>
+        <div class="control-group">
+            <label>Süre (dk)</label>
+            <input type="number" id="time" value="30" step="5" min="5" max="180">
+        </div>
+        <div class="control-group">
+            <label>1. Kap</label>
+            <select id="cell1" onchange="updateCellType(0, this.value)">
+                <option value="cuso4">CuSO₄ (Pt anot)</option>
+                <option value="agno3">AgNO₃ (Pt anot)</option>
+                <option value="nacl_a">Sulu NaCl</option>
+                <option value="water">Saf Su (H₂SO₄)</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>2. Kap</label>
+            <select id="cell2" onchange="updateCellType(1, this.value)">
+                <option value="agno3" selected>AgNO₃ (Pt anot)</option>
+                <option value="cuso4">CuSO₄ (Pt anot)</option>
+                <option value="nacl_a">Sulu NaCl</option>
+                <option value="water">Saf Su (H₂SO₄)</option>
+            </select>
+        </div>
+        <div class="control-group" id="cell3Control" style="display:none">
+            <label>3. Kap</label>
+            <select id="cell3" onchange="updateCellType(2, this.value)">
+                <option value="water">Saf Su (H₂SO₄)</option>
+                <option value="cuso4">CuSO₄ (Pt anot)</option>
+                <option value="agno3">AgNO₃ (Pt anot)</option>
+                <option value="nacl_a">Sulu NaCl</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="action-btn" id="startBtn" onclick="toggleSimulation()">▶ Simülasyonu Başlat</button>
+
+    <div class="sim-area">
+        <div class="cells-container" id="cellsContainer"></div>
+        <div class="particle-legend">
+            <div class="item"><div class="dot" style="background:#60a5fa"></div> Pozitif İyon (Kanyon)</div>
+            <div class="item"><div class="dot" style="background:#f87171"></div> Negatif İyon (Anyon)</div>
+            <div class="item"><div class="dot" style="background:#facc15"></div> Metal Birikintisi</div>
+            <div class="item"><div class="dot" style="background:#bae6fd"></div> Gaz Kabarcığı</div>
+        </div>
+    </div>
+
+    <div class="results" id="results"></div>
+</div>
+
+<script>
+const SYSTEMS = {
+    cuso4: { name: 'CuSO₄ (Pt anot)', cathode: { product: 'Cu(s)', color: '#f59e0b', type: 'metal' }, anode: { product: 'O₂↑', color: '#bae6fd', type: 'gas' }, ions: [{ symbol: 'Cu²⁺', charge: '+', type: 'positive', count: 6 }, { symbol: 'SO₄²⁻', charge: '-', type: 'negative', count: 6 }, { symbol: 'H₂O', charge: '0', type: 'neutral', count: 8 }], M: 63.5, n: 2, halfCathode: 'Cu²⁺ + 2e⁻ → Cu(s)', halfAnode: '2H₂O → O₂ + 4H⁺ + 4e⁻' },
+    agno3: { name: 'AgNO₃ (Pt anot)', cathode: { product: 'Ag(s)', color: '#e5e7eb', type: 'metal' }, anode: { product: 'O₂↑', color: '#bae6fd', type: 'gas' }, ions: [{ symbol: 'Ag⁺', charge: '+', type: 'positive', count: 7 }, { symbol: 'NO₃⁻', charge: '-', type: 'negative', count: 7 }, { symbol: 'H₂O', charge: '0', type: 'neutral', count: 6 }], M: 108, n: 1, halfCathode: 'Ag⁺ + e⁻ → Ag(s)', halfAnode: '2H₂O → O₂ + 4H⁺ + 4e⁻' },
+    nacl_a: { name: 'Sulu NaCl', cathode: { product: 'H₂↑', color: '#e2e8f0', type: 'gas' }, anode: { product: 'Cl₂↑', color: '#bde04a', type: 'gas' }, ions: [{ symbol: 'Na⁺', charge: '+', type: 'positive', count: 7 }, { symbol: 'Cl⁻', charge: '-', type: 'negative', count: 7 }, { symbol: 'H₂O', charge: '0', type: 'neutral', count: 6 }], M: 2, n: 2, gas: true, halfCathode: '2H₂O + 2e⁻ → H₂ + 2OH⁻', halfAnode: '2Cl⁻ → Cl₂ + 2e⁻' },
+    water: { name: 'Saf Su (H₂SO₄)', cathode: { product: 'H₂↑ (2V)', color: '#e2e8f0', type: 'gas', rate: 2 }, anode: { product: 'O₂↑ (1V)', color: '#bae6fd', type: 'gas', rate: 1 }, ions: [{ symbol: 'H⁺', charge: '+', type: 'positive', count: 5 }, { symbol: 'SO₄²⁻', charge: '-', type: 'negative', count: 4 }, { symbol: 'H₂O', charge: '0', type: 'neutral', count: 8 }], M: 2, n: 2, gas: true, halfCathode: '2H₂O + 2e⁻ → H₂ + 2OH⁻', halfAnode: '2H₂O → O₂ + 4H⁺ + 4e⁻' }
+};
+
+let isRunning = false;
+let animationInterval = null;
+let cells = [];
+let cellTypes = ['cuso4', 'agno3', 'water'];
+
+function createStars() {
+    const container = document.getElementById('stars');
+    for (let i = 0; i < 50; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        container.appendChild(star);
+    }
+}
+
+function createCells() {
+    const container = document.getElementById('cellsContainer');
+    container.innerHTML = '';
+    const count = parseInt(document.getElementById('cellCount').value);
+    cells = [];
+    for (let i = 0; i < count; i++) {
+        const cellType = cellTypes[i] || 'water';
+        const system = SYSTEMS[cellType];
+        const cellDiv = document.createElement('div');
+        cellDiv.className = 'cell';
+        cellDiv.id = `cell-${i}`;
+        let html = `<div class="cell-label">${i + 1}. Kap: ${system.name}</div><div style="position:relative;width:100%;">`;
+        if (i > 0) {
+            html += `<div class="electron-flow"><div class="electron-dot" style="animation-delay: ${i * 0.5}s"></div><div class="electron-dot" style="animation-delay: ${i * 0.5 + 0.3}s"></div></div>`;
+        }
+        if (i === 0) {
+            html += `<div class="power-source"><span class="bolt">⚡</span><span>DC Güç Kaynağı</span></div>`;
+        }
+        html += `<div class="cell-body"><div class="electrode-label cathode-label">⊖ KATOT</div><div class="electrode-label anode-label">⊕ ANOT</div><div class="electrode cathode" id="cathode-${i}"></div><div class="electrode anode" id="anode-${i}"></div><div class="liquid" id="liquid-${i}"></div><div class="deposit" id="deposit-${i}"></div><div id="particles-${i}"></div></div></div>`;
+        cellDiv.innerHTML = html;
+        container.appendChild(cellDiv);
+        addParticles(i, system);
+        cells.push({ index: i, type: cellType, system: system, deposit: 0, gasBubbles: 0 });
+    }
+    updateResults();
+}
+
+function addParticles(cellIndex, system) {
+    const container = document.getElementById(`particles-${cellIndex}`);
+    if (!container) return;
+    container.innerHTML = '';
+    system.ions.forEach((ion) => {
+        for (let j = 0; j < ion.count; j++) {
+            const particle = document.createElement('div');
+            particle.className = `ion ${ion.type}`;
+            particle.textContent = ion.symbol;
+            particle.style.left = (15 + Math.random() * 70) + '%';
+            particle.style.top = (20 + Math.random() * 60) + '%';
+            particle.style.animationDelay = (Math.random() * 2) + 's';
+            container.appendChild(particle);
+        }
+    });
+}
+
+function addBubble(cellIndex, isCathode) {
+    const cell = document.getElementById(`cell-${cellIndex}`);
+    if (!cell) return;
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    const size = 4 + Math.random() * 6;
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
+    bubble.style.left = (isCathode ? 20 : 75) + '%';
+    bubble.style.bottom = (15 + Math.random() * 20) + '%';
+    bubble.style.animationDuration = (2 + Math.random() * 2) + 's';
+    cell.querySelector('.cell-body').appendChild(bubble);
+    setTimeout(() => { if (bubble.parentNode) bubble.parentNode.removeChild(bubble); }, 4000);
+}
+
+function updateDeposit(cellIndex) {
+    const deposit = document.getElementById(`deposit-${cellIndex}`);
+    const cell = cells[cellIndex];
+    if (!deposit || !cell) return;
+    const system = cell.system;
+    if (system.cathode.type === 'metal') {
+        cell.deposit = Math.min(40, cell.deposit + 0.5);
+        deposit.style.height = cell.deposit + 'px';
+    }
+}
+
+function simulationLoop() {
+    if (!isRunning) return;
+    cells.forEach((cell, idx) => {
+        const system = cell.system;
+        if (system.cathode.type === 'gas') { if (Math.random() < 0.3) addBubble(idx, true); }
+        else if (system.cathode.type === 'metal') { updateDeposit(idx); }
+        if (system.anode.type === 'gas') { if (Math.random() < 0.2) addBubble(idx, false); }
+        const particles = document.querySelectorAll(`#particles-${idx} .ion`);
+        particles.forEach(p => {
+            const type = p.classList.contains('positive') ? 'positive' : p.classList.contains('negative') ? 'negative' : 'neutral';
+            const cathodeX = 25, anodeX = 155, centerY = 100;
+            let targetX, targetY;
+            if (type === 'positive') { targetX = cathodeX + (Math.random() - 0.5) * 15; targetY = centerY + (Math.random() - 0.5) * 40; }
+            else if (type === 'negative') { targetX = anodeX + (Math.random() - 0.5) * 15; targetY = centerY + (Math.random() - 0.5) * 40; }
+            else { targetX = 50 + Math.random() * 80; targetY = 30 + Math.random() * 120; }
+            const currentLeft = parseFloat(p.style.left) || 50;
+            const currentTop = parseFloat(p.style.top) || 50;
+            p.style.left = (currentLeft + (targetX / 180 * 100 - currentLeft) * 0.1) + '%';
+            p.style.top = (currentTop + (targetY / 200 * 100 - currentTop) * 0.1) + '%';
+        });
+    });
+}
+
+function toggleSimulation() {
+    const btn = document.getElementById('startBtn');
+    if (isRunning) {
+        isRunning = false;
+        btn.textContent = '▶ Simülasyonu Başlat';
+        btn.classList.remove('running');
+        if (animationInterval) clearInterval(animationInterval);
+    } else {
+        isRunning = true;
+        btn.textContent = '⏹ Simülasyonu Durdur';
+        btn.classList.add('running');
+        animationInterval = setInterval(simulationLoop, 200);
+    }
+}
+
+function updateResults() {
+    const resultsDiv = document.getElementById('results');
+    const I = parseFloat(document.getElementById('current').value) || 5;
+    const t = parseFloat(document.getElementById('time').value) || 30;
+    const Q = I * t * 60;
+    const F = 96500;
+    const molE = Q / F;
+    let html = '';
+    cells.forEach((cell, idx) => {
+        const system = cell.system;
+        const mol = molE / system.n;
+        const mass = mol * system.M;
+        const volume = system.gas ? mol * 22.4 : null;
+        html += `<div class="result-card"><h3>⚡ Kap ${idx + 1}: ${system.name}</h3><div class="result-row"><span class="label">Yük (Q)</span><span class="value">${Q.toFixed(0)} C</span></div><div class="result-row"><span class="label">mol e⁻</span><span class="value">${molE.toFixed(4)} mol</span></div><div class="result-row"><span class="label">Katot Ürünü</span><span class="value" style="color:${system.cathode.color}">${system.cathode.product}</span></div><div class="result-row"><span class="label">Anot Ürünü</span><span class="value" style="color:${system.anode.color}">${system.anode.product}</span></div><div class="result-row"><span class="label">Biriken Kütle</span><span class="value">${mass.toFixed(3)} g${volume ? ` · ${volume.toFixed(3)} L (NK)` : ''}</span></div><div class="result-row"><span class="label">Yarım Tepkimeler</span><span class="value" style="font-size:11px">${system.halfCathode}<br>${system.halfAnode}</span></div></div>`;
+    });
+    html += `<div class="result-card" style="border-color: rgba(250,204,21,0.4);"><h3>📊 Genel Bilgiler</h3><div class="result-row"><span class="label">Ortak Yük (Q)</span><span class="value" style="color:#facc15">${Q.toFixed(0)} C</span></div><div class="result-row"><span class="label">Akım (I)</span><span class="value">${I} A</span></div><div class="result-row"><span class="label">Süre (t)</span><span class="value">${t} dk = ${t*60} s</span></div><div class="result-row"><span class="label">Faraday Sabiti</span><span class="value">F = 96500 C/mol</span></div><div style="margin-top:10px;padding:8px;background:rgba(0,212,255,0.05);border-radius:8px;font-size:12px;color:#94a3b8;line-height:1.6">💡 Seri bağlı kaplardan <b>aynı yük (Q)</b> geçer. Her kapın ürün miktarı, o kapın elektrot tepkimesinin elektron sayısına (n) bağlıdır.</div></div>`;
+    resultsDiv.innerHTML = html;
+}
+
+function updateCells() {
+    const count = parseInt(document.getElementById('cellCount').value);
+    document.getElementById('cell3Control').style.display = count >= 3 ? 'flex' : 'none';
+    createCells();
+}
+
+function updateCellType(index, value) {
+    cellTypes[index] = value;
+    createCells();
+}
+
+document.getElementById('current').addEventListener('input', updateResults);
+document.getElementById('time').addEventListener('input', updateResults);
+
+createStars();
+createCells();
+</script>
+
+</body>
+</html>
