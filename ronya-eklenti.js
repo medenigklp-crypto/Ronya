@@ -2538,30 +2538,35 @@
     if (fsp) fsp.addEventListener('change', window.fdModeChanged);
   }
 
-  // ---------- 9f. Seri Kaplar Canlı Simülatörü ----------
+  // ---------- 9f. Seri Kaplar Canlı Simülatörü (Görsel Kaplar + Tanecikler) ----------
   // Seri bağlı 2-3 elektroliz kabı: hepsinden AYNI yük (Q) geçer.
   // Her kabın katot ve anot ürünleri, I ve t değiştikçe canlı hesaplanır.
+  // YENİ: Her kap gerçek bir görsel kap olarak çizilir, iyonlar hareket eder!
+
   var ELZ_CELLS = [
-    {k:'nacl_m',   name:'Erimi\u015f NaCl',              cat:{p:'Na(s)', M:23, n:1},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
-    {k:'mgcl2',    name:'Erimi\u015f MgCl\u2082',        cat:{p:'Mg(s)', M:24, n:2},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
-    {k:'cacl2',    name:'Erimi\u015f CaCl\u2082',        cat:{p:'Ca(s)', M:40, n:2},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
-    {k:'al2o3',    name:'Erimi\u015f Al\u2082O\u2083',   cat:{p:'Al(s)', M:27, n:3},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
-    {k:'nacl_a',   name:'Sulu NaCl (deri\u015fik)',      cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
-    {k:'water',    name:'Su (H\u2082SO\u2084\u2019l\u00fc)', cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
-    {k:'na2so4',   name:'Sulu Na\u2082SO\u2084',         cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
-    {k:'ki',       name:'Sulu KI',                        cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'I\u2082(k)', M:254, n:2}},
-    {k:'cuso4_pt', name:'Sulu CuSO\u2084 (Pt anot)',     cat:{p:'Cu(s)', M:63.5, n:2},          an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
-    {k:'cuso4_cu', name:'CuSO\u2084 (Cu anot)',          cat:{p:'Cu(s)', M:63.5, n:2},          an:{p:'Cu \u00e7\u00f6z\u00fcn\u00fcr', M:63.5, n:2, diss:1}},
-    {k:'agno3_pt', name:'Sulu AgNO\u2083 (Pt anot)',     cat:{p:'Ag(s)', M:108, n:1},           an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
-    {k:'agno3_ag', name:'AgNO\u2083 (Ag anot)',          cat:{p:'Ag(s)', M:108, n:1},           an:{p:'Ag \u00e7\u00f6z\u00fcn\u00fcr', M:108, n:1, diss:1}},
-    {k:'znso4',    name:'Sulu ZnSO\u2084 (Pt)',          cat:{p:'Zn(s)', M:65, n:2},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
-    {k:'niso4',    name:'Sulu NiSO\u2084 (Pt)',          cat:{p:'Ni(s)', M:59, n:2},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
-    {k:'crcl3',    name:'Sulu CrCl\u2083 (deri\u015fik)', cat:{p:'Cr(s)', M:52, n:3},           an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
-    {k:'aucl3',    name:'Sulu AuCl\u2083 (deri\u015fik)', cat:{p:'Au(s)', M:197, n:3},          an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
-    {k:'pbno3',    name:'Sulu Pb(NO\u2083)\u2082 (Pt)',  cat:{p:'Pb(s)', M:207, n:2},           an:{p:'O\u2082(g)', M:32, n:4, gas:1}}
+    {k:'nacl_m',   name:'Erimiş NaCl',              cat:{p:'Na(s)', M:23, n:1},            an:{p:'Cl₂(g)', M:71, n:2, gas:1}},
+    {k:'mgcl2',    name:'Erimiş MgCl₂',        cat:{p:'Mg(s)', M:24, n:2},            an:{p:'Cl₂(g)', M:71, n:2, gas:1}},
+    {k:'cacl2',    name:'Erimiş CaCl₂',        cat:{p:'Ca(s)', M:40, n:2},            an:{p:'Cl₂(g)', M:71, n:2, gas:1}},
+    {k:'al2o3',    name:'Erimiş Al₂O₃',   cat:{p:'Al(s)', M:27, n:3},            an:{p:'O₂(g)', M:32, n:4, gas:1}},
+    {k:'nacl_a',   name:'Sulu NaCl (derişik)',      cat:{p:'H₂(g)', M:2, n:2, gas:1}, an:{p:'Cl₂(g)', M:71, n:2, gas:1}},
+    {k:'water',    name:'Su (H₂SO₄'lü)', cat:{p:'H₂(g)', M:2, n:2, gas:1}, an:{p:'O₂(g)', M:32, n:4, gas:1}},
+    {k:'na2so4',   name:'Sulu Na₂SO₄',         cat:{p:'H₂(g)', M:2, n:2, gas:1}, an:{p:'O₂(g)', M:32, n:4, gas:1}},
+    {k:'ki',       name:'Sulu KI',                        cat:{p:'H₂(g)', M:2, n:2, gas:1}, an:{p:'I₂(k)', M:254, n:2}},
+    {k:'cuso4_pt', name:'Sulu CuSO₄ (Pt anot)',     cat:{p:'Cu(s)', M:63.5, n:2},          an:{p:'O₂(g)', M:32, n:4, gas:1}},
+    {k:'cuso4_cu', name:'CuSO₄ (Cu anot)',          cat:{p:'Cu(s)', M:63.5, n:2},          an:{p:'Cu çözünür', M:63.5, n:2, diss:1}},
+    {k:'agno3_pt', name:'Sulu AgNO₃ (Pt anot)',     cat:{p:'Ag(s)', M:108, n:1},           an:{p:'O₂(g)', M:32, n:4, gas:1}},
+    {k:'agno3_ag', name:'AgNO₃ (Ag anot)',          cat:{p:'Ag(s)', M:108, n:1},           an:{p:'Ag çözünür', M:108, n:1, diss:1}},
+    {k:'znso4',    name:'Sulu ZnSO₄ (Pt)',          cat:{p:'Zn(s)', M:65, n:2},            an:{p:'O₂(g)', M:32, n:4, gas:1}},
+    {k:'niso4',    name:'Sulu NiSO₄ (Pt)',          cat:{p:'Ni(s)', M:59, n:2},            an:{p:'O₂(g)', M:32, n:4, gas:1}},
+    {k:'crcl3',    name:'Sulu CrCl₃ (derişik)', cat:{p:'Cr(s)', M:52, n:3},           an:{p:'Cl₂(g)', M:71, n:2, gas:1}},
+    {k:'aucl3',    name:'Sulu AuCl₃ (derişik)', cat:{p:'Au(s)', M:197, n:3},          an:{p:'Cl₂(g)', M:71, n:2, gas:1}},
+    {k:'pbno3',    name:'Sulu Pb(NO₃)₂ (Pt)',  cat:{p:'Pb(s)', M:207, n:2},           an:{p:'O₂(g)', M:32, n:4, gas:1}}
   ];
   var ssCount = 2;
   var ssSel = ['agno3_pt', 'cuso4_pt', 'water'];
+
+  // === GÖRSEL KAP ÇİZİMİ ===
+  var ssAnim = { running: false, t: 0, particles: [], bubbles: [], deposits: [] };
 
   function ssCellDef(k){
     for (var i = 0; i < ELZ_CELLS.length; i++) if (ELZ_CELLS[i].k === k) return ELZ_CELLS[i];
@@ -2590,8 +2595,8 @@
       if (sel) sel.value = ssSel[j];
     }
   }
-  window.ssSelChanged = function(i, v){ ssSel[i] = v; ssRun(); };
-  window.ssSetCount = function(n, btn){ ssCount = n; if (btn) selectInRow(btn); ssBuild(); ssRun(); };
+  window.ssSelChanged = function(i, v){ ssSel[i] = v; ssRun(); ssInitVisual(); };
+  window.ssSetCount = function(n, btn){ ssCount = n; if (btn) selectInRow(btn); ssBuild(); ssRun(); ssInitVisual(); };
 
   function ssSecs(){
     var v = parseFloat((document.getElementById('ss-t-num') || {}).value);
@@ -2599,6 +2604,7 @@
     if (isNaN(v) || v <= 0) return NaN;
     return u === 'sa' ? v * 3600 : u === 'dk' ? v * 60 : v;
   }
+
   // Kaydırıcı ↔ sayı kutusu senkronu
   window.ssSync = function(which, from){
     var sl = document.getElementById('ss-' + which + '-sl');
@@ -2607,7 +2613,7 @@
     if (which === 'i') {
       if (from === 'sl') num.value = (sl.value / 10).toFixed(1);
       else { var v = parseFloat(num.value); if (!isNaN(v)) sl.value = Math.max(1, Math.min(200, Math.round(v * 10))); }
-    } else { // t (kaydırıcı dakika cinsinden)
+    } else {
       if (from === 'sl') {
         num.value = sl.value;
         var tu = document.getElementById('ss-tu');
@@ -2620,6 +2626,392 @@
     ssRun();
   };
 
+  // === GÖRSEL KAP ÇİZİM FONKSİYONLARI ===
+
+  function ssInitVisual() {
+    // Canvas oluştur/güncelle
+    var canvasContainer = document.getElementById('ss-visual');
+    if (!canvasContainer) {
+      var resDiv = document.getElementById('ss-res');
+      if (resDiv) {
+        resDiv.insertAdjacentHTML('beforebegin', 
+          '<div id="ss-visual-container" style="margin:15px 0;background:rgba(5,5,16,0.95);border:2px solid rgba(0,212,255,0.25);border-radius:16px;padding:15px;overflow-x:auto">' +
+          '<div style="font-size:13px;font-weight:700;color:#00d4ff;margin-bottom:10px;text-align:center">⚡ Seri Kaplar Görsel Simülasyonu</div>' +
+          '<div style="display:flex;gap:20px;justify-content:center;min-width:max-content" id="ss-visual"></div>' +
+          '<div style="display:flex;gap:15px;justify-content:center;margin-top:10px;flex-wrap:wrap;font-size:11px;color:#94a3b8">' +
+          '<span><span style="color:#60a5fa">●</span> Pozitif İyon</span>' +
+          '<span><span style="color:#f87171">●</span> Negatif İyon</span>' +
+          '<span><span style="color:#facc15">●</span> Metal Birikintisi</span>' +
+          '<span><span style="color:#bae6fd">○</span> Gaz Kabarcığı</span>' +
+          '<span><span style="color:#fbbf24">⚡</span> Elektron Akışı</span>' +
+          '</div></div>');
+      }
+    }
+
+    var visual = document.getElementById('ss-visual');
+    if (!visual) return;
+    visual.innerHTML = '';
+
+    for (var i = 0; i < ssCount; i++) {
+      var def = ssCellDef(ssSel[i]);
+      var cellDiv = document.createElement('div');
+      cellDiv.style.cssText = 'width:200px;flex-shrink:0;position:relative;';
+      cellDiv.innerHTML = 
+        '<div style="text-align:center;font-size:12px;font-weight:700;color:#00d4ff;margin-bottom:6px">Kap ' + (i+1) + '</div>' +
+        '<div style="text-align:center;font-size:11px;color:#94a3b8;margin-bottom:4px">' + def.name + '</div>' +
+        '<canvas id="ss-cv-' + i + '" width="200" height="280" style="width:200px;height:280px;border-radius:12px;background:#0a0e1a;border:1px solid rgba(99,102,241,0.3)"></canvas>' +
+        '<div id="ss-cv-info-' + i + '" style="margin-top:6px;font-size:10px;color:#94a3b8;text-align:center;line-height:1.5"></div>';
+      visual.appendChild(cellDiv);
+    }
+
+    ssAnim.particles = [];
+    ssAnim.bubbles = [];
+    ssAnim.deposits = [];
+
+    // Her kap için tanecikleri başlat
+    for (var j = 0; j < ssCount; j++) {
+      ssAnim.particles[j] = [];
+      ssAnim.bubbles[j] = [];
+      ssAnim.deposits[j] = 0;
+      ssInitParticles(j);
+    }
+
+    if (!ssAnim.running) {
+      ssAnim.running = true;
+      ssAnimLoop();
+    }
+  }
+
+  function ssInitParticles(cellIdx) {
+    var def = ssCellDef(ssSel[cellIdx]);
+    var particles = ssAnim.particles[cellIdx];
+    particles.length = 0;
+
+    // İyonları oluştur (görsel temsil)
+    var ionTypes = [
+      { type: 'pos', color: '#60a5fa', label: '+', count: 8 },
+      { type: 'neg', color: '#f87171', label: '−', count: 8 },
+      { type: 'neu', color: '#64748b', label: '•', count: 6 }
+    ];
+
+    for (var t = 0; t < ionTypes.length; t++) {
+      for (var n = 0; n < ionTypes[t].count; n++) {
+        particles.push({
+          x: 30 + Math.random() * 140,
+          y: 40 + Math.random() * 180,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8,
+          type: ionTypes[t].type,
+          color: ionTypes[t].color,
+          label: ionTypes[t].label,
+          size: 3 + Math.random() * 2,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+  }
+
+  function ssAnimLoop() {
+    if (!ssAnim.running) return;
+
+    ssAnim.t += 0.016;
+    var I = parseFloat((document.getElementById('ss-i-num') || {}).value) || 5;
+    var intensity = Math.min(1, I / 20); // Akıma göre animasyon hızı
+
+    for (var i = 0; i < ssCount; i++) {
+      var cv = document.getElementById('ss-cv-' + i);
+      if (!cv) continue;
+      var ctx = cv.getContext('2d');
+      var def = ssCellDef(ssSel[i]);
+
+      // Arkaplan
+      ctx.fillStyle = '#0a0e1a';
+      ctx.fillRect(0, 0, 200, 280);
+
+      // === KAP ÇİZİMİ ===
+      // Kap gövdesi (cam görünümü)
+      var glassGrad = ctx.createLinearGradient(0, 30, 0, 250);
+      glassGrad.addColorStop(0, 'rgba(56,189,248,0.08)');
+      glassGrad.addColorStop(0.5, 'rgba(56,189,248,0.15)');
+      glassGrad.addColorStop(1, 'rgba(56,189,248,0.08)');
+
+      ctx.fillStyle = glassGrad;
+      ctx.fillRect(20, 30, 160, 220);
+      ctx.strokeStyle = 'rgba(99,102,241,0.4)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(20, 30, 160, 220);
+
+      // Sıvı seviyesi
+      var liquidGrad = ctx.createLinearGradient(0, 60, 0, 240);
+      liquidGrad.addColorStop(0, 'rgba(56,189,248,0.12)');
+      liquidGrad.addColorStop(1, 'rgba(56,189,248,0.25)');
+      ctx.fillStyle = liquidGrad;
+      ctx.fillRect(22, 60, 156, 188);
+
+      // Sıvı yüzeyi (dalgalı)
+      ctx.beginPath();
+      ctx.moveTo(22, 60);
+      for (var wx = 0; wx <= 156; wx += 4) {
+        ctx.lineTo(22 + wx, 60 + Math.sin(wx * 0.05 + ssAnim.t * 2) * 2);
+      }
+      ctx.lineTo(178, 80);
+      ctx.lineTo(22, 80);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(56,189,248,0.3)';
+      ctx.fill();
+
+      // === ELEKTROTLAR ===
+      // Katot (sol, ⊖)
+      var cathodeGrad = ctx.createLinearGradient(35, 0, 55, 0);
+      cathodeGrad.addColorStop(0, '#3b82f6');
+      cathodeGrad.addColorStop(1, '#1d4ed8');
+      ctx.fillStyle = cathodeGrad;
+      ctx.fillRect(35, 40, 20, 200);
+      ctx.shadowColor = '#3b82f6';
+      ctx.shadowBlur = 15;
+      ctx.strokeStyle = '#60a5fa';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(35, 40, 20, 200);
+      ctx.shadowBlur = 0;
+
+      // Katot etiketi
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('⊖ KATOT', 45, 35);
+
+      // Anot (sağ, ⊕)
+      var anodeGrad = ctx.createLinearGradient(145, 0, 165, 0);
+      anodeGrad.addColorStop(0, '#ef4444');
+      anodeGrad.addColorStop(1, '#b91c1c');
+      ctx.fillStyle = anodeGrad;
+      ctx.fillRect(145, 40, 20, 200);
+      ctx.shadowColor = '#ef4444';
+      ctx.shadowBlur = 15;
+      ctx.strokeStyle = '#f87171';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(145, 40, 20, 200);
+      ctx.shadowBlur = 0;
+
+      // Anot etiketi
+      ctx.fillStyle = '#fff';
+      ctx.fillText('⊕ ANOT', 155, 35);
+
+      // === METAL BİRİKİNTİSİ (Katotta) ===
+      if (def.cat.p.indexOf('(s)') !== -1) {
+        ssAnim.deposits[i] = Math.min(30, ssAnim.deposits[i] + 0.1 * intensity);
+        var depH = ssAnim.deposits[i];
+        var depGrad = ctx.createLinearGradient(0, 240 - depH, 0, 240);
+        depGrad.addColorStop(0, '#facc15');
+        depGrad.addColorStop(1, '#ca8a04');
+        ctx.fillStyle = depGrad;
+        ctx.fillRect(36, 240 - depH, 18, depH);
+        ctx.shadowColor = '#facc15';
+        ctx.shadowBlur = 8;
+        ctx.strokeStyle = '#facc15';
+        ctx.strokeRect(36, 240 - depH, 18, depH);
+        ctx.shadowBlur = 0;
+      }
+
+      // === GAZ KABARCIKLARI ===
+      // Yeni kabarcık ekle
+      if (Math.random() < 0.05 * intensity) {
+        var isCatGas = def.cat.p.indexOf('(g)') !== -1 || def.cat.p.indexOf('(s)') === -1 && def.cat.p.indexOf('H₂') !== -1;
+        var isAnGas = def.an.p.indexOf('(g)') !== -1 || def.an.p.indexOf('O₂') !== -1 || def.an.p.indexOf('Cl₂') !== -1;
+
+        if (isCatGas && Math.random() < 0.5) {
+          ssAnim.bubbles[i].push({
+            x: 45 + (Math.random() - 0.5) * 15,
+            y: 230,
+            r: 2 + Math.random() * 3,
+            vy: -0.5 - Math.random() * 1,
+            color: '#bae6fd',
+            life: 1
+          });
+        }
+        if (isAnGas) {
+          ssAnim.bubbles[i].push({
+            x: 155 + (Math.random() - 0.5) * 15,
+            y: 230,
+            r: 2 + Math.random() * 3,
+            vy: -0.5 - Math.random() * 1,
+            color: def.an.p.indexOf('Cl₂') !== -1 ? '#bde04a' : '#bae6fd',
+            life: 1
+          });
+        }
+      }
+
+      // Kabarcıkları çiz ve güncelle
+      for (var b = ssAnim.bubbles[i].length - 1; b >= 0; b--) {
+        var bub = ssAnim.bubbles[i][b];
+        bub.y += bub.vy;
+        bub.x += Math.sin(ssAnim.t * 3 + b) * 0.3;
+        bub.life -= 0.008;
+
+        if (bub.y < 50 || bub.life <= 0) {
+          ssAnim.bubbles[i].splice(b, 1);
+          continue;
+        }
+
+        ctx.beginPath();
+        ctx.arc(bub.x, bub.y, bub.r, 0, Math.PI * 2);
+        ctx.fillStyle = bub.color;
+        ctx.globalAlpha = bub.life * 0.7;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      // === İYON HAREKETİ ===
+      var particles = ssAnim.particles[i];
+      for (var p = 0; p < particles.length; p++) {
+        var pt = particles[p];
+
+        // Elektrik alanı etkisi
+        if (pt.type === 'pos') {
+          pt.vx += (-0.02 - Math.random() * 0.02) * intensity; // Katota doğru (sol)
+        } else if (pt.type === 'neg') {
+          pt.vx += (0.02 + Math.random() * 0.02) * intensity; // Anota doğru (sağ)
+        }
+
+        // Sürükleme ve rastgele hareket
+        pt.vx *= 0.95;
+        pt.vy *= 0.95;
+        pt.vy += (Math.random() - 0.5) * 0.1;
+
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+
+        // Sınırlar
+        if (pt.x < 25) { pt.x = 25; pt.vx *= -0.5; }
+        if (pt.x > 175) { pt.x = 175; pt.vx *= -0.5; }
+        if (pt.y < 45) { pt.y = 45; pt.vy *= -0.5; }
+        if (pt.y > 235) { pt.y = 235; pt.vy *= -0.5; }
+
+        // Elektrotlarda "yok olma" efekti
+        if (pt.type === 'pos' && pt.x < 40) {
+          pt.x = 30 + Math.random() * 140;
+          pt.y = 60 + Math.random() * 160;
+          pt.vx = 0; pt.vy = 0;
+        }
+        if (pt.type === 'neg' && pt.x > 160) {
+          pt.x = 30 + Math.random() * 140;
+          pt.y = 60 + Math.random() * 160;
+          pt.vx = 0; pt.vy = 0;
+        }
+
+        // Parıltı efekti
+        var glow = Math.sin(ssAnim.t * 3 + pt.phase) * 0.3 + 0.7;
+
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        ctx.fillStyle = pt.color;
+        ctx.globalAlpha = glow;
+        ctx.fill();
+
+        // Dış parıltı
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size + 2, 0, Math.PI * 2);
+        ctx.fillStyle = pt.color;
+        ctx.globalAlpha = glow * 0.2;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        // İyon sembolü
+        if (pt.size > 4) {
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 8px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(pt.label, pt.x, pt.y);
+        }
+      }
+
+      // === ELEKTRON AKIŞI (Kablolar üzerinde) ===
+      if (i < ssCount - 1) {
+        var wireY = 15;
+        ctx.strokeStyle = 'rgba(250,204,21,0.3)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(155, wireY);
+        ctx.lineTo(200, wireY);
+        ctx.stroke();
+
+        // Elektron noktaları
+        var eOffset = (ssAnim.t * 2) % 1;
+        for (var e = 0; e < 3; e++) {
+          var ex = 155 + ((e + eOffset) % 1) * 45;
+          ctx.beginPath();
+          ctx.arc(ex, wireY, 3, 0, Math.PI * 2);
+          ctx.fillStyle = '#facc15';
+          ctx.shadowColor = '#facc15';
+          ctx.shadowBlur = 6;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        // Akış yönü oku
+        ctx.fillStyle = '#facc15';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('e⁻ →', 177, wireY - 8);
+      }
+
+      // === GÜÇ KAYNAĞI (İlk kap üzerinde) ===
+      if (i === 0) {
+        ctx.fillStyle = 'rgba(15,23,42,0.95)';
+        ctx.strokeStyle = 'rgba(250,204,21,0.5)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(65, 2, 70, 22, 6);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#facc15';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('⚡ DC', 100, 17);
+      }
+
+      // === ÜRÜN ETİKETLERİ ===
+      ctx.fillStyle = '#fff';
+      ctx.font = '9px sans-serif';
+      ctx.textAlign = 'center';
+
+      // Katot ürünü
+      var catY = 255;
+      ctx.fillStyle = def.cat.p.indexOf('(s)') !== -1 ? '#facc15' : '#bae6fd';
+      ctx.fillText(def.cat.p, 45, catY);
+
+      // Anot ürünü
+      ctx.fillStyle = def.an.p.indexOf('(g)') !== -1 ? '#bde04a' : '#f87171';
+      ctx.fillText(def.an.p, 155, catY);
+
+      // Kap bilgisi
+      var infoDiv = document.getElementById('ss-cv-info-' + i);
+      if (infoDiv) {
+        var I2 = parseFloat((document.getElementById('ss-i-num') || {}).value) || 5;
+        var t2 = ssSecs();
+        if (!isNaN(I2) && !isNaN(t2) && t2 > 0) {
+          var Q2 = I2 * t2, molE2 = Q2 / ELZ_F;
+          var mol2 = molE2 / def.cat.n, m2 = mol2 * def.cat.M;
+          var molA = molE2 / def.an.n, mA = molA * def.an.M;
+          infoDiv.innerHTML = 
+            '<span style="color:#60a5fa">Katot: ' + ssFmt(m2) + ' g</span><br>' +
+            '<span style="color:#f87171">Anot: ' + ssFmt(mA) + ' g</span>';
+        }
+      }
+    }
+
+    requestAnimationFrame(ssAnimLoop);
+  }
+
+  function ssStopVisual() {
+    ssAnim.running = false;
+  }
+
   function ssRun(){
     var res = document.getElementById('ss-res');
     var qline = document.getElementById('ss-q');
@@ -2627,12 +3019,12 @@
     var I = parseFloat((document.getElementById('ss-i-num') || {}).value);
     var t = ssSecs();
     if (isNaN(I) || I <= 0 || isNaN(t)) {
-      res.innerHTML = '<div style="font-size:13px;color:var(--yw)">Ak\u0131m ve s\u00fcreyi gir.</div>';
+      res.innerHTML = '<div style="font-size:13px;color:var(--yw)">Akım ve süreyi gir.</div>';
       if (qline) qline.innerHTML = '';
       return;
     }
     var Q = I * t, molE = Q / ELZ_F;
-    if (qline) qline.innerHTML = 'Ortak y\u00fck: <b style="color:var(--ac2)">Q = ' + I + ' \u00d7 ' + Math.round(t) + ' = ' + Q.toFixed(0) + ' C</b> \u2192 mol e\u207b = Q/F = <b style="color:var(--ac2)">' + molE.toFixed(4) + ' mol</b> \u2014 her kaptan ayn\u0131s\u0131 ge\u00e7er.';
+    if (qline) qline.innerHTML = 'Ortak yük: <b style="color:var(--ac2)">Q = ' + I + ' × ' + Math.round(t) + ' = ' + Q.toFixed(0) + ' C</b> → mol e⁻ = Q/F = <b style="color:var(--ac2)">' + molE.toFixed(4) + ' mol</b> — her kaptan aynısı geçer.';
 
     // Tüm ürünleri hesapla (çubuk ölçeği için maksimum kütle)
     var cells = [], maxM = 0;
@@ -2651,8 +3043,8 @@
       var bar = maxM > 0 ? Math.max(3, side.m / maxM * 100) : 0;
       var barCol = side.diss ? '#f87171' : iconCol;
       var txt = side.diss
-        ? '<b style="color:#f87171">\u2212' + ssFmt(side.m) + ' g</b> <span style="color:var(--tx3);font-size:11px">(elektrot incelir)</span>'
-        : '<b>' + ssFmt(side.m) + ' g</b>' + (side.V !== null ? ' <span style="color:var(--tx3)">\u00b7 ' + ssFmt(side.V) + ' L (NK)</span>' : '');
+        ? '<b style="color:#f87171">−' + ssFmt(side.m) + ' g</b> <span style="color:var(--tx3);font-size:11px">(elektrot incelir)</span>'
+        : '<b>' + ssFmt(side.m) + ' g</b>' + (side.V !== null ? ' <span style="color:var(--tx3)">· ' + ssFmt(side.V) + ' L (NK)</span>' : '');
       return '<div style="padding:7px 0;border-bottom:1px solid var(--br)">' +
         '<div style="display:flex;justify-content:space-between;gap:8px;font-size:12.5px;align-items:center">' +
           '<span style="color:' + iconCol + ';font-weight:700;white-space:nowrap">' + icon + '</span>' +
@@ -2666,14 +3058,17 @@
 
     var html = '';
     for (var j = 0; j < cells.length; j++) {
-      if (j > 0) html += '<div style="text-align:center;color:var(--tx3);font-size:10px;margin:4px 0">\u2502 seri ba\u011flant\u0131 \u00b7 ayn\u0131 Q \u2502</div>';
+      if (j > 0) html += '<div style="text-align:center;color:var(--tx3);font-size:10px;margin:4px 0">│ seri bağlantı · aynı Q │</div>';
       html += '<div style="background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:12px">' +
-        '<div style="font-family:Space Grotesk,sans-serif;font-size:13px;font-weight:800;color:var(--ac2);margin-bottom:6px">\u26a1 Kap ' + (j + 1) + ' \u00b7 ' + cells[j].name + '</div>' +
-        line('\u2296 Katot', '#60a5fa', cells[j].kt) +
-        line('\u2295 Anot', '#f87171', cells[j].an) +
+        '<div style="font-family:Space Grotesk,sans-serif;font-size:13px;font-weight:800;color:var(--ac2);margin-bottom:6px">⚡ Kap ' + (j + 1) + ' · ' + cells[j].name + '</div>' +
+        line('⊖ Katot', '#60a5fa', cells[j].kt) +
+        line('⊕ Anot', '#f87171', cells[j].an) +
         '</div>';
     }
     res.innerHTML = html;
+
+    // Görsel simülasyonu başlat/güncelle
+    ssInitVisual();
   }
   window.ssRun = ssRun;
 
