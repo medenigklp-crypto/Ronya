@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v9
+   RONYA KİMYA — EKLENTİ v10
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -26,9 +26,10 @@
        kaydırıcı/manuel I-t, kap başına katot-anot ürün miktarı
    21) 🧬 Hidrokarbonlar 3D: alkan/alken/alkinlerin ilk 10'ar
        üyesi, gerçek bağ geometrisi, pinch-zoom, fütüristik fon
-   22) 🔗 Seri Kaplar GÖRSEL simülasyonu: devre üzerinde pil +
-       elektron akışı + her kapta gerçek iyon göçü/kabarcık/
-       birikinti/çözünen anot animasyonu
+   22) 🔗 Seri Kaplar TAM 3D simülasyonu: sürükle-döndür sahne,
+       çoklu kap + pil + elektron akışı, gerçek iyon göçü
+   23) 🥈 Kaplama senaryolarına 3D görsel: nesne/metal elektrot,
+       Doğru↔Yanlış Bağlantı karşılaştırması, ortak 3D motor
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -2406,6 +2407,7 @@
     elzScenIdx = Math.max(0, Math.min(ELZ_SCEN.length - 1, elzScenIdx + d));
     var box = document.getElementById('elz-scen');
     if (box) box.innerHTML = elzScenHTML();
+    try { capSetScenario(elzScenIdx); } catch (e) {}
   };
   window.elzScenReset = function(){
     var sc = ELZ_SCEN[elzScenIdx];
@@ -2430,10 +2432,10 @@
         '<h1 class="ptitle">\ud83d\udd0b Elektroliz Laboratuvar\u0131</h1>' +
         '<p class="psub">3D sim\u00fclasyon, Faraday hesaplar\u0131 ve kaplama senaryolar\u0131 \u2014 galvanik h\u00fccrenin z\u0131tt\u0131: elektrik enerjisiyle Y\u00dcR\u00dcT\u00dcLEN tepkimeler.</p>' +
         '<div class="tabs" id="elz-tabs">' +
-          '<button class="tab on" onclick="tswitch(\'elz-tabs\',\'elz-tps\',0);ssVisStop()">\u26a1 3D Sim\u00fclasyon</button>' +
-          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',1);ssVisStop()">\ud83e\uddee Faraday</button>' +
-          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',2);ssVisStop()">\ud83e\udd48 Kaplama</button>' +
-          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',3);ssVisStart()">\ud83d\udd17 Seri Kaplar</button>' +
+          '<button class="tab on" onclick="elzTabGo(0)">\u26a1 3D Sim\u00fclasyon</button>' +
+          '<button class="tab" onclick="elzTabGo(1)">\ud83e\uddee Faraday</button>' +
+          '<button class="tab" onclick="elzTabGo(2)">\ud83e\udd48 Kaplama</button>' +
+          '<button class="tab" onclick="elzTabGo(3)">\ud83d\udd17 Seri Kaplar</button>' +
         '</div>' +
         '<div id="elz-tps">' +
           // --- TAB 1: 3D ---
@@ -2487,11 +2489,21 @@
             '</div>' +
           '</div>' +
           // --- TAB 3: Kaplama ---
-          '<div class="tp"><div class="card" id="elz-scen"></div></div>' +
+          '<div class="tp">' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:10px">' +
+              '<div id="cap-title" style="text-align:center;padding:8px;font-size:12px;color:#a5b4fc;font-weight:700"></div>' +
+              '<canvas id="cap-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+            '</div>' +
+            '<div style="display:flex;gap:8px;margin-bottom:12px">' +
+              '<button type="button" class="ob sel2" style="flex:1" onclick="capSetMode(true,this)">\u2705 Do\u011fru Ba\u011flant\u0131</button>' +
+              '<button type="button" class="ob" style="flex:1" onclick="capSetMode(false,this)">\u274c Yanl\u0131\u015f Ba\u011flant\u0131</button>' +
+            '</div>' +
+            '<div class="card" id="elz-scen"></div>' +
+          '</div>' +
           // --- TAB 4: Seri Kaplar ---
           '<div class="tp">' +
             '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
-              '<canvas id="ss-cv" style="width:100%;display:block" height="235"></canvas>' +
+              '<canvas id="ss-cv" style="width:100%;display:block;touch-action:none" height="280"></canvas>' +
             '</div>' +
             '<div class="card" style="margin-bottom:12px">' +
               '<p style="font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.6">Seri ba\u011fl\u0131 kaplardan <b>ayn\u0131 y\u00fck (Q = I\u00b7t)</b> ge\u00e7er. Ak\u0131m\u0131 ve s\u00fcreyi kayd\u0131rarak veya elle girerek her kab\u0131n elektrotlar\u0131nda neyin, ne kadar olu\u015ftu\u011funu canl\u0131 izle.</p>' +
@@ -2539,6 +2551,7 @@
     if (box) box.innerHTML = elzScenHTML();
     fdModeChanged();
     ssBuild(); ssRun();
+    capSetScenario(elzScenIdx);
     // Faraday'da seçim değişince satır görünürlüğü doğru kalsın
     var fsp = document.getElementById('fd-sp');
     if (fsp) fsp.addEventListener('change', window.fdModeChanged);
@@ -3141,10 +3154,12 @@
   function hcEnter(){ hcRenderGrid(); }
   function hcLeave(){ window.hcClose(); }
 
-  // ---------- 9g. Seri Kaplar GÖRSEL Simülasyonu ----------
-  // Seçilen 2-3 kap tek devre üzerinde çizilir: pil → kablolar →
-  // elektron akışı; her kapta kendi iyonları göç eder, gazlar
-  // kabarcıklanır, metaller birikir, aktif anotlar incelir.
+  // ---------- 9g. Seri Kaplar 3D GÖRSEL Simülasyonu ----------
+  // Seçilen 2-3 kap TEK 3D sahnede çizilir: pil → kablolar →
+  // elektron akışı; her kapta kendi iyonları 3B göç eder, gazlar
+  // kabarcıklanır, metaller birikir, aktif anotlar gerçekten
+  // incelir. Sahne sürüklenerek döndürülür (Elektroliz 3D ile
+  // aynı doku/his). Kaplama sekmesiyle motor ortaktır (9h).
   var SS_ION = {
     nacl_m:   { c:['Na\u207a','#60a5fa'],        a:['Cl\u207b','#a3e635'] },
     mgcl2:    { c:['Mg\u00b2\u207a','#93c5fd'],  a:['Cl\u207b','#a3e635'] },
@@ -3172,31 +3187,243 @@
     if (p.indexOf('O')  === 0) return '#bae6fd';
     return '#e2e8f0';
   }
-  var ssVis = { anim: null, t: 0, built: '', cells: [] };
-  function ssVisStart(){ if (ssVis.anim) cancelAnimationFrame(ssVis.anim); ssVisLoop(); }
+
+  // ---- Paylaşımlı 3D yardımcılar (Seri Kaplar + Kaplama ortak) ----
+  function g3Box(quads, st, W, H, cx, cy, cz, hx, hy, hz, fillRgb, alpha, stroke){
+    var C = [
+      [cx-hx,cy-hy,cz-hz],[cx+hx,cy-hy,cz-hz],[cx+hx,cy+hy,cz-hz],[cx-hx,cy+hy,cz-hz],
+      [cx-hx,cy-hy,cz+hz],[cx+hx,cy-hy,cz+hz],[cx+hx,cy+hy,cz+hz],[cx-hx,cy+hy,cz+hz]
+    ];
+    var F = [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]];
+    var shade = [0.9, 0.9, 1.0, 0.7, 0.8, 0.8];
+    for (var f = 0; f < 6; f++) {
+      var pts = [], zsum = 0;
+      for (var k = 0; k < 4; k++) {
+        var p = hcProj(st, C[F[f][k]][0], C[F[f][k]][1], C[F[f][k]][2], W, H);
+        pts.push(p); zsum += p.z;
+      }
+      quads.push({ t: 'box', pts: pts, z: zsum / 4, fill: fillRgb, a: alpha * shade[f], stroke: stroke });
+    }
+  }
+  function ssRgb(hex){
+    hex = (hex || '#94a3b8').replace('#', '');
+    return parseInt(hex.slice(0,2),16) + ',' + parseInt(hex.slice(2,4),16) + ',' + parseInt(hex.slice(4,6),16);
+  }
+  function spawnBub3D(cell, bx, by, bz, col){
+    if (cell.bub.length > 16) return;
+    cell.bub.push({ x: bx + (Math.random()-0.5)*6, y: Math.max(10, by), z: bz, r: 1.2 + Math.random()*1.4, c: col });
+  }
+  // Bir hücrenin fizik/kimya bayraklarını elektrolit tanımından türetir
+  function ssDeriveFlags(def, k){
+    var cat = def.cat, an = def.an;
+    var catDis = !cat.gas || k === 'water';
+    var catDep = catDis && cat.p.indexOf('H') !== 0;
+    var catIonGas = catDis && cat.p.indexOf('H') === 0;
+    var catAmbientGas = !catDis && !!cat.gas;
+    var anDis = !!an.diss || an.p.indexOf('Cl') === 0 || an.p.indexOf('I') === 0 || k === 'al2o3';
+    var anActive = !!an.diss;
+    var anDep = anDis && an.p.indexOf('I') === 0;
+    var anIonGas = anDis && !anActive && !anDep;
+    var anAmbientGas = !anDis && !!an.gas;
+    return { catDis:catDis, catDep:catDep, catIonGas:catIonGas, catAmbientGas:catAmbientGas,
+             anDis:anDis, anActive:anActive, anDep:anDep, anIonGas:anIonGas, anAmbientGas:anAmbientGas };
+  }
+  // Ortak iyon fiziği: katyonlar CATX'e, anyonlar ANX'e göçer;
+  // vardıklarında hücrenin bayraklarına göre biriktirir/gazlaştırır.
+  function ionStep3D(cell, spd){
+    var CATX = cell.CATX, ANX = cell.ANX, i;
+    for (i = 0; i < cell.ions.length; i++) {
+      var io = cell.ions[i];
+      io.cool -= 0.016;
+      var tx = io.ch > 0 ? CATX : io.ch < 0 ? ANX : io.x;
+      if (io.ch !== 0) io.x += (tx - io.x) * 0.012 * spd + (Math.random() - 0.5) * 0.9 * spd;
+      else io.x += (Math.random() - 0.5) * 0.6 * spd;
+      io.y += (Math.random() - 0.5) * 0.8 * spd;
+      io.z += (Math.random() - 0.5) * 0.8 * spd;
+      io.x = Math.max(CATX + 3, Math.min(ANX - 3, io.x));
+      io.y = Math.max(8, Math.min(90, io.y));
+      io.z = Math.max(-44, Math.min(44, io.z));
+      var mid = function(){ return CATX + (ANX - CATX) * (0.3 + Math.random() * 0.4); };
+      if (io.ch > 0 && io.cool <= 0 && Math.abs(io.x - tx) < 6) {
+        if (cell.catDis) {
+          if (cell.catDep) cell.dep = Math.min(8, cell.dep + 0.18);
+          else spawnBub3D(cell, CATX + 10, io.y, io.z, cell.catGasCol);
+          if (cell.anActive) { cell.anodeLeft = Math.max(2, cell.anodeLeft - 0.05); io.x = ANX - 14; }
+          else io.x = mid();
+          io.y = 8 + Math.random()*80; io.z = -40 + Math.random()*80; io.cool = 1.6;
+        } else { io.x += 9; io.cool = 1.2; }
+      }
+      if (io.ch < 0 && io.cool <= 0 && Math.abs(io.x - tx) < 6) {
+        if (cell.anDis) {
+          if (cell.anDep) cell.depAn = Math.min(8, cell.depAn + 0.18);
+          else if (cell.anIonGas) spawnBub3D(cell, ANX - 10, io.y, io.z, cell.anGasCol);
+          io.x = mid(); io.y = 8 + Math.random()*80; io.z = -40 + Math.random()*80; io.cool = 1.6;
+        } else { io.x -= 9; io.cool = 1.2; }
+      }
+    }
+    if (cell.catAmbientGas && Math.random() < 0.035 * spd) spawnBub3D(cell, CATX + 10, 24 + Math.random()*58, -18 + Math.random()*36, cell.catGasCol);
+    if (cell.anAmbientGas  && Math.random() < 0.035 * spd) spawnBub3D(cell, ANX - 10, 24 + Math.random()*58, -18 + Math.random()*36, cell.anGasCol);
+    for (var b = cell.bub.length - 1; b >= 0; b--) {
+      var bb = cell.bub[b];
+      bb.y -= 0.5 * spd; bb.x += (Math.random()-0.5)*0.5; bb.r = Math.min(4.2, bb.r + 0.018);
+      if (bb.y < 4) cell.bub.splice(b, 1);
+    }
+  }
+  // Bir hücreyi (kap veya kaplama nesnesi) 3D sahneye ekler
+  function pushTank(items, st, W, H, ox, cell){
+    var CATX = cell.CATX, ANX = cell.ANX, i;
+    g3Box(items, st, W, H, ox, 50, 0, cell.halfW, 52, 58, '56,130,246', 0.07, 'rgba(120,180,255,.2)');
+    // Katot
+    if (cell.itemSide === 'cat') {
+      var p1 = hcProj(st, ox + CATX, 40, 0, W, H);
+      items.push({ t:'item', z:p1.z, x:p1.x, y:p1.y, s:p1.s, icon:cell.itemIcon, bad: cell.itemGlow === 'bad' });
+    } else {
+      g3Box(items, st, W, H, ox + CATX, 30, 0, 7, 66, 20, '154,164,178', 0.85, 'rgba(200,210,225,.5)');
+    }
+    // Anot (aktif anotlarda incelir)
+    var anHx = cell.anActive ? Math.max(2, cell.anodeLeft) : 7;
+    if (cell.itemSide === 'an') {
+      var p2 = hcProj(st, ox + ANX, 40, 0, W, H);
+      items.push({ t:'item', z:p2.z, x:p2.x, y:p2.y, s:p2.s, icon:cell.itemIcon, bad: cell.itemGlow === 'bad' });
+    } else {
+      g3Box(items, st, W, H, ox + ANX, 30, 0, anHx, 66, 20, '154,164,178', 0.85, 'rgba(200,210,225,.5)');
+    }
+    // Birikintiler
+    if (cell.dep > 0.3) g3Box(items, st, W, H, ox + CATX + 7 + cell.dep/2, 55, 0, cell.dep/2, 40, 18, ssRgb(cell.catDepCol), 0.9, null);
+    if (cell.depAn > 0.3) g3Box(items, st, W, H, ox + ANX - anHx - cell.depAn/2, 55, 0, cell.depAn/2, 40, 18, ssRgb(cell.anDepCol), 0.9, null);
+    // İyonlar
+    for (i = 0; i < cell.ions.length; i++) {
+      var io = cell.ions[i];
+      var p = hcProj(st, ox + io.x, io.y, io.z, W, H);
+      var lab = io.ch > 0 ? cell.ic.c : io.ch < 0 ? cell.ic.a : null;
+      items.push({ t:'ion', z:p.z, x:p.x, y:p.y, s:p.s, r:(io.ch===0?3:5.2)*p.s, c: lab ? lab[1] : '#94a3b8', lab: lab ? lab[0] : null, faint: io.ch===0 });
+    }
+    // Kabarcıklar
+    for (i = 0; i < cell.bub.length; i++) {
+      var bb = cell.bub[i];
+      var pb = hcProj(st, ox + bb.x, bb.y, bb.z, W, H);
+      items.push({ t:'bub', z:pb.z, x:pb.x, y:pb.y, r: bb.r * pb.s, c: bb.c });
+    }
+    // Etiketler (z-sırasız, en üstte metin listesine eklenir)
+    var pc = hcProj(st, ox + CATX, -46, 0, W, H), pa = hcProj(st, ox + ANX, -46, 0, W, H);
+    var pcp = hcProj(st, ox + CATX, 104, 0, W, H), pap = hcProj(st, ox + ANX, 104, 0, W, H);
+    var pn = hcProj(st, ox, 122, 0, W, H);
+    cell._labels = [
+      { x: pc.x, y: pc.y, t: '\u2296', c: '#60a5fa', f: 'bold 12px sans-serif' },
+      { x: pa.x, y: pa.y, t: '\u2295', c: '#f87171', f: 'bold 12px sans-serif' },
+      { x: pcp.x, y: pcp.y, t: cell.catLabel, c: '#e2e8f0', f: 'bold 9px sans-serif' },
+      { x: pap.x, y: pap.y, t: cell.anLabel, c: cell.anActive ? '#38bdf8' : '#e2e8f0', f: 'bold 9px sans-serif' },
+      { x: pn.x, y: pn.y, t: cell.name, c: 'rgba(199,210,254,.85)', f: '9px sans-serif' }
+    ];
+  }
+  function drawSortedItems(x, items){
+    items.sort(function(a, b){ return b.z - a.z; });
+    for (var i = 0; i < items.length; i++) {
+      var o = items[i];
+      var depth = Math.max(0.3, Math.min(1, 1 - (o.z + 130) / 380));
+      if (o.t === 'box') {
+        x.beginPath(); x.moveTo(o.pts[0].x, o.pts[0].y);
+        for (var k = 1; k < 4; k++) x.lineTo(o.pts[k].x, o.pts[k].y);
+        x.closePath();
+        x.fillStyle = 'rgba(' + o.fill + ',' + o.a + ')'; x.fill();
+        if (o.stroke) { x.strokeStyle = o.stroke; x.lineWidth = 0.7; x.stroke(); }
+      } else if (o.t === 'ion') {
+        x.globalAlpha = o.faint ? 0.35 : 0.95;
+        x.beginPath(); x.arc(o.x, o.y, Math.max(1, o.r), 0, 6.283); x.fillStyle = o.c; x.fill();
+        x.globalAlpha = 1;
+        if (o.lab && o.r > 3.2) {
+          x.fillStyle = '#0b0e18'; x.font = 'bold ' + Math.max(5.5, o.r*1.05) + 'px sans-serif';
+          x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(o.lab, o.x, o.y); x.textBaseline = 'alphabetic';
+        }
+      } else if (o.t === 'bub') {
+        x.beginPath(); x.arc(o.x, o.y, Math.max(0.5, o.r), 0, 6.283);
+        x.strokeStyle = o.c; x.lineWidth = 1; x.stroke();
+        x.fillStyle = 'rgba(255,255,255,.12)'; x.fill();
+      } else if (o.t === 'item') {
+        var r = 15 * o.s;
+        if (o.bad) { x.beginPath(); x.arc(o.x, o.y, r + 7*o.s, 0, 6.283); x.fillStyle = 'rgba(239,68,68,.25)'; x.fill(); }
+        else { x.beginPath(); x.arc(o.x, o.y, r + 5*o.s, 0, 6.283); x.fillStyle = 'rgba(129,140,248,.18)'; x.fill(); }
+        var gg = x.createRadialGradient(o.x - r*0.3, o.y - r*0.3, r*0.1, o.x, o.y, r);
+        gg.addColorStop(0, '#3b4257'); gg.addColorStop(1, '#12141f');
+        x.beginPath(); x.arc(o.x, o.y, r, 0, 6.283); x.fillStyle = gg; x.fill();
+        x.strokeStyle = o.bad ? 'rgba(239,68,68,.7)' : 'rgba(129,140,248,.5)'; x.lineWidth = 1.3; x.stroke();
+        x.font = Math.max(11, r*1.15) + 'px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+        x.fillText(o.icon, o.x, o.y); x.textBaseline = 'alphabetic';
+      }
+    }
+  }
+
+  var ssVis = { anim: null, t: 0, built: '', cells: [], rotX: 0.3, rotY: -0.5, zoom: 1, drag: false, lx: 0, ly: 0, dist: 0, bound: false };
+  function ssVisStart(){
+    ssBindCanvas();
+    if (ssVis.anim) cancelAnimationFrame(ssVis.anim);
+    ssVisLoop();
+  }
   function ssVisStop(){ if (ssVis.anim) { cancelAnimationFrame(ssVis.anim); ssVis.anim = null; } }
+
+  function ssLayout(n){
+    if (n === 3) return { scale: 0.6, offs: [-195, 0, 195] };
+    return { scale: 1, offs: [-150, 150] };
+  }
 
   function ssVisBuild(){
     ssVis.built = ssCount + ':' + ssSel.slice(0, ssCount).join(',');
     ssVis.cells = [];
+    var lay = ssLayout(ssCount);
     for (var i = 0; i < ssCount; i++) {
       var k = ssSel[i], def = ssCellDef(k), ic = SS_ION[k] || SS_ION.water;
+      var fl = ssDeriveFlags(def, k);
+      var CATX = -72 * lay.scale, ANX = 72 * lay.scale;
       var cell = {
-        k: k, def: def, ic: ic,
-        catDis: !def.cat.gas || k === 'water',                      // katyon boşalıyor mu?
-        anDis: !!def.an.diss || def.an.p.indexOf('Cl') === 0 ||     // anyon boşalıyor mu?
-               def.an.p.indexOf('I') === 0 || k === 'al2o3',
-        dep: 0, depAn: 0, ions: [], bub: []
+        k: k, name: def.name, ic: ic, halfW: 108 * lay.scale, CATX: CATX, ANX: ANX,
+        catDis: fl.catDis, catDep: fl.catDep, catIonGas: fl.catIonGas, catAmbientGas: fl.catAmbientGas,
+        anDis: fl.anDis, anActive: fl.anActive, anDep: fl.anDep, anIonGas: fl.anIonGas, anAmbientGas: fl.anAmbientGas,
+        catGasCol: ssGasCol(def.cat.p), anGasCol: def.an.p.indexOf('I') === 0 ? '#a78bfa' : ssGasCol(def.an.p),
+        catDepCol: SS_DEPCOL[k] || '#cbd5e1', anDepCol: def.an.p.indexOf('I') === 0 ? '#7c3aed' : (SS_DEPCOL[k] || '#cbd5e1'),
+        catLabel: pretty(def.cat.p), anLabel: pretty(def.an.p),
+        dep: 0, depAn: 0, anodeLeft: 8, ions: [], bub: [], itemSide: null, _labels: []
       };
       var nEach = ssCount === 3 ? 4 : 5;
       for (var j = 0; j < nEach; j++) {
-        cell.ions.push({ x: 0.3 + Math.random()*0.4, y: 0.15 + Math.random()*0.7, ch: 1,  cool: Math.random()*2 });
-        cell.ions.push({ x: 0.3 + Math.random()*0.4, y: 0.15 + Math.random()*0.7, ch: -1, cool: Math.random()*2 });
+        cell.ions.push({ x: CATX + (ANX-CATX)*(0.3+Math.random()*0.4), y: 10+Math.random()*78, z: -40+Math.random()*80, ch: 1,  cool: Math.random()*2 });
+        cell.ions.push({ x: CATX + (ANX-CATX)*(0.3+Math.random()*0.4), y: 10+Math.random()*78, z: -40+Math.random()*80, ch: -1, cool: Math.random()*2 });
       }
       if (ic.w) for (var j2 = 0; j2 < 3; j2++)
-        cell.ions.push({ x: 0.2 + Math.random()*0.6, y: 0.1 + Math.random()*0.8, ch: 0, cool: 0 });
+        cell.ions.push({ x: CATX + (ANX-CATX)*Math.random(), y: 8+Math.random()*82, z: -42+Math.random()*84, ch: 0, cool: 0 });
       ssVis.cells.push(cell);
     }
+  }
+
+  function ssBindCanvas(){
+    if (ssVis.bound) return;
+    var cv = document.getElementById('ss-cv');
+    if (!cv) return;
+    ssVis.bound = true;
+    cv.onmousedown = function(e){ ssVis.drag = true; ssVis.lx = e.clientX; ssVis.ly = e.clientY; };
+    cv.onmousemove = function(e){
+      if (!ssVis.drag) return;
+      ssVis.rotY += (e.clientX - ssVis.lx) * 0.01; ssVis.rotX += (e.clientY - ssVis.ly) * 0.01;
+      ssVis.lx = e.clientX; ssVis.ly = e.clientY;
+    };
+    cv.onmouseup = cv.onmouseleave = function(){ ssVis.drag = false; };
+    cv.addEventListener('wheel', function(e){ e.preventDefault(); ssVis.zoom = Math.max(0.5, Math.min(2.2, ssVis.zoom - e.deltaY*0.001)); }, {passive:false});
+    cv.addEventListener('touchstart', function(e){
+      if (e.touches.length === 1) { ssVis.drag = true; ssVis.lx = e.touches[0].clientX; ssVis.ly = e.touches[0].clientY; }
+      else if (e.touches.length === 2) { var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY; ssVis.dist=Math.sqrt(dx*dx+dy*dy); }
+      e.preventDefault();
+    }, {passive:false});
+    cv.addEventListener('touchmove', function(e){
+      if (e.touches.length === 1 && ssVis.drag) {
+        ssVis.rotY += (e.touches[0].clientX - ssVis.lx) * 0.013; ssVis.rotX += (e.touches[0].clientY - ssVis.ly) * 0.013;
+        ssVis.lx = e.touches[0].clientX; ssVis.ly = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY, dist=Math.sqrt(dx*dx+dy*dy);
+        if (ssVis.dist > 0) ssVis.zoom = Math.max(0.5, Math.min(2.2, ssVis.zoom * dist/ssVis.dist));
+        ssVis.dist = dist;
+      }
+      e.preventDefault();
+    }, {passive:false});
+    cv.addEventListener('touchend', function(){ ssVis.drag = false; ssVis.dist = 0; });
   }
 
   function ssVisLoop(){
@@ -3206,14 +3433,18 @@
     var cv = document.getElementById('ss-cv');
     if (!cv) return;
     var rect = cv.getBoundingClientRect();
-    var W = rect.width, H2 = 235;
-    if (W < 10) return; // sekme görünmüyorsa boşa çizme
+    var W = rect.width || cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || 0;
+    var H = 280;
+    if (W < 10) return;
     var dpr = window.devicePixelRatio || 1;
-    if (Math.abs(cv.width - W*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
     var x = cv.getContext('2d');
+    try {
+    if (!ssVis.cells.length) ssVisBuild();
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H*dpr) > 2) { cv.width = W*dpr; cv.height = H*dpr; }
     x.setTransform(dpr, 0, 0, dpr, 0, 0);
-    x.clearRect(0, 0, W, H2);
-    x.fillStyle = '#050510'; x.fillRect(0, 0, W, H2);
+    var st = { rotX: ssVis.rotX, rotY: ssVis.rotY, zoom: ssVis.zoom, fit: 1, stars: ssVis._stars, sw: ssVis._sw, t: ssVis.t };
+    hcBg(x, st, W, H);
+    ssVis._stars = st.stars; ssVis._sw = st.sw;
 
     var I = parseFloat((document.getElementById('ss-i-num') || {}).value);
     if (isNaN(I) || I <= 0) I = 5;
@@ -3221,170 +3452,245 @@
     ssVis.t += 0.016;
     if (ssVis.built !== ssCount + ':' + ssSel.slice(0, ssCount).join(',')) ssVisBuild();
 
-    // Yerleşim
-    var m2 = 10, gap = 14;
-    var cw = (W - 2*m2 - (ssCount - 1)*gap) / ssCount;
-    var T = 58, TB = H2 - 26, TH = TB - T;
-    var wireY = 40;
-    // Pil
-    var bw = 58, bx = W/2 - bw/2, by = 8;
-    x.fillStyle = 'rgba(30,36,54,0.95)'; x.strokeStyle = 'rgba(129,140,248,.6)'; x.lineWidth = 1.2;
-    x.beginPath(); x.rect(bx, by, bw, 20); x.fill(); x.stroke();
-    x.fillStyle = '#c7d2fe'; x.font = 'bold 9px sans-serif'; x.textAlign = 'center';
-    x.fillText('DC', W/2, by + 13);
-    x.fillStyle = '#60a5fa'; x.fillText('\u2212', bx + 8, by + 13);
-    x.fillStyle = '#f87171'; x.fillText('+', bx + bw - 8, by + 13);
+    var lay = ssLayout(ssCount), items = [];
+    for (var i = 0; i < ssVis.cells.length; i++) {
+      ionStep3D(ssVis.cells[i], spd);
+      pushTank(items, st, W, H, lay.offs[i], ssVis.cells[i]);
+    }
 
-    // Kablo yolu (elektron yönü: pil(−) → kap1 katot; kapN anot → pil(+))
-    var path = [], cells = ssVis.cells, i2;
-    function catX(i){ return m2 + i*(cw + gap) + cw*0.16; }
-    function anX(i){ return m2 + i*(cw + gap) + cw*0.84; }
-    path.push([bx + 6, by + 20], [bx + 6, wireY], [catX(0), wireY], [catX(0), T + 4]);
-    var segStarts = [path.length]; // aralar
-    for (i2 = 0; i2 < ssCount - 1; i2++)
-      path.push([anX(i2), T + 4], [anX(i2), wireY], [catX(i2 + 1), wireY], [catX(i2 + 1), T + 4]);
-    path.push([anX(ssCount - 1), T + 4], [anX(ssCount - 1), wireY - 12], [bx + bw - 6, wireY - 12], [bx + bw - 6, by + 20]);
-    // Kabloları çiz (segment segment: 4'erli gruplar)
+    // Pil + kablolar + elektron akışı (3D dünya koordinatlarında)
+    g3Box(items, st, W, H, 0, -92, 0, 32, 13, 13, '30,36,54', 0.95, 'rgba(129,140,248,.6)');
+    var path = [[-34,-92,0],[-34,-68,0],[lay.offs[0]+ssVis.cells[0].CATX,-68,0],[lay.offs[0]+ssVis.cells[0].CATX,-36,0]];
+    for (i = 0; i < ssVis.cells.length - 1; i++) {
+      path.push([lay.offs[i]+ssVis.cells[i].ANX,-36,0], [lay.offs[i]+ssVis.cells[i].ANX,-68,0],
+                [lay.offs[i+1]+ssVis.cells[i+1].CATX,-68,0], [lay.offs[i+1]+ssVis.cells[i+1].CATX,-36,0]);
+    }
+    var lastI = ssVis.cells.length - 1;
+    path.push([lay.offs[lastI]+ssVis.cells[lastI].ANX,-36,0], [lay.offs[lastI]+ssVis.cells[lastI].ANX,-68,0], [34,-68,0], [34,-92,0]);
+
+    drawSortedItems(x, items);
+
+    // Kabloları çiz (üstte, düz çizgiler)
     x.strokeStyle = 'rgba(148,163,184,.55)'; x.lineWidth = 2; x.lineCap = 'round';
-    for (var g2 = 0; g2 < path.length; g2 += 4) {
-      x.beginPath();
-      x.moveTo(path[g2][0], path[g2][1]);
-      for (var g3 = 1; g3 < 4 && g2 + g3 < path.length; g3++) x.lineTo(path[g2 + g3][0], path[g2 + g3][1]);
-      x.stroke();
-    }
-    // Elektron noktaları (tüm yol boyunca akış)
-    var lens = [0], tot = 0;
-    for (i2 = 1; i2 < path.length; i2++) {
-      if (i2 % 4 === 0) { lens.push(tot); continue; } // segment atlaması yok gibi davran: kümülatif
-      tot += Math.hypot(path[i2][0] - path[i2-1][0], path[i2][1] - path[i2-1][1]);
-      lens.push(tot);
-    }
-    function dotAt(f){
-      var d2 = f * tot;
-      for (var s3 = 1; s3 < path.length; s3++) {
-        if (lens[s3] >= d2 && lens[s3] > lens[s3-1]) {
-          var ft = (d2 - lens[s3-1]) / (lens[s3] - lens[s3-1]);
-          return [ path[s3-1][0] + (path[s3][0]-path[s3-1][0])*ft,
-                   path[s3-1][1] + (path[s3][1]-path[s3-1][1])*ft ];
+    x.beginPath();
+    var p0 = hcProj(st, path[0][0], path[0][1], path[0][2], W, H);
+    x.moveTo(p0.x, p0.y);
+    for (i = 1; i < path.length; i++) { var pp = hcProj(st, path[i][0], path[i][1], path[i][2], W, H); x.lineTo(pp.x, pp.y); }
+    x.stroke();
+    // Elektron akış noktaları
+    var segLen = [0], tot = 0, pr = hcProj(st, path[0][0],path[0][1],path[0][2], W, H);
+    for (i = 1; i < path.length; i++) { var cp = hcProj(st, path[i][0],path[i][1],path[i][2], W, H); tot += Math.hypot(cp.x-pr.x, cp.y-pr.y); segLen.push(tot); pr = cp; }
+    for (var ed = 0; ed < 6; ed++) {
+      var f = ((ssVis.t * 0.09 * spd) + ed/6) % 1, d = f * tot;
+      for (var s2 = 1; s2 < path.length; s2++) {
+        if (segLen[s2] >= d) {
+          var ft = segLen[s2] === segLen[s2-1] ? 0 : (d - segLen[s2-1]) / (segLen[s2] - segLen[s2-1]);
+          var a1 = hcProj(st, path[s2-1][0],path[s2-1][1],path[s2-1][2], W, H), a2 = hcProj(st, path[s2][0],path[s2][1],path[s2][2], W, H);
+          var ex = a1.x + (a2.x-a1.x)*ft, ey = a1.y + (a2.y-a1.y)*ft;
+          x.beginPath(); x.arc(ex, ey, 2.6, 0, 6.283); x.fillStyle = '#facc15'; x.fill();
+          break;
         }
       }
-      return path[path.length-1];
     }
-    for (var ed = 0; ed < 5; ed++) {
-      var f2 = ((ssVis.t * 0.10 * spd) + ed / 5) % 1;
-      var dp = dotAt(f2);
-      x.beginPath(); x.arc(dp[0], dp[1], 2.6, 0, 6.283);
-      x.fillStyle = '#facc15'; x.fill();
-    }
-    x.fillStyle = '#facc15'; x.font = 'bold 8.5px sans-serif'; x.textAlign = 'left';
-    x.fillText('e\u207b \u2192', bx - 34, wireY - 2);
-    x.textAlign = 'right'; x.fillStyle = 'rgba(255,255,255,.35)'; x.font = '9px sans-serif';
-    x.fillText('I = ' + I.toFixed(1) + ' A', W - 6, 12);
-
-    // Kaplar
-    for (i2 = 0; i2 < ssCount; i2++) {
-      var c2 = cells[i2], x0 = m2 + i2*(cw + gap);
-      // Sıvı
-      x.fillStyle = 'rgba(56,130,246,0.08)';
-      x.fillRect(x0 + 2, T + 12, cw - 4, TH - 14);
-      // Kap çizgileri
-      x.strokeStyle = 'rgba(120,180,255,.35)'; x.lineWidth = 1.5;
-      x.beginPath(); x.moveTo(x0, T); x.lineTo(x0, TB); x.lineTo(x0 + cw, TB); x.lineTo(x0 + cw, T); x.stroke();
-      // Elektrotlar
-      var exC = catX(i2), exA = anX(i2);
-      var anW = c2.def.an.diss ? Math.max(2.5, 6 - c2.depAn) : 6;
-      x.fillStyle = 'rgba(154,164,178,.85)';
-      x.fillRect(exC - 3, T + 4, 6, TH * 0.72);
-      x.fillRect(exA - anW/2, T + 4, anW, TH * 0.72);
-      // Katot birikintisi
-      if (c2.dep > 0.4) {
-        x.fillStyle = SS_DEPCOL[c2.k] || '#cbd5e1';
-        x.fillRect(exC + 3, T + 12, Math.min(7, c2.dep), TH * 0.6);
-      }
-      // Anot birikintisi (I₂)
-      if (c2.def.an.p.indexOf('I') === 0 && c2.depAn > 0.4) {
-        x.fillStyle = '#7c3aed';
-        x.fillRect(exA - anW/2 - Math.min(7, c2.depAn), T + 12, Math.min(7, c2.depAn), TH * 0.6);
-      }
-      // Kutup işaretleri + ürünler
-      x.font = 'bold 10px sans-serif'; x.textAlign = 'center';
-      x.fillStyle = '#60a5fa'; x.fillText('\u2296', exC, T - 2);
-      x.fillStyle = '#f87171'; x.fillText('\u2295', exA, T - 2);
-      x.font = 'bold 8px sans-serif';
-      x.fillStyle = '#e2e8f0'; x.fillText(c2.def.cat.p, exC, TB - 5);
-      x.fillStyle = c2.def.an.diss ? '#38bdf8' : '#e2e8f0'; x.fillText(c2.def.an.p, exA, TB - 5);
-      // Kap adı
-      x.fillStyle = 'rgba(199,210,254,.8)'; x.font = '8.5px sans-serif';
-      x.fillText(c2.def.name, x0 + cw/2, TB + 13, cw - 4);
-
-      // İyonlar
-      var tgtC = 0.19, tgtA = 0.81;
-      for (var n3 = 0; n3 < c2.ions.length; n3++) {
-        var io = c2.ions[n3];
-        io.cool -= 0.016;
-        var tx = io.ch > 0 ? tgtC : io.ch < 0 ? tgtA : io.x;
-        if (io.ch !== 0) io.x += (tx - io.x) * 0.012 * spd + (Math.random() - 0.5) * 0.008 * spd;
-        else io.x += (Math.random() - 0.5) * 0.007 * spd;
-        io.y += (Math.random() - 0.5) * 0.012 * spd;
-        io.x = Math.max(0.12, Math.min(0.88, io.x));
-        io.y = Math.max(0.08, Math.min(0.92, io.y));
-        // Elektroda varış
-        if (io.ch !== 0 && io.cool <= 0 && Math.abs(io.x - tx) < 0.035) {
-          var dis = io.ch > 0 ? c2.catDis : c2.anDis;
-          var side = io.ch > 0 ? c2.def.cat : c2.def.an;
-          if (dis) {
-            if (io.ch > 0) { // katot olayı
-              if (side.gas) ssBub(c2, tgtC, io.y, ssGasCol(side.p));
-              else c2.dep = Math.min(7, c2.dep + 0.5);
-              if (c2.def.an.diss) { // aktif anot: yeni katyon anottan doğar
-                c2.depAn = Math.min(3.2, c2.depAn + 0.25);
-                io.x = 0.78; io.y = 0.15 + Math.random()*0.7;
-              } else { io.x = 0.35 + Math.random()*0.3; io.y = 0.15 + Math.random()*0.7; }
-            } else { // anot olayı
-              if (side.diss) { io.x = 0.35 + Math.random()*0.3; }
-              else if (side.p.indexOf('I') === 0) { c2.depAn = Math.min(7, c2.depAn + 0.5); io.x = 0.35 + Math.random()*0.3; }
-              else { ssBub(c2, tgtA, io.y, ssGasCol(side.p)); io.x = 0.35 + Math.random()*0.3; }
-              io.y = 0.15 + Math.random()*0.7;
-            }
-            io.cool = 1.6;
-          } else {
-            io.x += io.ch > 0 ? 0.12 : -0.12; // seyirci iyon geri döner
-            io.cool = 1.3;
-          }
-        }
-        var ipx = x0 + cw * io.x, ipy = T + 14 + (TH - 22) * io.y;
-        if (io.ch === 0) {
-          x.globalAlpha = 0.3;
-          x.beginPath(); x.arc(ipx, ipy, 2.6, 0, 6.283); x.fillStyle = '#94a3b8'; x.fill();
-          x.globalAlpha = 1;
-        } else {
-          var lab = io.ch > 0 ? c2.ic.c : c2.ic.a;
-          x.beginPath(); x.arc(ipx, ipy, 6, 0, 6.283); x.fillStyle = lab[1]; x.fill();
-          x.fillStyle = '#0b0e18'; x.font = 'bold 5.5px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
-          x.fillText(lab[0], ipx, ipy);
-          x.textBaseline = 'alphabetic';
-        }
-      }
-      // Sudan gelen gazlar (seyirci-iyonlu çözeltilerde elektrot kabarcıkları)
-      if (c2.def.cat.gas && Math.random() < 0.05 * spd * (2 / c2.def.cat.n)) ssBub(c2, tgtC, 0.3 + Math.random()*0.55, ssGasCol(c2.def.cat.p));
-      if (c2.def.an.gas && Math.random() < 0.05 * spd * (2 / c2.def.an.n)) ssBub(c2, tgtA, 0.3 + Math.random()*0.55, ssGasCol(c2.def.an.p));
-      // Kabarcıklar yükselir
-      for (var b3 = c2.bub.length - 1; b3 >= 0; b3--) {
-        var bb = c2.bub[b3];
-        bb.y -= 0.011 * spd; bb.r = Math.min(3.2, bb.r + 0.015);
-        if (bb.y < 0.05) { c2.bub.splice(b3, 1); continue; }
-        var bpx = x0 + cw * bb.x, bpy = T + 14 + (TH - 22) * bb.y;
-        x.beginPath(); x.arc(bpx, bpy, bb.r, 0, 6.283);
-        x.strokeStyle = bb.c; x.lineWidth = 1; x.stroke();
-        x.fillStyle = 'rgba(255,255,255,.1)'; x.fill();
+    // Etiketler
+    for (i = 0; i < ssVis.cells.length; i++) {
+      var labs = ssVis.cells[i]._labels;
+      for (var l = 0; l < labs.length; l++) {
+        x.fillStyle = labs[l].c; x.font = labs[l].f; x.textAlign = 'center';
+        x.fillText(labs[l].t, labs[l].x, labs[l].y);
       }
     }
+    var pbatt = hcProj(st, 0, -108, 0, W, H);
+    x.fillStyle = '#c7d2fe'; x.font = 'bold 9px sans-serif'; x.textAlign = 'center';
+    x.fillText('DC G\u00dc\u00c7 KAYNA\u011eI', pbatt.x, pbatt.y);
+    x.fillStyle = 'rgba(255,255,255,.28)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H - 8);
+    x.textAlign = 'right';
+    x.fillText('I = ' + I.toFixed(1) + ' A', W - 8, H - 8);
     x.textAlign = 'left';
+    } catch (drawErrObj) { drawErr(x, W, H, drawErrObj); }
   }
-  function ssBub(cell, bx2, by2, col){
-    if (cell.bub.length > 14) return;
-    cell.bub.push({ x: bx2 + (Math.random()-0.5)*0.05, y: Math.max(0.15, by2), r: 1 + Math.random(), c: col });
+
+  // Ekranda hata gösterici — mobilde konsol açmak zor olduğu için
+  // 3D sahnelerde bir hata olursa doğrudan canvas üzerine yazılır.
+  function drawErr(x, W, H, err){
+    x.fillStyle = '#1a0505'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#fca5a5'; x.font = 'bold 12px sans-serif'; x.textAlign = 'left';
+    x.fillText('\u26a0\ufe0f \u00c7izim hatas\u0131 (bu yaz\u0131y\u0131 g\u00f6nder):', 10, 24);
+    var msg = String(err && err.message || err);
+    var words = msg.split(' '), line = '', y = 46;
+    x.font = '11px monospace';
+    for (var i = 0; i < words.length; i++) {
+      var test = line + words[i] + ' ';
+      if (test.length > 42) { x.fillText(line, 10, y); line = words[i] + ' '; y += 16; if (y > H - 40) break; }
+      else line = test;
+    }
+    x.fillText(line, 10, y);
+    if (err && err.stack) {
+      x.fillStyle = 'rgba(252,165,165,.6)'; x.font = '9px monospace';
+      var sl = String(err.stack).split('\n').slice(1, 3);
+      for (var j = 0; j < sl.length; j++) x.fillText(sl[j].trim().slice(0, 46), 10, y + 20 + j*13);
+    }
+    try { console.error('Ronya 3D çizim hatası:', err); } catch (e2) {}
   }
+
+  // ---------- 9h. Kaplama 3D Görselleştirme ----------
+  // Seri Kaplar ile AYNI 3D motoru (pushTank/ionStep3D/g3Box)
+  // kullanır. Seçilen senaryoya göre nesne (kaşık/kolye) veya
+  // metal çubuk katot/anot olur; "Yanlış Bağlantı" doğru
+  // kutbun neden önemli olduğunu görsel olarak kanıtlar.
+  var CAP_META = [
+    { metalSym:'Ag', ionCol:'#e5e7eb', depCol:'#e5e7eb', icon:'\ud83e\udd44', itemLabel:'Demir ka\u015f\u0131k', metalLabel:'Saf g\u00fcm\u00fc\u015f', hasItem:true },
+    { metalSym:'Cu', ionCol:'#38bdf8', depCol:'#e78a5a', icon:'\ud83d\udfe0', itemLabel:'Safs\u0131z Cu (anot)', metalLabel:'Saf Cu (katot)', hasItem:false },
+    { metalSym:'Au', ionCol:'#fbbf24', depCol:'#fbbf24', icon:'\ud83d\udc8d', itemLabel:'G\u00fcm\u00fc\u015f kolye', metalLabel:'Saf alt\u0131n', hasItem:true }
+  ];
+  var capSt = { anim: null, t: 0, idx: 0, correct: true, rotX: 0.32, rotY: -0.5, zoom: 1, drag: false, lx: 0, ly: 0, dist: 0, bound: false, cell: null };
+
+  function capBuildCell(){
+    var meta = CAP_META[capSt.idx];
+    var CATX = -60, ANX = 60;
+    var itemSide = capSt.correct ? 'cat' : 'an';
+    var cell = {
+      k: 'cap', name: meta.hasItem ? '' : (capSt.correct ? 'Saf Cu katot \u00b7 Safs\u0131z Cu anot' : 'Safs\u0131z Cu katot \u00b7 Saf Cu anot (YANLI\u015e)'),
+      ic: { c: [meta.metalSym + '\u207a', meta.ionCol], a: ['SO\u2084\u00b2\u207b', '#c084fc'] },
+      halfW: 96, CATX: CATX, ANX: ANX,
+      catDis: true, catDep: true, catIonGas: false, catAmbientGas: false,
+      anDis: true, anActive: true, anDep: false, anIonGas: false, anAmbientGas: false,
+      catGasCol: '#e2e8f0', anGasCol: '#e2e8f0',
+      catDepCol: meta.depCol, anDepCol: meta.depCol,
+      catLabel: capSt.correct ? (meta.hasItem ? '\u2713 Kaplan\u0131yor!' : 'Saf Cu birikiyor') : (meta.hasItem ? '\u2717 Kaplanm\u0131yor' : 'Cu birikiyor (bo\u015fa)'),
+      anLabel: capSt.correct ? (meta.hasItem ? meta.metalLabel + ' \u00e7\u00f6z\u00fcn\u00fcyor' : 'Safs\u0131z Cu \u00e7\u00f6z\u00fcn\u00fcyor') : (meta.hasItem ? '\u26a0 Nesne \u00e7\u00f6z\u00fcn\u00fcyor!' : 'Saf Cu bo\u015fa \u00e7\u00f6z\u00fcn\u00fcyor'),
+      dep: 0, depAn: 0, anodeLeft: 8, ions: [], bub: [],
+      itemSide: meta.hasItem ? itemSide : null,
+      itemIcon: meta.icon, itemGlow: capSt.correct ? 'good' : 'bad'
+    };
+    for (var j = 0; j < 6; j++) {
+      cell.ions.push({ x: CATX + (ANX-CATX)*(0.3+Math.random()*0.4), y: 10+Math.random()*78, z: -38+Math.random()*76, ch: 1, cool: Math.random()*2 });
+      cell.ions.push({ x: CATX + (ANX-CATX)*(0.3+Math.random()*0.4), y: 10+Math.random()*78, z: -38+Math.random()*76, ch: -1, cool: Math.random()*2 });
+    }
+    capSt.cell = cell;
+  }
+
+  window.capSetMode = function(correct, btn){
+    capSt.correct = correct;
+    if (btn) {
+      var bs = btn.parentElement.querySelectorAll('button');
+      for (var i = 0; i < bs.length; i++) bs[i].classList.remove('sel2');
+      btn.classList.add('sel2');
+    }
+    capBuildCell();
+  };
+  function capSetScenario(idx){
+    if (idx < 0 || idx > 2) idx = 0;
+    capSt.idx = idx;
+    capBuildCell();
+    var t = document.getElementById('cap-title');
+    if (t) t.textContent = ELZ_SCEN[idx].icon + ' ' + ELZ_SCEN[idx].title;
+  }
+
+  function capBindCanvas(){
+    if (capSt.bound) return;
+    var cv = document.getElementById('cap-cv');
+    if (!cv) return;
+    capSt.bound = true;
+    cv.onmousedown = function(e){ capSt.drag = true; capSt.lx = e.clientX; capSt.ly = e.clientY; };
+    cv.onmousemove = function(e){
+      if (!capSt.drag) return;
+      capSt.rotY += (e.clientX - capSt.lx) * 0.01; capSt.rotX += (e.clientY - capSt.ly) * 0.01;
+      capSt.lx = e.clientX; capSt.ly = e.clientY;
+    };
+    cv.onmouseup = cv.onmouseleave = function(){ capSt.drag = false; };
+    cv.addEventListener('wheel', function(e){ e.preventDefault(); capSt.zoom = Math.max(0.5, Math.min(2.2, capSt.zoom - e.deltaY*0.001)); }, {passive:false});
+    cv.addEventListener('touchstart', function(e){
+      if (e.touches.length === 1) { capSt.drag = true; capSt.lx = e.touches[0].clientX; capSt.ly = e.touches[0].clientY; }
+      else if (e.touches.length === 2) { var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY; capSt.dist=Math.sqrt(dx*dx+dy*dy); }
+      e.preventDefault();
+    }, {passive:false});
+    cv.addEventListener('touchmove', function(e){
+      if (e.touches.length === 1 && capSt.drag) {
+        capSt.rotY += (e.touches[0].clientX - capSt.lx) * 0.013; capSt.rotX += (e.touches[0].clientY - capSt.ly) * 0.013;
+        capSt.lx = e.touches[0].clientX; capSt.ly = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY, dist=Math.sqrt(dx*dx+dy*dy);
+        if (capSt.dist > 0) capSt.zoom = Math.max(0.5, Math.min(2.2, capSt.zoom * dist/capSt.dist));
+        capSt.dist = dist;
+      }
+      e.preventDefault();
+    }, {passive:false});
+    cv.addEventListener('touchend', function(){ capSt.drag = false; capSt.dist = 0; });
+  }
+
+  function capStart(){
+    if (!capSt.cell) capBuildCell();
+    capBindCanvas();
+    if (capSt.anim) cancelAnimationFrame(capSt.anim);
+    capLoop();
+  }
+  function capStop(){ if (capSt.anim) { cancelAnimationFrame(capSt.anim); capSt.anim = null; } }
+
+  function capLoop(){
+    var scr = document.getElementById('s-elz');
+    if (!scr || scr.style.display === 'none') { capStop(); return; }
+    capSt.anim = requestAnimationFrame(capLoop);
+    var cv = document.getElementById('cap-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || 0;
+    var H = 260;
+    if (W < 10) return;
+    var dpr = window.devicePixelRatio || 1;
+    var x = cv.getContext('2d');
+    try {
+    if (!capSt.cell) capBuildCell();
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H*dpr) > 2) { cv.width = W*dpr; cv.height = H*dpr; }
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var st = { rotX: capSt.rotX, rotY: capSt.rotY, zoom: capSt.zoom, fit: 1, stars: capSt._stars, sw: capSt._sw, t: capSt.t };
+    hcBg(x, st, W, H);
+    capSt._stars = st.stars; capSt._sw = st.sw;
+    capSt.t += 0.016;
+
+    ionStep3D(capSt.cell, 1.1);
+    var items = [];
+    pushTank(items, st, W, H, 0, capSt.cell);
+    g3Box(items, st, W, H, 0, -92, 0, 30, 12, 12, '30,36,54', 0.95, 'rgba(129,140,248,.6)');
+    drawSortedItems(x, items);
+
+    // Kablolar (pil -> katot, anot -> pil) — hangi taraf katot ise oraya (-) gider
+    var CATX = capSt.cell.CATX, ANX = capSt.cell.ANX;
+    var pB1 = hcProj(st, -14, -92, 0, W, H), pB2 = hcProj(st, 14, -92, 0, W, H);
+    var pC = hcProj(st, CATX, -36, 0, W, H), pA = hcProj(st, ANX, -36, 0, W, H);
+    var pCm = hcProj(st, CATX, -68, 0, W, H), pAm = hcProj(st, ANX, -68, 0, W, H);
+    x.strokeStyle = 'rgba(148,163,184,.55)'; x.lineWidth = 2; x.lineCap = 'round';
+    x.beginPath(); x.moveTo(pB1.x,pB1.y); x.lineTo(pCm.x,pB1.y); x.lineTo(pCm.x,pCm.y); x.lineTo(pC.x,pC.y); x.stroke();
+    x.beginPath(); x.moveTo(pB2.x,pB2.y); x.lineTo(pAm.x,pB2.y); x.lineTo(pAm.x,pAm.y); x.lineTo(pA.x,pA.y); x.stroke();
+    x.fillStyle = capSt.correct ? '#60a5fa' : '#f87171';
+    x.font = 'bold 10px sans-serif'; x.textAlign = 'center';
+    var pMinus = hcProj(st, -14, -100, 0, W, H);
+    x.fillText('\u2212', pMinus.x, pMinus.y);
+
+    var labs = capSt.cell._labels;
+    for (var l = 0; l < labs.length; l++) {
+      x.fillStyle = labs[l].c; x.font = labs[l].f; x.textAlign = 'center';
+      x.fillText(labs[l].t, labs[l].x, labs[l].y);
+    }
+    x.fillStyle = 'rgba(255,255,255,.28)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H - 8);
+    x.textAlign = 'right';
+    x.fillStyle = capSt.correct ? '#22c55e' : '#ef4444';
+    x.fillText(capSt.correct ? '\u2713 DO\u011eRU BA\u011eLANTI' : '\u2717 YANLI\u015e BA\u011eLANTI', W - 8, H - 8);
+    x.textAlign = 'left';
+    } catch (drawErrObj2) { drawErr(x, W, H, drawErrObj2); }
+  }
+
+
+  function elzTabGo(idx){
+    tswitch('elz-tabs', 'elz-tps', idx);
+    elzStop(); ssVisStop(); capStop();
+    if (idx === 0) elzStart();
+    else if (idx === 2) capStart();
+    else if (idx === 3) ssVisStart();
+  }
+  window.elzTabGo = elzTabGo;
 
   // --- Başlat ---
   function init(){
@@ -3410,7 +3716,7 @@
             if (id === 'board') renderBoard();
             if (id === 'quiz') { refreshWeakBtn(); updateRangeNote(); }
             if (id !== 'eldetay') bohrStop();
-            if (id === 'elz') setTimeout(elzStart, 80); else { elzStop(); ssVisStop(); }
+            if (id === 'elz') setTimeout(elzStart, 80); else { elzStop(); ssVisStop(); capStop(); }
             if (id === 'hc') setTimeout(hcEnter, 80); else hcLeave();
           } catch (e) {}
         };
