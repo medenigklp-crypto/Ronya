@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v8
+   RONYA KİMYA — EKLENTİ v9
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -26,6 +26,9 @@
        kaydırıcı/manuel I-t, kap başına katot-anot ürün miktarı
    21) 🧬 Hidrokarbonlar 3D: alkan/alken/alkinlerin ilk 10'ar
        üyesi, gerçek bağ geometrisi, pinch-zoom, fütüristik fon
+   22) 🔗 Seri Kaplar GÖRSEL simülasyonu: devre üzerinde pil +
+       elektron akışı + her kapta gerçek iyon göçü/kabarcık/
+       birikinti/çözünen anot animasyonu
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -2427,10 +2430,10 @@
         '<h1 class="ptitle">\ud83d\udd0b Elektroliz Laboratuvar\u0131</h1>' +
         '<p class="psub">3D sim\u00fclasyon, Faraday hesaplar\u0131 ve kaplama senaryolar\u0131 \u2014 galvanik h\u00fccrenin z\u0131tt\u0131: elektrik enerjisiyle Y\u00dcR\u00dcT\u00dcLEN tepkimeler.</p>' +
         '<div class="tabs" id="elz-tabs">' +
-          '<button class="tab on" onclick="tswitch(\'elz-tabs\',\'elz-tps\',0)">\u26a1 3D Sim\u00fclasyon</button>' +
-          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',1)">\ud83e\uddee Faraday</button>' +
-          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',2)">\ud83e\udd48 Kaplama</button>' +
-          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',3)">\ud83d\udd17 Seri Kaplar</button>' +
+          '<button class="tab on" onclick="tswitch(\'elz-tabs\',\'elz-tps\',0);ssVisStop()">\u26a1 3D Sim\u00fclasyon</button>' +
+          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',1);ssVisStop()">\ud83e\uddee Faraday</button>' +
+          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',2);ssVisStop()">\ud83e\udd48 Kaplama</button>' +
+          '<button class="tab" onclick="tswitch(\'elz-tabs\',\'elz-tps\',3);ssVisStart()">\ud83d\udd17 Seri Kaplar</button>' +
         '</div>' +
         '<div id="elz-tps">' +
           // --- TAB 1: 3D ---
@@ -2487,6 +2490,9 @@
           '<div class="tp"><div class="card" id="elz-scen"></div></div>' +
           // --- TAB 4: Seri Kaplar ---
           '<div class="tp">' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+              '<canvas id="ss-cv" style="width:100%;display:block" height="235"></canvas>' +
+            '</div>' +
             '<div class="card" style="margin-bottom:12px">' +
               '<p style="font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.6">Seri ba\u011fl\u0131 kaplardan <b>ayn\u0131 y\u00fck (Q = I\u00b7t)</b> ge\u00e7er. Ak\u0131m\u0131 ve s\u00fcreyi kayd\u0131rarak veya elle girerek her kab\u0131n elektrotlar\u0131nda neyin, ne kadar olu\u015ftu\u011funu canl\u0131 izle.</p>' +
               '<div style="margin-bottom:12px"><div class="slbl">Kap Say\u0131s\u0131</div><div style="display:flex;gap:8px">' +
@@ -3135,6 +3141,251 @@
   function hcEnter(){ hcRenderGrid(); }
   function hcLeave(){ window.hcClose(); }
 
+  // ---------- 9g. Seri Kaplar GÖRSEL Simülasyonu ----------
+  // Seçilen 2-3 kap tek devre üzerinde çizilir: pil → kablolar →
+  // elektron akışı; her kapta kendi iyonları göç eder, gazlar
+  // kabarcıklanır, metaller birikir, aktif anotlar incelir.
+  var SS_ION = {
+    nacl_m:   { c:['Na\u207a','#60a5fa'],        a:['Cl\u207b','#a3e635'] },
+    mgcl2:    { c:['Mg\u00b2\u207a','#93c5fd'],  a:['Cl\u207b','#a3e635'] },
+    cacl2:    { c:['Ca\u00b2\u207a','#7dd3fc'],  a:['Cl\u207b','#a3e635'] },
+    al2o3:    { c:['Al\u00b3\u207a','#e2e8f0'],  a:['O\u00b2\u207b','#f87171'] },
+    nacl_a:   { c:['Na\u207a','#60a5fa'],        a:['Cl\u207b','#a3e635'], w:1 },
+    water:    { c:['H\u207a','#fca5a5'],         a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    na2so4:   { c:['Na\u207a','#60a5fa'],        a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    ki:       { c:['K\u207a','#c4b5fd'],         a:['I\u207b','#a78bfa'], w:1 },
+    cuso4_pt: { c:['Cu\u00b2\u207a','#38bdf8'],  a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    cuso4_cu: { c:['Cu\u00b2\u207a','#38bdf8'],  a:['SO\u2084\u00b2\u207b','#c084fc'] },
+    agno3_pt: { c:['Ag\u207a','#e5e7eb'],        a:['NO\u2083\u207b','#f0abfc'], w:1 },
+    agno3_ag: { c:['Ag\u207a','#e5e7eb'],        a:['NO\u2083\u207b','#f0abfc'] },
+    znso4:    { c:['Zn\u00b2\u207a','#a5f3fc'],  a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    niso4:    { c:['Ni\u00b2\u207a','#6ee7b7'],  a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    crcl3:    { c:['Cr\u00b3\u207a','#93c5fd'],  a:['Cl\u207b','#a3e635'], w:1 },
+    aucl3:    { c:['Au\u00b3\u207a','#fbbf24'],  a:['Cl\u207b','#a3e635'], w:1 },
+    pbno3:    { c:['Pb\u00b2\u207a','#9ca3af'],  a:['NO\u2083\u207b','#f0abfc'], w:1 }
+  };
+  var SS_DEPCOL = { cuso4_pt:'#e78a5a', cuso4_cu:'#e78a5a', agno3_pt:'#e2e8f0', agno3_ag:'#e2e8f0',
+                    aucl3:'#fbbf24', pbno3:'#9aa3af', crcl3:'#cbd5e1', znso4:'#d7e2ee', niso4:'#c7f0dd',
+                    nacl_m:'#cbd5e1', mgcl2:'#cdd5df', cacl2:'#d5dde6', al2o3:'#d8dee8' };
+  function ssGasCol(p){
+    if (p.indexOf('Cl') === 0) return '#bde04a';
+    if (p.indexOf('O')  === 0) return '#bae6fd';
+    return '#e2e8f0';
+  }
+  var ssVis = { anim: null, t: 0, built: '', cells: [] };
+  function ssVisStart(){ if (ssVis.anim) cancelAnimationFrame(ssVis.anim); ssVisLoop(); }
+  function ssVisStop(){ if (ssVis.anim) { cancelAnimationFrame(ssVis.anim); ssVis.anim = null; } }
+
+  function ssVisBuild(){
+    ssVis.built = ssCount + ':' + ssSel.slice(0, ssCount).join(',');
+    ssVis.cells = [];
+    for (var i = 0; i < ssCount; i++) {
+      var k = ssSel[i], def = ssCellDef(k), ic = SS_ION[k] || SS_ION.water;
+      var cell = {
+        k: k, def: def, ic: ic,
+        catDis: !def.cat.gas || k === 'water',                      // katyon boşalıyor mu?
+        anDis: !!def.an.diss || def.an.p.indexOf('Cl') === 0 ||     // anyon boşalıyor mu?
+               def.an.p.indexOf('I') === 0 || k === 'al2o3',
+        dep: 0, depAn: 0, ions: [], bub: []
+      };
+      var nEach = ssCount === 3 ? 4 : 5;
+      for (var j = 0; j < nEach; j++) {
+        cell.ions.push({ x: 0.3 + Math.random()*0.4, y: 0.15 + Math.random()*0.7, ch: 1,  cool: Math.random()*2 });
+        cell.ions.push({ x: 0.3 + Math.random()*0.4, y: 0.15 + Math.random()*0.7, ch: -1, cool: Math.random()*2 });
+      }
+      if (ic.w) for (var j2 = 0; j2 < 3; j2++)
+        cell.ions.push({ x: 0.2 + Math.random()*0.6, y: 0.1 + Math.random()*0.8, ch: 0, cool: 0 });
+      ssVis.cells.push(cell);
+    }
+  }
+
+  function ssVisLoop(){
+    var scr = document.getElementById('s-elz');
+    if (!scr || scr.style.display === 'none') { ssVisStop(); return; }
+    ssVis.anim = requestAnimationFrame(ssVisLoop);
+    var cv = document.getElementById('ss-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width, H2 = 235;
+    if (W < 10) return; // sekme görünmüyorsa boşa çizme
+    var dpr = window.devicePixelRatio || 1;
+    if (Math.abs(cv.width - W*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    x.clearRect(0, 0, W, H2);
+    x.fillStyle = '#050510'; x.fillRect(0, 0, W, H2);
+
+    var I = parseFloat((document.getElementById('ss-i-num') || {}).value);
+    if (isNaN(I) || I <= 0) I = 5;
+    var spd = Math.max(0.3, Math.min(3, I / 5));
+    ssVis.t += 0.016;
+    if (ssVis.built !== ssCount + ':' + ssSel.slice(0, ssCount).join(',')) ssVisBuild();
+
+    // Yerleşim
+    var m2 = 10, gap = 14;
+    var cw = (W - 2*m2 - (ssCount - 1)*gap) / ssCount;
+    var T = 58, TB = H2 - 26, TH = TB - T;
+    var wireY = 40;
+    // Pil
+    var bw = 58, bx = W/2 - bw/2, by = 8;
+    x.fillStyle = 'rgba(30,36,54,0.95)'; x.strokeStyle = 'rgba(129,140,248,.6)'; x.lineWidth = 1.2;
+    x.beginPath(); x.rect(bx, by, bw, 20); x.fill(); x.stroke();
+    x.fillStyle = '#c7d2fe'; x.font = 'bold 9px sans-serif'; x.textAlign = 'center';
+    x.fillText('DC', W/2, by + 13);
+    x.fillStyle = '#60a5fa'; x.fillText('\u2212', bx + 8, by + 13);
+    x.fillStyle = '#f87171'; x.fillText('+', bx + bw - 8, by + 13);
+
+    // Kablo yolu (elektron yönü: pil(−) → kap1 katot; kapN anot → pil(+))
+    var path = [], cells = ssVis.cells, i2;
+    function catX(i){ return m2 + i*(cw + gap) + cw*0.16; }
+    function anX(i){ return m2 + i*(cw + gap) + cw*0.84; }
+    path.push([bx + 6, by + 20], [bx + 6, wireY], [catX(0), wireY], [catX(0), T + 4]);
+    var segStarts = [path.length]; // aralar
+    for (i2 = 0; i2 < ssCount - 1; i2++)
+      path.push([anX(i2), T + 4], [anX(i2), wireY], [catX(i2 + 1), wireY], [catX(i2 + 1), T + 4]);
+    path.push([anX(ssCount - 1), T + 4], [anX(ssCount - 1), wireY - 12], [bx + bw - 6, wireY - 12], [bx + bw - 6, by + 20]);
+    // Kabloları çiz (segment segment: 4'erli gruplar)
+    x.strokeStyle = 'rgba(148,163,184,.55)'; x.lineWidth = 2; x.lineCap = 'round';
+    for (var g2 = 0; g2 < path.length; g2 += 4) {
+      x.beginPath();
+      x.moveTo(path[g2][0], path[g2][1]);
+      for (var g3 = 1; g3 < 4 && g2 + g3 < path.length; g3++) x.lineTo(path[g2 + g3][0], path[g2 + g3][1]);
+      x.stroke();
+    }
+    // Elektron noktaları (tüm yol boyunca akış)
+    var lens = [0], tot = 0;
+    for (i2 = 1; i2 < path.length; i2++) {
+      if (i2 % 4 === 0) { lens.push(tot); continue; } // segment atlaması yok gibi davran: kümülatif
+      tot += Math.hypot(path[i2][0] - path[i2-1][0], path[i2][1] - path[i2-1][1]);
+      lens.push(tot);
+    }
+    function dotAt(f){
+      var d2 = f * tot;
+      for (var s3 = 1; s3 < path.length; s3++) {
+        if (lens[s3] >= d2 && lens[s3] > lens[s3-1]) {
+          var ft = (d2 - lens[s3-1]) / (lens[s3] - lens[s3-1]);
+          return [ path[s3-1][0] + (path[s3][0]-path[s3-1][0])*ft,
+                   path[s3-1][1] + (path[s3][1]-path[s3-1][1])*ft ];
+        }
+      }
+      return path[path.length-1];
+    }
+    for (var ed = 0; ed < 5; ed++) {
+      var f2 = ((ssVis.t * 0.10 * spd) + ed / 5) % 1;
+      var dp = dotAt(f2);
+      x.beginPath(); x.arc(dp[0], dp[1], 2.6, 0, 6.283);
+      x.fillStyle = '#facc15'; x.fill();
+    }
+    x.fillStyle = '#facc15'; x.font = 'bold 8.5px sans-serif'; x.textAlign = 'left';
+    x.fillText('e\u207b \u2192', bx - 34, wireY - 2);
+    x.textAlign = 'right'; x.fillStyle = 'rgba(255,255,255,.35)'; x.font = '9px sans-serif';
+    x.fillText('I = ' + I.toFixed(1) + ' A', W - 6, 12);
+
+    // Kaplar
+    for (i2 = 0; i2 < ssCount; i2++) {
+      var c2 = cells[i2], x0 = m2 + i2*(cw + gap);
+      // Sıvı
+      x.fillStyle = 'rgba(56,130,246,0.08)';
+      x.fillRect(x0 + 2, T + 12, cw - 4, TH - 14);
+      // Kap çizgileri
+      x.strokeStyle = 'rgba(120,180,255,.35)'; x.lineWidth = 1.5;
+      x.beginPath(); x.moveTo(x0, T); x.lineTo(x0, TB); x.lineTo(x0 + cw, TB); x.lineTo(x0 + cw, T); x.stroke();
+      // Elektrotlar
+      var exC = catX(i2), exA = anX(i2);
+      var anW = c2.def.an.diss ? Math.max(2.5, 6 - c2.depAn) : 6;
+      x.fillStyle = 'rgba(154,164,178,.85)';
+      x.fillRect(exC - 3, T + 4, 6, TH * 0.72);
+      x.fillRect(exA - anW/2, T + 4, anW, TH * 0.72);
+      // Katot birikintisi
+      if (c2.dep > 0.4) {
+        x.fillStyle = SS_DEPCOL[c2.k] || '#cbd5e1';
+        x.fillRect(exC + 3, T + 12, Math.min(7, c2.dep), TH * 0.6);
+      }
+      // Anot birikintisi (I₂)
+      if (c2.def.an.p.indexOf('I') === 0 && c2.depAn > 0.4) {
+        x.fillStyle = '#7c3aed';
+        x.fillRect(exA - anW/2 - Math.min(7, c2.depAn), T + 12, Math.min(7, c2.depAn), TH * 0.6);
+      }
+      // Kutup işaretleri + ürünler
+      x.font = 'bold 10px sans-serif'; x.textAlign = 'center';
+      x.fillStyle = '#60a5fa'; x.fillText('\u2296', exC, T - 2);
+      x.fillStyle = '#f87171'; x.fillText('\u2295', exA, T - 2);
+      x.font = 'bold 8px sans-serif';
+      x.fillStyle = '#e2e8f0'; x.fillText(c2.def.cat.p, exC, TB - 5);
+      x.fillStyle = c2.def.an.diss ? '#38bdf8' : '#e2e8f0'; x.fillText(c2.def.an.p, exA, TB - 5);
+      // Kap adı
+      x.fillStyle = 'rgba(199,210,254,.8)'; x.font = '8.5px sans-serif';
+      x.fillText(c2.def.name, x0 + cw/2, TB + 13, cw - 4);
+
+      // İyonlar
+      var tgtC = 0.19, tgtA = 0.81;
+      for (var n3 = 0; n3 < c2.ions.length; n3++) {
+        var io = c2.ions[n3];
+        io.cool -= 0.016;
+        var tx = io.ch > 0 ? tgtC : io.ch < 0 ? tgtA : io.x;
+        if (io.ch !== 0) io.x += (tx - io.x) * 0.012 * spd + (Math.random() - 0.5) * 0.008 * spd;
+        else io.x += (Math.random() - 0.5) * 0.007 * spd;
+        io.y += (Math.random() - 0.5) * 0.012 * spd;
+        io.x = Math.max(0.12, Math.min(0.88, io.x));
+        io.y = Math.max(0.08, Math.min(0.92, io.y));
+        // Elektroda varış
+        if (io.ch !== 0 && io.cool <= 0 && Math.abs(io.x - tx) < 0.035) {
+          var dis = io.ch > 0 ? c2.catDis : c2.anDis;
+          var side = io.ch > 0 ? c2.def.cat : c2.def.an;
+          if (dis) {
+            if (io.ch > 0) { // katot olayı
+              if (side.gas) ssBub(c2, tgtC, io.y, ssGasCol(side.p));
+              else c2.dep = Math.min(7, c2.dep + 0.5);
+              if (c2.def.an.diss) { // aktif anot: yeni katyon anottan doğar
+                c2.depAn = Math.min(3.2, c2.depAn + 0.25);
+                io.x = 0.78; io.y = 0.15 + Math.random()*0.7;
+              } else { io.x = 0.35 + Math.random()*0.3; io.y = 0.15 + Math.random()*0.7; }
+            } else { // anot olayı
+              if (side.diss) { io.x = 0.35 + Math.random()*0.3; }
+              else if (side.p.indexOf('I') === 0) { c2.depAn = Math.min(7, c2.depAn + 0.5); io.x = 0.35 + Math.random()*0.3; }
+              else { ssBub(c2, tgtA, io.y, ssGasCol(side.p)); io.x = 0.35 + Math.random()*0.3; }
+              io.y = 0.15 + Math.random()*0.7;
+            }
+            io.cool = 1.6;
+          } else {
+            io.x += io.ch > 0 ? 0.12 : -0.12; // seyirci iyon geri döner
+            io.cool = 1.3;
+          }
+        }
+        var ipx = x0 + cw * io.x, ipy = T + 14 + (TH - 22) * io.y;
+        if (io.ch === 0) {
+          x.globalAlpha = 0.3;
+          x.beginPath(); x.arc(ipx, ipy, 2.6, 0, 6.283); x.fillStyle = '#94a3b8'; x.fill();
+          x.globalAlpha = 1;
+        } else {
+          var lab = io.ch > 0 ? c2.ic.c : c2.ic.a;
+          x.beginPath(); x.arc(ipx, ipy, 6, 0, 6.283); x.fillStyle = lab[1]; x.fill();
+          x.fillStyle = '#0b0e18'; x.font = 'bold 5.5px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+          x.fillText(lab[0], ipx, ipy);
+          x.textBaseline = 'alphabetic';
+        }
+      }
+      // Sudan gelen gazlar (seyirci-iyonlu çözeltilerde elektrot kabarcıkları)
+      if (c2.def.cat.gas && Math.random() < 0.05 * spd * (2 / c2.def.cat.n)) ssBub(c2, tgtC, 0.3 + Math.random()*0.55, ssGasCol(c2.def.cat.p));
+      if (c2.def.an.gas && Math.random() < 0.05 * spd * (2 / c2.def.an.n)) ssBub(c2, tgtA, 0.3 + Math.random()*0.55, ssGasCol(c2.def.an.p));
+      // Kabarcıklar yükselir
+      for (var b3 = c2.bub.length - 1; b3 >= 0; b3--) {
+        var bb = c2.bub[b3];
+        bb.y -= 0.011 * spd; bb.r = Math.min(3.2, bb.r + 0.015);
+        if (bb.y < 0.05) { c2.bub.splice(b3, 1); continue; }
+        var bpx = x0 + cw * bb.x, bpy = T + 14 + (TH - 22) * bb.y;
+        x.beginPath(); x.arc(bpx, bpy, bb.r, 0, 6.283);
+        x.strokeStyle = bb.c; x.lineWidth = 1; x.stroke();
+        x.fillStyle = 'rgba(255,255,255,.1)'; x.fill();
+      }
+    }
+    x.textAlign = 'left';
+  }
+  function ssBub(cell, bx2, by2, col){
+    if (cell.bub.length > 14) return;
+    cell.bub.push({ x: bx2 + (Math.random()-0.5)*0.05, y: Math.max(0.15, by2), r: 1 + Math.random(), c: col });
+  }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -3159,7 +3410,7 @@
             if (id === 'board') renderBoard();
             if (id === 'quiz') { refreshWeakBtn(); updateRangeNote(); }
             if (id !== 'eldetay') bohrStop();
-            if (id === 'elz') setTimeout(elzStart, 80); else elzStop();
+            if (id === 'elz') setTimeout(elzStart, 80); else { elzStop(); ssVisStop(); }
             if (id === 'hc') setTimeout(hcEnter, 80); else hcLeave();
           } catch (e) {}
         };
