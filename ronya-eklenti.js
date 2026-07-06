@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v13
+   RONYA KİMYA — EKLENTİ v14
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -46,6 +46,13 @@
        + Fonksiyonel Gruplar galerilerindeki 48 molekülden — şıklı
        ve yazarak modu destekli. İzomer belirsizliği (örn. etanol/
        dimetil eter aynı formül) Formül→Ad yönünde otomatik filtrelenir.
+   29) 🎨 Fonksiyonel Gruplar ekranına "İsimden Çiz" kutusu (IUPAC):
+       etanol, propanal, bütanon, propanoik asit, etil asetat, dimetil
+       eter gibi isimlerden 3D çizim — 2-propanol gibi konumlu alkoller
+       ve n-pentanol/heksanoik asit gibi uzatılmış zincirler de dahil.
+   30) 📋 Fonksiyonel Gruplar ana ekranına "Genel Bakış": her kategorinin
+       (Alkol/Eter/Aldehit/Keton/Asit/Ester) ilk 3 örneği küçük 3D
+       önizleme kartlarıyla + "Tümünü Gör" bağlantısıyla gösterilir.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
