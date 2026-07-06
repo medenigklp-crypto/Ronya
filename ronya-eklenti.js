@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v16
+   RONYA KİMYA — EKLENTİ v21
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -62,6 +62,21 @@
        sıcaklık/derişim müdahaleleriyle denge canlı kayar, stokiyometri
        (H₂=3×N₂) her zaman korunur, K denge sabiti + Haber-Bosch süreci
        anlatımı dahil.
+   33) 🐛 KRİTİK DÜZELTME: Kimyasal Denge 3D modülü yanlışlıkla tabanın
+       kendi "Denklem Dengeleyici" (nav id: eq) ile aynı ekran kimliğini
+       kullanıyordu — ikisi de bozulurdu. Kimyasal Denge artık ayrı bir
+       kimlikte (nav id: ledenge), Denklem Dengeleyici'ye dokunulmadı.
+   34) 🏆 3 yeni rozet: Volta Ustası (10 galvanik çifti incele), IUPAC
+       Şampiyonu (IUPAC testinde %80+), rozet sayısı 10'dan 13'e çıktı.
+   35) 🧪 Tepkime Türü Sınıflandırıcı: Sentez/Analiz/Yer Değiştirme/
+       Çift Değişim — 20 gerçek örnek denklem, açıklamalı quiz.
+   36) 🔥 Alev Testi Galerisi: 8 metal iyonunun (Li,Na,K,Ca,Sr,Ba,Cu,Pb)
+       karakteristik alev rengi — animasyonlu 3D alev + quiz modu.
+   37) 🔌 Redoks Yarı Tepkime Dengeleyici: 6 yaygın YKS/AYT örneği,
+       elektron kazanma/kaybetme yöntemiyle adım adım dengeleme.
+   38) 💥 Tepkime Hızı (Kinetik) 3D: Çarpışma teorisi simülasyonu —
+       derişim/sıcaklık/katalizör kontrolleri, canlı ölçülen tepkime
+       hızı (başarılı çarpışma/saniye), gerçek parçacık fiziği.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -1606,7 +1621,8 @@
     {id:'prova', e:'\ud83c\udf93', n:'Prova Sava\u015f\u00e7\u0131s\u0131', d:'Bir YKS provas\u0131 bitir',    f:function(s){ return s.scores.some(function(x){ return x.m === 'exam'; }); }},
     {id:'cmpu',  e:'\u2697\ufe0f', n:'Bile\u015fik Ustas\u0131',   d:'Bile\u015fik testinde %80+ yap',         f:function(s){ return s.scores.some(function(x){ return (x.t === 'cmp2name' || x.t === 'name2cmp') && x.p >= 80; }); }},
     {id:'temiz', e:'\ud83e\uddf9', n:'Temiz Sayfa',                d:'Yanl\u0131\u015f listeni tamamen temizle', f:function(s){ return !!s.flags.cleaned; }},
-    {id:'denge', e:'\u2696\ufe0f', n:'Dengeleyici',                d:'10 denklemi do\u011fru dengele',         f:function(s){ return s.bal.c >= 10; }}
+    {id:'denge', e:'\u2696\ufe0f', n:'Dengeleyici',                d:'10 denklemi do\u011fru dengele',         f:function(s){ return s.bal.c >= 10; }},
+    {id:'iupac', e:'\ud83e\uddea', n:'IUPAC \u015eampiyonu',       d:'IUPAC adland\u0131rma testinde %80+ yap', f:function(s){ return s.scores.some(function(x){ return (x.t === 'hc2name' || x.t === 'name2hc') && x.p >= 80; }); }}
   ];
   function badgeState(){
     return {
@@ -5644,12 +5660,24 @@
         '<div class="tc" id="tile-gv" onclick="nav(\'gv\')"><div class="ti">\ud83d\udd0b</div><div class="tt">Galvanik H\u00fccre 3D</div><div class="td">Kendili\u011finden redoks, tuz k\u00f6pr\u00fcs\u00fc, voltmetre \u2014 3D sim\u00fclasyon.</div></div>');
     gvBindCanvas();
     gvRenderInfo();
+
+    // Rozet: 🔋 Volta Ustası
+    try {
+      BADGES.push({ id: 'gv', e: '\ud83d\udd0b', n: 'Volta Ustas\u0131', d: 'T\u00fcm 10 galvanik h\u00fccre \u00e7iftini incele',
+                    f: function(s){ return ((s.flags.gvSeen || []).length) >= 10; } });
+    } catch (e) { /* sessiz */ }
   }
 
   window.gvSetPair = function(idx, btn){
     gvInit(idx);
     if (btn) selectInRow(btn);
     gvRenderInfo();
+    try {
+      var fl = sget('rk_flags', {});
+      fl.gvSeen = fl.gvSeen || [];
+      if (fl.gvSeen.indexOf(idx) === -1) { fl.gvSeen.push(idx); sset('rk_flags', fl); }
+      if (typeof checkBadges === 'function') checkBadges(true);
+    } catch (e) { /* sessiz */ }
   };
 
   function gvLoop(){
@@ -5709,8 +5737,16 @@
     s -= (eqSt.temp - 1) * 0.34;       // sıcaklık artışı → ekzotermik ileri tepkimeyi tersine çevirir
     return Math.max(0.06, Math.min(0.94, s));
   }
-  function eqSetPressure(p, btn){ eqSt.pressure = p; eqSt.shiftTarget = eqComputeShiftTarget(); if (btn) selectInRow(btn); eqRenderInfo(); }
-  function eqSetTemp(t, btn){ eqSt.temp = t; eqSt.shiftTarget = eqComputeShiftTarget(); if (btn) selectInRow(btn); eqRenderInfo(); }
+  function eqMarkUsed(key){
+    try {
+      var fl = sget('rk_flags', {});
+      fl.eqUsed = fl.eqUsed || {};
+      if (!fl.eqUsed[key]) { fl.eqUsed[key] = 1; sset('rk_flags', fl); }
+      if (typeof checkBadges === 'function') checkBadges(true);
+    } catch (e) { /* sessiz */ }
+  }
+  function eqSetPressure(p, btn){ eqSt.pressure = p; eqSt.shiftTarget = eqComputeShiftTarget(); if (btn) selectInRow(btn); eqRenderInfo(); eqMarkUsed('p'); }
+  function eqSetTemp(t, btn){ eqSt.temp = t; eqSt.shiftTarget = eqComputeShiftTarget(); if (btn) selectInRow(btn); eqRenderInfo(); eqMarkUsed('t'); }
   function eqNudge(kind){
     // Derişim müdahalesi: tepken eklemek/ürünü çekmek dengeyi sağa (NH3),
     // ürün eklemek/tepkeni çekmek dengeyi sola kaydırır (geçici, sonra yeniden yerleşir).
@@ -5718,6 +5754,7 @@
     eqSt.nudge = Math.max(-0.35, Math.min(0.35, eqSt.nudge + dir * 0.22));
     eqSt.nudgeDecay = 1;
     eqRenderInfo();
+    eqMarkUsed('n');
   }
 
   function eqBuildUnits(){
@@ -5848,11 +5885,11 @@
     '</div>';
 
   function setupEQ(){
-    if (document.getElementById('s-eq')) return;
+    if (document.getElementById('s-ledenge')) return;
     var app = document.querySelector('.app');
     if (!app) return;
     app.insertAdjacentHTML('beforeend',
-      '<div id="s-eq" style="display:none"><div class="pw narrow">' +
+      '<div id="s-ledenge" style="display:none"><div class="pw narrow">' +
         '<h1 class="ptitle">\u2696\ufe0f Kimyasal Denge 3D</h1>' +
         '<p class="psub">Le Chatelier \u0130lkesi \u2014 N\u2082 + 3H\u2082 \u21cc 2NH\u2083. Bas\u0131n\u00e7, s\u0131cakl\u0131k ve derişimi de\u011fi\u015ftir, dengenin canl\u0131 kaymasını izle.</p>' +
         '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
@@ -5882,14 +5919,14 @@
         '<div id="eq-info" style="margin-bottom:16px"></div>' +
         EQ_THEORY_HTML +
       '</div></div>');
-    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-eq') === -1) SCREENS.push('s-eq');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-ledenge') === -1) SCREENS.push('s-ledenge');
     var mn = document.getElementById('mn');
-    if (mn && !document.getElementById('mn-eq'))
-      mn.insertAdjacentHTML('beforeend', '<button id="mn-eq" onclick="nav(\'eq\')">\u2696\ufe0f Kimyasal Denge 3D</button>');
+    if (mn && !document.getElementById('mn-ledenge'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-ledenge" onclick="nav(\'ledenge\')">\u2696\ufe0f Kimyasal Denge 3D</button>');
     var tg = document.querySelector('#s-home .tgrid');
-    if (tg && !document.getElementById('tile-eq'))
+    if (tg && !document.getElementById('tile-ledenge'))
       tg.insertAdjacentHTML('afterbegin',
-        '<div class="tc" id="tile-eq" onclick="nav(\'eq\')"><div class="ti">\u2696\ufe0f</div><div class="tt">Kimyasal Denge 3D</div><div class="td">Le Chatelier ilkesi \u2014 basın\u00e7/s\u0131cakl\u0131k/derişim ile canlı denge kayması.</div></div>');
+        '<div class="tc" id="tile-ledenge" onclick="nav(\'ledenge\')"><div class="ti">\u2696\ufe0f</div><div class="tt">Kimyasal Denge 3D</div><div class="td">Le Chatelier ilkesi \u2014 basın\u00e7/s\u0131cakl\u0131k/derişim ile canlı denge kayması.</div></div>');
     eqBindCanvas();
     eqRenderInfo();
   }
@@ -5899,7 +5936,7 @@
   window.eqNudge = eqNudge;
 
   function eqLoop(){
-    var scr = document.getElementById('s-eq');
+    var scr = document.getElementById('s-ledenge');
     if (!scr || scr.style.display === 'none') { eqStop(); return; }
     eqSt.anim = requestAnimationFrame(eqLoop);
     var cv = document.getElementById('eq-cv');
@@ -5936,6 +5973,697 @@
   function eqEnter(){ setTimeout(eqStart, 80); }
   function eqLeave(){ eqStop(); }
 
+  // ---------- 17. TEPKİME TÜRÜ SINIFLANDIRICI ----------
+  var RXN_TYPES = {
+    sentez: { n:'Sentez (Birleşme)', c:'#22c55e', d:'\u0130ki ya da daha fazla madde birle\u015fip TEK bir \u00fcr\u00fcn olu\u015fturur: A + B \u2192 AB' },
+    analiz: { n:'Analiz (Ayr\u0131\u015fma)', c:'#3b82f6', d:'TEK bir madde, iki ya da daha fazla \u00fcr\u00fcne ayr\u0131\u015f\u0131r: AB \u2192 A + B' },
+    yerdeg: { n:'Yer De\u011fi\u015ftirme (Tekli)', c:'#f59e0b', d:'Bir element, bir bile\u015fikteki ba\u015fka bir elementin yerini al\u0131r: A + BC \u2192 AC + B' },
+    ciftdeg: { n:'\u00c7ift De\u011fi\u015fim (Bile\u015fim De\u011fi\u015ftirme)', c:'#a855f7', d:'\u0130ki bile\u015fik, katyon/anyonlar\u0131n\u0131 kar\u015f\u0131l\u0131kl\u0131 de\u011fi\u015ftirir: AB + CD \u2192 AD + CB' }
+  };
+  var RXN_LIST = [
+    { eq:'2H\u2082 + O\u2082 \u2192 2H\u2082O', t:'sentez', not:'\u0130ki element birle\u015fip tek \u00fcr\u00fcn (su) olu\u015fturdu.' },
+    { eq:'N\u2082 + 3H\u2082 \u2192 2NH\u2083', t:'sentez', not:'Haber-Bosch s\u00fcreci \u2014 iki gaz birle\u015fip amonyak verir.' },
+    { eq:'C + O\u2082 \u2192 CO\u2082', t:'sentez', not:'Karbonun yanmas\u0131 \u2014 klasik bir birle\u015fme tepkimesi.' },
+    { eq:'CaO + H\u2082O \u2192 Ca(OH)\u2082', t:'sentez', not:'S\u00f6nmemi\u015f kire\u00e7 + su \u2192 s\u00f6nm\u00fc\u015f kire\u00e7.' },
+    { eq:'SO\u2083 + H\u2082O \u2192 H\u2082SO\u2084', t:'sentez', not:'K\u00fck\u00fcrt trioksit + su \u2192 s\u00fclf\u00fcrik asit.' },
+    { eq:'2H\u2082O \u2192 2H\u2082 + O\u2082', t:'analiz', not:'Suyun elektrolizle ayr\u0131\u015fmas\u0131.' },
+    { eq:'CaCO\u2083 \u2192 CaO + CO\u2082', t:'analiz', not:'Kire\u00e7ta\u015f\u0131n\u0131n \u0131s\u0131yla ayr\u0131\u015fmas\u0131 (kalsinasyon).' },
+    { eq:'2KClO\u2083 \u2192 2KCl + 3O\u2082', t:'analiz', not:'Potasyum klorat\u0131n ayr\u0131\u015farak oksijen vermesi.' },
+    { eq:'2H\u2082O\u2082 \u2192 2H\u2082O + O\u2082', t:'analiz', not:'Hidrojen peroksitin ayr\u0131\u015fmas\u0131.' },
+    { eq:'2NaHCO\u2083 \u2192 Na\u2082CO\u2083 + H\u2082O + CO\u2082', t:'analiz', not:'Karbonat\u0131n \u0131s\u0131yla ayr\u0131\u015fmas\u0131.' },
+    { eq:'Zn + CuSO\u2084 \u2192 ZnSO\u2084 + Cu', t:'yerdeg', not:'\u00c7inko, bak\u0131r\u0131n yerini al\u0131r (\u00e7inko daha aktif).' },
+    { eq:'Fe + CuSO\u2084 \u2192 FeSO\u2084 + Cu', t:'yerdeg', not:'Demir, bak\u0131r\u0131n yerini al\u0131r.' },
+    { eq:'2Na + 2H\u2082O \u2192 2NaOH + H\u2082', t:'yerdeg', not:'Sodyum, suyun hidrojeninin yerini al\u0131r.' },
+    { eq:'Cl\u2082 + 2NaBr \u2192 2NaCl + Br\u2082', t:'yerdeg', not:'Klor, bromun yerini al\u0131r (klor daha aktif halojen).' },
+    { eq:'Mg + 2HCl \u2192 MgCl\u2082 + H\u2082', t:'yerdeg', not:'Magnezyum, asitteki hidrojenin yerini al\u0131r.' },
+    { eq:'AgNO\u2083 + NaCl \u2192 AgCl + NaNO\u2083', t:'ciftdeg', not:'A\u011f\u2019\u0131n katyonu Na\u2019n\u0131n katyonuyla yer de\u011fi\u015ftirir; AgCl \u00e7\u00f6kelir.' },
+    { eq:'BaCl\u2082 + Na\u2082SO\u2084 \u2192 BaSO\u2084 + 2NaCl', t:'ciftdeg', not:'BaSO\u2084 \u00e7\u00f6kele\u011fi olu\u015fur.' },
+    { eq:'HCl + NaOH \u2192 NaCl + H\u2082O', t:'ciftdeg', not:'N\u00f6tralle\u015fme tepkimesi \u2014 asit + baz \u2192 tuz + su.' },
+    { eq:'Pb(NO\u2083)\u2082 + 2KI \u2192 PbI\u2082 + 2KNO\u2083', t:'ciftdeg', not:'Sar\u0131 PbI\u2082 \u00e7\u00f6keleği klasik bir \u00e7ift de\u011fi\u015fim \u00f6rne\u011fidir.' },
+    { eq:'CuSO\u2084 + 2NaOH \u2192 Cu(OH)\u2082 + Na\u2082SO\u2084', t:'ciftdeg', not:'Mavi Cu(OH)\u2082 \u00e7\u00f6kele\u011fi olu\u015fur.' }
+  ];
+  var rxnSt = { cur: null, score: 0, total: 0, order: [], idx: 0 };
+
+  function rxnShuffle(){
+    rxnSt.order = RXN_LIST.map(function(_, i){ return i; });
+    for (var i = rxnSt.order.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp = rxnSt.order[i]; rxnSt.order[i] = rxnSt.order[j]; rxnSt.order[j] = tmp; }
+  }
+  rxnShuffle();
+
+  function setupRXN(){
+    if (document.getElementById('s-rxntype')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-rxntype" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83e\uddea Tepkime T\u00fcr\u00fc S\u0131n\u0131fland\u0131r\u0131c\u0131</h1>' +
+        '<p class="psub">Denklemi incele, hangi tepkime t\u00fcr\u00fc oldu\u011funu bul.</p>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;color:var(--tx3)">' +
+          '<span id="rxn-prog">Soru 1/' + RXN_LIST.length + '</span>' +
+          '<span>\u2713 <span id="rxn-score" style="color:var(--gr);font-weight:700">0</span></span>' +
+        '</div>' +
+        '<div class="card" style="text-align:center;margin-bottom:14px">' +
+          '<div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Bu tepkime hangi t\u00fcrdendir?</div>' +
+          '<div id="rxn-eq" style="font-family:monospace;font-size:20px;font-weight:700;color:#fff;line-height:1.6;word-break:break-word"></div>' +
+        '</div>' +
+        '<div id="rxn-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px"></div>' +
+        '<div id="rxn-fb" style="display:none;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6"></div>' +
+        '<button type="button" id="rxn-next" onclick="rxnNext()" style="display:none;width:100%;padding:12px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;cursor:pointer">Sonraki \u2192</button>' +
+        '<div class="card" style="margin-top:20px">' +
+          '<div class="slbl">4 Tepkime T\u00fcr\u00fc</div>' +
+          '<div id="rxn-theory"></div>' +
+        '</div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-rxntype') === -1) SCREENS.push('s-rxntype');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-rxntype'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-rxntype" onclick="nav(\'rxntype\')">\ud83e\uddea Tepkime T\u00fcr\u00fc S\u0131n\u0131fland\u0131r\u0131c\u0131</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-rxntype'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-rxntype" onclick="nav(\'rxntype\')"><div class="ti">\ud83e\uddea</div><div class="tt">Tepkime T\u00fcr\u00fc S\u0131n\u0131fland\u0131r\u0131c\u0131</div><div class="td">Sentez/analiz/yer de\u011fi\u015ftirme/\u00e7ift de\u011fi\u015fim tan\u0131ma quiz\u2019i.</div></div>');
+
+    var th = '';
+    ['sentez','analiz','yerdeg','ciftdeg'].forEach(function(k){
+      var rt = RXN_TYPES[k];
+      th += '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
+        '<div style="font-size:13px;font-weight:700;color:' + rt.c + '">' + rt.n + '</div>' +
+        '<div style="font-size:12px;color:var(--tx2);margin-top:2px">' + rt.d + '</div></div>';
+    });
+    document.getElementById('rxn-theory').innerHTML = th;
+  }
+  function rxnEnter(){ rxnSt.idx = 0; rxnSt.score = 0; rxnSt.total = 0; rxnShuffle(); rxnRender(); }
+
+  function rxnRender(){
+    if (rxnSt.idx >= rxnSt.order.length) { rxnShuffle(); rxnSt.idx = 0; }
+    var item = RXN_LIST[rxnSt.order[rxnSt.idx]];
+    rxnSt.cur = item;
+    document.getElementById('rxn-prog').textContent = 'Soru ' + (rxnSt.idx+1) + '/' + RXN_LIST.length;
+    document.getElementById('rxn-score').textContent = rxnSt.score;
+    document.getElementById('rxn-eq').textContent = item.eq;
+    var fb = document.getElementById('rxn-fb'); fb.style.display = 'none';
+    document.getElementById('rxn-next').style.display = 'none';
+    var keys = ['sentez','analiz','yerdeg','ciftdeg'];
+    var html = '';
+    keys.forEach(function(k){
+      html += '<button type="button" class="ob2" onclick="rxnCheck(\'' + k + '\',this)">' + RXN_TYPES[k].n + '</button>';
+    });
+    document.getElementById('rxn-opts').innerHTML = html;
+  }
+  window.rxnCheck = function(sel, btn){
+    var item = rxnSt.cur;
+    var btns = document.getElementById('rxn-opts').querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
+    var fb = document.getElementById('rxn-fb');
+    rxnSt.total++;
+    if (sel === item.t) {
+      rxnSt.score++;
+      btn.className = 'ob2 cor';
+      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#86efac';
+      fb.innerHTML = '\u2713 Do\u011fru! ' + item.not;
+    } else {
+      btn.className = 'ob2 wro';
+      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5';
+      fb.innerHTML = '\u2717 Yanl\u0131\u015f. Do\u011fru cevap: <b>' + RXN_TYPES[item.t].n + '</b> \u2014 ' + item.not;
+    }
+    document.getElementById('rxn-score').textContent = rxnSt.score;
+    document.getElementById('rxn-next').style.display = 'block';
+  };
+  window.rxnNext = function(){ rxnSt.idx++; rxnRender(); };
+
+  // ---------- 18. ALEV TESTİ (ALEV BOYAMA) GALERİSİ ----------
+  var FLAME_LIST = [
+    { sym:'Li', name:'Lityum', ion:'Li\u207a', col:['#ff6b6b','#c0392b'], hex:'#e74c3c', d:'Koyu k\u0131rm\u0131z\u0131 / karmen k\u0131rm\u0131z\u0131s\u0131. Havai fi\u015feklerde k\u0131rm\u0131z\u0131 renk i\u00e7in kullan\u0131l\u0131r.' },
+    { sym:'Na', name:'Sodyum', ion:'Na\u207a', col:['#ffe082','#f39c12'], hex:'#f1c40f', d:'Yo\u011fun SARI \u2014 en karakteristik ve en g\u00fc\u00e7l\u00fc alev rengidir; \u00e7ok az miktar bile t\u00fcm alevi sar\u0131ya boyar (sokak lambalar\u0131nda kullan\u0131l\u0131r\u0131d\u0131).' },
+    { sym:'K', name:'Potasyum', ion:'K\u207a', col:['#c39bd3','#8e44ad'], hex:'#9b59b6', d:'Soluk MOR / leylak rengi \u2014 sodyumun sar\u0131 rengi maskeleyebilece\u011fi i\u00e7in genelde kobalt cam\u0131yla bak\u0131l\u0131r.' },
+    { sym:'Ca', name:'Kalsiyum', ion:'Ca\u00b2\u207a', col:['#ff8a65','#d84315'], hex:'#e67e22', d:'Tu\u011fla k\u0131rm\u0131z\u0131s\u0131 / turuncu-k\u0131rm\u0131z\u0131.' },
+    { sym:'Sr', name:'Stronsiyum', ion:'Sr\u00b2\u207a', col:['#ff5252','#b71c1c'], hex:'#c0392b', d:'Parlak k\u0131rm\u0131z\u0131 \u2014 havai fi\u015feklerde ve i\u015faret f\u0130\u015feklerinde k\u0131rm\u0131z\u0131 renk kayna\u011f\u0131d\u0131r.' },
+    { sym:'Ba', name:'Baryum', ion:'Ba\u00b2\u207a', col:['#aed581','#558b2f'], hex:'#7cb342', d:'A\u00e7\u0131k ye\u015fil / sar\u0131-ye\u015fil.' },
+    { sym:'Cu', name:'Bak\u0131r', ion:'Cu\u00b2\u207a', col:['#4dd0e1','#00695c'], hex:'#16a085', d:'Turkuaz / ye\u015fil-mavi \u2014 havai fi\u015feklerde mavi-ye\u015fil renk kayna\u011f\u0131d\u0131r.' },
+    { sym:'Pb', name:'Kur\u015fun', ion:'Pb\u00b2\u207a', col:['#90a4ae','#455a64'], hex:'#607d8b', d:'Soluk mavi-beyaz \u2014 belirgin de\u011fildir.' }
+  ];
+  var flameIdx = 0;
+  var flameSt = { t: 0, anim: null, bound: false };
+  var flameQuizSt = { cur: null, score: 0, total: 0, order: [], idx: 0 };
+
+  function setupFlame(){
+    if (document.getElementById('s-alev')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var thumbs = '';
+    FLAME_LIST.forEach(function(f, i){
+      thumbs += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="flameSetIdx(' + i + ',this)">' + f.sym + '</button>';
+    });
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-alev" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udd25 Alev Testi (Alev Boyama)</h1>' +
+        '<p class="psub">Metal iyonlar\u0131n\u0131n bek alevinde verdi\u011fi karakteristik renkler.</p>' +
+        '<div class="tabs" id="alev-tabs">' +
+          '<button class="tab on" onclick="tswitch(\'alev-tabs\',\'alev-tps\',0)">\ud83d\udd25 Galeri</button>' +
+          '<button class="tab" onclick="tswitch(\'alev-tabs\',\'alev-tps\',1)">\u2753 Quiz</button>' +
+        '</div>' +
+        '<div id="alev-tps">' +
+          '<div class="tp on">' +
+            '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:12px"><div style="display:flex;gap:6px;min-width:max-content">' + thumbs + '</div></div>' +
+            '<div style="background:#050510;border:1px solid rgba(255,140,0,.3);border-radius:16px;overflow:hidden;margin-bottom:14px">' +
+              '<canvas id="alev-cv" style="width:100%;display:block" height="240"></canvas>' +
+            '</div>' +
+            '<div class="card" id="alev-info"></div>' +
+          '</div>' +
+          '<div class="tp">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;color:var(--tx3)">' +
+              '<span id="alevq-prog">Soru 1/' + FLAME_LIST.length + '</span>' +
+              '<span>\u2713 <span id="alevq-score" style="color:var(--gr);font-weight:700">0</span></span>' +
+            '</div>' +
+            '<div style="background:#050510;border:1px solid rgba(255,140,0,.3);border-radius:16px;overflow:hidden;margin-bottom:14px">' +
+              '<canvas id="alevq-cv" style="width:100%;display:block" height="180"></canvas>' +
+            '</div>' +
+            '<div style="text-align:center;font-size:12px;color:var(--tx3);margin-bottom:10px">Bu alev rengi hangi metale ait?</div>' +
+            '<div id="alevq-opts" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px"></div>' +
+            '<div id="alevq-fb" style="display:none;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6"></div>' +
+            '<button type="button" id="alevq-next" onclick="flameQNext()" style="display:none;width:100%;padding:12px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;cursor:pointer">Sonraki \u2192</button>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-alev') === -1) SCREENS.push('s-alev');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-alev'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-alev" onclick="nav(\'alev\')">\ud83d\udd25 Alev Testi</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-alev'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-alev" onclick="nav(\'alev\')"><div class="ti">\ud83d\udd25</div><div class="tt">Alev Testi</div><div class="td">Metal iyonlar\u0131n\u0131n karakteristik alev renkleri, animasyonlu + quiz.</div></div>');
+    flameRenderInfo();
+    flameBind();
+  }
+
+  window.flameSetIdx = function(i, btn){ flameIdx = i; if (btn) selectInRow(btn); flameRenderInfo(); };
+  function flameRenderInfo(){
+    var box = document.getElementById('alev-info');
+    if (!box) return;
+    var f = FLAME_LIST[flameIdx];
+    box.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+      '<span style="width:22px;height:22px;border-radius:50%;background:' + f.hex + ';display:inline-block;box-shadow:0 0 12px ' + f.hex + '"></span>' +
+      '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff">' + f.name + ' (' + f.ion + ')</div></div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7">' + f.d + '</p>';
+  }
+
+  function flameDrawOne(x, W, H2, f, t, cx){
+    cx = cx === undefined ? W/2 : cx;
+    var baseY = H2 - 20;
+    var flicker = Math.sin(t*7)*3 + Math.sin(t*13)*1.5;
+    var h = 90 + Math.sin(t*3)*6;
+    var w = 34 + Math.sin(t*5)*4;
+    var grd = x.createRadialGradient(cx, baseY - h*0.55, 4, cx, baseY - h*0.4, w*1.4);
+    grd.addColorStop(0, f.col[0]); grd.addColorStop(0.55, f.hex); grd.addColorStop(1, f.col[1]);
+    x.save();
+    x.translate(flicker*0.3, 0);
+    x.beginPath();
+    x.moveTo(cx, baseY);
+    x.bezierCurveTo(cx - w, baseY - h*0.35, cx - w*0.6 + flicker, baseY - h*0.85, cx + flicker*0.5, baseY - h);
+    x.bezierCurveTo(cx + w*0.6 + flicker, baseY - h*0.85, cx + w, baseY - h*0.35, cx, baseY);
+    x.closePath();
+    x.fillStyle = grd; x.globalAlpha = 0.9; x.fill(); x.globalAlpha = 1;
+    x.restore();
+    // iç mavi taban (bek alevi)
+    x.beginPath(); x.ellipse(cx, baseY - 4, 12, 16, 0, 0, 6.283);
+    x.fillStyle = 'rgba(90,160,255,0.5)'; x.fill();
+    // kıvılcım noktaları
+    for (var i = 0; i < 6; i++) {
+      var ph = t*4 + i*1.7;
+      var sx = cx + Math.sin(ph*1.3)*w*0.5, sy = baseY - (h*0.3 + ((ph*30) % (h*0.8)));
+      x.beginPath(); x.arc(sx, sy, 1.6, 0, 6.283); x.fillStyle = 'rgba(255,255,255,0.5)'; x.fill();
+    }
+    // bek (destek)
+    x.fillStyle = '#37474f';
+    x.fillRect(cx - 16, baseY, 32, 16);
+  }
+
+  function flameLoop(){
+    var scr = document.getElementById('s-alev');
+    if (!scr || scr.style.display === 'none') { flameStop(); return; }
+    flameSt.anim = requestAnimationFrame(flameLoop);
+    var cv = document.getElementById('alev-cv');
+    if (cv) {
+      var rect = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+      var W = rect.width || 300, H2 = 240;
+      if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+      var x = cv.getContext('2d');
+      x.setTransform(dpr, 0, 0, dpr, 0, 0);
+      try {
+        x.fillStyle = '#050510'; x.fillRect(0, 0, W, H2);
+        flameSt.t += 0.016;
+        flameDrawOne(x, W, H2, FLAME_LIST[flameIdx], flameSt.t);
+      } catch (e) { drawErr(x, W, H2, e); }
+    }
+    var qcv = document.getElementById('alevq-cv');
+    if (qcv && flameQuizSt.cur) {
+      var rect2 = qcv.getBoundingClientRect(), dpr2 = window.devicePixelRatio || 1;
+      var W2 = rect2.width || 300, H3 = 180;
+      if (Math.abs(qcv.width - W2*dpr2) > 2 || Math.abs(qcv.height - H3*dpr2) > 2) { qcv.width = W2*dpr2; qcv.height = H3*dpr2; }
+      var x2 = qcv.getContext('2d');
+      x2.setTransform(dpr2, 0, 0, dpr2, 0, 0);
+      try {
+        x2.fillStyle = '#050510'; x2.fillRect(0, 0, W2, H3);
+        flameDrawOne(x2, W2, H3, flameQuizSt.cur, flameSt.t);
+      } catch (e) { drawErr(x2, W2, H3, e); }
+    }
+  }
+  function flameStop(){ if (flameSt.anim) { cancelAnimationFrame(flameSt.anim); flameSt.anim = null; } }
+  function flameStart(){ if (flameSt.anim) cancelAnimationFrame(flameSt.anim); flameLoop(); }
+  function flameBind(){ /* statik galeri, sürükleme gerekmiyor */ }
+  function flameEnter(){ setTimeout(flameStart, 80); flameQEnter(); }
+  function flameLeave(){ flameStop(); }
+
+  function flameQShuffle(){
+    flameQuizSt.order = FLAME_LIST.map(function(_, i){ return i; });
+    for (var i = flameQuizSt.order.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp = flameQuizSt.order[i]; flameQuizSt.order[i] = flameQuizSt.order[j]; flameQuizSt.order[j] = tmp; }
+  }
+  function flameQEnter(){ flameQuizSt.idx = 0; flameQuizSt.score = 0; flameQShuffle(); flameQRender(); }
+  function flameQRender(){
+    if (flameQuizSt.idx >= flameQuizSt.order.length) { flameQShuffle(); flameQuizSt.idx = 0; }
+    var item = FLAME_LIST[flameQuizSt.order[flameQuizSt.idx]];
+    flameQuizSt.cur = item;
+    var progEl = document.getElementById('alevq-prog'), scEl = document.getElementById('alevq-score');
+    if (progEl) progEl.textContent = 'Soru ' + (flameQuizSt.idx+1) + '/' + FLAME_LIST.length;
+    if (scEl) scEl.textContent = flameQuizSt.score;
+    var fb = document.getElementById('alevq-fb'); if (fb) fb.style.display = 'none';
+    var nb = document.getElementById('alevq-next'); if (nb) nb.style.display = 'none';
+    var opts = FLAME_LIST.map(function(f){ return f; });
+    for (var i = opts.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp = opts[i]; opts[i] = opts[j]; opts[j] = tmp; }
+    opts = opts.slice(0, 4);
+    if (opts.indexOf(item) === -1) opts[0] = item;
+    for (var s = opts.length - 1; s > 0; s--) { var j2 = Math.floor(Math.random()*(s+1)); var tmp2 = opts[s]; opts[s] = opts[j2]; opts[j2] = tmp2; }
+    var html = '';
+    opts.forEach(function(o){ html += '<button type="button" class="ob2" onclick="flameQCheck(\'' + o.sym + '\',this)">' + o.name + '</button>'; });
+    var og = document.getElementById('alevq-opts'); if (og) og.innerHTML = html;
+  }
+  window.flameQCheck = function(sel, btn){
+    var item = flameQuizSt.cur;
+    var btns = document.getElementById('alevq-opts').querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
+    var fb = document.getElementById('alevq-fb');
+    flameQuizSt.total++;
+    if (sel === item.sym) {
+      flameQuizSt.score++;
+      btn.className = 'ob2 cor';
+      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#86efac';
+      fb.innerHTML = '\u2713 Do\u011fru! ' + item.name + ' \u2014 ' + item.d;
+    } else {
+      btn.className = 'ob2 wro';
+      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5';
+      fb.innerHTML = '\u2717 Yanl\u0131\u015f. Do\u011fru cevap: <b>' + item.name + '</b> \u2014 ' + item.d;
+    }
+    document.getElementById('alevq-score').textContent = flameQuizSt.score;
+    document.getElementById('alevq-next').style.display = 'block';
+  };
+  window.flameQNext = function(){ flameQuizSt.idx++; flameQRender(); };
+
+  // ---------- 19. REDOKS YARI TEPKİME DENGELEYİCİ ----------
+  var REDOX_LIST = [
+    {
+      name: 'Fe\u00b2\u207a + MnO\u2084\u207b (Asidik Ortam)',
+      unbal: 'Fe\u00b2\u207a + MnO\u2084\u207b \u2192 Fe\u00b3\u207a + Mn\u00b2\u207a',
+      steps: [
+        'Y\u00fckseltgenme yar\u0131 tepkimesi: Fe\u00b2\u207a \u2192 Fe\u00b3\u207a + e\u207b',
+        '\u0130ndirgenme yar\u0131 tepkimesi (dengesiz): MnO\u2084\u207b \u2192 Mn\u00b2\u207a',
+        'Oksijenleri dengele (su ile): MnO\u2084\u207b + 8H\u207a \u2192 Mn\u00b2\u207a + 4H\u2082O',
+        'Y\u00fc\u00fc dengele (elektron ekle): MnO\u2084\u207b + 8H\u207a + 5e\u207b \u2192 Mn\u00b2\u207a + 4H\u2082O',
+        'Elektron say\u0131lar\u0131n\u0131 e\u015fitle: Fe\u00b2\u207a yar\u0131 tepkimesini 5 ile \u00e7arp \u2014 5Fe\u00b2\u207a \u2192 5Fe\u00b3\u207a + 5e\u207b',
+        'Yar\u0131 tepkimeleri topla (elektronlar sadele\u015fir):'
+      ],
+      final: '5Fe\u00b2\u207a + MnO\u2084\u207b + 8H\u207a \u2192 5Fe\u00b3\u207a + Mn\u00b2\u207a + 4H\u2082O',
+      not: 'MnO\u2084\u207b\u2019deki Mn +7\u2019den +2\u2019ye iner (5 elektron al\u0131r); her Fe\u00b2\u207a 1 elektron verir \u2014 bu y\u00fczden 5 kat Fe gerekir.'
+    },
+    {
+      name: 'Fe\u00b2\u207a + Cr\u2082O\u2087\u00b2\u207b (Asidik Ortam)',
+      unbal: 'Fe\u00b2\u207a + Cr\u2082O\u2087\u00b2\u207b \u2192 Fe\u00b3\u207a + Cr\u00b3\u207a',
+      steps: [
+        'Y\u00fckseltgenme yar\u0131 tepkimesi: Fe\u00b2\u207a \u2192 Fe\u00b3\u207a + e\u207b',
+        'Cr atomlar\u0131n\u0131 dengele: Cr\u2082O\u2087\u00b2\u207b \u2192 2Cr\u00b3\u207a',
+        'Oksijenleri dengele: Cr\u2082O\u2087\u00b2\u207b + 14H\u207a \u2192 2Cr\u00b3\u207a + 7H\u2082O',
+        'Y\u00fck\u00fc dengele: Cr\u2082O\u2087\u00b2\u207b + 14H\u207a + 6e\u207b \u2192 2Cr\u00b3\u207a + 7H\u2082O',
+        'Elektronlar\u0131 e\u015fitle: Fe\u00b2\u207a yar\u0131 tepkimesini 6 ile \u00e7arp \u2014 6Fe\u00b2\u207a \u2192 6Fe\u00b3\u207a + 6e\u207b',
+        'Yar\u0131 tepkimeleri topla:'
+      ],
+      final: '6Fe\u00b2\u207a + Cr\u2082O\u2087\u00b2\u207b + 14H\u207a \u2192 6Fe\u00b3\u207a + 2Cr\u00b3\u207a + 7H\u2082O',
+      not: 'Cr\u2082O\u2087\u00b2\u207b\u2019deki 2 Cr atomu (her biri +6\u2019dan +3\u2019e, toplam 6 elektron) \u2014 6 kat Fe\u00b2\u207a gerekir.'
+    },
+    {
+      name: 'Zn + Cu\u00b2\u207a (Daniell Tepkimesi)',
+      unbal: 'Zn + Cu\u00b2\u207a \u2192 Zn\u00b2\u207a + Cu',
+      steps: [
+        'Y\u00fckseltgenme yar\u0131 tepkimesi: Zn \u2192 Zn\u00b2\u207a + 2e\u207b',
+        '\u0130ndirgenme yar\u0131 tepkimesi: Cu\u00b2\u207a + 2e\u207b \u2192 Cu',
+        'Her iki yar\u0131 tepkimede de elektron say\u0131s\u0131 zaten E\u015e\u0130T (2\u015e\u00e7er) \u2014 \u00e7arpan gerekmez.',
+        'Yar\u0131 tepkimeleri topla:'
+      ],
+      final: 'Zn + Cu\u00b2\u207a \u2192 Zn\u00b2\u207a + Cu',
+      not: 'En basit redoks \u00f6rne\u011fi \u2014 galvanik h\u00fccrenin (Daniell h\u00fccresi) temel tepkimesi. Her iki metal de 2 elektron al\u0131p verdi\u011fi i\u00e7in katsay\u0131 gerekmez.'
+    },
+    {
+      name: 'I\u207b + MnO\u2084\u207b (Asidik Ortam)',
+      unbal: 'I\u207b + MnO\u2084\u207b \u2192 I\u2082 + Mn\u00b2\u207a',
+      steps: [
+        'Y\u00fckseltgenme (I atomlar\u0131n\u0131 dengele): 2I\u207b \u2192 I\u2082 + 2e\u207b',
+        '\u0130ndirgenme (dengesiz): MnO\u2084\u207b \u2192 Mn\u00b2\u207a',
+        'Oksijenleri dengele: MnO\u2084\u207b + 8H\u207a \u2192 Mn\u00b2\u207a + 4H\u2082O',
+        'Y\u00fck\u00fc dengele: MnO\u2084\u207b + 8H\u207a + 5e\u207b \u2192 Mn\u00b2\u207a + 4H\u2082O',
+        'Elektronlar\u0131 e\u015fitle (EKOK=10): I\u207b yar\u0131 tepkimesini 5, Mn yar\u0131 tepkimesini 2 ile \u00e7arp',
+        'Yar\u0131 tepkimeleri topla:'
+      ],
+      final: '10I\u207b + 2MnO\u2084\u207b + 16H\u207a \u2192 5I\u2082 + 2Mn\u00b2\u207a + 8H\u2082O',
+      not: 'Elektron say\u0131lar\u0131 (2 ve 5) farkl\u0131 oldu\u011fu i\u00e7in EKOK=10 kullan\u0131larak her iki yar\u0131 tepkime ayr\u0131 katsay\u0131yla \u00e7arp\u0131l\u0131r.'
+    },
+    {
+      name: 'Zn + NO\u2083\u207b (Seyreltik Asit)',
+      unbal: 'Zn + NO\u2083\u207b \u2192 Zn\u00b2\u207a + NH\u2084\u207a',
+      steps: [
+        'Y\u00fckseltgenme: Zn \u2192 Zn\u00b2\u207a + 2e\u207b',
+        '\u0130ndirgenme (N atomu +5\u2019ten \u22123\u2019e, 8 elektron al\u0131r): NO\u2083\u207b \u2192 NH\u2084\u207a',
+        'Oksijen/hidrojeni dengele: NO\u2083\u207b + 10H\u207a + 8e\u207b \u2192 NH\u2084\u207a + 3H\u2082O',
+        'Elektronlar\u0131 e\u015fitle: Zn yar\u0131 tepkimesini 4 ile \u00e7arp \u2014 4Zn \u2192 4Zn\u00b2\u207a + 8e\u207b',
+        'Yar\u0131 tepkimeleri topla:'
+      ],
+      final: '4Zn + NO\u2083\u207b + 10H\u207a \u2192 4Zn\u00b2\u207a + NH\u2084\u207a + 3H\u2082O',
+      not: 'A\u015f\u0131r\u0131 aktif metaller (Zn, Al, Mg) seyreltik nitrik asitle tepkimeye girdi\u011finde N, beklenenden \u00e7ok daha fazla (8 elektron) indirgenip NH\u2084\u207a\u2019ya kadar gidebilir.'
+    },
+    {
+      name: 'SO\u2083\u00b2\u207b + MnO\u2084\u207b (Bazik Ortam)',
+      unbal: 'SO\u2083\u00b2\u207b + MnO\u2084\u207b \u2192 SO\u2084\u00b2\u207b + MnO\u2082',
+      steps: [
+        'Y\u00fckseltgenme (oksijen ekle): SO\u2083\u00b2\u207b + 2OH\u207b \u2192 SO\u2084\u00b2\u207b + H\u2082O + 2e\u207b',
+        '\u0130ndirgenme (dengesiz): MnO\u2084\u207b \u2192 MnO\u2082',
+        'Bazik ortamda oksijeni OH\u207b/H\u2082O ile dengele: MnO\u2084\u207b + 2H\u2082O + 3e\u207b \u2192 MnO\u2082 + 4OH\u207b',
+        'Elektronlar\u0131 e\u015fitle (EKOK=6): SO\u2083\u00b2\u207b yar\u0131 tepkimesini 3, Mn yar\u0131 tepkimesini 2 ile \u00e7arp',
+        'Yar\u0131 tepkimeleri topla:'
+      ],
+      final: '3SO\u2083\u00b2\u207b + 2MnO\u2084\u207b + H\u2082O \u2192 3SO\u2084\u00b2\u207b + 2MnO\u2082 + 2OH\u207b',
+      not: 'Bazik ortamda H\u207a yerine OH\u207b ve H\u2082O kullan\u0131l\u0131r \u2014 asidik ortamdan fark\u0131 budur.'
+    }
+  ];
+  var redoxIdx = 0;
+  var redoxStepIdx = 0;
+
+  function setupRedox(){
+    if (document.getElementById('s-redoks')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var btns = '';
+    REDOX_LIST.forEach(function(r, i){ btns += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="redoxSetIdx(' + i + ',this)">' + r.name + '</button>'; });
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-redoks" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udd0c Redoks Yar\u0131 Tepkime Dengeleyici</h1>' +
+        '<p class="psub">Elektron kazanma/kaybetme (yar\u0131 tepkime) y\u00f6ntemiyle ad\u0131m ad\u0131m redoks dengeleme.</p>' +
+        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' + btns + '</div></div>' +
+        '<div class="card">' +
+          '<div class="slbl">Dengesiz Tepkime</div>' +
+          '<div id="redox-unbal" style="font-family:monospace;font-size:15px;color:#f59e0b;margin-bottom:16px;word-break:break-word"></div>' +
+          '<div class="slbl">Ad\u0131mlar</div>' +
+          '<div id="redox-steps" style="font-size:13px;color:var(--tx2);line-height:2;margin-bottom:14px"></div>' +
+          '<button type="button" id="redox-nextbtn" onclick="redoxNextStep()" style="width:100%;padding:11px;background:var(--ac);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:12px">Sonraki Ad\u0131m \u2192</button>' +
+          '<div id="redox-final" style="display:none;padding:14px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:var(--r)">' +
+            '<div class="slbl" style="color:#86efac">Dengeli Tepkime</div>' +
+            '<div style="font-family:monospace;font-size:15px;font-weight:700;color:#86efac;margin-bottom:8px" id="redox-finaleq"></div>' +
+            '<div style="font-size:12px;color:var(--tx2);line-height:1.6" id="redox-finalnot"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-redoks') === -1) SCREENS.push('s-redoks');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-redoks'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-redoks" onclick="nav(\'redoks\')">\ud83d\udd0c Redoks Dengeleyici</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-redoks'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-redoks" onclick="nav(\'redoks\')"><div class="ti">\ud83d\udd0c</div><div class="tt">Redoks Dengeleyici</div><div class="td">Yar\u0131 tepkime y\u00f6ntemiyle ad\u0131m ad\u0131m redoks dengeleme.</div></div>');
+    redoxRender();
+  }
+  window.redoxSetIdx = function(i, btn){ redoxIdx = i; redoxStepIdx = 0; if (btn) selectInRow(btn); redoxRender(); };
+  function redoxRender(){
+    var r = REDOX_LIST[redoxIdx];
+    document.getElementById('redox-unbal').textContent = r.unbal;
+    var html = '';
+    for (var i = 0; i < redoxStepIdx; i++) html += '<div style="padding:4px 0">' + (i+1) + '. ' + r.steps[i] + '</div>';
+    document.getElementById('redox-steps').innerHTML = html;
+    var nb = document.getElementById('redox-nextbtn');
+    var fin = document.getElementById('redox-final');
+    if (redoxStepIdx >= r.steps.length) {
+      nb.style.display = 'none';
+      fin.style.display = 'block';
+      document.getElementById('redox-finaleq').textContent = r.final;
+      document.getElementById('redox-finalnot').textContent = r.not;
+    } else {
+      nb.style.display = 'block';
+      fin.style.display = 'none';
+      nb.textContent = redoxStepIdx === r.steps.length - 1 ? 'Dengeli Tepkimeyi G\u00f6ster \u2192' : 'Sonraki Ad\u0131m \u2192';
+    }
+  }
+  window.redoxNextStep = function(){ redoxStepIdx++; redoxRender(); };
+  function redoxEnter(){ redoxStepIdx = 0; redoxRender(); }
+
+  // ---------- 20. TEPKİME HIZI (KİNETİK) 3D — ÇARPIŞMA TEORİSİ ----------
+  var kinSt = {
+    rotX: 0.3, rotY: 0.4, zoom: 1, fit: 1, spin: true, drag: false, lx:0, ly:0, dist:0,
+    t: 0, anim: null, stars: null, sw: 0, bound: false,
+    conc: 1,       // 0.5 az, 1 normal, 1.8 çok (parçacık sayısı çarpanı)
+    temp: 1,       // 0.6 düşük, 1 normal, 1.7 yüksek (hız çarpanı)
+    catalyst: false,
+    particlesA: [], particlesB: [],
+    successCount: 0, totalCollisions: 0, rateWindow: [], rateVal: 0
+  };
+  var KIN_BOX = 80;
+  var KIN_BASE_N = 9;
+
+  function kinInit(){
+    kinSt.particlesA = []; kinSt.particlesB = [];
+    var n = Math.round(KIN_BASE_N * kinSt.conc);
+    for (var i = 0; i < n; i++) {
+      kinSt.particlesA.push(kinRandPt());
+      kinSt.particlesB.push(kinRandPt());
+    }
+    kinSt.successCount = 0; kinSt.totalCollisions = 0; kinSt.rateWindow = [];
+  }
+  function kinRandPt(){
+    var spd = 0.6 * kinSt.temp;
+    var th = Math.random()*6.283, ph = Math.random()*6.283;
+    return {
+      x: (Math.random()-0.5)*KIN_BOX*1.6, y: (Math.random()-0.5)*KIN_BOX*1.6, z: (Math.random()-0.5)*KIN_BOX*1.6,
+      vx: Math.cos(th)*spd, vy: Math.sin(th)*Math.cos(ph)*spd, vz: Math.sin(th)*Math.sin(ph)*spd,
+      flash: 0
+    };
+  }
+  kinInit();
+
+  function kinSetConc(c, btn){ kinSt.conc = c; if (btn) selectInRow(btn); kinInit(); kinRenderInfo(); }
+  function kinSetTemp(t, btn){
+    kinSt.temp = t;
+    if (btn) selectInRow(btn);
+    var speedRatio = t;
+    kinSt.particlesA.concat(kinSt.particlesB).forEach(function(p){
+      var curSpd = Math.sqrt(p.vx*p.vx+p.vy*p.vy+p.vz*p.vz) || 0.001;
+      var targetSpd = 0.6 * speedRatio;
+      var f = targetSpd / curSpd;
+      p.vx *= f; p.vy *= f; p.vz *= f;
+    });
+    kinRenderInfo();
+  }
+  function kinToggleCatalyst(btn){
+    kinSt.catalyst = !kinSt.catalyst;
+    if (btn) btn.classList.toggle('sel2', kinSt.catalyst);
+    kinRenderInfo();
+  }
+
+  function kinRenderInfo(){
+    var box = document.getElementById('kin-info');
+    if (!box) return;
+    var factors = [];
+    factors.push('Derişim: ' + (kinSt.conc < 1 ? 'Az' : kinSt.conc > 1 ? '\u00c7ok' : 'Normal'));
+    factors.push('S\u0131cakl\u0131k: ' + (kinSt.temp < 1 ? 'D\u00fc\u015f\u00fck' : kinSt.temp > 1 ? 'Y\u00fcksek' : 'Normal'));
+    factors.push('Katalizör: ' + (kinSt.catalyst ? 'Var' : 'Yok'));
+    box.innerHTML = '<div class="card">' +
+      '<div class="slbl">Mevcut Ko\u015fullar</div>' +
+      '<div style="font-size:13px;color:var(--tx2);margin-bottom:12px">' + factors.join(' \u00b7 ') + '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center">' +
+        '<span style="font-size:13px;color:var(--tx3)">\u00d6l\u00e7\u00fclen Tepkime H\u0131z\u0131</span>' +
+        '<span id="kin-rate" style="font-family:Space Grotesk,sans-serif;font-size:22px;font-weight:800;color:#f59e0b">0</span>' +
+      '</div>' +
+      '<div style="font-size:11px;color:var(--tx3);margin-top:4px">Ba\u015far\u0131l\u0131 \u00e7arp\u0131\u015fma / saniye (aktivasyon enerjisini a\u015fanlar)</div>' +
+    '</div>';
+  }
+
+  var KIN_THEORY_HTML =
+    '<div class="card">' +
+      '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:8px">\ud83d\udca5 \u00c7arp\u0131\u015fma Teorisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:12px">Bir tepkimenin ger\u00e7ekle\u015fmesi i\u00e7in taneciklerin \u00f6nce \u00e7ARPI\u015eMASI, sonra bu \u00e7arp\u0131\u015fman\u0131n YETERLİ ENERJİYLE (aktivasyon enerjisi, Ea) ve UYGUN Y\u00d6NELİMLE ger\u00e7ekle\u015fmesi gerekir. Her \u00e7arp\u0131\u015fma tepkimeyle sonu\u00e7lanmaz \u2014 bu simulasyonda YE\u015e\u0130L parlayanlar ba\u015far\u0131l\u0131, di\u011ferleri ba\u015far\u0131s\u0131z \u00e7arp\u0131\u015fmalard\u0131r.</p>' +
+      '<div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">H\u0131z\u0131 Etkileyen Fakt\u00f6rler</div>' +
+      '<ul style="margin:0 0 12px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">' +
+        '<li><b>Derişim/Bas\u0131n\u00e7 artışı:</b> Birim hacimdeki tanecik say\u0131s\u0131 artar \u2192 \u00e7arp\u0131\u015fma S IKLI\u011eI artar \u2192 h\u0131z artar.</li>' +
+        '<li><b>S\u0131cakl\u0131k artışı:</b> Tanecikler daha H\u0131ZLI hareket eder \u2192 hem \u00e7arp\u0131\u015fma s\u0131kl\u0131\u011f\u0131 HEM DE aktivasyon enerjisini a\u015fan \u00e7arp\u0131\u015fma ORANI artar \u2014 bu y\u00fczden s\u0131cakl\u0131k etkisi \u00e7ok g\u00fc\u00e7l\u00fcd\u00fcr.</li>' +
+        '<li><b>Katalizör:</b> Aktivasyon enerjisini D\u00dc\u015e\u00dcR\u00dcR (farkl\u0131 bir mekanizma sunar) \u2014 ayn\u0131 \u00e7arp\u0131\u015fma enerjisiyle daha \u00e7ok \u00e7arp\u0131\u015fma art\u0131k \u201cba\u015far\u0131l\u0131\u201d say\u0131l\u0131r. Katalizör TÜKETİLMEZ ve dengeyi de\u011fi\u015ftirmez.</li>' +
+        '<li><b>Temas y\u00fczeyi (kat\u0131 tepkenlerde):</b> Toz halindeki bir kat\u0131, aynı k\u00fctledeki tek par\u00e7aya g\u00f6re \u00e7ok daha fazla y\u00fczey alan\u0131na sahiptir \u2192 daha fazla \u00e7arp\u0131\u015fma imkan\u0131 \u2192 h\u0131z artar.</li>' +
+      '</ul>' +
+      '<div style="font-size:11px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Aktivasyon Enerjisi (Ea)</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:0">Tepkimenin ger\u00e7ekle\u015femesi i\u00e7in \u00e7arp\u0131\u015fan taneciklerin sahip olmas\u0131 gereken MİNİMUM enerjidir. Bu enerjinin alt\u0131ndaki \u00e7arp\u0131\u015fmalar tanecikleri sadece sekmesine (esnek \u00e7arp\u0131\u015fma) neden olur, \u00fcr\u00fcn olu\u015fturmaz.</p>' +
+    '</div>';
+
+  function setupKin(){
+    if (document.getElementById('s-kinetik')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-kinetik" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udca5 Tepkime H\u0131z\u0131 (Kinetik) 3D</h1>' +
+        '<p class="psub">\u00c7arp\u0131\u015fma teorisi \u2014 derişim, s\u0131cakl\u0131k ve katalizörün tepkime h\u0131z\u0131na etkisini canl\u0131 g\u00f6r.</p>' +
+        '<div style="background:#050510;border:1px solid rgba(245,158,11,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+          '<canvas id="kin-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+        '</div>' +
+        '<div class="card" style="margin-bottom:12px">' +
+          '<div class="slbl">\u00d7 Derişim</div>' +
+          '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+            '<button type="button" class="ob" onclick="kinSetConc(0.5,this)">Az</button>' +
+            '<button type="button" class="ob sel2" onclick="kinSetConc(1,this)">Normal</button>' +
+            '<button type="button" class="ob" onclick="kinSetConc(1.8,this)">\u00c7ok</button>' +
+          '</div>' +
+          '<div class="slbl">\ud83c\udf21\ufe0f S\u0131cakl\u0131k</div>' +
+          '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+            '<button type="button" class="ob" onclick="kinSetTemp(0.6,this)">D\u00fc\u015f\u00fck</button>' +
+            '<button type="button" class="ob sel2" onclick="kinSetTemp(1,this)">Normal</button>' +
+            '<button type="button" class="ob" onclick="kinSetTemp(1.7,this)">Y\u00fcksek</button>' +
+          '</div>' +
+          '<div class="slbl">\u2697\ufe0f Katalizör</div>' +
+          '<button type="button" id="kin-cat-btn" class="ob" onclick="kinToggleCatalyst(this)" style="width:100%">Katalizör Ekle</button>' +
+        '</div>' +
+        '<div id="kin-info" style="margin-bottom:16px"></div>' +
+        KIN_THEORY_HTML +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-kinetik') === -1) SCREENS.push('s-kinetik');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-kinetik'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-kinetik" onclick="nav(\'kinetik\')">\ud83d\udca5 Tepkime H\u0131z\u0131 3D</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-kinetik'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-kinetik" onclick="nav(\'kinetik\')"><div class="ti">\ud83d\udca5</div><div class="tt">Tepkime H\u0131z\u0131 3D</div><div class="td">\u00c7arp\u0131\u015fma teorisi \u2014 derişim/s\u0131cakl\u0131k/katalizör canlı sim\u00fclasyonu.</div></div>');
+    kinBindCanvas();
+    kinRenderInfo();
+  }
+
+  window.kinSetConc = kinSetConc;
+  window.kinSetTemp = kinSetTemp;
+  window.kinToggleCatalyst = kinToggleCatalyst;
+
+  function kinStep(){
+    var dt = 1;
+    var lim = KIN_BOX * 0.95;
+    function moveAndBounce(p){
+      p.x += p.vx*dt; p.y += p.vy*dt; p.z += p.vz*dt;
+      if (Math.abs(p.x) > lim) { p.vx *= -1; p.x = Math.sign(p.x)*lim; }
+      if (Math.abs(p.y) > lim) { p.vy *= -1; p.y = Math.sign(p.y)*lim; }
+      if (Math.abs(p.z) > lim) { p.vz *= -1; p.z = Math.sign(p.z)*lim; }
+      if (p.flash > 0) p.flash -= 0.05;
+    }
+    kinSt.particlesA.forEach(moveAndBounce);
+    kinSt.particlesB.forEach(moveAndBounce);
+    // A-B çarpışmalarını denetle
+    var threshold = 10;
+    var eaSpeed = kinSt.catalyst ? 0.55 : 0.95; // katalizör varsa daha düşük hız yeterli
+    for (var i = 0; i < kinSt.particlesA.length; i++) {
+      var a = kinSt.particlesA[i];
+      for (var j = 0; j < kinSt.particlesB.length; j++) {
+        var b = kinSt.particlesB[j];
+        var dx = a.x-b.x, dy = a.y-b.y, dz = a.z-b.z;
+        var d2 = dx*dx+dy*dy+dz*dz;
+        if (d2 < threshold*threshold && a.flash <= 0 && b.flash <= 0) {
+          kinSt.totalCollisions++;
+          var relSpeed = Math.sqrt((a.vx-b.vx)*(a.vx-b.vx) + (a.vy-b.vy)*(a.vy-b.vy) + (a.vz-b.vz)*(a.vz-b.vz));
+          var success = relSpeed > eaSpeed;
+          if (success) { kinSt.successCount++; kinSt.rateWindow.push(1); a.flash = 1; b.flash = 1; }
+          else { kinSt.rateWindow.push(0); }
+          // esnek sekme (basit): hızları ters çevir
+          a.vx *= -1; a.vy *= -1; a.vz *= -1;
+          b.vx *= -1; b.vy *= -1; b.vz *= -1;
+        }
+      }
+    }
+    if (kinSt.rateWindow.length > 400) kinSt.rateWindow.splice(0, kinSt.rateWindow.length - 400);
+    var sum = 0;
+    for (var k = 0; k < kinSt.rateWindow.length; k++) sum += kinSt.rateWindow[k];
+    kinSt.rateVal = Math.round(sum * 1.5);
+  }
+
+  function kinDraw(x, W, H2){
+    hcBg(x, kinSt, W, H2);
+    var boxPts = [];
+    for (var sx=-1; sx<=1; sx+=2) for (var sy=-1; sy<=1; sy+=2) for (var sz=-1; sz<=1; sz+=2) boxPts.push([sx*KIN_BOX,sy*KIN_BOX,sz*KIN_BOX]);
+    var edges = [[0,1],[0,2],[0,4],[3,1],[3,2],[3,7],[5,1],[5,4],[5,7],[6,2],[6,4],[6,7]];
+    x.strokeStyle = 'rgba(245,158,11,0.3)'; x.lineWidth = 1.1;
+    edges.forEach(function(e){
+      var p1 = hcProj(kinSt, boxPts[e[0]][0],boxPts[e[0]][1],boxPts[e[0]][2], W, H2);
+      var p2 = hcProj(kinSt, boxPts[e[1]][0],boxPts[e[1]][1],boxPts[e[1]][2], W, H2);
+      x.beginPath(); x.moveTo(p1.x,p1.y); x.lineTo(p2.x,p2.y); x.stroke();
+    });
+    var items = [];
+    function pushP(p, baseCol){
+      var pr = hcProj(kinSt, p.x, p.y, p.z, W, H2);
+      var col = p.flash > 0 ? '#22c55e' : baseCol;
+      items.push({ z: pr.z, x: pr.x, y: pr.y, r: (p.flash>0?9:6.5)*pr.s, c: col });
+    }
+    kinSt.particlesA.forEach(function(p){ pushP(p, '#3b82f6'); });
+    kinSt.particlesB.forEach(function(p){ pushP(p, '#ef4444'); });
+    items.sort(function(a,b){ return b.z-a.z; });
+    items.forEach(function(it){
+      x.beginPath(); x.arc(it.x, it.y, Math.max(1.5,it.r), 0, 6.283);
+      x.fillStyle = it.c; x.fill();
+    });
+    x.fillStyle = 'rgba(59,130,246,.85)'; x.font = 'bold 11px sans-serif'; x.textAlign = 'left';
+    x.fillText('\u25cf A tepkeni', 10, 20);
+    x.fillStyle = 'rgba(239,68,68,.85)';
+    x.fillText('\u25cf B tepkeni', 10, 36);
+    x.fillStyle = 'rgba(34,197,94,.85)';
+    x.fillText('\u25cf Ba\u015far\u0131l\u0131 \u00e7arp\u0131\u015fma', 10, 52);
+    x.fillStyle = 'rgba(255,255,255,.3)'; x.font = '10px sans-serif';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 10, H2-8);
+  }
+
+  function kinLoop(){
+    var scr = document.getElementById('s-kinetik');
+    if (!scr || scr.style.display === 'none') { kinStop(); return; }
+    kinSt.anim = requestAnimationFrame(kinLoop);
+    var cv = document.getElementById('kin-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || 300, H2 = 260;
+    var dpr = window.devicePixelRatio || 1;
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try {
+      if (kinSt.spin && !kinSt.drag) kinSt.rotY += 0.006;
+      kinSt.t += 0.016;
+      kinStep();
+      kinDraw(x, W, H2);
+      var rateEl = document.getElementById('kin-rate');
+      if (rateEl) rateEl.textContent = kinSt.rateVal;
+    } catch (e) { drawErr(x, W, H2, e); }
+  }
+  function kinStop(){ if (kinSt.anim) { cancelAnimationFrame(kinSt.anim); kinSt.anim = null; } }
+  function kinStart(){ kinBindCanvas(); if (kinSt.anim) cancelAnimationFrame(kinSt.anim); kinLoop(); }
+  function kinBindCanvas(){
+    if (kinSt.bound) return;
+    var cv = document.getElementById('kin-cv');
+    if (!cv) return;
+    kinSt.bound = true;
+    cv.onmousedown = function(e){ kinSt.drag = true; kinSt.lx = e.clientX; kinSt.ly = e.clientY; };
+    cv.onmousemove = function(e){ if (!kinSt.drag) return; kinSt.rotY += (e.clientX-kinSt.lx)*0.01; kinSt.rotX += (e.clientY-kinSt.ly)*0.01; kinSt.lx=e.clientX; kinSt.ly=e.clientY; };
+    cv.onmouseup = cv.onmouseleave = function(){ kinSt.drag = false; };
+    cv.addEventListener('touchstart', function(e){ kinSt.drag=true; kinSt.lx=e.touches[0].clientX; kinSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchmove', function(e){ if(!kinSt.drag) return; kinSt.rotY += (e.touches[0].clientX-kinSt.lx)*0.013; kinSt.rotX += (e.touches[0].clientY-kinSt.ly)*0.013; kinSt.lx=e.touches[0].clientX; kinSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchend', function(){ kinSt.drag = false; });
+  }
+  function kinEnter(){ setTimeout(kinStart, 80); }
+  function kinLeave(){ kinStop(); }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -5953,6 +6681,10 @@
     try { setupSet(); } catch (e) { /* sessiz */ }
     try { setupGV(); } catch (e) { /* sessiz */ }
     try { setupEQ(); } catch (e) { /* sessiz */ }
+    try { setupRXN(); } catch (e) { /* sessiz */ }
+    try { setupFlame(); } catch (e) { /* sessiz */ }
+    try { setupRedox(); } catch (e) { /* sessiz */ }
+    try { setupKin(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
@@ -5971,7 +6703,11 @@
             if (id === 'wi') wiEnter(); else wiLeave();
             if (id === 'set') setEnter();
             if (id === 'gv') gvEnter(); else gvLeave();
-            if (id === 'eq') eqEnter(); else eqLeave();
+            if (id === 'ledenge') eqEnter(); else eqLeave();
+            if (id === 'rxntype') rxnEnter();
+            if (id === 'alev') flameEnter(); else flameLeave();
+            if (id === 'redoks') redoxEnter();
+            if (id === 'kinetik') kinEnter(); else kinLeave();
           } catch (e) {}
         };
       }
