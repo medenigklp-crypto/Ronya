@@ -4660,7 +4660,7 @@
   };
   var WI_ORDER = ['london','dipol','hidrojen'];
   var wiKind = 'london';
-  var wiSt = { rotX: 0.3, rotY: 0.4, zoom: 1, spin: true, drag: false, lx:0, ly:0, dist:0, t: 0, anim: null, stars: null, sw: 0, bound: false };
+  var wiSt = { rotX: 0.3, rotY: 0.4, zoom: 1, fit: 1, spin: true, drag: false, lx:0, ly:0, dist:0, t: 0, anim: null, stars: null, sw: 0, bound: false };
 
   function wiDraw(x, W, H2){
     hcBg(x, wiSt, W, H2);
@@ -4808,7 +4808,7 @@
     ['S\u00fcblimle\u015fme','Kat\u0131 \u2192 Gaz (do\u011frudan)','Is\u0131 al\u0131n\u0131r'], ['Kra\u011f\u0131la\u015fma','Gaz \u2192 Kat\u0131 (do\u011frudan)','Is\u0131 verilir']
   ];
   var mhState = 'kati';
-  var mhSt = { rotX: 0.35, rotY: 0.5, zoom: 1, spin: false, drag: false, lx:0, ly:0, dist:0, t: 0, anim: null, stars: null, sw: 0, bound: false, particles: [] };
+  var mhSt = { rotX: 0.35, rotY: 0.5, zoom: 1, fit: 1, spin: false, drag: false, lx:0, ly:0, dist:0, t: 0, anim: null, stars: null, sw: 0, bound: false, particles: [] };
   var MH_N = 24, MH_BOX = 85;
 
   function mhInitParticles(){
