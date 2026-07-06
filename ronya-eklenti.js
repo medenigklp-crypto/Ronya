@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v21
+   RONYA KİMYA — EKLENTİ v23
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -77,6 +77,19 @@
    38) 💥 Tepkime Hızı (Kinetik) 3D: Çarpışma teorisi simülasyonu —
        derişim/sıcaklık/katalizör kontrolleri, canlı ölçülen tepkime
        hızı (başarılı çarpışma/saniye), gerçek parçacık fiziği.
+   39) 📚 Tepkime Türü Sınıflandırıcı DÜZELTMESİ: Maarif Modeli
+       müfredatına göre doğru 3 kategori (Asit-Baz / Çözünme-Çökelme /
+       Yükseltgenme-İndirgenme) ile yeniden yazıldı.
+   40) 🧮 Redoks Denge Motoru genişletildi: Artık KENDİ denkleminizi
+       (iyonsuz/moleküler) yazabilirsiniz — genel oksidasyon basamağı
+       hesaplayıcı (sabit kurallar + çok atomlu grup tanıma + tipik
+       anyon varsayımları) otomatik dengeler ve hangi elementin
+       yükseltgendiğini/indirgendiğini bulur. Orantısızlaşma (aynı
+       elementin birden fazla ürüne farklı basamakta dağılması) dahil
+       27 gerçek YKS/AYT düzeyi denklemle doğrulandı.
+   41) 🔄 Fiziksel ve Kimyasal Değişim: 40 günlük hayat örneği (hal
+       değişimleri, fermantasyon, paslanma, fotosentez, vb.) — quiz +
+       kategorili tam liste.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -5975,32 +5988,29 @@
 
   // ---------- 17. TEPKİME TÜRÜ SINIFLANDIRICI ----------
   var RXN_TYPES = {
-    sentez: { n:'Sentez (Birleşme)', c:'#22c55e', d:'\u0130ki ya da daha fazla madde birle\u015fip TEK bir \u00fcr\u00fcn olu\u015fturur: A + B \u2192 AB' },
-    analiz: { n:'Analiz (Ayr\u0131\u015fma)', c:'#3b82f6', d:'TEK bir madde, iki ya da daha fazla \u00fcr\u00fcne ayr\u0131\u015f\u0131r: AB \u2192 A + B' },
-    yerdeg: { n:'Yer De\u011fi\u015ftirme (Tekli)', c:'#f59e0b', d:'Bir element, bir bile\u015fikteki ba\u015fka bir elementin yerini al\u0131r: A + BC \u2192 AC + B' },
-    ciftdeg: { n:'\u00c7ift De\u011fi\u015fim (Bile\u015fim De\u011fi\u015ftirme)', c:'#a855f7', d:'\u0130ki bile\u015fik, katyon/anyonlar\u0131n\u0131 kar\u015f\u0131l\u0131kl\u0131 de\u011fi\u015ftirir: AB + CD \u2192 AD + CB' }
+    asitbaz: { n:'Asit-Baz Tepkimeleri', c:'#3b82f6', d:'Bir asit ile bir baz tepkimeye girerek TUZ ve genellikle SU olu\u015fturur (n\u00f6tralle\u015fme): Asit + Baz \u2192 Tuz + Su' },
+    cozunme: { n:'\u00c7\u00f6z\u00fcnme-\u00c7\u00f6kelme Tepkimeleri', c:'#a855f7', d:'\u0130ki \u00e7\u00f6zeltinin kar\u0131\u015ft\u0131r\u0131lmas\u0131yla suda \u00e7\u00f6zünmeyen (\u00e7\u00f6kelek) bir kat\u0131 olu\u015fur, ya da bir kat\u0131 suda iyonlar\u0131na ayr\u0131larak \u00e7\u00f6z\u00fcn\u00fcr.' },
+    redoks: { n:'Y\u00fckseltgenme-\u0130ndirgenme (Redoks) Tepkimeleri', c:'#f59e0b', d:'Taneciklar aras\u0131nda ELEKTRON al\u0131\u015fveri\u015fi olur \u2014 bir tanecik elektron verirken (y\u00fckseltgenir) di\u011feri elektron al\u0131r (indirgenir).' }
   };
   var RXN_LIST = [
-    { eq:'2H\u2082 + O\u2082 \u2192 2H\u2082O', t:'sentez', not:'\u0130ki element birle\u015fip tek \u00fcr\u00fcn (su) olu\u015fturdu.' },
-    { eq:'N\u2082 + 3H\u2082 \u2192 2NH\u2083', t:'sentez', not:'Haber-Bosch s\u00fcreci \u2014 iki gaz birle\u015fip amonyak verir.' },
-    { eq:'C + O\u2082 \u2192 CO\u2082', t:'sentez', not:'Karbonun yanmas\u0131 \u2014 klasik bir birle\u015fme tepkimesi.' },
-    { eq:'CaO + H\u2082O \u2192 Ca(OH)\u2082', t:'sentez', not:'S\u00f6nmemi\u015f kire\u00e7 + su \u2192 s\u00f6nm\u00fc\u015f kire\u00e7.' },
-    { eq:'SO\u2083 + H\u2082O \u2192 H\u2082SO\u2084', t:'sentez', not:'K\u00fck\u00fcrt trioksit + su \u2192 s\u00fclf\u00fcrik asit.' },
-    { eq:'2H\u2082O \u2192 2H\u2082 + O\u2082', t:'analiz', not:'Suyun elektrolizle ayr\u0131\u015fmas\u0131.' },
-    { eq:'CaCO\u2083 \u2192 CaO + CO\u2082', t:'analiz', not:'Kire\u00e7ta\u015f\u0131n\u0131n \u0131s\u0131yla ayr\u0131\u015fmas\u0131 (kalsinasyon).' },
-    { eq:'2KClO\u2083 \u2192 2KCl + 3O\u2082', t:'analiz', not:'Potasyum klorat\u0131n ayr\u0131\u015farak oksijen vermesi.' },
-    { eq:'2H\u2082O\u2082 \u2192 2H\u2082O + O\u2082', t:'analiz', not:'Hidrojen peroksitin ayr\u0131\u015fmas\u0131.' },
-    { eq:'2NaHCO\u2083 \u2192 Na\u2082CO\u2083 + H\u2082O + CO\u2082', t:'analiz', not:'Karbonat\u0131n \u0131s\u0131yla ayr\u0131\u015fmas\u0131.' },
-    { eq:'Zn + CuSO\u2084 \u2192 ZnSO\u2084 + Cu', t:'yerdeg', not:'\u00c7inko, bak\u0131r\u0131n yerini al\u0131r (\u00e7inko daha aktif).' },
-    { eq:'Fe + CuSO\u2084 \u2192 FeSO\u2084 + Cu', t:'yerdeg', not:'Demir, bak\u0131r\u0131n yerini al\u0131r.' },
-    { eq:'2Na + 2H\u2082O \u2192 2NaOH + H\u2082', t:'yerdeg', not:'Sodyum, suyun hidrojeninin yerini al\u0131r.' },
-    { eq:'Cl\u2082 + 2NaBr \u2192 2NaCl + Br\u2082', t:'yerdeg', not:'Klor, bromun yerini al\u0131r (klor daha aktif halojen).' },
-    { eq:'Mg + 2HCl \u2192 MgCl\u2082 + H\u2082', t:'yerdeg', not:'Magnezyum, asitteki hidrojenin yerini al\u0131r.' },
-    { eq:'AgNO\u2083 + NaCl \u2192 AgCl + NaNO\u2083', t:'ciftdeg', not:'A\u011f\u2019\u0131n katyonu Na\u2019n\u0131n katyonuyla yer de\u011fi\u015ftirir; AgCl \u00e7\u00f6kelir.' },
-    { eq:'BaCl\u2082 + Na\u2082SO\u2084 \u2192 BaSO\u2084 + 2NaCl', t:'ciftdeg', not:'BaSO\u2084 \u00e7\u00f6kele\u011fi olu\u015fur.' },
-    { eq:'HCl + NaOH \u2192 NaCl + H\u2082O', t:'ciftdeg', not:'N\u00f6tralle\u015fme tepkimesi \u2014 asit + baz \u2192 tuz + su.' },
-    { eq:'Pb(NO\u2083)\u2082 + 2KI \u2192 PbI\u2082 + 2KNO\u2083', t:'ciftdeg', not:'Sar\u0131 PbI\u2082 \u00e7\u00f6keleği klasik bir \u00e7ift de\u011fi\u015fim \u00f6rne\u011fidir.' },
-    { eq:'CuSO\u2084 + 2NaOH \u2192 Cu(OH)\u2082 + Na\u2082SO\u2084', t:'ciftdeg', not:'Mavi Cu(OH)\u2082 \u00e7\u00f6kele\u011fi olu\u015fur.' }
+    { eq:'HCl + NaOH \u2192 NaCl + H\u2082O', t:'asitbaz', not:'Klasik n\u00f6tralle\u015fme \u2014 g\u00fc\u00e7l\u00fc asit + g\u00fc\u00e7l\u00fc baz \u2192 tuz + su.' },
+    { eq:'H\u2082SO\u2084 + 2KOH \u2192 K\u2082SO\u2084 + 2H\u2082O', t:'asitbaz', not:'Diprotik asit iki bazla n\u00f6tralle\u015fir.' },
+    { eq:'CH\u2083COOH + NH\u2083 \u2192 CH\u2083COONH\u2084', t:'asitbaz', not:'Zay\u0131f asit + zay\u0131f baz \u2192 amonyum asetat tuzu.' },
+    { eq:'2HNO\u2083 + Ca(OH)\u2082 \u2192 Ca(NO\u2083)\u2082 + 2H\u2082O', t:'asitbaz', not:'Nitrik asit ile kalsiyum hidroksitin n\u00f6tralle\u015fmesi.' },
+    { eq:'HCl + NH\u2083 \u2192 NH\u2084Cl', t:'asitbaz', not:'Gaz halindeki amonyak, asitle do\u011frudan tuz olu\u015fturur (su a\u00e7\u0131\u011fa \u00e7\u0131kmaz).' },
+    { eq:'H\u2082CO\u2083 + 2NaOH \u2192 Na\u2082CO\u2083 + 2H\u2082O', t:'asitbaz', not:'Karbonik asidin n\u00f6tralle\u015fmesi.' },
+    { eq:'AgNO\u2083 + NaCl \u2192 AgCl\u2193 + NaNO\u2083', t:'cozunme', not:'Beyaz AgCl \u00e7\u00f6kele\u011fi olu\u015fur \u2014 klasik bir \u00e7\u00f6kelme tepkimesi.' },
+    { eq:'BaCl\u2082 + Na\u2082SO\u2084 \u2192 BaSO\u2084\u2193 + 2NaCl', t:'cozunme', not:'Suda \u00e7\u00f6zünmeyen BaSO\u2084 beyaz \u00e7\u00f6kelek olarak ayr\u0131l\u0131r.' },
+    { eq:'Pb(NO\u2083)\u2082 + 2KI \u2192 PbI\u2082\u2193 + 2KNO\u2083', t:'cozunme', not:'Sar\u0131 PbI\u2082 \u00e7\u00f6keleği olu\u015fur.' },
+    { eq:'CuSO\u2084 + 2NaOH \u2192 Cu(OH)\u2082\u2193 + Na\u2082SO\u2084', t:'cozunme', not:'Mavi Cu(OH)\u2082 \u00e7\u00f6kele\u011fi olu\u015fur.' },
+    { eq:'NaCl (k) \u2192 Na\u207a (suda) + Cl\u207b (suda)', t:'cozunme', not:'Kat\u0131 tuzun suda \u00e7\u00f6z\u00fcnerek iyonlar\u0131na ayr\u0131lmas\u0131 \u2014 \u00e7\u00f6kelmenin tersi.' },
+    { eq:'CaCl\u2082 + Na\u2082CO\u2083 \u2192 CaCO\u2083\u2193 + 2NaCl', t:'cozunme', not:'Suda \u00e7\u00f6zünmeyen CaCO\u2083 \u00e7\u00f6kelir.' },
+    { eq:'Zn + CuSO\u2084 \u2192 ZnSO\u2084 + Cu', t:'redoks', not:'\u00c7inko elektron verip Zn\u00b2\u207a\u2019ya y\u00fckseltgenir; Cu\u00b2\u207a elektron al\u0131p Cu\u2019ya indirgenir.' },
+    { eq:'2Na + Cl\u2082 \u2192 2NaCl', t:'redoks', not:'Sodyum elektron verir (y\u00fckseltgenir), klor elektron al\u0131r (indirgenir).' },
+    { eq:'Fe + 2HCl \u2192 FeCl\u2082 + H\u2082', t:'redoks', not:'Demir y\u00fckseltgenir (0\u2192+2), asitteki H\u207a indirgenir (+1\u21920).' },
+    { eq:'2Mg + O\u2082 \u2192 2MgO', t:'redoks', not:'Magnezyumun yanmas\u0131 \u2014 Mg y\u00fckseltgenir, O indirgenir.' },
+    { eq:'Zn + 2AgNO\u2083 \u2192 Zn(NO\u2083)\u2082 + 2Ag', t:'redoks', not:'\u00c7inko elektron verir, g\u00fcm\u00fc\u015f iyonu elektron al\u0131p metalik g\u00fcm\u00fc\u015fe indirgenir.' },
+    { eq:'2KMnO\u2084 + 16HCl \u2192 2KCl + 2MnCl\u2082 + 5Cl\u2082 + 8H\u2082O', t:'redoks', not:'Mn +7\u2019den +2\u2019ye indirgenirken, Cl\u207b elektron verip Cl\u2082\u2019ye y\u00fckseltgenir.' }
   ];
   var rxnSt = { cur: null, score: 0, total: 0, order: [], idx: 0 };
 
@@ -6044,7 +6054,7 @@
         '<div class="tc" id="tile-rxntype" onclick="nav(\'rxntype\')"><div class="ti">\ud83e\uddea</div><div class="tt">Tepkime T\u00fcr\u00fc S\u0131n\u0131fland\u0131r\u0131c\u0131</div><div class="td">Sentez/analiz/yer de\u011fi\u015ftirme/\u00e7ift de\u011fi\u015fim tan\u0131ma quiz\u2019i.</div></div>');
 
     var th = '';
-    ['sentez','analiz','yerdeg','ciftdeg'].forEach(function(k){
+    ['asitbaz','cozunme','redoks'].forEach(function(k){
       var rt = RXN_TYPES[k];
       th += '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
         '<div style="font-size:13px;font-weight:700;color:' + rt.c + '">' + rt.n + '</div>' +
@@ -6063,7 +6073,7 @@
     document.getElementById('rxn-eq').textContent = item.eq;
     var fb = document.getElementById('rxn-fb'); fb.style.display = 'none';
     document.getElementById('rxn-next').style.display = 'none';
-    var keys = ['sentez','analiz','yerdeg','ciftdeg'];
+    var keys = ['asitbaz','cozunme','redoks'];
     var html = '';
     keys.forEach(function(k){
       html += '<button type="button" class="ob2" onclick="rxnCheck(\'' + k + '\',this)">' + RXN_TYPES[k].n + '</button>';
@@ -6373,8 +6383,14 @@
     REDOX_LIST.forEach(function(r, i){ btns += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="redoxSetIdx(' + i + ',this)">' + r.name + '</button>'; });
     app.insertAdjacentHTML('beforeend',
       '<div id="s-redoks" style="display:none"><div class="pw narrow">' +
-        '<h1 class="ptitle">\ud83d\udd0c Redoks Yar\u0131 Tepkime Dengeleyici</h1>' +
-        '<p class="psub">Elektron kazanma/kaybetme (yar\u0131 tepkime) y\u00f6ntemiyle ad\u0131m ad\u0131m redoks dengeleme.</p>' +
+        '<h1 class="ptitle">\ud83d\udd0c Redoks Denge Motoru</h1>' +
+        '<p class="psub">Yar\u0131 tepkime y\u00f6ntemiyle haz\u0131r \u00f6rnekler, ya da kendi denklemini yaz \u2014 otomatik dengeleyip y\u00fckseltgenme/indirgenmeyi bulsun.</p>' +
+        '<div class="tabs" id="redox-tabs">' +
+          '<button class="tab on" onclick="tswitch(\'redox-tabs\',\'redox-tps\',0)">\ud83d\udcd6 Haz\u0131r \u00d6rnekler</button>' +
+          '<button class="tab" onclick="tswitch(\'redox-tabs\',\'redox-tps\',1)">\u270f\ufe0f Kendi Denklemini Yaz</button>' +
+        '</div>' +
+        '<div id="redox-tps">' +
+        '<div class="tp on">' +
         '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' + btns + '</div></div>' +
         '<div class="card">' +
           '<div class="slbl">Dengesiz Tepkime</div>' +
@@ -6388,6 +6404,16 @@
             '<div style="font-size:12px;color:var(--tx2);line-height:1.6" id="redox-finalnot"></div>' +
           '</div>' +
         '</div>' +
+        '</div>' +
+        '<div class="tp">' +
+          '<div class="card">' +
+            '<div class="slbl">Dengesiz Denklemini Yaz (\u0130yonsuz, m\u00f6lek\u00fcler form\u00fcl)</div>' +
+            '<input type="text" id="redox-own-inp" class="inp" placeholder="\u00f6rn: KMnO4 + HCl -> KCl + MnCl2 + H2O + Cl2" style="margin-bottom:10px" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+            '<button type="button" class="btn bp bfull" onclick="redoxSolveOwn()">\u00c7\u00f6z</button>' +
+            '<div id="redox-own-out" style="margin-top:14px"></div>' +
+          '</div>' +
+        '</div>' +
+        '</div>' +
       '</div></div>');
     if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-redoks') === -1) SCREENS.push('s-redoks');
     var mn = document.getElementById('mn');
@@ -6398,6 +6424,8 @@
       tg.insertAdjacentHTML('afterbegin',
         '<div class="tc" id="tile-redoks" onclick="nav(\'redoks\')"><div class="ti">\ud83d\udd0c</div><div class="tt">Redoks Dengeleyici</div><div class="td">Yar\u0131 tepkime y\u00f6ntemiyle ad\u0131m ad\u0131m redoks dengeleme.</div></div>');
     redoxRender();
+    var redoxInp = document.getElementById('redox-own-inp');
+    if (redoxInp) redoxInp.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); window.redoxSolveOwn(); } });
   }
   window.redoxSetIdx = function(i, btn){ redoxIdx = i; redoxStepIdx = 0; if (btn) selectInRow(btn); redoxRender(); };
   function redoxRender(){
@@ -6421,6 +6449,40 @@
   }
   window.redoxNextStep = function(){ redoxStepIdx++; redoxRender(); };
   function redoxEnter(){ redoxStepIdx = 0; redoxRender(); }
+
+  window.redoxSolveOwn = function(){
+    var inp = document.getElementById('redox-own-inp');
+    var out = document.getElementById('redox-own-out');
+    if (!inp || !out) return;
+    var raw = inp.value.trim();
+    if (!raw) { out.innerHTML = '<span style="color:var(--yw)">Bir denklem yaz (\u00f6rn: Zn + HCl -> ZnCl2 + H2).</span>'; return; }
+    var balanced, last;
+    try {
+      balanced = balanceEquation(raw);
+      last = balanceEquation._last;
+    } catch (e) {
+      out.innerHTML = '<div style="padding:12px;border-radius:var(--r);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5;font-size:13px">\u26a0\ufe0f ' + e.message + '</div>';
+      return;
+    }
+    var changes = [];
+    try { changes = identifyRedoxChanges(last.species, last.nReact); } catch (e) { changes = []; }
+    var html = '<div style="padding:14px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:var(--r);margin-bottom:12px">' +
+      '<div class="slbl" style="color:#86efac">Dengeli Denklem</div>' +
+      '<div style="font-family:monospace;font-size:15px;font-weight:700;color:#86efac">' + balanced + '</div></div>';
+    if (changes.length === 0) {
+      html += '<div style="padding:12px;border-radius:var(--r);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fcd34d;font-size:13px">\u2139\ufe0f Hi\u00e7bir elementin y\u00fckseltgenme basama\u011f\u0131 de\u011fi\u015fmedi \u2014 bu bir redoks tepkimesi de\u011fil (asit-baz ya da \u00e7\u00f6z\u00fcnme-\u00e7\u00f6kelme t\u00fcr\u00fc olabilir).</div>';
+    } else {
+      html += '<div class="slbl">Y\u00fckseltgenme / \u0130ndirgenme Analizi</div>';
+      changes.forEach(function(c){
+        var isUp = c.kind === 'yukselt';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
+          '<span style="font-size:13px;color:var(--tx2)">' + c.el + ': ' + fmtOx(c.from) + ' \u2192 ' + fmtOx(c.to) + '</span>' +
+          '<span style="font-size:12px;font-weight:700;color:' + (isUp?'#fca5a5':'#93c5fd') + '">' + (isUp ? '\u2191 Y\u00fckseltgenme' : '\u2193 \u0130ndirgenme') + '</span></div>';
+      });
+      html += '<div style="font-size:11px;color:var(--tx3);margin-top:8px;line-height:1.6">\u2139\ufe0f Oksidasyon basamaklar\u0131 sezgisel kurallarla (sabit de\u011ferler + bilinen \u00e7ok atomlu gruplar) hesaplan\u0131r; ola\u011fand\u0131\u015f\u0131/nadir bile\u015fiklerde k\u00fc\u00e7\u00fck sapmalar olabilir.</div>';
+    }
+    out.innerHTML = html;
+  };
 
   // ---------- 20. TEPKİME HIZI (KİNETİK) 3D — ÇARPIŞMA TEORİSİ ----------
   var kinSt = {
@@ -6664,6 +6726,274 @@
   function kinEnter(){ setTimeout(kinStart, 80); }
   function kinLeave(){ kinStop(); }
 
+  // ---------- 21. GENEL REDOKS ANALİZ MOTORU ----------
+  // Mevcut Gauss-eliminasyon dengeleyicisini (balanceEquation) yeniden
+  // kullanır; üzerine oksidasyon basamağı hesaplama + redoks tespiti
+  // katmanı ekler. Böylece kullanıcı KENDİ denklemini (moleküler/iyonik
+  // olmayan) yazabilir, sistem hem dengeler hem de hangi elementin
+  // yükseltgendiğini/indirgendiğini adım adım gösterir.
+  var OX_FIXED_1 = ['Li','Na','K','Rb','Cs','Fr'];
+  var OX_FIXED_2 = ['Be','Mg','Ca','Sr','Ba','Ra'];
+  var OX_POLY_GROUPS = [
+    { keyEl:'Cr', atoms:{Cr:2,O:7}, ox:{Cr:6,O:-2} },   // dikromat Cr2O7
+    { keyEl:'Mn', atoms:{Mn:1,O:4}, ox:{Mn:7,O:-2} },   // permanganat MnO4 (tek Mn varsayımıyla)
+    { keyEl:'S',  atoms:{S:1,O:4}, ox:{S:6,O:-2} },     // sülfat SO4
+    { keyEl:'N',  atoms:{N:1,O:3}, ox:{N:5,O:-2} },     // nitrat NO3
+    { keyEl:'C',  atoms:{C:1,O:3}, ox:{C:4,O:-2} },     // karbonat CO3
+    { keyEl:'P',  atoms:{P:1,O:4}, ox:{P:5,O:-2} },     // fosfat PO4
+    { keyEl:'Cl', atoms:{Cl:1,O:4}, ox:{Cl:7,O:-2} },   // perklorat ClO4
+    { keyEl:'As', atoms:{As:1,O:4}, ox:{As:5,O:-2} }    // arsenat AsO4
+  ];
+
+  // Verilen (nötr, moleküler) formülün her elementi için oksidasyon
+  // basamağını tahmin eder. Genel amaçlı bir öğretim aracı için
+  // makul bir sezgisel yöntemdir — her bileşiği doğru çözmesi
+  // garanti değildir, ama yayg\u0131n redoks bile\u015fikleri i\u00e7in g\u00fcvenilirdir.
+  function assignOxStates(rawFormula){
+    var flat = parseFormula(rawFormula);
+    var ox = {};
+    var remaining = 0; // nötr molekül varsayımı
+
+    // Peroksit özel durumu (H2O2, Na2O2, BaO2 gibi O-O bağlı bileşikler,
+    // O=-1). Bu ölçek için en yaygın örnek olan H2O2'yi doğrudan tan\u0131.
+    var isPeroxide = (flat.H === 2 && flat.O === 2 && Object.keys(flat).length === 2);
+
+    if (flat.F) { ox.F = -1; remaining -= -1 * flat.F; }
+    OX_FIXED_1.forEach(function(m){ if (flat[m]) { ox[m] = 1; remaining -= 1 * flat[m]; } });
+    OX_FIXED_2.forEach(function(m){ if (flat[m]) { ox[m] = 2; remaining -= 2 * flat[m]; } });
+
+    if (isPeroxide) {
+      ox.O = -1; remaining -= -1 * flat.O;
+    } else {
+      // Bilinen çok atomlu grup (sülfat, nitrat, permanganat...) var mı?
+      for (var i = 0; i < OX_POLY_GROUPS.length; i++) {
+        var g = OX_POLY_GROUPS[i];
+        if (ox[g.keyEl] !== undefined) continue;
+        if (!flat[g.keyEl] || flat[g.keyEl] % g.atoms[g.keyEl] !== 0) continue;
+        var mult = flat[g.keyEl] / g.atoms[g.keyEl];
+        var needO = g.atoms.O * mult;
+        if (!flat.O || flat.O < needO) continue;
+        ox[g.keyEl] = g.ox[g.keyEl];
+        remaining -= g.ox[g.keyEl] * flat[g.keyEl];
+        remaining -= g.ox.O * needO; // grubun İÇİNDEKİ oksijenin katkısı HER ZAMAN düşülür
+        flat.O -= needO;
+        if (flat.O === 0) delete flat.O;
+        break;
+      }
+      if (flat.O && ox.O === undefined) { ox.O = -2; remaining -= -2 * flat.O; }
+    }
+
+    if (flat.H && ox.H === undefined) {
+      var others = Object.keys(flat).filter(function(e){ return e !== 'H' && flat[e]; });
+      var isHydride = others.length === 1 && ox[others[0]] !== undefined && ox[others[0]] > 0 &&
+        (OX_FIXED_1.indexOf(others[0]) !== -1 || OX_FIXED_2.indexOf(others[0]) !== -1);
+      ox.H = isHydride ? -1 : 1;
+      remaining -= ox.H * flat.H;
+    }
+
+    // İkili (metal + tek ametal) bileşiklerde ametale TİPİK anyon
+    // basamağını ata (halojenler -1, S/Se/Te -2, N/P/As/Sb -3) —
+    // MnCl2, FeS, Na3N gibi bileşiklerde metalin basamağını çözebilmek için.
+    var unknown0 = Object.keys(flat).filter(function(e){ return flat[e] && ox[e] === undefined; });
+    if (unknown0.length === 2) {
+      var TYPICAL_ANION = { Cl:-1, Br:-1, I:-1, S:-2, Se:-2, Te:-2, N:-3, P:-3, As:-3 };
+      var anionEl = unknown0.filter(function(e){ return TYPICAL_ANION[e] !== undefined; });
+      if (anionEl.length === 1) {
+        var ae = anionEl[0];
+        ox[ae] = TYPICAL_ANION[ae];
+        remaining -= TYPICAL_ANION[ae] * flat[ae];
+      }
+    }
+
+    var unknown = Object.keys(flat).filter(function(e){ return flat[e] && ox[e] === undefined; });
+    if (unknown.length === 1) {
+      ox[unknown[0]] = remaining / flat[unknown[0]];
+    }
+    return ox;
+  }
+
+  // Dengelenmiş denklemdeki (species dizisi + nReact) her elementin
+  // reaktan/ürün taraflarındaki oksidasyon basamaklarını karşılaştırır.
+  // Orantısızlaşma (aynı elementin birden fazla ürüne farklı basamaklarda
+  // dağılması) dahil TÜM anlamlı geçişleri döndürür.
+  function identifyRedoxChanges(species, nReact){
+    var speciesOx = species.map(function(sp){
+      try { return assignOxStates(sp); } catch (e) { return {}; }
+    });
+    var elMap = {};
+    species.forEach(function(sp, idx){
+      var flat;
+      try { flat = parseFormula(sp); } catch (e) { return; }
+      Object.keys(flat).forEach(function(el){
+        if (speciesOx[idx][el] === undefined) return;
+        if (!elMap[el]) elMap[el] = { react: [], prod: [] };
+        var entry = { spIdx: idx, ox: speciesOx[idx][el] };
+        (idx < nReact ? elMap[el].react : elMap[el].prod).push(entry);
+      });
+    });
+    var seen = {}, transitions = [];
+    Object.keys(elMap).forEach(function(el){
+      var m = elMap[el];
+      m.react.forEach(function(r){
+        m.prod.forEach(function(p){
+          if (r.ox !== p.ox) {
+            var key = el + '|' + r.ox + '|' + p.ox + '|' + r.spIdx + '|' + p.spIdx;
+            if (seen[key]) return;
+            seen[key] = 1;
+            transitions.push({ el: el, from: r.ox, to: p.ox, reactSpIdx: r.spIdx, prodSpIdx: p.spIdx, kind: p.ox > r.ox ? 'yukselt' : 'indirge' });
+          }
+        });
+      });
+    });
+    return transitions;
+  }
+
+  function fmtOx(n){ return (n > 0 ? '+' : '') + n; }
+
+  // ---------- 22. FİZİKSEL VE KİMYASAL DEĞİŞİM ----------
+  var FIZKIM_LIST = [
+    // --- FİZİKSEL DEĞİŞİMLER ---
+    { txt:'Hal de\u011fi\u015fimleri (erime, buharla\u015fma, s\u00fcblimle\u015fme...)', t:'fiziksel', not:'Sadece tanecikler aras\u0131 uzakl\u0131k/d\u00fczen de\u011fi\u015fir; madde kimyasal olarak AYNI kal\u0131r (H\u2082O hep H\u2082O\u2019dur).' },
+    { txt:'G\u00f6kku\u015fa\u011f\u0131 olu\u015fumu', t:'fiziksel', not:'I\u015f\u0131\u011f\u0131n su damlac\u0131klar\u0131nda k\u0131r\u0131l\u0131p yans\u0131mas\u0131 \u2014 yeni bir madde olu\u015fmaz, sadece \u0131\u015f\u0131k ayr\u0131\u015f\u0131r.' },
+    { txt:'Yo\u011furttan ayran eldesi', t:'fiziksel', not:'Yo\u011furt suyla SEYRELTİLİR ve KARIŞTIRILIR \u2014 yeni bir madde olu\u015fmaz, sadece kar\u0131\u015f\u0131m haz\u0131rlan\u0131r.' },
+    { txt:'S\u00fctten tereya\u011f\u0131 eldesi', t:'fiziksel', not:'S\u00fctteki ya\u011f\u0131n \u00e7alkalanarak AYRILMASI (mekanik bir ay\u0131rma) \u2014 kimyasal bir tepkime olmaz.' },
+    { txt:'Metallerin elektrik ak\u0131m\u0131n\u0131 iletmesi', t:'fiziksel', not:'Serbest elektronlar\u0131n hareketi \u2014 metalin kimyasal yap\u0131s\u0131 de\u011fi\u015fmez.' },
+    { txt:'Yemek tuzunun suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'NaCl, suda Na\u207a ve Cl\u207b iyonlar\u0131na ayr\u0131l\u0131r ama bunlar yeniden buharla\u015ft\u0131r\u0131ld\u0131\u011f\u0131nda AYNI NaCl olarak geri elde edilir.' },
+    { txt:'O\u2082 gaz\u0131n\u0131n suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'Bal\u0131klar\u0131n solunum yapabilmesini sa\u011flayan basit bir \u00e7\u00f6z\u00fcnme \u2014 O\u2082 kimyasal olarak de\u011fi\u015fmez.' },
+    { txt:'Ya\u011fl\u0131 boyan\u0131n tiner ile inceltilmesi', t:'fiziksel', not:'Sadece bir \u00e7\u00f6zelti haz\u0131rlan\u0131r, boyan\u0131n kimyasal yap\u0131s\u0131 de\u011fi\u015fmez (kurumas\u0131 ise KİMYASALDIR).' },
+    { txt:'\u015eeker pancar\u0131ndan \u015feker eldesi', t:'fiziksel', not:'\u015eeker, pancardan safla\u015ft\u0131r\u0131larak (ay\u0131rma y\u00f6ntemleriyle) elde edilir \u2014 yeni bir madde olu\u015fturulmaz.' },
+    { txt:'Alkol\u00fcn suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'Her oranda kar\u0131\u015fabilen iki s\u0131v\u0131n\u0131n homojen kar\u0131\u015f\u0131m\u0131 \u2014 yeni madde olu\u015fmaz.' },
+    { txt:'Ka\u011f\u0131d\u0131n y\u0131rt\u0131lmas\u0131', t:'fiziksel', not:'Sadece \u015fekil/boyut de\u011fi\u015fir; ka\u011f\u0131d\u0131 olu\u015fturan sel\u00fcloz molek\u00fclleri AYNIDIR.' },
+    { txt:'Cam k\u0131r\u0131lmas\u0131', t:'fiziksel', not:'Camin kimyasal bile\u015fimi de\u011fi\u015fmez, sadece par\u00e7alara ayr\u0131l\u0131r.' },
+    { txt:'Petrolden benzin, mazot eldesi', t:'fiziksel', not:'Fraksiyonlu damıtma (kaynama noktas\u0131 farklar\u0131na g\u00f6re AYIRMA) \u2014 yeni molek\u00fcl olu\u015fturulmaz, zaten var olanlar ayr\u0131l\u0131r.' },
+    { txt:'Kar\u0131\u015f\u0131mlar\u0131 ay\u0131rma y\u00f6ntemleri (s\u00fczme, damıtma, eleme...)', t:'fiziksel', not:'T\u00fcm ay\u0131rma y\u00f6ntemleri fizikseldir \u2014 bile\u015fenlerin kimyasal yap\u0131s\u0131 de\u011fi\u015fmeden sadece birbirinden ayr\u0131l\u0131r.' },
+    // --- KİMYASAL DEĞİŞİMLER ---
+    { txt:'CO\u2082 gaz\u0131n\u0131n suda \u00e7\u00f6z\u00fcnmesi (CO\u2082 + H\u2082O \u2192 H\u2082CO\u2083)', t:'kimyasal', not:'CO\u2082 ve H\u2082O birle\u015fip TAMAMEN FARKLI bir madde (karbonik asit) olu\u015fturur.' },
+    { txt:'Tuzlu suyun elektrik ak\u0131m\u0131n\u0131 iletmesi', t:'kimyasal', not:'\u0130letim s\u0131ras\u0131nda elektrotlarda GERÇEK kimyasal tepkimeler (elektroliz) ger\u00e7ekle\u015fir.' },
+    { txt:'Aktif metallerin suda \u00e7\u00f6z\u00fcnmesi (Na, K gibi)', t:'kimyasal', not:'Na + H\u2082O \u2192 NaOH + H\u2082 \u2014 yeni maddeler (baz ve gaz) olu\u015fur.' },
+    { txt:'Metallerin asitlerle tepkimesi', t:'kimyasal', not:'\u00d6rn. Zn + 2HCl \u2192 ZnCl\u2082 + H\u2082 \u2014 tuz ve hidrojen gaz\u0131 olu\u015fur.' },
+    { txt:'Asit-baz tepkimeleri', t:'kimyasal', not:'N\u00f6tralle\u015fme sonucu tuz ve su gibi TAMAMEN YENİ maddeler olu\u015fur.' },
+    { txt:'Elektroliz', t:'kimyasal', not:'Elektrik enerjisiyle bile\u015fikler kendi elementlerine AYRIŞTIRILIR (\u00f6rn. suyun H\u2082 ve O\u2082\u2019ye ayr\u0131\u015fmas\u0131).' },
+    { txt:'Ya\u011fl\u0131 boyan\u0131n kurumas\u0131', t:'kimyasal', not:'Havadaki oksijenle tepkimeye girip (oksidasyon/polimerle\u015fme) sertle\u015fir \u2014 geri d\u00f6nü\u015fs\u00fcz bir kimyasal de\u011fi\u015fimdir.' },
+    { txt:'Betonun donmas\u0131', t:'kimyasal', not:'\u00c7imentodaki bile\u015fiklerin su ile tepkimeye girip (hidratasyon) yeni kristal yap\u0131lar olu\u015fturmas\u0131d\u0131r.' },
+    { txt:'\u00c7imentonun donmas\u0131', t:'kimyasal', not:'Betonla ayn\u0131 \u015fekilde, su ile ger\u00e7ekle\u015fen hidratasyon tepkimesidir; geri d\u00f6n\u00fc\u015fs\u00fczd\u00fcr.' },
+    { txt:'Kan\u0131n p\u0131ht\u0131la\u015fmas\u0131', t:'kimyasal', not:'Enzimlerle tetiklenen bir dizi protein tepkimesi sonucu fibrin a\u011f\u0131 olu\u015fur \u2014 yeni madde (fibrin) olu\u015fur.' },
+    { txt:'Sa\u00e7\u0131n a\u011farmas\u0131', t:'kimyasal', not:'Melanin pigmentinin \u00fcretiminin durmas\u0131/y\u0131k\u0131lmas\u0131 \u2014 kimyasal bile\u015fim de\u011fi\u015fir.' },
+    { txt:'Giysilerin \u00e7ama\u015f\u0131r suyu ile a\u011fart\u0131lmas\u0131', t:'kimyasal', not:'Sodyum hipoklorit, renk pigmentlerini kimyasal olarak PARÇALAR (oksitler).' },
+    { txt:'Grizu patlamas\u0131', t:'kimyasal', not:'Metan gaz\u0131n\u0131n oksijenle H\u0131ZLI YANMASI (patlay\u0131c\u0131 oksidasyon tepkimesi).' },
+    { txt:'Hava yast\u0131\u011f\u0131n\u0131n patlamas\u0131', t:'kimyasal', not:'Sodyum azid\u00fcn (NaN\u2083) h\u0131zla ayr\u0131\u015f\u0131p b\u00fcy\u00fck hacimde N\u2082 gaz\u0131 \u00fcretmesi.' },
+    { txt:'Solunum', t:'kimyasal', not:'Glikozun oksijenle yak\u0131lmas\u0131yla (h\u00fccresel solunum) enerji, CO\u2082 ve su a\u00e7\u0131\u011fa \u00e7\u0131kar.' },
+    { txt:'Fotosentez', t:'kimyasal', not:'CO\u2082 + H\u2082O + \u0131\u015f\u0131k enerjisi \u2192 glikoz + O\u2082 \u2014 tamamen yeni maddeler olu\u015fur.' },
+    { txt:'Yanma (oksitlenme, paslanma)', t:'kimyasal', not:'Madde, oksijenle tepkimeye girerek FARKLI bir bile\u015fi\u011fe (\u00f6rn. demir \u2192 demir oksit/pas) d\u00f6n\u00fc\u015f\u00fcr.' },
+    { txt:'S\u00fctten peynir, yo\u011furt eldesi', t:'kimyasal', not:'Bakteriler s\u00fct \u015fekerini (laktoz) laktik aside \u00e7evirir \u2014 protein yap\u0131s\u0131 de\u011fi\u015fir (peyni\u015fme), geri d\u00f6n\u00fc\u015fs\u00fczd\u00fcr.' },
+    { txt:'\u00dcz\u00fcmden \u015farap, arpadan bira, elmadan sirke eldesi', t:'kimyasal', not:'Fermantasyon \u2014 mikroorganizmalar \u015fekeri alkole/aside \u00e7evirir, TAMAMEN yeni maddeler olu\u015fur.' },
+    { txt:'G\u00fcm\u00fc\u015f\u00fcn kararmas\u0131', t:'kimyasal', not:'G\u00fcm\u00fc\u015f, havadaki k\u00fck\u00fcrt bile\u015fikleriyle tepkimeye girip Ag\u2082S (gümü\u015f s\u00fclf\u00fcr) olu\u015fturur.' },
+    { txt:'K\u00fcflenme (\u00e7\u00fcr\u00fcme)', t:'kimyasal', not:'Mikroorganizmalar organik maddeyi kimyasal olarak PARÇALAYIP farkl\u0131 bile\u015fiklere d\u00f6n\u00fc\u015ft\u00fcr\u00fcr.' },
+    { txt:'Yumurtan\u0131n pi\u015fmesi', t:'kimyasal', not:'Is\u0131yla proteinlerin yap\u0131s\u0131 (denat\u00fcrasyon) kal\u0131c\u0131 olarak de\u011fi\u015fir \u2014 geri \u00e7evrilemez.' },
+    { txt:'Efervesan tabletin suda \u00e7\u00f6z\u00fcnmesi', t:'kimyasal', not:'Tabletteki asit ve karbonat suda tepkimeye girip CO\u2082 gaz\u0131 (kabarc\u0131klar) a\u00e7\u0131\u011fa \u00e7\u0131kar\u0131r.' },
+    { txt:'Pamukkale Travertenlerinin olu\u015fumu', t:'kimyasal', not:'Sudaki kalsiyum bikarbonat\u0131n CO\u2082 kaybederek kalsiyum karbonata (traverten) d\u00f6n\u00fc\u015fmesi.' },
+    { txt:'Pasta \u00fczerindeki maytab\u0131n yanmas\u0131', t:'kimyasal', not:'Metal tozlar\u0131n\u0131n h\u0131zl\u0131 yanmas\u0131 (oksitlenmesi) \u2014 \u0131\u015f\u0131k ve yeni bile\u015fikler a\u00e7\u0131\u011fa \u00e7\u0131kar.' },
+    { txt:'Yapra\u011f\u0131n sararmas\u0131', t:'kimyasal', not:'Klorofil pigmentinin par\u00e7alanmas\u0131yla alt\u0131nda gizli olan karotenoid (sar\u0131/turuncu) pigmentler ortaya \u00e7\u0131kar \u2014 kimyasal bir bozunmad\u0131r.' }
+  ];
+  var fkSt = { score: 0, total: 0, order: [], idx: 0, cur: null };
+  function fkShuffle(){
+    fkSt.order = FIZKIM_LIST.map(function(_, i){ return i; });
+    for (var i = fkSt.order.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp = fkSt.order[i]; fkSt.order[i] = fkSt.order[j]; fkSt.order[j] = tmp; }
+  }
+  fkShuffle();
+
+  function setupFizKim(){
+    if (document.getElementById('s-fizkim')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-fizkim" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udd04 Fiziksel ve Kimyasal De\u011fi\u015fim</h1>' +
+        '<p class="psub">G\u00fcnl\u00fck hayattan ' + FIZKIM_LIST.length + ' \u00f6rnek \u2014 hangisi fiziksel, hangisi kimyasal de\u011fi\u015fim?</p>' +
+        '<div class="tabs" id="fk-tabs">' +
+          '<button class="tab on" onclick="tswitch(\'fk-tabs\',\'fk-tps\',0)">\u2753 Quiz</button>' +
+          '<button class="tab" onclick="tswitch(\'fk-tabs\',\'fk-tps\',1)">\ud83d\udcd6 T\u00fcm Örnekler</button>' +
+        '</div>' +
+        '<div id="fk-tps">' +
+          '<div class="tp on">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;color:var(--tx3)">' +
+              '<span id="fk-prog">Soru 1/' + FIZKIM_LIST.length + '</span>' +
+              '<span>\u2713 <span id="fk-score" style="color:var(--gr);font-weight:700">0</span></span>' +
+            '</div>' +
+            '<div class="card" style="text-align:center;margin-bottom:14px">' +
+              '<div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Bu bir fiziksel mi, kimyasal bir de\u011fi\u015fim mi?</div>' +
+              '<div id="fk-txt" style="font-size:17px;font-weight:700;color:#fff;line-height:1.5"></div>' +
+            '</div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">' +
+              '<button type="button" class="ob2" onclick="fkCheck(\'fiziksel\',this)" style="text-align:center;font-weight:700">\ud83d\udd35 Fiziksel</button>' +
+              '<button type="button" class="ob2" onclick="fkCheck(\'kimyasal\',this)" style="text-align:center;font-weight:700">\ud83d\udd34 Kimyasal</button>' +
+            '</div>' +
+            '<div id="fk-fb" style="display:none;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6"></div>' +
+            '<button type="button" id="fk-next" onclick="fkNext()" style="display:none;width:100%;padding:12px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;cursor:pointer">Sonraki \u2192</button>' +
+          '</div>' +
+          '<div class="tp" id="fk-list-wrap"></div>' +
+        '</div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-fizkim') === -1) SCREENS.push('s-fizkim');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-fizkim'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-fizkim" onclick="nav(\'fizkim\')">\ud83d\udd04 Fiziksel ve Kimyasal De\u011fi\u015fim</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-fizkim'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-fizkim" onclick="nav(\'fizkim\')"><div class="ti">\ud83d\udd04</div><div class="tt">Fiziksel ve Kimyasal De\u011fi\u015fim</div><div class="td">G\u00fcnl\u00fck hayattan \u00f6rneklerle fiziksel/kimyasal de\u011fi\u015fim ay\u0131rt etme.</div></div>');
+    fkRenderList();
+  }
+  function fkRenderList(){
+    var box = document.getElementById('fk-list-wrap');
+    if (!box) return;
+    var fizList = FIZKIM_LIST.filter(function(x){ return x.t === 'fiziksel'; });
+    var kimList = FIZKIM_LIST.filter(function(x){ return x.t === 'kimyasal'; });
+    function renderGroup(title, color, list){
+      var h = '<div style="font-size:13px;font-weight:700;color:' + color + ';margin:14px 0 8px">' + title + ' (' + list.length + ')</div>';
+      list.forEach(function(item){
+        h += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+          '<div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:4px">' + item.txt + '</div>' +
+          '<div style="font-size:12px;color:var(--tx2);line-height:1.5">' + item.not + '</div></div>';
+      });
+      return h;
+    }
+    box.innerHTML = renderGroup('\ud83d\udd35 Fiziksel De\u011fi\u015fimler', '#60a5fa', fizList) + renderGroup('\ud83d\udd34 Kimyasal De\u011fi\u015fimler', '#f87171', kimList);
+  }
+  function fkEnter(){ fkSt.idx = 0; fkSt.score = 0; fkShuffle(); fkRender(); fkRenderList(); }
+  function fkRender(){
+    if (fkSt.idx >= fkSt.order.length) { fkShuffle(); fkSt.idx = 0; }
+    var item = FIZKIM_LIST[fkSt.order[fkSt.idx]];
+    fkSt.cur = item;
+    document.getElementById('fk-prog').textContent = 'Soru ' + (fkSt.idx+1) + '/' + FIZKIM_LIST.length;
+    document.getElementById('fk-score').textContent = fkSt.score;
+    document.getElementById('fk-txt').textContent = item.txt;
+    var fb = document.getElementById('fk-fb'); fb.style.display = 'none';
+    document.getElementById('fk-next').style.display = 'none';
+    var btns = document.querySelectorAll ? null : null;
+  }
+  window.fkCheck = function(sel, btn){
+    var item = fkSt.cur;
+    var container = btn.parentElement;
+    var btns = container ? container.querySelectorAll('button') : [btn];
+    for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
+    var fb = document.getElementById('fk-fb');
+    fkSt.total++;
+    if (sel === item.t) {
+      fkSt.score++;
+      btn.className = 'ob2 cor';
+      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#86efac';
+      fb.innerHTML = '\u2713 Do\u011fru! ' + item.not;
+    } else {
+      btn.className = 'ob2 wro';
+      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5';
+      fb.innerHTML = '\u2717 Yanl\u0131\u015f. Do\u011fru cevap: <b>' + (item.t === 'fiziksel' ? 'Fiziksel' : 'Kimyasal') + '</b> \u2014 ' + item.not;
+    }
+    document.getElementById('fk-score').textContent = fkSt.score;
+    document.getElementById('fk-next').style.display = 'block';
+  };
+  window.fkNext = function(){ fkSt.idx++; fkRender(); };
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -6685,6 +7015,7 @@
     try { setupFlame(); } catch (e) { /* sessiz */ }
     try { setupRedox(); } catch (e) { /* sessiz */ }
     try { setupKin(); } catch (e) { /* sessiz */ }
+    try { setupFizKim(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
@@ -6708,6 +7039,7 @@
             if (id === 'alev') flameEnter(); else flameLeave();
             if (id === 'redoks') redoxEnter();
             if (id === 'kinetik') kinEnter(); else kinLeave();
+            if (id === 'fizkim') fkEnter();
           } catch (e) {}
         };
       }
