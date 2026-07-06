@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v12
+   RONYA KİMYA — EKLENTİ v13
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -39,6 +39,11 @@
    26) 🧊 Maarif 9. Sınıf Etkileşim Ünitesi: Zayıf Etkileşimler
        (London/dipol-dipol/hidrojen bağı) + Maddenin Halleri
        (katı/sıvı/gaz/plazma parçacık simülasyonu), 3D + detaylı konu
+   27) ⚙️ Ayarlar ekranı: tüm ilerleme verilerini (skor, rozet, seri,
+       flashcard, yanlış listesi) görüntüle ve tek tek/toplu sıfırla
+   28) 🧪 IUPAC Adlandırma Quiz'i: Element Testi ekranına yeni soru
+       tipleri (Formül→IUPAC Ad, IUPAC Ad→Formül), Hidrokarbonlar 3D
+       galerisindeki 30 molekülden — şıklı ve yazarak modu destekli
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -429,6 +434,7 @@
     {f:'K2Cr2O7', n:'Potasyum dikromat', c:'Tuz'}, {f:'CaSO4', n:'Kalsiyum s\u00fclfat (al\u00e7\u0131 ta\u015f\u0131)', c:'Tuz'}
   ];
   function isCmpType(t){ return t === 'cmp2name' || t === 'name2cmp'; }
+  function isHcType(t){ return t === 'hc2name' || t === 'name2hc'; }
 
   function weakMap(){ return sget('rk_weak', {}); }
   function weakList(){ var w = weakMap(); return ELS.filter(function(e){ return w[e.n]; }); }
@@ -493,7 +499,9 @@
         '<button type="button" class="ob" onclick="setQType(\'period\',this)">Periyot</button>' +
         '<button type="button" class="ob" onclick="setQType(\'conf\',this)">e\u207b Dizilimi</button>' +
         '<button type="button" class="ob" onclick="setQType(\'cmp2name\',this)">Bile\u015fik \u2192 Ad</button>' +
-        '<button type="button" class="ob" onclick="setQType(\'name2cmp\',this)">Ad \u2192 Form\u00fcl</button>');
+        '<button type="button" class="ob" onclick="setQType(\'name2cmp\',this)">Ad \u2192 Form\u00fcl</button>' +
+        '<button type="button" class="ob" onclick="setQType(\'hc2name\',this)">\ud83e\uddea Form\u00fcl \u2192 IUPAC Ad</button>' +
+        '<button type="button" class="ob" onclick="setQType(\'name2hc\',this)">\ud83e\uddea IUPAC Ad \u2192 Form\u00fcl</button>');
     }
 
     var startBtn = card.querySelector('button.btn.bp');
@@ -520,6 +528,10 @@
     if (!note) return;
     if (isCmpType(quizCfg.type)) {
       note.textContent = 'Bile\u015fik sorular\u0131 ' + COMPOUNDS.length + ' bile\u015fiklik YKS listesinden gelir; element aral\u0131\u011f\u0131 se\u00e7imi bu tipte uygulanmaz.';
+      return;
+    }
+    if (isHcType(quizCfg.type)) {
+      note.textContent = 'IUPAC sorular\u0131 Hidrokarbonlar 3D galerisindeki ' + hcList().length + ' molek\u00fclden gelir; element aral\u0131\u011f\u0131 se\u00e7imi bu tipte uygulanmaz.';
       return;
     }
     var size = poolFor(qMode).length;
@@ -567,6 +579,10 @@
     if (isCmpType(quizCfg.type)) {
       var cp = shuffleArr(COMPOUNDS.slice());
       items = cp.slice(0, Math.min(quizCfg.count, cp.length)).map(function(c){ return { cmp: c, type: quizCfg.type }; });
+      qPool = [];
+    } else if (isHcType(quizCfg.type)) {
+      var hp = shuffleArr(hcList().slice());
+      items = hp.slice(0, Math.min(quizCfg.count, hp.length)).map(function(m){ return { hc: m, type: quizCfg.type }; });
       qPool = [];
     } else {
       var pool = typeFilter(poolFor(qMode), quizCfg.type);
@@ -650,6 +666,13 @@
         return { big: c.n, sub: c.c, label: 'Bu bile\u015fi\u011fin form\u00fcl\u00fc nedir?', ans: pretty(c.f), plain: c.f, kind: 'cmpf', smallBig: true };
       return { big: pretty(c.f), sub: c.c, label: 'Bu bile\u015fi\u011fin ad\u0131 nedir?', ans: c.n, kind: 'cmpn' };
     }
+    if (item.hc) {
+      var m = item.hc;
+      var kindLabel = m.kind === 'an' ? 'Alkan' : m.kind === 'en' ? 'Alken' : 'Alkin';
+      if (t === 'name2hc')
+        return { big: m.name, sub: kindLabel, label: 'Bu molek\u00fcl\u00fcn molek\u00fcl form\u00fcl\u00fc nedir?', ans: pretty(m.f), plain: m.f, kind: 'hcf', smallBig: true };
+      return { big: pretty(m.f), sub: kindLabel, label: 'Bu molek\u00fcl\u00fcn IUPAC ad\u0131 nedir?', ans: m.name, kind: 'hcn' };
+    }
     var el = item.el, d = EL_DATA[el.n] || {};
     if (t === 'sym2name')
       return { big: el.sym, sub: el.cat, label: 'Bu sembol\u00fcn elementi hangisidir?', ans: el.name, kind: 'name' };
@@ -683,6 +706,21 @@
       while (opts.length < OPT_N && guard++ < 800) {
         r = COMPOUNDS[Math.floor(Math.random()*COMPOUNDS.length)];
         cand = q.kind === 'cmpn' ? r.n : pretty(r.f);
+        if (cand && opts.indexOf(cand) === -1) opts.push(cand);
+      }
+    } else if (q.kind === 'hcn' || q.kind === 'hcf') {
+      // Önce aynı tür (alkan/alken/alkin) çeldirici dene — daha zor olur
+      var sameK = hcList().filter(function(x){ return x.kind === item.hc.kind && x.f !== item.hc.f; });
+      var src3 = sameK.length >= OPT_N - 1 ? sameK : hcList();
+      while (opts.length < OPT_N && guard++ < 800) {
+        r = src3[Math.floor(Math.random()*src3.length)];
+        cand = q.kind === 'hcn' ? r.name : pretty(r.f);
+        if (cand && opts.indexOf(cand) === -1) opts.push(cand);
+      }
+      guard = 0;
+      while (opts.length < OPT_N && guard++ < 800) {
+        r = hcList()[Math.floor(Math.random()*hcList().length)];
+        cand = q.kind === 'hcn' ? r.name : pretty(r.f);
         if (cand && opts.indexOf(cand) === -1) opts.push(cand);
       }
     } else {
@@ -726,7 +764,7 @@
     var fb = document.getElementById('fbar');
     fb.className = 'fb'; fb.textContent = '';
     var item = quizSt.items[quizSt.cur];
-    if (item && !item.el && !item.cmp) item = { el: item, type: quizCfg.type }; // geriye uyumluluk
+    if (item && !item.el && !item.cmp && !item.hc) item = { el: item, type: quizCfg.type }; // geriye uyumluluk
     document.getElementById('qcnt-lbl').textContent = 'Soru ' + (quizSt.cur + 1) + '/' + quizSt.items.length;
     document.getElementById('lvc').textContent = '\u2713 ' + quizSt.score;
     document.getElementById('lvw').textContent = '\u2717 ' + quizSt.wrongs;
@@ -753,7 +791,7 @@
         ww.style.display = 'block';
         var inp = document.getElementById('writeInp');
         inp.disabled = false; inp.value = '';
-        inp.placeholder = q.kind === 'cmpf' ? 'Form\u00fcl\u00fc d\u00fcz yaz (\u00f6rn: H2SO4)...' : 'Cevab\u0131n\u0131 yaz...';
+        inp.placeholder = (q.kind === 'cmpf' || q.kind === 'hcf') ? 'Form\u00fcl\u00fc d\u00fcz yaz (\u00f6rn: C4H10)...' : 'Cevab\u0131n\u0131 yaz...';
         setTimeout(function(){ try { inp.focus(); } catch (e) {} }, 60);
       }
     } else {
@@ -846,7 +884,7 @@
     if (!v) { if (typeof toast === 'function') toast('Bir cevap yaz!'); return; }
     qAnswered = true;
     inp.disabled = true;
-    var target = quizSt._kind === 'cmpf' ? quizSt._plain : quizSt.correct;
+    var target = (quizSt._kind === 'cmpf' || quizSt._kind === 'hcf') ? quizSt._plain : quizSt.correct;
     var ok = matchAnswer(v, target, quizSt._kind);
     var fb = document.getElementById('fbar');
     if (ok) { fb.className = 'fb show cor'; fb.textContent = '\u2713 Do\u011fru!'; }
@@ -5015,6 +5053,91 @@
   function wiEnter(){ setTimeout(function(){ wiStart(); mhStart(); }, 80); }
   function wiLeave(){ wiStop(); mhStop(); }
 
+  // ---------- 14. AYARLAR EKRANI ----------
+  var SET_KEYS = [
+    { k:'rk_stats', label:'Element Testi', icon:'\ud83e\uddea', kind:'ac' },
+    { k:'rk_bal', label:'Denklem Dengeleme', icon:'\u2696\ufe0f', kind:'ac' },
+    { k:'rk_scores', label:'YKS Provas\u0131', icon:'\u23f1\ufe0f', kind:'scores' },
+    { k:'rk_badges', label:'Rozetler', icon:'\ud83c\udfc6', kind:'count', max:11 },
+    { k:'rk_days', label:'\u00c7al\u0131\u015fma Serisi', icon:'\ud83d\udd25', kind:'days' },
+    { k:'rk_fc', label:'Flashcard \u0130lerlemesi', icon:'\ud83c\udccf', kind:'obj' },
+    { k:'rk_weak', label:'Yanl\u0131\u015f Listesi', icon:'\u274c', kind:'obj' }
+  ];
+
+  function setSummaryFor(item){
+    var v = sget(item.k, item.kind === 'scores' || item.kind === 'days' ? [] : (item.kind === 'obj' ? {} : {}));
+    if (item.kind === 'ac') {
+      var a = v.a || 0, c = v.c || 0;
+      if (!a) return 'Hen\u00fcz veri yok';
+      return c + ' do\u011fru / ' + a + ' deneme (%' + Math.round(100*c/a) + ')';
+    }
+    if (item.kind === 'scores') {
+      if (!v.length) return 'Hen\u00fcz deneme yok';
+      var best = 0; v.forEach(function(s){ if ((s.p||0) > best) best = s.p; });
+      return v.length + ' deneme \u00b7 en y\u00fcksek %' + Math.round(best);
+    }
+    if (item.kind === 'count') {
+      var n = Array.isArray(v) ? v.length : Object.keys(v).length;
+      return n + ' / ' + item.max + ' kazan\u0131ld\u0131';
+    }
+    if (item.kind === 'days') {
+      return (v.length || 0) + ' g\u00fcn kaydedildi';
+    }
+    if (item.kind === 'obj') {
+      return Object.keys(v).length + ' kay\u0131t';
+    }
+    return '\u2014';
+  }
+
+  function setRenderList(){
+    var box = document.getElementById('set-list');
+    if (!box) return;
+    var html = '';
+    SET_KEYS.forEach(function(item){
+      html += '<div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">' +
+        '<div style="min-width:0"><div style="font-size:14px;font-weight:700;color:#fff">' + item.icon + ' ' + item.label + '</div>' +
+        '<div style="font-size:12px;color:var(--tx3);margin-top:2px">' + setSummaryFor(item) + '</div></div>' +
+        '<button type="button" onclick="setReset(\'' + item.k + '\',\'' + item.label.replace(/'/g,"") + '\')" style="flex-shrink:0;padding:8px 12px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35);border-radius:100px;color:#f87171;font-size:12px;cursor:pointer">S\u0131f\u0131rla</button>' +
+      '</div>';
+    });
+    box.innerHTML = html;
+  }
+
+  window.setReset = function(key, label){
+    if (!window.confirm(label + ' verilerini s\u0131f\u0131rlamak istedi\u011fine emin misin? Bu i\u015flem geri al\u0131namaz.')) return;
+    try { localStorage.removeItem(key); } catch (e) { /* sessiz */ }
+    setRenderList();
+  };
+  window.setResetAll = function(){
+    if (!window.confirm('T\u00dcM ilerleme verilerini (skorlar, rozetler, seri, flashcard, yanl\u0131\u015f listesi) sil? Bu i\u015flem GER\u0130 ALINAMAZ.')) return;
+    SET_KEYS.forEach(function(item){ try { localStorage.removeItem(item.k); } catch (e) { /* sessiz */ } });
+    try { localStorage.removeItem('rk_flags'); } catch (e) { /* sessiz */ }
+    setRenderList();
+  };
+
+  function setupSet(){
+    if (document.getElementById('s-set')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-set" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\u2699\ufe0f Ayarlar</h1>' +
+        '<p class="psub">\u0130lerleme verilerini g\u00f6r\u00fcnt\u00fcle ve gerekirse s\u0131f\u0131rla.</p>' +
+        '<div id="set-list" style="margin-bottom:14px"></div>' +
+        '<button type="button" onclick="setResetAll()" style="width:100%;padding:14px;background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:var(--rlg);color:#fca5a5;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px">\ud83d\uddd1\ufe0f T\u00fcm \u0130lerlemeyi S\u0131f\u0131rla</button>' +
+        '<p style="font-size:11px;color:var(--tx3);text-align:center;line-height:1.6">Bu ekran yaln\u0131zca bu cihazda saklanan yerel ilerleme verilerini y\u00f6netir. Hi\u00e7bir veri sunucuya g\u00f6nderilmez.</p>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-set') === -1) SCREENS.push('s-set');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-set'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-set" onclick="nav(\'set\')">\u2699\ufe0f Ayarlar</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-set'))
+      tg.insertAdjacentHTML('beforeend',
+        '<div class="tc" id="tile-set" onclick="nav(\'set\')"><div class="ti">\u2699\ufe0f</div><div class="tt">Ayarlar</div><div class="td">\u0130lerleme verilerini g\u00f6r\u00fcnt\u00fcle, gerekirse s\u0131f\u0131rla.</div></div>');
+  }
+  function setEnter(){ setRenderList(); }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -5029,6 +5152,7 @@
     try { setupHC(); } catch (e) { /* sessiz */ }
     try { setupFG(); } catch (e) { /* sessiz */ }
     try { setupWI(); } catch (e) { /* sessiz */ }
+    try { setupSet(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
@@ -5045,6 +5169,7 @@
             if (id === 'hc') setTimeout(hcEnter, 80); else hcLeave();
             if (id === 'fg') setTimeout(fgEnter, 80); else fgLeave();
             if (id === 'wi') wiEnter(); else wiLeave();
+            if (id === 'set') setEnter();
           } catch (e) {}
         };
       }
