@@ -43,7 +43,9 @@
        flashcard, yanlış listesi) görüntüle ve tek tek/toplu sıfırla
    28) 🧪 IUPAC Adlandırma Quiz'i: Element Testi ekranına yeni soru
        tipleri (Formül→IUPAC Ad, IUPAC Ad→Formül), Hidrokarbonlar 3D
-       galerisindeki 30 molekülden — şıklı ve yazarak modu destekli
+       + Fonksiyonel Gruplar galerilerindeki 48 molekülden — şıklı
+       ve yazarak modu destekli. İzomer belirsizliği (örn. etanol/
+       dimetil eter aynı formül) Formül→Ad yönünde otomatik filtrelenir.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -435,6 +437,34 @@
   ];
   function isCmpType(t){ return t === 'cmp2name' || t === 'name2cmp'; }
   function isHcType(t){ return t === 'hc2name' || t === 'name2hc'; }
+  var ORG_POOL = null;
+  function organicQuizPool(){
+    if (ORG_POOL) return ORG_POOL;
+    ORG_POOL = [];
+    hcList().forEach(function(m){
+      var cat = m.kind === 'an' ? 'Alkan' : m.kind === 'en' ? 'Alken' : 'Alkin';
+      ORG_POOL.push({ name: m.name, f: m.f, cat: cat });
+    });
+    fgList().forEach(function(m){
+      ORG_POOL.push({ name: m.name, f: m.f, cat: FG_CLASS_NAMES[m.cls] });
+    });
+    return ORG_POOL;
+  }
+  var ORG_UNIQUE_POOL = null;
+  function organicUniqueFormulaPool(){
+    // "Formül → Ad" yönü için: bazı fonksiyonel gruplar İZOMERDİR (aynı
+    // molekül formülü, farklı yapı/isim — örn. etanol/dimetil eter,
+    // propanal/propanon, asetik asit/metil format). Bu yönde formülü
+    // göstermek gerçek bir belirsizlik yaratır; o yüzden aynı formüle
+    // sahip BİRDEN FAZLA molekül varsa, bu yönde sorulmazlar (diğer
+    // yönde — Ad → Formül — sorun yok, çünkü isim tek anlamlıdır).
+    if (ORG_UNIQUE_POOL) return ORG_UNIQUE_POOL;
+    var pool = organicQuizPool();
+    var counts = {};
+    pool.forEach(function(p){ counts[p.f] = (counts[p.f] || 0) + 1; });
+    ORG_UNIQUE_POOL = pool.filter(function(p){ return counts[p.f] === 1; });
+    return ORG_UNIQUE_POOL;
+  }
 
   function weakMap(){ return sget('rk_weak', {}); }
   function weakList(){ var w = weakMap(); return ELS.filter(function(e){ return w[e.n]; }); }
@@ -531,7 +561,7 @@
       return;
     }
     if (isHcType(quizCfg.type)) {
-      note.textContent = 'IUPAC sorular\u0131 Hidrokarbonlar 3D galerisindeki ' + hcList().length + ' molek\u00fclden gelir; element aral\u0131\u011f\u0131 se\u00e7imi bu tipte uygulanmaz.';
+      note.textContent = 'IUPAC sorular\u0131 Hidrokarbonlar 3D ve Fonksiyonel Gruplar galerilerindeki toplam ' + organicQuizPool().length + ' molek\u00fclden gelir; element aral\u0131\u011f\u0131 se\u00e7imi bu tipte uygulanmaz.';
       return;
     }
     var size = poolFor(qMode).length;
@@ -581,7 +611,8 @@
       items = cp.slice(0, Math.min(quizCfg.count, cp.length)).map(function(c){ return { cmp: c, type: quizCfg.type }; });
       qPool = [];
     } else if (isHcType(quizCfg.type)) {
-      var hp = shuffleArr(hcList().slice());
+      var hcSrc = quizCfg.type === 'hc2name' ? organicUniqueFormulaPool() : organicQuizPool();
+      var hp = shuffleArr(hcSrc.slice());
       items = hp.slice(0, Math.min(quizCfg.count, hp.length)).map(function(m){ return { hc: m, type: quizCfg.type }; });
       qPool = [];
     } else {
@@ -668,7 +699,7 @@
     }
     if (item.hc) {
       var m = item.hc;
-      var kindLabel = m.kind === 'an' ? 'Alkan' : m.kind === 'en' ? 'Alken' : 'Alkin';
+      var kindLabel = m.cat;
       if (t === 'name2hc')
         return { big: m.name, sub: kindLabel, label: 'Bu molek\u00fcl\u00fcn molek\u00fcl form\u00fcl\u00fc nedir?', ans: pretty(m.f), plain: m.f, kind: 'hcf', smallBig: true };
       return { big: pretty(m.f), sub: kindLabel, label: 'Bu molek\u00fcl\u00fcn IUPAC ad\u0131 nedir?', ans: m.name, kind: 'hcn' };
@@ -709,9 +740,9 @@
         if (cand && opts.indexOf(cand) === -1) opts.push(cand);
       }
     } else if (q.kind === 'hcn' || q.kind === 'hcf') {
-      // Önce aynı tür (alkan/alken/alkin) çeldirici dene — daha zor olur
-      var sameK = hcList().filter(function(x){ return x.kind === item.hc.kind && x.f !== item.hc.f; });
-      var src3 = sameK.length >= OPT_N - 1 ? sameK : hcList();
+      // Önce aynı kategori (alkan/alken/alkin/alkol/eter/...) çeldirici dene
+      var sameK = organicQuizPool().filter(function(x){ return x.cat === item.hc.cat && x.f !== item.hc.f; });
+      var src3 = sameK.length >= OPT_N - 1 ? sameK : organicQuizPool();
       while (opts.length < OPT_N && guard++ < 800) {
         r = src3[Math.floor(Math.random()*src3.length)];
         cand = q.kind === 'hcn' ? r.name : pretty(r.f);
@@ -719,7 +750,7 @@
       }
       guard = 0;
       while (opts.length < OPT_N && guard++ < 800) {
-        r = hcList()[Math.floor(Math.random()*hcList().length)];
+        r = organicQuizPool()[Math.floor(Math.random()*organicQuizPool().length)];
         cand = q.kind === 'hcn' ? r.name : pretty(r.f);
         if (cand && opts.indexOf(cand) === -1) opts.push(cand);
       }
@@ -868,10 +899,14 @@
       }
       return true;
     }
-    if (kind === 'cmpn') {
-      // Parantezli ek açıklamayı ("sönmemiş kireç" gibi) tolere et
+    if (kind === 'cmpn' || kind === 'hcn') {
+      // "Ad (Alternatif Ad)" biçiminde: hem tam metni, hem paranteZ ÖNCESİNİ,
+      // hem de parantez İÇİNDEKİ alternatif ismi ("sönmemiş kireç" ya da
+      // sadece "Aseton" gibi) ayrı ayrı kabul et.
       var core = String(correct).replace(/\(.*?\)/g, '');
-      return fold(user) === fold(correct) || fold(user) === fold(core);
+      var innerM = String(correct).match(/\(([^)]*)\)/);
+      var inner = innerM ? innerM[1] : '';
+      return fold(user) === fold(correct) || fold(user) === fold(core) || (inner !== '' && fold(user) === fold(inner));
     }
     return fold(user) === fold(correct);
   }
@@ -4252,18 +4287,27 @@
   }
 
   // --- Alkol: R-OH (n karbonlu düz zincir, OH ucundaki C1'de) ---
-  function buildAlcohol(n, branchAt2){
+  function buildAlcohol(n, ohLocant){
+    ohLocant = ohLocant || 1;
     var atoms = [], bonds = [];
     atoms.push({ x:0, y:0, z:0, el:'C' });
     if (n > 1) fgAddChainFrom(atoms, bonds, 0, v3(0,0,0), v3(1,0,0), n - 1);
-    var c1pos = v3(atoms[0].x, atoms[0].y, atoms[0].z);
-    var nb0 = n > 1 ? [{ dir: vNorm(vSub(v3(atoms[1].x,atoms[1].y,atoms[1].z), c1pos)), o:1 }] : [];
-    var dirO = freeDirs(nb0, 1)[0] || v3(0,1,0);
-    var oIdx = fgAddO(atoms, bonds, 0, c1pos, dirO, 1, 1.43);
+    function nbOf(idx){
+      var nb = [];
+      bonds.forEach(function(bd){
+        var A = atoms[bd.a], B = atoms[bd.b];
+        if (bd.a === idx) nb.push({ dir: vNorm(vSub(v3(B.x,B.y,B.z), v3(A.x,A.y,A.z))), o: bd.o });
+        if (bd.b === idx) nb.push({ dir: vNorm(vSub(v3(A.x,A.y,A.z), v3(B.x,B.y,B.z))), o: bd.o });
+      });
+      return nb;
+    }
+    var pIdx = Math.max(0, Math.min(n - 1, ohLocant - 1));
+    var pPos = v3(atoms[pIdx].x, atoms[pIdx].y, atoms[pIdx].z);
+    var dirO = freeDirs(nbOf(pIdx), 1)[0] || v3(0,1,0);
+    var oIdx = fgAddO(atoms, bonds, pIdx, pPos, dirO, 1, 1.43);
     var oPos = v3(atoms[oIdx].x, atoms[oIdx].y, atoms[oIdx].z);
     var hDir = freeDirs([{ dir: vScale(dirO,-1), o:1 }], 1)[0];
     fgAddH(atoms, bonds, oIdx, oPos, hDir, 0.96);
-    if (branchAt2 && n >= 3) { /* 2-propanol vb. için basitleştirilmiş: ek dal eklenmez, düz zincir yeterli görsel verir */ }
     fgFillH(atoms, bonds);
     var nC = atoms.filter(function(a){return a.el==='C';}).length;
     var nO = atoms.filter(function(a){return a.el==='O';}).length;
@@ -4396,6 +4440,7 @@
       { cls:'alkol', name:'Etanol', f:'C2H6O', build:function(){ return buildAlcohol(2); } },
       { cls:'alkol', name:'1-Propanol', f:'C3H8O', build:function(){ return buildAlcohol(3); } },
       { cls:'alkol', name:'1-Bütanol', f:'C4H10O', build:function(){ return buildAlcohol(4); } },
+      { cls:'alkol', name:'2-Propanol (İzopropil Alkol)', f:'C3H8O', build:function(){ return buildAlcohol(3, 2); } },
       { cls:'eter', name:'Dimetil Eter', f:'C2H6O', build:function(){ return buildEther(1,1); } },
       { cls:'eter', name:'Metil Etil Eter', f:'C3H8O', build:function(){ return buildEther(1,2); } },
       { cls:'eter', name:'Dietil Eter', f:'C4H10O', build:function(){ return buildEther(2,2); } },
@@ -4514,6 +4559,125 @@
     }
   };
 
+  // ---------- 12c. FONKSİYONEL GRUP İSİM AYRIŞTIRICISI ----------
+  var FG_ALKAN_ROOTS = {};
+  IUPAC_PARENTS.forEach(function(p){ if (p[1] === 'an') FG_ALKAN_ROOTS[p[0]] = p[2]; });
+  var FG_ALKAN_ROOT_LIST = Object.keys(FG_ALKAN_ROOTS).sort(function(a,b){ return b.length - a.length; });
+
+  var FG_ALKIL_MAP = { metil:1, etil:2, propil:3, butil:4 };
+  var FG_ALKIL_LIST = Object.keys(FG_ALKIL_MAP).sort(function(a,b){ return b.length - a.length; });
+
+  var FG_ACID_COMMON = { formik:1, asetik:2, propiyonik:3, butirik:4 };
+  var FG_ESTER_STEM = { format:1, asetat:2, propiyonat:3, butirat:4 };
+
+  function fgMatchAlkanRoot(s){
+    for (var i = 0; i < FG_ALKAN_ROOT_LIST.length; i++)
+      if (s.indexOf(FG_ALKAN_ROOT_LIST[i]) === 0) {
+        var found = null;
+        for (var j = 0; j < IUPAC_PARENTS.length; j++)
+          if (IUPAC_PARENTS[j][0] === FG_ALKAN_ROOT_LIST[i] && IUPAC_PARENTS[j][1] === 'an') { found = IUPAC_PARENTS[j]; break; }
+        return { root: FG_ALKAN_ROOT_LIST[i], n: FG_ALKAN_ROOTS[FG_ALKAN_ROOT_LIST[i]], proper: found ? found[3].toLocaleLowerCase('tr') : FG_ALKAN_ROOT_LIST[i] };
+      }
+    return null;
+  }
+  function fgMatchAlkil(s){
+    for (var i = 0; i < FG_ALKIL_LIST.length; i++)
+      if (s.indexOf(FG_ALKIL_LIST[i]) === 0) return { name: FG_ALKIL_LIST[i], n: FG_ALKIL_MAP[FG_ALKIL_LIST[i]] };
+    return null;
+  }
+
+  // Türkçe fonksiyonel grup ismini ayrıştırır. Dönüş: { ok, type, build() } ya da { ok:false, error }
+  function parseFgName(raw){
+    if (!raw || !String(raw).trim()) return { ok:false, error:'Bo\u015f isim girildi.' };
+    var trimmed = String(raw).trim();
+    var tokens = trimmed.split(/\s+/).map(function(t){ return foldOrg(t); }).filter(Boolean);
+    var norm = tokens.join('');       // boşluksuz tek parça (tek kelimeli isimler için)
+    var normTr = norm;                // Türkçe karakterler korunur
+
+    // --- ETER: "dimetil eter" / "metil etil eter" / "dietil eter" ---
+    if (tokens.length >= 2 && tokens[tokens.length - 1] === 'eter') {
+      var body = tokens.slice(0, -1).join(' ');
+      var mDi = body.match(/^di(.+)$/);
+      if (mDi) {
+        var a1 = fgMatchAlkil(mDi[1]);
+        if (!a1) return { ok:false, error:'"' + mDi[1] + '" tan\u0131nan bir alkil grubu de\u011fil.' };
+        return { ok:true, type:'eter', label:'Eter', build:function(){ return buildEther(a1.n, a1.n); },
+          canon: 'di' + a1.name + ' eter' };
+      }
+      var parts = body.split(/\s+/);
+      if (parts.length === 2) {
+        var b1 = fgMatchAlkil(parts[0]), b2 = fgMatchAlkil(parts[1]);
+        if (!b1 || !b2) return { ok:false, error:'Alkil gruplar\u0131 tan\u0131namad\u0131 (metil, etil, propil, b\u00fctil desteklenir).' };
+        return { ok:true, type:'eter', label:'Eter', build:function(){ return buildEther(b1.n, b2.n); },
+          canon: b1.name + ' ' + b2.name + ' eter' };
+      }
+      return { ok:false, error:'Eter ad\u0131 "dimetil eter" ya da "metil etil eter" bi\u00e7iminde yaz\u0131lmal\u0131.' };
+    }
+
+    // --- ESTER: "etil asetat" / "metil format" ---
+    if (tokens.length === 2 && (FG_ESTER_STEM[tokens[1]] || /at$/.test(tokens[1]))) {
+      var alkPart = fgMatchAlkil(tokens[0]);
+      if (!alkPart) return { ok:false, error:'"' + tokens[0] + '" tan\u0131nan bir alkil grubu de\u011fil.' };
+      var stem = tokens[1], acidN = FG_ESTER_STEM[stem];
+      if (!acidN) {
+        // sistematik: "<parent>oat" (örn. "propanoat" -> propan -> 3)
+        var stemBase = stem.replace(/oat$/, '');
+        var pr = fgMatchAlkanRoot(stemBase);
+        if (pr) acidN = pr.n;
+      }
+      if (!acidN) return { ok:false, error:'"' + stem + '" tan\u0131nan bir asit k\u00f6k\u00fc de\u011fil (format, asetat, propiyonat, b\u00fctirat desteklenir).' };
+      return { ok:true, type:'ester', label:'Ester', build:function(){ return buildEster(acidN, alkPart.n); },
+        canon: tokens[0] + ' ' + stem };
+    }
+
+    // --- ASİT: "propanoik asit" / "asetik asit" / "formik asit" ---
+    if (tokens.length === 2 && tokens[1] === 'asit') {
+      var acidWord = tokens[0];
+      if (FG_ACID_COMMON[acidWord])
+        return { ok:true, type:'asit', label:'Karboksilik Asit', build:function(){ return buildCarboxylicAcid(FG_ACID_COMMON[acidWord]); }, canon: acidWord + ' asit' };
+      var mOik = acidWord.match(/^(.+)oik$/);
+      if (mOik) {
+        var ar = fgMatchAlkanRoot(mOik[1]);
+        if (ar) return { ok:true, type:'asit', label:'Karboksilik Asit', build:function(){ return buildCarboxylicAcid(ar.n); }, canon: ar.proper + 'oik asit' };
+      }
+      return { ok:false, error:'"' + acidWord + '" tan\u0131nan bir asit k\u00f6k\u00fc de\u011fil.' };
+    }
+
+    // --- Tek kelimelik isimler: alkol (-ol), aldehit (-al), keton (-on) ---
+    // Başta olası bir locant (örn. "2-propanol", "2-bütanon") olabilir.
+    var locM = norm.match(/^(\d+)(.+)$/);
+    var locant = null, rest = norm;
+    if (locM) { locant = parseInt(locM[1], 10); rest = locM[2]; }
+
+    if (/ol$/.test(rest)) {
+      var alcRoot = fgMatchAlkanRoot(rest.replace(/ol$/, ''));
+      if (!alcRoot) return { ok:false, error:'"' + rest + '" tan\u0131nan bir alkol k\u00f6k\u00fc de\u011fil.' };
+      var ohLoc = locant || 1;
+      if (ohLoc < 1 || ohLoc > alcRoot.n) return { ok:false, error: ohLoc + ' konumu ' + alcRoot.n + ' karbonlu zincirin d\u0131\u015f\u0131nda.' };
+      return { ok:true, type:'alkol', label:'Alkol', build:function(){ return buildAlcohol(alcRoot.n, ohLoc); },
+        canon: (ohLoc > 1 ? ohLoc + '-' : '') + alcRoot.proper + 'ol' };
+    }
+    if (/al$/.test(rest) && !/eter$/.test(rest)) {
+      var aldRoot = fgMatchAlkanRoot(rest.replace(/al$/, ''));
+      if (!aldRoot) return { ok:false, error:'"' + rest + '" tan\u0131nan bir aldehit k\u00f6k\u00fc de\u011fil.' };
+      return { ok:true, type:'aldehit', label:'Aldehit', build:function(){ return buildAldehyde(aldRoot.n); },
+        canon: aldRoot.proper + 'al' };
+    }
+    if (/on$/.test(rest)) {
+      var ketRoot = fgMatchAlkanRoot(rest.replace(/on$/, ''));
+      if (!ketRoot) return { ok:false, error:'"' + rest + '" tan\u0131nan bir keton k\u00f6k\u00fc de\u011fil.' };
+      if (ketRoot.n < 3) return { ok:false, error:'Keton en az 3 karbonlu bir zincir gerektirir.' };
+      var coLoc = locant || Math.ceil(ketRoot.n / 2);
+      if (coLoc < 2 || coLoc > ketRoot.n - 1) return { ok:false, error: coLoc + ' konumunda karbonil olamaz (2 ile ' + (ketRoot.n-1) + ' aras\u0131 olmal\u0131).' };
+      var kn1 = coLoc - 1, kn2 = ketRoot.n - coLoc;
+      return { ok:true, type:'keton', label:'Keton', build:function(){ return buildKetone(kn1, kn2); },
+        canon: (ketRoot.n > 4 ? coLoc + '-' : '') + ketRoot.proper + 'on' };
+    }
+
+    return { ok:false, error:'Tan\u0131nan bir fonksiyonel grup ismi de\u011fil. \u00d6rnekler: etanol, propanal, b\u00fctanon, propanoik asit, etil asetat, dimetil eter.' };
+  }
+
+
   var fgCat = 'alkol';
   var fgSt = { rotX: 0.42, rotY: 0.6, zoom: 1, fit: 1, spin: true, spd: 1, drag: false,
                lx: 0, ly: 0, dist: 0, t: 0, anim: null, labels: true, item: null, stars: null, sw: 0 };
@@ -4531,6 +4695,15 @@
       '<div id="s-fg" style="display:none"><div style="max-width:900px;margin:0 auto;padding:15px">' +
         '<h1 class="ptitle">\u2697\ufe0f Fonksiyonel Gruplar 3D</h1>' +
         '<p class="psub">Alkol, eter, aldehit, keton, karboksilik asit, ester \u2014 3D yap\u0131, \u00f6zellikler ve tepkimeler.</p>' +
+        '<div class="card" style="margin-bottom:14px">' +
+          '<div class="slbl">\u270f\ufe0f \u0130simden \u00c7iz (IUPAC)</div>' +
+          '<div style="display:flex;gap:8px">' +
+            '<input type="text" id="fg-name-inp" class="inp" placeholder="\u00f6rn: etanol, propanal, b\u00fctanon, etil asetat" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+            '<button type="button" class="btn bp" onclick="fgDrawFromName()">\u00c7iz</button>' +
+          '</div>' +
+          '<div id="fg-name-out" style="font-size:12px;margin-top:8px;line-height:1.6"></div>' +
+        '</div>' +
+        '<div id="fg-overview" style="margin-bottom:18px"></div>' +
         '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' + catBtns + '</div></div>' +
         '<div id="fg-theory" style="margin-bottom:16px"></div>' +
         '<div id="fg-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>' +
@@ -4557,7 +4730,78 @@
         '<div class="tc" id="tile-fg" onclick="nav(\'fg\')"><div class="ti">\u2697\ufe0f</div><div class="tt">Fonksiyonel Gruplar 3D</div><div class="td">Alkol, eter, aldehit, keton, asit, ester \u2014 3D yap\u0131 ve tepkimeler.</div></div>');
     fgBindCanvas();
     fgRenderTheory();
+    fgRenderOverview();
+    var fgNameInp = document.getElementById('fg-name-inp');
+    if (fgNameInp) fgNameInp.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); window.fgDrawFromName(); } });
   }
+
+  window.fgDrawFromName = function(){
+    var inp = document.getElementById('fg-name-inp');
+    var out = document.getElementById('fg-name-out');
+    if (!inp || !out) return;
+    var raw = inp.value.trim();
+    if (!raw) { out.innerHTML = '<span style="color:var(--yw)">Bir isim yaz (\u00f6rn: etanol, propanal, b\u00fctanon).</span>'; return; }
+    var r = parseFgName(raw);
+    if (!r.ok) { out.innerHTML = '<span style="color:var(--yw)">\u26a0\ufe0f ' + r.error + '</span>'; return; }
+    try {
+      var mol = r.build();
+      var item = { cls: r.type, name: raw.trim(), f: 'C' + mol.nC + 'H' + mol.nH + (mol.nO > 1 ? 'O' + mol.nO : (mol.nO ? 'O' : '')), mol: mol, custom: true };
+      out.innerHTML = '<span style="color:var(--gr)">\u2713 ' + r.label + ' \u00b7 ' + pretty(item.f) +
+        (r.canon !== foldOrg(raw) ? ' \u00b7 IUPAC: ' + r.canon : '') + '</span>';
+      window.fgOpen(item);
+    } catch (err) {
+      out.innerHTML = '<span style="color:var(--yw)">\u00c7izim hatas\u0131: ' + err.message + '</span>';
+    }
+  };
+
+  function fgRenderOverview(){
+    var box = document.getElementById('fg-overview');
+    if (!box) return;
+    var html = '';
+    FG_CLASSES.forEach(function(c){
+      var list = fgList().filter(function(m){ return m.cls === c; });
+      var preview = list.slice(0, 3);
+      html += '<div style="margin-bottom:16px">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+          '<div style="font-size:14px;font-weight:700;color:#fff">' + FG_THEORY[c].icon + ' ' + FG_CLASS_NAMES[c] + '</div>' +
+          '<button type="button" onclick="fgJumpCat(\'' + c + '\')" style="background:none;border:none;color:#f87171;font-size:12px;cursor:pointer;font-weight:600">T\u00fcm\u00fcn\u00fc G\u00f6r (' + list.length + ') \u2192</button>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">';
+      preview.forEach(function(m){
+        var idx = fgList().indexOf(m);
+        html += '<div onclick="fgOpen(' + idx + ')" style="background:var(--sf);border:2px solid rgba(239,68,68,0.2);border-radius:12px;padding:6px;text-align:center;cursor:pointer">' +
+          '<div style="font-size:10.5px;font-weight:700;color:#fca5a5;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + m.name + '</div>' +
+          '<div style="font-size:9.5px;color:var(--tx3);margin-bottom:4px">' + pretty(m.f) + '</div>' +
+          '<canvas id="fg-ov-' + idx + '" width="120" height="90" style="width:100%;border-radius:8px;background:#050510;border:1px solid rgba(239,68,68,0.15)"></canvas>' +
+        '</div>';
+      });
+      html += '</div></div>';
+    });
+    box.innerHTML = html;
+    setTimeout(function(){
+      FG_CLASSES.forEach(function(c){
+        fgList().filter(function(m){ return m.cls === c; }).slice(0, 3).forEach(function(m){
+          fgThumbOv(fgList().indexOf(m));
+        });
+      });
+    }, 60);
+  }
+  function fgThumbOv(idx){
+    var cv = document.getElementById('fg-ov-' + idx);
+    if (!cv) return;
+    var item = fgList()[idx], mol = fgMol(item);
+    var st = { rotX: 0.45, rotY: 0.5 + idx*0.4, zoom: 0.92, fit: mol.fit, t: idx, stars: null, sw: 0 };
+    hcDraw(cv.getContext('2d'), mol, st, 120, 90, false);
+  }
+  window.fgJumpCat = function(c){
+    fgCat = c;
+    var btn = document.getElementById('fg-cat-' + c);
+    if (btn) selectInRow(btn);
+    fgRenderTheory();
+    fgRenderGrid();
+    var tabsEl = btn ? btn.closest('div') : null;
+    if (tabsEl && tabsEl.scrollIntoView) tabsEl.scrollIntoView({ behavior:'smooth', block:'center' });
+  };
 
   window.fgSetCat = function(c, btn){
     fgCat = c;
@@ -4613,8 +4857,8 @@
     hcDraw(cv.getContext('2d'), mol, st, 170, 130, false);
   }
 
-  window.fgOpen = function(idx){
-    var item = fgList()[idx];
+  window.fgOpen = function(idxOrItem){
+    var item = typeof idxOrItem === 'number' ? fgList()[idxOrItem] : idxOrItem;
     if (!item) return;
     fgSt.item = item; fgSt.rotX = 0.42; fgSt.rotY = 0.6; fgSt.zoom = 1; fgSt.spin = true;
     fgSt.fit = fgMol(item).fit;
@@ -4685,7 +4929,7 @@
     }, { passive:false });
     cv.addEventListener('touchend', function(){ fgSt.drag = false; fgSt.dist = 0; });
   }
-  function fgEnter(){ fgRenderTheory(); fgRenderGrid(); }
+  function fgEnter(){ fgRenderTheory(); fgRenderGrid(); fgRenderOverview(); }
   function fgLeave(){ window.fgClose(); }
 
   // ---------- 13. MAARİF 9. SINIF — ETKİLEŞİM ÜNİTESİ ----------
