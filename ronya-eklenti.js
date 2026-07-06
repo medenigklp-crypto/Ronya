@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v10
+   RONYA KİMYA — EKLENTİ v12
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -30,6 +30,15 @@
        çoklu kap + pil + elektron akışı, gerçek iyon göçü
    23) 🥈 Kaplama senaryolarına 3D görsel: nesne/metal elektrot,
        Doğru↔Yanlış Bağlantı karşılaştırması, ortak 3D motor
+   24) 🧬 Dallanmış IUPAC isim ayrıştırıcı: "3-metilbütan" gibi
+       isimlerden 3D molekül çizimi (metil/etil/propil/bütil/
+       izopropil/izobütil/tersbütil + çift/üçlü bağ konumu)
+   25) ⚗️ Fonksiyonel Gruplar 3D: Alkol, Eter, Aldehit, Keton,
+       Karboksilik Asit, Ester — 18 molekül + detaylı konu +
+       tepkimeler (oksijen atomu render desteği eklendi)
+   26) 🧊 Maarif 9. Sınıf Etkileşim Ünitesi: Zayıf Etkileşimler
+       (London/dipol-dipol/hidrojen bağı) + Maddenin Halleri
+       (katı/sıvı/gaz/plazma parçacık simülasyonu), 3D + detaylı konu
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -2942,22 +2951,23 @@
           x.stroke();
         }
       } else {
-        var r = (it.el === 'C' ? 9.5 : 5.6) * it.p.s;
+        var r = (it.el === 'C' ? 9.5 : it.el === 'O' ? 8.3 : 5.6) * it.p.s;
         // dış parıltı
         x.beginPath(); x.arc(it.p.x, it.p.y, r + 4 * it.p.s, 0, 6.283);
-        x.fillStyle = it.el === 'C' ? 'rgba(34,211,238,' + 0.10*depth + ')' : 'rgba(255,255,255,' + 0.08*depth + ')';
+        x.fillStyle = it.el === 'C' ? 'rgba(34,211,238,' + 0.10*depth + ')' : it.el === 'O' ? 'rgba(248,113,113,' + 0.12*depth + ')' : 'rgba(255,255,255,' + 0.08*depth + ')';
         x.fill();
         var gg = x.createRadialGradient(it.p.x - r*0.35, it.p.y - r*0.35, r*0.1, it.p.x, it.p.y, r);
         if (it.el === 'C') { gg.addColorStop(0, '#7deefc'); gg.addColorStop(0.55, '#0ea5c9'); gg.addColorStop(1, '#075b73'); }
+        else if (it.el === 'O') { gg.addColorStop(0, '#fca5a5'); gg.addColorStop(0.55, '#ef4444'); gg.addColorStop(1, '#7f1d1d'); }
         else { gg.addColorStop(0, '#ffffff'); gg.addColorStop(0.6, '#dbe4ef'); gg.addColorStop(1, '#8fa0b5'); }
         x.globalAlpha = 0.55 + 0.45 * depth;
         x.beginPath(); x.arc(it.p.x, it.p.y, r, 0, 6.283);
         x.fillStyle = gg; x.fill();
-        x.strokeStyle = it.el === 'C' ? 'rgba(125,238,252,' + 0.5*depth + ')' : 'rgba(255,255,255,' + 0.35*depth + ')';
+        x.strokeStyle = it.el === 'C' ? 'rgba(125,238,252,' + 0.5*depth + ')' : it.el === 'O' ? 'rgba(252,165,165,' + 0.55*depth + ')' : 'rgba(255,255,255,' + 0.35*depth + ')';
         x.lineWidth = 1; x.stroke();
         x.globalAlpha = 1;
         if (labels && r > 5) {
-          x.fillStyle = it.el === 'C' ? '#02222b' : '#334155';
+          x.fillStyle = it.el === 'C' ? '#02222b' : it.el === 'O' ? '#3f0d0d' : '#334155';
           x.font = 'bold ' + Math.max(7, r*0.95) + 'px sans-serif';
           x.textAlign = 'center'; x.textBaseline = 'middle';
           x.fillText(it.el, it.p.x, it.p.y);
@@ -2980,6 +2990,14 @@
       '<div id="s-hc" style="display:none"><div style="max-width:900px;margin:0 auto;padding:15px">' +
         '<h1 class="ptitle">\ud83e\uddec Hidrokarbonlar 3D</h1>' +
         '<p class="psub">Alkan, alken ve alkinlerin ilk 10 \u00fcyesi \u2014 ger\u00e7ek ba\u011f a\u00e7\u0131lar\u0131yla. Molek\u00fcle dokun, tam ekranda d\u00f6nd\u00fcr.</p>' +
+        '<div class="card" style="margin-bottom:14px">' +
+          '<div class="slbl">\u270f\ufe0f \u0130simden \u00c7iz (IUPAC)</div>' +
+          '<div style="display:flex;gap:8px">' +
+            '<input type="text" id="hc-name-inp" class="inp" placeholder="\u00f6rn: 3-metilb\u00fctan, 2-metil-2-b\u00fcten" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+            '<button type="button" class="btn bp" onclick="hcDrawFromName()">\u00c7iz</button>' +
+          '</div>' +
+          '<div id="hc-name-out" style="font-size:12px;margin-top:8px;line-height:1.6"></div>' +
+        '</div>' +
         '<div style="display:flex;gap:6px;margin-bottom:14px">' +
           '<button type="button" id="hc-cat-an" class="ob sel2" style="flex:1" onclick="hcSetCat(\'an\',this)">Alkanlar C\u2099H\u2082\u2099\u208a\u2082</button>' +
           '<button type="button" id="hc-cat-en" class="ob" style="flex:1" onclick="hcSetCat(\'en\',this)">Alkenler C\u2099H\u2082\u2099</button>' +
@@ -3013,6 +3031,8 @@
       tg.insertAdjacentHTML('afterbegin',
         '<div class="tc" id="tile-hc" onclick="nav(\'hc\')"><div class="ti">\ud83e\uddec</div><div class="tt">Hidrokarbonlar 3D</div><div class="td">Alkan, alken, alkin \u2014 30 molek\u00fcl\u00fcn ger\u00e7ek 3D modeli. D\u00f6nd\u00fcr, yak\u0131nla\u015ft\u0131r.</div></div>');
     hcBindCanvas();
+    var hcNameInp = document.getElementById('hc-name-inp');
+    if (hcNameInp) hcNameInp.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); window.hcDrawFromName(); } });
   }
 
   window.hcSetCat = function(cat, btn){
@@ -3050,8 +3070,8 @@
     hcDraw(x, mol, st, 170, 130, false);
   }
 
-  window.hcOpen = function(idx){
-    var item = hcList()[idx];
+  window.hcOpen = function(idxOrItem){
+    var item = typeof idxOrItem === 'number' ? hcList()[idxOrItem] : idxOrItem;
     if (!item) return;
     hcSt.item = item;
     hcSt.rotX = 0.42; hcSt.rotY = 0.6; hcSt.zoom = 1; hcSt.spin = true;
@@ -3107,6 +3127,25 @@
     var d = document.getElementById('hc-detail');
     if (d) d.style.display = 'none';
     hcStopAnim(); hcSt.item = null;
+  };
+  window.hcDrawFromName = function(){
+    var inp = document.getElementById('hc-name-inp');
+    var out = document.getElementById('hc-name-out');
+    if (!inp || !out) return;
+    var raw = inp.value.trim();
+    if (!raw) { out.innerHTML = '<span style="color:var(--yw)">Bir isim yaz (\u00f6rn: 3-metilb\u00fctan).</span>'; return; }
+    var r = parseOrganicName(raw);
+    if (!r.ok) { out.innerHTML = '<span style="color:var(--yw)">\u26a0\ufe0f ' + r.error + '</span>'; return; }
+    try {
+      var mol = hcBuildAt(r.n, r.kind, r.dbAt, r.branches);
+      var KIND_LABEL = { an:'Alkan', en:'Alken', in:'Alkin' };
+      var item = { kind: r.kind, n: r.n, name: raw.trim(), f: organicMolFormula(mol), mol: mol, custom: true };
+      out.innerHTML = '<span style="color:var(--gr)">\u2713 ' + KIND_LABEL[r.kind] + ' \u00b7 ' + pretty(item.f) +
+        (r.branches.length ? ' \u00b7 ' + r.branches.length + ' dal grubu' : ' \u00b7 dallanmam\u0131\u015f') + '</span>';
+      window.hcOpen(item);
+    } catch (err) {
+      out.innerHTML = '<span style="color:var(--yw)">\u00c7izim hatas\u0131: ' + err.message + '</span>';
+    }
   };
   window.hcToggleSpin = function(){ hcSt.spin = !hcSt.spin; };
   window.hcSetSpd = function(v){ hcSt.spd = v; };
@@ -3692,6 +3731,1205 @@
   }
   window.elzTabGo = elzTabGo;
 
+  // ---------- 11a. GENEL 3D İSKELET MOTORU (dallanma + heteroatom destekli) ----------
+  // Mevcut hcBuild (Bölüm 10) dokunulmadan bırakıldı — galeri onunla çalışmaya
+  // devam ediyor. Bu bölüm, "isimden çiz" özelliği ve fonksiyonel gruplar için
+  // YENİ, dallanma destekli bir iskelet motoru ekler; aynı vektör yardımcılarını
+  // (v3, vAdd, vSub, vScale, vNorm, vCross, rotZv, HC_TETRA) kullanır.
+  function vDot(a, b){ return a.x*b.x + a.y*b.y + a.z*b.z; }
+  function vLen2(a){ return Math.sqrt(vDot(a,a)); }
+  function rotAxis(v, axis, ang){
+    axis = vNorm(axis);
+    var c = Math.cos(ang), s = Math.sin(ang);
+    var t1 = vScale(v, c);
+    var t2 = vScale(vCross(axis, v), s);
+    var t3 = vScale(axis, vDot(axis, v) * (1 - c));
+    return vAdd(vAdd(t1, t2), t3);
+  }
+  function perpAxis(u){
+    return Math.abs(u.z) < 0.9 ? vNorm(vCross(u, v3(0,0,1))) : vNorm(vCross(u, v3(1,0,0)));
+  }
+
+  // Bir atomun MEVCUT komşu yönlerine göre, EKSİK olan (H veya yeni dal için)
+  // yönleri döndürür. nb: [{dir, o}], count: kaç yön isteniyor.
+  function freeDirs(nb, count){
+    if (count <= 0) return [];
+    if (nb.length === 0) {
+      var q3 = 1 / Math.sqrt(3);
+      var full = [v3(q3,q3,q3), v3(q3,-q3,-q3), v3(-q3,q3,-q3), v3(-q3,-q3,q3)];
+      return full.slice(0, count);
+    }
+    if (nb.length === 1) {
+      var u = nb[0].dir;
+      if (count === 1) {
+        if (nb[0].o === 3) return [vScale(u, -1)];               // ≡C-H (doğrusal)
+        // Genel sp³ tek-bağ devamı: mevcut yönden 109.47° açıyla
+        var axSingle = perpAxis(u);
+        return [rotAxis(vScale(u, -1), axSingle, HC_TETRA)];
+      }
+      if (count === 2) {                                          // =CH₂ ya da dal ikilisi (~120°)
+        return [rotZv3(u, 2.0944), rotZv3(u, -2.0944)];
+      }
+      if (count === 3) {                                          // -CH₃ üçayak (109.47°)
+        var p = perpAxis(u), q = vNorm(vCross(u, p));
+        var dirs3 = [];
+        for (var t3 = 0; t3 < 3; t3++) {
+          var a3 = 0.5236 + t3 * 2.0944;
+          dirs3.push(vNorm(vAdd(vScale(u, -0.33333),
+            vScale(vAdd(vScale(p, Math.cos(a3)), vScale(q, Math.sin(a3))), 0.94281))));
+        }
+        return dirs3;
+      }
+    }
+    if (nb.length === 2) {
+      var u1 = nb[0].dir, u2 = nb[1].dir, s2 = vAdd(u1, u2);
+      if (count === 1) return [vNorm(vScale(s2, -1))];             // sp² tek eksik (=CH- ya da dal)
+      if (count === 2) {                                           // sp³ -CH₂-
+        var bb = vNorm(vScale(s2, -1));
+        var nn = vCross(u1, u2);
+        if (vLen2(nn) < 1e-4) nn = v3(0, 0, 1);
+        nn = vNorm(nn);
+        return [ vNorm(vAdd(vScale(bb, 0.57735), vScale(nn, 0.81650))),
+                 vNorm(vAdd(vScale(bb, 0.57735), vScale(nn, -0.81650))) ];
+      }
+    }
+    if (nb.length === 3 && count === 1) {
+      // Tam tetrahedral: 4 birim vektörün toplamı ≈ 0 → 4.'yü diğer 3'ten bul
+      var sum3 = vAdd(vAdd(nb[0].dir, nb[1].dir), nb[2].dir);
+      return [vNorm(vScale(sum3, -1))];
+    }
+    return [];
+  }
+  // rotZv, sadece Z ekseni etrafında döner; =CH₂ gibi rastgele yönlü tek bağdan
+  // ikili dal üretirken KEYFİ (ama tutarlı) bir dik eksen etrafında dönmemiz
+  // gerekir — bu yüzden rotZv'nin genel 3B karşılığı:
+  function rotZv3(u, ang){
+    var ax = perpAxis(u);
+    return rotAxis(u, ax, ang);
+  }
+
+  // Bir zincir dalını (metil, etil, propil, bütil...) verilen başlangıç
+  // konumundan ve yönünden itibaren zikzak şeklinde büyütür.
+  function growChain(parentPos, startDir, count){
+    var positions = [];
+    var d = vNorm(startDir);
+    var pos = vAdd(parentPos, vScale(d, 1.54));
+    positions.push(pos);
+    if (count === 1) return positions;
+    var axis = perpAxis(d);
+    var sign = -1;
+    for (var i = 1; i < count; i++) {
+      d = rotAxis(d, axis, sign * HC_TETRA);
+      sign = -sign;
+      pos = vAdd(pos, vScale(d, 1.54));
+      positions.push(pos);
+    }
+    return positions;
+  }
+
+  // ---------- 11b. DALLANMIŞ İSKELET İNŞACISI ----------
+  // hcBuildAt(n, kind, dbAt, branches): ana zincir + dallar + tüm H'leri
+  // tek seferde üretir. dbAt: çift/üçlü bağın 0-index'li İLK karbonu
+  // (locant-1). branches: [{locant, carbons, special}] — special:
+  // null (düz zincir) | 'izopropil' | 'izobutil' | 'tersbutil'.
+  function hcBuildAt(n, kind, dbAt, branches){
+    dbAt = (dbAt === undefined || dbAt === null) ? 0 : dbAt;
+    branches = branches || [];
+    // Bağ dereceleri: index i = atom i ile i+1 arasındaki bağ derecesi
+    var ord = [];
+    for (var i = 0; i < n - 1; i++) {
+      if (kind === 'en' && i === dbAt) ord.push(2);
+      else if (kind === 'in' && i === dbAt) ord.push(3);
+      else ord.push(1);
+    }
+    // Ana zincir konumları
+    var C = [v3(0, 0, 0)];
+    var d = v3(1, 0, 0), sign = -1;
+    if (n > 1) d = rotZv(d, 0.61548);
+    for (i = 1; i < n; i++) {
+      var curO = ord[i - 1];
+      var prevO = i >= 2 ? ord[i - 2] : 1;
+      var len = curO === 3 ? 1.20 : curO === 2 ? 1.34 : 1.54;
+      if (i === 1) {
+        // ilk bağ: başlangıç eğimi zaten ayarlı
+      } else if (prevO >= 2) {
+        d = rotZv(d, 1.0472); sign = -1;                 // çoklu bağdan çıkış: 120° kink
+      } else {
+        d = rotZv(d, sign * HC_TETRA); sign = -sign;      // sıradan sp³-sp³
+      }
+      C.push(vAdd(C[i - 1], vScale(d, len)));
+    }
+    // Ana ekseni yatayla hizala
+    if (n > 1) {
+      var ax0 = vSub(C[n - 1], C[0]), ang0 = Math.atan2(ax0.y, ax0.x);
+      for (i = 0; i < n; i++) C[i] = rotZv(C[i], -ang0);
+    }
+    var atoms = [], bonds = [];
+    for (i = 0; i < n; i++) atoms.push({ x: C[i].x, y: C[i].y, z: C[i].z, el: 'C' });
+    for (i = 0; i < n - 1; i++) bonds.push({ a: i, b: i + 1, o: ord[i] });
+
+    function nbOf(idx){
+      var nb = [];
+      for (var b2 = 0; b2 < bonds.length; b2++) {
+        var A = atoms[bonds[b2].a], B = atoms[bonds[b2].b];
+        if (bonds[b2].a === idx) nb.push({ dir: vNorm(vSub(v3(B.x,B.y,B.z), v3(A.x,A.y,A.z))), o: bonds[b2].o });
+        if (bonds[b2].b === idx) nb.push({ dir: vNorm(vSub(v3(A.x,A.y,A.z), v3(B.x,B.y,B.z))), o: bonds[b2].o });
+      }
+      return nb;
+    }
+    function addAtom(pos){ var idx = atoms.length; atoms.push({ x: pos.x, y: pos.y, z: pos.z, el: 'C' }); return idx; }
+
+    // Dalları ekle — AYNI karbona (aynı locant) bağlanan dallar TEK seferde
+    // hesaplanmalı, yoksa iki ayrı tek-yön isteği aynı düzlemde çakışabilir.
+    var byLocant = {};
+    for (var br0 = 0; br0 < branches.length; br0++) {
+      var loc0 = branches[br0].locant;
+      (byLocant[loc0] = byLocant[loc0] || []).push(branches[br0]);
+    }
+    var locKeys = Object.keys(byLocant);
+    for (var lk = 0; lk < locKeys.length; lk++) {
+      var pIdx = parseInt(locKeys[lk], 10) - 1;
+      if (pIdx < 0 || pIdx >= n) continue;
+      var group = byLocant[locKeys[lk]];
+      var pPos = v3(atoms[pIdx].x, atoms[pIdx].y, atoms[pIdx].z);
+      var hasSpecial = group.some(function(g){ return !!g.special; });
+
+      if (group.length === 1 || hasSpecial) {
+        // Tek dal (ya da özel dallı grup) — sırayla, her seferinde güncel nb ile
+        for (var gi = 0; gi < group.length; gi++) {
+          var b = group[gi];
+          var free1 = freeDirs(nbOf(pIdx), 1);
+          if (!free1.length) continue;
+          attachOneBranch(b, pIdx, pPos, free1[0]);
+        }
+      } else {
+        // Aynı locant'ta 2+ düz-zincir dal — TÜM yönleri birlikte iste
+        var freeN = freeDirs(nbOf(pIdx), group.length);
+        for (var gj = 0; gj < group.length && gj < freeN.length; gj++)
+          attachOneBranch(group[gj], pIdx, pPos, freeN[gj]);
+      }
+    }
+
+    function attachOneBranch(b, pIdx, pPos, dir0){
+      if (b.special === 'izopropil' || b.special === 'tersbutil') {
+        var c1pos = vAdd(pPos, vScale(dir0, 1.54));
+        var c1idx = addAtom(c1pos);
+        bonds.push({ a: pIdx, b: c1idx, o: 1 });
+        var nbC1 = [{ dir: vScale(dir0, -1), o: 1 }];
+        var need = b.special === 'izopropil' ? 2 : 3;
+        var dirs = freeDirs(nbC1, need);
+        for (var k1 = 0; k1 < dirs.length; k1++) {
+          var mp = vAdd(c1pos, vScale(dirs[k1], 1.54));
+          var mi = addAtom(mp);
+          bonds.push({ a: c1idx, b: mi, o: 1 });
+        }
+      } else if (b.special === 'izobutil') {
+        var d1pos = vAdd(pPos, vScale(dir0, 1.54));
+        var d1idx = addAtom(d1pos);
+        bonds.push({ a: pIdx, b: d1idx, o: 1 });
+        var nbD1 = [{ dir: vScale(dir0, -1), o: 1 }];
+        var dir1 = freeDirs(nbD1, 1)[0];
+        var d2pos = vAdd(d1pos, vScale(dir1, 1.54));
+        var d2idx = addAtom(d2pos);
+        bonds.push({ a: d1idx, b: d2idx, o: 1 });
+        var nbD2 = [{ dir: vScale(dir1, -1), o: 1 }];
+        var twoDirs = freeDirs(nbD2, 2);
+        for (var k2 = 0; k2 < twoDirs.length; k2++) {
+          var mp2 = vAdd(d2pos, vScale(twoDirs[k2], 1.54));
+          var mi2 = addAtom(mp2);
+          bonds.push({ a: d2idx, b: mi2, o: 1 });
+        }
+      } else {
+        var positions = growChain(pPos, dir0, b.carbons);
+        var prevIdx = pIdx;
+        for (var pi = 0; pi < positions.length; pi++) {
+          var ni = addAtom(positions[pi]);
+          bonds.push({ a: prevIdx, b: ni, o: 1 });
+          prevIdx = ni;
+        }
+      }
+    }
+
+    // Tüm karbonlar için eksik hidrojenleri tamamla
+    var CH = 1.09;
+    var carbonCount = atoms.length; // dallar dahil, H'ler henüz yok
+    for (i = 0; i < carbonCount; i++) {
+      var nb2 = nbOf(i);
+      var val = 0;
+      for (var vi = 0; vi < nb2.length; vi++) val += nb2[vi].o;
+      var h = 4 - val;
+      if (h <= 0) continue;
+      var hd = freeDirs(nb2, h);
+      for (var hh = 0; hh < hd.length; hh++) {
+        var hp = vAdd(v3(atoms[i].x, atoms[i].y, atoms[i].z), vScale(hd[hh], CH));
+        atoms.push({ x: hp.x, y: hp.y, z: hp.z, el: 'H' });
+        bonds.push({ a: i, b: atoms.length - 1, o: 1 });
+      }
+    }
+
+    // Merkeze al + ölçekle
+    var cx = 0, cy = 0, cz = 0;
+    atoms.forEach(function(a4){ cx += a4.x; cy += a4.y; cz += a4.z; });
+    cx /= atoms.length; cy /= atoms.length; cz /= atoms.length;
+    var maxR = 1;
+    atoms.forEach(function(a4){
+      a4.x = (a4.x - cx) * 34; a4.y = (a4.y - cy) * 34; a4.z = (a4.z - cz) * 34;
+      maxR = Math.max(maxR, Math.sqrt(a4.x*a4.x + a4.y*a4.y + a4.z*a4.z));
+    });
+    var nC = carbonCount, nH = atoms.length - carbonCount;
+    return { atoms: atoms, bonds: bonds, nC: nC, nH: nH, fit: Math.min(1.6, 92 / maxR) };
+  }
+
+  // ---------- 11c. TÜRKÇE IUPAC İSİM AYRIŞTIRICISI ----------
+  function foldOrg(s){
+    return String(s).toLocaleLowerCase('tr')
+      .replace(/\u00e7/g,'c').replace(/\u011f/g,'g').replace(/\u0131/g,'i')
+      .replace(/\u00f6/g,'o').replace(/\u015f/g,'s').replace(/\u00fc/g,'u')
+      .replace(/[^a-z0-9,]/g,'');
+  }
+  var IUPAC_PARENTS = [
+    ['dekan','an',10,'Dekan'], ['nonan','an',9,'Nonan'], ['oktan','an',8,'Oktan'], ['heptan','an',7,'Heptan'],
+    ['heksan','an',6,'Heksan'], ['pentan','an',5,'Pentan'], ['butan','an',4,'B\u00fctan'], ['propan','an',3,'Propan'],
+    ['etan','an',2,'Etan'], ['metan','an',1,'Metan'],
+    ['undeken','en',11,'Undeken'], ['deken','en',10,'Deken'], ['nonen','en',9,'Nonen'], ['okten','en',8,'Okten'],
+    ['hepten','en',7,'Hepten'], ['heksen','en',6,'Heksen'], ['penten','en',5,'Penten'], ['buten','en',4,'B\u00fcten'],
+    ['propen','en',3,'Propen'], ['eten','en',2,'Eten'],
+    ['undekin','in',11,'Undekin'], ['dekin','in',10,'Dekin'], ['nonin','in',9,'Nonin'], ['oktin','in',8,'Oktin'],
+    ['heptin','in',7,'Heptin'], ['heksin','in',6,'Heksin'], ['pentin','in',5,'Pentin'], ['butin','in',4,'B\u00fctin'],
+    ['propin','in',3,'Propin'], ['etin','in',2,'Etin']
+  ];
+  IUPAC_PARENTS.sort(function(a,b){ return b[0].length - a[0].length; });
+  var IUPAC_SUBS = [
+    ['tersbutil', 4, 'tersbutil'], ['tbutil', 4, 'tersbutil'],
+    ['izobutil', 4, 'izobutil'],
+    ['butil', 4, null],
+    ['izopropil', 3, 'izopropil'],
+    ['propil', 3, null],
+    ['etil', 2, null],
+    ['metil', 1, null]
+  ];
+  IUPAC_SUBS.sort(function(a,b){ return b[0].length - a[0].length; });
+  var IUPAC_MULT = [ ['tetra',4], ['tri',3], ['di',2] ];
+
+  function parseOrganicName(raw){
+    if (!raw || !String(raw).trim()) return { ok:false, error:'Bo\u015f isim girildi.' };
+    var norm = String(raw).replace(/[\s\-]+/g, '');
+    var folded = foldOrg(norm);
+
+    var parentMatch = null;
+    for (var i = 0; i < IUPAC_PARENTS.length; i++) {
+      var pn = IUPAC_PARENTS[i][0];
+      if (folded.length >= pn.length && folded.slice(folded.length - pn.length) === pn) { parentMatch = IUPAC_PARENTS[i]; break; }
+    }
+    if (!parentMatch) return { ok:false, error:'Tan\u0131nan bir ana zincir bulunamad\u0131. \u00d6rnekler: b\u00fctan, 2-penten, 3-metilheksan.' };
+    var kind = parentMatch[1], n = parentMatch[2], properParent = parentMatch[3];
+    var prefix = folded.slice(0, folded.length - parentMatch[0].length);
+
+    var dbAt = 0;
+    if (kind !== 'an') {
+      var trailingNum = prefix.match(/(\d+)$/);
+      if (trailingNum) {
+        var beforeNum = prefix.slice(0, prefix.length - trailingNum[0].length);
+        if (beforeNum === '' || /[a-z]$/.test(beforeNum)) {
+          dbAt = parseInt(trailingNum[1], 10) - 1;
+          prefix = beforeNum;
+        }
+      }
+    }
+
+    var branches = [];
+    var guard = 0;
+    while (prefix.length > 0 && guard++ < 20) {
+      var lm = prefix.match(/^(\d+(?:,\d+)*)/);
+      if (!lm) return { ok:false, error:'"' + prefix + '" k\u0131sm\u0131nda bir konum numaras\u0131 (\u00f6rn. "3-") bekleniyordu.' };
+      var locants = lm[1].split(',').map(Number);
+      prefix = prefix.slice(lm[0].length);
+      for (var m2 = 0; m2 < IUPAC_MULT.length; m2++) {
+        if (prefix.indexOf(IUPAC_MULT[m2][0]) === 0) { prefix = prefix.slice(IUPAC_MULT[m2][0].length); break; }
+      }
+      var subMatch = null;
+      for (var s2 = 0; s2 < IUPAC_SUBS.length; s2++) {
+        if (prefix.indexOf(IUPAC_SUBS[s2][0]) === 0) { subMatch = IUPAC_SUBS[s2]; break; }
+      }
+      if (!subMatch) return { ok:false, error:'"' + prefix + '" tan\u0131nan bir grup ad\u0131 de\u011fil. Desteklenenler: metil, etil, propil, izopropil, b\u00fctil, izob\u00fctil, tersb\u00fctil.' };
+      prefix = prefix.slice(subMatch[0].length);
+      for (var li = 0; li < locants.length; li++)
+        branches.push({ locant: locants[li], carbons: subMatch[1], special: subMatch[2] });
+    }
+
+    for (var bi = 0; bi < branches.length; bi++) {
+      if (branches[bi].locant < 1 || branches[bi].locant > n)
+        return { ok:false, error: branches[bi].locant + ' konumu ' + n + ' karbonlu zincirin d\u0131\u015f\u0131nda kal\u0131yor.' };
+    }
+    if (dbAt < 0 || dbAt > n - 2)
+      return { ok:false, error: '\u00c7ift/\u00fc\u00e7l\u00fc ba\u011f konumu ge\u00e7ersiz.' };
+
+    return { ok:true, n:n, kind:kind, dbAt:dbAt, branches:branches, properParent:properParent };
+  }
+
+  function organicMolFormula(mol){
+    return 'C' + mol.nC + 'H' + mol.nH;
+  }
+
+  // ---------- 12. FONKSİYONEL GRUPLAR 3D GALERİSİ ----------
+  // Alkol, Eter, Aldehit, Keton, Karboksilik Asit, Ester — her biri için
+  // temsili moleküller, 3D yapı (O atomu kırmızı, C=O çift bağ pembe),
+  // detaylı konu özellikleri ve kimyasal tepkimeler.
+  function fgAddO(atoms, bonds, cIdx, cPos, dir, order, bondLen){
+    var oPos = vAdd(cPos, vScale(dir, bondLen || 1.36));
+    var oIdx = atoms.length;
+    atoms.push({ x: oPos.x, y: oPos.y, z: oPos.z, el: 'O' });
+    bonds.push({ a: cIdx, b: oIdx, o: order });
+    return oIdx;
+  }
+  function fgAddH(atoms, bonds, parentIdx, parentPos, dir, bondLen){
+    var hPos = vAdd(parentPos, vScale(dir, bondLen || 1.0));
+    atoms.push({ x: hPos.x, y: hPos.y, z: hPos.z, el: 'H' });
+    bonds.push({ a: parentIdx, b: atoms.length - 1, o: 1 });
+  }
+  function fgAddChainFrom(atoms, bonds, startIdx, startPos, dir, count){
+    if (count <= 0) return;
+    var positions = growChain(startPos, dir, count);
+    var prevIdx = startIdx;
+    for (var i = 0; i < positions.length; i++) {
+      var idx = atoms.length;
+      atoms.push({ x: positions[i].x, y: positions[i].y, z: positions[i].z, el: 'C' });
+      bonds.push({ a: prevIdx, b: idx, o: 1 });
+      prevIdx = idx;
+    }
+  }
+  function fgFillH(atoms, bonds){
+    var n0 = atoms.length;
+    function nbOf(idx){
+      var nb = [];
+      for (var b2 = 0; b2 < bonds.length; b2++) {
+        var A = atoms[bonds[b2].a], B = atoms[bonds[b2].b];
+        if (bonds[b2].a === idx) nb.push({ dir: vNorm(vSub(v3(B.x,B.y,B.z), v3(A.x,A.y,A.z))), o: bonds[b2].o });
+        if (bonds[b2].b === idx) nb.push({ dir: vNorm(vSub(v3(A.x,A.y,A.z), v3(B.x,B.y,B.z))), o: bonds[b2].o });
+      }
+      return nb;
+    }
+    for (var i = 0; i < n0; i++) {
+      if (atoms[i].el !== 'C' && atoms[i].el !== 'O') continue;
+      var target = atoms[i].el === 'C' ? 4 : 2;
+      var nb = nbOf(i);
+      var val = 0;
+      for (var k = 0; k < nb.length; k++) val += nb[k].o;
+      var h = target - val;
+      if (h <= 0) continue;
+      var dirs = freeDirs(nb, h);
+      for (var d = 0; d < dirs.length; d++)
+        fgAddH(atoms, bonds, i, v3(atoms[i].x, atoms[i].y, atoms[i].z), dirs[d], atoms[i].el === 'O' ? 0.96 : 1.09);
+    }
+  }
+  function fgFinalize(atoms, bonds, nC, nH, nO){
+    var cx=0,cy=0,cz=0;
+    atoms.forEach(function(a){ cx+=a.x; cy+=a.y; cz+=a.z; });
+    cx/=atoms.length; cy/=atoms.length; cz/=atoms.length;
+    var maxR=1;
+    atoms.forEach(function(a){ a.x=(a.x-cx)*34; a.y=(a.y-cy)*34; a.z=(a.z-cz)*34; maxR=Math.max(maxR,Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z)); });
+    return { atoms: atoms, bonds: bonds, nC: nC, nH: nH, nO: nO, fit: Math.min(1.6, 92/maxR) };
+  }
+
+  // --- Alkol: R-OH (n karbonlu düz zincir, OH ucundaki C1'de) ---
+  function buildAlcohol(n, branchAt2){
+    var atoms = [], bonds = [];
+    atoms.push({ x:0, y:0, z:0, el:'C' });
+    if (n > 1) fgAddChainFrom(atoms, bonds, 0, v3(0,0,0), v3(1,0,0), n - 1);
+    var c1pos = v3(atoms[0].x, atoms[0].y, atoms[0].z);
+    var nb0 = n > 1 ? [{ dir: vNorm(vSub(v3(atoms[1].x,atoms[1].y,atoms[1].z), c1pos)), o:1 }] : [];
+    var dirO = freeDirs(nb0, 1)[0] || v3(0,1,0);
+    var oIdx = fgAddO(atoms, bonds, 0, c1pos, dirO, 1, 1.43);
+    var oPos = v3(atoms[oIdx].x, atoms[oIdx].y, atoms[oIdx].z);
+    var hDir = freeDirs([{ dir: vScale(dirO,-1), o:1 }], 1)[0];
+    fgAddH(atoms, bonds, oIdx, oPos, hDir, 0.96);
+    if (branchAt2 && n >= 3) { /* 2-propanol vb. için basitleştirilmiş: ek dal eklenmez, düz zincir yeterli görsel verir */ }
+    fgFillH(atoms, bonds);
+    var nC = atoms.filter(function(a){return a.el==='C';}).length;
+    var nO = atoms.filter(function(a){return a.el==='O';}).length;
+    var nH = atoms.filter(function(a){return a.el==='H';}).length;
+    return fgFinalize(atoms, bonds, nC, nH, nO);
+  }
+
+  // --- Eter: R-O-R' ---
+  function buildEther(n1, n2){
+    var atoms = [], bonds = [];
+    atoms.push({ x:0, y:0, z:0, el:'C' });
+    if (n1 > 1) fgAddChainFrom(atoms, bonds, 0, v3(0,0,0), v3(1,0,0), n1 - 1);
+    var c1pos = v3(atoms[0].x, atoms[0].y, atoms[0].z);
+    var nb0 = n1 > 1 ? [{ dir: vNorm(vSub(v3(atoms[1].x,atoms[1].y,atoms[1].z), c1pos)), o:1 }] : [];
+    var dirO = freeDirs(nb0, 1)[0] || v3(0,1,0);
+    var oIdx = fgAddO(atoms, bonds, 0, c1pos, dirO, 1, 1.43);
+    var oPos = v3(atoms[oIdx].x, atoms[oIdx].y, atoms[oIdx].z);
+    var dirC2 = freeDirs([{ dir: vScale(dirO,-1), o:1 }], 1)[0];
+    var c2pos = vAdd(oPos, vScale(dirC2, 1.43));
+    var c2idx = atoms.length;
+    atoms.push({ x:c2pos.x, y:c2pos.y, z:c2pos.z, el:'C' });
+    bonds.push({ a: oIdx, b: c2idx, o: 1 });
+    if (n2 > 1) fgAddChainFrom(atoms, bonds, c2idx, c2pos, dirC2, n2 - 1);
+    fgFillH(atoms, bonds);
+    var nC = atoms.filter(function(a){return a.el==='C';}).length;
+    var nO = atoms.filter(function(a){return a.el==='O';}).length;
+    var nH = atoms.filter(function(a){return a.el==='H';}).length;
+    return fgFinalize(atoms, bonds, nC, nH, nO);
+  }
+
+  // --- Aldehit: R-CHO (karbonil ucunda, H açık) ---
+  function buildAldehyde(n){
+    var atoms = [], bonds = [];
+    atoms.push({ x:0, y:0, z:0, el:'C' }); // karbonil C (C1)
+    var nbChain = [];
+    if (n > 1) {
+      fgAddChainFrom(atoms, bonds, 0, v3(0,0,0), v3(1,0,0), n - 1);
+      nbChain = [{ dir: vNorm(vSub(v3(atoms[1].x,atoms[1].y,atoms[1].z), v3(0,0,0))), o:1 }];
+    }
+    var dirO = freeDirs(nbChain, 1)[0] || v3(0,1,0);
+    fgAddO(atoms, bonds, 0, v3(0,0,0), dirO, 2, 1.20);
+    fgFillH(atoms, bonds); // karbonil karbonundaki eksik H (aldehidin kendine özgü H'si) otomatik tamamlanır
+    var nC = atoms.filter(function(a){return a.el==='C';}).length;
+    var nO = atoms.filter(function(a){return a.el==='O';}).length;
+    var nH = atoms.filter(function(a){return a.el==='H';}).length;
+    return fgFinalize(atoms, bonds, nC, nH, nO);
+  }
+
+  // --- Keton: R-CO-R' (karbonil ortada) ---
+  function buildKetone(n1, n2){
+    var atoms = [], bonds = [];
+    atoms.push({ x:0, y:0, z:0, el:'C' }); // karbonil C
+    fgAddChainFrom(atoms, bonds, 0, v3(0,0,0), v3(1,0,0), n1);
+    var dirLeft = vNorm(vSub(v3(atoms[1].x,atoms[1].y,atoms[1].z), v3(0,0,0)));
+    var nb1 = [{ dir: dirLeft, o: 1 }];
+    var dirRight = freeDirs(nb1, 1)[0];
+    var c2idx = atoms.length;
+    var c2pos = vAdd(v3(0,0,0), vScale(dirRight, 1.54));
+    atoms.push({ x:c2pos.x, y:c2pos.y, z:c2pos.z, el:'C' });
+    bonds.push({ a:0, b:c2idx, o:1 });
+    if (n2 > 1) fgAddChainFrom(atoms, bonds, c2idx, c2pos, dirRight, n2 - 1);
+    var dirO = freeDirs([nb1[0], { dir: dirRight, o:1 }], 1)[0];
+    fgAddO(atoms, bonds, 0, v3(0,0,0), dirO, 2, 1.20);
+    fgFillH(atoms, bonds);
+    var nC = atoms.filter(function(a){return a.el==='C';}).length;
+    var nO = atoms.filter(function(a){return a.el==='O';}).length;
+    var nH = atoms.filter(function(a){return a.el==='H';}).length;
+    return fgFinalize(atoms, bonds, nC, nH, nO);
+  }
+
+  // --- Karboksilik Asit: R-COOH ---
+  function buildCarboxylicAcid(n){
+    var atoms = [], bonds = [];
+    atoms.push({ x:0, y:0, z:0, el:'C' }); // karboksil C
+    var nbChain = [];
+    if (n > 1) {
+      fgAddChainFrom(atoms, bonds, 0, v3(0,0,0), v3(1,0,0), n - 1);
+      nbChain = [{ dir: vNorm(vSub(v3(atoms[1].x,atoms[1].y,atoms[1].z), v3(0,0,0))), o:1 }];
+    }
+    var twoDirs = freeDirs(nbChain, 2);
+    fgAddO(atoms, bonds, 0, v3(0,0,0), twoDirs[0], 2, 1.20); // C=O
+    var ohIdx = fgAddO(atoms, bonds, 0, v3(0,0,0), twoDirs[1], 1, 1.36); // C-OH
+    var ohPos = v3(atoms[ohIdx].x, atoms[ohIdx].y, atoms[ohIdx].z);
+    var hDir = freeDirs([{ dir: vScale(twoDirs[1], -1), o: 1 }], 1)[0];
+    fgAddH(atoms, bonds, ohIdx, ohPos, hDir, 0.96);
+    fgFillH(atoms, bonds);
+    var nC = atoms.filter(function(a){return a.el==='C';}).length;
+    var nO = atoms.filter(function(a){return a.el==='O';}).length;
+    var nH = atoms.filter(function(a){return a.el==='H';}).length;
+    return fgFinalize(atoms, bonds, nC, nH, nO);
+  }
+
+  // --- Ester: R-CO-O-R' ---
+  function buildEster(n1, n2){
+    var atoms = [], bonds = [];
+    atoms.push({ x:0, y:0, z:0, el:'C' }); // karbonil C
+    var nbChain = [];
+    if (n1 > 1) {
+      fgAddChainFrom(atoms, bonds, 0, v3(0,0,0), v3(1,0,0), n1 - 1);
+      nbChain = [{ dir: vNorm(vSub(v3(atoms[1].x,atoms[1].y,atoms[1].z), v3(0,0,0))), o:1 }];
+    }
+    var twoDirs = freeDirs(nbChain, 2);
+    fgAddO(atoms, bonds, 0, v3(0,0,0), twoDirs[0], 2, 1.20); // C=O
+    var oEsterIdx = fgAddO(atoms, bonds, 0, v3(0,0,0), twoDirs[1], 1, 1.36); // -O-
+    var oPos = v3(atoms[oEsterIdx].x, atoms[oEsterIdx].y, atoms[oEsterIdx].z);
+    var dirC2 = freeDirs([{ dir: vScale(twoDirs[1], -1), o: 1 }], 1)[0];
+    var c2pos = vAdd(oPos, vScale(dirC2, 1.43));
+    var c2idx = atoms.length;
+    atoms.push({ x:c2pos.x, y:c2pos.y, z:c2pos.z, el:'C' });
+    bonds.push({ a: oEsterIdx, b: c2idx, o: 1 });
+    if (n2 > 1) fgAddChainFrom(atoms, bonds, c2idx, c2pos, dirC2, n2 - 1);
+    fgFillH(atoms, bonds);
+    var nC = atoms.filter(function(a){return a.el==='C';}).length;
+    var nO = atoms.filter(function(a){return a.el==='O';}).length;
+    var nH = atoms.filter(function(a){return a.el==='H';}).length;
+    return fgFinalize(atoms, bonds, nC, nH, nO);
+  }
+
+  // ---------- 12b. FONKSİYONEL GRUPLAR — GALERİ + KONU ----------
+  var FG_CLASSES = ['alkol','eter','aldehit','keton','asit','ester'];
+  var FG_CLASS_NAMES = { alkol:'Alkoller', eter:'Eterler', aldehit:'Aldehitler', keton:'Ketonlar', asit:'Karboksilik Asitler', ester:'Esterler' };
+  var FG_LIST = null;
+  function fgList(){
+    if (FG_LIST) return FG_LIST;
+    FG_LIST = [
+      { cls:'alkol', name:'Metanol', f:'CH4O', build:function(){ return buildAlcohol(1); } },
+      { cls:'alkol', name:'Etanol', f:'C2H6O', build:function(){ return buildAlcohol(2); } },
+      { cls:'alkol', name:'1-Propanol', f:'C3H8O', build:function(){ return buildAlcohol(3); } },
+      { cls:'alkol', name:'1-Bütanol', f:'C4H10O', build:function(){ return buildAlcohol(4); } },
+      { cls:'eter', name:'Dimetil Eter', f:'C2H6O', build:function(){ return buildEther(1,1); } },
+      { cls:'eter', name:'Metil Etil Eter', f:'C3H8O', build:function(){ return buildEther(1,2); } },
+      { cls:'eter', name:'Dietil Eter', f:'C4H10O', build:function(){ return buildEther(2,2); } },
+      { cls:'aldehit', name:'Metanal (Formaldehit)', f:'CH2O', build:function(){ return buildAldehyde(1); } },
+      { cls:'aldehit', name:'Etanal (Asetaldehit)', f:'C2H4O', build:function(){ return buildAldehyde(2); } },
+      { cls:'aldehit', name:'Propanal', f:'C3H6O', build:function(){ return buildAldehyde(3); } },
+      { cls:'keton', name:'Propanon (Aseton)', f:'C3H6O', build:function(){ return buildKetone(1,1); } },
+      { cls:'keton', name:'B\u00fctanon', f:'C4H8O', build:function(){ return buildKetone(1,2); } },
+      { cls:'asit', name:'Metanoik Asit (Formik Asit)', f:'CH2O2', build:function(){ return buildCarboxylicAcid(1); } },
+      { cls:'asit', name:'Etanoik Asit (Asetik Asit)', f:'C2H4O2', build:function(){ return buildCarboxylicAcid(2); } },
+      { cls:'asit', name:'Propanoik Asit', f:'C3H6O2', build:function(){ return buildCarboxylicAcid(3); } },
+      { cls:'ester', name:'Metil Format', f:'C2H4O2', build:function(){ return buildEster(1,1); } },
+      { cls:'ester', name:'Metil Asetat', f:'C3H6O2', build:function(){ return buildEster(2,1); } },
+      { cls:'ester', name:'Etil Asetat', f:'C4H8O2', build:function(){ return buildEster(2,2); } }
+    ];
+    return FG_LIST;
+  }
+  function fgMol(item){ if (!item.mol) item.mol = item.build(); return item.mol; }
+
+  var FG_THEORY = {
+    alkol: {
+      icon:'\ud83c\udf77', genel:'R-OH', hib:'Fonksiyonel grup karbonu sp\u00b3',
+      tanim:'Bir hidrokarbon zincirine hidroksil (-OH) grubunun ba\u011flanmas\u0131yla olu\u015fur. Oksijen b\u00fckk\u00fclm\u00fc\u015f (su gibi) geometriye sahiptir.',
+      ozellikler:[
+        'Molek\u00fcller aras\u0131 <b>hidrojen ba\u011f\u0131</b> yapar \u2192 ayn\u0131 karbon say\u0131l\u0131 alkanlardan kaynama noktas\u0131 \u00e7ok daha y\u00fcksektir.',
+        'K\u00fc\u00e7\u00fck alkoller (metanol, etanol) suda tamamen \u00e7\u00f6z\u00fcn\u00fcr; zincir uzad\u0131k\u00e7a \u00e7\u00f6z\u00fcn\u00fcrl\u00fck azal\u0131r.',
+        'Birincil (1\u00b0), ikincil (2\u00b0) ve \u00fc\u00e7\u00fcnc\u00fcl (3\u00b0) alkol olarak s\u0131n\u0131fland\u0131r\u0131l\u0131r (OH\u2019nin ba\u011fl\u0131 oldu\u011fu karbonun ba\u015fka ka\u00e7 karbona ba\u011fl\u0131 oldu\u011funa g\u00f6re).',
+        'Etanol, alkoll\u00fc i\u00e7eceklerin ve dezenfektanlar\u0131n etken maddesidir; metanol ise zehirlidir (k\u00f6rl\u00fc\u011fe yol a\u00e7ar).'
+      ],
+      tepkimeler:[
+        '<b>Yanma:</b> 2CH\u2083OH + 3O\u2082 \u2192 2CO\u2082 + 4H\u2082O',
+        '<b>Y\u00fckseltgenme:</b> 1\u00b0 alkol \u2192 aldehit \u2192 karboksilik asit; 2\u00b0 alkol \u2192 keton (3\u00b0 alkol kolayca y\u00fckseltgenmez).',
+        '<b>Esterle\u015fme:</b> R-OH + R\u2019-COOH \u21cc R\u2019-COO-R + H\u2082O (asit kataliz\u00f6rl\u00fc)',
+        '<b>Sodyumla tepkime:</b> 2R-OH + 2Na \u2192 2R-ONa + H\u2082\u2191 (alkoller zay\u0131f asittir)',
+        '<b>Dehidrasyon:</b> Alkol, deri\u015fik H\u2082SO\u2084 ile \u0131s\u0131t\u0131l\u0131rsa su kaybederek alken olu\u015fturur.'
+      ]
+    },
+    eter: {
+      icon:'\ud83e\uddea', genel:'R-O-R\u2019', hib:'Oksijen b\u00fckk\u00fcl\u00fc (~110\u00b0)',
+      tanim:'\u0130ki hidrokarbon grubunun bir oksijen k\u00f6pr\u00fcs\u00fcyle ba\u011fland\u0131\u011f\u0131 yap\u0131d\u0131r. Ayn\u0131 molek\u00fcl form\u00fcl\u00fcndeki alkollerin yap\u0131 izomeridir (\u00f6rn. dimetil eter C\u2082H\u2086O, etanol ile ayn\u0131 form\u00fcle sahiptir).',
+      ozellikler:[
+        'O-H ba\u011f\u0131 OLMADI\u011eI i\u00e7in eterler kendi aralar\u0131nda hidrojen ba\u011f\u0131 YAPAMAZ \u2192 ayn\u0131 form\u00fcll\u00fc alkolden \u00e7ok daha D\u00dc\u015e\u00dcK kaynama noktas\u0131na sahiptir.',
+        'Genellikle kimyasal olarak durgundur (reaktif de\u011fildir) \u2014 bu y\u00fczden iyi bir \u00e7\u00f6z\u00fcc\u00fcd\u00fcr.',
+        'Dietil eter eskiden anestezik olarak kullan\u0131lm\u0131\u015ft\u0131r; uçucu ve yan\u0131c\u0131d\u0131r.',
+        'Alkollerin aksine metal Na ile H\u2082 gaz\u0131 vermez (O-H ba\u011f\u0131 yoktur).'
+      ],
+      tepkimeler:[
+        '<b>Yanma:</b> Eterler yan\u0131c\u0131d\u0131r, tam yanmada CO\u2082 ve H\u2082O verir.',
+        '<b>Williamson Eter Sentezi:</b> R-ONa + R\u2019-X \u2192 R-O-R\u2019 + NaX (eter haz\u0131rlaman\u0131n temel y\u00f6ntemi)',
+        'Kuvvetli asitlerle (HI gibi) \u0131s\u0131t\u0131ld\u0131\u011f\u0131nda C-O ba\u011f\u0131 k\u0131r\u0131larak alkil halojen\u00fcr + alkole ayr\u0131\u015f\u0131r.'
+      ]
+    },
+    aldehit: {
+      icon:'\ud83e\uddec', genel:'R-CHO', hib:'Karbonil karbonu sp\u00b2 (d\u00fczlemsel, 120\u00b0)',
+      tanim:'Karbonil grubunun (C=O) zincirin UCUNDA bulundu\u011fu ve karbonil karbonuna en az bir H\u2019nin do\u011frudan ba\u011fl\u0131 oldu\u011fu yap\u0131d\u0131r.',
+      ozellikler:[
+        'Karbonil karbonu d\u00fczlemseldir (sp\u00b2); C=O ba\u011f\u0131 kutupludur (O daha elektronegatif).',
+        'K\u00fc\u00e7\u00fck aldehitler keskin/rahats\u0131z edici kokuludur; baz\u0131lar\u0131 (vanilin gibi) ho\u015f kokuludur.',
+        'Alkollerden farkl\u0131 olarak O-H ba\u011f\u0131 yoktur \u2192 kendi aralar\u0131nda hidrojen ba\u011f\u0131 yapamazlar, kaynama noktalar\u0131 orta d\u00fczeydedir.',
+        'Kolayca y\u00fckseltgenerek karboksilik aside d\u00f6n\u00fc\u015f\u00fcr \u2014 bu y\u00fczden \u201cindirgen \u015feker\u201d testlerinde (Tollens, Fehling) pozitif verirler.'
+      ],
+      tepkimeler:[
+        '<b>Y\u00fckseltgenme:</b> R-CHO + [O] \u2192 R-COOH (Tollens/Fehling ile ay\u0131rt edilir \u2014 keton bu tepkimeyi vermez!)',
+        '<b>\u0130ndirgenme:</b> R-CHO + H\u2082 \u2192 R-CH\u2082OH (1\u00b0 alkole d\u00f6n\u00fc\u015f\u00fcr)',
+        '<b>Tollens testi:</b> Ag(NH\u2083)\u2082\u207a ile g\u00fcm\u00fc\u015f ayna olu\u015fturur \u2014 aldehide \u00f6zg\u00fc, ketonda olmaz.',
+        '<b>Katılma:</b> Karbonil karbonuna H\u2082, HCN gibi k\u00fc\u00e7\u00fck molek\u00fcller katılabilir (\u00e7ift ba\u011f a\u00e7\u0131l\u0131r).'
+      ]
+    },
+    keton: {
+      icon:'\ud83e\uddea', genel:'R-CO-R\u2019', hib:'Karbonil karbonu sp\u00b2 (d\u00fczlemsel, 120\u00b0)',
+      tanim:'Karbonil grubunun (C=O) zincirin ORTASINDA, iki karbon grubu aras\u0131nda bulundu\u011fu yap\u0131d\u0131r.',
+      ozellikler:[
+        'Aldehit ile ayn\u0131 genel form\u00fcle sahiptir (C\u2099H\u2082\u2099O) fakat karbonil karbonuna H de\u011fil, iki KARBON grubu ba\u011fl\u0131d\u0131r.',
+        'Aseton (propanon), t\u0131rnak c\u0131las\u0131 \u00e7\u00f6z\u00fcc\u00fcs\u00fc olarak yayg\u0131n kullan\u0131l\u0131r; suyla her oranda kar\u0131\u015f\u0131r.',
+        'Aldehitlerin aksine KOLAYCA y\u00fckseltgenmezler (H eksikli\u011fi nedeniyle) \u2014 bu, aldehit-keton ay\u0131rt etmenin temel yoludur.',
+        'Ketonlar Tollens ve Fehling testlerine NEGAT\u0130F verir.'
+      ],
+      tepkimeler:[
+        '<b>\u0130ndirgenme:</b> R-CO-R\u2019 + H\u2082 \u2192 R-CH(OH)-R\u2019 (2\u00b0 alkole d\u00f6n\u00fc\u015f\u00fcr)',
+        '<b>Y\u00fckseltgenmeye diren\u00e7:</b> Normal ko\u015fullarda y\u00fckseltgen belirte\u00e7lerle tepkime vermez (aldehitten ay\u0131r\u0131c\u0131 \u00f6zellik).',
+        '<b>Katılma:</b> Karbonile HCN, alkol gibi k\u00fc\u00e7\u00fck molek\u00fcller katılabilir.',
+        '<b>İyodoform testi:</b> Metil ketonlar (CH\u2083-CO-R) I\u2082/NaOH ile sar\u0131 \u00e7\u00f6kelti (CHI\u2083) verir.'
+      ]
+    },
+    asit: {
+      icon:'\ud83c\udf4b', genel:'R-COOH', hib:'Karboksil karbonu sp\u00b2',
+      tanim:'Karbonil (C=O) ve hidroksil (-OH) gruplar\u0131n\u0131n AYNI karbona ba\u011fl\u0131 oldu\u011fu (-COOH) yap\u0131d\u0131r. Organik asitlerin genel s\u0131n\u0131f\u0131d\u0131r.',
+      ozellikler:[
+        'O-H ba\u011f\u0131 \u00e7ok polar oldu\u011fu i\u00e7in G\u00dc\u00c7L\u00dc hidrojen ba\u011f\u0131 yapar \u2014 ayn\u0131 karbon say\u0131l\u0131 alkolden bile daha y\u00fcksek kaynama noktas\u0131na sahiptir (genelde \u00e7ift molek\u00fcl/dimer olu\u015ftururlar).',
+        'Sirkedeki asetik asit (%4-8), format asit (kar\u0131ncalarda) ve ya\u011f asitleri g\u00fcnl\u00fck hayatta s\u0131k g\u00f6r\u00fcl\u00fcr.',
+        'Zay\u0131f asittir (HCl gibi g\u00fc\u00e7l\u00fc asitlerden farkl\u0131) fakat turnusolu k\u0131rm\u0131z\u0131ya \u00e7evirecek kadar asidiktir.',
+        'Karbon say\u0131s\u0131 artt\u0131k\u00e7a asitlik azal\u0131r (alkil grubunun elektron iten etkisi nedeniyle).'
+      ],
+      tepkimeler:[
+        '<b>N\u00f6tralle\u015fme:</b> R-COOH + NaOH \u2192 R-COONa + H\u2082O',
+        '<b>Esterle\u015fme (Fischer):</b> R-COOH + R\u2019-OH \u21cc R-COO-R\u2019 + H\u2082O',
+        '<b>Karbonatla tepkime:</b> 2R-COOH + Na\u2082CO\u2083 \u2192 2R-COONa + H\u2082O + CO\u2082\u2191 (gaz \u00e7\u0131k\u0131\u015f\u0131yla ayırt edilir)',
+        '<b>\u0130ndirgenme:</b> R-COOH + 4[H] \u2192 R-CH\u2082OH + H\u2082O (g\u00fc\u00e7l\u00fc indirgen gerekir)'
+      ]
+    },
+    ester: {
+      icon:'\ud83c\udf52', genel:'R-CO-O-R\u2019', hib:'Karbonil karbonu sp\u00b2',
+      tanim:'Karboksilik asidin -OH grubunun bir alkoksi (-OR\u2019) grubuyla yer de\u011fi\u015ftirmesiyle olu\u015fur. Asit + alkol \u2192 ester + su tepkimesinin \u00fcr\u00fcn\u00fcd\u00fcr.',
+      ozellikler:[
+        'O-H ba\u011f\u0131 YOKTUR \u2192 kendi aralar\u0131nda hidrojen ba\u011f\u0131 yapamazlar; ayn\u0131 asitten kaynama noktalar\u0131 D\u00dc\u015e\u00dcKT\u00dcR.',
+        'Karakteristik HO\u015e KOKULARIYLA bilinirler \u2014 meyve, \u00e7i\u00e7ek ve parf\u00fcm aromalar\u0131n\u0131n \u00e7o\u011fu esterlerden gelir (\u00f6rn. etil asetat = oje \u00e7\u0131kar\u0131c\u0131 kokusu, benzil asetat = \u015feftali kokusu).',
+        'Ya\u011flar ve ya\u011f asitleri (trigliseritler) gliserin ile uzun zincirli ya\u011f asitlerinin OLU\u015eTURDU\u011eU esterlerdir.',
+        'Adland\u0131rma: \u201casit k\u00f6k\u00fc + -at\u201d \u00f6nce, \u201calkol k\u00f6k\u00fc + -il\u201d sonra s\u00f6ylenir (\u00f6rn. etil asetat).'
+      ],
+      tepkimeler:[
+        '<b>Esterle\u015fme (olu\u015fum):</b> R-COOH + R\u2019-OH \u21cc R-COO-R\u2019 + H\u2082O (asit katalizli, denge tepkimesi)',
+        '<b>Hidroliz (asidik):</b> R-COO-R\u2019 + H\u2082O \u2192 R-COOH + R\u2019-OH (esterle\u015fmenin tersi)',
+        '<b>Sabunla\u015fma (bazik hidroliz):</b> R-COO-R\u2019 + NaOH \u2192 R-COONa (sabun) + R\u2019-OH \u2014 sabun \u00fcretiminin temelidir!',
+        '<b>\u0130ndirgenme:</b> Ester + H\u2082 (katalizör) \u2192 iki farkl\u0131 alkol verir.'
+      ]
+    }
+  };
+
+  var fgCat = 'alkol';
+  var fgSt = { rotX: 0.42, rotY: 0.6, zoom: 1, fit: 1, spin: true, spd: 1, drag: false,
+               lx: 0, ly: 0, dist: 0, t: 0, anim: null, labels: true, item: null, stars: null, sw: 0 };
+
+  function setupFG(){
+    if (document.getElementById('s-fg')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var catBtns = '';
+    for (var i = 0; i < FG_CLASSES.length; i++) {
+      var c = FG_CLASSES[i];
+      catBtns += '<button type="button" id="fg-cat-' + c + '" class="ob' + (i===0?' sel2':'') + '" style="flex-shrink:0" onclick="fgSetCat(\'' + c + '\',this)">' + FG_CLASS_NAMES[c] + '</button>';
+    }
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-fg" style="display:none"><div style="max-width:900px;margin:0 auto;padding:15px">' +
+        '<h1 class="ptitle">\u2697\ufe0f Fonksiyonel Gruplar 3D</h1>' +
+        '<p class="psub">Alkol, eter, aldehit, keton, karboksilik asit, ester \u2014 3D yap\u0131, \u00f6zellikler ve tepkimeler.</p>' +
+        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' + catBtns + '</div></div>' +
+        '<div id="fg-theory" style="margin-bottom:16px"></div>' +
+        '<div id="fg-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>' +
+      '</div>' +
+      '<div id="fg-detail" style="display:none;position:fixed;inset:0;background:rgba(2,3,10,0.97);z-index:600;overflow-y:auto;padding:20px">' +
+        '<button type="button" onclick="fgClose()" style="position:fixed;top:15px;right:15px;width:40px;height:40px;background:rgba(255,50,50,0.2);border:1px solid rgba(255,50,50,0.5);border-radius:50%;color:#ff6666;font-size:22px;cursor:pointer;z-index:601;display:flex;align-items:center;justify-content:center">\u00d7</button>' +
+        '<div id="fg-title" style="text-align:center;font-size:1.4rem;color:#00d4ff;margin:46px 0 4px;text-shadow:0 0 15px rgba(0,212,255,0.4);font-family:Space Grotesk,sans-serif;font-weight:800"></div>' +
+        '<div id="fg-sub" style="text-align:center;font-size:14px;color:var(--tx2);margin-bottom:14px"></div>' +
+        '<canvas id="fg-cv" width="600" height="420" style="width:100%;max-width:560px;height:auto;border-radius:16px;background:#050510;border:2px solid rgba(0,212,255,0.3);display:block;margin:0 auto 10px;touch-action:none"></canvas>' +
+        '<p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:10px">\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr \u00b7 \ud83e\udd0f \u0130ki parmakla yak\u0131nla\u015ft\u0131r</p>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">' +
+          '<button type="button" onclick="fgToggleSpin()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer">\ud83d\udd04 Oto-D\u00f6nd\u00fcr</button>' +
+          '<button type="button" onclick="fgResetView()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer">\ud83c\udfaf S\u0131f\u0131rla</button>' +
+        '</div>' +
+        '<div style="max-width:560px;margin:0 auto 30px;background:var(--sf);border:1px solid var(--br);border-left:3px solid #ef4444;border-radius:var(--rlg);padding:18px" id="fg-props"></div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-fg') === -1) SCREENS.push('s-fg');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-fg'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-fg" onclick="nav(\'fg\')">\u2697\ufe0f Fonksiyonel Gruplar 3D</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-fg'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-fg" onclick="nav(\'fg\')"><div class="ti">\u2697\ufe0f</div><div class="tt">Fonksiyonel Gruplar 3D</div><div class="td">Alkol, eter, aldehit, keton, asit, ester \u2014 3D yap\u0131 ve tepkimeler.</div></div>');
+    fgBindCanvas();
+    fgRenderTheory();
+  }
+
+  window.fgSetCat = function(c, btn){
+    fgCat = c;
+    if (btn) selectInRow(btn);
+    fgRenderTheory();
+    fgRenderGrid();
+  };
+
+  function fgRenderTheory(){
+    var box = document.getElementById('fg-theory');
+    if (!box) return;
+    var th = FG_THEORY[fgCat];
+    var html = '<div class="card">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+        '<span style="font-size:26px">' + th.icon + '</span>' +
+        '<div><div style="font-family:Space Grotesk,sans-serif;font-size:17px;font-weight:800;color:#fff">' + FG_CLASS_NAMES[fgCat] + '</div>' +
+        '<div style="font-size:12px;color:var(--ac2);font-weight:600">Genel form\u00fcl: ' + th.genel + ' \u00b7 ' + th.hib + '</div></div>' +
+      '</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:12px">' + th.tanim + '</p>' +
+      '<div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">\u00d6zellikler</div>' +
+      '<ul style="margin:0 0 12px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">';
+    th.ozellikler.forEach(function(o){ html += '<li>' + o + '</li>'; });
+    html += '</ul>' +
+      '<div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Kimyasal Tepkimeler</div>' +
+      '<div style="font-size:13px;color:var(--tx2);line-height:2">';
+    th.tepkimeler.forEach(function(t){ html += '\u2022 ' + t + '<br>'; });
+    html += '</div></div>';
+    box.innerHTML = html;
+  }
+
+  function fgRenderGrid(){
+    var grid = document.getElementById('fg-grid');
+    if (!grid) return;
+    var list = fgList().filter(function(m){ return m.cls === fgCat; });
+    var html = '';
+    for (var i = 0; i < list.length; i++) {
+      var idx = fgList().indexOf(list[i]);
+      html += '<div onclick="fgOpen(' + idx + ')" style="background:var(--sf);border:2px solid rgba(239,68,68,0.25);border-radius:16px;padding:10px 8px;text-align:center;cursor:pointer">' +
+        '<div style="font-size:13px;font-weight:700;color:#fca5a5;margin-bottom:2px">' + list[i].name + '</div>' +
+        '<div style="font-size:11px;color:var(--tx3);margin-bottom:6px">' + pretty(list[i].f) + '</div>' +
+        '<canvas id="fg-th-' + idx + '" width="170" height="130" style="width:100%;border-radius:10px;background:#050510;border:1px solid rgba(239,68,68,0.15)"></canvas>' +
+      '</div>';
+    }
+    grid.innerHTML = html;
+    setTimeout(function(){ for (var j = 0; j < list.length; j++) fgThumb(fgList().indexOf(list[j])); }, 60);
+  }
+
+  function fgThumb(idx){
+    var cv = document.getElementById('fg-th-' + idx);
+    if (!cv) return;
+    var item = fgList()[idx], mol = fgMol(item);
+    var st = { rotX: 0.45, rotY: 0.5 + idx*0.4, zoom: 0.92, fit: mol.fit, t: idx, stars: null, sw: 0 };
+    hcDraw(cv.getContext('2d'), mol, st, 170, 130, false);
+  }
+
+  window.fgOpen = function(idx){
+    var item = fgList()[idx];
+    if (!item) return;
+    fgSt.item = item; fgSt.rotX = 0.42; fgSt.rotY = 0.6; fgSt.zoom = 1; fgSt.spin = true;
+    fgSt.fit = fgMol(item).fit;
+    document.getElementById('fg-title').textContent = item.name;
+    document.getElementById('fg-sub').innerHTML = pretty(item.f) + ' \u00b7 <span style="color:#f87171">' + FG_CLASS_NAMES[item.cls] + '</span>';
+    var mol = fgMol(item);
+    var html = '<div style="font-size:14px;font-weight:600;color:#f87171;margin-bottom:12px">\ud83d\udccb Molek\u00fcl \u00d6zellikleri</div>';
+    var rows = [['Molek\u00fcl Form\u00fcl\u00fc', pretty(item.f)], ['Karbon / Hidrojen / Oksijen', mol.nC + ' C \u00b7 ' + mol.nH + ' H \u00b7 ' + mol.nO + ' O'], ['Fonksiyonel Grup', FG_THEORY[item.cls].genel]];
+    for (var r = 0; r < rows.length; r++)
+      html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px"><span style="color:var(--tx3)">' + rows[r][0] + '</span><span style="color:#f87171;font-weight:700;text-align:right">' + rows[r][1] + '</span></div>';
+    html += '<div style="margin-top:10px;font-size:11px;color:var(--tx3);line-height:1.6">\ud83c\udfa8 Renkler: <span style="color:#22d3ee">\u25cf C</span> \u00b7 <span style="color:#e2e8f0">\u25cf H</span> \u00b7 <span style="color:#ef4444">\u25cf O</span> \u00b7 <span style="color:#fb7185">\u2550 C=O \u00e7ift ba\u011f</span></div>';
+    document.getElementById('fg-props').innerHTML = html;
+    document.getElementById('fg-detail').style.display = 'block';
+    document.getElementById('fg-detail').scrollTop = 0;
+    if (fgSt.anim) cancelAnimationFrame(fgSt.anim);
+    fgLoop();
+  };
+
+  function fgLoop(){
+    if (!fgSt.item) return;
+    var cv = document.getElementById('fg-cv');
+    if (!cv || document.getElementById('fg-detail').style.display === 'none') { fgStopAnim(); return; }
+    fgSt.anim = requestAnimationFrame(fgLoop);
+    var rect = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    var W = rect.width || 300, H2 = Math.round(W * 0.72);
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (fgSt.spin && !fgSt.drag) fgSt.rotY += 0.008 * fgSt.spd;
+    fgSt.t += 0.016;
+    hcDraw(x, fgMol(fgSt.item), fgSt, W, H2, fgSt.labels);
+  }
+  function fgStopAnim(){ if (fgSt.anim) { cancelAnimationFrame(fgSt.anim); fgSt.anim = null; } }
+  window.fgClose = function(){
+    var d = document.getElementById('fg-detail');
+    if (d) d.style.display = 'none';
+    fgStopAnim(); fgSt.item = null;
+  };
+  window.fgToggleSpin = function(){ fgSt.spin = !fgSt.spin; };
+  window.fgResetView = function(){ fgSt.rotX = 0.42; fgSt.rotY = 0.6; fgSt.zoom = 1; };
+
+  function fgBindCanvas(){
+    var cv = document.getElementById('fg-cv');
+    if (!cv) return;
+    cv.onmousedown = function(e){ fgSt.drag = true; fgSt.lx = e.clientX; fgSt.ly = e.clientY; };
+    cv.onmousemove = function(e){
+      if (!fgSt.drag) return;
+      fgSt.rotY += (e.clientX - fgSt.lx) * 0.01; fgSt.rotX += (e.clientY - fgSt.ly) * 0.01;
+      fgSt.lx = e.clientX; fgSt.ly = e.clientY;
+    };
+    cv.onmouseup = cv.onmouseleave = function(){ fgSt.drag = false; };
+    cv.addEventListener('wheel', function(e){ e.preventDefault(); fgSt.zoom = Math.max(0.5, Math.min(3.5, fgSt.zoom - e.deltaY*0.0012)); }, { passive:false });
+    cv.addEventListener('touchstart', function(e){
+      if (e.touches.length === 1) { fgSt.drag = true; fgSt.lx = e.touches[0].clientX; fgSt.ly = e.touches[0].clientY; }
+      else if (e.touches.length === 2) { var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY; fgSt.dist=Math.sqrt(dx*dx+dy*dy); }
+      e.preventDefault();
+    }, { passive:false });
+    cv.addEventListener('touchmove', function(e){
+      if (e.touches.length === 1 && fgSt.drag) {
+        fgSt.rotY += (e.touches[0].clientX - fgSt.lx) * 0.014; fgSt.rotX += (e.touches[0].clientY - fgSt.ly) * 0.014;
+        fgSt.lx = e.touches[0].clientX; fgSt.ly = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY, dist=Math.sqrt(dx*dx+dy*dy);
+        if (fgSt.dist > 0) fgSt.zoom = Math.max(0.5, Math.min(3.5, fgSt.zoom * dist/fgSt.dist));
+        fgSt.dist = dist;
+      }
+      e.preventDefault();
+    }, { passive:false });
+    cv.addEventListener('touchend', function(){ fgSt.drag = false; fgSt.dist = 0; });
+  }
+  function fgEnter(){ fgRenderTheory(); fgRenderGrid(); }
+  function fgLeave(){ window.fgClose(); }
+
+  // ---------- 13. MAARİF 9. SINIF — ETKİLEŞİM ÜNİTESİ ----------
+  // Zayıf Etkileşimler (London/dipol-dipol/hidrojen bağı) ve
+  // Maddenin Halleri (katı/sıvı/gaz/plazma) — 3D görsel + detaylı konu.
+
+  // ---- 13a. ZAYIF ETKİLEŞİMLER ----
+  var WI_TYPES = {
+    london: {
+      name:'London (Van der Waals) Kuvvetleri', icon:'\u26a1',
+      tanim:'T\u00fcm molek\u00fcller aras\u0131nda bulunan, elektron bulutunun ANLIK ve GE\u00c7\u0130C\u0130 kaym\u0131 sonucu olu\u015fan EN ZAYIF \u00e7ekim kuvvetidir. Apolar molek\u00fcllerin (N\u2082, CH\u2084, soy gazlar) TEK etkile\u015fim t\u00fcr\u00fcd\u00fcr.',
+      ozellikler:[
+        'Elektron say\u0131s\u0131 (molek\u00fcl k\u00fctlesi) artt\u0131k\u00e7 London kuvveti G\u00dc\u00c7LEN\u0130R \u2192 kaynama noktas\u0131 y\u00fckselir (\u00f6rn. F\u2082<Cl\u2082<Br\u2082<I\u2082).',
+        'Molek\u00fcl \u015fekli de \u00f6nemlidir: DO\u011eRUSAL/uzun molek\u00fcllerde temas y\u00fczeyi fazla oldu\u011fu i\u00e7in London kuvveti, dallanm\u0131\u015f/k\u00fcresel izomerlerden daha g\u00fc\u00e7l\u00fcd\u00fcr.',
+        'T\u00fcm di\u011fer etkile\u015fim t\u00fcrlerinin YANINDA da her zaman bulunur (en zay\u0131f ama en yayg\u0131n olan\u0131d\u0131r).',
+        'Oda s\u0131cakl\u0131\u011f\u0131nda soy gazlar\u0131n ve H\u2082, N\u2082, O\u2082 gibi apolar molek\u00fcllerin gaz halde bulunmas\u0131n\u0131n nedeni budur \u2014 \u00e7ok zay\u0131f oldu\u011fu i\u00e7in kolayca ayr\u0131l\u0131rlar.'
+      ]
+    },
+    dipol: {
+      name:'Dipol-Dipol Etkile\u015fimi', icon:'\u2194\ufe0f',
+      tanim:'POLAR molek\u00fcllerin kal\u0131c\u0131 (+) ve (\u2212) u\u00e7lar\u0131n\u0131n birbirini \u00e7ekmesiyle olu\u015fur. London kuvvetinden G\u00dc\u00c7L\u00dc, hidrojen ba\u011f\u0131ndan ZAYIFTIR.',
+      ozellikler:[
+        'Yaln\u0131zca polar molek\u00fcllerde (HCl, SO\u2082, aseton gibi) g\u00f6r\u00fcl\u00fcr \u2014 molek\u00fclde kal\u0131c\u0131 bir dipol moment olmal\u0131d\u0131r.',
+        'Ayn\u0131 molek\u00fcl k\u00fctlesine sahip apolar bir molek\u00fclden DAHA Y\u00dcKSEK kaynama noktas\u0131na yol a\u00e7ar (\u00f6rn. HCl, F\u2082\u2019den daha polar ve daha y\u00fcksek kaynar).',
+        'Molek\u00fcller birbirine (+) u\u00e7 \u2014 (\u2212) u\u00e7 \u015feklinde, elektrostatik \u00e7ekimle diz1lir.',
+        '\u00d6rnekler: HCl, HBr, SO\u2082, aseton (CH\u2083COCH\u2083), kloroform (CHCl\u2083).'
+      ]
+    },
+    hidrojen: {
+      name:'Hidrojen Ba\u011f\u0131', icon:'\ud83d\udca7',
+      tanim:'H atomunun \u00c7OK elektronegatif bir atoma (F, O, N) do\u011frudan ba\u011fl\u0131 oldu\u011fu molek\u00fcllerde g\u00f6r\u00fclen, zay\u0131f etkile\u015fimlerin EN G\u00dc\u00c7L\u00dcS\u00fcd\u00fcr (yine de gerçek bir kovalent/iyonik bağdan çok daha zayıftır).',
+      ozellikler:[
+        '"F-O-N kural\u0131": Hidrojen ba\u011f\u0131 i\u00e7in H, mutlaka F, O veya N atomuna DO\u011eRUDAN ba\u011fl\u0131 olmal\u0131d\u0131r.',
+        'Su (H\u2082O), amonyak (NH\u2083), hidrojen florür (HF) ve alkoller (R-OH) hidrojen ba\u011f\u0131 yapan ba\u015fl\u0131ca örneklerdir.',
+        'Suyun beklenenden ÇOK y\u00fcksek kaynama noktas\u0131na (100°C) sahip olmas\u0131n\u0131n nedeni budur \u2014 H\u2082S (hidrojen ba\u011f\u0131 yapamaz) \u2212 60°C\u2019de kaynar!',
+        'DNA\u2019n\u0131n çift sarmal yap\u0131s\u0131n\u0131 bir arada tutan da hidrojen ba\u011flar\u0131d\u0131r; buz, hidrojen ba\u011flar\u0131 sayesinde sudan daha az yo\u011fundur (bu yüzden buz suda yüzer).'
+      ]
+    }
+  };
+  var WI_ORDER = ['london','dipol','hidrojen'];
+  var wiKind = 'london';
+  var wiSt = { rotX: 0.3, rotY: 0.4, zoom: 1, spin: true, drag: false, lx:0, ly:0, dist:0, t: 0, anim: null, stars: null, sw: 0, bound: false };
+
+  function wiDraw(x, W, H2){
+    hcBg(x, wiSt, W, H2);
+    var items = [];
+    function pushMol(cx, polarity){ // polarity: 0=apolar, 1=+uçlu, -1=−uçlu (basit iki-küre gösterim)
+      var col = polarity > 0 ? [96,165,250] : polarity < 0 ? [248,113,113] : [148,197,255];
+      var p = hcProj(wiSt, cx, 0, 0, W, H2);
+      items.push({ z: p.z, x: p.x, y: p.y, s: p.s, r: 30*p.s, col: col, lab: polarity>0?'\u03b4+':polarity<0?'\u03b4\u2212':'' });
+    }
+    var gap = 95 + 25*Math.sin(wiSt.t*0.6);
+    if (wiKind === 'london') {
+      // Sürekli titreşen, anlık dipol vurgusu
+      var phase = Math.sin(wiSt.t*2.2);
+      pushMol(-gap/2, phase>0.15?1:phase<-0.15?-1:0);
+      pushMol(gap/2, phase>0.15?-1:phase<-0.15?1:0);
+    } else if (wiKind === 'dipol') {
+      pushMol(-gap/2, 1); pushMol(gap/2, -1);
+    } else {
+      pushMol(-gap/2, 1); pushMol(gap/2, -1);
+    }
+    // Çekim çizgisi
+    var pL = hcProj(wiSt, -gap/2+30, 0, 0, W, H2), pR = hcProj(wiSt, gap/2-30, 0, 0, W, H2);
+    x.save();
+    if (wiKind === 'hidrojen') { x.setLineDash([6,5]); x.strokeStyle = 'rgba(248,113,113,0.85)'; x.lineWidth = 2.4; }
+    else if (wiKind === 'dipol') { x.strokeStyle = 'rgba(96,165,250,0.6)'; x.lineWidth = 1.8; }
+    else { x.strokeStyle = 'rgba(148,197,255,' + (0.2+0.35*Math.abs(Math.sin(wiSt.t*2.2))) + ')'; x.lineWidth = 1.4; x.setLineDash([2,4]); }
+    x.beginPath(); x.moveTo(pL.x,pL.y); x.lineTo(pR.x,pR.y); x.stroke();
+    x.restore();
+    items.sort(function(a,b){ return b.z-a.z; });
+    for (var i=0;i<items.length;i++){
+      var it = items[i];
+      var gg = x.createRadialGradient(it.x-it.r*0.3, it.y-it.r*0.3, it.r*0.1, it.x, it.y, it.r);
+      gg.addColorStop(0, 'rgba(' + it.col.join(',') + ',0.95)');
+      gg.addColorStop(1, 'rgba(' + it.col.join(',') + ',0.35)');
+      x.beginPath(); x.arc(it.x, it.y, it.r, 0, 6.283); x.fillStyle = gg; x.fill();
+      x.strokeStyle = 'rgba(255,255,255,0.3)'; x.lineWidth = 1; x.stroke();
+      if (it.lab) {
+        x.fillStyle = '#fff'; x.font = 'bold ' + Math.max(11, it.r*0.5) + 'px sans-serif';
+        x.textAlign = 'center'; x.textBaseline = 'middle';
+        x.fillText(it.lab, it.x, it.y); x.textBaseline = 'alphabetic';
+      }
+    }
+    x.fillStyle = 'rgba(255,255,255,.3)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H2-8);
+    x.textAlign = 'left';
+  }
+
+  window.wiSetKind = function(k, btn){ wiKind = k; if (btn) selectInRow(btn); wiRenderTheory(); };
+  function wiRenderTheory(){
+    var box = document.getElementById('wi-theory');
+    if (!box) return;
+    var th = WI_TYPES[wiKind];
+    var html = '<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+      '<span style="font-size:26px">' + th.icon + '</span><div style="font-family:Space Grotesk,sans-serif;font-size:17px;font-weight:800;color:#fff">' + th.name + '</div></div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:12px">' + th.tanim + '</p>' +
+      '<div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">\u00d6zellikler</div>' +
+      '<ul style="margin:0 0 4px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">';
+    th.ozellikler.forEach(function(o){ html += '<li>' + o + '</li>'; });
+    html += '</ul></div>';
+    html += '<div class="card" style="margin-top:10px"><div class="slbl">G\u00fc\u00e7 S\u0131ralamas\u0131</div>' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx2);margin-top:6px">' +
+      '<span>London <b style="color:#93c5fd">(en zay\u0131f)</b></span><span>\u2192</span><span>Dipol-Dipol</span><span>\u2192</span><span><b style="color:#f87171">Hidrojen Ba\u011f\u0131</b> (en g\u00fc\u00e7l\u00fc)</span></div></div>';
+    box.innerHTML = html;
+  }
+
+  function wiLoop(){
+    var scr = document.getElementById('s-wi');
+    if (!scr || scr.style.display === 'none') { wiStop(); return; }
+    wiSt.anim = requestAnimationFrame(wiLoop);
+    var cv = document.getElementById('wi-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || 300, H2 = 260;
+    var dpr = window.devicePixelRatio || 1;
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try {
+      if (wiSt.spin && !wiSt.drag) wiSt.rotY += 0.006;
+      wiSt.t += 0.016;
+      wiDraw(x, W, H2);
+    } catch (e) { drawErr(x, W, H2, e); }
+  }
+  function wiStop(){ if (wiSt.anim) { cancelAnimationFrame(wiSt.anim); wiSt.anim = null; } }
+  function wiStart(){ wiBind(); if (wiSt.anim) cancelAnimationFrame(wiSt.anim); wiLoop(); }
+  function wiBind(){
+    if (wiSt.bound) return;
+    var cv = document.getElementById('wi-cv');
+    if (!cv) return;
+    wiSt.bound = true;
+    cv.onmousedown = function(e){ wiSt.drag = true; wiSt.lx = e.clientX; wiSt.ly = e.clientY; };
+    cv.onmousemove = function(e){ if (!wiSt.drag) return; wiSt.rotY += (e.clientX-wiSt.lx)*0.01; wiSt.rotX += (e.clientY-wiSt.ly)*0.01; wiSt.lx=e.clientX; wiSt.ly=e.clientY; };
+    cv.onmouseup = cv.onmouseleave = function(){ wiSt.drag = false; };
+    cv.addEventListener('touchstart', function(e){ wiSt.drag=true; wiSt.lx=e.touches[0].clientX; wiSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchmove', function(e){ if(!wiSt.drag) return; wiSt.rotY += (e.touches[0].clientX-wiSt.lx)*0.013; wiSt.rotX += (e.touches[0].clientY-wiSt.ly)*0.013; wiSt.lx=e.touches[0].clientX; wiSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchend', function(){ wiSt.drag = false; });
+  }
+
+  // ---- 13b. MADDENİN HALLERİ ----
+  var MH_STATES = {
+    kati: {
+      name:'Kat\u0131', icon:'\ud83e\uddca',
+      tanim:'Tanecikler birbirine \u00e7ok yak\u0131n, D\u00dcZENL\u0130 (\u00f6rg\u00fc/kristal) bir diziliminde ve sabit konumlar etraf\u0131nda sadece T\u0130TRE\u015e\u0130R.',
+      ozellikler:[
+        'Belirli \u015fekli VE belirli hacmi vard\u0131r.',
+        'Tanecikler aras\u0131 \u00e7ekim kuvveti EN G\u00dc\u00c7L\u00dc, taneciklerin kinetik enerjisi EN D\u00dc\u015e\u00dcKT\u00dcR.',
+        'S\u0131k\u0131\u015ft\u0131r\u0131lamaz (tanecikler aras\u0131 bo\u015fluk neredeyse yoktur).',
+        'Ak\u0131\u015fkan de\u011fildir; kendi \u015feklini korur.'
+      ]
+    },
+    sivi: {
+      name:'S\u0131v\u0131', icon:'\ud83d\udca7',
+      tanim:'Tanecikler birbirine yak\u0131n ama D\u00dcZENS\u0130Zdir; sabit bir konumlar\u0131 yoktur, birbirinin \u00fczerinden KAYARAK hareket ederler.',
+      ozellikler:[
+        'Belirli hacmi vard\u0131r fakat belirli \u015fekli YOKTUR \u2014 konuldu\u011fu kab\u0131n \u015feklini al\u0131r.',
+        'Tanecikler aras\u0131 \u00e7ekim kat\u0131dan zay\u0131f, gazdan g\u00fc\u00e7l\u00fcd\u00fcr; orta d\u00fczeyde kinetik enerjiye sahiptirler.',
+        'Ak\u0131\u015fkand\u0131r; \u00e7ok az s\u0131k\u0131\u015ft\u0131r\u0131labilir (neredeyse s\u0131f\u0131r).',
+        'Y\u00fczey gerilimi ve viskozite gibi \u00f6zellikler s\u0131v\u0131lara \u00f6zg\u00fcd\u00fcr.'
+      ]
+    },
+    gaz: {
+      name:'Gaz', icon:'\ud83d\udca8',
+      tanim:'Tanecikler birbirinden ÇOK uzak, tamamen D\u00dcZENSİZ ve BA\u011eIMSIZ olarak h\u0131zl\u0131 ve rastgele hareket eder.',
+      ozellikler:[
+        'Ne belirli \u015fekli NE de belirli hacmi vard\u0131r \u2014 bulundu\u011fu kab\u0131n tamam\u0131n\u0131 doldurur.',
+        'Tanecikler aras\u0131 \u00e7ekim kuvveti \u0130HMAL ED\u0130LEB\u0130L\u0130R d\u00fczeydedir; kinetik enerji EN Y\u00dcKSEKT\u0130R.',
+        'Kolayca S\u0130KI\u015eTIRILABİLİR (tanecikler aras\u0131 bo\u015fluk \u00e7ok fazlad\u0131r).',
+        'Bas\u0131n\u00e7, hacim ve s\u0131cakl\u0131k aras\u0131ndaki ili\u015fki ideal gaz yasas\u0131yla (PV=nRT) a\u00e7\u0131klan\u0131r.'
+      ]
+    },
+    plazma: {
+      name:'Plazma', icon:'\u2604\ufe0f',
+      tanim:'Gaz\u0131n \u00e7ok y\u00fcksek s\u0131cakl\u0131kta İYONLA\u015eMASIYLA (elektronlar\u0131n atomdan kopmas\u0131yla) olu\u015fan D\u00d6RD\u00dcNC\u00dc hal say\u0131lan\u0131r.',
+      ozellikler:[
+        'Serbest elektronlar ve pozitif iyonlardan olu\u015fur \u2014 elektrik ak\u0131m\u0131n\u0131 iletir, manyetik alandan etkilenir.',
+        'Evrendeki maddenin \u00e7o\u011funlu\u011fu plazma halindedir (y\u0131ld\u0131zlar, g\u00fcne\u015f).',
+        'G\u00fcnl\u00fck hayatta floresan/neon lambalar, y\u0131ld\u0131r\u0131m ve kutup \u0131\u015f\u0131klar\u0131 (aurora) plazma \u00f6rnekleridir.',
+        'Gazdan daha y\u00fcksek enerjilidir; tanecikler hem h\u0131zl\u0131 hareket eder hem de elektrik y\u00fckl\u00fcd\u00fcr.'
+      ]
+    }
+  };
+  var MH_TRANS = [
+    ['Erime','Kat\u0131 \u2192 S\u0131v\u0131','Is\u0131 al\u0131n\u0131r'], ['Donma','S\u0131v\u0131 \u2192 Kat\u0131','Is\u0131 verilir'],
+    ['Buharla\u015fma','S\u0131v\u0131 \u2192 Gaz','Is\u0131 al\u0131n\u0131r'], ['Yo\u011fu\u015fma','Gaz \u2192 S\u0131v\u0131','Is\u0131 verilir'],
+    ['S\u00fcblimle\u015fme','Kat\u0131 \u2192 Gaz (do\u011frudan)','Is\u0131 al\u0131n\u0131r'], ['Kra\u011f\u0131la\u015fma','Gaz \u2192 Kat\u0131 (do\u011frudan)','Is\u0131 verilir']
+  ];
+  var mhState = 'kati';
+  var mhSt = { rotX: 0.35, rotY: 0.5, zoom: 1, spin: false, drag: false, lx:0, ly:0, dist:0, t: 0, anim: null, stars: null, sw: 0, bound: false, particles: [] };
+  var MH_N = 24, MH_BOX = 85;
+
+  function mhInitParticles(){
+    mhSt.particles = [];
+    var side = Math.ceil(Math.pow(MH_N, 1/3));
+    for (var i = 0; i < MH_N; i++) {
+      var gx = (i % side) - side/2, gy = (Math.floor(i/side) % side) - side/2, gz = Math.floor(i/(side*side)) - side/2;
+      mhSt.particles.push({
+        hx: gx * (MH_BOX*1.7/side), hy: gy * (MH_BOX*1.7/side), hz: gz * (MH_BOX*1.7/side),
+        x: (Math.random()-0.5)*MH_BOX*1.6, y: (Math.random()-0.5)*MH_BOX*1.6, z: (Math.random()-0.5)*MH_BOX*1.6,
+        vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2, vz: (Math.random()-0.5)*2
+      });
+    }
+  }
+  mhInitParticles();
+
+  window.mhSetState = function(s, btn){
+    mhState = s;
+    if (btn) selectInRow(btn);
+    mhRenderTheory();
+  };
+  function mhRenderTheory(){
+    var box = document.getElementById('mh-theory');
+    if (!box) return;
+    var th = MH_STATES[mhState];
+    var html = '<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+      '<span style="font-size:26px">' + th.icon + '</span><div style="font-family:Space Grotesk,sans-serif;font-size:17px;font-weight:800;color:#fff">' + th.name + '</div></div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:12px">' + th.tanim + '</p>' +
+      '<div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">\u00d6zellikler</div>' +
+      '<ul style="margin:0 0 4px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">';
+    th.ozellikler.forEach(function(o){ html += '<li>' + o + '</li>'; });
+    html += '</ul></div>';
+    if (mhState !== 'plazma') {
+      html += '<div class="card" style="margin-top:10px"><div class="slbl">Hal De\u011fi\u015fim Tepkimeleri</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px;font-size:11px">';
+      MH_TRANS.forEach(function(t){
+        html += '<div style="background:var(--sf2);border-radius:8px;padding:8px;text-align:center">' +
+          '<div style="font-weight:700;color:#fff;margin-bottom:2px">' + t[0] + '</div>' +
+          '<div style="color:var(--ac2);margin-bottom:2px">' + t[1] + '</div>' +
+          '<div style="color:var(--tx3)">' + t[2] + '</div></div>';
+      });
+      html += '</div></div>';
+    }
+    box.innerHTML = html;
+  }
+
+  function mhDraw(x, W, H2){
+    hcBg(x, mhSt, W, H2);
+    var items = [];
+    // Kap
+    var boxPts = [];
+    for (var sx=-1; sx<=1; sx+=2) for (var sy=-1; sy<=1; sy+=2) for (var sz=-1; sz<=1; sz+=2) boxPts.push([sx*MH_BOX,sy*MH_BOX,sz*MH_BOX]);
+    var edges = [[0,1],[0,2],[0,4],[3,1],[3,2],[3,7],[5,1],[5,4],[5,7],[6,2],[6,4],[6,7]];
+    x.strokeStyle = 'rgba(129,140,248,0.35)'; x.lineWidth = 1.2;
+    edges.forEach(function(e){
+      var p1 = hcProj(mhSt, boxPts[e[0]][0],boxPts[e[0]][1],boxPts[e[0]][2], W, H2);
+      var p2 = hcProj(mhSt, boxPts[e[1]][0],boxPts[e[1]][1],boxPts[e[1]][2], W, H2);
+      x.beginPath(); x.moveTo(p1.x,p1.y); x.lineTo(p2.x,p2.y); x.stroke();
+    });
+    var speed = mhState==='kati'?0.06:mhState==='sivi'?0.5:mhState==='gaz'?2.4:3.2;
+    var isPlazma = mhState === 'plazma';
+    for (var i = 0; i < mhSt.particles.length; i++) {
+      var pt = mhSt.particles[i];
+      if (mhState === 'kati') {
+        pt.x = pt.hx + Math.sin(mhSt.t*8 + i)*2.5;
+        pt.y = pt.hy + Math.cos(mhSt.t*7 + i*1.3)*2.5;
+        pt.z = pt.hz + Math.sin(mhSt.t*6 + i*0.7)*2.5;
+      } else {
+        pt.x += pt.vx * speed; pt.y += pt.vy * speed; pt.z += pt.vz * speed;
+        var lim = mhState === 'sivi' ? MH_BOX*0.55 : MH_BOX*0.92;
+        if (Math.abs(pt.x) > lim) { pt.vx *= -1; pt.x = Math.sign(pt.x)*lim; }
+        if (Math.abs(pt.y) > lim) { pt.vy *= -1; pt.y = Math.sign(pt.y)*lim; }
+        if (Math.abs(pt.z) > lim) { pt.vz *= -1; pt.z = Math.sign(pt.z)*lim; }
+        if (mhState === 'sivi' && Math.random() < 0.02) { pt.vx += (Math.random()-0.5)*0.6; pt.vy += (Math.random()-0.5)*0.6; pt.vz += (Math.random()-0.5)*0.6; }
+      }
+      var p = hcProj(mhSt, pt.x, pt.y, pt.z, W, H2);
+      items.push({ z: p.z, x: p.x, y: p.y, r: (isPlazma?7:6)*p.s, plasma: isPlazma });
+    }
+    items.sort(function(a,b){ return b.z-a.z; });
+    for (var j = 0; j < items.length; j++) {
+      var it = items[j];
+      if (it.plasma) {
+        x.beginPath(); x.arc(it.x, it.y, it.r+5, 0, 6.283);
+        x.fillStyle = 'rgba(168,85,247,0.25)'; x.fill();
+      }
+      var gg = x.createRadialGradient(it.x-it.r*0.3, it.y-it.r*0.3, it.r*0.1, it.x, it.y, it.r);
+      if (it.plasma) { gg.addColorStop(0,'#e9d5ff'); gg.addColorStop(0.6,'#a855f7'); gg.addColorStop(1,'#581c87'); }
+      else { gg.addColorStop(0,'#93c5fd'); gg.addColorStop(0.6,'#3b82f6'); gg.addColorStop(1,'#1e3a8a'); }
+      x.beginPath(); x.arc(it.x, it.y, it.r, 0, 6.283); x.fillStyle = gg; x.fill();
+    }
+    x.fillStyle = 'rgba(255,255,255,.3)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H2-8);
+  }
+
+  function mhLoop(){
+    var scr = document.getElementById('s-wi');
+    if (!scr || scr.style.display === 'none') { mhStop(); return; }
+    mhSt.anim = requestAnimationFrame(mhLoop);
+    var cv = document.getElementById('mh-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || 300, H2 = 260;
+    var dpr = window.devicePixelRatio || 1;
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try {
+      if (mhSt.spin && !mhSt.drag) mhSt.rotY += 0.006;
+      mhSt.t += 0.016;
+      mhDraw(x, W, H2);
+    } catch (e) { drawErr(x, W, H2, e); }
+  }
+  function mhStop(){ if (mhSt.anim) { cancelAnimationFrame(mhSt.anim); mhSt.anim = null; } }
+  function mhStart(){ mhBind(); if (mhSt.anim) cancelAnimationFrame(mhSt.anim); mhLoop(); }
+  function mhBind(){
+    if (mhSt.bound) return;
+    var cv = document.getElementById('mh-cv');
+    if (!cv) return;
+    mhSt.bound = true;
+    cv.onmousedown = function(e){ mhSt.drag = true; mhSt.lx = e.clientX; mhSt.ly = e.clientY; };
+    cv.onmousemove = function(e){ if (!mhSt.drag) return; mhSt.rotY += (e.clientX-mhSt.lx)*0.01; mhSt.rotX += (e.clientY-mhSt.ly)*0.01; mhSt.lx=e.clientX; mhSt.ly=e.clientY; };
+    cv.onmouseup = cv.onmouseleave = function(){ mhSt.drag = false; };
+    cv.addEventListener('touchstart', function(e){ mhSt.drag=true; mhSt.lx=e.touches[0].clientX; mhSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchmove', function(e){ if(!mhSt.drag) return; mhSt.rotY += (e.touches[0].clientX-mhSt.lx)*0.013; mhSt.rotX += (e.touches[0].clientY-mhSt.ly)*0.013; mhSt.lx=e.touches[0].clientX; mhSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchend', function(){ mhSt.drag = false; });
+  }
+
+  // ---- 13c. Ekran kurulumu (Zayıf Etkileşimler + Maddenin Halleri sekmeleri) ----
+  function setupWI(){
+    if (document.getElementById('s-wi')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var wiBtns = '', mhBtns = '';
+    WI_ORDER.forEach(function(k, i){ wiBtns += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="wiSetKind(\'' + k + '\',this)">' + WI_TYPES[k].icon + ' ' + WI_TYPES[k].name + '</button>'; });
+    ['kati','sivi','gaz','plazma'].forEach(function(k, i){ mhBtns += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="mhSetState(\'' + k + '\',this)">' + MH_STATES[k].icon + ' ' + MH_STATES[k].name + '</button>'; });
+
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-wi" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83e\uddf2 Etkile\u015fim \u00dcnitesi \u00b7 9. S\u0131n\u0131f</h1>' +
+        '<p class="psub">Zay\u0131f etkile\u015fimler ve maddenin halleri \u2014 3D g\u00f6rsel + detayl\u0131 konu.</p>' +
+        '<div class="tabs" id="wi-tabs">' +
+          '<button class="tab on" onclick="tswitch(\'wi-tabs\',\'wi-tps\',0)">\u26a1 Zay\u0131f Etkile\u015fimler</button>' +
+          '<button class="tab" onclick="tswitch(\'wi-tabs\',\'wi-tps\',1)">\ud83e\uddca Maddenin Halleri</button>' +
+        '</div>' +
+        '<div id="wi-tps">' +
+          '<div class="tp on">' +
+            '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:10px"><div style="display:flex;gap:6px;min-width:max-content">' + wiBtns + '</div></div>' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+              '<canvas id="wi-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+            '</div>' +
+            '<div id="wi-theory"></div>' +
+          '</div>' +
+          '<div class="tp">' +
+            '<div style="display:flex;gap:6px;margin-bottom:10px">' + mhBtns + '</div>' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+              '<canvas id="mh-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+            '</div>' +
+            '<div id="mh-theory"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>');
+
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-wi') === -1) SCREENS.push('s-wi');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-wi'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-wi" onclick="nav(\'wi\')">\ud83e\uddf2 Etkile\u015fim \u00dcnitesi (9. S\u0131n\u0131f)</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-wi'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-wi" onclick="nav(\'wi\')"><div class="ti">\ud83e\uddf2</div><div class="tt">Etkile\u015fim \u00dcnitesi</div><div class="td">9. S\u0131n\u0131f: Zay\u0131f etkile\u015fimler ve maddenin halleri, 3D g\u00f6rsel.</div></div>');
+
+    wiRenderTheory(); mhRenderTheory();
+    wiBind(); mhBind();
+  }
+  function wiEnter(){ setTimeout(function(){ wiStart(); mhStart(); }, 80); }
+  function wiLeave(){ wiStop(); mhStop(); }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -3704,6 +4942,8 @@
     try { setupCompareScreen(); } catch (e) { /* sessiz */ }
     try { setupElz(); } catch (e) { /* sessiz */ }
     try { setupHC(); } catch (e) { /* sessiz */ }
+    try { setupFG(); } catch (e) { /* sessiz */ }
+    try { setupWI(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
@@ -3718,6 +4958,8 @@
             if (id !== 'eldetay') bohrStop();
             if (id === 'elz') setTimeout(elzStart, 80); else { elzStop(); ssVisStop(); capStop(); }
             if (id === 'hc') setTimeout(hcEnter, 80); else hcLeave();
+            if (id === 'fg') setTimeout(fgEnter, 80); else fgLeave();
+            if (id === 'wi') wiEnter(); else wiLeave();
           } catch (e) {}
         };
       }
