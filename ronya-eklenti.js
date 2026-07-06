@@ -3140,8 +3140,11 @@
       var mol = hcBuildAt(r.n, r.kind, r.dbAt, r.branches);
       var KIND_LABEL = { an:'Alkan', en:'Alken', in:'Alkin' };
       var item = { kind: r.kind, n: r.n, name: raw.trim(), f: organicMolFormula(mol), mol: mol, custom: true };
-      out.innerHTML = '<span style="color:var(--gr)">\u2713 ' + KIND_LABEL[r.kind] + ' \u00b7 ' + pretty(item.f) +
+      var correct = checkCanonicalName(r);
+      var msg = '<span style="color:var(--gr)">\u2713 ' + KIND_LABEL[r.kind] + ' \u00b7 ' + pretty(item.f) +
         (r.branches.length ? ' \u00b7 ' + r.branches.length + ' dal grubu' : ' \u00b7 dallanmam\u0131\u015f') + '</span>';
+      if (correct) msg += '<br><span style="color:var(--yw)">\u26a0\ufe0f Bu isim IUPAC kural\u0131na (en d\u00fc\u015f\u00fck lokant) g\u00f6re yaz\u0131lmam\u0131\u015f. Do\u011fru IUPAC ad\u0131: <b>' + correct + '</b></span>';
+      out.innerHTML = msg;
       window.hcOpen(item);
     } catch (err) {
       out.innerHTML = '<span style="color:var(--yw)">\u00c7izim hatas\u0131: ' + err.message + '</span>';
@@ -4065,6 +4068,59 @@
       return { ok:false, error: '\u00c7ift/\u00fc\u00e7l\u00fc ba\u011f konumu ge\u00e7ersiz.' };
 
     return { ok:true, n:n, kind:kind, dbAt:dbAt, branches:branches, properParent:properParent };
+  }
+
+  // ---------- 11d. KANONİK (EN DÜŞÜK LOKANT) IUPAC ADI KONTROLÜ ----------
+  var SUBST_DISPLAY = {
+    '1|null':'metil', '2|null':'etil', '3|null':'propil', '4|null':'b\u00fctil',
+    '3|izopropil':'izopropil', '4|izobutil':'izob\u00fctil', '4|tersbutil':'tersb\u00fctil'
+  };
+  var MULT_NAME = { 2:'di', 3:'tri', 4:'tetra' };
+  function cmpArr(a, b){
+    for (var i = 0; i < Math.max(a.length, b.length); i++) {
+      var av = a[i] === undefined ? Infinity : a[i], bv = b[i] === undefined ? Infinity : b[i];
+      if (av !== bv) return av - bv;
+    }
+    return 0;
+  }
+  function canonicalLocants(n, kind, dbAt, branches){
+    var LdbA = kind === 'an' ? -1 : dbAt;
+    var subA = branches.map(function(b){ return b.locant; }).sort(function(x,y){ return x-y; });
+    var dbAtB = n - 2 - dbAt;
+    var LdbB = kind === 'an' ? -1 : dbAtB;
+    var branchesB = branches.map(function(b){ return { locant: n + 1 - b.locant, carbons: b.carbons, special: b.special }; });
+    var subB = branchesB.map(function(b){ return b.locant; }).sort(function(x,y){ return x-y; });
+    var pickB = false;
+    if (kind !== 'an' && LdbB !== LdbA) pickB = LdbB < LdbA;
+    else pickB = cmpArr(subB, subA) < 0;
+    if (pickB) return { dbAt: dbAtB, branches: branchesB, changed: true };
+    return { dbAt: dbAt, branches: branches, changed: false };
+  }
+  function buildCanonicalName(n, kind, dbAt, branches, properParent){
+    var groups = {};
+    branches.forEach(function(b){
+      var key = b.carbons + '|' + (b.special || 'null');
+      if (!groups[key]) groups[key] = { locants: [], dispName: SUBST_DISPLAY[key] || 'grup' };
+      groups[key].locants.push(b.locant);
+    });
+    var groupList = Object.keys(groups).map(function(k){ return groups[k]; });
+    groupList.forEach(function(g){ g.locants.sort(function(a,b){ return a-b; }); });
+    groupList.sort(function(a,b){ return a.dispName.localeCompare(b.dispName, 'tr'); });
+    var parts = groupList.map(function(g){
+      var mult = g.locants.length > 1 ? (MULT_NAME[g.locants.length] || '') : '';
+      return g.locants.join(',') + '-' + mult + g.dispName;
+    });
+    var prefix = parts.join('-');
+    var parentLower = properParent.toLocaleLowerCase('tr');
+    if (kind === 'an') return prefix ? prefix + parentLower : parentLower;
+    var dbLocant = dbAt + 1;
+    return (prefix ? prefix + '-' : '') + dbLocant + '-' + parentLower;
+  }
+  // Ayrıştırılan isim IUPAC'a göre en düşük lokantlı mı? Değilse doğru adı döndürür.
+  function checkCanonicalName(parsed){
+    var canon = canonicalLocants(parsed.n, parsed.kind, parsed.dbAt, parsed.branches);
+    if (!canon.changed) return null;
+    return buildCanonicalName(parsed.n, parsed.kind, canon.dbAt, canon.branches, parsed.properParent);
   }
 
   function organicMolFormula(mol){
