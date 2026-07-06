@@ -2516,7 +2516,7 @@
                 '<div class="slbl">Ak\u0131m I (A)</div>' +
                 '<div style="display:flex;gap:10px;align-items:center">' +
                   '<input type="range" id="ss-i-sl" min="1" max="200" value="50" oninput="ssSync(\'i\',\'sl\')" style="flex:1">' +
-                  '<input type="number" id="ss-i-num" class="inp" value="5.0" step="0.1" style="width:86px" oninput="ssSync(\'i\',\'num\')">' +
+                  '<input type="number" id="ss-i-num" class="inp" value="5.000" step="0.001" style="width:96px" oninput="ssSync(\'i\',\'num\')">' +
                 '</div></div>' +
               '<div>' +
                 '<div class="slbl">S\u00fcre t</div>' +
@@ -2624,7 +2624,7 @@
     var num = document.getElementById('ss-' + which + '-num');
     if (!sl || !num) return;
     if (which === 'i') {
-      if (from === 'sl') num.value = (sl.value / 10).toFixed(1);
+      if (from === 'sl') num.value = (sl.value / 10).toFixed(3);
       else { var v = parseFloat(num.value); if (!isNaN(v)) sl.value = Math.max(1, Math.min(200, Math.round(v * 10))); }
     } else { // t (kaydırıcı dakika cinsinden)
       if (from === 'sl') {
@@ -3506,7 +3506,7 @@
     x.fillStyle = 'rgba(255,255,255,.28)'; x.font = '10px sans-serif'; x.textAlign = 'left';
     x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H - 8);
     x.textAlign = 'right';
-    x.fillText('I = ' + I.toFixed(1) + ' A', W - 8, H - 8);
+    x.fillText('I = ' + I.toFixed(3) + ' A', W - 8, H - 8);
     x.textAlign = 'left';
     } catch (drawErrObj) { drawErr(x, W, H, drawErrObj); }
   }
