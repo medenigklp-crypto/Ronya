@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v23
+   RONYA KİMYA — EKLENTİ v24
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -90,6 +90,10 @@
    41) 🔄 Fiziksel ve Kimyasal Değişim: 40 günlük hayat örneği (hal
        değişimleri, fermantasyon, paslanma, fotosentez, vb.) — quiz +
        kategorili tam liste.
+   42) 🧮 Redoks Denge Motoruna 3. sekme ("27 Örnek"): kullanıcının
+       verdiği 27 denklem artık seçilebiliyor, her biri otomatik
+       oksidasyon-basamağı analiziyle adım adım (hangi element
+       yükseltgendi/indirgendi → dengeli denklem) çözülüyor.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -6372,6 +6376,91 @@
       not: 'Bazik ortamda H\u207a yerine OH\u207b ve H\u2082O kullan\u0131l\u0131r \u2014 asidik ortamdan fark\u0131 budur.'
     }
   ];
+  var REDOX27_LIST = [
+    { label:'P + HNO\u2083 + H\u2082O \u2192 H\u2083PO\u2084 + NO', eq:'P + HNO3 + H2O -> H3PO4 + NO' },
+    { label:'Sn + HNO\u2083 \u2192 H\u2082SnO\u2083 + NO\u2082 + H\u2082O', eq:'Sn + HNO3 -> H2SnO3 + NO2 + H2O' },
+    { label:'MnO\u2082 + KNO\u2083 + KOH \u2192 K\u2082MnO\u2084 + NO + H\u2082O', eq:'MnO2 + KNO3 + KOH -> K2MnO4 + NO + H2O' },
+    { label:'KBr + H\u2083AsO\u2084 \u2192 KBrO\u2083 + H\u2083AsO\u2083', eq:'KBr + H3AsO4 -> KBrO3 + H3AsO3' },
+    { label:'H\u2082S + HNO\u2083 \u2192 S + NO + H\u2082O', eq:'H2S + HNO3 -> S + NO + H2O' },
+    { label:'As + HNO\u2083 + H\u2082O \u2192 H\u2083AsO\u2084 + NO', eq:'As + HNO3 + H2O -> H3AsO4 + NO' },
+    { label:'NaClO\u2083 + SO\u2082 + H\u2082O \u2192 NaCl + H\u2082SO\u2084', eq:'NaClO3 + SO2 + H2O -> NaCl + H2SO4' },
+    { label:'HNO\u2083 + I\u2082 \u2192 HIO\u2083 + NO + H\u2082O', eq:'HNO3 + I2 -> HIO3 + NO + H2O' },
+    { label:'Sb + HNO\u2083 \u2192 Sb\u2082O\u2085 + NO\u2082 + H\u2082O', eq:'Sb + HNO3 -> Sb2O5 + NO2 + H2O' },
+    { label:'Na\u2082S\u2082O\u2083 + H\u2082O + Cl\u2082 \u2192 NaHSO\u2084 + HCl', eq:'Na2S2O3 + H2O + Cl2 -> NaHSO4 + HCl' },
+    { label:'As + HNO\u2083 + H\u2082O \u2192 H\u2084As\u2082O\u2087 + NO', eq:'As + HNO3 + H2O -> H4As2O7 + NO' },
+    { label:'Sb\u2082O\u2083 + I\u2082 + H\u2082O \u2192 Sb\u2082O\u2085 + HI', eq:'Sb2O3 + I2 + H2O -> Sb2O5 + HI' },
+    { label:'Zn + HNO\u2083 \u2192 Zn(NO\u2083)\u2082 + N\u2082 + H\u2082O', eq:'Zn + HNO3 -> Zn(NO3)2 + N2 + H2O' },
+    { label:'Cu + HNO\u2083 \u2192 Cu(NO\u2083)\u2082 + NO + H\u2082O', eq:'Cu + HNO3 -> Cu(NO3)2 + NO + H2O' },
+    { label:'Zn + H\u2082SO\u2084 \u2192 ZnSO\u2084 + H\u2082S + H\u2082O', eq:'Zn + H2SO4 -> ZnSO4 + H2S + H2O' },
+    { label:'KMnO\u2084 + HCl \u2192 KCl + MnCl\u2082 + H\u2082O + Cl\u2082', eq:'KMnO4 + HCl -> KCl + MnCl2 + H2O + Cl2' },
+    { label:'KOH + Cl\u2082 \u2192 KCl + KClO\u2083 + H\u2082O', eq:'KOH + Cl2 -> KCl + KClO3 + H2O' },
+    { label:'KOH + Br\u2082 \u2192 KBrO\u2083 + KBr + H\u2082O', eq:'KOH + Br2 -> KBrO3 + KBr + H2O' },
+    { label:'HClO\u2083 \u2192 HClO\u2084 + ClO\u2082 + H\u2082O', eq:'HClO3 -> HClO4 + ClO2 + H2O' },
+    { label:'S + H\u2082SO\u2084 \u2192 SO\u2082 + H\u2082O', eq:'S + H2SO4 -> SO2 + H2O' },
+    { label:'KOH + H\u2082S\u2082O\u2083 \u2192 S + KHSO\u2084 + H\u2082O', eq:'KOH + H2S2O3 -> S + KHSO4 + H2O' },
+    { label:'NaOH + MnS + NaClO\u2084 \u2192 MnO\u2082 + Na\u2082SO\u2084 + NaCl + H\u2082O', eq:'NaOH + MnS + NaClO4 -> MnO2 + Na2SO4 + NaCl + H2O' },
+    { label:'CrI\u2083 + KOH + Cl\u2082 \u2192 K\u2082CrO\u2084 + KCl + KIO\u2084 + H\u2082O', eq:'CrI3 + KOH + Cl2 -> K2CrO4 + KCl + KIO4 + H2O' },
+    { label:'Sb\u2082S\u2083 + HNO\u2083 \u2192 Sb\u2082O\u2085 + NO\u2082 + H\u2082SO\u2084 + H\u2082O', eq:'Sb2S3 + HNO3 -> Sb2O5 + NO2 + H2SO4 + H2O' },
+    { label:'MnS + HClO\u2084 + H\u2082O \u2192 MnO\u2082 + H\u2082SO\u2084 + HCl', eq:'MnS + HClO4 + H2O -> MnO2 + H2SO4 + HCl' },
+    { label:'HCl + FeS + H\u2082O\u2082 \u2192 H\u2082O + FeCl\u2083 + H\u2082SO\u2084', eq:'HCl + FeS + H2O2 -> H2O + FeCl3 + H2SO4' },
+    { label:'NH\u2084NO\u2083 + NH\u2084Cl \u2192 N\u2082 + Cl\u2082 + H\u2082O', eq:'NH4NO3 + NH4Cl -> N2 + Cl2 + H2O' }
+  ];
+  var redox27Idx = 0, redox27StepIdx = 0, redox27Cur = null;
+
+  function redoxAutoSteps(rawEq){
+    var balanced = balanceEquation(rawEq);
+    var last = balanceEquation._last;
+    var changes = identifyRedoxChanges(last.species, last.nReact);
+    var steps = [];
+    changes.forEach(function(c){
+      var reactName = pretty(last.species[c.reactSpIdx]);
+      var prodName = pretty(last.species[c.prodSpIdx]);
+      if (c.kind === 'yukselt') {
+        steps.push('<b>' + c.el + '</b> atomu ' + reactName + '\u2019daki ' + fmtOx(c.from) + ' basama\u011f\u0131ndan ' + prodName + '\u2019daki ' + fmtOx(c.to) + ' basama\u011f\u0131na \u00e7\u0131kar \u2192 <b style="color:#fca5a5">Y\u00dcKSELTGENME</b> (elektron kayb\u0131).');
+      } else {
+        steps.push('<b>' + c.el + '</b> atomu ' + reactName + '\u2019daki ' + fmtOx(c.from) + ' basama\u011f\u0131ndan ' + prodName + '\u2019daki ' + fmtOx(c.to) + ' basama\u011f\u0131na iner \u2192 <b style="color:#93c5fd">\u0130ND\u0130RGENME</b> (elektron kazanc\u0131).');
+      }
+    });
+    if (steps.length === 0) steps.push('Bu tepkimede oksidasyon basama\u011f\u0131 de\u011fi\u015fimi tespit edilmedi.');
+    steps.push('T\u00fcm elektron al\u0131\u015fveri\u015fleri e\u015fitlenecek \u015fekilde katsay\u0131lar hesapland\u0131, denklem dengelendi:');
+    return { balanced: balanced, steps: steps };
+  }
+
+  window.redox27SetIdx = function(i, btn){ redox27Idx = i; redox27StepIdx = 0; if (btn) selectInRow(btn); redox27Render(); };
+  function redox27Render(){
+    var item = REDOX27_LIST[redox27Idx];
+    if (!redox27Cur || redox27Cur.idx !== redox27Idx) {
+      try {
+        var solved = redoxAutoSteps(item.eq);
+        redox27Cur = { idx: redox27Idx, balanced: solved.balanced, steps: solved.steps, error: null };
+      } catch (e) {
+        redox27Cur = { idx: redox27Idx, balanced: null, steps: [], error: e.message };
+      }
+    }
+    document.getElementById('redox27-unbal').textContent = item.label;
+    var stepsBox = document.getElementById('redox27-steps');
+    var nb = document.getElementById('redox27-nextbtn');
+    var fin = document.getElementById('redox27-final');
+    if (redox27Cur.error) {
+      stepsBox.innerHTML = '<span style="color:var(--yw)">\u26a0\ufe0f ' + redox27Cur.error + '</span>';
+      nb.style.display = 'none'; fin.style.display = 'none';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < redox27StepIdx; i++) html += '<div style="padding:4px 0">' + (i+1) + '. ' + redox27Cur.steps[i] + '</div>';
+    stepsBox.innerHTML = html;
+    if (redox27StepIdx >= redox27Cur.steps.length) {
+      nb.style.display = 'none';
+      fin.style.display = 'block';
+      document.getElementById('redox27-finaleq').textContent = redox27Cur.balanced;
+    } else {
+      nb.style.display = 'block'; fin.style.display = 'none';
+      nb.textContent = redox27StepIdx === redox27Cur.steps.length - 1 ? 'Dengeli Tepkimeyi G\u00f6ster \u2192' : 'Sonraki Ad\u0131m \u2192';
+    }
+  }
+  window.redox27NextStep = function(){ redox27StepIdx++; redox27Render(); };
+  function redox27Enter(){ redox27StepIdx = 0; redox27Cur = null; redox27Render(); }
+
   var redoxIdx = 0;
   var redoxStepIdx = 0;
 
@@ -6381,6 +6470,8 @@
     if (!app) return;
     var btns = '';
     REDOX_LIST.forEach(function(r, i){ btns += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="redoxSetIdx(' + i + ',this)">' + r.name + '</button>'; });
+    var btns27 = '';
+    REDOX27_LIST.forEach(function(r, i){ btns27 += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="redox27SetIdx(' + i + ',this)">' + (i+1) + '. ' + r.label + '</button>'; });
     app.insertAdjacentHTML('beforeend',
       '<div id="s-redoks" style="display:none"><div class="pw narrow">' +
         '<h1 class="ptitle">\ud83d\udd0c Redoks Denge Motoru</h1>' +
@@ -6388,6 +6479,7 @@
         '<div class="tabs" id="redox-tabs">' +
           '<button class="tab on" onclick="tswitch(\'redox-tabs\',\'redox-tps\',0)">\ud83d\udcd6 Haz\u0131r \u00d6rnekler</button>' +
           '<button class="tab" onclick="tswitch(\'redox-tabs\',\'redox-tps\',1)">\u270f\ufe0f Kendi Denklemini Yaz</button>' +
+          '<button class="tab" onclick="tswitch(\'redox-tabs\',\'redox-tps\',2)">\ud83e\uddee 27 Örnek</button>' +
         '</div>' +
         '<div id="redox-tps">' +
         '<div class="tp on">' +
@@ -6411,6 +6503,20 @@
             '<input type="text" id="redox-own-inp" class="inp" placeholder="\u00f6rn: KMnO4 + HCl -> KCl + MnCl2 + H2O + Cl2" style="margin-bottom:10px" autocapitalize="off" autocorrect="off" spellcheck="false">' +
             '<button type="button" class="btn bp bfull" onclick="redoxSolveOwn()">\u00c7\u00f6z</button>' +
             '<div id="redox-own-out" style="margin-top:14px"></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="tp">' +
+          '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto">' + btns27 + '</div></div>' +
+          '<div class="card">' +
+            '<div class="slbl">Dengesiz Tepkime</div>' +
+            '<div id="redox27-unbal" style="font-family:monospace;font-size:14px;color:#f59e0b;margin-bottom:16px;word-break:break-word"></div>' +
+            '<div class="slbl">Otomatik Analiz Ad\u0131mlar\u0131</div>' +
+            '<div id="redox27-steps" style="font-size:13px;color:var(--tx2);line-height:2;margin-bottom:14px"></div>' +
+            '<button type="button" id="redox27-nextbtn" onclick="redox27NextStep()" style="width:100%;padding:11px;background:var(--ac);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:12px">Sonraki Ad\u0131m \u2192</button>' +
+            '<div id="redox27-final" style="display:none;padding:14px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:var(--r)">' +
+              '<div class="slbl" style="color:#86efac">Dengeli Tepkime</div>' +
+              '<div style="font-family:monospace;font-size:14px;font-weight:700;color:#86efac;word-break:break-word" id="redox27-finaleq"></div>' +
+            '</div>' +
           '</div>' +
         '</div>' +
         '</div>' +
@@ -6448,7 +6554,7 @@
     }
   }
   window.redoxNextStep = function(){ redoxStepIdx++; redoxRender(); };
-  function redoxEnter(){ redoxStepIdx = 0; redoxRender(); }
+  function redoxEnter(){ redoxStepIdx = 0; redoxRender(); redox27Enter(); }
 
   window.redoxSolveOwn = function(){
     var inp = document.getElementById('redox-own-inp');
