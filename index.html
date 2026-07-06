@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Ronya Kimya</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&family=Great+Vibes&display=swap');
@@ -167,7 +167,7 @@ header {
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
-    padding: 12px 24px; /* Logonun ve butonun ekran kenarlarına sıfırlanmaması için iç boşluk */
+   padding: max(12px, env(safe-area-inset-top)) 24px 12px; /* Logonun ve butonun ekran kenarlarına sıfırlanmaması için iç boşluk */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255,255,255,0.06);
