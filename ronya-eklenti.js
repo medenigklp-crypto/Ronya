@@ -3786,7 +3786,18 @@
     }
     if (nb.length === 2) {
       var u1 = nb[0].dir, u2 = nb[1].dir, s2 = vAdd(u1, u2);
-      if (count === 1) return [vNorm(vScale(s2, -1))];             // sp² tek eksik (=CH- ya da dal)
+      var isMultiple = nb[0].o >= 2 || nb[1].o >= 2;
+      if (count === 1) {
+        if (isMultiple) return [vNorm(vScale(s2, -1))];   // sp² düzlemsel tek eksik (çift/üçlü bağ komşusu var)
+        // sp³: iki zincir bağı arasından TEK dal/H isteniyor — düzlem İÇİNDE değil,
+        // gerçek tetrahedral (düzlem DIŞI) yönlerden biri seçilmeli, yoksa dal ile
+        // aynı düzlemdeki H neredeyse üst üste biner.
+        var bb0 = vNorm(vScale(s2, -1));
+        var nn0 = vCross(u1, u2);
+        if (vLen2(nn0) < 1e-4) nn0 = v3(0, 0, 1);
+        nn0 = vNorm(nn0);
+        return [vNorm(vAdd(vScale(bb0, 0.57735), vScale(nn0, 0.81650)))];
+      }
       if (count === 2) {                                           // sp³ -CH₂-
         var bb = vNorm(vScale(s2, -1));
         var nn = vCross(u1, u2);
@@ -4047,8 +4058,9 @@
       if (!lm) return { ok:false, error:'"' + prefix + '" k\u0131sm\u0131nda bir konum numaras\u0131 (\u00f6rn. "3-") bekleniyordu.' };
       var locants = lm[1].split(',').map(Number);
       prefix = prefix.slice(lm[0].length);
+      var multVal = 1;
       for (var m2 = 0; m2 < IUPAC_MULT.length; m2++) {
-        if (prefix.indexOf(IUPAC_MULT[m2][0]) === 0) { prefix = prefix.slice(IUPAC_MULT[m2][0].length); break; }
+        if (prefix.indexOf(IUPAC_MULT[m2][0]) === 0) { multVal = IUPAC_MULT[m2][1]; prefix = prefix.slice(IUPAC_MULT[m2][0].length); break; }
       }
       var subMatch = null;
       for (var s2 = 0; s2 < IUPAC_SUBS.length; s2++) {
@@ -4057,7 +4069,7 @@
       if (!subMatch) return { ok:false, error:'"' + prefix + '" tan\u0131nan bir grup ad\u0131 de\u011fil. Desteklenenler: metil, etil, propil, izopropil, b\u00fctil, izob\u00fctil, tersb\u00fctil.' };
       prefix = prefix.slice(subMatch[0].length);
       for (var li = 0; li < locants.length; li++)
-        branches.push({ locant: locants[li], carbons: subMatch[1], special: subMatch[2] });
+        branches.push({ locant: locants[li], carbons: subMatch[1], special: subMatch[2], mult: multVal });
     }
 
     for (var bi = 0; bi < branches.length; bi++) {
@@ -4067,7 +4079,20 @@
     if (dbAt < 0 || dbAt > n - 2)
       return { ok:false, error: '\u00c7ift/\u00fc\u00e7l\u00fc ba\u011f konumu ge\u00e7ersiz.' };
 
-    return { ok:true, n:n, kind:kind, dbAt:dbAt, branches:branches, properParent:properParent };
+    // Çoğaltma öneki (di/tri/tetra) tutarlılığı: aynı grup (karbon+özel tip)
+    // TOPLAM ka\u00e7 kez ge\u00e7iyorsa, \u00f6nek de o say\u0131y\u0131 do\u011fru yans\u0131tmal\u0131.
+    var multOk = true;
+    var chk = {};
+    branches.forEach(function(b){
+      var key = b.carbons + '|' + (b.special || 'null');
+      (chk[key] = chk[key] || []).push(b);
+    });
+    Object.keys(chk).forEach(function(k){
+      var g = chk[k];
+      g.forEach(function(b){ if (b.mult !== g.length) multOk = false; });
+    });
+
+    return { ok:true, n:n, kind:kind, dbAt:dbAt, branches:branches, properParent:properParent, multOk:multOk };
   }
 
   // ---------- 11d. KANONİK (EN DÜŞÜK LOKANT) IUPAC ADI KONTROLÜ ----------
@@ -4116,10 +4141,11 @@
     var dbLocant = dbAt + 1;
     return (prefix ? prefix + '-' : '') + dbLocant + '-' + parentLower;
   }
-  // Ayrıştırılan isim IUPAC'a göre en düşük lokantlı mı? Değilse doğru adı döndürür.
+  // Ayrıştırılan isim IUPAC'a göre en düşük lokantlı mı VE çoğaltma
+  // önekleri (di/tri/tetra) doğru mu? Değilse doğru adı döndürür.
   function checkCanonicalName(parsed){
     var canon = canonicalLocants(parsed.n, parsed.kind, parsed.dbAt, parsed.branches);
-    if (!canon.changed) return null;
+    if (!canon.changed && parsed.multOk !== false) return null;
     return buildCanonicalName(parsed.n, parsed.kind, canon.dbAt, canon.branches, parsed.properParent);
   }
 
@@ -4261,7 +4287,10 @@
     atoms.push({ x:c2pos.x, y:c2pos.y, z:c2pos.z, el:'C' });
     bonds.push({ a:0, b:c2idx, o:1 });
     if (n2 > 1) fgAddChainFrom(atoms, bonds, c2idx, c2pos, dirRight, n2 - 1);
-    var dirO = freeDirs([nb1[0], { dir: dirRight, o:1 }], 1)[0];
+    // NOT: karbonil karbonu sp² (düzlemsel) olmalı; freeDirs'e "çoklu bağ var"
+    // ipucu vermek için o:2 kullanıyoruz (gerçek bağ derecesini etkilemez,
+    // sadece düzlemsel mi tetrahedral mi hesaplanacağını belirler).
+    var dirO = freeDirs([{ dir: nb1[0].dir, o: 2 }, { dir: dirRight, o: 1 }], 1)[0];
     fgAddO(atoms, bonds, 0, v3(0,0,0), dirO, 2, 1.20);
     fgFillH(atoms, bonds);
     var nC = atoms.filter(function(a){return a.el==='C';}).length;
