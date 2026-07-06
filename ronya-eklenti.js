@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v24
+   RONYA KİMYA — EKLENTİ v25
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -94,6 +94,16 @@
        verdiği 27 denklem artık seçilebiliyor, her biri otomatik
        oksidasyon-basamağı analiziyle adım adım (hangi element
        yükseltgendi/indirgendi → dengeli denklem) çözülüyor.
+   43) 💥 Tepkime Hızı ekranı sekmeli hale getirildi, 3 yeni araç
+       eklendi:
+       a) ⛰️ Potansiyel Enerji Diyagramı — Ea(ileri)/Ea(geri)/ΔH canlı
+          görselleştirme, katalizörlü/katalizörsüz karşılaştırma,
+          fiziksel olarak imkânsız (negatif Ea) girdiler tespit edilir.
+       b) ⏱️ Hız Hesaplayıcı — denklem gir, bir türün hızından tüm
+          diğerlerinin hızını stokiyometriye göre bulur; kütle→hız
+          çevirici dahil.
+       c) 📐 Hız Bağıntısı — deneysel verilerden (derişim/hız tablosu)
+          reaktan mertebelerini ve hız sabitini (k) otomatik bulur.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -6660,6 +6670,301 @@
     '</div>';
   }
 
+  // ---------- 23a. POTANSİYEL ENERJİ DİYAGRAMI ----------
+  var peSt = { ea1: 60, dH: -30, showCat: false, catFactor: 0.45 };
+
+  function peCompute(){
+    var ea2 = peSt.ea1 - peSt.dH; // Ea(geri) = Ea(ileri) - ΔH
+    var isExo = peSt.dH < 0;
+    var invalid = ea2 < 0; // Ea negatif olamaz — endotermik tepkimede Ea(ileri) >= ΔH olmalı
+    return { ea1: peSt.ea1, ea2: ea2, dH: peSt.dH, isExo: isExo, invalid: invalid };
+  }
+
+  window.peSetEa1 = function(v){ peSt.ea1 = Math.max(5, Math.min(150, v)); peRender(); };
+  window.peSetDH = function(v){ peSt.dH = Math.max(-100, Math.min(100, v)); peRender(); };
+  window.peToggleCat = function(btn){ peSt.showCat = !peSt.showCat; if (btn) btn.classList.toggle('sel2', peSt.showCat); peRender(); };
+  window.peSetPreset = function(ea1, dH){
+    peSt.ea1 = ea1; peSt.dH = dH;
+    var e1 = document.getElementById('pe-ea1-inp'); if (e1) e1.value = ea1;
+    var e2 = document.getElementById('pe-dh-inp'); if (e2) e2.value = dH;
+    peRender();
+  };
+
+  function peDrawCurve(ctx, W, H2, ea1, dH, color, dashed){
+    // Koordinatlar: x 0..1 (tepkime koordinatı), y potansiyel enerji (birim: kj, göreli)
+    var padL = 46, padR = 16, padT = 20, padB = 34;
+    var plotW = W - padL - padR, plotH = H2 - padT - padB;
+    var maxE = Math.max(ea1, ea1 - dH, 10) * 1.25;
+    var minE = Math.min(0, dH) - maxE * 0.12;
+    var range = maxE - minE;
+    function px(x){ return padL + x * plotW; }
+    function py(e){ return padT + plotH - ((e - minE) / range) * plotH; }
+
+    var reactY = py(0), prodY = py(dH), peakY = py(ea1);
+    ctx.strokeStyle = color; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(px(0), reactY);
+    ctx.lineTo(px(0.32), reactY);
+    ctx.bezierCurveTo(px(0.40), reactY, px(0.42), peakY, px(0.5), peakY);
+    ctx.bezierCurveTo(px(0.58), peakY, px(0.60), prodY, px(0.68), prodY);
+    ctx.lineTo(px(1), prodY);
+    if (dashed) ctx.setLineDash([5,4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    return { px: px, py: py, reactY: reactY, prodY: prodY, peakY: peakY };
+  }
+
+  function peDraw(){
+    var cv = document.getElementById('pe-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    var W = rect.width || 320, H2 = 240;
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = '#050510'; ctx.fillRect(0, 0, W, H2);
+
+    var data = peCompute();
+    var geo = peDrawCurve(ctx, W, H2, data.ea1, data.dH, '#f59e0b', false);
+    if (peSt.showCat) {
+      peDrawCurve(ctx, W, H2, data.ea1 * peSt.catFactor, data.dH, '#22c55e', true);
+    }
+
+    // Eksenler
+    ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(40, 20); ctx.lineTo(40, 206); ctx.lineTo(W-12, 206); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('Tepkime Koordinat\u0131', W/2, H2-6);
+    ctx.save(); ctx.translate(12, H2/2); ctx.rotate(-Math.PI/2); ctx.fillText('Potansiyel Enerji', 0, 0); ctx.restore();
+
+    // Ea1, Ea2, dH işaretleri (ana eğri üzerinde)
+    ctx.strokeStyle = 'rgba(245,158,11,.5)'; ctx.setLineDash([3,3]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(geo.px(0.5), geo.reactY); ctx.lineTo(geo.px(0.5), geo.peakY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(geo.px(0.68), geo.prodY); ctx.lineTo(geo.px(0.68), geo.peakY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#fcd34d'; ctx.textAlign = 'left'; ctx.font = 'bold 10px sans-serif';
+    ctx.fillText('Ea(ileri)=' + data.ea1, geo.px(0.02), geo.peakY - 6);
+    ctx.fillStyle = '#93c5fd';
+    ctx.fillText('Ea(geri)=' + data.ea2.toFixed(1), geo.px(0.70), (geo.peakY + geo.prodY)/2);
+    ctx.fillStyle = data.isExo ? '#86efac' : '#fca5a5';
+    ctx.fillText('\u0394H=' + (data.dH>0?'+':'') + data.dH, geo.px(0.72), geo.prodY + (data.isExo? 14 : -8));
+    ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.font = '10px sans-serif';
+    ctx.fillText('Girenler', geo.px(0.02), geo.reactY - 6);
+    ctx.fillText('\u00dcr\u00fcnler', geo.px(0.80), geo.prodY - 6);
+    if (peSt.showCat) { ctx.fillStyle = '#22c55e'; ctx.fillText('\u2500\u2500 Katalizörl\u00fc (yeşil, kesikli)', geo.px(0.02), 20); }
+  }
+
+  function peRender(){
+    var data = peCompute();
+    var box = document.getElementById('pe-info');
+    if (data.invalid) {
+      if (box) box.innerHTML = '<div style="padding:12px;border-radius:var(--r);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5;font-size:13px">\u26a0\ufe0f Bu de\u011ferlerle Ea(geri) NEGATİF \u00e7\u0131kar, ki bu fiziksel olarak imk\u00e2ns\u0131zd\u0131r (aktifleşme enerjisi hi\u00e7bir zaman negatif olamaz). Endotermik bir tepkimede Ea(ileri), \u0394H\u2019dan K\u00dc\u00c7\u00dcK olamaz \u2014 Ea(ileri) de\u011ferini artt\u0131r ya da \u0394H\u2019yi azalt.</div>';
+      var cv = document.getElementById('pe-cv');
+      if (cv) { var ctx0 = cv.getContext('2d'); ctx0.fillStyle = '#050510'; ctx0.fillRect(0,0,cv.width,cv.height); }
+      return;
+    }
+    peDraw();
+    if (!box) return;
+    box.innerHTML = '<div class="card">' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px"><span style="color:var(--tx3)">Ea (ileri)</span><span style="font-weight:700;color:#fcd34d">' + data.ea1.toFixed(1) + ' kj</span></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px"><span style="color:var(--tx3)">Ea (geri)</span><span style="font-weight:700;color:#93c5fd">' + data.ea2.toFixed(1) + ' kj</span></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px"><span style="color:var(--tx3)">\u0394H = Ea(ileri) \u2212 Ea(geri)</span><span style="font-weight:700;color:' + (data.isExo?'#86efac':'#fca5a5') + '">' + (data.dH>0?'+':'') + data.dH.toFixed(1) + ' kj \u00b7 ' + (data.isExo ? 'Ekzotermik' : 'Endotermik') + '</span></div>' +
+    '</div>';
+  }
+
+  var PE_THEORY_HTML =
+    '<div class="card">' +
+      '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:8px">\u26f0\ufe0f Potansiyel Enerji Diyagram\u0131</div>' +
+      '<ul style="margin:0 0 12px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">' +
+        '<li><b>Eşik enerjisi (Ea):</b> Bir çarpışmanın tepkimeyle sonuçlanabilmesi için gereken MİNİMUM kinetik enerji.</li>' +
+        '<li><b>Aktifleşmiş kompleks:</b> Eski bağların kopmakta, yeni bağların oluşmakta olduğu, KARARSIZ ve enerjisi en yüksek olan ara yapı (grafikteki tepe noktası).</li>' +
+        '<li><b>\u0394H = Ea(ileri) \u2212 Ea(geri):</b> \u0130leri ve geri y\u00f6n aktifleşme enerjileri arasındaki farktır. \u0394H < 0 ise EKZOTERMİK, \u0394H > 0 ise ENDOTERMİK.</li>' +
+        '<li><b>Katalizör:</b> Hem ileri hem geri y\u00f6ndeki Ea\u2019yı AYNI MİKTARDA düşürür \u2014 \u0394H\u2019yi (ve dolayısıyla ürün miktarını/verimini) DEĞİŞTİRMEZ, sadece dengeye/tamamlanmaya daha çabuk ulaşılmasını sağlar.</li>' +
+        '<li>Ea negatif OLAMAZ (her zaman pozitif bir değerdir), ama \u0394H hem pozitif hem negatif olabilir.</li>' +
+      '</ul>' +
+    '</div>';
+
+  // ---------- 23b. HIZ HESAPLAYICI (STOKİYOMETRİ) ----------
+  var hcalcSt = { species: [], nReact: 0, eqStr: '' };
+
+  window.hcalcParse = function(){
+    var inp = document.getElementById('hcalc-eq-inp');
+    var out = document.getElementById('hcalc-out');
+    if (!inp || !out) return;
+    var raw = inp.value.trim();
+    if (!raw) { out.innerHTML = '<span style="color:var(--yw)">Bir denklem yaz (\u00f6rn: 2N2O5 -> 4NO2 + O2).</span>'; return; }
+    try {
+      var balanced = balanceEquation(raw);
+      var last = balanceEquation._last;
+      hcalcSt.species = last.species.map(function(sp, i){ return { formula: pretty(sp), coef: last.ints[i], isReact: i < last.nReact }; });
+      hcalcSt.nReact = last.nReact;
+      hcalcSt.eqStr = balanced;
+      hcalcRenderForm();
+    } catch (e) {
+      out.innerHTML = '<span style="color:var(--yw)">\u26a0\ufe0f ' + e.message + '</span>';
+      hcalcSt.species = [];
+    }
+  };
+
+  function hcalcRenderForm(){
+    var out = document.getElementById('hcalc-out');
+    if (!out) return;
+    var opts = '';
+    hcalcSt.species.forEach(function(s, i){ opts += '<option value="' + i + '">' + s.formula + ' (kat: ' + s.coef + ')</option>'; });
+    var html = '<div class="card" style="margin-top:10px">' +
+      '<div class="slbl">Dengeli Denklem</div>' +
+      '<div style="font-family:monospace;font-size:14px;color:#86efac;margin-bottom:14px">' + hcalcSt.eqStr + '</div>' +
+      '<div class="slbl">Bilinen T\u00fcr</div>' +
+      '<select class="sel" id="hcalc-known-sp" style="margin-bottom:10px">' + opts + '</select>' +
+      '<div class="slbl">Bu t\u00fcr\u00fcn h\u0131z\u0131 (mol/(L\u00b7s))</div>' +
+      '<input type="number" step="any" id="hcalc-known-rate" class="inp" placeholder="\u00f6rn: 0.002" style="margin-bottom:12px">' +
+      '<button type="button" class="btn bp bfull" onclick="hcalcCompute()">Di\u011fer T\u00fcrlerin H\u0131z\u0131n\u0131 Hesapla</button>' +
+      '<div id="hcalc-result" style="margin-top:14px"></div>' +
+    '</div>';
+    out.innerHTML = html;
+  }
+
+  window.hcalcCompute = function(){
+    var idx = parseInt(document.getElementById('hcalc-known-sp').value, 10);
+    var rate = parseFloat(document.getElementById('hcalc-known-rate').value);
+    var res = document.getElementById('hcalc-result');
+    if (isNaN(rate) || rate <= 0) { res.innerHTML = '<span style="color:var(--yw)">Ge\u00e7erli bir h\u0131z de\u011feri gir.</span>'; return; }
+    var known = hcalcSt.species[idx];
+    var perCoef = rate / known.coef; // birim katsayı başına hız
+    var html = '<div class="slbl">Sonu\u00e7lar (t\u00fcm h\u0131zlar orant\u0131l\u0131d\u0131r: h\u0131z\u2c7f/katsay\u0131\u2c7f = sabit)</div>';
+    hcalcSt.species.forEach(function(s, i){
+      var r = perCoef * s.coef;
+      var tag = s.isReact ? 'harcanma h\u0131z\u0131' : 'olu\u015fma h\u0131z\u0131';
+      var isKnown = i === idx;
+      html += '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px">' +
+        '<span style="color:var(--tx2)">' + s.formula + ' ' + tag + (isKnown?' <span style="color:var(--tx3)">(bilinen)</span>':'') + '</span>' +
+        '<span style="font-weight:700;color:' + (isKnown?'#f59e0b':'#86efac') + '">' + r.toPrecision(4) + ' mol/(L\u00b7s)</span></div>';
+    });
+    res.innerHTML = html;
+  };
+
+  // Yardımcı: kütle/zaman/molar kütle/hacimden hıza çevirme
+  window.hcalcMassCompute = function(){
+    var mass = parseFloat(document.getElementById('hm-mass').value);
+    var molar = parseFloat(document.getElementById('hm-molar').value);
+    var time = parseFloat(document.getElementById('hm-time').value);
+    var vol = parseFloat(document.getElementById('hm-vol').value);
+    var out = document.getElementById('hm-out');
+    if (isNaN(mass) || isNaN(molar) || isNaN(time) || molar <= 0 || time <= 0) {
+      out.innerHTML = '<span style="color:var(--yw)">K\u00fctle, molar k\u00fctle ve zaman\u0131 (hacim opsiyonel) do\u011fru gir.</span>';
+      return;
+    }
+    var mol = mass / molar;
+    var rateMolPerTime = mol / time;
+    var html = '<div style="font-size:13px;color:var(--tx2);line-height:1.8">mol = k\u00fctle / molar k\u00fctle = ' + mol.toPrecision(4) + ' mol<br>' +
+      'H\u0131z (mol/zaman birimi) = ' + rateMolPerTime.toPrecision(4) + ' mol/birim zaman';
+    if (!isNaN(vol) && vol > 0) {
+      var rateConc = rateMolPerTime / vol;
+      html += '<br><b style="color:#f59e0b">H\u0131z (mol/(L\u00b7birim zaman)) = ' + rateConc.toPrecision(4) + '</b>';
+    }
+    html += '</div>';
+    out.innerHTML = html;
+  };
+
+  var HCALC_THEORY_HTML =
+    '<div class="card">' +
+      '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:8px">\u23f1\ufe0f H\u0131z Hesaplamalarının Temeli</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:0">aX + bY \u2192 cZ + dT tepkimesinde, HER türün h\u0131zı kendi katsayısıyla ORANTILIDIR: <b>r(X)/a = r(Y)/b = r(Z)/c = r(T)/d</b>. Bu y\u00fczden herhangi BİR türün h\u0131zı bilinirse, di\u011ferlerinin h\u0131zı bu oran kullanılarak bulunabilir. T\u00fcm h\u0131zlar POZİTİFTİR (harcanma h\u0131zı da, olu\u015fma h\u0131zı da mutlak de\u011ferle ifade edilir).</p>' +
+    '</div>';
+
+  // ---------- 23c. HIZ BAĞINTISI (MERTEBE BULMA) ----------
+  var rlawSt = { nR: 2, rows: 4 };
+
+  function rlawBuildTable(){
+    var box = document.getElementById('rlaw-table-wrap');
+    if (!box) return;
+    var letters = ['A', 'B', 'C'];
+    var head = '<div style="display:grid;grid-template-columns:36px repeat(' + rlawSt.nR + ',1fr) 1fr;gap:4px;margin-bottom:4px">' +
+      '<div style="font-size:10px;color:var(--tx3);text-align:center">#</div>';
+    for (var c = 0; c < rlawSt.nR; c++) head += '<div style="font-size:10px;color:var(--tx3);text-align:center">[' + letters[c] + ']</div>';
+    head += '<div style="font-size:10px;color:var(--tx3);text-align:center">H\u0131z</div></div>';
+    var rows = '';
+    for (var r = 0; r < rlawSt.rows; r++) {
+      rows += '<div style="display:grid;grid-template-columns:36px repeat(' + rlawSt.nR + ',1fr) 1fr;gap:4px;margin-bottom:4px">' +
+        '<div style="font-size:12px;color:var(--tx3);text-align:center;align-self:center">' + (r+1) + '</div>';
+      for (var c2 = 0; c2 < rlawSt.nR; c2++) rows += '<input type="number" step="any" class="inp rlaw-conc" data-row="' + r + '" data-col="' + c2 + '" style="padding:8px;font-size:12px;text-align:center">';
+      rows += '<input type="number" step="any" class="inp rlaw-rate" data-row="' + r + '" style="padding:8px;font-size:12px;text-align:center">';
+      rows += '</div>';
+    }
+    box.innerHTML = head + rows;
+  }
+  window.rlawSetN = function(n, btn){ rlawSt.nR = n; if (btn) selectInRow(btn); rlawBuildTable(); document.getElementById('rlaw-result').innerHTML = ''; };
+
+  window.rlawCompute = function(){
+    var res = document.getElementById('rlaw-result');
+    var concInps = document.querySelectorAll ? document.getElementById('rlaw-table-wrap').querySelectorAll('.rlaw-conc') : [];
+    var rateInps = document.getElementById('rlaw-table-wrap').querySelectorAll('.rlaw-rate');
+    var trials = [];
+    for (var r = 0; r < rlawSt.rows; r++) {
+      var concs = [], allFilled = true;
+      for (var c = 0; c < rlawSt.nR; c++) {
+        var el = null;
+        for (var ii = 0; ii < concInps.length; ii++) { if (+concInps[ii].getAttribute('data-row') === r && +concInps[ii].getAttribute('data-col') === c) { el = concInps[ii]; break; } }
+        var v = el ? parseFloat(el.value) : NaN;
+        if (isNaN(v)) { allFilled = false; break; }
+        concs.push(v);
+      }
+      var rateEl = null;
+      for (var jj = 0; jj < rateInps.length; jj++) { if (+rateInps[jj].getAttribute('data-row') === r) { rateEl = rateInps[jj]; break; } }
+      var rateV = rateEl ? parseFloat(rateEl.value) : NaN;
+      if (allFilled && !isNaN(rateV)) trials.push({ concs: concs, rate: rateV });
+    }
+    if (trials.length < rlawSt.nR + 1) {
+      res.innerHTML = '<div style="padding:12px;border-radius:var(--r);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fcd34d;font-size:13px">\u26a0\ufe0f En az ' + (rlawSt.nR + 1) + ' dolu deney sat\u0131r\u0131 gerekli (her reaktan i\u00e7in kar\u015f\u0131la\u015ft\u0131rma yap\u0131labilmesi i\u00e7in).</div>';
+      return;
+    }
+    var letters = ['A', 'B', 'C'];
+    var orders = [];
+    for (var ri = 0; ri < rlawSt.nR; ri++) {
+      var found = null;
+      for (var i = 0; i < trials.length && !found; i++) {
+        for (var j = 0; j < trials.length && !found; j++) {
+          if (i === j) continue;
+          var a = trials[i], b = trials[j];
+          if (a.concs[ri] === b.concs[ri]) continue;
+          var othersSame = true;
+          for (var k = 0; k < rlawSt.nR; k++) { if (k !== ri && a.concs[k] !== b.concs[k]) { othersSame = false; break; } }
+          if (othersSame) {
+            var order = Math.log(b.rate / a.rate) / Math.log(b.concs[ri] / a.concs[ri]);
+            found = Math.round(order * 100) / 100;
+          }
+        }
+      }
+      orders.push(found);
+    }
+    if (orders.indexOf(null) !== -1) {
+      res.innerHTML = '<div style="padding:12px;border-radius:var(--r);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5;font-size:13px">\u26a0\ufe0f Baz\u0131 reaktanlar i\u00e7in kar\u015f\u0131la\u015ft\u0131r\u0131labilir bir deney çifti bulunamad\u0131 (di\u011ferleri sabit tutulup sadece o t\u00fcr\u00fcn deri\u015fimi de\u011fi\u015fen bir çift gerekli).</div>';
+      return;
+    }
+    // k hesapla (ilk deneyden)
+    var t0 = trials[0], denom = 1;
+    for (var m = 0; m < rlawSt.nR; m++) denom *= Math.pow(t0.concs[m], orders[m]);
+    var k = t0.rate / denom;
+    var totalOrder = orders.reduce(function(a,b){ return a+b; }, 0);
+    var rateLawStr = 'r = k' + orders.map(function(o, idx){ return '[' + letters[idx] + ']' + (o === 1 ? '' : '<sup>' + o + '</sup>'); }).join('');
+    var html = '<div class="card">' +
+      '<div class="slbl">Hız Bağıntısı</div>' +
+      '<div style="font-family:monospace;font-size:16px;font-weight:700;color:#86efac;margin-bottom:14px">' + rateLawStr + '</div>';
+    orders.forEach(function(o, idx){
+      html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px"><span style="color:var(--tx3)">' + letters[idx] + ' mertebesi</span><span style="font-weight:700">' + o + '</span></div>';
+    });
+    html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px"><span style="color:var(--tx3)">Toplam mertebe (tepkime derecesi)</span><span style="font-weight:700">' + totalOrder + '</span></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px"><span style="color:var(--tx3)">H\u0131z sabiti (k)</span><span style="font-weight:700;color:#f59e0b">' + k.toPrecision(4) + '</span></div>' +
+    '</div>';
+    res.innerHTML = html;
+  };
+
+  var RLAW_THEORY_HTML =
+    '<div class="card">' +
+      '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:8px">\ud83d\udcd0 Hız Bağıntısı (Rate Law)</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:0">Deneysel olarak, di\u011fer t\u00fcm derişimler SABİT tutulup sadece BİR reaktan\u0131n derişimi de\u011fi\u015ftirilerek hızın nasıl de\u011fi\u015fti\u011fi g\u00f6zlenir. Bu, o reaktana g\u00f6re TEPKİME MERTEBESİNİ (üssünü) verir. T\u00fcm mertebeler bulunduktan sonra, herhangi bir deneyin verileriyle hız sabiti (k) hesaplan\u0131r. \u00d6NEMLİ: mertebeler denklemdeki katsay\u0131lardan de\u011fil, SADECE deneysel veriden bulunur!</p>' +
+    '</div>';
+
   var KIN_THEORY_HTML =
     '<div class="card">' +
       '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:8px">\ud83d\udca5 \u00c7arp\u0131\u015fma Teorisi</div>' +
@@ -6681,8 +6986,16 @@
     if (!app) return;
     app.insertAdjacentHTML('beforeend',
       '<div id="s-kinetik" style="display:none"><div class="pw narrow">' +
-        '<h1 class="ptitle">\ud83d\udca5 Tepkime H\u0131z\u0131 (Kinetik) 3D</h1>' +
-        '<p class="psub">\u00c7arp\u0131\u015fma teorisi \u2014 derişim, s\u0131cakl\u0131k ve katalizörün tepkime h\u0131z\u0131na etkisini canl\u0131 g\u00f6r.</p>' +
+        '<h1 class="ptitle">\ud83d\udca5 Tepkime H\u0131z\u0131 (Kinetik)</h1>' +
+        '<p class="psub">\u00c7arp\u0131\u015fma teorisi, potansiyel enerji diyagram\u0131, h\u0131z hesaplamalar\u0131 ve h\u0131z bağ\u0131nt\u0131s\u0131.</p>' +
+        '<div class="ltabs" id="kin-tabs">' +
+          '<button class="ltab on" onclick="tswitch(\'kin-tabs\',\'kin-tps\',0)">\ud83d\udca5 3D Sim\u00fclasyon</button>' +
+          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',1)">\u26f0\ufe0f PE Diyagram\u0131</button>' +
+          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',2)">\u23f1\ufe0f H\u0131z Hesapla</button>' +
+          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',3)">\ud83d\udcd0 H\u0131z Bağ\u0131nt\u0131s\u0131</button>' +
+        '</div>' +
+        '<div id="kin-tps">' +
+        '<div class="tp on">' +
         '<div style="background:#050510;border:1px solid rgba(245,158,11,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
           '<canvas id="kin-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
         '</div>' +
@@ -6704,6 +7017,62 @@
         '</div>' +
         '<div id="kin-info" style="margin-bottom:16px"></div>' +
         KIN_THEORY_HTML +
+        '</div>' +
+        '<div class="tp">' +
+          '<div style="background:#050510;border:1px solid rgba(245,158,11,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+            '<canvas id="pe-cv" style="width:100%;display:block" height="240"></canvas>' +
+          '</div>' +
+          '<div class="card" style="margin-bottom:12px">' +
+            '<div style="display:flex;gap:6px;margin-bottom:12px">' +
+              '<button type="button" class="ob" onclick="peSetPreset(80,-40)">Ekzotermik \u00d6rnek</button>' +
+              '<button type="button" class="ob" onclick="peSetPreset(90,50)">Endotermik \u00d6rnek</button>' +
+            '</div>' +
+            '<div class="g2" style="margin-bottom:10px">' +
+              '<div><div class="slbl">Ea (ileri, kj)</div><input type="number" id="pe-ea1-inp" class="inp" value="60" oninput="peSetEa1(parseFloat(this.value)||0)"></div>' +
+              '<div><div class="slbl">\u0394H (kj)</div><input type="number" id="pe-dh-inp" class="inp" value="-30" oninput="peSetDH(parseFloat(this.value)||0)"></div>' +
+            '</div>' +
+            '<button type="button" class="ob" id="pe-cat-btn" onclick="peToggleCat(this)" style="width:100%">\u2697\ufe0f Katalizörl\u00fc Karş\u0131laşt\u0131r</button>' +
+          '</div>' +
+          '<div id="pe-info" style="margin-bottom:16px"></div>' +
+          PE_THEORY_HTML +
+        '</div>' +
+        '<div class="tp">' +
+          '<div class="card">' +
+            '<div class="slbl">Tepkime Denklemi (Otomatik Dengelenir)</div>' +
+            '<input type="text" id="hcalc-eq-inp" class="inp" placeholder="\u00f6rn: 2N2O5 -> 4NO2 + O2" style="margin-bottom:10px" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+            '<button type="button" class="btn bp bfull" onclick="hcalcParse()">Denklemi Ayr\u0131\u015ft\u0131r</button>' +
+            '<div id="hcalc-out" style="margin-top:6px"></div>' +
+          '</div>' +
+          '<div class="card" style="margin-top:12px">' +
+            '<div class="slbl">Yard\u0131mc\u0131: K\u00fctleden H\u0131za \u00c7evir</div>' +
+            '<div class="g2" style="margin-bottom:10px">' +
+              '<div><div class="slbl">K\u00fctle (g)</div><input type="number" step="any" id="hm-mass" class="inp"></div>' +
+              '<div><div class="slbl">Molar K\u00fctle (g/mol)</div><input type="number" step="any" id="hm-molar" class="inp"></div>' +
+            '</div>' +
+            '<div class="g2" style="margin-bottom:10px">' +
+              '<div><div class="slbl">Zaman</div><input type="number" step="any" id="hm-time" class="inp"></div>' +
+              '<div><div class="slbl">Hacim (L, opsiyonel)</div><input type="number" step="any" id="hm-vol" class="inp"></div>' +
+            '</div>' +
+            '<button type="button" class="btn bs bfull" onclick="hcalcMassCompute()">\u00c7evir</button>' +
+            '<div id="hm-out" style="margin-top:10px"></div>' +
+          '</div>' +
+          '<div style="margin-top:12px">' + HCALC_THEORY_HTML + '</div>' +
+        '</div>' +
+        '<div class="tp">' +
+          '<div class="card">' +
+            '<div class="slbl">Reaktan Say\u0131s\u0131</div>' +
+            '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+              '<button type="button" class="ob sel2" onclick="rlawSetN(2,this)">2 Reaktan</button>' +
+              '<button type="button" class="ob" onclick="rlawSetN(3,this)">3 Reaktan</button>' +
+            '</div>' +
+            '<div class="slbl">Deneysel Veriler</div>' +
+            '<div id="rlaw-table-wrap" style="margin-bottom:14px"></div>' +
+            '<button type="button" class="btn bp bfull" onclick="rlawCompute()">Hesapla</button>' +
+            '<div id="rlaw-result" style="margin-top:14px"></div>' +
+          '</div>' +
+          '<div style="margin-top:12px">' + RLAW_THEORY_HTML + '</div>' +
+        '</div>' +
+        '</div>' +
       '</div></div>');
     if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-kinetik') === -1) SCREENS.push('s-kinetik');
     var mn = document.getElementById('mn');
@@ -6715,6 +7084,8 @@
         '<div class="tc" id="tile-kinetik" onclick="nav(\'kinetik\')"><div class="ti">\ud83d\udca5</div><div class="tt">Tepkime H\u0131z\u0131 3D</div><div class="td">\u00c7arp\u0131\u015fma teorisi \u2014 derişim/s\u0131cakl\u0131k/katalizör canlı sim\u00fclasyonu.</div></div>');
     kinBindCanvas();
     kinRenderInfo();
+    peRender();
+    rlawBuildTable();
   }
 
   window.kinSetConc = kinSetConc;
@@ -6829,7 +7200,7 @@
     cv.addEventListener('touchmove', function(e){ if(!kinSt.drag) return; kinSt.rotY += (e.touches[0].clientX-kinSt.lx)*0.013; kinSt.rotX += (e.touches[0].clientY-kinSt.ly)*0.013; kinSt.lx=e.touches[0].clientX; kinSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
     cv.addEventListener('touchend', function(){ kinSt.drag = false; });
   }
-  function kinEnter(){ setTimeout(kinStart, 80); }
+  function kinEnter(){ setTimeout(kinStart, 80); setTimeout(peRender, 90); }
   function kinLeave(){ kinStop(); }
 
   // ---------- 21. GENEL REDOKS ANALİZ MOTORU ----------
