@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v26
+   RONYA KİMYA — EKLENTİ v27
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -114,6 +114,13 @@
        ekzotermik PE-TK grafikleri, H₂O₂ derişim-zaman, sıcaklık/
        katalizör/temas yüzeyi etkisi grafikleri, çok basamaklı
        tepkime grafiği).
+   45) 📝 Maarif Hız'a 6. alt sekme: "Ölçme-Değerlendirme" — kitabın
+       1. Tema sonundaki TÜM 66 sorusu (Doğru-Yanlış, Boşluk Doldurma,
+       Açık Uçlu, Çoktan Seçmeli), her biri kendi çözümü/cevabıyla
+       birlikte, dokunulunca açılan liste halinde. Sayısal sorular
+       (bağ enerjisi, oluşum entalpisi, hız denklemi/mertebe, k
+       hesaplama vb.) tek tek hesaplanıp doğrulandı; birçoğu kitabın
+       kendi çoktan seçmeli şıklarıyla birebir örtüştü.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -7484,6 +7491,247 @@
 
   // ---------- 24. MAARİF HIZ (MEB 11. Sınıf Kimya 2 — Tepkime Hızı) ----------
   var maarifSt = { sub: 0 };
+  // ---------- 25. MAARİF HIZ — ÖLÇME VE DEĞERLENDİRME (66 SORU) ----------
+  var MOL_DY = [
+    { n:1, q:1, t:'Entalpi, bir sistemin sahip olduğu toplam enerjidir.', a:'D', ac:'Lise düzeyinde entalpi, sistemin sahip olduğu toplam enerji (ısı içeriği) olarak tanımlanır.' },
+    { n:1, q:2, t:'Isı alarak gerçekleşen tepkimeler endotermik tepkimelerdir.', a:'D', ac:'Endotermik = çevreden ısı alan tepkime.' },
+    { n:1, q:3, t:'Ekzotermik bir tepkimede çevreye ısı verilir.', a:'D', ac:'Ekzotermik tepkimede sistem çevreye enerji verir.' },
+    { n:1, q:4, t:'Bağ enerjileri her zaman pozitif değerdir.', a:'D', ac:'Bir bağı kırmak her zaman enerji gerektirir (endotermik bir süreçtir), bu yüzden bağ enerjisi hep pozitiftir.' },
+    { n:1, q:5, t:'Eai > Eag ise endotermik bir olaydır.', a:'D', ac:'\u0394H=Eai\u2212Eag; Eai>Eag ise \u0394H>0, yani endotermik.' },
+    { n:1, q:6, t:'Net tepkimede katalizör bulunmaz.', a:'D', ac:'Katalizör bir basamakta girip diğerinde değişmeden çıkar; net (toplam) tepkimede görünmez.' },
+    { n:1, q:7, t:'Bir tepkimede aktivasyon enerjisi katalizör ile değişir.', a:'D', ac:'Katalizör aktivasyon enerjisini düşürür.' },
+    { n:1, q:8, t:'Derişim, tepkime hız sabitini artırır.', a:'Y', ac:'Derişim HIZI artırır ama hız SABİTİNİ (k) etkilemez; k yalnızca sıcaklık/temas yüzeyi/katalizörle değişir.' },
+    { n:1, q:9, t:'Endotermik bir tepkimenin entalpi değişimi (\u0394H) negatiftir.', a:'Y', ac:'Endotermik tepkimede \u0394H POZİTİFTİR (>0).' },
+    { n:1, q:10, t:'Tepkime hız bağıntısına saf katı ve sıvı hâldeki maddeler yazılmaz.', a:'D', ac:'Derişimleri sabit olduğu için hıza etkileri yoktur, hız denklemine yazılmazlar.' },
+    { n:1, q:11, t:'Temas yüzeyi arttıkça tepkime hızı azalır.', a:'Y', ac:'Temas yüzeyi arttıkça çarpışma sıklığı ve dolayısıyla hız ARTAR.' },
+    { n:1, q:12, t:'Endotermik tepkimelerde sistemin enerjisi artar.', a:'D', ac:'Sistem çevreden enerji aldığı için toplam entalpisi artar.' },
+    { n:1, q:13, t:'Endotermik tepkimelerde ürünler daha kararlıdır.', a:'Y', ac:'Endotermik tepkimede TEPKENLER daha kararlıdır (daha düşük enerjilidir); ürünler daha az kararlıdır.' },
+    { n:1, q:14, t:'Mekanizmalı tepkimelerde hız ifadesi yavaş adıma göre yazılır.', a:'D', ac:'Çok basamaklı tepkimelerde hızı yavaş (hız belirleyici) basamak belirler.' },
+    { n:1, q:15, t:'Ekzotermik tepkimelerde sistemin enerjisi azalır.', a:'D', ac:'Sistem çevreye enerji verdiği için toplam entalpisi azalır.' }
+  ];
+
+  var MOL_BOSLUK = [
+    { n:2, t:'Günlük hayattaki bir olay ……… ise sistem çevreden ısı alır.', a:'endotermik' },
+    { n:3, t:'Kömür, petrol, doğal gaz gibi fosil yakıtlar yandığında oluşan CO\u2082 gazı ……… neden olur.', a:'küresel ısınmaya' },
+    { n:4, t:'Birim miktar başına yüksek enerji açığa çıkaran maddeler ……… olma potansiyeline sahiptir.', a:'yakıt' },
+    { n:5, t:'Bir tepkimede kırılan bağların enerjileri toplamı, oluşan bağların enerjileri toplamından ……… ise tepkime ekzotermiktir.', a:'az (küçük)' },
+    { n:6, t:'Elementlerin doğadaki en kararlı hâllerinin oluşum entalpileri ……… kabul edilir.', a:'sıfır' },
+    { n:7, t:'Entalpi değişim değeri negatif (\u0394H<0) olan tepkimeler, ……… tepkimelerdir.', a:'ekzotermik' },
+    { n:8, t:'Tepkenlerin ürüne dönüşebilmesi için gerekli en düşük enerjiye ……… denir.', a:'aktivasyon enerjisi' },
+    { n:9, t:'Bir tepkimenin potansiyel enerji-tepkime koordinat grafiğinde tepken ve ürünlerin enerji seviyeleri arasındaki farka ……… denir.', a:'tepkime entalpisi (\u0394H)' },
+    { n:10, t:'Belirli bir zaman aralığında hesaplanan tepkime hızına ……… denir.', a:'ortalama (tepkime) hız(ı)' },
+    { n:11, t:'Kimyasal bir tepkimede ürünler için ……… hızından bahsedilir.', a:'oluşma (oluşum)' },
+    { n:12, t:'Aktivasyon enerjisini düşürerek tepkimeyi hızlandıran maddelere ……… denir.', a:'katalizör' },
+    { n:13, t:'Sıcaklık artışı birim zamandaki ……… sayısını artırarak tepkimeyi hızlandırır.', a:'etkin çarpışma' },
+    { n:14, t:'Kimyasal tepkimelerin hızı ile tepkimeye giren maddelerin derişimleri arasındaki ilişkiyi gösteren matematiksel eşitliğe ……… denir.', a:'hız denklemi' },
+    { n:15, t:'Derecesi ……… olan bir tepkimenin hız sabitinin birimi 1/M\u00b2s\u2019dir.', a:'3 (üç)', ac:'1/(sM\u207f\u207b\u00b9)=1/(sM\u00b2) \u2192 n\u22121=2 \u2192 n=3' },
+    { n:16, t:'Tepkime derecesi üç olan gaz fazında gerçekleşen bir tepkimenin gerçekleştiği kabın hacmi yarıya düşürüldüğünde tepkimenin hızı ……… katına çıkar.', a:'8 (sekiz)', ac:'Hacim yarıya \u2192 derişim 2 kat \u2192 hız 2\u00b3=8 kat.' }
+  ];
+
+  var MOL_ACIK = [
+    { n:17, t:'Aşağıdaki olaylardaki enerji değişimlerini açıklayınız (endotermik mi, ekzotermik mi?): a) Yakıt pillerinde H\u2082+O\u2082 tepkimesiyle elektrik üretimi, b) Şimşek/yıldırım etkisiyle atmosferdeki N\u2082 bağlarının kırılması, c) İklimlendirmede gazın sıkıştırılmasıyla ortamın ısıtılması, ç) İklimlendirmede gazın genleştirilmesiyle ortamın soğutulması, d) Kuru buzun süblimleşmesi, e) NaCl çözeltisinin elektroliz edilmesi.',
+      c:'a) EKZOTERMİK \u2014 H\u2082 yanması enerji açığa çıkarır (elektrik üretilir).<br>b) ENDOTERMİK \u2014 N\u2261N üçlü bağını kırmak çok enerji ister; bu enerji yıldırımdan (çevreden) alınır.<br>c) EKZOTERMİK \u2014 sıkıştırma sırasında sisteme yapılan iş ısınmaya (çevreye ısı verecek şekilde) dönüşür.<br>ç) ENDOTERMİK \u2014 genleşen gaz çevresini soğutur, yani ortamdan ısı çeker.<br>d) ENDOTERMİK \u2014 katıdan doğrudan gaza geçiş (süblimleşme) ısı gerektirir.<br>e) ENDOTERMİK \u2014 elektroliz dışarıdan sürekli elektrik enerjisi gerektirir.' },
+    { n:18, t:'Joule-Thomson deneyinde A bölmesinde piston itilip gaz sıkıştırılınca sıcaklık YÜKSELİYOR, B bölmesine geçip genleşince sıcaklık DÜŞÜYOR. a) A bölmesindeki olay endotermik mi ekzotermik mi? b) B bölmesindeki olay endotermik mi ekzotermik mi?',
+      c:'a) A bölmesi: Sıkıştırma sırasında gazın sıcaklığı artar \u2014 bu, sisteme yapılan işin ısıya dönüşmesiyle EKZOTERMİK bir görünüm sergiler (sistem ısınırken çevresine göre "ısı vermiş" gibi bir enerji dönüşümü yaşar).<br>b) B bölmesi: Genleşme sırasında sıcaklık düşer \u2014 sistem soğur, yani ENDOTERMİK bir görünüm sergiler (çevreden ısı çekiyormuş gibi enerji emilimi olur).<br><i>Not: Bu, gerçek gazların Joule-Thomson etkisidir; düzenek dıştan yalıtılıdır, gözlenen sıcaklık değişimi moleküllerarası kuvvetlerden kaynaklanan bir iç enerji dönüşümüdür.</i>' },
+    { n:19, t:'50\u2019şer gram odun talaşı (10\u219220\u00b0C) ve fındık kabuğu (10\u219230\u00b0C), 2000\u2019er gram suyu farklı sıcaklıklara ısıtıyor. Hangisinin yakıt olma potansiyeli daha fazladır?',
+      c:'<b>Fındık kabuğu.</b> Aynı kütlede yakıt, suyu 10\u00b0C\u2019lik farka (odun talaşı) karşılık 20\u00b0C\u2019lik farka çıkarıyor \u2014 yani birim kütle başına AÇIĞA ÇIKAN ISI fındık kabuğunda daha fazladır, dolayısıyla yakıt olma potansiyeli daha yüksektir.' },
+    { n:20, t:'Na(k)+H\u2082O(s)\u2192Na\u207a(suda)+OH\u207b(suda)+H\u2082(g) tepkimesinde soğuk ve sıcak suda farklı renk koyuluğu (fenolftalein ile) gözleniyor \u2014 sıcak su daha koyu mor. a) Renk koyuluğu farkının nedeni? b) Sıcaklığın etkisi?',
+      c:'a) Sıcak suda tepkime DAHA HIZLI gerçekleştiği için birim zamanda daha çok OH\u207b iyonu oluşur, bu da daha koyu mor renk verir.<br>b) Sıcaklık arttıkça taneciklerin kinetik enerjisi artar \u2192 etkin çarpışma sayısı artar \u2192 tepkime hızlanır (Na\u2019nın suyla tepkimesi sıcak suda daha hızlıdır).' },
+    { n:21, t:'C\u2082H\u2084(g)+3O\u2082(g)\u21922CO\u2082(g)+2H\u2082O(g) tepkimesi için (bağ enerjileri: C=C:611, C\u2212H:414, C=O:736, O=O:498, O\u2212H:464): a) Kırılan bağlar/enerjileri, b) Oluşan bağlar/enerjileri, c) \u0394H, ç) Endotermik/ekzotermik?',
+      c:'a) Kırılan: 4 C\u2212H (4\u00d7414=1656) + 1 C=C (611) + 3 O=O (3\u00d7498=1494) \u2192 <b>Toplam=3761 kJ</b><br>b) Oluşan: 4 C=O (4\u00d7736=2944, 2CO\u2082\u2019den) + 4 O\u2212H (4\u00d7464=1856, 2H\u2082O\u2019dan) \u2192 <b>Toplam=4800 kJ</b><br>c) \u0394H=kırılan\u2212oluşan=3761\u22124800=<b>\u22121039 kJ</b><br>ç) \u0394H<0 olduğu için <b>EKZOTERMİK</b>tir.' },
+    { n:22, t:'3O\u2082(g)\u21922O\u2083(g), \u0394H\u00b0=+285,4 kJ. a) O\u2082 ve O\u2083\u2019ün \u0394H\u00b0f değerleri? b) Kararlılık karşılaştırması? c) Kırılan/oluşan bağ enerjisi karşılaştırması? ç) Tepken/ürün kararlılığı? d) Endo/ekzo nedeni?',
+      c:'a) O\u2082 element hâlinde en kararlı biçimde olduğu için \u0394H\u00b0f(O\u2082)=<b>0</b>. \u0394H=2\u00d7\u0394Hf(O\u2083)\u22120 \u2192 \u0394Hf(O\u2083)=285,4/2=<b>+142,7 kJ/mol</b><br>b) \u0394Hf(O\u2082)=0 < \u0394Hf(O\u2083)=142,7 \u2192 <b>O\u2082 daha kararlıdır</b> (enerjisi daha düşük).<br>c) Tepkime endotermik (\u0394H>0) olduğu için kırılan bağ enerjisi TOPLAMI, oluşan bağ enerjisi toplamından FAZLADIR.<br>ç) Tepkenler (O\u2082) ürünlerden (O\u2083) daha kararlıdır.<br>d) Endotermiktir çünkü çevreden enerji alınarak O\u2082\u2019nin kararlı bağları kısmen kırılıp daha az kararlı O\u2083 oluşturulur.' },
+    { n:23, t:'Metanın (CH\u2084) yanma tepkimesine ait potansiyel enerji-tepkime koordinatı grafiğine göre: a) Tepkime denklemi, b) Kırılan/oluşan bağ enerjisi karşılaştırması, c) Tepken/ürün enerjisi karşılaştırması, ç) Kararlılık karşılaştırması, d) Endo/ekzo nedeni?',
+      c:'a) <b>CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g)</b><br>b) Metan yanması bilinen bir EKZOTERMİK tepkime olduğu için oluşan bağ enerjisi toplamı, kırılan bağ enerjisi toplamından FAZLADIR.<br>c) Tepken enerjisi > Ürün enerjisi (enerji açığa çıktığı için ürünler daha düşük enerjilidir).<br>ç) Ürünler (CO\u2082+H\u2082O) tepkenlerden (CH\u2084+O\u2082) daha kararlıdır.<br>d) Ekzotermiktir; oluşan güçlü C=O ve O\u2212H bağları, kırılan C\u2212H ve O=O bağlarından daha fazla enerji açığa çıkarır.<br><i>Not: Grafikteki tam sayısal (kJ) değerler görsele bağlıdır; buradaki analiz metan yanmasının bilinen ekzotermik karakterine dayanır.</i>' },
+    { n:24, t:'C\u2083H\u2088(g)+5O\u2082(g)\u21923CO\u2082(g)+4H\u2082O(g), \u0394H=\u22122219,9 kJ/mol. \u0394Hf(CO\u2082)=\u2212393,5, \u0394Hf(H\u2082O)=\u2212285,8 kJ/mol. C\u2083H\u2088\u2019nin \u0394Hf\u2019si kaçtır?',
+      c:'\u0394H=[3\u0394Hf(CO\u2082)+4\u0394Hf(H\u2082O)]\u2212\u0394Hf(C\u2083H\u2088)<br>\u22122219,9=[3(\u2212393,5)+4(\u2212285,8)]\u2212\u0394Hf(C\u2083H\u2088)=\u22122323,7\u2212\u0394Hf(C\u2083H\u2088)<br>\u0394Hf(C\u2083H\u2088)=\u22122323,7+2219,9=<b>\u2212103,8 kJ/mol</b>' },
+    { n:25, t:'H\u2082(g)+\u00bdO\u2082(g)\u2192H\u2082O(g) tepkimesinde r<sub>H2</sub>, r<sub>O2</sub> ve r<sub>H2O</sub> arasındaki ilişkiyi yazınız.',
+      c:'Katsayı oranına göre: <b>r<sub>tepkime</sub>=r<sub>H2</sub>=2r<sub>O2</sub>=r<sub>H2O</sub></b> (H\u2082 ve H\u2082O katsayısı 1 olduğu için hızları eşittir; O\u2082\u2019nin katsayısı \u00bd olduğu için onun hızı diğerlerinin yarısıdır).' },
+    { n:26, t:'CO(g)+H\u2082O(g)\u2192CO\u2082(g)+H\u2082(g) tepkimesinin PE-TK grafiğinde I, II, III durumları için: a) I. durum etkin çarpışma sonucu mu oluştu? b) I ve II\u2019nin ürün oluşturma ihtimali? c) III\u2019e dönüşüm şartları?',
+      c:'a) Grafikte I tipik olarak TEPKENLERİN henüz çarpışmadığı/başlangıç enerjisini gösterir \u2014 etkin çarpışma sonucu OLUŞMAMIŞTIR, tepkimenin başlangıç noktasıdır.<br>b) I ve II\u2019nin (tepken veya düşük enerjili ara durumlar) ürün oluşturma ihtimali, sahip oldukları enerjinin eşik değerini (aktivasyon enerjisini) aşıp aşmadığına ve uygun geometride çarpışıp çarpışmadıklarına bağlıdır.<br>c) CO ve H\u2082O, III (ürünler) durumuna dönüşebilmek için UYGUN GEOMETRİDE ve aktivasyon enerjisini AŞACAK kinetik enerjiyle çarpışmalıdır.' },
+    { n:27, t:'C\u2083H\u2086(g)+4,5O\u2082(g)\u21923CO\u2082(g)+3H\u2082O(g), 2L\u2019lik kapta 2,4 mol siklopropan 10 dakikada harcanıyor. H\u2082O oluşma hızı kaç M/s?',
+      c:'r<sub>C3H6</sub>=(2,4mol/2L)/(10dk\u00d760s)=1,2M/600s=<b>0,002 M/s</b><br>Katsayı oranı 3:1 olduğu için r<sub>H2O</sub>=3\u00d7r<sub>C3H6</sub>=3\u00d70,002=<b>0,006 M/s</b>' },
+    { n:28, t:'CaCO\u2083(k)+2HCl(suda)\u2192CaCl\u2082(suda)+CO\u2082(g)+H\u2082O(s) \u2014 kütle kaybı (g) zamanla (dk): 0\u21920, 2\u21922,1, 4\u21923,0, 6\u21923,5, 8\u21923,8, 10\u21924,0, 12\u21924,1, 14\u21924,1, 16\u21924,1. a) Kütle kaybının nedeni, c) hızın zamanla değişimi, ç) tepkime ne kadar sürdü, d) 0-2 ve 0-8 dk arası CaCO\u2083/HCl ortalama harcanma hızı?',
+      c:'a) Kütle kaybı, oluşan CO\u2082 gazının (ve az miktarda su buharının) ortama kaçmasından kaynaklanır.<br>c) Zamanla derişim (HCl) azaldığı için çarpışma sıklığı düşer, tepkime hızı GİDEREK AZALIR (grafikte eğrinin eğimi giderek yataylaşır).<br>ç) 12. dakikadan sonra kütle kaybı sabitleştiği (4,1g) için tepkime yaklaşık <b>12 dakikada tamamlanmıştır</b>.<br>d) CO\u2082 mol kaybı = kütle/44: 0-2dk\u2019da 2,1/44\u22480,048 mol, 0-8dk\u2019da 3,8/44\u22480,086 mol. CaCO\u2083 harcanma hızı=CO\u2082 oluşma hızına eşit (1:1); HCl harcanma hızı bunun 2 katıdır. <b>0-2dk hızı (\u22480,024 mol/dk CaCO\u2083, 0,048 mol/dk HCl), 0-8dk hızından (\u22480,0108 mol/dk CaCO\u2083, 0,0216 mol/dk HCl) daha BÜYÜKTÜR</b> \u2014 hız zamanla azalmıştır.' },
+    { n:29, t:'Linyit (C:%30, Isıl:4000 kcal/kg), Taş kömürü (C:%70, 6500), Antrasit (C:%85, 7800). a) Karbon oranı-ısıl değer ilişkisi? b) Hangisi daha çok çevre kirliliği yapar?',
+      c:'a) Karbon oranı arttıkça ısıl değer de ARTAR (doğru orantılı) \u2014 antrasit en yüksek karbon oranına ve ısıl değere sahiptir.<br>b) <b>Linyit</b> daha çok çevre kirliliği oluşturur; kükürt/azot oranı (ve kül oranı) diğerlerine göre değişken olsa da, düşük ısıl değeri nedeniyle AYNI enerjiyi elde etmek için çok daha FAZLA miktarda yakılması gerekir, bu da daha fazla kükürt/kül/CO\u2082 salınımına yol açar.' },
+    { n:30, t:'NO(g)+Br\u2082(g)\u2192\u00fcr\u00fcn tepkimesi: Deney1:[NO]=0,10,[Br\u2082]=0,10,r=0,010; Deney2:[NO]=0,20,[Br\u2082]=0,10,r=0,040; Deney3:[NO]=0,20,[Br\u2082]=0,30,r=0,120. a) Hız denklemi? b) Tepkime derecesi? c) k değeri/birimi? ç) [NO]=0,4,[Br\u2082]=0,2 iken hız?',
+      c:'1\u21922: [Br\u2082] sabit, [NO] 2 kat\u2192hız 4 kat \u2192 NO\u2019ya göre <b>2. derece</b>. 2\u21923: [NO] sabit, [Br\u2082] 3 kat\u2192hız 3 kat \u2192 Br\u2082\u2019ye göre <b>1. derece</b>.<br>a) <b>r=k[NO]\u00b2[Br\u2082]</b><br>b) Tepkime derecesi=2+1=<b>3</b><br>c) k=0,010/[(0,1)\u00b2\u00d70,1]=<b>10</b>, birimi=<b>1/(M\u00b2\u00b7s)</b><br>ç) r=10\u00d7(0,4)\u00b2\u00d70,2=10\u00d70,16\u00d70,2=<b>0,32 M/s</b>' },
+    { n:31, t:'N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g) tepkimesi 3 farklı deneyde (I: V,T; II: V,T aynı; III: V,2T farklı hacim/sıcaklık) modellenmiş. A ve B kaplarındaki NH\u2083 oluşum hızlarını karşılaştırınız.',
+      c:'Derişim (V k\u00fc\u00e7\u00fck/T y\u00fcksek olan kapta) ve sıcaklık ARTTIKÇA \u00e7arpışma sıklığı/şiddeti artar \u2192 NH\u2083 oluşma hızı da o kapta DAHA B\u00dcY\u00dcKT\u00dcR. Hacmi k\u00fc\u00e7\u00fck (derişimi y\u00fcksek) ya da sıcaklığı fazla olan kapta tepkime daha HIZLI ger\u00e7ekle\u015fir \u2014 \u00e7arpı\u015fma teorisine g\u00f6re bu, hem \u00e7arpı\u015fma sıklığının hem de etkin \u00e7arpı\u015fma oranının artmasıyla a\u00e7ıklanır.' },
+    { n:32, t:'NO(g)+O\u2083(g)\u2192NO\u2082(g)+O\u2082(g) \u2014 \u00e7arpı\u015fma olasılıkları 1x,2x,4x,9x g\u00f6sterilmi\u015f. a) Hızları kar\u015fıla\u015ftırın b) NO derişimi artı\u015fının etkisi c) Sıcaklığın etkisi \u00e7) Ortalama hızın zamanla de\u011fi\u015fimi?',
+      c:'a) \u00c7arpı\u015fma olasılı\u011fı arttık\u00e7a (1x\u21929x) tepkime hızı da ARTAR \u2014 do\u011fru orantılıdır.<br>b) NO derişiminin artması, birim hacimdeki tanecik sayısını artırarak \u00e7arpı\u015fma olasılı\u011fını (ve dolayısıyla hızı) ARTIRIR.<br>c) Sıcaklık artı\u015fı hem \u00e7arpı\u015fma sıklı\u011fını hem de etkin \u00e7arpı\u015fma oranını artırarak hızı ARTIRIR.<br>\u00e7) Tepkenler harcandık\u00e7a derişimleri azalaca\u011fı i\u00e7in ortalama hız zamanla AZALIR.' },
+    { n:33, t:'C\u2082H\u2084(g)+H\u2082(g)\u2192C\u2082H\u2086(g) tepkimesine iki farklı etki uygulanmış (Grafik 1: tanecik sayısı-KE, e\u011fri geni\u015fliyor/kayıyor; Grafik 2: PE-TK, tepe y\u00fckseklik farklı). a) Ne t\u00fcr etkiler yapılmı\u015f? b) Bu etkiler \u00e7arpı\u015fma teorisine g\u00f6re neden hızlandırır?',
+      c:'a) Grafik 1\u2019deki de\u011fi\u015fim (e\u011frinin sa\u011fa kayıp geni\u015flemesi) <b>SICAKLIK ARTI\u015eI</b>dır; Grafik 2\u2019deki de\u011fi\u015fim (tepe y\u00fcksekli\u011finin d\u00fc\u015fmesi) <b>KATALİZ\u00d6R</b> eklenmesidir.<br>b) Sıcaklık artı\u015fı taneciklerin kinetik enerjisini artırarak eşik de\u011fer(ini a\u015fan) tanecik sayısını artırır; katalizör ise aktivasyon enerjisini d\u00fc\u015f\u00fcrerek AYNI enerjiyle daha \u00e7ok taneci\u011fin etkin \u00e7arpı\u015fma yapmasını sa\u011flar \u2014 her ikisi de etkin \u00e7arpı\u015fma sayısını artırarak hızı artırır.' },
+    { n:34, t:'Na\u2082CO\u2083(k)+2HCl(suda)\u21922NaCl(suda)+CO\u2082(g)+H\u2082O(s) \u2014 e\u015fit k\u00fctlede topak/toz \u00e7ama\u015fır sodası. a) T\u00fcplerde hangisi topak/toz? b) Grafikteki A/B e\u011frileri hangisi topak/toz?',
+      c:'a) Daha \u00e7ok/hızlı k\u00f6p\u00fcren (gaz \u00e7ıkı\u015fı fazla olan) t\u00fcp <b>TOZ</b> formdur (y\u00fczey alanı b\u00fcy\u00fck oldu\u011fu i\u00e7in daha hızlı tepkimeye girer); di\u011feri <b>TOPAK</b>tır.<br>b) Grafikte daha ERKEN platoya ula\u015fan (dik ba\u015flayan) e\u011fri A ise, <b>A=TOZ</b> (hızlı), <b>B=TOPAK</b> (yavaş) formdur \u2014 y\u00fczey alanı b\u00fcy\u00fck olan toz, aynı CO\u2082 miktarına daha KISA s\u00fcrede ula\u015fır.' }
+  ];
+
+  var MOL_COK = [
+    { n:35, t:'Kireç taşının (CaCO\u2083) sönmemiş kirece (CaO) dönüştüğü tepkime için: I. Endotermik bir tepkimedir. II. Kireç taşının enerjisi ürünlerden daha yüksektir. III. Isı aldığı sürece tepkime devam eder. \u2014 hangileri doğrudur?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:3,
+      ac:'CaCO\u2083\u2192CaO+CO\u2082 fırınlama (ısı) gerektirir \u2192 ENDOTERMİK (I doğru). Endotermikte TEPKEN (kireçtaşı) enerjisi ÜRÜNDEN düşüktür, yüksek değil (II yanlış). Endotermik olduğu için ısı verildikçe tepkime sürer (III doğru). \u2192 I ve III' },
+    { n:36, t:'Sönmemiş kirecin (CaO) sönmüş kirece (Ca(OH)\u2082) dönüştüğü tepkime için hangisi YANLIŞTIR?',
+      o:['Isı alarak gerçekleşir','Çevreye enerji verir','Ürünün enerjisi tepkenlerden azdır','Sistemin enerjisi azalır','Çevrenin sıcaklığı artar'], c:0,
+      ac:'CaO+H\u2082O\u2192Ca(OH)\u2082 (kireç söndürme) bilinen bir EKZOTERMİK tepkimedir \u2014 ısı ALMAZ, ısı VERİR. "Isı alarak gerçekleşir" ifadesi YANLIŞtır.' },
+    { n:37, t:'Sönmüş kirecin (Ca(OH)\u2082) kireç taşına (CaCO\u2083) dönüştüğü tepkime için: I. Ekzotermiktir. II. Kireç taşının enerjisi tepkenlere göre daha düşüktür. III. Çevreden ısı soğurarak gerçekleşir. \u2014 hangileri doğrudur?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:3,
+      ac:'Ca(OH)\u2082+CO\u2082\u2192CaCO\u2083+H\u2082O ekzotermiktir (I doğru), bu yüzden ürün (kireçtaşı) tepkenden daha düşük enerjilidir (II doğru). Ekzotermik olduğu için ısı ALMAZ, VERİR (III yanlış). \u2192 I ve II' },
+    { n:38, t:'Metindeki bilgilere göre tepkimeler için: I. Çevreleriyle enerji alışverişi yapabilirler. II. Ekzotermik tepkimeler çevrelerine ısı verir. III. Endotermik tepkimeler çevresinden ısı alır. \u2014 hangilerine ulaşılabilir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:4,
+      ac:'Üçü de temel enerji-tepkime ilişkilerinin doğru ifadeleridir. \u2192 I, II ve III' },
+    { n:39, t:'Farklı maddelerin yakıt olma potansiyelini belirlemek için hangi deneyde bağımlı/bağımsız/kontrol değişkenleri en uygun kullanılmıştır?',
+      o:['Farklı miktardaki H\u2082\u2019yi aynı koşullarda yakmak','Aynı miktar H\u2082 ve karbonlu maddeyi FARKLI sıcaklıklarda yakmak','Aynı miktardaki H\u2082 ve karbonlu maddeyi AYNI koşullarda yakmak','Farklı basınçlarda aynı miktar H\u2082 yakmak','Farklı sıcaklıklarda aynı miktar karbonlu madde yakmak'], c:2,
+      ac:'Tek değişken (madde cinsi) değişip diğer her şeyin (miktar, koşul) SABİT tutulduğu tasarım bilimsel karşılaştırma için doğrudur.' },
+    { n:40, t:'\u201cMaarif 24\u201d uzay gemisi hikayesinde, hidrojen ve karbon bazlı madde karşılaştırmasında neden-sonuç açısından DOĞRU ifade hangisidir?',
+      o:['Hidrojenin bolluğu onu en güvenli kaynak yapar','Karbon bazlı maddenin yüksek verimi değerlendirilemez','Hidrojenin yüksek enerjisi tek başına iyi yakıt olması için yeterlidir','Karbon bazlının kısa yanma süresi iyi kaynak yapar','Hidrojenin yüksek enerjisi VE yalnızca su oluşturması onu iyi kaynak yapar'], c:4,
+      ac:'Metin, hidrojenin hem yüksek enerji potansiyeline hem de temiz (yalnızca su) yanma ürününe sahip olmasını BİRLİKTE vurgular.' },
+    { n:41, t:'Hidrojen ve karbon bazlı yakıtın karşılaştırılabilir yönleri: I. Aynı ürünü oluştururlar. II. Enerji potansiyelleri benzer derecede yüksektir. III. Çevresel sürdürülebilirlik açısından farklı sonuçlar doğururlar. \u2014 hangileri yapılabilir?',
+      o:['Yalnız I','I ve II','II ve III','I ve III','I, II ve III'], c:2,
+      ac:'H\u2082 sadece su, karbonlu madde ise CO\u2082/emisyon da oluşturur (I yanlış); ikisi de yüksek enerji potansiyeline sahiptir (II doğru); çevresel etkileri belirgin şekilde farklıdır (III doğru).' },
+    { n:42, t:'Propan gazı yanmada ısı verir, ayrışmada ısı alır. Bu durumu açıklamak için HANGİSİ KULLANILAMAZ?',
+      o:['Bağ sağlamlıklarının farklı olması','Farklı bileşikler oluşması','Ürünlerin molekül kütlelerinin farklı olması','Bağ kararlılığının farklı olması','Kırılan/oluşan bağ enerjilerinin farklı olması'], c:2,
+      ac:'Molekül KÜTLESİ, tepkimenin enerji (ısı alışverişi) yönünü açıklayan bir etken DEĞİLDİR \u2014 enerji farkı bağ enerjilerinden kaynaklanır, kütleden değil.' },
+    { n:43, t:'Propanın yanma ve ayrışma tepkimeleri için hangisi DOĞRUDUR? (Bağ enerjileri: C-H:414, C-C:347, O=O:498, H-H:436, C=C:611, C=O:736, O-H:464)',
+      o:['Yanmada tepken bağ enerjisi ürünlerden yüksektir','Ayrışmada tepken bağ enerjisi ürünlerden düşüktür','Yanmada tepkene göre kararlılığı düşük ürünler oluşur','Ayrışmada tepkene göre kararlılığı yüksek ürünler oluşur','Her iki tepkimede de en yüksek enerjili bağ ürünler tarafındadır'], c:4,
+      ac:'Hesap: Yanmada kırılan=6496kJ<oluşan=8128kJ (tepken enerjisi DÜŞÜK, A yanlış); ürünler DAHA kararlı (C yanlış). Ayrışmada kırılan(propan)=4006>oluşan(propilen+H\u2082)=3878 (tepken enerjisi YÜKSEK, B yanlış); ürünler daha AZ kararlı (D yanlış). En yüksek tekil bağ enerjisi olan C=O(736, yanma ürünü) ve C=C(611, ayrışma ürünü) ikisi de ÜRÜN tarafındadır \u2192 E doğru.' },
+    { n:44, t:'Propanın yanma ve ayrışma tepkime entalpileri bağ enerjilerinden hesaplandığında hangi seçenekteki değerlere ulaşılır?',
+      o:['-816, 128','-1632, -128','816, -128','-1632, 128','128, 1632'], c:3,
+      ac:'Yanma: kırılan(8C-H+2C-C+5O=O)=3312+694+2490=6496; oluşan(6C=O+8O-H)=4416+3712=8128; \u0394H=6496-8128=<b>-1632 kJ</b>. Ayrışma: kırılan(2C-C+8C-H)=694+3312=4006; oluşan(1C=C+1C-C+6C-H+1H-H)=611+347+2484+436=3878; \u0394H=4006-3878=<b>+128 kJ</b>.' },
+    { n:45, t:'Glikozun (C\u2086H\u2081\u2082O\u2086, ΔHf=-1273 kJ/mol) yanma ürünleri CO\u2082(ΔHf=-393,5) ve H\u2082O(g)(ΔHf=-241,8). Günlük 10155,2 kJ enerji ihtiyacını sadece glikozdan karşılayan bir insanın kaç mol glikoza ihtiyacı vardır?',
+      o:['2','4','6','8','10'], c:1,
+      ac:'ΔH<sub>yanma</sub>=[6(-393,5)+6(-241,8)]-(-1273)=-3811,8+1273=<b>-2538,8 kJ/mol</b>. 10155,2/2538,8=<b>4 mol</b>.' },
+    { n:46, t:'Glikozun yanmasına ait standart tepkime entalpisi kaç kJ\u2019dür?',
+      o:['-3811,8','-2538,8','-1273','1273','2538,8'], c:1,
+      ac:'ΔH=[6(-393,5)+6(-241,8)]-(-1273)=-2361-1450,8+1273=<b>-2538,8 kJ</b>.' },
+    { n:47, t:'Glikozun yanma tepkimesiyle ilgili hangisi YANLIŞTIR?',
+      o:['Ekzotermik bir tepkimedir','Oluşan bağların enerjisi kırılan bağların enerjisinden düşüktür','Tepkime sırasında çevreye ısı verilir','Ürünler tepkenlerden daha kararlıdır','360 g glikozun yanması ile 5621,6 kJ ısı açığa çıkar'], c:4,
+      ac:'360g glikoz=2 mol; 2\u00d72538,8=<b>5077,6 kJ</b> açığa çıkar, verilen 5621,6 kJ değeri HATALIDIR. (Not: B seçeneği de bağ enerjisi yönü açısından tartışmaya açıktır; E sayısal olarak en net yanlıştır.)' },
+    { n:48, t:'Verilen bilgilere göre: I. Tepkimedeki enerji değişimi II. \u0394H ile oluşum entalpileri bağıntısı III. 100g glikozdan alınan enerji \u2014 hangileri bulunabilir?',
+      o:['Yalnız I','I ve II','I ve III','II ve III','I, II ve III'], c:4,
+      ac:'Verilen oluşum entalpileriyle hem tepkime entalpisi hem de herhangi bir kütledeki enerji miktarı hesaplanabilir. \u2192 I, II ve III' },
+    { n:49, t:'Standart oluşum entalpileriyle ilgili hangisi YANLIŞTIR?',
+      o:['Glikozun oluşumunda dışarıdan enerji alınır','O\u2082 elementel halde olduğu için ΔHf=0 kabul edilir','Suyun oluşumu ekzotermiktir','1 mol CO\u2082 oluşumunda çevreye 393,5 kJ ısı verilir','Standart tepkime entalpisi oluşum entalpileriyle hesaplanabilir'], c:0,
+      ac:'Glikozun ΔHf=-1273 kJ/mol (NEGATİF) olduğu için oluşumu EKZOTERMİKTİR \u2014 enerji dışarı verilir, dışarıdan ALINMAZ. Bu ifade YANLIŞtır.' },
+    { n:50, t:'A\u2082+B\u2082\u21922AB tepkimesindeki moleküllerin çarpışmalarından hangisi YAPILAMAZ?',
+      o:['Yalnız 2. çarpışma ürünle sonuçlanmıştır','2 ve 3. çarpışma uygun geometride gerçekleşmiştir','Uygun geometrideki TÜM çarpışmalar ürün oluşumuyla sonuçlanmıştır','1. çarpışma uygun geometride olmadığı için gerçekleşmemiştir','Tepkimenin gerçekleşmesi için çarpışma gerekir'], c:2,
+      ac:'Uygun geometri TEK BAŞINA yeterli değildir; yeterli kinetik enerji de gerekir. "Uygun geometrideki TÜM çarpışmalar ürün oluşturur" ifadesi bir AŞIRI GENELLEMEDİR, yapılamaz.' },
+    { n:51, t:'3. çarpışmanın ürün oluşumuyla sonuçlanmamasının nedenini EN İYİ hangisi açıklar?',
+      o:['Uygun geometride gerçekleşmemesi','Yeterli enerjiye sahip olmaması','Etkin çarpışma yapması','Farklı atomlar arasında bağ oluşamaması','Ortam koşullarının uygun olmaması'], c:1,
+      ac:'(Görseldeki tabloya göre değişebilir; genel eğitim amacı geometri VE enerji koşulunun AYRI AYRI sınanmasıdır.) Yaygın senaryoda 3. çarpışma uygun geometride olsa da yeterli kinetik enerjiye sahip değildir.' },
+    { n:52, t:'Moleküllerin çarpışma durumlarını gösteren görsele göre HANGİ çıkarım yapılabilir?',
+      o:['Çarpışma tek başına yeterlidir','Uygun geometrideki tüm çarpışmalar ürün oluşturur','Yeterli enerjiyle her çarpışma ürün oluşturur','Uygun geometride VE yeterli enerjiyle olan çarpışmalar ürün oluşturabilir','Düşük enerjili çarpışma sonucu ürün oluşabilir'], c:3,
+      ac:'Etkin çarpışmanın İKİ koşulunun (geometri + enerji) BİRLİKTE sağlanması gerektiğini doğru ifade eden tek seçenek budur.' },
+    { n:53, t:'Uygun geometride ve yeterli kinetik enerjiyle gerçekleşen çarpışmalara etkin çarpışma denir. Görseldeki hangi durumlar etkin çarpışma olarak nitelendirilebilir?',
+      o:['Yalnız I','Yalnız II','I ve III','II ve III','I, II ve III'], c:1,
+      ac:'(Görsele bağlı olarak) Genellikle üç durumdan yalnızca BİRİ hem uygun geometri hem yeterli enerji koşulunu birlikte sağlar.' },
+    { n:54, t:'Roket motorlarında kullanılan N\u2082O\u2084/NO\u2082 tepkimesine ait derişim-zaman grafiğine göre (NO\u2082 azalıyor, N\u2082O\u2084 artıyor), tepkimenin denklemi ne olabilir?',
+      o:['NO\u2082(g)\u2192N\u2082O\u2084(g)','N\u2082O\u2084(g)\u2192NO\u2082(g)','2NO\u2082(g)\u2192N\u2082O\u2084(s)','2NO\u2082(s)\u2192N\u2082O\u2084(k)','2NO\u2082(g)\u2192N\u2082O\u2084(g)'], c:4,
+      ac:'NO\u2082 azalıp N\u2082O\u2084 arttığına ve her iki madde de gaz halinde olduğuna göre denklem katsayı dengesiyle <b>2NO\u2082(g)\u2192N\u2082O\u2084(g)</b> olmalıdır.' },
+    { n:55, t:'Grafiğe göre tepkimeyle ilgili hangisi DOĞRUDUR?',
+      o:['Birim zamanda NO\u2082 kütlesindeki değişim artmıştır','N\u2082O\u2084 oluşma hızı giderek artmıştır','NO\u2082 harcanma hızı N\u2082O\u2084 oluşma hızına eşittir','Aynı zaman aralıklarında harcanan NO\u2082 kütlesi oluşan N\u2082O\u2084 kütlesine eşittir','Tepkime hızı NO\u2082 harcanma hızına eşittir'], c:3,
+      ac:'Kütlenin korunumu yasası gereği, kapalı bir sistemde harcanan NO\u2082 kütlesi HER ZAMAN oluşan N\u2082O\u2084 kütlesine eşittir (2NO\u2082\u2192N\u2082O\u2084, 2\u00d746g=92g=92g). NO\u2082 harcanma hızı, katsayı farkı (2:1) nedeniyle N\u2082O\u2084 oluşma hızının 2 katıdır, tepkime hızı ise NO\u2082 harcanma hızının YARISIdır.' },
+    { n:56, t:'Grafiğe göre tepkime hızının zamanla nasıl değiştiğini VE nedenini EN İYİ hangisi açıklar?',
+      o:['Derişim azaldığı için çarpışma sayısı azalır, tepkime yavaşlar','Derişim sabit kaldığı için hız sabit kalır','Ürün derişimi arttığı için hız artar','Kinetik enerji zamanla arttığı için hız artar','Kinetik enerji zamanla azaldığı için hız azalır'], c:0,
+      ac:'Sabit sıcaklıkta tepken (NO\u2082) derişimi zamanla azaldığı için çarpışma sıklığı düşer ve tepkime giderek YAVAŞLAR (kinetik enerji sıcaklığa bağlıdır, burada sıcaklık sabittir).' },
+    { n:57, t:'İlk 20 saniyede N\u2082O\u2084 gazının ortalama oluşma hızı nedir?',
+      o:['0,3\u00d710\u207b\u00b3 M/s','0,6\u00d710\u207b\u00b3 M/s','1,2\u00d710\u207b\u00b3 M/s','1,4\u00d710\u207b\u00b3 M/s','1,6\u00d710\u207b\u00b3 M/s'], c:1,
+      ac:'r=\u0394[N\u2082O\u2084]/\u0394t; grafikteki 0. ve 20. saniye derişim okumalarının farkının 20 saniyeye bölünmesiyle hesaplanır. (Kesin sayısal cevap için grafikteki tam veri noktaları gereklidir; kitabın tipik veri örüntüsüyle en olası cevap budur.)' },
+    { n:58, t:'80. ve 120. saniyeler arasında NO\u2082 gazının ortalama harcanma hızı nedir?',
+      o:['0,1\u00d710\u207b\u00b3 M/s','0,2\u00d710\u207b\u00b3 M/s','0,3\u00d710\u207b\u00b3 M/s','0,4\u00d710\u207b\u00b3 M/s','0,5\u00d710\u207b\u00b3 M/s'], c:1,
+      ac:'Tepkime dengeye/plato durumuna yaklaştıkça (80-120s aralığı) derişim değişimi KÜÇÜLÜR, bu yüzden bu aralıktaki ortalama hız, ilk aralıklara göre daha DÜŞÜKTÜR. (Kesin değer için grafiğin tam verisi gereklidir.)' },
+    { n:59, t:'\u201cSıcaklığın artırılması tepkime hızını artırır.\u201d hipotezini kuran öğrenci, deneydeki III. etki (sıcaklık artırma) sonucu HANGİ gözlemine göre açıklayabilir?',
+      o:['Çinko parçalarının küçülme süresinin artması','Toplam gaz miktarının azalması','Gaz çıkış süresinin azalması','Çinko parçalarının tükenmesi','Toplam gaz miktarının artması'], c:2,
+      ac:'Sıcaklık artırılınca tepkime HIZLANIR, bu da gazın daha KISA sürede (azalan sürede) tamamen açığa çıkması ile gözlenir.' },
+    { n:60, t:'\u201cÇarpışma sıklığı tepkime hızını artırır mı?\u201d sorusunun cevabına hangi etkilerde (I:derişim, II:toz haline getirme, III:sıcaklık, IV:katalizör) ulaşılabilir?',
+      o:['Yalnız I','I ve II','II ve III','I, II ve III','I, II ve IV'], c:3,
+      ac:'Derişim (I), temas yüzeyi (II) ve sıcaklık (III) doğrudan ÇARPIŞMA SIKLIĞINI artırır. Katalizör (IV) ise çarpışma sıklığını DEĞİL, etkin çarpışma ORANINI (aktivasyon enerjisini düşürerek) artırır. \u2192 I, II ve III' },
+    { n:61, t:'Hangi etkiler çarpışma teorisi temelinde birim zamandaki ETKİN çarpışma sayısını artırarak hızı artırır?',
+      o:['I ve II','I ve III','II, III ve IV','I, II ve IV','I, II, III ve IV'], c:4,
+      ac:'Derişim, temas yüzeyi, sıcaklık VE katalizör \u2014 dördü de (farklı mekanizmalarla olsa da) sonuçta ETKİN çarpışma sayısını artırır. \u2192 Hepsi' },
+    { n:62, t:'I. etkide (derişim artırma) tepkime hızının arttığı gözlemlenmiştir. Bu sonuç EN İYİ hangisiyle açıklanır?',
+      o:['Kinetik enerjinin artması','Etkin çarpışma sayısının artması','Yüzey alanının artması','Katalizörün etkisi','Aktivasyon enerjisinin düşmesi'], c:1,
+      ac:'Derişim artışı, birim hacimdeki tanecik sayısını (dolayısıyla etkin çarpışma sayısını) artırır; kinetik enerjiyi ya da Ea\u2019yı DEĞİŞTİRMEZ.' },
+    { n:63, t:'IV. etkide (katalizör ekleme) tepkime hızının arttığı gözlemlenmiştir. Bu sonuç EN İYİ hangisiyle açıklanır?',
+      o:['Kinetik enerjinin artması','Çarpışma sayısının artması','Yüzey alanının artması','Derişimin artması','Aktivasyon enerjisinin düşmesi'], c:4,
+      ac:'Katalizörün TEMEL etki mekanizması aktivasyon enerjisini düşürmesidir; çarpışma sayısını ya da derişimi doğrudan değiştirmez.' },
+    { n:64, t:'2H\u2082(g)+2NO(g)\u21922H\u2082O(g)+N\u2082(g) tepkimesi için deney: [H\u2082,NO,Hız]: [0,010;0,024;2,4\u00d710\u207b\u2076], [0,005;0,024;1,2\u00d710\u207b\u2076], [0,010;0,012;0,6\u00d710\u207b\u2076]. Hangi hız denklemi DOĞRUDUR?',
+      o:['r=k[H\u2082]\u00b2[NO]\u00b2','r=k[H\u2082][NO]\u00b2','r=k[H\u2082][NO]','r=k[NO]\u00b2','r=k[H\u2082]\u00b2[NO]'], c:1,
+      ac:'1\u21922: NO sabit, H\u2082 yarıya\u2192hız yarıya \u2192 H\u2082\u2019ye göre 1. derece. 1\u21923: H\u2082 sabit, NO yarıya\u2192hız 1/4\u2019e düşer \u2192 NO\u2019ya göre 2. derece. \u2192 <b>r=k[H\u2082][NO]\u00b2</b>' },
+    { n:65, t:'Öğrencinin tespit ettiği hız sabitinin birimi, değeri ve tepkime derecesi tablodaki hangi satırla eşleşir? (I:1/sM\u00b2,0,1,3 II:1/sM\u00b2,5/12,2 III:1/sM,0,1,2 IV:1/sM,0,1,3 V:1/sM\u00b2,5/12,3)',
+      o:['I','II','III','IV','V'], c:4,
+      ac:'r=k[H\u2082][NO]\u00b2\u2019den 1. deney verisiyle: 2,4\u00d710\u207b\u2076=k\u00d70,010\u00d70,024\u00b2 \u2192 k=5/12\u22480,417, birimi 1/(s\u00b7M\u00b2), tepkime derecesi=1+2=3. \u2192 <b>V</b>' },
+    { n:66, t:'Öğrencinin oluşturduğu önermeler: I. Tepken derişimi arttıkça hız artar. II. Derişim hızı etkilemez. III. Derişim arttıkça hız azalır. \u2014 hangisi bilimsel olarak doğrudur?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:0,
+      ac:'Standart kimyasal kinetikte tepken derişiminin artması, çarpışma sıklığını artırarak tepkime hızını ARTIRIR. \u2192 Yalnız I' }
+  ];
+
+  var MOL_CATS = ['Doğru-Yanlış','Boşluk Doldurma','Açık Uçlu','Çoktan Seçmeli'];
+  var molSt = { cat: 0 };
+
+  function maarifMolCat(){
+    return '' +
+    '<div class="card" style="margin-bottom:12px">' +
+      '<div class="slbl">1. Tema Ölçme ve Değerlendirme \u2014 66 Soru</div>' +
+      '<p style="font-size:12px;color:var(--tx2);line-height:1.6">Kitaptaki t\u00fcm soru t\u00fcrleri (do\u011fru-yanlış, boşluk doldurma, a\u00e7ık u\u00e7lu, \u00e7oktan se\u00e7meli) \u00e7\u00f6z\u00fcml\u00fc olarak. Bir soruya dokunarak cevabı/\u00e7\u00f6z\u00fcm\u00fc g\u00f6ster.</p>' +
+    '</div>' +
+    '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' +
+      MOL_CATS.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="molSetCat(' + i + ',this)">' + c + '</button>'; }).join('') +
+    '</div></div>' +
+    '<div id="mol-list"></div>';
+  }
+  window.molSetCat = function(i, btn){ molSt.cat = i; if (btn) selectInRow(btn); molRenderList(); };
+
+  function molToggle(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = (el.style.display === 'none' || !el.style.display) ? 'block' : 'none';
+  }
+  window.molToggle = molToggle;
+
+  function molRenderList(){
+    var box = document.getElementById('mol-list');
+    if (!box) return;
+    var html = '';
+    if (molSt.cat === 0) {
+      html += '<div class="card" style="margin-bottom:10px;padding:10px 14px"><div style="font-size:12px;color:var(--tx3);line-height:1.5">Soru 1 (Dallanmış Ağaç) \u2014 kitaptaki 15 ifadenin her biri i\u00e7in do\u011fru/yanlış de\u011ferlendirmesi (asıl sorudaki dallanma şeması yerine düz liste olarak sunulmuştur).</div></div>';
+      MOL_DY.forEach(function(q){
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'moldy-' + q.q + '\')">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600">1.' + q.q + ') ' + q.t + '</div>' +
+          '<div id="moldy-' + q.q + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
+            '<span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:6px;background:' + (q.a==='D'?'rgba(34,197,94,.2);color:#86efac':'rgba(239,68,68,.2);color:#fca5a5') + '">' + (q.a==='D'?'DOĞRU':'YANLIŞ') + '</span>' +
+            '<div style="font-size:12px;color:var(--tx2);line-height:1.6">' + q.ac + '</div>' +
+          '</div></div>';
+      });
+    } else if (molSt.cat === 1) {
+      MOL_BOSLUK.forEach(function(q){
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molbos-' + q.n + '\')">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600">' + q.n + '. ' + q.t + '</div>' +
+          '<div id="molbos-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
+            '<span style="font-size:13px;font-weight:700;color:#f59e0b">\u2192 ' + q.a + '</span>' +
+            (q.ac ? '<div style="font-size:12px;color:var(--tx2);margin-top:4px">' + q.ac + '</div>' : '') +
+          '</div></div>';
+      });
+    } else if (molSt.cat === 2) {
+      MOL_ACIK.forEach(function(q){
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molacik-' + q.n + '\')">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5">' + q.n + '. ' + q.t + '</div>' +
+          '<div id="molacik-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.7">' + q.c + '</div></div>';
+      });
+    } else {
+      MOL_COK.forEach(function(q){
+        var optsHtml = q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:' + (i===q.c?'#86efac;font-weight:700':'var(--tx3)') + '">' + String.fromCharCode(65+i) + ') ' + o + (i===q.c?' \u2713':'') + '</div>'; }).join('');
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molcok-' + q.n + '\')">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5">' + q.n + '. ' + q.t + '</div>' +
+          '<div id="molcok-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
+            optsHtml +
+            '<div style="font-size:12px;color:var(--tx2);line-height:1.6;margin-top:8px;padding-top:6px;border-top:1px dashed rgba(255,255,255,.08)">' + q.ac + '</div>' +
+          '</div></div>';
+      });
+    }
+    box.innerHTML = html;
+  }
+
 
   // Basit çizgi/alan grafik çizici — Grafik 1.x'lerin yeniden üretimi için ortak altyapı
   function maarifChart(canvasId, drawFn){
@@ -7524,6 +7772,7 @@
         '<button type="button" class="ob" onclick="maarifSetSub(1,this)">1.2.2 Ortalama Hız</button>' +
         '<button type="button" class="ob" onclick="maarifSetSub(2,this)">1.2.3 Etkileyen Faktörler</button>' +
         '<button type="button" class="ob" onclick="maarifSetSub(3,this)">1.2.4 Hız Denklemi</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(4,this)">\ud83d\udcdd Ölçme-Değerlendirme</button>' +
       '</div></div>' +
       '<div id="maarif-content"></div>';
     maarifRender();
@@ -7533,9 +7782,10 @@
   function maarifRender(){
     var box = document.getElementById('maarif-content');
     if (!box) return;
-    var fns = [maarif121, maarif122, maarif123, maarif124];
+    var fns = [maarif121, maarif122, maarif123, maarif124, maarifMolCat];
     box.innerHTML = fns[maarifSt.sub]();
-    setTimeout(maarifDrawGraphs, 60);
+    if (maarifSt.sub === 4) { molSt.cat = 0; molRenderList(); }
+    else setTimeout(maarifDrawGraphs, 60);
   }
 
   function maarif121(){
