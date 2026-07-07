@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v27
+   RONYA KİMYA — EKLENTİ v28
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -121,6 +121,9 @@
        (bağ enerjisi, oluşum entalpisi, hız denklemi/mertebe, k
        hesaplama vb.) tek tek hesaplanıp doğrulandı; birçoğu kitabın
        kendi çoktan seçmeli şıklarıyla birebir örtüştü.
+   46) 🐛 DÜZELTME: Çoktan seçmeli sorularda şıklar artık soruyla
+       birlikte HER ZAMAN görünüyor (önceden tıklanana kadar gizliydi).
+       Tıklama artık sadece doğru cevap + çözümü açıyor.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -7720,12 +7723,14 @@
       });
     } else {
       MOL_COK.forEach(function(q){
-        var optsHtml = q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:' + (i===q.c?'#86efac;font-weight:700':'var(--tx3)') + '">' + String.fromCharCode(65+i) + ') ' + o + (i===q.c?' \u2713':'') + '</div>'; }).join('');
-        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molcok-' + q.n + '\')">' +
-          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5">' + q.n + '. ' + q.t + '</div>' +
+        var optsHtml = q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:var(--tx2)">' + String.fromCharCode(65+i) + ') ' + o + '</div>'; }).join('');
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5;margin-bottom:6px">' + q.n + '. ' + q.t + '</div>' +
+          '<div style="margin-bottom:8px">' + optsHtml + '</div>' +
+          '<div onclick="molToggle(\'molcok-' + q.n + '\')" style="cursor:pointer;font-size:12px;font-weight:600;color:#f59e0b;padding:6px 0;border-top:1px solid rgba(255,255,255,.08)">\ud83d\udc41\ufe0f Cevabı ve çözümü göster</div>' +
           '<div id="molcok-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
-            optsHtml +
-            '<div style="font-size:12px;color:var(--tx2);line-height:1.6;margin-top:8px;padding-top:6px;border-top:1px dashed rgba(255,255,255,.08)">' + q.ac + '</div>' +
+            '<div style="font-size:13px;font-weight:700;color:#86efac;margin-bottom:6px">Doğru cevap: ' + String.fromCharCode(65+q.c) + ') ' + q.o[q.c] + '</div>' +
+            '<div style="font-size:12px;color:var(--tx2);line-height:1.6">' + q.ac + '</div>' +
           '</div></div>';
       });
     }
