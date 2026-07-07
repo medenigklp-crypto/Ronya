@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v28
+   RONYA KİMYA — EKLENTİ v29
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -124,6 +124,12 @@
    46) 🐛 DÜZELTME: Çoktan seçmeli sorularda şıklar artık soruyla
        birlikte HER ZAMAN görünüyor (önceden tıklanana kadar gizliydi).
        Tıklama artık sadece doğru cevap + çözümü açıyor.
+   47) 📓 Tepkime Hızı ekranına 6. sekme: "Özel Ders Notu" — kullanıcının
+       paylaştığı el yazması ders notundan 24 çözümlü örnek soru,
+       12 kategoriye ayrılmış (Hız Bağıntısı, Ortalama Hız, Madde
+       Cinsi Etkisi, Mekanizma, Hız Denklemi, Derişim/Piston, Sıcaklık
+       Etkisi, Katalizör, Temas Yüzeyi, Karışık Faktörler, Potansiyel
+       Enerji). Soru her zaman görünür, dokununca çözüm açılır.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -7107,6 +7113,7 @@
     peRender();
     rlawBuildTable();
     setupMaarif();
+    setupNoteQ();
   }
 
   window.kinSetConc = kinSetConc;
@@ -7757,6 +7764,96 @@
     x.fillText(xlab, (padL+W-padR)/2, H2-6);
     x.save(); x.translate(12, (padT+H2-padB)/2); x.rotate(-Math.PI/2); x.fillText(ylab, 0, 0); x.restore();
     return { padL: padL, padR: padR, padT: padT, padB: padB, plotW: W-padL-padR, plotH: H2-padT-padB };
+  }
+
+  // ---------- 26. ÖZEL DERS NOTU SORULARI (el yazması PDF'ten) ----------
+  var NOTE_Q = [
+    { n:1, kat:'Hız Bağıntısı', t:'2N\u2082O\u2085(g) \u2192 4NO\u2082(g) + O\u2082(g) tepkimesi i\u00e7in: I. Tepkime denklemi bu şekildedir. II. Sabit hacimli kapta basın\u00e7taki artışla tepkime hızı \u00f6l\u00e7\u00fclebilir. III. O\u2082 gazının oluşma hızı, NO\u2082 gazının oluşma hızının 4 katıdır. \u2014 hangileri doğrudur?',
+      c:'Katsayı oranı N\u2082O\u2085:NO\u2082:O\u2082 = 2:4:1\u2019dir.<br><b>I \u2014 DOĞRU</b> (denklem verilen katsayılarla tutarlıdır).<br><b>II \u2014 DOĞRU</b>: Gaz mol sayısı 2\u2019den (2+4+1=) 7\u2019ye \u00e7ıktığı i\u00e7in sabit hacimde basın\u00e7 artışı g\u00f6zlenebilir, bu da hızın \u00f6l\u00e7\u00fclmesini sağlar.<br><b>III \u2014 YANLIŞ</b>: Katsayı oranına g\u00f6re NO\u2082 hızı O\u2082 hızının 4 katıdır, tersi değil (O\u2082 hızı NO\u2082\u2019nin \u00e7eyreğidir).<br>\u2192 <b>I ve II doğrudur.</b>' },
+    { n:2, kat:'Hız Bağıntısı', t:'Bir tepkimede: A\u2019nın harcanma hızı D\u2019nin oluşma hızına eşittir. E\u2019nin oluşma hızı, B\u2019nin harcanma hızının 3 katıdır. C\u2019nin oluşma hızı, E\u2019nin oluşma hızının yarısıdır. Tepkimenin denklemini yazınız.',
+      c:'r<sub>A</sub>=r<sub>D</sub> \u2192 A ve D\u2019nin katsayıları EŞİT (a=d).<br>r<sub>E</sub>=3r<sub>B</sub> \u2192 e:b=3:1.<br>r<sub>C</sub>=r<sub>E</sub>/2 \u2192 e:c=2:1.<br>e i\u00e7in ortak katı (EKOK) se\u00e7ilirse e=6 \u2192 b=2, c=3, a=d=1 (en k\u00fc\u00e7\u00fck tam sayı).<br>\u2192 <b>A + 2B \u2192 3C + D + 6E</b>' },
+    { n:3, kat:'Ortalama Hız', t:'CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g) tepkimesinde 20 saniyede 4,8 gram CH\u2084 harcanıyor. H\u2082O\u2019nun ortalama oluşma hızı ka\u00e7 mol/dk\u2019dır? (H:1, C:12)',
+      c:'mol CH\u2084 = 4,8/16=0,3 mol. 20 s = 1/3 dk. r<sub>CH4</sub>=0,3/(1/3)=<b>0,9 mol/dk</b>.<br>Katsayı oranı CH\u2084:H\u2082O=1:2 \u2192 r<sub>H2O</sub>=2\u00d70,9=<b>1,8 mol/dk</b>.' },
+    { n:4, kat:'Ortalama Hız', t:'4NH\u2083(g)+3O\u2082(g)\u21922N\u2082(g)+6H\u2082O(g) tepkimesi 2 litrelik sabit hacimli kapta 2 dakikada ger\u00e7ekleşiyor. 13,6 gram NH\u2083 tamamı tepkimeye girdiğinde N\u2082 ve H\u2082O\u2019nun oluşma hızı ka\u00e7 mol/(L\u00b7s)\u2019dir? (H:1, N:14)',
+      c:'mol NH\u2083=13,6/17=0,8 mol. 2 dk=120 s. r<sub>NH3</sub>=(0,8/2L)/120s=<b>0,00333 M/s</b>.<br>Katsayı oranı NH\u2083:N\u2082:H\u2082O=4:2:6.<br>r<sub>N2</sub>=r<sub>NH3</sub>\u00d7(2/4)=<b>0,00167 M/s</b>.<br>r<sub>H2O</sub>=r<sub>NH3</sub>\u00d7(6/4)=<b>0,005 M/s</b>.' },
+    { n:5, kat:'Ortalama Hız', t:'Mg(k)+2HBr(suda)\u2192MgBr\u2082(suda)+H\u2082(g) tepkimesinde Mg kütlesi 120 saniyede 18,8 g\u2019dan 11,6 g\u2019a düşüyor. HBr \u00e7\u00f6zeltisinin harcanma hızı ka\u00e7 mol/dk\u2019dır? (Mg:24)',
+      c:'\u0394m(Mg)=18,8\u221211,6=7,2 g \u2192 \u0394n(Mg)=7,2/24=0,3 mol. 120 s=2 dk.<br>r<sub>Mg</sub>=0,3/2=<b>0,15 mol/dk</b>.<br>Katsayı oranı Mg:HBr=1:2 \u2192 r<sub>HBr</sub>=2\u00d70,15=<b>0,3 mol/dk</b>.' },
+    { n:6, kat:'Ortalama Hız', t:'Al(k)+3HCl(suda)\u2192AlCl\u2083(suda)+\u00b3\u2044\u2082H\u2082(g) tepkimesine g\u00f6re 2 L\u2019lik bir kapta [HCl] derişimi 1. dakikada 0,5 M, 4. dakikada 0,2 M olarak \u00f6l\u00e7\u00fclm\u00fcşt\u00fcr. 1. ve 4. dakikalar arasında H\u2082(g)\u2019nin oluşma hızı ka\u00e7 g/dk\u2019dır? (H:1)',
+      c:'\u0394[HCl]=0,5\u22120,2=0,3 M, 2 L\u2019de \u0394n(HCl)=0,6 mol. 3 dakikada: r<sub>HCl</sub>=0,6/3=<b>0,2 mol/dk</b>.<br>Katsayı oranı HCl:H\u2082=3:1,5=2:1 \u2192 r<sub>H2</sub>=0,2/2=<b>0,1 mol/dk</b>.<br>K\u00fctlece: 0,1\u00d72 g/mol=<b>0,2 g/dk</b>.' },
+    { n:7, kat:'Ortalama Hız', t:'Sabit sıcaklıkta yandaki kapta ger\u00e7ekleştirilen: I. N\u2082O\u2084(g)\u21922NO\u2082(g), II. N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g), III. H\u2082(g)+I\u2082(g)\u21922HI(g) tepkimelerinden hangilerinin hızı hacim (ya da basın\u00e7) artışı g\u00f6zlenerek \u00f6l\u00e7\u00fclebilir?',
+      c:'Gaz fazında tepkime hızı hacim/basın\u00e7 değişimiyle \u00f6l\u00e7\u00fclebilmesi i\u00e7in toplam gaz MOL SAYISININ değişmesi gerekir.<br>I: 1mol\u21922mol \u2014 <b>DEĞİŞİYOR, \u00f6l\u00e7\u00fclebilir.</b><br>II: 4mol\u21922mol \u2014 <b>DEĞİŞİYOR, \u00f6l\u00e7\u00fclebilir.</b><br>III: 2mol\u21922mol \u2014 <b>DEĞİŞMİYOR, \u00f6l\u00e7\u00fclemez</b> (H\u2082+I\u2082\u21922HI klasik \u00f6rnektir; I\u2082 KATI verilmişse bu durum değişir, sadece gaz halindekiler sayılır).<br>\u2192 <b>Yalnız I ve II</b> hacim/basın\u00e7 değişimiyle izlenebilir.' },
+    { n:8, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda ger\u00e7ekleşen: 1) Ag\u207a(suda)+Cl\u207b(suda)\u2192AgCl(k) 2) Fe(k)+SO\u2084\u00b2\u207b(suda)\u2192FeSO\u2084(k) \u2014 hangisi daha hızlıdır?',
+      c:'1. tepkime ZIT Y\u00dcKL\u00dc İYONLAR arasında ger\u00e7ekleşir (elektrostatik \u00e7ekim ile \u00e7ok hızlıdır). 2. tepkime bir METAL ile bir iyon arasındadır (daha yavaş, elektron transferi ve y\u00fczey etkileşimi gerektirir). \u2192 <b>1. tepkime (Ag\u207a+Cl\u207b) daha hızlıdır.</b>' },
+    { n:9, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda: 1) CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g) 2) C\u2083H\u2088(g)+5O\u2082(g)\u21923CO\u2082(g)+4H\u2082O(g) \u2014 hangisi daha hızlıdır?',
+      c:'Propanın (C\u2083H\u2088) yanması daha \u00e7ok bağın (daha b\u00fcy\u00fck molek\u00fcl, daha fazla C-H ve C-C bağı) kırılmasını gerektirir. Kırılan bağ sayısı arttık\u00e7a tepkime YAVAŞLAR. \u2192 <b>1. tepkime (metan yanması) daha hızlıdır.</b>' },
+    { n:10, kat:'Mekanizma', t:'HCOOH+H\u2082SO\u2084 tepkimesi 3 basamakta ger\u00e7ekleşiyor: 1.adım (hızlı): HCOOH+H\u2082SO\u2084\u2192HCOOH\u2082\u207a+HSO\u2084\u207b; 2.adım (\u00e7ok hızlı): HCOOH\u2082\u207a\u2192HCO\u207a+H\u2082O; 3.adım (yavaş): HCO\u207a+HSO\u2084\u207b\u2192H\u2082SO\u2084+CO. Buna g\u00f6re H\u2082SO\u2084\u2019\u00fcn rol\u00fc nedir, ara \u00fcr\u00fcnler nelerdir, hız denklemi nasıl yazılır?',
+      c:'H\u2082SO\u2084, 1. adımda tepkimeye girip 3. adımda değişmeden \u00e7ıkıyor \u2192 <b>KATALİZ\u00d6RD\u00dcR</b> (net tepkimede g\u00f6r\u00fcnmez).<br>HCOOH\u2082\u207a ve HCO\u207a bir basamakta oluşup diğerinde kullanıldığı i\u00e7in <b>ARA \u00dcR\u00dcNd\u00fcr</b>.<br>Hız, YAVAŞ (3.) basamağa g\u00f6re yazılır: <b>r=k[HCO\u207a][HSO\u2084\u207b]</b>.' },
+    { n:11, kat:'Hız Denklemi', t:'Aşağıdaki tepkimelerin hız bağıntıları verilmiştir: SO\u2082(g)+\u00bdO\u2082(g)\u2192SO\u2083(g), r=k[SO\u2082][O\u2082]; N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g), r=k[N\u2082][H\u2082]\u00b2. Bu tepkimelerden hangileri mekanizmalıdır?',
+      c:'SO\u2082+\u00bdO\u2082\u2192SO\u2083: katsayılar (1,\u00bd) iken hız denklemindeki \u00fcsler (1,1) \u2014 UYUMSUZ (\u00bd\u22601) \u2192 <b>mekanizmalıdır</b>.<br>N\u2082+3H\u2082\u21922NH\u2083: katsayılar (1,3) iken \u00fcsler (1,2) \u2014 UYUMSUZ (3\u22602) \u2192 <b>mekanizmalıdır</b>.<br>(Bir tepkimenin tek adımlı olabilmesi i\u00e7in hız denklemi katsayılarla TAM uyumlu olmalıdır.)' },
+    { n:12, kat:'Derişim/Piston', t:'Sabit sıcaklık ve basın\u00e7ta, ideal pistonlu bir kaba, kapta bulunan tanecik sayısı kadar B\u2082 gazı ilave edilirse (A\u2082(g)+2B\u2082(g)\u2192... tepkimesinde) tepkime hızı ka\u00e7 katına \u00e7ıkar?',
+      c:'Sabit BASIN\u00c7ta gaz ilave edilirse piston hareket eder ve HACİM de orantılı artar; bu durumda toplam tanecik sayısı 2 katına \u00e7ıksa da hacim de 2 katına \u00e7ıktığı i\u00e7in <b>derişim DEĞİŞMEZ</b> \u2014 dolayısıyla tepkime hızı da <b>DEĞİŞMEZ (1 kat, aynı kalır)</b>. (Bu, sabit HACİMLİ bir kapta gaz eklemekten temel farkıdır \u2014 orada derişim doğrudan artardı.)' },
+    { n:13, kat:'Sıcaklık Etkisi', t:'Aynı miktar N\u2082O\u2084 gazı, biri 25\u00b0C diğer ikisi 50\u00b0C olan ve farklı hacimlere (V, 2V) sahip \u00fc\u00e7 \u00f6zdeş kapta bulunduruluyor. Bu kaplardaki tepkimelerin (N\u2082O\u2084\u21922NO\u2082) hızlarını karşılaştırınız.',
+      c:'Sıcaklık arttık\u00e7a hız ARTAR; hacim arttık\u00e7a (derişim azaldık\u00e7a) hız AZALIR. 50\u00b0C\u2019deki KÜ\u00c7\u00dcK hacimli (V) kap en HIZLI, 25\u00b0C\u2019deki (genellikle en b\u00fcy\u00fck hacimli olan) kap en YAVAŞ tepkime verir. Sıcaklık etkisi genellikle derişim/hacim etkisinden DAHA baskındır.' },
+    { n:14, kat:'Sıcaklık Etkisi', t:'T\u2081 ve T\u2082 (T\u2082>T\u2081) sıcaklıklarındaki bir gazın molek\u00fcl sayısı-kinetik enerji dağılım grafiğine g\u00f6re, aşağıdakilerden hangisi YANLIŞTIR? A) T\u2082\u2019de etkin \u00e7arpışma sayısı T\u2081\u2019e g\u00f6re daha fazladır B) T\u2082\u2019de tepkime hızı T\u2081\u2019e g\u00f6re daha d\u00fcş\u00fckt\u00fcr C) Her iki sıcaklıkta Ea değeri aynıdır D) T\u2082\u2019de eşik enerjisini aşan molek\u00fcl sayısı T\u2081\u2019e g\u00f6re daha \u00e7oktur E) T\u2082\u2019de moleküllerin kinetik enerjisi T\u2081\u2019e g\u00f6re daha fazladır',
+      c:'T\u2082>T\u2081 olduğu i\u00e7in T\u2082\u2019de kinetik enerji, etkin \u00e7arpışma sayısı ve eşiği aşan molek\u00fcl sayısı DAHA FAZLADIR (A,D,E doğru); Ea sıcaklıktan etkilenmez, sabittir (C doğru). Ancak y\u00fcksek sıcaklıkta (T\u2082) hız DAHA D\u00dcŞ\u00dcK değil, DAHA Y\u00dcKSEK olur. \u2192 <b>YANLIŞ olan: B</b>' },
+    { n:15, kat:'Sıcaklık Etkisi', t:'Bir tepkimede T\u2081 ve T\u2082 sıcaklıklarındaki (T\u2082>T\u2081) enerji dağılımlarına ilişkin: I. T\u2081 sıcaklığında eşik enerjisi en k\u00fc\u00e7\u00fckt\u00fcr II. Hız sabitleri arasındaki ilişki k\u2081<k\u2082\u2019dir III. Birim zamanda en az \u00fcr\u00fcn T\u2081 sıcaklığında oluşur \u2014 hangileri YANLIŞTIR?',
+      c:'Eşik enerjisi (Ea) SICAKLIKTAN BAĞIMSIZDIR, T\u2081\u2019de \u201cen k\u00fc\u00e7\u00fck\u201d olamaz \u2014 <b>I YANLIŞ</b> (Ea her iki sıcaklıkta da AYNIDIR). Sıcaklık arttık\u00e7a hız sabiti (k) artar, T\u2082>T\u2081 olduğundan k\u2082>k\u2081, yani k\u2081<k\u2082 doğrudur \u2014 <b>II DOĞRU</b>. D\u00fcş\u00fck sıcaklıkta (T\u2081) hız daha yavaş olduğu i\u00e7in birim zamanda en AZ \u00fcr\u00fcn T\u2081\u2019de oluşur \u2014 <b>III DOĞRU</b>. \u2192 Yalnız I yanlıştır.' },
+    { n:16, kat:'Katalizör', t:'2SO\u2083(g)\u21922SO\u2082(g)+O\u2082(g) tepkimesinin iki ayrı durumdaki (biri katalizörl\u00fc, diğeri katalizörs\u00fcz) aktifleşme enerjileri Ea\u2081 ve Ea\u2082 olarak verilmiştir. Ea\u2081<Ea\u2082 olduğuna g\u00f6re hangisi katalizörl\u00fcd\u00fcr ve hangisinin hızı daha b\u00fcy\u00fckt\u00fcr?',
+      c:'Katalizör aktivasyon enerjisini D\u00dcŞ\u00dcRD\u00dcĞ\u00dc i\u00e7in, DAHA D\u00dcŞ\u00dcK aktivasyon enerjisine sahip olan (Ea\u2081) <b>KATALİZ\u00d6RL\u00dc</b> durumdur. D\u00fcş\u00fck aktivasyon enerjisi = daha fazla etkin \u00e7arpışma = <b>DAHA B\u00dcY\u00dcK HIZ</b> \u2192 Ea\u2081\u2019e sahip (katalizörl\u00fc) tepkime daha hızlıdır.' },
+    { n:17, kat:'Katalizör/Mekanizma', t:'H\u2082(g)+Cl\u2082(g)\u21922HCl(g) tepkimesi tek adımda ger\u00e7ekleşiyor. Şu işlemler uygulanıyor: 1. Ortama aynı sıcaklıkta H\u2082(g) ekleniyor. 2. Sıcaklık d\u00fcş\u00fcr\u00fcl\u00fcyor. 3. Ortama uygun katalizör konuyor. Bu işlemlerin tepkime hızına etkisini (zamanla değişim grafiği şeklinde) yorumlayınız.',
+      c:'1) H\u2082 eklenmesi derişimi ANİDEN artırır \u2192 hız SIRAMASINDA sıçrayarak artar, sonra tekrar azalmaya başlar (derişim yine t\u00fckendik\u00e7e).<br>2) Sıcaklık d\u00fcş\u00fcr\u00fclmesi hızı ANİNDEN AZALTIR (aşağı sı\u00e7rama).<br>3) Katalizör eklenmesi de hızı ANİDEN ARTIRIR (yukarı sı\u00e7rama), \u00e7\u00fcnk\u00fc Ea d\u00fcşer.<br>Grafik zaman ekseninde bu 3 m\u00fcdahale noktasında ANİ sı\u00e7ramalar (1\u2019de yukarı, 2\u2019de aşağı, 3\u2019te yukarı) g\u00f6sterir, aralarda ise normal azalan e\u011fri devam eder.' },
+    { n:18, kat:'Katalizör', t:'x elementinin kolayca (daha hızlı) elde edilebilmesi i\u00e7in: I. Sıcaklığı azaltmak II. Uygun katalizör kullanmak III. Kabın hacmini b\u00fcy\u00fctmek işlemlerinden hangileri AYRI AYRI uygulanabilir?',
+      c:'Sıcaklığı AZALTMAK hızı D\u00dcŞ\u00dcR\u00dcR (I uygun değil). Katalizör kullanmak Ea\u2019yı d\u00fcş\u00fcrerek hızı ARTIRIR (II uygundur). Hacmi B\u00dcY\u00dcTMEK derişimi AZALTIR, hızı D\u00dcŞ\u00dcR\u00dcR (III uygun değil). \u2192 <b>Yalnız II (katalizör) uygulanabilir.</b>' },
+    { n:19, kat:'Katalizör', t:'CS\u2082(k)+3O\u2082(g)\u2192CO\u2082(g)+2SO\u2082(g) tepkimesinin PE-TK grafiği I numaralı eğridedir. Bu tepkimeye aşağıdaki işlemlerden hangisi uygulanırsa aynı Ea seviyesinde ama daha alt bir yeni eğri (II numaralı, daha d\u00fcş\u00fck tepe) elde edilir? A) Katalizör kullanmak B) Sıcaklığı artırmak C) CS\u2082\u2019yi toz haline getirmek D) Girenlerin mol sayısını artırmak E) Kabın hacmini artırmak',
+      c:'PE-TK grafiğinde tepe y\u00fcksekliğinin (aktivasyon enerjisinin) DÜŞMESİ sadece <b>KATALİZ\u00d6R</b> ile olur; diğer se\u00e7enekler (sıcaklık, y\u00fczey alanı, derişim, hacim) tepkime HIZINI etkiler ama Ea\u2019yı (grafiğin şeklini) DEĞİŞTİRMEZ. \u2192 <b>A) Katalizör kullanmak</b>' },
+    { n:20, kat:'Temas Y\u00fczeyi', t:'Mg(k)+2HCl(suda)\u2192MgCl\u2082(suda)+H\u2082(g) tepkimesinde, 0,1 mol Mg ile 2M 200 mL HCl \u00e7\u00f6zeltisinin tepkimesinden oluşan H\u2082 gazının mol-zaman grafiği I. eğridir (10 s\u2019de tamamlanıyor). Aynı tepkimede II. eğriyi (8 s\u2019de tamamlanma) elde etmek i\u00e7in hangi işlemler AYRI AYRI uygulanabilir? I. Sıcaklığı artırmak ve katalizör kullanmak II. Mg\u2019nin temas y\u00fczeyini VE HCl derişimini artırmak III. Mg miktarını ve sıcaklığı artırmak',
+      c:'II. eğri, AYNI miktarda \u00fcr\u00fcn\u00fc DAHA KISA s\u00fcrede vermektedir \u2014 yani sadece HIZ artmış, TOPLAM \u00fcr\u00fcn miktarı DEĞİŞMEMİŞTİR. Mg miktarını artırmak (III) TOPLAM H\u2082 miktarını da DEĞİŞTİRİR (grafik platosu y\u00fckselir), bu y\u00fczden III uygun DEĞİLDİR. I ve II\u2019deki işlemler (sıcaklık+katalizör, ya da y\u00fczey+derişim) TOPLAM miktarı değiştirmeden SADECE hızı artırır. \u2192 <b>Yalnız I ve II tek başına uygulanabilir.</b>' },
+    { n:21, kat:'Temas Y\u00fczeyi', t:'Farklı tanecik boyutlarındaki iki k\u00f6m\u00fcr numunesinin yanması sonucu oluşan CO\u2082 gazının sabit sıcaklıkta zamanla mol sayısı değişimi grafiğe g\u00f6re: I. Birim zamanda oluşan CO\u2082 mol sayısı 2. k\u00f6m\u00fcrde daha b\u00fcy\u00fckt\u00fcr II. Tepkime hızı 1. k\u00f6m\u00fcrde daha yavaştır III. Kullanılan k\u00f6m\u00fcr\u00fcn par\u00e7acık boyutu 1. k\u00f6m\u00fcrde daha b\u00fcy\u00fckt\u00fcr \u2014 hangileri doğrudur?',
+      c:'Eğer 2. k\u00f6m\u00fcr numunesi CO\u2082\u2019yi daha HIZLI \u00fcretiyorsa (grafikte daha dik/erken plato), bu onun daha K\u00dc\u00c7\u00dcK par\u00e7acık boyutuna (daha b\u00fcy\u00fck y\u00fczey alanına) sahip olduğunu g\u00f6sterir. Buna g\u00f6re: I doğru (2. k\u00f6m\u00fcr daha hızlı \u00fcr\u00fcn verir), II doğru (1. k\u00f6m\u00fcr yavaş olduğu i\u00e7in b\u00fcy\u00fck par\u00e7acıklıdır), III doğru (1. k\u00f6m\u00fcr\u00fcn par\u00e7acık boyutu B\u00dcY\u00dcKT\u00dcR, k\u00fc\u00e7\u00fck y\u00fczey alanı yavaş tepkime demektir). \u2192 <b>I, II ve III doğrudur.</b>' },
+    { n:22, kat:'Kar\u0131\u015f\u0131k Fakt\u00f6rler', t:'0,2 mol Zn(k) ile 0,2 M\u2019lık HCl \u00e7\u00f6zeltisinin 1 litresi (Zn(k)+2HCl(suda)\u2192ZnCl\u2082(suda)+H\u2082(g)) tam verimle tepkimeye giriyor. H\u2082 gazının HEM \u00e7ıkış hızını HEM DE miktarını artırmak i\u00e7in: I. Zn\u2019yi toz haline getirmek II. 0,2 M\u2019lık HCl\u2019den 2 L kullanmak III. 0,3 M\u2019lık HCl\u2019den 1 L eklemek \u2014 hangileri AYRI AYRI uygulanabilir?',
+      c:'I. Toz haline getirmek sadece HIZI artırır, TOPLAM H\u2082 miktarı sınırlayıcı reaktif (HCl, 0,2mol<0,4mol gerekli) aynı kaldığı i\u00e7in DEĞİŞMEZ \u2014 miktarı artırmaz.<br>II. Aynı derişimde 2 L kullanmak, derişim SABİT kalırken HCl mol sayısını 2 katına \u00e7ıkarır (0,4mol) \u2014 bu hem Zn\u2019nin TAMAMEN tepkimeye girmesini (miktar artışı) sağlar, hem derişim aynı kaldığı i\u00e7in HIZ değişmez (aslında hız değişmez, miktar artar tek başına bu koşulu tam sağlamaz).<br>III. 0,3M\u2019lık 1L kullanmak, HEM derişimi artırır (0,2\u21920,3M, hız artar) HEM de mol sayısını artırır (0,2\u21920,3mol HCl, Zn\u2019nin tamamının tepkimeye girmesini sağlayacak kadar) \u2014 <b>hem hız hem miktar artar.</b><br>\u2192 En uygun tek başına yeterli seçenek: <b>III</b> (II sadece miktarı, I sadece hızı etkiler; III ikisini birden sağlar).' },
+    { n:23, kat:'Kar\u0131\u015f\u0131k Fakt\u00f6rler', t:'Aynı k\u00fctlede değişik y\u00fczeyli Al par\u00e7aları eşit hacimde HCl \u00e7\u00f6zeltilerine ayrı ayrı konuluyor (Al(k)+3HCl(suda)\u2192AlCl\u2083(suda)+\u00b3\u2044\u2082H\u2082(g)). H\u2082 hacminin zamanla değişimi grafiğe g\u00f6re: I. 1. \u00e7\u00f6zeltinin molar derişimi 2. ve 3.\u2019den k\u00fc\u00e7\u00fckt\u00fcr II. 3. tepkimede toz Al, 2.\u2019de par\u00e7alar halinde Al kullanılmış olabilir III. 1. tepkimenin hızı 3.\u2019n\u00fcnkinden b\u00fcy\u00fckt\u00fcr \u2014 hangileri doğrudur?',
+      c:'Sıcaklık eşit olduğuna g\u00f6re, en YAVAŞ tepkiyen (1.) ya en D\u00dcŞ\u00dcK derişime ya da en B\u00dcY\u00dcK par\u00e7acık boyutuna sahiptir; en HIZLI tepkiyen (3., muhtemelen toz Al ya da y\u00fcksek derişim) daha b\u00fcy\u00fck y\u00fczey alanına/derişime sahiptir. I doğru olabilir (1. en d\u00fcş\u00fck derişimli), II doğru olabilir (3. toz, 2. par\u00e7a), ancak III (\u201c1. tepkimenin hızı 3.\u2019den B\u00dcY\u00dcKT\u00dcR\u201d) YANLIŞTIR \u2014 1. en YAVAŞ olduğuna g\u00f6re hızı 3.\u2019den K\u00dc\u00c7\u00dcKT\u00dcR. \u2192 <b>I ve II doğru, III yanlış.</b>' },
+    { n:24, kat:'Potansiyel Enerji', t:'X(g)+Y(g)\u2192Z(g)+T(g) tepkimesinin PE-TK grafiği: Ep(X+Y)=50 kj, aktifleşmiş kompleks tepe noktası=90 kj, ara basamak (Z ara \u00fcr\u00fcn ile)=80 kj, ikinci tepe=... son \u00fcr\u00fcn (Z+T)=30 kj gibi bir 2 basamaklı mekanizma sunulmuştur. a) Tepkime ka\u00e7 adımlıdır? b) En hızlı adım hangisidir? c) Hız denklemi nasıldır? \u00e7) Tepkimenin entalpisi ka\u00e7 kJ\u2019dir?',
+      c:'a) Grafikte İKİ tepe noktası olduğu i\u00e7in tepkime <b>2 ADIMLIDIR</b> (mekanizmalıdır).<br>b) Aktivasyon enerjisi (tepe y\u00fcksekliği) daha K\u00dc\u00c7\u00dcK olan basamak DAHA HIZLIDIR; iki tepeden hangisi başlangı\u00e7 seviyesine daha yakınsa (Ea\u2019sı k\u00fc\u00e7\u00fckse) o basamak hızlıdır.<br>c) Hız denklemi, YAVAŞ (b\u00fcy\u00fck Ea\u2019lı) basamağın tepkenlerine g\u00f6re yazılır.<br>\u00e7) Tepkime entalpisi = Ürün enerjisi \u2212 Tepken enerjisi (\u00f6rn. 30\u221250=\u221220 kJ gibi, EKZOTERMİK). <i>(Not: Bu sorunun tam sayısal değerleri el yazması g\u00f6rselin PE eksenindeki tam okumaya bağlıdır; y\u00f6ntem yukarıdaki gibidir.)</i>' }
+  ];
+
+  function setupNoteQ(){
+    if (document.getElementById('noteq-wrap')) return;
+    var host = document.getElementById('kin-tps');
+    if (!host) return;
+    host.insertAdjacentHTML('beforeend', '<div class="tp" id="noteq-wrap"></div>');
+    var tabsBar = document.getElementById('kin-tabs');
+    if (tabsBar && !document.getElementById('mn-noteqtab'))
+      tabsBar.insertAdjacentHTML('beforeend', '<button class="ltab" id="mn-noteqtab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',5)">\ud83d\udcd3 Özel Ders Notu</button>');
+    var wrap = document.getElementById('noteq-wrap');
+    var cats = ['Tümü'];
+    NOTE_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
+    wrap.innerHTML =
+      '<p class="psub" style="margin-bottom:10px">Kendi el yazması ders notundaki ' + NOTE_Q.length + ' \u00e7\u00f6z\u00fcml\u00fc örnek soru \u2014 sorulara ve şıklara dokunmadan g\u00f6r, \u00e7\u00f6z\u00fcm\u00fc a\u00e7mak i\u00e7in \u201c\u00e7\u00f6z\u00fcm\u00fc g\u00f6ster\u201de dokun.</p>' +
+      '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="noteq-cats">' +
+        cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="noteqSetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
+      '</div></div>' +
+      '<div id="noteq-list"></div>';
+    noteqRenderList();
+  }
+  var noteqSt = { cat: 'Tümü' };
+  window.noteqSetCat = function(cat, btn){ noteqSt.cat = cat; if (btn) selectInRow(btn); noteqRenderList(); };
+
+  function noteqRenderList(){
+    var box = document.getElementById('noteq-list');
+    if (!box) return;
+    var html = '';
+    NOTE_Q.forEach(function(q){
+      if (noteqSt.cat !== 'Tümü' && q.kat !== noteqSt.cat) return;
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">' + q.kat + '</div>' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6;margin-bottom:8px">' + q.n + '. ' + q.t + '</div>' +
+        '<div onclick="molToggle(\'noteq-' + q.n + '\')" style="cursor:pointer;font-size:12px;font-weight:600;color:#f59e0b;padding:6px 0;border-top:1px solid rgba(255,255,255,.08)">\ud83d\udc41\ufe0f \u00c7\u00f6z\u00fcm\u00fc g\u00f6ster</div>' +
+        '<div id="noteq-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.7">' + q.c + '</div>' +
+      '</div>';
+    });
+    box.innerHTML = html;
   }
 
   function setupMaarif(){
