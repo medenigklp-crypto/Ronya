@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v25
+   RONYA KİMYA — EKLENTİ v26
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -104,6 +104,16 @@
           çevirici dahil.
        c) 📐 Hız Bağıntısı — deneysel verilerden (derişim/hız tablosu)
           reaktan mertebelerini ve hız sabitini (k) otomatik bulur.
+   44) 📘 MAARİF HIZ (yeni 5. sekme, Tepkime Hızı ekranında): MEB
+       Maarif Modeli 11. sınıf Kimya 2 ders kitabının "Kimyasal
+       Tepkimelerde Hız" ünitesinin TAM konu anlatımı — 4 alt bölüm
+       (1.2.1 Gerekli Şartlar, 1.2.2 Ortalama Hız, 1.2.3 Etkileyen
+       Faktörler, 1.2.4 Hız Denklemi), kitaptaki TÜM etkinlik/örnek/
+       tablo içerikleriyle, ayrıca kitaptaki Grafik 1.4-1.14'ün canvas
+       ile yeniden çizilmiş halleri (eşik enerjisi dağılımı, endo/
+       ekzotermik PE-TK grafikleri, H₂O₂ derişim-zaman, sıcaklık/
+       katalizör/temas yüzeyi etkisi grafikleri, çok basamaklı
+       tepkime grafiği).
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -7086,6 +7096,7 @@
     kinRenderInfo();
     peRender();
     rlawBuildTable();
+    setupMaarif();
   }
 
   window.kinSetConc = kinSetConc;
@@ -7470,6 +7481,597 @@
     document.getElementById('fk-next').style.display = 'block';
   };
   window.fkNext = function(){ fkSt.idx++; fkRender(); };
+
+  // ---------- 24. MAARİF HIZ (MEB 11. Sınıf Kimya 2 — Tepkime Hızı) ----------
+  var maarifSt = { sub: 0 };
+
+  // Basit çizgi/alan grafik çizici — Grafik 1.x'lerin yeniden üretimi için ortak altyapı
+  function maarifChart(canvasId, drawFn){
+    var cv = document.getElementById(canvasId);
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    var W = rect.width || 300, H2 = cv.getAttribute('data-h') ? +cv.getAttribute('data-h') : 200;
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    x.fillStyle = '#050510'; x.fillRect(0, 0, W, H2);
+    try { drawFn(x, W, H2); } catch (e) { drawErr(x, W, H2, e); }
+  }
+  function mcAxes(x, W, H2, padL, padR, padT, padB, xlab, ylab){
+    x.strokeStyle = 'rgba(255,255,255,.25)'; x.lineWidth = 1;
+    x.beginPath(); x.moveTo(padL, padT); x.lineTo(padL, H2-padB); x.lineTo(W-padR, H2-padB); x.stroke();
+    x.fillStyle = 'rgba(255,255,255,.45)'; x.font = '10px sans-serif'; x.textAlign = 'center';
+    x.fillText(xlab, (padL+W-padR)/2, H2-6);
+    x.save(); x.translate(12, (padT+H2-padB)/2); x.rotate(-Math.PI/2); x.fillText(ylab, 0, 0); x.restore();
+    return { padL: padL, padR: padR, padT: padT, padB: padB, plotW: W-padL-padR, plotH: H2-padT-padB };
+  }
+
+  function setupMaarif(){
+    if (document.getElementById('maarif-wrap')) return;
+    var host = document.getElementById('kin-tps');
+    if (!host) return;
+    host.insertAdjacentHTML('beforeend', '<div class="tp" id="maarif-wrap"></div>');
+    if (!document.getElementById('mn-maariftab')) {
+      // 5. sekme butonunu kin-tabs'e ekle
+      var tabsBar = document.getElementById('kin-tabs');
+      if (tabsBar) tabsBar.insertAdjacentHTML('beforeend', '<button class="ltab" id="mn-maariftab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',4)">\ud83d\udcd8 Maarif Hız</button>');
+    }
+    var wrap = document.getElementById('maarif-wrap');
+    wrap.innerHTML =
+      '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cKimyasal Tepkimelerde Hız\u201d ünitesinin tam konu anlatımı \u2014 tüm etkinlik, örnek ve grafikleriyle.</p>' +
+      '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' +
+        '<button type="button" class="ob sel2" onclick="maarifSetSub(0,this)">1.2.1 Gerekli Şartlar</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(1,this)">1.2.2 Ortalama Hız</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(2,this)">1.2.3 Etkileyen Faktörler</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(3,this)">1.2.4 Hız Denklemi</button>' +
+      '</div></div>' +
+      '<div id="maarif-content"></div>';
+    maarifRender();
+  }
+  window.maarifSetSub = function(i, btn){ maarifSt.sub = i; if (btn) selectInRow(btn); maarifRender(); };
+
+  function maarifRender(){
+    var box = document.getElementById('maarif-content');
+    if (!box) return;
+    var fns = [maarif121, maarif122, maarif123, maarif124];
+    box.innerHTML = fns[maarifSt.sub]();
+    setTimeout(maarifDrawGraphs, 60);
+  }
+
+  function maarif121(){
+    return '' +
+    '<div class="card">' +
+      '<div class="slbl">1.2.1 \u2014 Kimyasal Tepkimelerin Gerçekleşmesi İçin Gerekli Şartlar</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '1) Yaşamın kaynağı kimyasal tepkimelerdir; d\u00fcnyanın dengesi ve canlıların yaşamı i\u00e7in \u00f6nemli olan bu tepkimelerin b\u00fcy\u00fck kısmı olumlu, bir kısmı ise (paslanma, \u00e7\u00fcr\u00fcme, b\u00f6zulma gibi) olumsuzdur.<br><br>' +
+      '2) <b>\u00d6rnek \u2014 Orman yangını:</b> Organik maddeler (a\u011fa\u00e7, yaprak) atmosferdeki O\u2082 ile hızlı tepkimeye girip CO\u2082, H\u2082O, CO ve u\u00e7ucu organik bileşikler oluşturur:<br>' +
+      '<span style="font-family:monospace;color:#f59e0b">C\u2093H\u2082\u1d67 + (2x+y)/2 O\u2082 \u2192 xCO\u2082 + yH\u2082O + enerji</span><br><br>' +
+      '3) <b>\u00d6rnek \u2014 Kibrit:</b> Kibritte k\u00fck\u00fcrt, potasyum klorat ve kırmızı fosfor bulunur. S\u00fcrt\u00fcnme ile oluşan ısı, yanma tepkimesini BAŞLATIR (bu ısı olmadan, oksijenle s\u00fcrekli temas halinde olsa bile kibrit kendili\u011finden yanmaz \u2014 aktivasyon enerjisi bariyeri a\u015fılmadı\u011fı i\u00e7in). Islak kibrit tutuşmaz \u00e7\u00fcnk\u00fc su molek\u00fclleri tanecikleri \u00e7evreleyip etkin \u00e7arpışmayı engeller. R\u00fczgarlı havada yanma tepkimesi devam etmez \u00e7\u00fcnk\u00fc a\u00e7ı\u011fa \u00e7ıkan ısı \u00e7abuk da\u011fılır.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83d\udca5 \u00c7arpışma Teorisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '4) Bir kimyasal tepkimenin ger\u00e7ekleşebilmesi i\u00e7in tanecikler \u00d6NCE \u00e7arpışmalıdır. Ancak HER \u00e7arpışma \u00fcr\u00fcn oluşturmaz \u2014 \u00fcr\u00fcn oluşması i\u00e7in <b>etkin \u00e7arpışma</b> gerekir.<br><br>' +
+      '5) Etkin \u00e7arpışma i\u00e7in tanecikler:<br>' +
+      '&nbsp;&nbsp;a) <b>Uygun geometride (do\u011frultu/y\u00f6nde)</b> \u00e7arpışmalı,<br>' +
+      '&nbsp;&nbsp;b) <b>Yeterli kinetik enerjiye</b> sahip olmalıdır.<br><br>' +
+      '6) Kinetik enerjisi d\u00fcş\u00fck iki taneci\u011fin \u00e7arpışması sonucunda ba\u011fların kırılması olası de\u011fildir. Bir tepkimenin ger\u00e7ekleşebilmesi i\u00e7in \u00e7arpışan taneciklerin sahip olması gereken MİNİMUM toplam kinetik enerjiye <b>eşik de\u011feri (eşik enerjisi)</b> denir.' +
+      '</p>' +
+      '<div style="background:#050510;border:1px solid rgba(245,158,11,.25);border-radius:12px;overflow:hidden;margin:10px 0"><canvas id="mgraf14" data-h="200" style="width:100%;display:block"></canvas></div>' +
+      '<p style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:10px">Grafik 1.4: Tanecik sayısı \u2013 Kinetik enerji grafi\u011fi (kırmızı alan: etkin \u00e7arpışma yapabilecek tanecikler)</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '7) <b>\u00d6rnek \u2014 NO(g) + O\u2083(g) \u2192 NO\u2082(g) + O\u2082(g):</b> NO ile O\u2083 UYGUN geometride \u00e7arpışırsa NO\u2082 ve O\u2082 \u00fcr\u00fcnleri oluşur. UYGUN OLMAYAN geometride \u00e7arpışırsa (\u00f6rn. NO\u2019nun yanlış ucundan yaklaşması) hi\u00e7bir \u00fcr\u00fcn oluşmaz, tanecikler de\u011fişmeden geri sekerler.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\u26a1 Aktivasyon Enerjisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '8) Endotermik veya ekzotermik her t\u00fcrl\u00fc tepkimenin başlayabilmesi i\u00e7in MUTLAKA enerjiye ihtiya\u00e7 vardır. Bu enerjiye <b>aktivasyon (aktifleşme) enerjisi</b> denir. Aktivasyon enerjisi tepkenlerin kinetik enerjilerinden sa\u011flanır. B\u00fcy\u00fck aktivasyon enerjili tepkimeler genellikle yavaş ger\u00e7ekleşir.<br><br>' +
+      '9) Tepkenlerin \u00fcr\u00fcnlere d\u00f6n\u00fcşmesine <b>ileri tepkime</b>, \u00fcr\u00fcnlerin tepkenlere d\u00f6n\u00fcşmesine <b>geri tepkime</b> denir.<br><br>' +
+      '10) Tepkenlerin \u00fcr\u00fcnlere d\u00f6n\u00fcşebilmesi i\u00e7in gereken en d\u00fcş\u00fck enerjiye <b>ileri aktivasyon enerjisi (E<sub>ai</sub>)</b>, \u00fcr\u00fcnlerin tepkenlere geri d\u00f6nebilmesi i\u00e7in gereken en d\u00fcş\u00fck enerjiye <b>geri aktivasyon enerjisi (E<sub>ag</sub>)</b> denir.<br><br>' +
+      '11) Tepkime entalpisi: <span style="font-family:monospace;color:#86efac">\u0394H<sub>tepkime</sub> = E<sub>ai</sub> \u2212 E<sub>ag</sub></span>' +
+      '</p>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">' +
+        '<div><div style="background:#050510;border:1px solid rgba(96,165,250,.3);border-radius:12px;overflow:hidden"><canvas id="mgraf15" data-h="170" style="width:100%;display:block"></canvas></div><p style="font-size:10px;color:var(--tx3);text-align:center;margin-top:4px">Grafik 1.5: Endotermik (E<sub>ai</sub>&gt;E<sub>ag</sub>, \u0394H&gt;0)</p></div>' +
+        '<div><div style="background:#050510;border:1px solid rgba(248,113,113,.3);border-radius:12px;overflow:hidden"><canvas id="mgraf16" data-h="170" style="width:100%;display:block"></canvas></div><p style="font-size:10px;color:var(--tx3);text-align:center;margin-top:4px">Grafik 1.6: Ekzotermik (E<sub>ai</sub>&lt;E<sub>ag</sub>, \u0394H&lt;0)</p></div>' +
+      '</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '12) <b>Endotermik tepkimede</b> (Grafik 1.5): E<sub>ai</sub> &gt; E<sub>ag</sub>, \u00e7evreden enerji alınır, toplam entalpi artar, tepkenler \u00fcr\u00fcnlerden daha kararlıdır, tepkimenin devamı i\u00e7in s\u00fcrekli enerji verilmelidir.<br><br>' +
+      '13) <b>Ekzotermik tepkimede</b> (Grafik 1.6): E<sub>ai</sub> &lt; E<sub>ag</sub>, \u00e7evreye enerji verilir, toplam entalpi azalır, \u00fcr\u00fcnler tepkenlerden daha kararlıdır, tepkime başladıktan sonra kendili\u011finden devam eder.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83d\ude80 Kimya ve Yaşam: Roket Motorları</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '14) Roketler y\u00fckseldik\u00e7e atmosferdeki O\u2082 derişimi azaldı\u011fından yakıtla birlikte yakıcı (oksitleyici) madde de taşınır. Hidrazin (N\u2082H\u2084) yakıt, diazot tetraoksit (N\u2082O\u2084) oksitleyici olarak kullanılan bir roket motorunda:<br>' +
+      '<span style="font-family:monospace;color:#f59e0b">2N\u2082H\u2084(s) + N\u2082O\u2084(g) \u2192 3N\u2082(g) + 4H\u2082O(g) + 1168 kj</span><br>' +
+      '\u2192 Atmosferdeki O\u2082 derişiminin azalması etkin \u00e7arpışma sayısını AZALTIR; bu y\u00fczden roket kendi oksitleyicisini taşımak zorundadır.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83d\udcdd Uygulama Noktası 1.3 \u2014 \u00c7\u00f6z\u00fcml\u00fc \u00d6rnekler</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>1) Fosgen sentezi:</b> CO(g) + Cl\u2082(g) \u2192 COCl\u2082(g), g\u00fcneş ışı\u011fı varlı\u011fında ger\u00e7ekleşir. \u0394H=\u221207 kJ, E<sub>ai</sub>=80 kJ.<br>' +
+      '&nbsp;&nbsp;\u2022 G\u00fcneş ışı\u011fı gereklidir \u00e7\u00fcnk\u00fc tepkenlere aktivasyon enerjisini (80 kJ) aşacak enerji sa\u011flar.<br>' +
+      '&nbsp;&nbsp;\u2022 E<sub>ag</sub> = E<sub>ai</sub> \u2212 \u0394H = 80 \u2212 (\u2212107) = <b>187 kJ</b><br><br>' +
+      '<b>2) NH\u2083 \u2192 H\u2082 d\u00f6n\u00fcş\u00fcm\u00fc:</b> 2NH\u2083(g) \u2192 N\u2082(g) + 3H\u2082(g), \u0394H=+22 kJ, E<sub>ag</sub>=50 kJ.<br>' +
+      '&nbsp;&nbsp;\u2022 E<sub>ai</sub> = \u0394H + E<sub>ag</sub> = 22+50 = <b>72 kJ</b> \u2014 tepkenlere en az 72 kJ verilmelidir.<br>' +
+      '&nbsp;&nbsp;\u2022 \u0394H&gt;0 oldu\u011fu i\u00e7in tepkime <b>endotermiktir</b>; tepkenler \u00fcr\u00fcnlerden daha kararlıdır (enerjisi daha d\u00fcş\u00fCk).<br>' +
+      '&nbsp;&nbsp;\u2022 Endotermik oldu\u011fu i\u00e7in devam edebilmesi i\u00e7in \u00e7evreden s\u00fcrekli enerji almalıdır.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\u2705 Kontrol Noktası 1.5 \u2014 CO + NO\u2082 \u2192 CO\u2082 + NO</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      'Grafikte I = E<sub>ai</sub> (ileri aktivasyon enerjisi), II = E<sub>ag</sub> (geri aktivasyon enerjisi), III = \u0394H olarak işaretlenir (tepenlerden tepeye kadar olan I; \u00fcr\u00fcnlerden tepeye kadar olan II; tepken-\u00fcr\u00fcn seviye farkı III).<br><br>' +
+      '<b>Molek\u00fcl \u00e7arpışmaları:</b> D\u00fcş\u00fck kinetik enerjili \u00e7arpışmalar (II, III) etkin \u00e7arpışma olamaz; y\u00fcksek kinetik enerjili VE uygun geometrideki \u00e7arpışmalar (I, IV \u2014 CO\u2019nun karbonu NO\u2082\u2019nin oksijenine do\u011fru yönelmişse) \u00fcr\u00fcn oluşturabilir.' +
+      '</p>' +
+    '</div>';
+  }
+
+  function maarif122(){
+    return '' +
+    '<div class="card">' +
+      '<div class="slbl">1.2.2 \u2014 Ortalama Tepkime Hızlarının Hesaplanması</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '1) Tepkime hızı; kimyasal bir tepkimede belli bir s\u00fcrede madde miktarındaki de\u011fişimin \u00f6l\u00e7\u00fcs\u00fcd\u00fcr:<br>' +
+      '<span style="font-family:monospace;color:#f59e0b">Tepkime hızı = \u2212\u0394[tepken]/\u0394t &nbsp;=&nbsp; +\u0394[\u00fcr\u00fcn]/\u0394t</span><br><br>' +
+      '2) \u0394[tepken] terimi NEGATİFTİR (derişim azalır); hızın pozitif olması i\u00e7in \u00f6n\u00fcne eksi işareti konur. \u0394[\u00fcr\u00fcn] terimi POZİTİFTİR, eksi işareti konmaz. Hız \u201cr\u201d ile g\u00f6sterilir, SI biriminde M/s\u2019dir.<br><br>' +
+      '3) [ ] simgesi \u201cderişim\u201d, \u0394 ise \u201cson de\u011fer \u2212 ilk de\u011fer\u201d anlamına gelir.' +
+      '</p>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px;margin:10px 0"><tr style="background:rgba(255,255,255,.06)"><th style="padding:6px;border:1px solid rgba(255,255,255,.1)">Madde Miktarı</th><th style="padding:6px;border:1px solid rgba(255,255,255,.1)">Zaman</th><th style="padding:6px;border:1px solid rgba(255,255,255,.1)">Hız Formülü</th><th style="padding:6px;border:1px solid rgba(255,255,255,.1)">Birim</th></tr>' +
+      '<tr><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">Derişim</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">saniye</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">r=\u0394[M]/\u0394t</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">M/s</td></tr>' +
+      '<tr><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">K\u00fctle</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">dakika</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">r=\u0394m/\u0394t</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">g/dk</td></tr>' +
+      '<tr><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">Mol</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">saat</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">r=\u0394n/\u0394t</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">mol/sa</td></tr>' +
+      '<tr><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">Hacim</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">g\u00fcn</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">r=\u0394V/\u0394t</td><td style="padding:6px;border:1px solid rgba(255,255,255,.1);text-align:center">L/g\u00fcn</td></tr></table>' +
+      '<p style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:10px">Tablo 1.6</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">Katsayı \u2014 Hız İlişkisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '4) N\u2082(g) + 3H\u2082(g) \u2192 2NH\u2083(g) tepkimesinde harcanma/oluşma hızları katsayılarla orantılıdır (1 mol N\u2082 harcanırken 3 mol H\u2082 harcanır, 2 mol NH\u2083 oluşur):<br>' +
+      '<span style="font-family:monospace;color:#86efac">r<sub>tepkime</sub> = r<sub>N2</sub> = \u2153 r<sub>H2</sub> = \u00bd r<sub>NH3</sub></span><br><br>' +
+      '5) Genel olarak <b>aA + bB \u2192 cC + dD</b> tepkimesinde:<br>' +
+      '<span style="font-family:monospace;color:#86efac">r<sub>tepkime</sub> = (1/a)r<sub>A</sub> = (1/b)r<sub>B</sub> = (1/c)r<sub>C</sub> = (1/d)r<sub>D</sub></span>' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83d\udcca Ortalama Tepkime Hızı \u2014 H\u2082O\u2082 \u00d6rne\u011fi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '6) Belli bir zaman aralı\u011fında madde miktarındaki de\u011fişime <b>ortalama hız</b> denir. H\u2082O\u2082(suda) \u2192 H\u2082O(s) + \u00bdO\u2082(g) tepkimesi i\u00e7in H\u2082O\u2082\u2019nin derişim\u2013zaman grafi\u011fi:' +
+      '</p>' +
+      '<div style="background:#050510;border:1px solid rgba(245,158,11,.25);border-radius:12px;overflow:hidden;margin:10px 0"><canvas id="mgraf17" data-h="200" style="width:100%;display:block"></canvas></div>' +
+      '<p style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:10px">Grafik 1.7: H\u2082O\u2082 derişim-zaman grafi\u011fi</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>200-400 s arası:</b> r=\u2212(1,70\u22122,00)/(400\u2212200) = \u2212(\u22120,30)/200 = <b>0,0015 M/s</b><br>' +
+      '<b>400-600 s arası:</b> r=\u2212(1,50\u22121,70)/(600\u2212400) = \u2212(\u22120,20)/200 = <b>0,0010 M/s</b><br>' +
+      '\u2192 Zaman ilerledikce ortalama hız D\u00dc\u015e\u00dcYOR (derişim azaldık\u00e7a \u00e7arpışma sıklı\u011fı azalır).' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83e\uddea Etkinlik 1.10 \u2014 N\u2082O\u2085 Ayrışması (2N\u2082O\u2085 \u2192 4NO\u2082 + O\u2082)</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:11px;margin:8px 0"><tr style="background:rgba(255,255,255,.06)"><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">t(s)</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">[N\u2082O\u2085]</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">[NO\u2082]</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">[O\u2082]</th></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,200</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">100</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,169</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,063</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,016</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">200</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,142</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,115</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,029</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">300</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,120</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,160</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,040</td></tr></table>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>a) 0-100s arası N\u2082O\u2085 ortalama harcanma hızı:</b> \u2212(0,169\u22120,200)/100 = <b>3,1\u00d710\u207b\u2074 M/s</b><br>' +
+      '<b>100-200s arası:</b> \u2212(0,142\u22120,169)/100 = <b>2,7\u00d710\u207b\u2074 M/s</b> (giderek azalıyor)<br>' +
+      '<b>b) 0-100s arası NO\u2082 ortalama oluşma hızı:</b> (0,063\u22120)/100 = <b>6,3\u00d710\u207b\u2074 M/s</b><br>' +
+      '<b>c) 0-100s arası O\u2082 ortalama oluşma hızı:</b> (0,016\u22120)/100 = <b>1,6\u00d710\u207b\u2074 M/s</b><br>' +
+      '\u2192 NO\u2082 hızı N\u2082O\u2085 hızının 2 katı, O\u2082 hızı N\u2082O\u2085 hızının yarısı civarındadır (katsayı oranı 4:2:1 ile uyumlu).' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83d\udcc8 Hızın Zamanla Değişimi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '7) Sabit sıcaklıkta ger\u00e7ekleşen bir tepkimenin hızı, tepkenlerin derişimine ba\u011flı olarak zamanla de\u011fişir. Tepkenler harcandık\u00e7a miktarları azalır.<br><br>' +
+      '8) <b>Gaz fazında veya \u00e7\u00f6z\u00fcnm\u00fcş halde</b> ger\u00e7ekleşen tepkimelerde derişim azalır \u2192 \u00e7arpışma sıklı\u011fı d\u00fcşer \u2192 hız zamanla AZALIR (en y\u00fcksek hız BAŞLANGI\u00c7ta).<br><br>' +
+      '9) <b>Katı veya saf sıvı</b> tepkenlerin yer aldı\u011fı tepkimelerde derişim SABİTTİR (de\u011fişmez) \u2192 tepkime, temas y\u00fczeyi de\u011fişmedi\u011fi s\u00fcrece AYNI HIZLA devam eder.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83d\udcdd \u00c7alışma Yapra\u011fı 1.2 \u2014 \u00c7\u00f6z\u00fcml\u00fc \u00d6rnekler</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>1) 2CO(g)+O\u2082(g)\u21922CO\u2082(g) ve 2NO\u2082(g)\u2192N\u2082(g)+2O\u2082(g):</b> 2 saniyede 0,4 M CO ve 0,2 M NO\u2082 harcanıyor.<br>' +
+      '&nbsp;&nbsp;\u2022 Hız ba\u011fıntıları: r<sub>tepkime</sub>=\u00bdr<sub>CO</sub>=r<sub>O2</sub>=\u00bdr<sub>CO2</sub> ve r<sub>tepkime</sub>=\u00bdr<sub>NO2</sub>=r<sub>N2</sub>=\u00bdr<sub>O2</sub><br>' +
+      '&nbsp;&nbsp;\u2022 CO ve O\u2082 harcanma hızı: r<sub>CO</sub>=0,4/2=<b>0,2 M/s</b>; r<sub>O2</sub>=r<sub>CO</sub>/2=<b>0,1 M/s</b><br>' +
+      '&nbsp;&nbsp;\u2022 N\u2082 ve O\u2082 oluşma hızı: r<sub>NO2</sub>=0,2/2=<b>0,1 M/s</b>; r<sub>N2</sub>=r<sub>NO2</sub>/2=<b>0,05 M/s</b>, r<sub>O2</sub>=r<sub>NO2</sub>=<b>0,1 M/s</b><br><br>' +
+      '<b>2) SO\u2082+\u00bdO\u2082\u2192SO\u2083 (20s\u2019de 0,12M SO\u2082) ve SO\u2083+H\u2082O\u2192H\u2082SO\u2084 (2 dk\u2019da tamamı):</b><br>' +
+      '&nbsp;&nbsp;\u2022 SO\u2082 ortalama harcanma hızı: 0,12/20 = <b>0,006 M/s</b><br>' +
+      '&nbsp;&nbsp;\u2022 O\u2082 ortalama harcanma hızı: 0,006/2 = <b>0,003 M/s</b><br>' +
+      '&nbsp;&nbsp;\u2022 SO\u2083 oluşma hızı (1. tepkimeden) = SO\u2082 harcanma hızına eşit = 0,006 M/s; 2 dakikada (120s) oluşan SO\u2083 miktarı 0,12 mol/L oldu\u011funa g\u00f6re SO\u2083 ortalama harcanma hızı (2. tepkimede) = 0,12/120 = <b>0,001 M/s = 0,06 M/dk</b>' +
+      '</p>' +
+    '</div>';
+  }
+
+  function maarif123(){
+    return '' +
+    '<div class="card">' +
+      '<div class="slbl">1.2.3 \u2014 Tepkime Hızına Etki Eden Faktörler</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '1) Katalitik konvert\u00f6rler; platin, paladyum, rodyum metalleriyle egzoz gazlarındaki CO, C\u2093H\u1d67, NO\u2093 gibi zararlı gazları CO\u2082, H\u2082O, N\u2082, O\u2082\u2019ye d\u00f6n\u00fcşt\u00fcr\u00fcr \u2014 bu metaller tepkimeyi HIZLANDIRICI \u00f6zelliktedir.<br><br>' +
+      '2) Tepkime hızını belirleyen 5 temel fakt\u00f6r: <b>Madde Cinsi \u00b7 Fiziksel Hal \u00b7 Derişim \u00b7 Sıcaklık \u00b7 Katalizör</b> (+ Temas Y\u00fczeyi).' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">1\ufe0f\u20e3 Madde Cinsinin Etkisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '3) Kimyasal tepkimeler, tepkenlerdeki ba\u011fların kopması ve \u00fcr\u00fcnlerde yeni ba\u011fların oluşmasıyla ger\u00e7ekleşir. <b>Kopan ba\u011f sayısı ne kadar \u00e7oksa, tepkime o kadar yavaş</b> ger\u00e7ekleşme e\u011filimindedir.<br>' +
+      '&nbsp;&nbsp;\u2022 \u00d6rnek: C\u2083H\u2088(propan)\u2019ın yanması (5O\u2082 ile, daha \u00e7ok ba\u011f kırılır) CH\u2084(metan)\u2019ın yanmasından (2O\u2082 ile) DAHA YAVAŞtır.<br><br>' +
+      '4) <b>Tepken t\u00fcr\u00fc (\u00e7eşidi) fazla olan tepkimeler</b> genellikle yavaş ger\u00e7ekleşir (\u00e7\u00fcnk\u00fc aynı anda birden fazla farklı molek\u00fcl\u00fcn uygun geometride \u00e7arpışma olasılı\u011fı d\u00fcş\u00fckt\u00fcr).<br>' +
+      '&nbsp;&nbsp;\u2022 \u00d6rnek: 2NO+H\u2082\u2192N\u2082+H\u2082O\u2082 (\u00fc\u00e7 molek\u00fcl AYNI ANDA \u00e7arpışmalı) YAVAŞ; H\u2082O\u2082+H\u2082\u21922H\u2082O (iki molek\u00fcl) daha HIZLIdır.<br><br>' +
+      '5) <b>Zıt y\u00fckl\u00fc iyonlar arası tepkimeler</b> elektrostatik \u00e7ekim nedeniyle genellikle \u00e7ok HIZLI ger\u00e7ekleşir \u2014 n\u00f6tralleşme ve \u00e7\u00f6z\u00fcnme-\u00e7\u00f6kelme tepkimeleri bu y\u00fczden hızlıdır:<br>' +
+      '&nbsp;&nbsp;\u2022 HCl(suda)+NaOH(suda)\u2192NaCl(suda)+H\u2082O(s) \u2014 net iyon: H\u207a+OH\u207b\u2192H\u2082O<br>' +
+      '&nbsp;&nbsp;\u2022 KI(suda)+Pb(NO\u2083)\u2082(suda)\u2192PbI\u2082(k)+KNO\u2083(suda) \u2014 net iyon: Pb\u00b2\u207a+2I\u207b\u2192PbI\u2082(k)<br><br>' +
+      '<b>\u00d6rnek (1.5 Uygulama):</b> Glikozun fermantasyonu (C\u2086H\u2081\u2082O\u2086(k)\u21922C\u2082H\u2085OH(s)+2CO\u2082(g)) organik/karmaşık bir s\u00fcre\u00e7tir, YAVAŞtır. H\u2082SO\u2084+2KOH\u2192K\u2082SO\u2084+2H\u2082O ise iyonlar arası bir asit-baz tepkimesidir, \u00c7OK HIZLIdır.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">2\ufe0f\u20e3 Maddenin Fiziksel Halinin Etkisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '6) Genel olarak <b>gaz &gt; sıvı &gt; katı</b> hızında ger\u00e7ekleşir \u2014 gaz molek\u00fclleri daha hareketli oldu\u011fu i\u00e7in \u00e7arpışma olasılı\u011fı y\u00fcksektir.<br>' +
+      '&nbsp;&nbsp;\u2022 Ca(k)+H\u2082O(s)\u2192Ca(OH)\u2082(suda)+H\u2082(g) &nbsp;<b>YAVAŞ</b><br>' +
+      '&nbsp;&nbsp;\u2022 Ca(k)+H\u2082O(g)\u2192Ca(OH)\u2082(k)+H\u2082(g) &nbsp;<b>HIZLI</b> (su buhar halinde)<br><br>' +
+      '<b>\u00d6rnek (1.6 Uygulama):</b> Etan (C\u2082H\u2086, gaz) ve heptan (C\u2087H\u2081\u2086, sıvı) aynı koşullarda yakıldı\u011fında, GAZ halindeki etan daha \u00e7ok hareketli oldu\u011fu i\u00e7in yanma tepkimesi heptandan daha HIZLIdır.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">3\ufe0f\u20e3 Derişimin Etkisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '7) Derişim = birim hacimdeki madde miktarı. Y\u00fcksek derişim \u2192 \u00e7arpışma olasılı\u011fı artar \u2192 etkin \u00e7arpışma sayısı artar \u2192 hız ARTAR. <b>Derişimin artması aktivasyon enerjisini DE\u011eİŞTİRMEZ.</b><br><br>' +
+      '8) <b>Gaz fazında hacim de\u011fişimi:</b> Hacim artırılırsa derişim d\u00fcşer (hız azalır); hacim azaltılırsa derişim artar (hız artar).' +
+      '</p>' +
+      '<div style="display:flex;align-items:center;justify-content:center;gap:16px;padding:10px 0">' +
+        '<div style="text-align:center"><div style="font-size:11px;color:var(--tx3)">Derişimi D\u00fcş\u00fck</div><div style="font-size:24px">\ud83d\udfe2 \ud83d\udd34</div><div style="font-size:10px;color:var(--tx3)">az \u00e7arpışma \u2192 yavaş</div></div>' +
+        '<div style="font-size:20px;color:var(--tx3)">\u2192</div>' +
+        '<div style="text-align:center"><div style="font-size:11px;color:var(--tx3)">Derişimi Y\u00fcksek</div><div style="font-size:20px">\ud83d\udfe2\ud83d\udd34\ud83d\udfe2\ud83d\udd34\ud83d\udfe2\ud83d\udd34</div><div style="font-size:10px;color:var(--tx3)">\u00e7ok \u00e7arpışma \u2192 hızlı</div></div>' +
+      '</div>' +
+      '<p style="font-size:11px;color:var(--tx3);text-align:center">G\u00f6rsel 1.8: Derişim etkisi</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>\u00d6rnek (1.7 Uygulama \u2014 H\u2082+Cl\u2082\u21922HCl, 3 \u00f6zdeş kap):</b> Kaptaki H\u2082/Cl\u2082 sayısı ne kadar \u00e7oksa (derişim y\u00fcksekse) o kapta birim zamanda daha fazla HCl \u00fcretilir; \u00e7arpışma sıklı\u011fı fazla oldu\u011fu i\u00e7in hız daha y\u00fcksektir.<br><br>' +
+      '\ud83d\udca7 <b>Kimya ve Yaşam \u2014 Nemli Havada Paslanma:</b> Nem, demirin y\u00fczeyinde daha fazla su bulunmasına yol a\u00e7ar; bu, elektrokimyasal paslanma s\u00fcrecinde gerekli İYONLARIN taşınmasını (derişimini) artırır \u2192 paslanma HIZLANIR.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">4\ufe0f\u20e3 Sıcaklığın Etkisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '9) Sıcaklık artışı tepkenlerin KİNETİK ENERJİSİNİ artırır \u2192 \u00e7arpışma sıklı\u011fı VE şiddeti artar \u2192 eşik de\u011ferini aşan tanecik sayısı artar \u2192 hız ARTAR. <b>Sıcaklık aktivasyon enerjisini VE tepkimenin izledi\u011fi yolu DE\u011eİŞTİRMEZ.</b>' +
+      '</p>' +
+      '<div style="background:#050510;border:1px solid rgba(96,165,250,.25);border-radius:12px;overflow:hidden;margin:10px 0"><canvas id="mgraf9" data-h="190" style="width:100%;display:block"></canvas></div>' +
+      '<p style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:10px">Grafik 1.9/1.10: T\u2082&gt;T\u2081 \u2014 sıcaklık arttık\u00e7a e\u011frinin altındaki alan AYNI kalır (tanecik sayısı de\u011fişmez), ama eşik de\u011ferini aşan (kırmızı) alan B\u00dcY\u00dcR</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>\u00d6rnek (1.8 Uygulama):</b> Kire\u00e7 taşı maketleri 5\u00b0C, 15\u00b0C, 35\u00b0C ortamlarda eşit derişimde asit ile aşındırılıyor \u2014 35\u00b0C\u2019deki maket en HIZLI aşınır (\u00e7arpışma teorisine g\u00f6re: y\u00fcksek sıcaklık \u2192 y\u00fcksek kinetik enerji \u2192 daha \u00e7ok etkin \u00e7arpışma).' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">5\ufe0f\u20e3 Katalizörün Etkisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '10) Katalizör: tepkimenin AKTİVASYON ENERJİSİNİ D\u00dc\u015e\u00dcRerek tepkimeyi hızlandıran maddedir. Tepkimeye katılır ama SONUNDA DE\u011eİŞMEDEN \u00e7ıkar.' +
+      '</p>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">' +
+        '<div><div style="background:#050510;border:1px solid rgba(34,197,94,.25);border-radius:12px;overflow:hidden"><canvas id="mgraf11" data-h="170" style="width:100%;display:block"></canvas></div><p style="font-size:10px;color:var(--tx3);text-align:center;margin-top:4px">Grafik 1.11: Katalizör Ea\u2019yı d\u00fcş\u00fcr\u00fcr, \u0394H de\u011fişmez</p></div>' +
+        '<div><div style="background:#050510;border:1px solid rgba(34,197,94,.25);border-radius:12px;overflow:hidden"><canvas id="mgraf12" data-h="170" style="width:100%;display:block"></canvas></div><p style="font-size:10px;color:var(--tx3);text-align:center;margin-top:4px">Grafik 1.12: Katalizörl\u00fc alanda daha \u00e7ok tanecik eşi\u011fi aşar</p></div>' +
+      '</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '11) <b>Katalizörlerin \u00f6zellikleri:</b><br>' +
+      '&nbsp;&nbsp;\u2022 Aktivasyon enerjisini d\u00fcş\u00fcr\u00fcr, ileri ve geri Ea\u2019yı AYNI miktarda azaltır \u2192 <b>\u0394H\u2019yi de\u011fiştirmez</b><br>' +
+      '&nbsp;&nbsp;\u2022 Etkin \u00e7arpışma ve birim zamanda oluşan \u00fcr\u00fcn miktarını artırır<br>' +
+      '&nbsp;&nbsp;\u2022 Tepken/\u00fcr\u00fcn enerjisini, \u00fcr\u00fcn t\u00fcr\u00fc/miktarını/verimini DE\u011eİŞTİRMEZ<br>' +
+      '&nbsp;&nbsp;\u2022 Tepkime başlaması i\u00e7in GEREKLİ de\u011fildir; başlamış tepkimeyi hızlandırır<br>' +
+      '&nbsp;&nbsp;\u2022 Tepkimenin y\u00f6n\u00fcn\u00fc değiştirmez; tepkimeyi mekanizmalı hale getirebilir (yavaş adıma etki eder)<br><br>' +
+      '12) <b>İnhibit\u00f6r (negatif katalizör):</b> Tepkimeyi YAVAŞLATIR. Hazır gıdalarda kullanılan sodyum benzoat, askorbik asit gibi maddeler inhibit\u00f6rd\u00fcr.<br><br>' +
+      '13) Tepkenlerle AYNI fazda olan katalizöre <b>homojen</b>, farklı fazda olana <b>heterojen katalizör</b> denir (heterojen katalizörler genelde katı, tepkenler sıvı/gaz).' +
+      '</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>\u00d6rnek (1.9 Uygulama \u2014 Margarin \u00fcretimi):</b> Doymamış bitkisel ya\u011flar, Ni katalizörl\u00fc\u011f\u00fcnde H\u2082 gazıyla tepkimeye girip doymuş ya\u011fa (margarin) d\u00f6n\u00fcş\u00fcr. Katalizörl\u00fc tesis, aynı koşullarda daha AZ enerjiyle daha ÇOK \u00fcr\u00fcn elde eder (aktivasyon enerjisi d\u00fcş\u00fckt\u00fcr).' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">6\ufe0f\u20e3 Temas Y\u00fczeyinin Etkisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '14) Katı tepkenin y\u00fczey alanı arttık\u00e7a (ince toz haline getirildik\u00e7e) tepkimenin ger\u00e7ekleşebilece\u011fi B\u00d6LGE artar \u2192 \u00e7arpışma sıklı\u011fı artar \u2192 hız ARTAR.' +
+      '</p>' +
+      '<div style="background:#050510;border:1px solid rgba(168,85,247,.25);border-radius:12px;overflow:hidden;margin:10px 0"><canvas id="mgraf13" data-h="180" style="width:100%;display:block"></canvas></div>' +
+      '<p style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:10px">Grafik 1.13: Zn(k)+HCl(suda)\u2192ZnCl\u2082+H\u2082 \u2014 toz \u00e7inko (kırmızı), par\u00e7a \u00e7inko (mavi) H\u2082 mol\u2013zaman grafi\u011fi. İkisi de aynı miktarda \u00fcr\u00fcn verir, ama TOZ ÇİNKO ile daha KISA s\u00fcrede tamamlanır.</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>\u00d6rnek (1.10 Uygulama \u2014 FeCl\u2082 \u00fcretimi):</b> Fe(k)+2HCl(suda)\u2192FeCl\u2082(suda)+H\u2082(g). 10\u2019ar gram Fe levhası, talaşı, tozu aynı derişimdeki HCl ile tepkimeye giriyor. <b>Fe tozu</b> en b\u00fcy\u00fck y\u00fczey alanına sahip oldu\u011fu i\u00e7in birim zamanda EN FAZLA FeCl\u2082 \u00fcretir ve H\u2082 gazı EN HIZLI \u00e7ıkar; Fe levhası ise en yavaştır.' +
+      '</p>' +
+    '</div>';
+  }
+
+  function maarif124(){
+    return '' +
+    '<div class="card">' +
+      '<div class="slbl">1.2.4 \u2014 Kimyasal Tepkimelerin Hız Denklemi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">' +
+      '1) Tepkimelerin hızı ile tepkenlerin derişimleri arasındaki ilişkiyi g\u00f6steren ba\u011fıntıya <b>hız denklemi</b> denir. Derişim ile hız arasındaki orantıyı eşitli\u011fe d\u00f6n\u00fcşt\u00fcren orantı sabitine <b>hız sabiti (k)</b> denir. k\u2019nın de\u011feri; tepkimenin niteli\u011fine, SICAKLI\u011eA, TEMAS Y\u00dcZEYİNE ve KATALİZ\u00d6RE ba\u011flıdır (sıcaklık/temas y\u00fczeyi/katalizör ile k ARTAR). k, DERİŞİMDEN etkilenmez.<br><br>' +
+      '2) Gaz fazında ve <b>tek basamakta</b> ger\u00e7ekleşen aA+bB\u2192cC+dD tepkimesinin hızı:<br>' +
+      '<span style="font-family:monospace;color:#f59e0b;font-size:15px">r = k[A]\u1d43[B]\u1d47</span><br><br>' +
+      '3) Hız denkleminde \u00fcslerin toplamına <b>tepkime derecesi</b> (a+b) denir. Tepkime A\u2019ya g\u00f6re a. dereceden, B\u2019ye g\u00f6re b. derecedendir.<br><br>' +
+      '4) Hız denklemi yazım kuralları:<br>' +
+      '&nbsp;&nbsp;\u2022 Tepkenlerin STOKİYOMETRİK KATSAYILARI, derişimlerin \u00fczerine \u00dcS olarak yazılır (tek basamaklı tepkimede)<br>' +
+      '&nbsp;&nbsp;\u2022 Tepkenlerin derişimleri \u00e7arpılır, hız sabiti (k) ile \u00e7arpılır<br>' +
+      '&nbsp;&nbsp;\u2022 <b>Katı ve sıvı hâldeki SAF maddeler hız denklemine YAZILMAZ</b> (derişimleri tepkime s\u00fcresince de\u011fişmez, hıza etkileri yoktur)<br><br>' +
+      '5) \u00d6rnek: N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g) \u2192 <span style="font-family:monospace;color:#86efac">r=k[N\u2082][H\u2082]\u00b3</span> \u2014 N\u2082\u2019ye g\u00f6re 1., H\u2082\u2019ye g\u00f6re 3. derece, toplam 4. derece. N\u2082 derişimi 2 katına \u00e7ıkarsa hız 2 katına; H\u2082 derişimi 2 katına \u00e7ıkarsa hız 2\u00b3=8 katına \u00e7ıkar.' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83e\uddea Etkinlik 1.18 \u2014 Deneysel Hız Denklemi Bulma (Tek Basamaklı)</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">CO(g)+Cl\u2082(g)\u2192COCl\u2082(g) tepkimesi TEK basamaklıdır:</p>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px;margin:8px 0"><tr style="background:rgba(255,255,255,.06)"><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">Deney</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">[CO]</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">[Cl\u2082]</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">Hız (M/s)</th></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">1</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,20</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,20</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,04</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">2</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,20</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,60</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,12</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">3</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,40</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,60</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,24</td></tr></table>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">1\u21922: [CO] sabit, [Cl\u2082] 3 kat \u2192 hız 3 kat \u2192 Cl\u2082\u2019ye g\u00f6re 1. derece. 2\u21923: [Cl\u2082] sabit, [CO] 2 kat \u2192 hız 2 kat \u2192 CO\u2019ya g\u00f6re 1. derece.<br>' +
+      '\u2192 <span style="font-family:monospace;color:#86efac">r=k[CO][Cl\u2082]</span>, tepkime derecesi=2 (tek basamaklı olması hız denklemi katsayılarla UYUMLU \u00e7ıkmasıyla do\u011frulanır).' +
+      '</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8"><b>Çok basamaklı karşılaştırma:</b> 2NO(g)+2H\u2082(g)\u2192N\u2082(g)+2H\u2082O(g) i\u00e7in deneysel hız denklemi <span style="font-family:monospace;color:#86efac">r=k[NO]\u00b2[H\u2082]</span> bulunur \u2014 katsayılarla (2,2) UYUMSUZ oldu\u011fu i\u00e7in bu tepkime \u00c7OK BASAMAKLIdır.</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83d\udcd0 Tablo 1.7 \u2014 NO\u2082(g)+CO(g)\u2192NO(g)+CO\u2082(g)</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px;margin:8px 0"><tr style="background:rgba(255,255,255,.06)"><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">Deney</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">[NO\u2082]</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">[CO]</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">Hız (M/s)</th></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">1</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,10</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,010</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">1,2\u00d710\u207b\u00b3</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">2</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,10</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,040</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">4,8\u00d710\u207b\u00b3</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">3</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,20</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0,010</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">2,4\u00d710\u207b\u00b3</td></tr></table>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">1\u21922: [CO] 4 kat \u2192 hız 4 kat \u2192 CO\u2019ya g\u00f6re 1. derece. 1\u21923: [NO\u2082] 2 kat \u2192 hız 2 kat \u2192 NO\u2082\u2019ye g\u00f6re 1. derece.<br>' +
+      '\u2192 <span style="font-family:monospace;color:#86efac">r=k[NO\u2082][CO]</span>, tepkime derecesi=2.<br>' +
+      '<b>k hesabı</b> (1. deney): 1,2\u00d710\u207b\u00b3=k\u00d7(0,1)\u00d7(0,01) \u2192 <b>k=1,2</b>. <b>k\u2019nın birimi:</b> M/s = k\u00d7M\u00d7M \u2192 k=1/(sM).' +
+      '</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\ud83d\udcd0 Tablo 1.8 \u2014 Tepkime Derecesi ile Hız Sabiti Birimi</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:11px;margin:8px 0"><tr style="background:rgba(255,255,255,.06)"><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">Tepkime</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">Hız Denklemi</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">Derece</th><th style="padding:5px;border:1px solid rgba(255,255,255,.1)">k birimi</th></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1)">C(k)+O\u2082(g)\u2192CO\u2082(g)</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">r=k[O\u2082]</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">1</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">1/s</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1)">CaCO\u2083(k)\u2192CaO(k)+CO\u2082(g)</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">r=k</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">0</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">M/s</td></tr>' +
+      '<tr><td style="padding:5px;border:1px solid rgba(255,255,255,.1)">Mg(k)+2HCl\u2192MgCl\u2082+H\u2082</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">r=k[HCl]\u00b2</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">2</td><td style="padding:5px;border:1px solid rgba(255,255,255,.1);text-align:center">1/(sM)</td></tr></table>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.8">\u2192 Genel kural: hız sabiti birimi <b>1/(sM\u207f\u207b\u00b9)</b> olan tepkimenin derecesi <b>n</b>\u2019dir.</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9"><b>\u00d6rnek (1.11 Uygulama \u2014 g\u00f6l demiri):</b> Fe\u00b3\u207a(suda)+3OH\u207b(suda)\u2192Fe(OH)\u2083(k), r=k[Fe\u00b3\u207a][OH\u207b]\u00b3, k=0,005. 3 g\u00f6lden numune: [OH\u207b]=0,1M sabit, hızlar 2\u00d710\u207b\u2076, 8\u00d710\u207b\u2076, 32\u00d710\u207b\u2076 M/s. r=k[Fe\u00b3\u207a](0,1)\u00b3=0,005\u00d70,001\u00d7[Fe\u00b3\u207a] \u2192 A=2\u00d710\u207b\u2076/(5\u00d710\u207b\u2076)=<b>0,4M</b>, B=1,6M, C=6,4M (her deneyde hızın \u00f6nceki deneyin 4 katı olması, [Fe\u00b3\u207a]\u2019nın da 4 katına \u00e7ıktı\u011fını g\u00f6sterir).</p>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="slbl">\u26d3\ufe0f \u00c7ok Basamaklı Tepkimeler (Mekanizma)</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '6) \u00c7arpışma teorisine g\u00f6re İKİDEN FAZLA taneci\u011fin AYNI ANDA uygun geometride \u00e7arpışma olasılı\u011fı \u00e7ok d\u00fcş\u00fckt\u00fcr. Bu y\u00fczden b\u00f6yle tepkimeler genellikle ikili/\u00fc\u00e7l\u00fc ARA BASAMAKLARA ayrılarak ger\u00e7ekleşir. Bu t\u00fcr tepkimelere <b>\u00e7ok basamaklı tepkimeler</b> denir.<br><br>' +
+      '7) <b>\u00c7ok basamaklı tepkimelerde hızı YAVAŞ BASAMAK belirler.</b> Hız denklemi net tepkimeye g\u00f6re DE\u011eİL, yavaş basama\u011fa g\u00f6re yazılır.<br><br>' +
+      '8) \u00d6rnek: 2H\u2082O\u2082(suda)\u21922H\u2082O(s)+O\u2082(g) iki basamaktan oluşur:<br>' +
+      '&nbsp;&nbsp;I. basamak: H\u2082O\u2082+I\u207b\u2192H\u2082O+IO\u207b<br>' +
+      '&nbsp;&nbsp;II. basamak: H\u2082O\u2082+IO\u207b\u2192H\u2082O+O\u2082+I\u207b<br>' +
+      'Deneysel hız denklemi r=k[H\u2082O\u2082][I\u207b] olarak bulunmuştur \u2014 bu, I. basama\u011fın katsayılarıyla UYUMLU oldu\u011fu i\u00e7in <b>I. basamak yavaş (hız belirleyici) basamaktır.</b> (I\u207b katalizör, IO\u207b ara \u00fcr\u00fcnd\u00fcr; ikisi de net tepkimede g\u00f6r\u00fcnmez.)' +
+      '</p>' +
+      '<div style="background:#050510;border:1px solid rgba(245,158,11,.25);border-radius:12px;overflow:hidden;margin:10px 0"><canvas id="mgraf114" data-h="180" style="width:100%;display:block"></canvas></div>' +
+      '<p style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:10px">Grafik 1.14: 2 basamaklı tepkimenin PE-TK grafi\u011fi \u2014 1. basamak (b\u00fcy\u00fck Ea, endotermik) daha yavaş; 2. basamak hızlı; net tepkime ekzotermiktir</p>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.9">' +
+      '<b>\u00d6rnek (1.12 Uygulama \u2014 Kloroetan eldesi):</b><br>' +
+      '&nbsp;&nbsp;I. C\u2082H\u2084+HCl\u2192C\u2082H\u2085\u207a+Cl\u207b (b\u00fcy\u00fck E<sub>a</sub>, yavaş) &nbsp; II. C\u2082H\u2085\u207a+Cl\u207b\u2192C\u2082H\u2085Cl (k\u00fc\u00e7\u00fck E<sub>a</sub>, hızlı)<br>' +
+      '&nbsp;&nbsp;Net tepkime: <b>C\u2082H\u2084+HCl\u2192C\u2082H\u2085Cl</b>. Hız denklemi yavaş (I.) basama\u011fa g\u00f6re: <b>r=k[C\u2082H\u2084][HCl]</b>.<br><br>' +
+      '<b>\u00d6rnek (Nitrozil kl\u00fcr\u00fcr):</b> 2NO(g)+Cl\u2082(g)\u21922NOCl(g), r=k[NO][Cl\u2082] olarak verildi\u011fine g\u00f6re (katsayılarla UYUMSUZ, 2\u22601) tepkime <b>\u00e7ok basamaklıdır</b>; tepkime derecesi <b>iki</b>; yavaş basamak <b>NO(g)+Cl\u2082(g)\u2192\u00dcr\u00fcn</b> şeklinde olmalıdır (NO+\u00bdCl\u2082 de\u011fil, tam bir Cl\u2082 molek\u00fcl\u00fc ile); hız sabitinin birimi <b>1/(M\u00b7s)</b>; NO ve Cl\u2082 derişimi 2 katına \u00e7ıkınca hız <b>d\u00f6rt</b> katına \u00e7ıkar.' +
+      '</p>' +
+    '</div>';
+  }
+
+  function maarifBell(x, cx0, w, mu, sigma, amp){
+    // Basit çan eğrisi (Gauss benzeri) çizer, path olarak x noktalarını döndürür
+    var pts = [];
+    for (var px = 0; px <= w; px += 2) {
+      var xv = mu + (px - w*0.32) / (w*0.5) * sigma * 2.2;
+      var y = amp * Math.exp(-Math.pow(xv - mu, 2) / (2*sigma*sigma));
+      pts.push([cx0 + px, y]);
+    }
+    return pts;
+  }
+
+  function maarifDrawGraphs(){
+    // --- Grafik 1.4: Tanecik sayısı - Kinetik enerji (eşik değeri) ---
+    maarifChart('mgraf14', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 44, 14, 14, 30, 'Kinetik enerji', 'Tanecik sayısı');
+      var pts = [];
+      for (var i = 0; i <= 100; i++) {
+        var xf = i/100, xv = g.padL + xf*g.plotW;
+        var yv = Math.exp(-Math.pow((xf-0.32)*3.1, 2)) * (1 - xf*0.15);
+        pts.push([xv, g.padT + g.plotH - yv*g.plotH*0.92]);
+      }
+      var eşikX = g.padL + 0.58*g.plotW;
+      // Kırmızı alan (eşik ötesi)
+      x.beginPath(); x.moveTo(eşikX, g.padT+g.plotH);
+      pts.forEach(function(p){ if (p[0] >= eşikX) x.lineTo(p[0], p[1]); });
+      x.lineTo(g.padL+g.plotW, g.padT+g.plotH); x.closePath();
+      x.fillStyle = 'rgba(239,68,68,.45)'; x.fill();
+      // Eğri
+      x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); });
+      x.strokeStyle = '#f59e0b'; x.lineWidth = 2; x.stroke();
+      // Eşik çizgisi
+      x.strokeStyle = 'rgba(255,255,255,.5)'; x.setLineDash([4,3]); x.lineWidth = 1;
+      x.beginPath(); x.moveTo(eşikX, g.padT); x.lineTo(eşikX, g.padT+g.plotH); x.stroke(); x.setLineDash([]);
+      x.fillStyle = '#fca5a5'; x.font = '10px sans-serif'; x.textAlign = 'center';
+      x.fillText('Eşik değeri', eşikX, g.padT+g.plotH+16);
+    });
+
+    // --- Grafik 1.5: Endotermik PE-TK ---
+    maarifChart('mgraf15', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Tepkime koordinatı', 'Pot. enerji');
+      var reactY = g.padT + g.plotH*0.72, prodY = g.padT + g.plotH*0.42, peakY = g.padT + g.plotH*0.06;
+      drawPETK(x, g, reactY, prodY, peakY);
+      annotatePETK(x, g, reactY, prodY, peakY, 'Eai', 'Eag', '\u0394H>0');
+    });
+    // --- Grafik 1.6: Ekzotermik PE-TK ---
+    maarifChart('mgraf16', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Tepkime koordinatı', 'Pot. enerji');
+      var reactY = g.padT + g.plotH*0.42, prodY = g.padT + g.plotH*0.72, peakY = g.padT + g.plotH*0.06;
+      drawPETK(x, g, reactY, prodY, peakY);
+      annotatePETK(x, g, reactY, prodY, peakY, 'Eai', 'Eag', '\u0394H<0');
+    });
+
+    function drawPETK(x, g, reactY, prodY, peakY){
+      function px(f){ return g.padL + f*g.plotW; }
+      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2;
+      x.beginPath();
+      x.moveTo(px(0.02), reactY); x.lineTo(px(0.30), reactY);
+      x.bezierCurveTo(px(0.40), reactY, px(0.42), peakY, px(0.5), peakY);
+      x.bezierCurveTo(px(0.58), peakY, px(0.60), prodY, px(0.70), prodY);
+      x.lineTo(px(0.98), prodY);
+      x.stroke();
+      x.strokeStyle = 'rgba(255,255,255,.2)'; x.setLineDash([3,3]); x.lineWidth = 1;
+      x.beginPath(); x.moveTo(px(0.02), reactY); x.lineTo(px(0.98), reactY); x.stroke();
+      x.beginPath(); x.moveTo(px(0.30), prodY); x.lineTo(px(0.98), prodY); x.stroke();
+      x.setLineDash([]);
+    }
+    function annotatePETK(x, g, reactY, prodY, peakY, l1, l2, l3){
+      function px(f){ return g.padL + f*g.plotW; }
+      x.strokeStyle = 'rgba(255,255,255,.4)'; x.lineWidth = 1;
+      x.beginPath(); x.moveTo(px(0.5), reactY); x.lineTo(px(0.5), peakY); x.stroke();
+      x.beginPath(); x.moveTo(px(0.68), prodY); x.lineTo(px(0.68), peakY); x.stroke();
+      x.fillStyle = '#fcd34d'; x.font = 'bold 10px sans-serif'; x.textAlign = 'left';
+      x.fillText(l1, px(0.03), (reactY+peakY)/2);
+      x.fillStyle = '#93c5fd'; x.fillText(l2, px(0.70), (prodY+peakY)/2);
+      x.fillStyle = reactY < prodY ? '#fca5a5' : '#86efac';
+      x.fillText(l3, px(0.32), (reactY+prodY)/2+4);
+      x.fillStyle = 'rgba(255,255,255,.5)'; x.fillText('Tepkenler', px(0.03), reactY-6);
+      x.fillText('\u00dcr\u00fcnler', px(0.72), prodY-6);
+    }
+
+    // --- Grafik 1.7: H2O2 derişim-zaman ---
+    maarifChart('mgraf17', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman (s)', '[H\u2082O\u2082] mol/L');
+      var data = [[0,2.30],[200,2.00],[400,1.70],[600,1.50],[1200,1.00],[1800,0.60],[2600,0.30]];
+      function px(t){ return g.padL + (t/2600)*g.plotW; }
+      function py(c){ return g.padT + g.plotH - (c/2.30)*g.plotH; }
+      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.beginPath();
+      data.forEach(function(d,i2){ i2===0?x.moveTo(px(d[0]),py(d[1])):x.lineTo(px(d[0]),py(d[1])); });
+      x.stroke();
+      x.fillStyle = '#f59e0b';
+      data.forEach(function(d){ x.beginPath(); x.arc(px(d[0]), py(d[1]), 2.5, 0, 6.283); x.fill(); });
+    });
+
+    // --- Grafik 1.9/1.10: Sıcaklık etkisi (T1,T2 kinetik enerji dağılımı) ---
+    maarifChart('mgraf9', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Kinetik enerji', 'Molekül sayısı');
+      function curve(muF, sigF, ampF){
+        var pts = [];
+        for (var i = 0; i <= 100; i++) {
+          var f = i/100, xv = g.padL + f*g.plotW;
+          var xf = (f - muF) / sigF;
+          var yv = ampF * Math.exp(-xf*xf*2.2);
+          pts.push([xv, g.padT + g.plotH - yv*g.plotH*0.9]);
+        }
+        return pts;
+      }
+      var t1 = curve(0.28, 0.16, 1.0);
+      var t2 = curve(0.42, 0.22, 0.72);
+      var eşikF = 0.62, eşikX = g.padL + eşikF*g.plotW;
+      function fillBeyond(pts, col){
+        x.beginPath(); x.moveTo(eşikX, g.padT+g.plotH);
+        pts.forEach(function(p){ if (p[0] >= eşikX) x.lineTo(p[0], p[1]); });
+        x.lineTo(g.padL+g.plotW, g.padT+g.plotH); x.closePath();
+        x.fillStyle = col; x.fill();
+      }
+      fillBeyond(t2, 'rgba(239,68,68,.4)');
+      fillBeyond(t1, 'rgba(96,165,250,.5)');
+      function stroke(pts, col){ x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.strokeStyle=col; x.lineWidth=2; x.stroke(); }
+      stroke(t1, '#3b82f6'); stroke(t2, '#ef4444');
+      x.strokeStyle = 'rgba(255,255,255,.5)'; x.setLineDash([4,3]); x.lineWidth = 1;
+      x.beginPath(); x.moveTo(eşikX, g.padT); x.lineTo(eşikX, g.padT+g.plotH); x.stroke(); x.setLineDash([]);
+      x.textAlign = 'left'; x.font = '10px sans-serif';
+      x.fillStyle = '#93c5fd'; x.fillText('T\u2081 (düşük)', g.padL+4, g.padT+10);
+      x.fillStyle = '#fca5a5'; x.fillText('T\u2082 (yüksek)', g.padL+4, g.padT+24);
+      x.fillStyle = 'rgba(255,255,255,.5)'; x.fillText('Eşik', eşikX+3, g.padT+g.plotH-4);
+    });
+
+    // --- Grafik 1.11: Katalizörlü/katalizörsüz PE-TK ---
+    maarifChart('mgraf11', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Tepkime koordinatı', 'Pot. enerji');
+      var reactY = g.padT + g.plotH*0.55, prodY = g.padT + g.plotH*0.78;
+      function curve(peakY, col, dashed){
+        function px(f){ return g.padL + f*g.plotW; }
+        x.beginPath();
+        x.moveTo(px(0.02), reactY); x.lineTo(px(0.30), reactY);
+        x.bezierCurveTo(px(0.40), reactY, px(0.42), peakY, px(0.5), peakY);
+        x.bezierCurveTo(px(0.58), peakY, px(0.60), prodY, px(0.70), prodY);
+        x.lineTo(px(0.98), prodY);
+        x.strokeStyle = col; x.lineWidth = 2;
+        if (dashed) x.setLineDash([5,4]);
+        x.stroke(); x.setLineDash([]);
+      }
+      curve(g.padT + g.plotH*0.04, '#3b82f6', false);
+      curve(g.padT + g.plotH*0.30, '#22c55e', true);
+      x.fillStyle = '#3b82f6'; x.font = '10px sans-serif'; x.textAlign = 'left';
+      x.fillText('Katalizörsüz', g.padL+4, g.padT+8);
+      x.fillStyle = '#22c55e'; x.fillText('Katalizörlü', g.padL+4, g.padT+20);
+    });
+    // --- Grafik 1.12: Katalizörlü/katalizörsüz tanecik-KE dağılımı ---
+    maarifChart('mgraf12', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Kinetik enerji', 'Tanecik sayısı');
+      var pts = [];
+      for (var i = 0; i <= 100; i++) {
+        var f = i/100, xv = g.padL + f*g.plotW;
+        var yv = Math.exp(-Math.pow((f-0.3)*2.6, 2));
+        pts.push([xv, g.padT + g.plotH - yv*g.plotH*0.9]);
+      }
+      var eaCatF = 0.45, eaNoCatF = 0.68;
+      var eaCatX = g.padL+eaCatF*g.plotW, eaNoCatX = g.padL+eaNoCatF*g.plotW;
+      function fillFrom(fromX, col){
+        x.beginPath(); x.moveTo(fromX, g.padT+g.plotH);
+        pts.forEach(function(p){ if (p[0] >= fromX) x.lineTo(p[0], p[1]); });
+        x.lineTo(g.padL+g.plotW, g.padT+g.plotH); x.closePath();
+        x.fillStyle = col; x.fill();
+      }
+      fillFrom(eaCatX, 'rgba(96,165,250,.5)');
+      fillFrom(eaNoCatX, 'rgba(34,197,94,.55)');
+      x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); });
+      x.strokeStyle = '#f59e0b'; x.lineWidth = 2; x.stroke();
+      x.strokeStyle = 'rgba(255,255,255,.5)'; x.setLineDash([4,3]); x.lineWidth = 1;
+      x.beginPath(); x.moveTo(eaCatX, g.padT); x.lineTo(eaCatX, g.padT+g.plotH); x.stroke();
+      x.beginPath(); x.moveTo(eaNoCatX, g.padT); x.lineTo(eaNoCatX, g.padT+g.plotH); x.stroke();
+      x.setLineDash([]);
+      x.font = '9px sans-serif'; x.textAlign = 'center';
+      x.fillStyle = '#93c5fd'; x.fillText('Ea(kat)', eaCatX, g.padT+g.plotH+10);
+      x.fillStyle = '#86efac'; x.fillText('Ea(katsız)', eaNoCatX, g.padT-4);
+    });
+
+    // --- Grafik 1.13: Toz/Parça çinko H2 mol-zaman ---
+    maarifChart('mgraf13', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman', 'n(H\u2082)');
+      function curve(rate, col){
+        var pts = [];
+        for (var i = 0; i <= 100; i++) {
+          var f = i/100;
+          var yv = 1 - Math.exp(-rate*f*6);
+          pts.push([g.padL+f*g.plotW, g.padT+g.plotH-yv*g.plotH*0.85]);
+        }
+        x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); });
+        x.strokeStyle = col; x.lineWidth = 2.2; x.stroke();
+      }
+      curve(1.0, '#ef4444');
+      curve(0.4, '#3b82f6');
+      x.font = '10px sans-serif'; x.textAlign = 'left';
+      x.fillStyle = '#ef4444'; x.fillText('Toz \u00e7inko', g.padL+4, g.padT+10);
+      x.fillStyle = '#3b82f6'; x.fillText('Par\u00e7a \u00e7inko', g.padL+4, g.padT+22);
+    });
+
+    // --- Grafik 1.14: 2 basamaklı tepkime PE-TK ---
+    maarifChart('mgraf114', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Tepkime koordinatı', 'Pot. enerji');
+      function px(f){ return g.padL + f*g.plotW; }
+      var reactY = g.padT + g.plotH*0.55, midY = g.padT + g.plotH*0.62, prodY = g.padT + g.plotH*0.80;
+      var peak1Y = g.padT + g.plotH*0.03, peak2Y = g.padT + g.plotH*0.40;
+      x.beginPath();
+      x.moveTo(px(0.02), reactY); x.lineTo(px(0.14), reactY);
+      x.bezierCurveTo(px(0.20), reactY, px(0.22), peak1Y, px(0.30), peak1Y);
+      x.bezierCurveTo(px(0.38), peak1Y, px(0.40), midY, px(0.48), midY);
+      x.lineTo(px(0.55), midY);
+      x.bezierCurveTo(px(0.61), midY, px(0.63), peak2Y, px(0.70), peak2Y);
+      x.bezierCurveTo(px(0.77), peak2Y, px(0.79), prodY, px(0.86), prodY);
+      x.lineTo(px(0.98), prodY);
+      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.stroke();
+      x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '9px sans-serif'; x.textAlign = 'center';
+      x.fillText('1. basamak (yavaş)', px(0.24), peak1Y-6);
+      x.fillText('2. basamak (hızlı)', px(0.66), peak2Y-6);
+      x.fillText('Tepkenler', px(0.06), reactY-6);
+      x.fillText('Ara \u00fcr\u00fcn', px(0.5), midY-6);
+      x.fillText('\u00dcr\u00fcnler', px(0.90), prodY-6);
+    });
+  }
 
   // --- Başlat ---
   function init(){
