@@ -1,1 +1,1937 @@
+/* RONYA KİMYA — EKLENTİ PARÇA 2/4 (devamı — parça 1'den SONRA yüklenmelidir) */
+'use strict';
+  // ---------- 9c. Faraday hesaplayıcısı ----------
+  var ELZ_SP = [
+    {k:'Ag', l:'G\u00fcm\u00fc\u015f \u2014 Ag\u207a+e\u207b', M:108, n:1},
+    {k:'Cu', l:'Bak\u0131r \u2014 Cu\u00b2\u207a+2e\u207b', M:63.5, n:2},
+    {k:'Al', l:'Al\u00fcminyum \u2014 Al\u00b3\u207a+3e\u207b', M:27, n:3},
+    {k:'Zn', l:'\u00c7inko \u2014 Zn\u00b2\u207a+2e\u207b', M:65, n:2},
+    {k:'Ni', l:'Nikel \u2014 Ni\u00b2\u207a+2e\u207b', M:59, n:2},
+    {k:'Cr', l:'Krom \u2014 Cr\u00b3\u207a+3e\u207b', M:52, n:3},
+    {k:'Au', l:'Alt\u0131n \u2014 Au\u00b3\u207a+3e\u207b', M:197, n:3},
+    {k:'Na', l:'Sodyum \u2014 Na\u207a+e\u207b', M:23, n:1},
+    {k:'Pb', l:'Kur\u015fun \u2014 Pb\u00b2\u207a+2e\u207b', M:207, n:2},
+    {k:'H2', l:'H\u2082 gaz\u0131 \u2014 2H\u207a+2e\u207b', M:2, n:2, gas:1},
+    {k:'O2', l:'O\u2082 gaz\u0131 \u2014 4e\u207b', M:32, n:4, gas:1},
+    {k:'Cl2', l:'Cl\u2082 gaz\u0131 \u2014 2e\u207b', M:71, n:2, gas:1}
+  ];
+  var ELZ_F = 96500;
+
+  function elzSp(k){ for (var i = 0; i < ELZ_SP.length; i++) if (ELZ_SP[i].k === k) return ELZ_SP[i]; return ELZ_SP[0]; }
+  function elzSecs(){
+    var v = parseFloat((document.getElementById('fd-t') || {}).value);
+    var u = (document.getElementById('fd-tu') || {}).value || 's';
+    if (isNaN(v)) return NaN;
+    return u === 'sa' ? v * 3600 : u === 'dk' ? v * 60 : v;
+  }
+  function elzTimeStr(sec){
+    if (sec >= 3600) return (sec/3600).toFixed(2) + ' saat (' + Math.round(sec) + ' s)';
+    if (sec >= 60) return (sec/60).toFixed(2) + ' dakika (' + Math.round(sec) + ' s)';
+    return sec.toFixed(1) + ' saniye';
+  }
+
+  window.fdModeChanged = function(){
+    var u = (document.getElementById('fd-u') || {}).value;
+    var sp = elzSp((document.getElementById('fd-sp') || {}).value);
+    var show = function(id, on){ var e = document.getElementById(id); if (e) e.style.display = on ? '' : 'none'; };
+    show('fd-row-i', u !== 'I');
+    show('fd-row-t', u !== 't');
+    show('fd-row-m', u !== 'm');
+    var ml = document.getElementById('fd-m-lbl');
+    if (ml) ml.textContent = sp.gas ? 'Gaz Hacmi (L, NK)' : 'K\u00fctle (g)';
+  };
+
+  window.faradayRun = function(){
+    var u = (document.getElementById('fd-u') || {}).value;
+    var sp = elzSp((document.getElementById('fd-sp') || {}).value);
+    var out = document.getElementById('fd-out');
+    if (!out) return;
+    var I = parseFloat((document.getElementById('fd-i') || {}).value);
+    var t = elzSecs();
+    var mv = parseFloat((document.getElementById('fd-m') || {}).value);
+    var steps = [], res = '';
+    try {
+      if (u === 'm') {
+        if (isNaN(I) || isNaN(t)) throw new Error('Ak\u0131m ve s\u00fcreyi gir.');
+        var Q = I * t, moleE = Q / ELZ_F, mol = moleE / sp.n, m2 = mol * sp.M;
+        steps.push('Q = I \u00d7 t = ' + I + ' \u00d7 ' + Math.round(t) + ' = ' + Q.toFixed(0) + ' C');
+        steps.push('mol e\u207b = Q / F = ' + Q.toFixed(0) + ' / 96500 = ' + moleE.toFixed(4) + ' mol');
+        steps.push('mol madde = mol e\u207b / n = ' + moleE.toFixed(4) + ' / ' + sp.n + ' = ' + mol.toFixed(4) + ' mol');
+        steps.push('m = mol \u00d7 M = ' + mol.toFixed(4) + ' \u00d7 ' + sp.M + ' = ' + m2.toFixed(3) + ' g');
+        res = '<b>' + m2.toFixed(3) + ' g</b>';
+        if (sp.gas) { steps.push('V(NK) = mol \u00d7 22.4 = ' + (mol * 22.4).toFixed(3) + ' L'); res += ' \u00b7 <b>' + (mol*22.4).toFixed(3) + ' L (NK)</b>'; }
+      } else {
+        if (isNaN(mv)) throw new Error(sp.gas ? 'Gaz hacmini (L, NK) gir.' : 'K\u00fctleyi gir.');
+        var mol2 = sp.gas ? mv / 22.4 : mv / sp.M;
+        var moleE2 = mol2 * sp.n, Q2 = moleE2 * ELZ_F;
+        steps.push(sp.gas ? 'mol = V / 22.4 = ' + mv + ' / 22.4 = ' + mol2.toFixed(4) + ' mol'
+                          : 'mol = m / M = ' + mv + ' / ' + sp.M + ' = ' + mol2.toFixed(4) + ' mol');
+        steps.push('mol e\u207b = mol \u00d7 n = ' + mol2.toFixed(4) + ' \u00d7 ' + sp.n + ' = ' + moleE2.toFixed(4) + ' mol');
+        steps.push('Q = mol e\u207b \u00d7 F = ' + moleE2.toFixed(4) + ' \u00d7 96500 = ' + Q2.toFixed(0) + ' C');
+        if (u === 't') {
+          if (isNaN(I)) throw new Error('Ak\u0131m\u0131 gir.');
+          var tt = Q2 / I;
+          steps.push('t = Q / I = ' + Q2.toFixed(0) + ' / ' + I + ' = ' + tt.toFixed(1) + ' s');
+          res = '<b>' + elzTimeStr(tt) + '</b>';
+        } else {
+          if (isNaN(t)) throw new Error('S\u00fcreyi gir.');
+          var ii = Q2 / t;
+          steps.push('I = Q / t = ' + Q2.toFixed(0) + ' / ' + Math.round(t) + ' = ' + ii.toFixed(3) + ' A');
+          res = '<b>' + ii.toFixed(3) + ' A</b>';
+        }
+      }
+      var html = '<div class="rb"><div class="rl">Sonu\u00e7</div><div class="rv" style="font-size:20px">' + res + '</div></div>';
+      html += '<div style="background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:12px;margin-top:8px">' +
+        '<div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Ad\u0131m Ad\u0131m \u00c7\u00f6z\u00fcm (F = 96500 C/mol)</div>';
+      steps.forEach(function(s2, i2){ html += '<div style="font-size:12.5px;color:var(--tx2);padding:3px 0;font-family:Space Grotesk,sans-serif"><span style="color:var(--ac2);font-weight:700">' + (i2+1) + '.</span> ' + s2 + '</div>'; });
+      html += '</div>';
+      out.innerHTML = html;
+    } catch (err) {
+      out.innerHTML = '<div style="font-size:13px;color:var(--yw)">' + err.message + '</div>';
+    }
+  };
+
+  window.seriRun = function(){
+    var A = elzSp((document.getElementById('sr-a') || {}).value);
+    var B = elzSp((document.getElementById('sr-b') || {}).value);
+    var mA = parseFloat((document.getElementById('sr-m') || {}).value);
+    var out = document.getElementById('sr-out');
+    if (!out) return;
+    if (isNaN(mA)) { out.innerHTML = '<div style="font-size:13px;color:var(--yw)">Birinci h\u00fccredeki k\u00fctleyi gir.</div>'; return; }
+    var mB = mA * (B.M / B.n) / (A.M / A.n);
+    var html = '<div class="rb"><div class="rl">' + B.k + ' k\u00fctlesi</div><div class="rv" style="font-size:20px">' + mB.toFixed(3) + ' g' +
+      (B.gas ? ' \u00b7 ' + ((mB / B.M) * 22.4).toFixed(3) + ' L (NK)' : '') + '</div></div>';
+    html += '<div style="font-size:12px;color:var(--tx2);margin-top:8px;line-height:1.7">Seri ba\u011fl\u0131 h\u00fccrelerden AYNI y\u00fck (Q) ge\u00e7er \u2192 k\u00fctleler <b>e\u015fde\u011fer k\u00fctlelerle (M/n)</b> orant\u0131l\u0131d\u0131r:<br>' +
+      'm(' + B.k + ') = ' + mA + ' \u00d7 (' + B.M + '/' + B.n + ') / (' + A.M + '/' + A.n + ') = <b>' + mB.toFixed(3) + ' g</b></div>';
+    out.innerHTML = html;
+  };
+
+  // ---------- 9d. Kaplama senaryoları ----------
+  var ELZ_SCEN = [
+    { id: 'ag', icon: '\ud83e\udd44', title: 'Demir ka\u015f\u0131\u011f\u0131 g\u00fcm\u00fc\u015fle kapla',
+      intro: 'Bir demir ka\u015f\u0131\u011f\u0131 g\u00fcm\u00fc\u015fle kaplamak istiyorsun. D\u00fczene\u011fi do\u011fru kur:',
+      qs: [
+        { q: 'Ka\u015f\u0131k hangi elektrot olmal\u0131?', opts: ['Katot (\u2212)', 'Anot (+)', 'Fark etmez', 'Tuz k\u00f6pr\u00fcs\u00fc'], a: 0,
+          why: 'Kaplanacak e\u015fya HER ZAMAN katottur \u2014 metal iyonlar\u0131 (Ag\u207a) katotta indirgenerek e\u015fyan\u0131n \u00fczerinde birikir.' },
+        { q: 'Anot ne olmal\u0131?', opts: ['G\u00fcm\u00fc\u015f \u00e7ubuk', 'Demir \u00e7ubuk', 'Bak\u0131r tel', 'Grafit'], a: 0,
+          why: 'Aktif g\u00fcm\u00fc\u015f anot \u00e7\u00f6z\u00fcnerek (Ag \u2192 Ag\u207a + e\u207b) \u00e7\u00f6zeltideki Ag\u207a deri\u015fimini sabit tutar \u2014 kaplama kal\u0131n ve d\u00fczg\u00fcn olur.' },
+        { q: '\u00c7\u00f6zelti ne olmal\u0131?', opts: ['AgNO\u2083 \u00e7\u00f6zeltisi', 'FeSO\u2084 \u00e7\u00f6zeltisi', 'NaCl \u00e7\u00f6zeltisi', 'Saf su'], a: 0,
+          why: '\u00c7\u00f6zelti mutlaka KAPLAYAN metalin iyonunu i\u00e7ermelidir (Ag\u207a).' }
+      ] },
+    { id: 'cu', icon: '\ud83d\udfe0', title: 'Bak\u0131r rafinasyonu (saf bak\u0131r \u00fcret)',
+      intro: 'Saf olmayan (blister) bak\u0131rdan %99.99 saf bak\u0131r elde edeceksin:',
+      qs: [
+        { q: 'Saf olmayan bak\u0131r hangi elektrot olur?', opts: ['Anot (+)', 'Katot (\u2212)', '\u00c7\u00f6zeltiye at\u0131l\u0131r', 'Tuz k\u00f6pr\u00fcs\u00fc'], a: 0,
+          why: 'Saf olmayan bak\u0131r ANOTTUR \u2014 \u00e7\u00f6z\u00fcnerek Cu\u00b2\u207a verir; saf bak\u0131r ise ince levha halinde katottur ve orada birikir.' },
+        { q: '\u00c7\u00f6zelti ne olmal\u0131?', opts: ['CuSO\u2084 \u00e7\u00f6zeltisi', 'NaCl \u00e7\u00f6zeltisi', 'AgNO\u2083 \u00e7\u00f6zeltisi', 'H\u2082SO\u2084 (deri\u015fik)'], a: 0,
+          why: 'Cu\u00b2\u207a i\u00e7eren \u00e7\u00f6zelti gerekir; elektroliz boyunca Cu\u00b2\u207a deri\u015fimi sabit kal\u0131r (anottan gelen = katotta biriken).' },
+        { q: 'Anot \u00e7amuru nedir?', opts: ['Alt\u0131n-g\u00fcm\u00fc\u015f gibi soy safs\u0131zl\u0131klar', '\u00c7\u00f6z\u00fcnen bak\u0131r', 'S\u00fclfat tuzlar\u0131', 'Grafit tozu'], a: 0,
+          why: 'Bak\u0131rdan daha SOY (aktifli\u011fi d\u00fc\u015f\u00fck) metaller y\u00fckseltgenemez, anodun dibine \u00e7\u00f6ker \u2014 bu \u00e7amurdan alt\u0131n ve g\u00fcm\u00fc\u015f geri kazan\u0131l\u0131r.' }
+      ] },
+    { id: 'au', icon: '\ud83d\udc8d', title: 'Kolyeyi alt\u0131nla kapla',
+      intro: 'G\u00fcm\u00fc\u015f bir kolyeyi alt\u0131nla kaplayacaks\u0131n:',
+      qs: [
+        { q: 'Kolye nereye ba\u011flan\u0131r?', opts: ['G\u00fc\u00e7 kayna\u011f\u0131n\u0131n (\u2212) ucuna', 'G\u00fc\u00e7 kayna\u011f\u0131n\u0131n (+) ucuna', '\u0130ki elektrot aras\u0131na', 'Toprak hatt\u0131na'], a: 0,
+          why: '(\u2212) u\u00e7 = katot. Elektronlar kolyeye akar, Au\u00b3\u207a orada indirgenip birikir.' },
+        { q: 'Kolyeyi yanl\u0131\u015fl\u0131kla (+) uca ba\u011flarsan ne olur?', opts: ['Kaplama olmaz, kolye \u00e7\u00f6z\u00fcnebilir', 'Daha h\u0131zl\u0131 kaplan\u0131r', 'Hi\u00e7bir \u015fey de\u011fi\u015fmez', 'Kolye k\u0131r\u0131l\u0131r'], a: 0,
+          why: '(+) u\u00e7 = anot = y\u00fckseltgenme. Kolye kaplanmak yerine \u00e7\u00f6z\u00fcnmeye ba\u015flar \u2014 tam tersi etki!' },
+        { q: 'Kaplanan alt\u0131n k\u00fctlesi neye ba\u011fl\u0131d\u0131r?', opts: ['Ak\u0131m \u00d7 s\u00fcre (ge\u00e7en y\u00fck)', 'Sadece \u00e7\u00f6zelti s\u0131cakl\u0131\u011f\u0131na', 'Kolyenin rengine', 'Kab\u0131n hacmine'], a: 0,
+          why: 'Faraday yasas\u0131: m = M\u00b7I\u00b7t / (n\u00b7F). Ge\u00e7en y\u00fck (Q = I\u00b7t) artt\u0131k\u00e7a biriken k\u00fctle artar.' }
+      ] }
+  ];
+  var elzScenIdx = 0, elzScenAns = {};
+
+  function elzScenHTML(){
+    var sc = ELZ_SCEN[elzScenIdx];
+    var done = sget('rk_flags', {}).elzs || [];
+    var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
+      '<button type="button" class="ob" onclick="elzScenNav(-1)" ' + (elzScenIdx === 0 ? 'disabled style="opacity:.3"' : '') + '>\u2190</button>' +
+      '<div style="font-size:11px;color:var(--tx3);font-weight:700">Senaryo ' + (elzScenIdx + 1) + '/' + ELZ_SCEN.length + ' \u00b7 Tamamlanan: ' + done.length + '/3</div>' +
+      '<button type="button" class="ob" onclick="elzScenNav(1)" ' + (elzScenIdx === ELZ_SCEN.length - 1 ? 'disabled style="opacity:.3"' : '') + '>\u2192</button></div>';
+    html += '<div style="font-family:Space Grotesk,sans-serif;font-size:17px;font-weight:800;color:#fff;margin-bottom:4px">' + sc.icon + ' ' + sc.title + '</div>';
+    html += '<p style="font-size:13px;color:var(--tx2);margin-bottom:14px;line-height:1.6">' + sc.intro + '</p>';
+    for (var i = 0; i < sc.qs.length; i++) {
+      var q = sc.qs[i], picked = elzScenAns[sc.id + i];
+      html += '<div style="margin-bottom:14px">' +
+        '<div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:8px">' + (i + 1) + ') ' + q.q + '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
+      for (var o = 0; o < q.opts.length; o++) {
+        var cls = 'ob2', dis = '';
+        if (picked !== undefined) {
+          dis = 'disabled';
+          if (o === q.a) cls = 'ob2 cor';
+          else if (o === picked) cls = 'ob2 wro';
+        }
+        html += '<button type="button" class="' + cls + '" ' + dis + ' onclick="elzScenPick(' + i + ',' + o + ')" style="font-size:12.5px">' + q.opts[o] + '</button>';
+      }
+      html += '</div>';
+      if (picked !== undefined)
+        html += '<div style="font-size:12px;color:' + (picked === q.a ? '#22c55e' : '#f87171') + ';margin-top:6px;line-height:1.6">' +
+          (picked === q.a ? '\u2713 ' : '\u2717 ') + q.why + '</div>';
+      html += '</div>';
+    }
+    var allDone = sc.qs.every(function(_, i2){ return elzScenAns[sc.id + i2] !== undefined; });
+    if (allDone) {
+      var allCorrect = sc.qs.every(function(q2, i3){ return elzScenAns[sc.id + i3] === q2.a; });
+      html += '<div style="background:' + (allCorrect ? 'rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)' : 'rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3)') + ';border-radius:var(--r);padding:12px;font-size:13px;font-weight:600;color:' + (allCorrect ? '#22c55e' : '#f59e0b') + '">' +
+        (allCorrect ? '\ud83c\udf89 M\u00fckemmel \u2014 d\u00fczenek do\u011fru kuruldu!' : 'Senaryo bitti \u2014 a\u00e7\u0131klamalar\u0131 oku, sonra tekrar dene!') +
+        ' <button type="button" class="ob" style="margin-left:8px" onclick="elzScenReset()">\u21bb Tekrar</button></div>';
+    }
+    return html;
+  }
+  window.elzScenPick = function(qi, oi){
+    var sc = ELZ_SCEN[elzScenIdx];
+    if (elzScenAns[sc.id + qi] !== undefined) return;
+    elzScenAns[sc.id + qi] = oi;
+    var allDone = sc.qs.every(function(_, i2){ return elzScenAns[sc.id + i2] !== undefined; });
+    var allCorrect = allDone && sc.qs.every(function(q2, i3){ return elzScenAns[sc.id + i3] === q2.a; });
+    if (allCorrect) {
+      var fl = sget('rk_flags', {});
+      fl.elzs = fl.elzs || [];
+      if (fl.elzs.indexOf(sc.id) === -1) { fl.elzs.push(sc.id); sset('rk_flags', fl); }
+      try { checkBadges(true); } catch (e) {}
+    }
+    var box = document.getElementById('elz-scen');
+    if (box) box.innerHTML = elzScenHTML();
+  };
+  window.elzScenNav = function(d){
+    elzScenIdx = Math.max(0, Math.min(ELZ_SCEN.length - 1, elzScenIdx + d));
+    var box = document.getElementById('elz-scen');
+    if (box) box.innerHTML = elzScenHTML();
+    try { capSetScenario(elzScenIdx); } catch (e) {}
+  };
+  window.elzScenReset = function(){
+    var sc = ELZ_SCEN[elzScenIdx];
+    for (var i = 0; i < sc.qs.length; i++) delete elzScenAns[sc.id + i];
+    var box = document.getElementById('elz-scen');
+    if (box) box.innerHTML = elzScenHTML();
+  };
+
+  // ---------- 9e. Ekran kurulumu ----------
+  function setupElz(){
+    if (document.getElementById('s-elz')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var spOpts = '';
+    ELZ_SP.forEach(function(s){ spOpts += '<option value="' + s.k + '">' + s.l + ' (M=' + s.M + ', n=' + s.n + ')</option>'; });
+    var modeBtns = '';
+    Object.keys(ELZ_MODES).forEach(function(k, i){
+      modeBtns += '<button type="button" class="ob' + (i === 0 ? ' sel2' : '') + '" style="flex-shrink:0" onclick="elzSetMode(\'' + k + '\',this)">' + ELZ_MODES[k].name + '</button>';
+    });
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-elz" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udd0b Elektroliz Laboratuvar\u0131</h1>' +
+        '<p class="psub">3D sim\u00fclasyon, Faraday hesaplar\u0131 ve kaplama senaryolar\u0131 \u2014 galvanik h\u00fccrenin z\u0131tt\u0131: elektrik enerjisiyle Y\u00dcR\u00dcT\u00dcLEN tepkimeler.</p>' +
+        '<div class="tabs" id="elz-tabs">' +
+          '<button class="tab on" onclick="elzTabGo(0)">\u26a1 3D Sim\u00fclasyon</button>' +
+          '<button class="tab" onclick="elzTabGo(1)">\ud83e\uddee Faraday</button>' +
+          '<button class="tab" onclick="elzTabGo(2)">\ud83e\udd48 Kaplama</button>' +
+          '<button class="tab" onclick="elzTabGo(3)">\ud83d\udd17 Seri Kaplar</button>' +
+        '</div>' +
+        '<div id="elz-tps">' +
+          // --- TAB 1: 3D ---
+          '<div class="tp on">' +
+            '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:10px"><div style="display:flex;gap:6px;min-width:max-content">' + modeBtns + '</div></div>' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:10px">' +
+              '<canvas id="elzCv" style="width:100%;display:block;touch-action:none" height="340"></canvas>' +
+            '</div>' +
+            '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:14px">' +
+              '<button type="button" class="ob" onclick="elzToggleSpin()">\ud83d\udd04 Oto-D\u00f6nd\u00fcr</button>' +
+              '<button type="button" class="ob" onclick="elzResetView()">\ud83c\udfaf S\u0131f\u0131rla</button>' +
+              '<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--br);border-radius:100px;padding:6px 14px">' +
+                '<span style="font-size:11px;color:var(--tx3);font-weight:700">Ak\u0131m</span>' +
+                '<input type="range" min="3" max="30" value="12" oninput="elzSetCur(this.value)" style="width:110px">' +
+              '</div>' +
+            '</div>' +
+            '<div id="elz-half"></div>' +
+            '<div class="card" style="margin-top:12px"><div class="slbl">Galvanik \u2194 Elektrolitik</div>' +
+              '<div style="font-size:12px;color:var(--tx2);line-height:1.9">' +
+                '\u26a1 <b>Galvanik (pil):</b> \u0130stemli tepkime \u2192 elektrik \u00fcretir. Anot (\u2212), Katot (+).<br>' +
+                '\ud83d\udd0b <b>Elektrolitik:</b> Elektrik \u2192 istemsiz tepkimeyi zorlar. Anot (+), Katot (\u2212).<br>' +
+                '\ud83d\udccc Her ikisinde de: <b>anot = y\u00fckseltgenme, katot = indirgenme</b> \u2014 de\u011fi\u015fen sadece i\u015faretlerdir!' +
+              '</div></div>' +
+          '</div>' +
+          // --- TAB 2: Faraday ---
+          '<div class="tp">' +
+            '<div class="card" style="margin-bottom:12px">' +
+              '<div class="fbox">m = M \u00b7 I \u00b7 t / (n \u00b7 F)</div>' +
+              '<div class="g2" style="margin-bottom:10px">' +
+                '<div><div class="slbl">Bilinmeyen</div><select class="sel" id="fd-u" onchange="fdModeChanged()"><option value="m">K\u00fctle / Hacim</option><option value="t">S\u00fcre t</option><option value="I">Ak\u0131m I</option></select></div>' +
+                '<div><div class="slbl">T\u00fcr</div><select class="sel" id="fd-sp" onchange="fdModeChanged()">' + spOpts + '</select></div>' +
+              '</div>' +
+              '<div class="g2" style="margin-bottom:10px">' +
+                '<div id="fd-row-i"><div class="slbl">Ak\u0131m I (A)</div><input type="number" id="fd-i" class="inp" placeholder="\u00f6rn: 5"></div>' +
+                '<div id="fd-row-t"><div class="slbl">S\u00fcre</div><div style="display:flex;gap:6px"><input type="number" id="fd-t" class="inp" placeholder="..."><select class="sel" id="fd-tu" style="width:76px"><option value="s">s</option><option value="dk">dk</option><option value="sa">sa</option></select></div></div>' +
+              '</div>' +
+              '<div id="fd-row-m" style="display:none;margin-bottom:10px"><div class="slbl" id="fd-m-lbl">K\u00fctle (g)</div><input type="number" id="fd-m" class="inp" placeholder="..."></div>' +
+              '<button type="button" class="btn bp bfull" onclick="faradayRun()">Hesapla</button>' +
+              '<div id="fd-out" style="margin-top:12px"></div>' +
+            '</div>' +
+            '<div class="card">' +
+              '<div class="slbl">\ud83d\udd17 Seri Ba\u011fl\u0131 H\u00fccreler</div>' +
+              '<p style="font-size:12px;color:var(--tx2);margin-bottom:10px;line-height:1.6">Ayn\u0131 devrede seri ba\u011fl\u0131 iki h\u00fccre \u2014 birinde biriken k\u00fctleden di\u011ferini bul.</p>' +
+              '<div class="g2" style="margin-bottom:10px">' +
+                '<div><div class="slbl">1. H\u00fccre</div><select class="sel" id="sr-a">' + spOpts + '</select></div>' +
+                '<div><div class="slbl">Biriken (g)</div><input type="number" id="sr-m" class="inp" placeholder="\u00f6rn: 10.8"></div>' +
+              '</div>' +
+              '<div style="margin-bottom:10px"><div class="slbl">2. H\u00fccre</div><select class="sel" id="sr-b">' + spOpts + '</select></div>' +
+              '<button type="button" class="btn bp bfull" onclick="seriRun()">Hesapla</button>' +
+              '<div id="sr-out" style="margin-top:12px"></div>' +
+            '</div>' +
+          '</div>' +
+          // --- TAB 3: Kaplama ---
+          '<div class="tp">' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:10px">' +
+              '<div id="cap-title" style="text-align:center;padding:8px;font-size:12px;color:#a5b4fc;font-weight:700"></div>' +
+              '<canvas id="cap-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+            '</div>' +
+            '<div style="display:flex;gap:8px;margin-bottom:12px">' +
+              '<button type="button" class="ob sel2" style="flex:1" onclick="capSetMode(true,this)">\u2705 Do\u011fru Ba\u011flant\u0131</button>' +
+              '<button type="button" class="ob" style="flex:1" onclick="capSetMode(false,this)">\u274c Yanl\u0131\u015f Ba\u011flant\u0131</button>' +
+            '</div>' +
+            '<div class="card" id="elz-scen"></div>' +
+          '</div>' +
+          // --- TAB 4: Seri Kaplar ---
+          '<div class="tp">' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+              '<canvas id="ss-cv" style="width:100%;display:block;touch-action:none" height="280"></canvas>' +
+            '</div>' +
+            '<div class="card" style="margin-bottom:12px">' +
+              '<p style="font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.6">Seri ba\u011fl\u0131 kaplardan <b>ayn\u0131 y\u00fck (Q = I\u00b7t)</b> ge\u00e7er. Ak\u0131m\u0131 ve s\u00fcreyi kayd\u0131rarak veya elle girerek her kab\u0131n elektrotlar\u0131nda neyin, ne kadar olu\u015ftu\u011funu canl\u0131 izle.</p>' +
+              '<div style="margin-bottom:12px"><div class="slbl">Kap Say\u0131s\u0131</div><div style="display:flex;gap:8px">' +
+                '<button type="button" class="ob sel2" onclick="ssSetCount(2,this)">2 Kap</button>' +
+                '<button type="button" class="ob" onclick="ssSetCount(3,this)">3 Kap</button>' +
+              '</div></div>' +
+              '<div id="ss-cells"></div>' +
+              '<div style="margin-top:4px;margin-bottom:10px">' +
+                '<div class="slbl">Ak\u0131m I (A)</div>' +
+                '<div style="display:flex;gap:10px;align-items:center">' +
+                  '<input type="range" id="ss-i-sl" min="1" max="200" value="50" oninput="ssSync(\'i\',\'sl\')" style="flex:1">' +
+                  '<input type="number" id="ss-i-num" class="inp" value="5.000" step="0.001" style="width:96px" oninput="ssSync(\'i\',\'num\')">' +
+                '</div></div>' +
+              '<div>' +
+                '<div class="slbl">S\u00fcre t</div>' +
+                '<div style="display:flex;gap:10px;align-items:center">' +
+                  '<input type="range" id="ss-t-sl" min="1" max="180" value="30" oninput="ssSync(\'t\',\'sl\')" style="flex:1">' +
+                  '<input type="number" id="ss-t-num" class="inp" value="30" style="width:70px" oninput="ssSync(\'t\',\'num\')">' +
+                  '<select class="sel" id="ss-tu" style="width:66px" onchange="ssSync(\'t\',\'num\')"><option value="dk">dk</option><option value="s">s</option><option value="sa">sa</option></select>' +
+                '</div></div>' +
+            '</div>' +
+            '<div id="ss-q" style="font-size:12px;color:var(--tx2);line-height:1.7;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:10px 12px;margin-bottom:10px"></div>' +
+            '<div id="ss-res"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>');
+
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-elz') === -1) SCREENS.push('s-elz');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-elz'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-elz" onclick="nav(\'elz\')">\ud83d\udd0b Elektroliz Laboratuvar\u0131</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-elz'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-elz" onclick="nav(\'elz\')"><div class="ti">\ud83d\udd0b</div><div class="tt">Elektroliz Laboratuvar\u0131</div><div class="td">3D sim\u00fclasyon, Faraday hesaplar\u0131, kaplama senaryolar\u0131.</div></div>');
+
+    // Rozet: 🔋 Elektrolizci
+    try {
+      BADGES.push({ id: 'elz', e: '\ud83d\udd0b', n: 'Elektrolizci', d: '3 kaplama senaryosunu do\u011fru tamamla',
+                    f: function(s){ return ((s.flags.elzs || []).length) >= 3; } });
+    } catch (e) {}
+
+    var box = document.getElementById('elz-scen');
+    if (box) box.innerHTML = elzScenHTML();
+    fdModeChanged();
+    ssBuild(); ssRun();
+    capSetScenario(elzScenIdx);
+    // Faraday'da seçim değişince satır görünürlüğü doğru kalsın
+    var fsp = document.getElementById('fd-sp');
+    if (fsp) fsp.addEventListener('change', window.fdModeChanged);
+  }
+
+  // ---------- 9f. Seri Kaplar Canlı Simülatörü ----------
+  // Seri bağlı 2-3 elektroliz kabı: hepsinden AYNI yük (Q) geçer.
+  // Her kabın katot ve anot ürünleri, I ve t değiştikçe canlı hesaplanır.
+  var ELZ_CELLS = [
+    {k:'nacl_m',   name:'Erimi\u015f NaCl',              cat:{p:'Na(s)', M:23, n:1},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'mgcl2',    name:'Erimi\u015f MgCl\u2082',        cat:{p:'Mg(s)', M:24, n:2},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'cacl2',    name:'Erimi\u015f CaCl\u2082',        cat:{p:'Ca(s)', M:40, n:2},            an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'al2o3',    name:'Erimi\u015f Al\u2082O\u2083',   cat:{p:'Al(s)', M:27, n:3},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'nacl_a',   name:'Sulu NaCl (deri\u015fik)',      cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'water',    name:'Su (H\u2082SO\u2084\u2019l\u00fc)', cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'na2so4',   name:'Sulu Na\u2082SO\u2084',         cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'ki',       name:'Sulu KI',                        cat:{p:'H\u2082(g)', M:2, n:2, gas:1}, an:{p:'I\u2082(k)', M:254, n:2}},
+    {k:'cuso4_pt', name:'Sulu CuSO\u2084 (Pt anot)',     cat:{p:'Cu(s)', M:63.5, n:2},          an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'cuso4_cu', name:'CuSO\u2084 (Cu anot)',          cat:{p:'Cu(s)', M:63.5, n:2},          an:{p:'Cu \u00e7\u00f6z\u00fcn\u00fcr', M:63.5, n:2, diss:1}},
+    {k:'agno3_pt', name:'Sulu AgNO\u2083 (Pt anot)',     cat:{p:'Ag(s)', M:108, n:1},           an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'agno3_ag', name:'AgNO\u2083 (Ag anot)',          cat:{p:'Ag(s)', M:108, n:1},           an:{p:'Ag \u00e7\u00f6z\u00fcn\u00fcr', M:108, n:1, diss:1}},
+    {k:'znso4',    name:'Sulu ZnSO\u2084 (Pt)',          cat:{p:'Zn(s)', M:65, n:2},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'niso4',    name:'Sulu NiSO\u2084 (Pt)',          cat:{p:'Ni(s)', M:59, n:2},            an:{p:'O\u2082(g)', M:32, n:4, gas:1}},
+    {k:'crcl3',    name:'Sulu CrCl\u2083 (deri\u015fik)', cat:{p:'Cr(s)', M:52, n:3},           an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'aucl3',    name:'Sulu AuCl\u2083 (deri\u015fik)', cat:{p:'Au(s)', M:197, n:3},          an:{p:'Cl\u2082(g)', M:71, n:2, gas:1}},
+    {k:'pbno3',    name:'Sulu Pb(NO\u2083)\u2082 (Pt)',  cat:{p:'Pb(s)', M:207, n:2},           an:{p:'O\u2082(g)', M:32, n:4, gas:1}}
+  ];
+  var ssCount = 2;
+  var ssSel = ['agno3_pt', 'cuso4_pt', 'water'];
+
+  function ssCellDef(k){
+    for (var i = 0; i < ELZ_CELLS.length; i++) if (ELZ_CELLS[i].k === k) return ELZ_CELLS[i];
+    return ELZ_CELLS[0];
+  }
+  function ssFmt(v){
+    if (v >= 100) return v.toFixed(1);
+    if (v >= 1) return v.toFixed(2);
+    return v.toFixed(3);
+  }
+
+  function ssBuild(){
+    var wrap = document.getElementById('ss-cells');
+    if (!wrap) return;
+    var opts = '';
+    for (var c = 0; c < ELZ_CELLS.length; c++)
+      opts += '<option value="' + ELZ_CELLS[c].k + '">' + ELZ_CELLS[c].name + '</option>';
+    var html = '';
+    for (var i = 0; i < ssCount; i++) {
+      html += '<div style="margin-bottom:8px"><div class="slbl">Kap ' + (i + 1) + '</div>' +
+        '<select class="sel" id="ss-c' + i + '" onchange="ssSelChanged(' + i + ', this.value)">' + opts + '</select></div>';
+    }
+    wrap.innerHTML = html;
+    for (var j = 0; j < ssCount; j++) {
+      var sel = document.getElementById('ss-c' + j);
+      if (sel) sel.value = ssSel[j];
+    }
+  }
+  window.ssSelChanged = function(i, v){ ssSel[i] = v; ssRun(); };
+  window.ssSetCount = function(n, btn){ ssCount = n; if (btn) selectInRow(btn); ssBuild(); ssRun(); };
+
+  function ssSecs(){
+    var v = parseFloat((document.getElementById('ss-t-num') || {}).value);
+    var u = (document.getElementById('ss-tu') || {}).value || 'dk';
+    if (isNaN(v) || v <= 0) return NaN;
+    return u === 'sa' ? v * 3600 : u === 'dk' ? v * 60 : v;
+  }
+  // Kaydırıcı ↔ sayı kutusu senkronu
+  window.ssSync = function(which, from){
+    var sl = document.getElementById('ss-' + which + '-sl');
+    var num = document.getElementById('ss-' + which + '-num');
+    if (!sl || !num) return;
+    if (which === 'i') {
+      if (from === 'sl') num.value = (sl.value / 10).toFixed(3);
+      else { var v = parseFloat(num.value); if (!isNaN(v)) sl.value = Math.max(1, Math.min(200, Math.round(v * 10))); }
+    } else { // t (kaydırıcı dakika cinsinden)
+      if (from === 'sl') {
+        num.value = sl.value;
+        var tu = document.getElementById('ss-tu');
+        if (tu) tu.value = 'dk';
+      } else {
+        var sec = ssSecs();
+        if (!isNaN(sec)) sl.value = Math.max(1, Math.min(180, Math.round(sec / 60)));
+      }
+    }
+    ssRun();
+  };
+
+  function ssRun(){
+    var res = document.getElementById('ss-res');
+    var qline = document.getElementById('ss-q');
+    if (!res) return;
+    var I = parseFloat((document.getElementById('ss-i-num') || {}).value);
+    var t = ssSecs();
+    if (isNaN(I) || I <= 0 || isNaN(t)) {
+      res.innerHTML = '<div style="font-size:13px;color:var(--yw)">Ak\u0131m ve s\u00fcreyi gir.</div>';
+      if (qline) qline.innerHTML = '';
+      return;
+    }
+    var Q = I * t, molE = Q / ELZ_F;
+    if (qline) qline.innerHTML = 'Ortak y\u00fck: <b style="color:var(--ac2)">Q = ' + I + ' \u00d7 ' + Math.round(t) + ' = ' + Q.toFixed(0) + ' C</b> \u2192 mol e\u207b = Q/F = <b style="color:var(--ac2)">' + molE.toFixed(4) + ' mol</b> \u2014 her kaptan ayn\u0131s\u0131 ge\u00e7er.';
+
+    // Tüm ürünleri hesapla (çubuk ölçeği için maksimum kütle)
+    var cells = [], maxM = 0;
+    for (var i = 0; i < ssCount; i++) {
+      var def = ssCellDef(ssSel[i]);
+      function calc(side){
+        var mol = molE / side.n, m2 = mol * side.M;
+        return { p: side.p, m: m2, V: side.gas ? mol * 22.4 : null, diss: !!side.diss, gas: !!side.gas };
+      }
+      var kt = calc(def.cat), an = calc(def.an);
+      maxM = Math.max(maxM, kt.m, an.m);
+      cells.push({ name: def.name, kt: kt, an: an });
+    }
+
+    function line(icon, iconCol, side){
+      var bar = maxM > 0 ? Math.max(3, side.m / maxM * 100) : 0;
+      var barCol = side.diss ? '#f87171' : iconCol;
+      var txt = side.diss
+        ? '<b style="color:#f87171">\u2212' + ssFmt(side.m) + ' g</b> <span style="color:var(--tx3);font-size:11px">(elektrot incelir)</span>'
+        : '<b>' + ssFmt(side.m) + ' g</b>' + (side.V !== null ? ' <span style="color:var(--tx3)">\u00b7 ' + ssFmt(side.V) + ' L (NK)</span>' : '');
+      return '<div style="padding:7px 0;border-bottom:1px solid var(--br)">' +
+        '<div style="display:flex;justify-content:space-between;gap:8px;font-size:12.5px;align-items:center">' +
+          '<span style="color:' + iconCol + ';font-weight:700;white-space:nowrap">' + icon + '</span>' +
+          '<span style="color:#fff;font-weight:600;flex:1">' + side.p + '</span>' +
+          '<span style="text-align:right;color:var(--tx)">' + txt + '</span>' +
+        '</div>' +
+        '<div style="height:4px;background:var(--sf3);border-radius:100px;margin-top:5px;overflow:hidden">' +
+          '<div style="height:100%;width:' + bar + '%;background:' + barCol + ';border-radius:100px;transition:width .15s"></div>' +
+        '</div></div>';
+    }
+
+    var html = '';
+    for (var j = 0; j < cells.length; j++) {
+      if (j > 0) html += '<div style="text-align:center;color:var(--tx3);font-size:10px;margin:4px 0">\u2502 seri ba\u011flant\u0131 \u00b7 ayn\u0131 Q \u2502</div>';
+      html += '<div style="background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:12px">' +
+        '<div style="font-family:Space Grotesk,sans-serif;font-size:13px;font-weight:800;color:var(--ac2);margin-bottom:6px">\u26a1 Kap ' + (j + 1) + ' \u00b7 ' + cells[j].name + '</div>' +
+        line('\u2296 Katot', '#60a5fa', cells[j].kt) +
+        line('\u2295 Anot', '#f87171', cells[j].an) +
+        '</div>';
+    }
+    res.innerHTML = html;
+  }
+  window.ssRun = ssRun;
+
+  /* ============================================================
+     BÖLÜM 10 — 3D HİDROKARBON GALERİSİ
+     Alkan, alken ve alkinlerin ilk 10'ar üyesi (30 molekül).
+     Geometri prosedürel üretilir: gerçek bağ açıları (sp³ 109.47°,
+     sp² 120°, sp 180°) ve bağ uzunlukları (C-C 1.54, C=C 1.34,
+     C≡C 1.20, C-H 1.09 Å). Orbital modülüyle aynı doku:
+     fütüristik yıldızlı fon, sürükle-döndür, pinch-zoom,
+     tıklayınca tam ekran detay.
+     ============================================================ */
+
+  // ---- 10a. Vektör yardımcıları ----
+  function v3(x, y, z){ return { x: x, y: y, z: z }; }
+  function vAdd(a, b){ return v3(a.x + b.x, a.y + b.y, a.z + b.z); }
+  function vSub(a, b){ return v3(a.x - b.x, a.y - b.y, a.z - b.z); }
+  function vScale(a, k){ return v3(a.x * k, a.y * k, a.z * k); }
+  function vLen(a){ return Math.sqrt(a.x*a.x + a.y*a.y + a.z*a.z); }
+  function vNorm(a){ var l = vLen(a) || 1; return vScale(a, 1 / l); }
+  function vCross(a, b){ return v3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x); }
+  function rotZv(a, ang){
+    var c = Math.cos(ang), s = Math.sin(ang);
+    return v3(a.x*c - a.y*s, a.x*s + a.y*c, a.z);
+  }
+
+  // ---- 10b. Molekül üretici (kimyasal olarak doğru) ----
+  var HC_TETRA = 1.23096; // 70.529° (zincir dönüş açısı → C-C-C = 109.47°)
+  function hcBuild(n, kind){
+    // Karbon iskeleti
+    var C = [v3(0, 0, 0)];
+    var d = v3(1, 0, 0), sign = -1, i;
+    if (kind === 'an' && n > 1) d = rotZv(d, 0.61548); // 35.264° başlangıç eğimi
+    for (i = 1; i < n; i++) {
+      var len = 1.54;
+      if (kind === 'an') {
+        if (i > 1) { d = rotZv(d, sign * HC_TETRA); sign = -sign; }
+      } else if (kind === 'en') {
+        if (i === 1) { len = 1.34; }                                   // C1=C2
+        else if (i === 2) { d = rotZv(d, 1.0472); len = 1.50; sign = -1; } // 120°
+        else { d = rotZv(d, sign * HC_TETRA); sign = -sign; }
+      } else { // 'in'
+        if (i === 1) { len = 1.20; }                                   // C1≡C2
+        else if (i === 2) { len = 1.46; }                              // sp: 180°, düz
+        else if (i === 3) { d = rotZv(d, HC_TETRA); sign = -1; }
+        else { d = rotZv(d, sign * HC_TETRA); sign = -sign; }
+      }
+      C.push(vAdd(C[i - 1], vScale(d, len)));
+    }
+    // Ana ekseni yatayla hizala
+    if (n > 1) {
+      var ax = vSub(C[n - 1], C[0]), ang = Math.atan2(ax.y, ax.x);
+      for (i = 0; i < n; i++) C[i] = rotZv(C[i], -ang);
+    }
+    // C-C bağları
+    var atoms = [], bonds = [];
+    for (i = 0; i < n; i++) atoms.push({ x: C[i].x, y: C[i].y, z: C[i].z, el: 'C' });
+    for (i = 1; i < n; i++) {
+      var o = 1;
+      if (i === 1 && kind === 'en') o = 2;
+      if (i === 1 && kind === 'in') o = 3;
+      bonds.push({ a: i - 1, b: i, o: o });
+    }
+    // Hidrojenler: her karbonun eksik değerliği tamamlanır
+    var CH = 1.09;
+    for (i = 0; i < n; i++) {
+      var nb = [];
+      for (var b2 = 0; b2 < bonds.length; b2++) {
+        if (bonds[b2].a === i) nb.push({ dir: vNorm(vSub(C[bonds[b2].b], C[i])), o: bonds[b2].o });
+        if (bonds[b2].b === i) nb.push({ dir: vNorm(vSub(C[bonds[b2].a], C[i])), o: bonds[b2].o });
+      }
+      var val = 0;
+      for (var k2 = 0; k2 < nb.length; k2++) val += nb[k2].o;
+      var h = 4 - val, dirs = [];
+      if (nb.length === 0) { // Metan
+        var q3 = 1 / Math.sqrt(3);
+        dirs = [v3(q3,q3,q3), v3(q3,-q3,-q3), v3(-q3,q3,-q3), v3(-q3,-q3,q3)];
+      } else if (nb.length === 1) {
+        var u = nb[0].dir;
+        if (h === 1 && nb[0].o === 3) dirs = [vScale(u, -1)];               // ≡C-H
+        else if (h === 2 && nb[0].o === 2) dirs = [rotZv(u, 2.0944), rotZv(u, -2.0944)]; // =CH₂ (120°)
+        else { // -CH₃ üçayak (109.47°)
+          var p = Math.abs(u.z) < 0.9 ? vNorm(vCross(u, v3(0,0,1))) : v3(1,0,0);
+          var q = vNorm(vCross(u, p));
+          var off = i * 1.0472 + 0.5236; // basamaklı görünüm
+          for (var t3 = 0; t3 < 3; t3++) {
+            var a3 = off + t3 * 2.0944;
+            dirs.push(vNorm(vAdd(vScale(u, -0.33333),
+              vScale(vAdd(vScale(p, Math.cos(a3)), vScale(q, Math.sin(a3))), 0.94281))));
+          }
+        }
+      } else {
+        var u1 = nb[0].dir, u2 = nb[1].dir, s2 = vAdd(u1, u2);
+        if (h === 1) dirs = [vNorm(vScale(s2, -1))];                        // sp² =CH-
+        else if (h === 2) {                                                 // sp³ -CH₂-
+          var bb = vNorm(vScale(s2, -1));
+          var nn = vCross(u1, u2);
+          if (vLen(nn) < 1e-4) nn = v3(0, 0, 1);
+          nn = vNorm(nn);
+          dirs = [ vNorm(vAdd(vScale(bb, 0.57735), vScale(nn, 0.81650))),
+                   vNorm(vAdd(vScale(bb, 0.57735), vScale(nn, -0.81650))) ];
+        }
+      }
+      for (var hh = 0; hh < dirs.length; hh++) {
+        var hp = vAdd(C[i], vScale(dirs[hh], CH));
+        atoms.push({ x: hp.x, y: hp.y, z: hp.z, el: 'H' });
+        bonds.push({ a: i, b: atoms.length - 1, o: 1 });
+      }
+    }
+    // Merkeze al + ölçekle
+    var cx = 0, cy = 0, cz = 0;
+    atoms.forEach(function(a4){ cx += a4.x; cy += a4.y; cz += a4.z; });
+    cx /= atoms.length; cy /= atoms.length; cz /= atoms.length;
+    var maxR = 1;
+    atoms.forEach(function(a4){
+      a4.x = (a4.x - cx) * 34; a4.y = (a4.y - cy) * 34; a4.z = (a4.z - cz) * 34;
+      maxR = Math.max(maxR, Math.sqrt(a4.x*a4.x + a4.y*a4.y + a4.z*a4.z));
+    });
+    var nH = atoms.length - n;
+    return { atoms: atoms, bonds: bonds, nC: n, nH: nH, fit: Math.min(1.6, 92 / maxR) };
+  }
+
+  // ---- 10c. Molekül listesi ----
+  var HC_NAMES = {
+    an: ['Metan','Etan','Propan','B\u00fctan','Pentan','Heksan','Heptan','Oktan','Nonan','Dekan'],
+    en: ['Eten (Etilen)','Propen','1-B\u00fcten','1-Penten','1-Heksen','1-Hepten','1-Okten','1-Nonen','1-Deken','1-Undeken'],
+    in_: ['Etin (Asetilen)','Propin','1-B\u00fctin','1-Pentin','1-Heksin','1-Heptin','1-Oktin','1-Nonin','1-Dekin','1-Undekin']
+  };
+  var HC_LIST = null;
+  function hcList(){
+    if (HC_LIST) return HC_LIST;
+    HC_LIST = [];
+    var k, i, n;
+    for (i = 0; i < 10; i++) {
+      n = i + 1;
+      HC_LIST.push({ kind: 'an', n: n, name: HC_NAMES.an[i], f: 'C' + n + 'H' + (2*n+2), mol: null });
+    }
+    for (i = 0; i < 10; i++) {
+      n = i + 2;
+      HC_LIST.push({ kind: 'en', n: n, name: HC_NAMES.en[i], f: 'C' + n + 'H' + (2*n), mol: null });
+    }
+    for (i = 0; i < 10; i++) {
+      n = i + 2;
+      HC_LIST.push({ kind: 'in', n: n, name: HC_NAMES.in_[i], f: 'C' + n + 'H' + (2*n-2), mol: null });
+    }
+    return HC_LIST;
+  }
+  function hcMol(item){ if (!item.mol) item.mol = hcBuild(item.n, item.kind); return item.mol; }
+
+  // ---- 10d. Çizim motoru (fütüristik fon + derinlik sıralı) ----
+  function hcProj(st, x, y, z, W, H2){
+    var y1 = y * Math.cos(st.rotX) - z * Math.sin(st.rotX);
+    var z1 = y * Math.sin(st.rotX) + z * Math.cos(st.rotX);
+    var x2 = x * Math.cos(st.rotY) + z1 * Math.sin(st.rotY);
+    var z2 = -x * Math.sin(st.rotY) + z1 * Math.cos(st.rotY);
+    var s = (300 * st.zoom * st.fit) / (430 + z2);
+    return { x: W/2 + x2 * s, y: H2/2 + y1 * s, z: z2, s: s };
+  }
+
+  function hcBg(x, st, W, H2){
+    x.fillStyle = '#050510'; x.fillRect(0, 0, W, H2);
+    // Yıldızlar (titreşimli)
+    if (!st.stars || st.sw !== W) {
+      st.stars = []; st.sw = W;
+      for (var i = 0; i < 42; i++)
+        st.stars.push({ x: Math.random()*W, y: Math.random()*H2, r: 0.5 + Math.random()*1.3, p: Math.random()*6.28 });
+    }
+    for (var s2 = 0; s2 < st.stars.length; s2++) {
+      var sr = st.stars[s2];
+      x.globalAlpha = 0.25 + 0.3 * (0.5 + 0.5 * Math.sin(st.t * 1.4 + sr.p));
+      x.fillStyle = '#9bd7ff';
+      x.beginPath(); x.arc(sr.x, sr.y, sr.r, 0, 6.283); x.fill();
+    }
+    x.globalAlpha = 1;
+    // Nebula parıltıları
+    var g1 = x.createRadialGradient(W*0.18, H2*0.14, 0, W*0.18, H2*0.14, W*0.55);
+    g1.addColorStop(0, 'rgba(0,212,255,0.07)'); g1.addColorStop(1, 'rgba(0,212,255,0)');
+    x.fillStyle = g1; x.fillRect(0, 0, W, H2);
+    var g2 = x.createRadialGradient(W*0.85, H2*0.9, 0, W*0.85, H2*0.9, W*0.5);
+    g2.addColorStop(0, 'rgba(168,85,247,0.07)'); g2.addColorStop(1, 'rgba(168,85,247,0)');
+    x.fillStyle = g2; x.fillRect(0, 0, W, H2);
+    // Zemin ızgarası
+    x.strokeStyle = 'rgba(0,212,255,0.07)'; x.lineWidth = 1;
+    for (var k = 0; k < 5; k++) {
+      var yy = H2 * (0.76 + k * 0.055);
+      x.beginPath(); x.moveTo(0, yy); x.lineTo(W, yy); x.stroke();
+    }
+    // Merkez hale
+    var g3 = x.createRadialGradient(W/2, H2/2, 0, W/2, H2/2, 120 * st.zoom * (st.fit || 1));
+    g3.addColorStop(0, 'rgba(99,102,241,0.08)'); g3.addColorStop(1, 'rgba(99,102,241,0)');
+    x.fillStyle = g3; x.fillRect(0, 0, W, H2);
+  }
+
+  function hcDraw(x, mol, st, W, H2, labels){
+    hcBg(x, st, W, H2);
+    var items = [], i;
+    // Bağlar (uçlar küre yarıçapı kadar kısaltılır)
+    for (i = 0; i < mol.bonds.length; i++) {
+      var bd = mol.bonds[i], A = mol.atoms[bd.a], B = mol.atoms[bd.b];
+      var tA = { x: A.x + (B.x-A.x)*0.15, y: A.y + (B.y-A.y)*0.15, z: A.z + (B.z-A.z)*0.15 };
+      var tB = { x: A.x + (B.x-A.x)*0.85, y: A.y + (B.y-A.y)*0.85, z: A.z + (B.z-A.z)*0.85 };
+      if (bd.o === 2) {
+        // BİLİMSEL DÜZELTME: C=C'nin iki çizgisi molekül DÜZLEMİNDE durur —
+        // sp² hidrojenleriyle aynı düzlemde döner, yandan bakınca tek çizgiye kapanır.
+        var bv = vSub(B, A);
+        var pp = vCross(bv, v3(0, 0, 1));
+        var perp = vLen(pp) > 1e-4 ? vNorm(pp) : v3(0, 1, 0);
+        for (var sgn = -1; sgn <= 1; sgn += 2) {
+          var oA = vAdd(tA, vScale(perp, 3.2 * sgn));
+          var oB = vAdd(tB, vScale(perp, 3.2 * sgn));
+          var pa2 = hcProj(st, oA.x, oA.y, oA.z, W, H2);
+          var pb2 = hcProj(st, oB.x, oB.y, oB.z, W, H2);
+          items.push({ z: (pa2.z + pb2.z) / 2, b: 1, pa: pa2, pb: pb2, o: 1, col: '251,113,133', lw: 2.4 });
+        }
+      } else {
+        var pa = hcProj(st, tA.x, tA.y, tA.z, W, H2);
+        var pb = hcProj(st, tB.x, tB.y, tB.z, W, H2);
+        items.push({ z: (pa.z + pb.z) / 2, b: 1, pa: pa, pb: pb, o: bd.o,
+                     col: bd.o === 3 ? '251,191,36' : '186,212,240',
+                     lw: bd.o === 1 ? 3.1 : 2.3 });
+      }
+    }
+    // Atomlar
+    for (i = 0; i < mol.atoms.length; i++) {
+      var at = mol.atoms[i];
+      var p = hcProj(st, at.x, at.y, at.z, W, H2);
+      items.push({ z: p.z, a: 1, p: p, el: at.el });
+    }
+    items.sort(function(m1, m2){ return m2.z - m1.z; });
+    for (i = 0; i < items.length; i++) {
+      var it = items[i];
+      var depth = Math.max(0.3, Math.min(1, 1 - (it.z + 130) / 380));
+      if (it.b) {
+        var sAvg = (it.pa.s + it.pb.s) / 2;
+        var dx = it.pb.x - it.pa.x, dy = it.pb.y - it.pa.y;
+        var ll = Math.sqrt(dx*dx + dy*dy) || 1;
+        var px2 = -dy / ll, py2 = dx / ll;
+        var cnt = it.o, gap = 3.4 * sAvg;
+        for (var lj = 0; lj < cnt; lj++) {
+          var off = (lj - (cnt - 1) / 2) * gap;
+          x.strokeStyle = 'rgba(' + it.col + ',' + (0.9 * depth) + ')';
+          x.lineWidth = it.lw * sAvg;
+          x.lineCap = 'round';
+          x.beginPath();
+          x.moveTo(it.pa.x + px2*off, it.pa.y + py2*off);
+          x.lineTo(it.pb.x + px2*off, it.pb.y + py2*off);
+          x.stroke();
+        }
+      } else {
+        var r = (it.el === 'C' ? 9.5 : it.el === 'O' ? 8.3 : 5.6) * it.p.s;
+        // dış parıltı
+        x.beginPath(); x.arc(it.p.x, it.p.y, r + 4 * it.p.s, 0, 6.283);
+        x.fillStyle = it.el === 'C' ? 'rgba(34,211,238,' + 0.10*depth + ')' : it.el === 'O' ? 'rgba(248,113,113,' + 0.12*depth + ')' : 'rgba(255,255,255,' + 0.08*depth + ')';
+        x.fill();
+        var gg = x.createRadialGradient(it.p.x - r*0.35, it.p.y - r*0.35, r*0.1, it.p.x, it.p.y, r);
+        if (it.el === 'C') { gg.addColorStop(0, '#7deefc'); gg.addColorStop(0.55, '#0ea5c9'); gg.addColorStop(1, '#075b73'); }
+        else if (it.el === 'O') { gg.addColorStop(0, '#fca5a5'); gg.addColorStop(0.55, '#ef4444'); gg.addColorStop(1, '#7f1d1d'); }
+        else { gg.addColorStop(0, '#ffffff'); gg.addColorStop(0.6, '#dbe4ef'); gg.addColorStop(1, '#8fa0b5'); }
+        x.globalAlpha = 0.55 + 0.45 * depth;
+        x.beginPath(); x.arc(it.p.x, it.p.y, r, 0, 6.283);
+        x.fillStyle = gg; x.fill();
+        x.strokeStyle = it.el === 'C' ? 'rgba(125,238,252,' + 0.5*depth + ')' : it.el === 'O' ? 'rgba(252,165,165,' + 0.55*depth + ')' : 'rgba(255,255,255,' + 0.35*depth + ')';
+        x.lineWidth = 1; x.stroke();
+        x.globalAlpha = 1;
+        if (labels && r > 5) {
+          x.fillStyle = it.el === 'C' ? '#02222b' : it.el === 'O' ? '#3f0d0d' : '#334155';
+          x.font = 'bold ' + Math.max(7, r*0.95) + 'px sans-serif';
+          x.textAlign = 'center'; x.textBaseline = 'middle';
+          x.fillText(it.el, it.p.x, it.p.y);
+          x.textBaseline = 'alphabetic';
+        }
+      }
+    }
+  }
+
+  // ---- 10e. Ekran + galeri ----
+  var hcCat = 'an';
+  var hcSt = { rotX: 0.42, rotY: 0.6, zoom: 1, fit: 1, spin: true, spd: 1, drag: false,
+               lx: 0, ly: 0, dist: 0, t: 0, anim: null, labels: false, item: null, stars: null, sw: 0 };
+
+  function setupHC(){
+    if (document.getElementById('s-hc')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-hc" style="display:none"><div style="max-width:900px;margin:0 auto;padding:15px">' +
+        '<h1 class="ptitle">\ud83e\uddec Hidrokarbonlar 3D</h1>' +
+        '<p class="psub">Alkan, alken ve alkinlerin ilk 10 \u00fcyesi \u2014 ger\u00e7ek ba\u011f a\u00e7\u0131lar\u0131yla. Molek\u00fcle dokun, tam ekranda d\u00f6nd\u00fcr.</p>' +
+        '<div class="card" style="margin-bottom:14px">' +
+          '<div class="slbl">\u270f\ufe0f \u0130simden \u00c7iz (IUPAC)</div>' +
+          '<div style="display:flex;gap:8px">' +
+            '<input type="text" id="hc-name-inp" class="inp" placeholder="\u00f6rn: 3-metilb\u00fctan, 2-metil-2-b\u00fcten" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+            '<button type="button" class="btn bp" onclick="hcDrawFromName()">\u00c7iz</button>' +
+          '</div>' +
+          '<div id="hc-name-out" style="font-size:12px;margin-top:8px;line-height:1.6"></div>' +
+        '</div>' +
+        '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+          '<button type="button" id="hc-cat-an" class="ob sel2" style="flex:1" onclick="hcSetCat(\'an\',this)">Alkanlar C\u2099H\u2082\u2099\u208a\u2082</button>' +
+          '<button type="button" id="hc-cat-en" class="ob" style="flex:1" onclick="hcSetCat(\'en\',this)">Alkenler C\u2099H\u2082\u2099</button>' +
+          '<button type="button" id="hc-cat-in" class="ob" style="flex:1" onclick="hcSetCat(\'in\',this)">Alkinler C\u2099H\u2082\u2099\u208b\u2082</button>' +
+        '</div>' +
+        '<div id="hc-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>' +
+      '</div>' +
+      // Tam ekran detay
+      '<div id="hc-detail" style="display:none;position:fixed;inset:0;background:rgba(2,3,10,0.97);z-index:600;overflow-y:auto;padding:20px">' +
+        '<button type="button" onclick="hcClose()" style="position:fixed;top:15px;right:15px;width:40px;height:40px;background:rgba(255,50,50,0.2);border:1px solid rgba(255,50,50,0.5);border-radius:50%;color:#ff6666;font-size:22px;cursor:pointer;z-index:601;display:flex;align-items:center;justify-content:center">\u00d7</button>' +
+        '<div id="hc-title" style="text-align:center;font-size:1.4rem;color:#00d4ff;margin:46px 0 4px;text-shadow:0 0 15px rgba(0,212,255,0.4);font-family:Space Grotesk,sans-serif;font-weight:800"></div>' +
+        '<div id="hc-sub" style="text-align:center;font-size:14px;color:var(--tx2);margin-bottom:14px"></div>' +
+        '<canvas id="hc-cv" width="600" height="420" style="width:100%;max-width:560px;height:auto;border-radius:16px;background:#050510;border:2px solid rgba(0,212,255,0.3);display:block;margin:0 auto 10px;touch-action:none"></canvas>' +
+        '<p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:10px">\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr \u00b7 \ud83e\udd0f \u0130ki parmakla yak\u0131nla\u015ft\u0131r</p>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">' +
+          '<button type="button" onclick="hcToggleSpin()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">\ud83d\udd04 Oto-D\u00f6nd\u00fcr</button>' +
+          '<button type="button" onclick="hcSetSpd(0.3)" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">\ud83d\udc0c Yava\u015f</button>' +
+          '<button type="button" onclick="hcSetSpd(1.6)" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">\ud83d\ude80 H\u0131zl\u0131</button>' +
+          '<button type="button" onclick="hcToggleLbl()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">\ud83d\udd24 C/H Etiket</button>' +
+          '<button type="button" onclick="hcResetView()" style="padding:7px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:100px;color:#00d4ff;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">\ud83c\udfaf S\u0131f\u0131rla</button>' +
+        '</div>' +
+        '<div style="max-width:560px;margin:0 auto 30px;background:var(--sf);border:1px solid var(--br);border-left:3px solid #7b2cbf;border-radius:var(--rlg);padding:18px" id="hc-props"></div>' +
+      '</div></div>');
+
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-hc') === -1) SCREENS.push('s-hc');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-hc'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-hc" onclick="nav(\'hc\')">\ud83e\uddec Hidrokarbonlar 3D</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-hc'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-hc" onclick="nav(\'hc\')"><div class="ti">\ud83e\uddec</div><div class="tt">Hidrokarbonlar 3D</div><div class="td">Alkan, alken, alkin \u2014 30 molek\u00fcl\u00fcn ger\u00e7ek 3D modeli. D\u00f6nd\u00fcr, yak\u0131nla\u015ft\u0131r.</div></div>');
+    hcBindCanvas();
+    var hcNameInp = document.getElementById('hc-name-inp');
+    if (hcNameInp) hcNameInp.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); window.hcDrawFromName(); } });
+  }
+
+  window.hcSetCat = function(cat, btn){
+    hcCat = cat;
+    if (btn) selectInRow(btn);
+    hcRenderGrid();
+  };
+
+  function hcRenderGrid(){
+    var grid = document.getElementById('hc-grid');
+    if (!grid) return;
+    var list = hcList().filter(function(m){ return m.kind === hcCat; });
+    var html = '';
+    for (var i = 0; i < list.length; i++) {
+      var idx = hcList().indexOf(list[i]);
+      html += '<div onclick="hcOpen(' + idx + ')" style="background:var(--sf);border:2px solid rgba(0,212,255,0.3);border-radius:16px;padding:10px 8px;text-align:center;cursor:pointer;transition:all .2s" ' +
+        'onmouseover="this.style.borderColor=\'#00d4ff\'" onmouseout="this.style.borderColor=\'rgba(0,212,255,0.3)\'">' +
+        '<div style="font-size:13px;font-weight:700;color:#00d4ff;margin-bottom:2px">' + list[i].name + '</div>' +
+        '<div style="font-size:11px;color:var(--tx3);margin-bottom:6px">' + pretty(list[i].f) + '</div>' +
+        '<canvas id="hc-th-' + idx + '" width="170" height="130" style="width:100%;border-radius:10px;background:#050510;border:1px solid rgba(0,212,255,0.15)"></canvas>' +
+      '</div>';
+    }
+    grid.innerHTML = html;
+    setTimeout(function(){
+      for (var j = 0; j < list.length; j++) hcThumb(hcList().indexOf(list[j]));
+    }, 60);
+  }
+
+  function hcThumb(idx){
+    var cv = document.getElementById('hc-th-' + idx);
+    if (!cv) return;
+    var item = hcList()[idx], mol = hcMol(item);
+    var st = { rotX: 0.45, rotY: 0.5 + idx * 0.33, zoom: 0.92, fit: mol.fit, t: idx, stars: null, sw: 0 };
+    var x = cv.getContext('2d');
+    hcDraw(x, mol, st, 170, 130, false);
+  }
+
+  window.hcOpen = function(idxOrItem){
+    var item = typeof idxOrItem === 'number' ? hcList()[idxOrItem] : idxOrItem;
+    if (!item) return;
+    hcSt.item = item;
+    hcSt.rotX = 0.42; hcSt.rotY = 0.6; hcSt.zoom = 1; hcSt.spin = true;
+    hcSt.fit = hcMol(item).fit;
+    var TK = { an: 'Alkan (doymu\u015f)', en: 'Alken (doymam\u0131\u015f)', in: 'Alkin (doymam\u0131\u015f)' };
+    document.getElementById('hc-title').textContent = item.name;
+    document.getElementById('hc-sub').innerHTML = pretty(item.f) + ' \u00b7 <span style="color:var(--ac2)">' + TK[item.kind] + '</span>';
+    var mol = hcMol(item);
+    var GF = { an: 'C\u2099H\u2082\u2099\u208a\u2082', en: 'C\u2099H\u2082\u2099', in: 'C\u2099H\u2082\u2099\u208b\u2082' };
+    var BAG = { an: 'T\u00fcm ba\u011flar tekli (\u03c3) \u2014 doymu\u015f hidrokarbon.',
+                en: '1 adet C=C ikili ba\u011f (1\u03c3 + 1\u03c0) \u2014 katılma tepkimesi verir.',
+                in: '1 adet C\u2261C \u00fc\u00e7l\u00fc ba\u011f (1\u03c3 + 2\u03c0) \u2014 katılma tepkimesi verir.' };
+    var HIB = { an: 'T\u00fcm karbonlar sp\u00b3 (109.5\u00b0)',
+                en: 'C1-C2: sp\u00b2 (120\u00b0), di\u011ferleri sp\u00b3',
+                in: 'C1-C2: sp (180\u00b0), di\u011ferleri sp\u00b3' };
+    var rows = [
+      ['Molek\u00fcl Form\u00fcl\u00fc', pretty(item.f)],
+      ['Genel Form\u00fcl', GF[item.kind]],
+      ['Karbon / Hidrojen', mol.nC + ' C \u00b7 ' + mol.nH + ' H'],
+      ['Hibritle\u015fme', HIB[item.kind]]
+    ];
+    var html = '<div style="font-size:14px;font-weight:600;color:#00d4ff;margin-bottom:12px">\ud83d\udccb Molek\u00fcl \u00d6zellikleri</div>';
+    for (var r = 0; r < rows.length; r++)
+      html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px"><span style="color:var(--tx3)">' + rows[r][0] + '</span><span style="color:#00d4ff;font-weight:700;text-align:right">' + rows[r][1] + '</span></div>';
+    html += '<div style="margin-top:10px;padding:10px;background:rgba(0,212,255,0.06);border-radius:8px;font-size:13px;line-height:1.6;color:var(--tx2)">' + BAG[item.kind] + '</div>';
+    html += '<div style="margin-top:8px;font-size:11px;color:var(--tx3);line-height:1.6">\ud83c\udfa8 Renkler: <span style="color:#22d3ee">\u25cf C (karbon)</span> \u00b7 <span style="color:#e2e8f0">\u25cf H (hidrojen)</span>' +
+      (item.kind === 'en' ? ' \u00b7 <span style="color:#fb7185">\u2550 ikili ba\u011f</span>' : '') +
+      (item.kind === 'in' ? ' \u00b7 <span style="color:#fbbf24">\u2261 \u00fc\u00e7l\u00fc ba\u011f</span>' : '') + '</div>';
+    document.getElementById('hc-props').innerHTML = html;
+    document.getElementById('hc-detail').style.display = 'block';
+    document.getElementById('hc-detail').scrollTop = 0;
+    if (hcSt.anim) cancelAnimationFrame(hcSt.anim);
+    hcLoop();
+  };
+
+  function hcLoop(){
+    if (!hcSt.item) return;
+    var cv = document.getElementById('hc-cv');
+    if (!cv || document.getElementById('hc-detail').style.display === 'none') { hcStopAnim(); return; }
+    hcSt.anim = requestAnimationFrame(hcLoop);
+    var rect = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    var W = rect.width || 300, H2 = Math.round(W * 0.72);
+    if (Math.abs(cv.width - W * dpr) > 2 || Math.abs(cv.height - H2 * dpr) > 2) { cv.width = W * dpr; cv.height = H2 * dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (hcSt.spin && !hcSt.drag) hcSt.rotY += 0.008 * hcSt.spd;
+    hcSt.t += 0.016;
+    hcDraw(x, hcMol(hcSt.item), hcSt, W, H2, hcSt.labels);
+  }
+  function hcStopAnim(){ if (hcSt.anim) { cancelAnimationFrame(hcSt.anim); hcSt.anim = null; } }
+
+  window.hcClose = function(){
+    var d = document.getElementById('hc-detail');
+    if (d) d.style.display = 'none';
+    hcStopAnim(); hcSt.item = null;
+  };
+  window.hcDrawFromName = function(){
+    var inp = document.getElementById('hc-name-inp');
+    var out = document.getElementById('hc-name-out');
+    if (!inp || !out) return;
+    var raw = inp.value.trim();
+    if (!raw) { out.innerHTML = '<span style="color:var(--yw)">Bir isim yaz (\u00f6rn: 3-metilb\u00fctan).</span>'; return; }
+    var r = parseOrganicName(raw);
+    if (!r.ok) { out.innerHTML = '<span style="color:var(--yw)">\u26a0\ufe0f ' + r.error + '</span>'; return; }
+    try {
+      var mol = hcBuildAt(r.n, r.kind, r.dbAt, r.branches);
+      var KIND_LABEL = { an:'Alkan', en:'Alken', in:'Alkin' };
+      var item = { kind: r.kind, n: r.n, name: raw.trim(), f: organicMolFormula(mol), mol: mol, custom: true };
+      var correct = checkCanonicalName(r);
+      var msg = '<span style="color:var(--gr)">\u2713 ' + KIND_LABEL[r.kind] + ' \u00b7 ' + pretty(item.f) +
+        (r.branches.length ? ' \u00b7 ' + r.branches.length + ' dal grubu' : ' \u00b7 dallanmam\u0131\u015f') + '</span>';
+      if (correct) msg += '<br><span style="color:var(--yw)">\u26a0\ufe0f Bu isim IUPAC kural\u0131na (en d\u00fc\u015f\u00fck lokant) g\u00f6re yaz\u0131lmam\u0131\u015f. Do\u011fru IUPAC ad\u0131: <b>' + correct + '</b></span>';
+      out.innerHTML = msg;
+      window.hcOpen(item);
+    } catch (err) {
+      out.innerHTML = '<span style="color:var(--yw)">\u00c7izim hatas\u0131: ' + err.message + '</span>';
+    }
+  };
+  window.hcToggleSpin = function(){ hcSt.spin = !hcSt.spin; };
+  window.hcSetSpd = function(v){ hcSt.spd = v; };
+  window.hcToggleLbl = function(){ hcSt.labels = !hcSt.labels; };
+  window.hcResetView = function(){ hcSt.rotX = 0.42; hcSt.rotY = 0.6; hcSt.zoom = 1; };
+
+  function hcBindCanvas(){
+    var cv = document.getElementById('hc-cv');
+    if (!cv) return;
+    cv.onmousedown = function(e){ hcSt.drag = true; hcSt.lx = e.clientX; hcSt.ly = e.clientY; };
+    cv.onmousemove = function(e){
+      if (!hcSt.drag) return;
+      hcSt.rotY += (e.clientX - hcSt.lx) * 0.01; hcSt.rotX += (e.clientY - hcSt.ly) * 0.01;
+      hcSt.lx = e.clientX; hcSt.ly = e.clientY;
+    };
+    cv.onmouseup = cv.onmouseleave = function(){ hcSt.drag = false; };
+    cv.addEventListener('wheel', function(e){
+      e.preventDefault();
+      hcSt.zoom = Math.max(0.5, Math.min(3.5, hcSt.zoom - e.deltaY * 0.0012));
+    }, { passive: false });
+    cv.addEventListener('touchstart', function(e){
+      if (e.touches.length === 1) { hcSt.drag = true; hcSt.lx = e.touches[0].clientX; hcSt.ly = e.touches[0].clientY; }
+      else if (e.touches.length === 2) {
+        var dx = e.touches[0].clientX - e.touches[1].clientX, dy = e.touches[0].clientY - e.touches[1].clientY;
+        hcSt.dist = Math.sqrt(dx*dx + dy*dy);
+      }
+      e.preventDefault();
+    }, { passive: false });
+    cv.addEventListener('touchmove', function(e){
+      if (e.touches.length === 1 && hcSt.drag) {
+        hcSt.rotY += (e.touches[0].clientX - hcSt.lx) * 0.014;
+        hcSt.rotX += (e.touches[0].clientY - hcSt.ly) * 0.014;
+        hcSt.lx = e.touches[0].clientX; hcSt.ly = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        var dx = e.touches[0].clientX - e.touches[1].clientX, dy = e.touches[0].clientY - e.touches[1].clientY;
+        var dist = Math.sqrt(dx*dx + dy*dy);
+        if (hcSt.dist > 0) hcSt.zoom = Math.max(0.5, Math.min(3.5, hcSt.zoom * dist / hcSt.dist));
+        hcSt.dist = dist;
+      }
+      e.preventDefault();
+    }, { passive: false });
+    cv.addEventListener('touchend', function(){ hcSt.drag = false; hcSt.dist = 0; });
+  }
+
+  function hcEnter(){ hcRenderGrid(); }
+  function hcLeave(){ window.hcClose(); }
+
+  // ---------- 9g. Seri Kaplar 3D GÖRSEL Simülasyonu ----------
+  // Seçilen 2-3 kap TEK 3D sahnede çizilir: pil → kablolar →
+  // elektron akışı; her kapta kendi iyonları 3B göç eder, gazlar
+  // kabarcıklanır, metaller birikir, aktif anotlar gerçekten
+  // incelir. Sahne sürüklenerek döndürülür (Elektroliz 3D ile
+  // aynı doku/his). Kaplama sekmesiyle motor ortaktır (9h).
+  var SS_ION = {
+    nacl_m:   { c:['Na\u207a','#60a5fa'],        a:['Cl\u207b','#a3e635'] },
+    mgcl2:    { c:['Mg\u00b2\u207a','#93c5fd'],  a:['Cl\u207b','#a3e635'] },
+    cacl2:    { c:['Ca\u00b2\u207a','#7dd3fc'],  a:['Cl\u207b','#a3e635'] },
+    al2o3:    { c:['Al\u00b3\u207a','#e2e8f0'],  a:['O\u00b2\u207b','#f87171'] },
+    nacl_a:   { c:['Na\u207a','#60a5fa'],        a:['Cl\u207b','#a3e635'], w:1 },
+    water:    { c:['H\u207a','#fca5a5'],         a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    na2so4:   { c:['Na\u207a','#60a5fa'],        a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    ki:       { c:['K\u207a','#c4b5fd'],         a:['I\u207b','#a78bfa'], w:1 },
+    cuso4_pt: { c:['Cu\u00b2\u207a','#38bdf8'],  a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    cuso4_cu: { c:['Cu\u00b2\u207a','#38bdf8'],  a:['SO\u2084\u00b2\u207b','#c084fc'] },
+    agno3_pt: { c:['Ag\u207a','#e5e7eb'],        a:['NO\u2083\u207b','#f0abfc'], w:1 },
+    agno3_ag: { c:['Ag\u207a','#e5e7eb'],        a:['NO\u2083\u207b','#f0abfc'] },
+    znso4:    { c:['Zn\u00b2\u207a','#a5f3fc'],  a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    niso4:    { c:['Ni\u00b2\u207a','#6ee7b7'],  a:['SO\u2084\u00b2\u207b','#c084fc'], w:1 },
+    crcl3:    { c:['Cr\u00b3\u207a','#93c5fd'],  a:['Cl\u207b','#a3e635'], w:1 },
+    aucl3:    { c:['Au\u00b3\u207a','#fbbf24'],  a:['Cl\u207b','#a3e635'], w:1 },
+    pbno3:    { c:['Pb\u00b2\u207a','#9ca3af'],  a:['NO\u2083\u207b','#f0abfc'], w:1 }
+  };
+  var SS_DEPCOL = { cuso4_pt:'#e78a5a', cuso4_cu:'#e78a5a', agno3_pt:'#e2e8f0', agno3_ag:'#e2e8f0',
+                    aucl3:'#fbbf24', pbno3:'#9aa3af', crcl3:'#cbd5e1', znso4:'#d7e2ee', niso4:'#c7f0dd',
+                    nacl_m:'#cbd5e1', mgcl2:'#cdd5df', cacl2:'#d5dde6', al2o3:'#d8dee8' };
+  function ssGasCol(p){
+    if (p.indexOf('Cl') === 0) return '#bde04a';
+    if (p.indexOf('O')  === 0) return '#bae6fd';
+    return '#e2e8f0';
+  }
+
+  // ---- Paylaşımlı 3D yardımcılar (Seri Kaplar + Kaplama ortak) ----
+  function g3Box(quads, st, W, H, cx, cy, cz, hx, hy, hz, fillRgb, alpha, stroke){
+    var C = [
+      [cx-hx,cy-hy,cz-hz],[cx+hx,cy-hy,cz-hz],[cx+hx,cy+hy,cz-hz],[cx-hx,cy+hy,cz-hz],
+      [cx-hx,cy-hy,cz+hz],[cx+hx,cy-hy,cz+hz],[cx+hx,cy+hy,cz+hz],[cx-hx,cy+hy,cz+hz]
+    ];
+    var F = [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]];
+    var shade = [0.9, 0.9, 1.0, 0.7, 0.8, 0.8];
+    for (var f = 0; f < 6; f++) {
+      var pts = [], zsum = 0;
+      for (var k = 0; k < 4; k++) {
+        var p = hcProj(st, C[F[f][k]][0], C[F[f][k]][1], C[F[f][k]][2], W, H);
+        pts.push(p); zsum += p.z;
+      }
+      quads.push({ t: 'box', pts: pts, z: zsum / 4, fill: fillRgb, a: alpha * shade[f], stroke: stroke });
+    }
+  }
+  function ssRgb(hex){
+    hex = (hex || '#94a3b8').replace('#', '');
+    return parseInt(hex.slice(0,2),16) + ',' + parseInt(hex.slice(2,4),16) + ',' + parseInt(hex.slice(4,6),16);
+  }
+  function spawnBub3D(cell, bx, by, bz, col){
+    if (cell.bub.length > 16) return;
+    cell.bub.push({ x: bx + (Math.random()-0.5)*6, y: Math.max(10, by), z: bz, r: 1.2 + Math.random()*1.4, c: col });
+  }
+  // Bir hücrenin fizik/kimya bayraklarını elektrolit tanımından türetir
+  function ssDeriveFlags(def, k){
+    var cat = def.cat, an = def.an;
+    var catDis = !cat.gas || k === 'water';
+    var catDep = catDis && cat.p.indexOf('H') !== 0;
+    var catIonGas = catDis && cat.p.indexOf('H') === 0;
+    var catAmbientGas = !catDis && !!cat.gas;
+    var anDis = !!an.diss || an.p.indexOf('Cl') === 0 || an.p.indexOf('I') === 0 || k === 'al2o3';
+    var anActive = !!an.diss;
+    var anDep = anDis && an.p.indexOf('I') === 0;
+    var anIonGas = anDis && !anActive && !anDep;
+    var anAmbientGas = !anDis && !!an.gas;
+    return { catDis:catDis, catDep:catDep, catIonGas:catIonGas, catAmbientGas:catAmbientGas,
+             anDis:anDis, anActive:anActive, anDep:anDep, anIonGas:anIonGas, anAmbientGas:anAmbientGas };
+  }
+  // Ortak iyon fiziği: katyonlar CATX'e, anyonlar ANX'e göçer;
+  // vardıklarında hücrenin bayraklarına göre biriktirir/gazlaştırır.
+  function ionStep3D(cell, spd){
+    var CATX = cell.CATX, ANX = cell.ANX, i;
+    for (i = 0; i < cell.ions.length; i++) {
+      var io = cell.ions[i];
+      io.cool -= 0.016;
+      var tx = io.ch > 0 ? CATX : io.ch < 0 ? ANX : io.x;
+      if (io.ch !== 0) io.x += (tx - io.x) * 0.012 * spd + (Math.random() - 0.5) * 0.9 * spd;
+      else io.x += (Math.random() - 0.5) * 0.6 * spd;
+      io.y += (Math.random() - 0.5) * 0.8 * spd;
+      io.z += (Math.random() - 0.5) * 0.8 * spd;
+      io.x = Math.max(CATX + 3, Math.min(ANX - 3, io.x));
+      io.y = Math.max(8, Math.min(90, io.y));
+      io.z = Math.max(-44, Math.min(44, io.z));
+      var mid = function(){ return CATX + (ANX - CATX) * (0.3 + Math.random() * 0.4); };
+      if (io.ch > 0 && io.cool <= 0 && Math.abs(io.x - tx) < 6) {
+        if (cell.catDis) {
+          if (cell.catDep) cell.dep = Math.min(8, cell.dep + 0.18);
+          else spawnBub3D(cell, CATX + 10, io.y, io.z, cell.catGasCol);
+          if (cell.anActive) { cell.anodeLeft = Math.max(2, cell.anodeLeft - 0.05); io.x = ANX - 14; }
+          else io.x = mid();
+          io.y = 8 + Math.random()*80; io.z = -40 + Math.random()*80; io.cool = 1.6;
+        } else { io.x += 9; io.cool = 1.2; }
+      }
+      if (io.ch < 0 && io.cool <= 0 && Math.abs(io.x - tx) < 6) {
+        if (cell.anDis) {
+          if (cell.anDep) cell.depAn = Math.min(8, cell.depAn + 0.18);
+          else if (cell.anIonGas) spawnBub3D(cell, ANX - 10, io.y, io.z, cell.anGasCol);
+          io.x = mid(); io.y = 8 + Math.random()*80; io.z = -40 + Math.random()*80; io.cool = 1.6;
+        } else { io.x -= 9; io.cool = 1.2; }
+      }
+    }
+    if (cell.catAmbientGas && Math.random() < 0.035 * spd) spawnBub3D(cell, CATX + 10, 24 + Math.random()*58, -18 + Math.random()*36, cell.catGasCol);
+    if (cell.anAmbientGas  && Math.random() < 0.035 * spd) spawnBub3D(cell, ANX - 10, 24 + Math.random()*58, -18 + Math.random()*36, cell.anGasCol);
+    for (var b = cell.bub.length - 1; b >= 0; b--) {
+      var bb = cell.bub[b];
+      bb.y -= 0.5 * spd; bb.x += (Math.random()-0.5)*0.5; bb.r = Math.min(4.2, bb.r + 0.018);
+      if (bb.y < 4) cell.bub.splice(b, 1);
+    }
+  }
+  // Bir hücreyi (kap veya kaplama nesnesi) 3D sahneye ekler
+  function pushTank(items, st, W, H, ox, cell){
+    var CATX = cell.CATX, ANX = cell.ANX, i;
+    g3Box(items, st, W, H, ox, 50, 0, cell.halfW, 52, 58, '56,130,246', 0.07, 'rgba(120,180,255,.2)');
+    // Katot
+    if (cell.itemSide === 'cat') {
+      var p1 = hcProj(st, ox + CATX, 40, 0, W, H);
+      items.push({ t:'item', z:p1.z, x:p1.x, y:p1.y, s:p1.s, icon:cell.itemIcon, bad: cell.itemGlow === 'bad' });
+    } else {
+      g3Box(items, st, W, H, ox + CATX, 30, 0, 7, 66, 20, '154,164,178', 0.85, 'rgba(200,210,225,.5)');
+    }
+    // Anot (aktif anotlarda incelir)
+    var anHx = cell.anActive ? Math.max(2, cell.anodeLeft) : 7;
+    if (cell.itemSide === 'an') {
+      var p2 = hcProj(st, ox + ANX, 40, 0, W, H);
+      items.push({ t:'item', z:p2.z, x:p2.x, y:p2.y, s:p2.s, icon:cell.itemIcon, bad: cell.itemGlow === 'bad' });
+    } else {
+      g3Box(items, st, W, H, ox + ANX, 30, 0, anHx, 66, 20, '154,164,178', 0.85, 'rgba(200,210,225,.5)');
+    }
+    // Birikintiler
+    if (cell.dep > 0.3) g3Box(items, st, W, H, ox + CATX + 7 + cell.dep/2, 55, 0, cell.dep/2, 40, 18, ssRgb(cell.catDepCol), 0.9, null);
+    if (cell.depAn > 0.3) g3Box(items, st, W, H, ox + ANX - anHx - cell.depAn/2, 55, 0, cell.depAn/2, 40, 18, ssRgb(cell.anDepCol), 0.9, null);
+    // İyonlar
+    for (i = 0; i < cell.ions.length; i++) {
+      var io = cell.ions[i];
+      var p = hcProj(st, ox + io.x, io.y, io.z, W, H);
+      var lab = io.ch > 0 ? cell.ic.c : io.ch < 0 ? cell.ic.a : null;
+      items.push({ t:'ion', z:p.z, x:p.x, y:p.y, s:p.s, r:(io.ch===0?3:5.2)*p.s, c: lab ? lab[1] : '#94a3b8', lab: lab ? lab[0] : null, faint: io.ch===0 });
+    }
+    // Kabarcıklar
+    for (i = 0; i < cell.bub.length; i++) {
+      var bb = cell.bub[i];
+      var pb = hcProj(st, ox + bb.x, bb.y, bb.z, W, H);
+      items.push({ t:'bub', z:pb.z, x:pb.x, y:pb.y, r: bb.r * pb.s, c: bb.c });
+    }
+    // Etiketler (z-sırasız, en üstte metin listesine eklenir)
+    var pc = hcProj(st, ox + CATX, -46, 0, W, H), pa = hcProj(st, ox + ANX, -46, 0, W, H);
+    var pcp = hcProj(st, ox + CATX, 104, 0, W, H), pap = hcProj(st, ox + ANX, 104, 0, W, H);
+    var pn = hcProj(st, ox, 122, 0, W, H);
+    cell._labels = [
+      { x: pc.x, y: pc.y, t: '\u2296', c: '#60a5fa', f: 'bold 12px sans-serif' },
+      { x: pa.x, y: pa.y, t: '\u2295', c: '#f87171', f: 'bold 12px sans-serif' },
+      { x: pcp.x, y: pcp.y, t: cell.catLabel, c: '#e2e8f0', f: 'bold 9px sans-serif' },
+      { x: pap.x, y: pap.y, t: cell.anLabel, c: cell.anActive ? '#38bdf8' : '#e2e8f0', f: 'bold 9px sans-serif' },
+      { x: pn.x, y: pn.y, t: cell.name, c: 'rgba(199,210,254,.85)', f: '9px sans-serif' }
+    ];
+  }
+  function drawSortedItems(x, items){
+    items.sort(function(a, b){ return b.z - a.z; });
+    for (var i = 0; i < items.length; i++) {
+      var o = items[i];
+      var depth = Math.max(0.3, Math.min(1, 1 - (o.z + 130) / 380));
+      if (o.t === 'box') {
+        x.beginPath(); x.moveTo(o.pts[0].x, o.pts[0].y);
+        for (var k = 1; k < 4; k++) x.lineTo(o.pts[k].x, o.pts[k].y);
+        x.closePath();
+        x.fillStyle = 'rgba(' + o.fill + ',' + o.a + ')'; x.fill();
+        if (o.stroke) { x.strokeStyle = o.stroke; x.lineWidth = 0.7; x.stroke(); }
+      } else if (o.t === 'ion') {
+        x.globalAlpha = o.faint ? 0.35 : 0.95;
+        x.beginPath(); x.arc(o.x, o.y, Math.max(1, o.r), 0, 6.283); x.fillStyle = o.c; x.fill();
+        x.globalAlpha = 1;
+        if (o.lab && o.r > 3.2) {
+          x.fillStyle = '#0b0e18'; x.font = 'bold ' + Math.max(5.5, o.r*1.05) + 'px sans-serif';
+          x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(o.lab, o.x, o.y); x.textBaseline = 'alphabetic';
+        }
+      } else if (o.t === 'bub') {
+        x.beginPath(); x.arc(o.x, o.y, Math.max(0.5, o.r), 0, 6.283);
+        x.strokeStyle = o.c; x.lineWidth = 1; x.stroke();
+        x.fillStyle = 'rgba(255,255,255,.12)'; x.fill();
+      } else if (o.t === 'item') {
+        var r = 15 * o.s;
+        if (o.bad) { x.beginPath(); x.arc(o.x, o.y, r + 7*o.s, 0, 6.283); x.fillStyle = 'rgba(239,68,68,.25)'; x.fill(); }
+        else { x.beginPath(); x.arc(o.x, o.y, r + 5*o.s, 0, 6.283); x.fillStyle = 'rgba(129,140,248,.18)'; x.fill(); }
+        var gg = x.createRadialGradient(o.x - r*0.3, o.y - r*0.3, r*0.1, o.x, o.y, r);
+        gg.addColorStop(0, '#3b4257'); gg.addColorStop(1, '#12141f');
+        x.beginPath(); x.arc(o.x, o.y, r, 0, 6.283); x.fillStyle = gg; x.fill();
+        x.strokeStyle = o.bad ? 'rgba(239,68,68,.7)' : 'rgba(129,140,248,.5)'; x.lineWidth = 1.3; x.stroke();
+        x.font = Math.max(11, r*1.15) + 'px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+        x.fillText(o.icon, o.x, o.y); x.textBaseline = 'alphabetic';
+      }
+    }
+  }
+
+  var ssVis = { anim: null, t: 0, built: '', cells: [], rotX: 0.3, rotY: -0.5, zoom: 1, drag: false, lx: 0, ly: 0, dist: 0, bound: false };
+  function ssVisStart(){
+    ssBindCanvas();
+    if (ssVis.anim) cancelAnimationFrame(ssVis.anim);
+    ssVisLoop();
+  }
+  function ssVisStop(){ if (ssVis.anim) { cancelAnimationFrame(ssVis.anim); ssVis.anim = null; } }
+
+  function ssLayout(n){
+    if (n === 3) return { scale: 0.6, offs: [-195, 0, 195] };
+    return { scale: 1, offs: [-150, 150] };
+  }
+
+  function ssVisBuild(){
+    ssVis.built = ssCount + ':' + ssSel.slice(0, ssCount).join(',');
+    ssVis.cells = [];
+    var lay = ssLayout(ssCount);
+    for (var i = 0; i < ssCount; i++) {
+      var k = ssSel[i], def = ssCellDef(k), ic = SS_ION[k] || SS_ION.water;
+      var fl = ssDeriveFlags(def, k);
+      var CATX = -72 * lay.scale, ANX = 72 * lay.scale;
+      var cell = {
+        k: k, name: def.name, ic: ic, halfW: 108 * lay.scale, CATX: CATX, ANX: ANX,
+        catDis: fl.catDis, catDep: fl.catDep, catIonGas: fl.catIonGas, catAmbientGas: fl.catAmbientGas,
+        anDis: fl.anDis, anActive: fl.anActive, anDep: fl.anDep, anIonGas: fl.anIonGas, anAmbientGas: fl.anAmbientGas,
+        catGasCol: ssGasCol(def.cat.p), anGasCol: def.an.p.indexOf('I') === 0 ? '#a78bfa' : ssGasCol(def.an.p),
+        catDepCol: SS_DEPCOL[k] || '#cbd5e1', anDepCol: def.an.p.indexOf('I') === 0 ? '#7c3aed' : (SS_DEPCOL[k] || '#cbd5e1'),
+        catLabel: pretty(def.cat.p), anLabel: pretty(def.an.p),
+        dep: 0, depAn: 0, anodeLeft: 8, ions: [], bub: [], itemSide: null, _labels: []
+      };
+      var nEach = ssCount === 3 ? 4 : 5;
+      for (var j = 0; j < nEach; j++) {
+        cell.ions.push({ x: CATX + (ANX-CATX)*(0.3+Math.random()*0.4), y: 10+Math.random()*78, z: -40+Math.random()*80, ch: 1,  cool: Math.random()*2 });
+        cell.ions.push({ x: CATX + (ANX-CATX)*(0.3+Math.random()*0.4), y: 10+Math.random()*78, z: -40+Math.random()*80, ch: -1, cool: Math.random()*2 });
+      }
+      if (ic.w) for (var j2 = 0; j2 < 3; j2++)
+        cell.ions.push({ x: CATX + (ANX-CATX)*Math.random(), y: 8+Math.random()*82, z: -42+Math.random()*84, ch: 0, cool: 0 });
+      ssVis.cells.push(cell);
+    }
+  }
+
+  function ssBindCanvas(){
+    if (ssVis.bound) return;
+    var cv = document.getElementById('ss-cv');
+    if (!cv) return;
+    ssVis.bound = true;
+    cv.onmousedown = function(e){ ssVis.drag = true; ssVis.lx = e.clientX; ssVis.ly = e.clientY; };
+    cv.onmousemove = function(e){
+      if (!ssVis.drag) return;
+      ssVis.rotY += (e.clientX - ssVis.lx) * 0.01; ssVis.rotX += (e.clientY - ssVis.ly) * 0.01;
+      ssVis.lx = e.clientX; ssVis.ly = e.clientY;
+    };
+    cv.onmouseup = cv.onmouseleave = function(){ ssVis.drag = false; };
+    cv.addEventListener('wheel', function(e){ e.preventDefault(); ssVis.zoom = Math.max(0.5, Math.min(2.2, ssVis.zoom - e.deltaY*0.001)); }, {passive:false});
+    cv.addEventListener('touchstart', function(e){
+      if (e.touches.length === 1) { ssVis.drag = true; ssVis.lx = e.touches[0].clientX; ssVis.ly = e.touches[0].clientY; }
+      else if (e.touches.length === 2) { var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY; ssVis.dist=Math.sqrt(dx*dx+dy*dy); }
+      e.preventDefault();
+    }, {passive:false});
+    cv.addEventListener('touchmove', function(e){
+      if (e.touches.length === 1 && ssVis.drag) {
+        ssVis.rotY += (e.touches[0].clientX - ssVis.lx) * 0.013; ssVis.rotX += (e.touches[0].clientY - ssVis.ly) * 0.013;
+        ssVis.lx = e.touches[0].clientX; ssVis.ly = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY, dist=Math.sqrt(dx*dx+dy*dy);
+        if (ssVis.dist > 0) ssVis.zoom = Math.max(0.5, Math.min(2.2, ssVis.zoom * dist/ssVis.dist));
+        ssVis.dist = dist;
+      }
+      e.preventDefault();
+    }, {passive:false});
+    cv.addEventListener('touchend', function(){ ssVis.drag = false; ssVis.dist = 0; });
+  }
+
+  function ssVisLoop(){
+    var scr = document.getElementById('s-elz');
+    if (!scr || scr.style.display === 'none') { ssVisStop(); return; }
+    ssVis.anim = requestAnimationFrame(ssVisLoop);
+    var cv = document.getElementById('ss-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || 0;
+    var H = 280;
+    if (W < 10) return;
+    var dpr = window.devicePixelRatio || 1;
+    var x = cv.getContext('2d');
+    try {
+    if (!ssVis.cells.length) ssVisBuild();
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H*dpr) > 2) { cv.width = W*dpr; cv.height = H*dpr; }
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var st = { rotX: ssVis.rotX, rotY: ssVis.rotY, zoom: ssVis.zoom, fit: 1, stars: ssVis._stars, sw: ssVis._sw, t: ssVis.t };
+    hcBg(x, st, W, H);
+    ssVis._stars = st.stars; ssVis._sw = st.sw;
+
+    var I = parseFloat((document.getElementById('ss-i-num') || {}).value);
+    if (isNaN(I) || I <= 0) I = 5;
+    var spd = Math.max(0.3, Math.min(3, I / 5));
+    ssVis.t += 0.016;
+    if (ssVis.built !== ssCount + ':' + ssSel.slice(0, ssCount).join(',')) ssVisBuild();
+
+    var lay = ssLayout(ssCount), items = [];
+    for (var i = 0; i < ssVis.cells.length; i++) {
+      ionStep3D(ssVis.cells[i], spd);
+      pushTank(items, st, W, H, lay.offs[i], ssVis.cells[i]);
+    }
+
+    // Pil + kablolar + elektron akışı (3D dünya koordinatlarında)
+    g3Box(items, st, W, H, 0, -92, 0, 32, 13, 13, '30,36,54', 0.95, 'rgba(129,140,248,.6)');
+    var path = [[-34,-92,0],[-34,-68,0],[lay.offs[0]+ssVis.cells[0].CATX,-68,0],[lay.offs[0]+ssVis.cells[0].CATX,-36,0]];
+    for (i = 0; i < ssVis.cells.length - 1; i++) {
+      path.push([lay.offs[i]+ssVis.cells[i].ANX,-36,0], [lay.offs[i]+ssVis.cells[i].ANX,-68,0],
+                [lay.offs[i+1]+ssVis.cells[i+1].CATX,-68,0], [lay.offs[i+1]+ssVis.cells[i+1].CATX,-36,0]);
+    }
+    var lastI = ssVis.cells.length - 1;
+    path.push([lay.offs[lastI]+ssVis.cells[lastI].ANX,-36,0], [lay.offs[lastI]+ssVis.cells[lastI].ANX,-68,0], [34,-68,0], [34,-92,0]);
+
+    drawSortedItems(x, items);
+
+    // Kabloları çiz (üstte, düz çizgiler)
+    x.strokeStyle = 'rgba(148,163,184,.55)'; x.lineWidth = 2; x.lineCap = 'round';
+    x.beginPath();
+    var p0 = hcProj(st, path[0][0], path[0][1], path[0][2], W, H);
+    x.moveTo(p0.x, p0.y);
+    for (i = 1; i < path.length; i++) { var pp = hcProj(st, path[i][0], path[i][1], path[i][2], W, H); x.lineTo(pp.x, pp.y); }
+    x.stroke();
+    // Elektron akış noktaları
+    var segLen = [0], tot = 0, pr = hcProj(st, path[0][0],path[0][1],path[0][2], W, H);
+    for (i = 1; i < path.length; i++) { var cp = hcProj(st, path[i][0],path[i][1],path[i][2], W, H); tot += Math.hypot(cp.x-pr.x, cp.y-pr.y); segLen.push(tot); pr = cp; }
+    for (var ed = 0; ed < 6; ed++) {
+      var f = ((ssVis.t * 0.09 * spd) + ed/6) % 1, d = f * tot;
+      for (var s2 = 1; s2 < path.length; s2++) {
+        if (segLen[s2] >= d) {
+          var ft = segLen[s2] === segLen[s2-1] ? 0 : (d - segLen[s2-1]) / (segLen[s2] - segLen[s2-1]);
+          var a1 = hcProj(st, path[s2-1][0],path[s2-1][1],path[s2-1][2], W, H), a2 = hcProj(st, path[s2][0],path[s2][1],path[s2][2], W, H);
+          var ex = a1.x + (a2.x-a1.x)*ft, ey = a1.y + (a2.y-a1.y)*ft;
+          x.beginPath(); x.arc(ex, ey, 2.6, 0, 6.283); x.fillStyle = '#facc15'; x.fill();
+          break;
+        }
+      }
+    }
+    // Etiketler
+    for (i = 0; i < ssVis.cells.length; i++) {
+      var labs = ssVis.cells[i]._labels;
+      for (var l = 0; l < labs.length; l++) {
+        x.fillStyle = labs[l].c; x.font = labs[l].f; x.textAlign = 'center';
+        x.fillText(labs[l].t, labs[l].x, labs[l].y);
+      }
+    }
+    var pbatt = hcProj(st, 0, -108, 0, W, H);
+    x.fillStyle = '#c7d2fe'; x.font = 'bold 9px sans-serif'; x.textAlign = 'center';
+    x.fillText('DC G\u00dc\u00c7 KAYNA\u011eI', pbatt.x, pbatt.y);
+    x.fillStyle = 'rgba(255,255,255,.28)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H - 8);
+    x.textAlign = 'right';
+    x.fillText('I = ' + I.toFixed(3) + ' A', W - 8, H - 8);
+    x.textAlign = 'left';
+    } catch (drawErrObj) { drawErr(x, W, H, drawErrObj); }
+  }
+
+  // Ekranda hata gösterici — mobilde konsol açmak zor olduğu için
+  // 3D sahnelerde bir hata olursa doğrudan canvas üzerine yazılır.
+  function drawErr(x, W, H, err){
+    x.fillStyle = '#1a0505'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#fca5a5'; x.font = 'bold 12px sans-serif'; x.textAlign = 'left';
+    x.fillText('\u26a0\ufe0f \u00c7izim hatas\u0131 (bu yaz\u0131y\u0131 g\u00f6nder):', 10, 24);
+    var msg = String(err && err.message || err);
+    var words = msg.split(' '), line = '', y = 46;
+    x.font = '11px monospace';
+    for (var i = 0; i < words.length; i++) {
+      var test = line + words[i] + ' ';
+      if (test.length > 42) { x.fillText(line, 10, y); line = words[i] + ' '; y += 16; if (y > H - 40) break; }
+      else line = test;
+    }
+    x.fillText(line, 10, y);
+    if (err && err.stack) {
+      x.fillStyle = 'rgba(252,165,165,.6)'; x.font = '9px monospace';
+      var sl = String(err.stack).split('\n').slice(1, 3);
+      for (var j = 0; j < sl.length; j++) x.fillText(sl[j].trim().slice(0, 46), 10, y + 20 + j*13);
+    }
+    try { console.error('Ronya 3D çizim hatası:', err); } catch (e2) {}
+  }
+
+  // ---------- 9h. Kaplama 3D Görselleştirme ----------
+  // Seri Kaplar ile AYNI 3D motoru (pushTank/ionStep3D/g3Box)
+  // kullanır. Seçilen senaryoya göre nesne (kaşık/kolye) veya
+  // metal çubuk katot/anot olur; "Yanlış Bağlantı" doğru
+  // kutbun neden önemli olduğunu görsel olarak kanıtlar.
+  var CAP_META = [
+    { metalSym:'Ag', ionCol:'#e5e7eb', depCol:'#e5e7eb', icon:'\ud83e\udd44', itemLabel:'Demir ka\u015f\u0131k', metalLabel:'Saf g\u00fcm\u00fc\u015f', hasItem:true },
+    { metalSym:'Cu', ionCol:'#38bdf8', depCol:'#e78a5a', icon:'\ud83d\udfe0', itemLabel:'Safs\u0131z Cu (anot)', metalLabel:'Saf Cu (katot)', hasItem:false },
+    { metalSym:'Au', ionCol:'#fbbf24', depCol:'#fbbf24', icon:'\ud83d\udc8d', itemLabel:'G\u00fcm\u00fc\u015f kolye', metalLabel:'Saf alt\u0131n', hasItem:true }
+  ];
+  var capSt = { anim: null, t: 0, idx: 0, correct: true, rotX: 0.32, rotY: -0.5, zoom: 1, drag: false, lx: 0, ly: 0, dist: 0, bound: false, cell: null };
+
+  function capBuildCell(){
+    var meta = CAP_META[capSt.idx];
+    var CATX = -60, ANX = 60;
+    var itemSide = capSt.correct ? 'cat' : 'an';
+    var cell = {
+      k: 'cap', name: meta.hasItem ? '' : (capSt.correct ? 'Saf Cu katot \u00b7 Safs\u0131z Cu anot' : 'Safs\u0131z Cu katot \u00b7 Saf Cu anot (YANLI\u015e)'),
+      ic: { c: [meta.metalSym + '\u207a', meta.ionCol], a: ['SO\u2084\u00b2\u207b', '#c084fc'] },
+      halfW: 96, CATX: CATX, ANX: ANX,
+      catDis: true, catDep: true, catIonGas: false, catAmbientGas: false,
+      anDis: true, anActive: true, anDep: false, anIonGas: false, anAmbientGas: false,
+      catGasCol: '#e2e8f0', anGasCol: '#e2e8f0',
+      catDepCol: meta.depCol, anDepCol: meta.depCol,
+      catLabel: capSt.correct ? (meta.hasItem ? '\u2713 Kaplan\u0131yor!' : 'Saf Cu birikiyor') : (meta.hasItem ? '\u2717 Kaplanm\u0131yor' : 'Cu birikiyor (bo\u015fa)'),
+      anLabel: capSt.correct ? (meta.hasItem ? meta.metalLabel + ' \u00e7\u00f6z\u00fcn\u00fcyor' : 'Safs\u0131z Cu \u00e7\u00f6z\u00fcn\u00fcyor') : (meta.hasItem ? '\u26a0 Nesne \u00e7\u00f6z\u00fcn\u00fcyor!' : 'Saf Cu bo\u015fa \u00e7\u00f6z\u00fcn\u00fcyor'),
+      dep: 0, depAn: 0, anodeLeft: 8, ions: [], bub: [],
+      itemSide: meta.hasItem ? itemSide : null,
+      itemIcon: meta.icon, itemGlow: capSt.correct ? 'good' : 'bad'
+    };
+    for (var j = 0; j < 6; j++) {
+      cell.ions.push({ x: CATX + (ANX-CATX)*(0.3+Math.random()*0.4), y: 10+Math.random()*78, z: -38+Math.random()*76, ch: 1, cool: Math.random()*2 });
+      cell.ions.push({ x: CATX + (ANX-CATX)*(0.3+Math.random()*0.4), y: 10+Math.random()*78, z: -38+Math.random()*76, ch: -1, cool: Math.random()*2 });
+    }
+    capSt.cell = cell;
+  }
+
+  window.capSetMode = function(correct, btn){
+    capSt.correct = correct;
+    if (btn) {
+      var bs = btn.parentElement.querySelectorAll('button');
+      for (var i = 0; i < bs.length; i++) bs[i].classList.remove('sel2');
+      btn.classList.add('sel2');
+    }
+    capBuildCell();
+  };
+  function capSetScenario(idx){
+    if (idx < 0 || idx > 2) idx = 0;
+    capSt.idx = idx;
+    capBuildCell();
+    var t = document.getElementById('cap-title');
+    if (t) t.textContent = ELZ_SCEN[idx].icon + ' ' + ELZ_SCEN[idx].title;
+  }
+
+  function capBindCanvas(){
+    if (capSt.bound) return;
+    var cv = document.getElementById('cap-cv');
+    if (!cv) return;
+    capSt.bound = true;
+    cv.onmousedown = function(e){ capSt.drag = true; capSt.lx = e.clientX; capSt.ly = e.clientY; };
+    cv.onmousemove = function(e){
+      if (!capSt.drag) return;
+      capSt.rotY += (e.clientX - capSt.lx) * 0.01; capSt.rotX += (e.clientY - capSt.ly) * 0.01;
+      capSt.lx = e.clientX; capSt.ly = e.clientY;
+    };
+    cv.onmouseup = cv.onmouseleave = function(){ capSt.drag = false; };
+    cv.addEventListener('wheel', function(e){ e.preventDefault(); capSt.zoom = Math.max(0.5, Math.min(2.2, capSt.zoom - e.deltaY*0.001)); }, {passive:false});
+    cv.addEventListener('touchstart', function(e){
+      if (e.touches.length === 1) { capSt.drag = true; capSt.lx = e.touches[0].clientX; capSt.ly = e.touches[0].clientY; }
+      else if (e.touches.length === 2) { var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY; capSt.dist=Math.sqrt(dx*dx+dy*dy); }
+      e.preventDefault();
+    }, {passive:false});
+    cv.addEventListener('touchmove', function(e){
+      if (e.touches.length === 1 && capSt.drag) {
+        capSt.rotY += (e.touches[0].clientX - capSt.lx) * 0.013; capSt.rotX += (e.touches[0].clientY - capSt.ly) * 0.013;
+        capSt.lx = e.touches[0].clientX; capSt.ly = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        var dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY, dist=Math.sqrt(dx*dx+dy*dy);
+        if (capSt.dist > 0) capSt.zoom = Math.max(0.5, Math.min(2.2, capSt.zoom * dist/capSt.dist));
+        capSt.dist = dist;
+      }
+      e.preventDefault();
+    }, {passive:false});
+    cv.addEventListener('touchend', function(){ capSt.drag = false; capSt.dist = 0; });
+  }
+
+  function capStart(){
+    if (!capSt.cell) capBuildCell();
+    capBindCanvas();
+    if (capSt.anim) cancelAnimationFrame(capSt.anim);
+    capLoop();
+  }
+  function capStop(){ if (capSt.anim) { cancelAnimationFrame(capSt.anim); capSt.anim = null; } }
+
+  function capLoop(){
+    var scr = document.getElementById('s-elz');
+    if (!scr || scr.style.display === 'none') { capStop(); return; }
+    capSt.anim = requestAnimationFrame(capLoop);
+    var cv = document.getElementById('cap-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || 0;
+    var H = 260;
+    if (W < 10) return;
+    var dpr = window.devicePixelRatio || 1;
+    var x = cv.getContext('2d');
+    try {
+    if (!capSt.cell) capBuildCell();
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H*dpr) > 2) { cv.width = W*dpr; cv.height = H*dpr; }
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var st = { rotX: capSt.rotX, rotY: capSt.rotY, zoom: capSt.zoom, fit: 1, stars: capSt._stars, sw: capSt._sw, t: capSt.t };
+    hcBg(x, st, W, H);
+    capSt._stars = st.stars; capSt._sw = st.sw;
+    capSt.t += 0.016;
+
+    ionStep3D(capSt.cell, 1.1);
+    var items = [];
+    pushTank(items, st, W, H, 0, capSt.cell);
+    g3Box(items, st, W, H, 0, -92, 0, 30, 12, 12, '30,36,54', 0.95, 'rgba(129,140,248,.6)');
+    drawSortedItems(x, items);
+
+    // Kablolar (pil -> katot, anot -> pil) — hangi taraf katot ise oraya (-) gider
+    var CATX = capSt.cell.CATX, ANX = capSt.cell.ANX;
+    var pB1 = hcProj(st, -14, -92, 0, W, H), pB2 = hcProj(st, 14, -92, 0, W, H);
+    var pC = hcProj(st, CATX, -36, 0, W, H), pA = hcProj(st, ANX, -36, 0, W, H);
+    var pCm = hcProj(st, CATX, -68, 0, W, H), pAm = hcProj(st, ANX, -68, 0, W, H);
+    x.strokeStyle = 'rgba(148,163,184,.55)'; x.lineWidth = 2; x.lineCap = 'round';
+    x.beginPath(); x.moveTo(pB1.x,pB1.y); x.lineTo(pCm.x,pB1.y); x.lineTo(pCm.x,pCm.y); x.lineTo(pC.x,pC.y); x.stroke();
+    x.beginPath(); x.moveTo(pB2.x,pB2.y); x.lineTo(pAm.x,pB2.y); x.lineTo(pAm.x,pAm.y); x.lineTo(pA.x,pA.y); x.stroke();
+    x.fillStyle = capSt.correct ? '#60a5fa' : '#f87171';
+    x.font = 'bold 10px sans-serif'; x.textAlign = 'center';
+    var pMinus = hcProj(st, -14, -100, 0, W, H);
+    x.fillText('\u2212', pMinus.x, pMinus.y);
+
+    var labs = capSt.cell._labels;
+    for (var l = 0; l < labs.length; l++) {
+      x.fillStyle = labs[l].c; x.font = labs[l].f; x.textAlign = 'center';
+      x.fillText(labs[l].t, labs[l].x, labs[l].y);
+    }
+    x.fillStyle = 'rgba(255,255,255,.28)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H - 8);
+    x.textAlign = 'right';
+    x.fillStyle = capSt.correct ? '#22c55e' : '#ef4444';
+    x.fillText(capSt.correct ? '\u2713 DO\u011eRU BA\u011eLANTI' : '\u2717 YANLI\u015e BA\u011eLANTI', W - 8, H - 8);
+    x.textAlign = 'left';
+    } catch (drawErrObj2) { drawErr(x, W, H, drawErrObj2); }
+  }
+
+
+  function elzTabGo(idx){
+    tswitch('elz-tabs', 'elz-tps', idx);
+    elzStop(); ssVisStop(); capStop();
+    if (idx === 0) elzStart();
+    else if (idx === 2) capStart();
+    else if (idx === 3) ssVisStart();
+  }
+  window.elzTabGo = elzTabGo;
+
+  // ---------- 11a. GENEL 3D İSKELET MOTORU (dallanma + heteroatom destekli) ----------
+  // Mevcut hcBuild (Bölüm 10) dokunulmadan bırakıldı — galeri onunla çalışmaya
+  // devam ediyor. Bu bölüm, "isimden çiz" özelliği ve fonksiyonel gruplar için
+  // YENİ, dallanma destekli bir iskelet motoru ekler; aynı vektör yardımcılarını
+  // (v3, vAdd, vSub, vScale, vNorm, vCross, rotZv, HC_TETRA) kullanır.
+  function vDot(a, b){ return a.x*b.x + a.y*b.y + a.z*b.z; }
+  function vLen2(a){ return Math.sqrt(vDot(a,a)); }
+  function rotAxis(v, axis, ang){
+    axis = vNorm(axis);
+    var c = Math.cos(ang), s = Math.sin(ang);
+    var t1 = vScale(v, c);
+    var t2 = vScale(vCross(axis, v), s);
+    var t3 = vScale(axis, vDot(axis, v) * (1 - c));
+    return vAdd(vAdd(t1, t2), t3);
+  }
+  function perpAxis(u){
+    return Math.abs(u.z) < 0.9 ? vNorm(vCross(u, v3(0,0,1))) : vNorm(vCross(u, v3(1,0,0)));
+  }
+
+  // Bir atomun MEVCUT komşu yönlerine göre, EKSİK olan (H veya yeni dal için)
+  // yönleri döndürür. nb: [{dir, o}], count: kaç yön isteniyor.
+  function freeDirs(nb, count){
+    if (count <= 0) return [];
+    if (nb.length === 0) {
+      var q3 = 1 / Math.sqrt(3);
+      var full = [v3(q3,q3,q3), v3(q3,-q3,-q3), v3(-q3,q3,-q3), v3(-q3,-q3,q3)];
+      return full.slice(0, count);
+    }
+    if (nb.length === 1) {
+      var u = nb[0].dir;
+      if (count === 1) {
+        if (nb[0].o === 3) return [vScale(u, -1)];               // ≡C-H (doğrusal)
+        // Genel sp³ tek-bağ devamı: mevcut yönden 109.47° açıyla
+        var axSingle = perpAxis(u);
+        return [rotAxis(vScale(u, -1), axSingle, HC_TETRA)];
+      }
+      if (count === 2) {                                          // =CH₂ ya da dal ikilisi (~120°)
+        return [rotZv3(u, 2.0944), rotZv3(u, -2.0944)];
+      }
+      if (count === 3) {                                          // -CH₃ üçayak (109.47°)
+        var p = perpAxis(u), q = vNorm(vCross(u, p));
+        var dirs3 = [];
+        for (var t3 = 0; t3 < 3; t3++) {
+          var a3 = 0.5236 + t3 * 2.0944;
+          dirs3.push(vNorm(vAdd(vScale(u, -0.33333),
+            vScale(vAdd(vScale(p, Math.cos(a3)), vScale(q, Math.sin(a3))), 0.94281))));
+        }
+        return dirs3;
+      }
+    }
+    if (nb.length === 2) {
+      var u1 = nb[0].dir, u2 = nb[1].dir, s2 = vAdd(u1, u2);
+      var isMultiple = nb[0].o >= 2 || nb[1].o >= 2;
+      if (count === 1) {
+        if (isMultiple) return [vNorm(vScale(s2, -1))];   // sp² düzlemsel tek eksik (çift/üçlü bağ komşusu var)
+        // sp³: iki zincir bağı arasından TEK dal/H isteniyor — düzlem İÇİNDE değil,
+        // gerçek tetrahedral (düzlem DIŞI) yönlerden biri seçilmeli, yoksa dal ile
+        // aynı düzlemdeki H neredeyse üst üste biner.
+        var bb0 = vNorm(vScale(s2, -1));
+        var nn0 = vCross(u1, u2);
+        if (vLen2(nn0) < 1e-4) nn0 = v3(0, 0, 1);
+        nn0 = vNorm(nn0);
+        return [vNorm(vAdd(vScale(bb0, 0.57735), vScale(nn0, 0.81650)))];
+      }
+      if (count === 2) {                                           // sp³ -CH₂-
+        var bb = vNorm(vScale(s2, -1));
+        var nn = vCross(u1, u2);
+        if (vLen2(nn) < 1e-4) nn = v3(0, 0, 1);
+        nn = vNorm(nn);
+        return [ vNorm(vAdd(vScale(bb, 0.57735), vScale(nn, 0.81650))),
+                 vNorm(vAdd(vScale(bb, 0.57735), vScale(nn, -0.81650))) ];
+      }
+    }
+    if (nb.length === 3 && count === 1) {
+      // Tam tetrahedral: 4 birim vektörün toplamı ≈ 0 → 4.'yü diğer 3'ten bul
+      var sum3 = vAdd(vAdd(nb[0].dir, nb[1].dir), nb[2].dir);
+      return [vNorm(vScale(sum3, -1))];
+    }
+    return [];
+  }
+  // rotZv, sadece Z ekseni etrafında döner; =CH₂ gibi rastgele yönlü tek bağdan
+  // ikili dal üretirken KEYFİ (ama tutarlı) bir dik eksen etrafında dönmemiz
+  // gerekir — bu yüzden rotZv'nin genel 3B karşılığı:
+  function rotZv3(u, ang){
+    var ax = perpAxis(u);
+    return rotAxis(u, ax, ang);
+  }
+
+  // Bir zincir dalını (metil, etil, propil, bütil...) verilen başlangıç
+  // konumundan ve yönünden itibaren zikzak şeklinde büyütür.
+  function growChain(parentPos, startDir, count){
+    var positions = [];
+    var d = vNorm(startDir);
+    var pos = vAdd(parentPos, vScale(d, 1.54));
+    positions.push(pos);
+    if (count === 1) return positions;
+    var axis = perpAxis(d);
+    var sign = -1;
+    for (var i = 1; i < count; i++) {
+      d = rotAxis(d, axis, sign * HC_TETRA);
+      sign = -sign;
+      pos = vAdd(pos, vScale(d, 1.54));
+      positions.push(pos);
+    }
+    return positions;
+  }
+
+  // ---------- 11b. DALLANMIŞ İSKELET İNŞACISI ----------
+  // hcBuildAt(n, kind, dbAt, branches): ana zincir + dallar + tüm H'leri
+  // tek seferde üretir. dbAt: çift/üçlü bağın 0-index'li İLK karbonu
+  // (locant-1). branches: [{locant, carbons, special}] — special:
+  // null (düz zincir) | 'izopropil' | 'izobutil' | 'tersbutil'.
+  function hcBuildAt(n, kind, dbAt, branches){
+    dbAt = (dbAt === undefined || dbAt === null) ? 0 : dbAt;
+    branches = branches || [];
+    // Bağ dereceleri: index i = atom i ile i+1 arasındaki bağ derecesi
+    var ord = [];
+    for (var i = 0; i < n - 1; i++) {
+      if (kind === 'en' && i === dbAt) ord.push(2);
+      else if (kind === 'in' && i === dbAt) ord.push(3);
+      else ord.push(1);
+    }
+    // Ana zincir konumları
+    var C = [v3(0, 0, 0)];
+    var d = v3(1, 0, 0), sign = -1;
+    if (n > 1) d = rotZv(d, 0.61548);
+    for (i = 1; i < n; i++) {
+      var curO = ord[i - 1];
+      var prevO = i >= 2 ? ord[i - 2] : 1;
+      var len = curO === 3 ? 1.20 : curO === 2 ? 1.34 : 1.54;
+      if (i === 1) {
+        // ilk bağ: başlangıç eğimi zaten ayarlı
+      } else if (prevO >= 2) {
+        d = rotZv(d, 1.0472); sign = -1;                 // çoklu bağdan çıkış: 120° kink
+      } else {
+        d = rotZv(d, sign * HC_TETRA); sign = -sign;      // sıradan sp³-sp³
+      }
+      C.push(vAdd(C[i - 1], vScale(d, len)));
+    }
+    // Ana ekseni yatayla hizala
+    if (n > 1) {
+      var ax0 = vSub(C[n - 1], C[0]), ang0 = Math.atan2(ax0.y, ax0.x);
+      for (i = 0; i < n; i++) C[i] = rotZv(C[i], -ang0);
+    }
+    var atoms = [], bonds = [];
+    for (i = 0; i < n; i++) atoms.push({ x: C[i].x, y: C[i].y, z: C[i].z, el: 'C' });
+    for (i = 0; i < n - 1; i++) bonds.push({ a: i, b: i + 1, o: ord[i] });
+
+    function nbOf(idx){
+      var nb = [];
+      for (var b2 = 0; b2 < bonds.length; b2++) {
+        var A = atoms[bonds[b2].a], B = atoms[bonds[b2].b];
+        if (bonds[b2].a === idx) nb.push({ dir: vNorm(vSub(v3(B.x,B.y,B.z), v3(A.x,A.y,A.z))), o: bonds[b2].o });
+        if (bonds[b2].b === idx) nb.push({ dir: vNorm(vSub(v3(A.x,A.y,A.z), v3(B.x,B.y,B.z))), o: bonds[b2].o });
+      }
+      return nb;
+    }
+    function addAtom(pos){ var idx = atoms.length; atoms.push({ x: pos.x, y: pos.y, z: pos.z, el: 'C' }); return idx; }
+
+    // Dalları ekle — AYNI karbona (aynı locant) bağlanan dallar TEK seferde
+    // hesaplanmalı, yoksa iki ayrı tek-yön isteği aynı düzlemde çakışabilir.
+    var byLocant = {};
+    for (var br0 = 0; br0 < branches.length; br0++) {
+      var loc0 = branches[br0].locant;
+      (byLocant[loc0] = byLocant[loc0] || []).push(branches[br0]);
+    }
+    var locKeys = Object.keys(byLocant);
+    for (var lk = 0; lk < locKeys.length; lk++) {
+      var pIdx = parseInt(locKeys[lk], 10) - 1;
+      if (pIdx < 0 || pIdx >= n) continue;
+      var group = byLocant[locKeys[lk]];
+      var pPos = v3(atoms[pIdx].x, atoms[pIdx].y, atoms[pIdx].z);
+      var hasSpecial = group.some(function(g){ return !!g.special; });
+
+      if (group.length === 1 || hasSpecial) {
+        // Tek dal (ya da özel dallı grup) — sırayla, her seferinde güncel nb ile
+        for (var gi = 0; gi < group.length; gi++) {
+          var b = group[gi];
+          var free1 = freeDirs(nbOf(pIdx), 1);
+          if (!free1.length) continue;
+          attachOneBranch(b, pIdx, pPos, free1[0]);
+        }
+      } else {
+        // Aynı locant'ta 2+ düz-zincir dal — TÜM yönleri birlikte iste
+        var freeN = freeDirs(nbOf(pIdx), group.length);
+        for (var gj = 0; gj < group.length && gj < freeN.length; gj++)
+          attachOneBranch(group[gj], pIdx, pPos, freeN[gj]);
+      }
+    }
+
+    function attachOneBranch(b, pIdx, pPos, dir0){
+      if (b.special === 'izopropil' || b.special === 'tersbutil') {
+        var c1pos = vAdd(pPos, vScale(dir0, 1.54));
+        var c1idx = addAtom(c1pos);
+        bonds.push({ a: pIdx, b: c1idx, o: 1 });
+        var nbC1 = [{ dir: vScale(dir0, -1), o: 1 }];
+        var need = b.special === 'izopropil' ? 2 : 3;
+        var dirs = freeDirs(nbC1, need);
+        for (var k1 = 0; k1 < dirs.length; k1++) {
+          var mp = vAdd(c1pos, vScale(dirs[k1], 1.54));
+          var mi = addAtom(mp);
+          bonds.push({ a: c1idx, b: mi, o: 1 });
+        }
+      } else if (b.special === 'izobutil') {
+        var d1pos = vAdd(pPos, vScale(dir0, 1.54));
+        var d1idx = addAtom(d1pos);
+        bonds.push({ a: pIdx, b: d1idx, o: 1 });
+        var nbD1 = [{ dir: vScale(dir0, -1), o: 1 }];
+        var dir1 = freeDirs(nbD1, 1)[0];
+        var d2pos = vAdd(d1pos, vScale(dir1, 1.54));
+        var d2idx = addAtom(d2pos);
+        bonds.push({ a: d1idx, b: d2idx, o: 1 });
+        var nbD2 = [{ dir: vScale(dir1, -1), o: 1 }];
+        var twoDirs = freeDirs(nbD2, 2);
+        for (var k2 = 0; k2 < twoDirs.length; k2++) {
+          var mp2 = vAdd(d2pos, vScale(twoDirs[k2], 1.54));
+          var mi2 = addAtom(mp2);
+          bonds.push({ a: d2idx, b: mi2, o: 1 });
+        }
+      } else {
+        var positions = growChain(pPos, dir0, b.carbons);
+        var prevIdx = pIdx;
+        for (var pi = 0; pi < positions.length; pi++) {
+          var ni = addAtom(positions[pi]);
+          bonds.push({ a: prevIdx, b: ni, o: 1 });
+          prevIdx = ni;
+        }
+      }
+    }
+
+    // Tüm karbonlar için eksik hidrojenleri tamamla
+    var CH = 1.09;
+    var carbonCount = atoms.length; // dallar dahil, H'ler henüz yok
+    for (i = 0; i < carbonCount; i++) {
+      var nb2 = nbOf(i);
+      var val = 0;
+      for (var vi = 0; vi < nb2.length; vi++) val += nb2[vi].o;
+      var h = 4 - val;
+      if (h <= 0) continue;
+      var hd = freeDirs(nb2, h);
+      for (var hh = 0; hh < hd.length; hh++) {
+        var hp = vAdd(v3(atoms[i].x, atoms[i].y, atoms[i].z), vScale(hd[hh], CH));
+        atoms.push({ x: hp.x, y: hp.y, z: hp.z, el: 'H' });
+        bonds.push({ a: i, b: atoms.length - 1, o: 1 });
+      }
+    }
+
+    // Merkeze al + ölçekle
+    var cx = 0, cy = 0, cz = 0;
+    atoms.forEach(function(a4){ cx += a4.x; cy += a4.y; cz += a4.z; });
+    cx /= atoms.length; cy /= atoms.length; cz /= atoms.length;
+    var maxR = 1;
+    atoms.forEach(function(a4){
+      a4.x = (a4.x - cx) * 34; a4.y = (a4.y - cy) * 34; a4.z = (a4.z - cz) * 34;
+      maxR = Math.max(maxR, Math.sqrt(a4.x*a4.x + a4.y*a4.y + a4.z*a4.z));
+    });
+    var nC = carbonCount, nH = atoms.length - carbonCount;
+    return { atoms: atoms, bonds: bonds, nC: nC, nH: nH, fit: Math.min(1.6, 92 / maxR) };
+  }
+
+  // ---------- 11c. TÜRKÇE IUPAC İSİM AYRIŞTIRICISI ----------
+  function foldOrg(s){
+    return String(s).toLocaleLowerCase('tr')
+      .replace(/\u00e7/g,'c').replace(/\u011f/g,'g').replace(/\u0131/g,'i')
+      .replace(/\u00f6/g,'o').replace(/\u015f/g,'s').replace(/\u00fc/g,'u')
+      .replace(/[^a-z0-9,]/g,'');
+  }
+  var IUPAC_PARENTS = [
+    ['dekan','an',10,'Dekan'], ['nonan','an',9,'Nonan'], ['oktan','an',8,'Oktan'], ['heptan','an',7,'Heptan'],
+    ['heksan','an',6,'Heksan'], ['pentan','an',5,'Pentan'], ['butan','an',4,'B\u00fctan'], ['propan','an',3,'Propan'],
+    ['etan','an',2,'Etan'], ['metan','an',1,'Metan'],
+    ['undeken','en',11,'Undeken'], ['deken','en',10,'Deken'], ['nonen','en',9,'Nonen'], ['okten','en',8,'Okten'],
+    ['hepten','en',7,'Hepten'], ['heksen','en',6,'Heksen'], ['penten','en',5,'Penten'], ['buten','en',4,'B\u00fcten'],
+    ['propen','en',3,'Propen'], ['eten','en',2,'Eten'],
+    ['undekin','in',11,'Undekin'], ['dekin','in',10,'Dekin'], ['nonin','in',9,'Nonin'], ['oktin','in',8,'Oktin'],
+    ['heptin','in',7,'Heptin'], ['heksin','in',6,'Heksin'], ['pentin','in',5,'Pentin'], ['butin','in',4,'B\u00fctin'],
+    ['propin','in',3,'Propin'], ['etin','in',2,'Etin']
+  ];
+  IUPAC_PARENTS.sort(function(a,b){ return b[0].length - a[0].length; });
+  var IUPAC_SUBS = [
+    ['tersbutil', 4, 'tersbutil'], ['tbutil', 4, 'tersbutil'],
+    ['izobutil', 4, 'izobutil'],
+    ['butil', 4, null],
+    ['izopropil', 3, 'izopropil'],
+    ['propil', 3, null],
+    ['etil', 2, null],
+    ['metil', 1, null]
+  ];
+  IUPAC_SUBS.sort(function(a,b){ return b[0].length - a[0].length; });
+  var IUPAC_MULT = [ ['tetra',4], ['tri',3], ['di',2] ];
+
+  function parseOrganicName(raw){
+    if (!raw || !String(raw).trim()) return { ok:false, error:'Bo\u015f isim girildi.' };
+    var norm = String(raw).replace(/[\s\-]+/g, '');
+    var folded = foldOrg(norm);
+
+    var parentMatch = null;
+    for (var i = 0; i < IUPAC_PARENTS.length; i++) {
+      var pn = IUPAC_PARENTS[i][0];
+      if (folded.length >= pn.length && folded.slice(folded.length - pn.length) === pn) { parentMatch = IUPAC_PARENTS[i]; break; }
+    }
+    if (!parentMatch) return { ok:false, error:'Tan\u0131nan bir ana zincir bulunamad\u0131. \u00d6rnekler: b\u00fctan, 2-penten, 3-metilheksan.' };
+    var kind = parentMatch[1], n = parentMatch[2], properParent = parentMatch[3];
+    var prefix = folded.slice(0, folded.length - parentMatch[0].length);
+
+    var dbAt = 0;
+    if (kind !== 'an') {
+      var trailingNum = prefix.match(/(\d+)$/);
+      if (trailingNum) {
+        var beforeNum = prefix.slice(0, prefix.length - trailingNum[0].length);
+        if (beforeNum === '' || /[a-z]$/.test(beforeNum)) {
+          dbAt = parseInt(trailingNum[1], 10) - 1;
+          prefix = beforeNum;
+        }
+      }
+    }
+
+    var branches = [];
+    var guard = 0;
+    while (prefix.length > 0 && guard++ < 20) {
+      var lm = prefix.match(/^(\d+(?:,\d+)*)/);
+      if (!lm) return { ok:false, error:'"' + prefix + '" k\u0131sm\u0131nda bir konum numaras\u0131 (\u00f6rn. "3-") bekleniyordu.' };
+      var locants = lm[1].split(',').map(Number);
+      prefix = prefix.slice(lm[0].length);
+      var multVal = 1;
+      for (var m2 = 0; m2 < IUPAC_MULT.length; m2++) {
+        if (prefix.indexOf(IUPAC_MULT[m2][0]) === 0) { multVal = IUPAC_MULT[m2][1]; prefix = prefix.slice(IUPAC_MULT[m2][0].length); break; }
+      }
+      var subMatch = null;
+      for (var s2 = 0; s2 < IUPAC_SUBS.length; s2++) {
+        if (prefix.indexOf(IUPAC_SUBS[s2][0]) === 0) { subMatch = IUPAC_SUBS[s2]; break; }
+      }
+      if (!subMatch) return { ok:false, error:'"' + prefix + '" tan\u0131nan bir grup ad\u0131 de\u011fil. Desteklenenler: metil, etil, propil, izopropil, b\u00fctil, izob\u00fctil, tersb\u00fctil.' };
+      prefix = prefix.slice(subMatch[0].length);
+      for (var li = 0; li < locants.length; li++)
+        branches.push({ locant: locants[li], carbons: subMatch[1], special: subMatch[2], mult: multVal });
+    }
+
+    for (var bi = 0; bi < branches.length; bi++) {
+      if (branches[bi].locant < 1 || branches[bi].locant > n)
+        return { ok:false, error: branches[bi].locant + ' konumu ' + n + ' karbonlu zincirin d\u0131\u015f\u0131nda kal\u0131yor.' };
+    }
+    if (dbAt < 0 || dbAt > n - 2)
+      return { ok:false, error: '\u00c7ift/\u00fc\u00e7l\u00fc ba\u011f konumu ge\u00e7ersiz.' };
+
+    // Çoğaltma öneki (di/tri/tetra) tutarlılığı: aynı grup (karbon+özel tip)
+    // TOPLAM ka\u00e7 kez ge\u00e7iyorsa, \u00f6nek de o say\u0131y\u0131 do\u011fru yans\u0131tmal\u0131.
+    var multOk = true;
+    var chk = {};
+    branches.forEach(function(b){
+      var key = b.carbons + '|' + (b.special || 'null');
+      (chk[key] = chk[key] || []).push(b);
+    });
+    Object.keys(chk).forEach(function(k){
+      var g = chk[k];
+      g.forEach(function(b){ if (b.mult !== g.length) multOk = false; });
+    });
+
+    return { ok:true, n:n, kind:kind, dbAt:dbAt, branches:branches, properParent:properParent, multOk:multOk };
+  }
+
+  // ---------- 11d. KANONİK (EN DÜŞÜK LOKANT) IUPAC ADI KONTROLÜ ----------
+  var SUBST_DISPLAY = {
+    '1|null':'metil', '2|null':'etil', '3|null':'propil', '4|null':'b\u00fctil',
+    '3|izopropil':'izopropil', '4|izobutil':'izob\u00fctil', '4|tersbutil':'tersb\u00fctil'
+  };
+  var MULT_NAME = { 2:'di', 3:'tri', 4:'tetra' };
+  function cmpArr(a, b){
+    for (var i = 0; i < Math.max(a.length, b.length); i++) {
+      var av = a[i] === undefined ? Infinity : a[i], bv = b[i] === undefined ? Infinity : b[i];
+      if (av !== bv) return av - bv;
+    }
+    return 0;
+  }
+  function canonicalLocants(n, kind, dbAt, branches){
+    var LdbA = kind === 'an' ? -1 : dbAt;
+    var subA = branches.map(function(b){ return b.locant; }).sort(function(x,y){ return x-y; });
+    var dbAtB = n - 2 - dbAt;
+    var LdbB = kind === 'an' ? -1 : dbAtB;
+    var branchesB = branches.map(function(b){ return { locant: n + 1 - b.locant, carbons: b.carbons, special: b.special }; });
+    var subB = branchesB.map(function(b){ return b.locant; }).sort(function(x,y){ return x-y; });
+    var pickB = false;
+    if (kind !== 'an' && LdbB !== LdbA) pickB = LdbB < LdbA;
+    else pickB = cmpArr(subB, subA) < 0;
+    if (pickB) return { dbAt: dbAtB, branches: branchesB, changed: true };
+    return { dbAt: dbAt, branches: branches, changed: false };
+  }
+  function buildCanonicalName(n, kind, dbAt, branches, properParent){
+    var groups = {};
+    branches.forEach(function(b){
+      var key = b.carbons + '|' + (b.special || 'null');
+      if (!groups[key]) groups[key] = { locants: [], dispName: SUBST_DISPLAY[key] || 'grup' };
+      groups[key].locants.push(b.locant);
+    });
+    var groupList = Object.keys(groups).map(function(k){ return groups[k]; });
+    groupList.forEach(function(g){ g.locants.sort(function(a,b){ return a-b; }); });
+    groupList.sort(function(a,b){ return a.dispName.localeCompare(b.dispName, 'tr'); });
+    var parts = groupList.map(function(g){
+      var mult = g.locants.length > 1 ? (MULT_NAME[g.locants.length] || '') : '';
+      return g.locants.join(',') + '-' + mult + g.dispName;
+    });
+    var prefix = parts.join('-');
+    var parentLower = properParent.toLocaleLowerCase('tr');
+    if (kind === 'an') return prefix ? prefix + parentLower : parentLower;
+    var dbLocant = dbAt + 1;
+    return (prefix ? prefix + '-' : '') + dbLocant + '-' + parentLower;
+  }
+  // Ayrıştırılan isim IUPAC'a göre en düşük lokantlı mı VE çoğaltma
+  // önekleri (di/tri/tetra) doğru mu? Değilse doğru adı döndürür.
+  function checkCanonicalName(parsed){
+    var canon = canonicalLocants(parsed.n, parsed.kind, parsed.dbAt, parsed.branches);
+    if (!canon.changed && parsed.multOk !== false) return null;
+    return buildCanonicalName(parsed.n, parsed.kind, canon.dbAt, canon.branches, parsed.properParent);
+  }
+
+  function organicMolFormula(mol){
+    return 'C' + mol.nC + 'H' + mol.nH;
+  }
 
