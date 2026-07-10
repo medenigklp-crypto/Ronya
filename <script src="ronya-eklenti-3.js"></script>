@@ -1,5 +1,6 @@
 /* RONYA KİMYA — EKLENTİ PARÇA 3/4 (devamı — parça 1'den SONRA yüklenmelidir) */
-'use strict';
+(function () {
+  'use strict';
   // ---------- 12. FONKSİYONEL GRUPLAR 3D GALERİSİ ----------
   // Alkol, Eter, Aldehit, Keton, Karboksilik Asit, Ester — her biri için
   // temsili moleküller, 3D yapı (O atomu kırmızı, C=O çift bağ pembe),
@@ -2314,3 +2315,30 @@
     }
     out.innerHTML = html;
   };
+
+
+  // --- Diğer parçaların kullanabilmesi için gerekli isimleri dışa aç ---
+  window.FG_CLASS_NAMES = FG_CLASS_NAMES;
+  window.eqEnter = eqEnter;
+  window.eqLeave = eqLeave;
+  window.fgEnter = fgEnter;
+  window.fgLeave = fgLeave;
+  window.fgList = fgList;
+  window.flameEnter = flameEnter;
+  window.flameLeave = flameLeave;
+  window.gvEnter = gvEnter;
+  window.gvLeave = gvLeave;
+  window.redoxEnter = redoxEnter;
+  window.rxnEnter = rxnEnter;
+  window.setEnter = setEnter;
+  window.setupEQ = setupEQ;
+  window.setupFG = setupFG;
+  window.setupFlame = setupFlame;
+  window.setupGV = setupGV;
+  window.setupRXN = setupRXN;
+  window.setupRedox = setupRedox;
+  window.setupSet = setupSet;
+  window.setupWI = setupWI;
+  window.wiEnter = wiEnter;
+  window.wiLeave = wiLeave;
+})();
