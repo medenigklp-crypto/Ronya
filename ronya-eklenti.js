@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v31
+   RONYA KİMYA — EKLENTİ v32
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -151,6 +151,14 @@
        eşleşti. Bu, Enerji/Denge/Asit-Baz/Çözünürlük Dengesi
        serisinin İLK parçası — MEB kitap bölümleri ve diğer 3 konu
        sıradaki adımlarda gelecek.
+   55) 🚫 DÜZELTME (dürüstlük): Önceki bir adımda Kimyasal Enerji'ye
+       "2025/2026 AYT — resmi ÖSYM kaynağından doğrulandı" diye 3 soru
+       eklemiştim. Bu iddiayı doğrulayamadığım İÇİN ve ayrıca ÖSYM'nin
+       resmi duyurusunda soruların telif korumalı olduğu ve izinsiz
+       çoğaltılamayacağı açıkça yazdığı için bu 3 soru KALDIRILDI.
+       Kullanıcının kendi el yazması notlarındaki 2019-2024 AYT
+       soruları (kişisel çalışma notu olduğu için) korunuyor. Enerji
+       modülü 19 doğrulanmış soruya geri döndü.
    50) 📁 DOSYA YAPISI DEĞİŞTİ: ronya-eklenti.js artık 4 parçaya
        bölündü (ronya-eklenti-1.js .. -4.js), Claude önizlemesinin
        çökmesini önlemek için. index.html'de 4 <script> etiketi SIRAYLA
@@ -713,6 +721,15 @@
     }
   }
 
+  // Öncüllü (I./II./III./IV./V.) soru metinlerini test kağıdı gibi alt alta diz
+  function formatOncul(text){
+    if (!text) return text;
+    // "... Buna göre: I. ... II. ... III. ..." kalıbını her önculü yeni satıra alacak şekilde böl
+    var out = text.replace(/\s(I{1,3}|IV|V)\.\s+/g, function(m, roman){
+      return '<br>&nbsp;&nbsp;<b>' + roman + '.</b> ';
+    });
+    return out;
+  }
   function selectInRow(btn){
     var bs = btn.parentElement.querySelectorAll('.ob');
     for (var i = 0; i < bs.length; i++) bs[i].classList.remove('sel2');
@@ -7785,14 +7802,14 @@
     } else if (molSt.cat === 2) {
       MOL_ACIK.forEach(function(q){
         html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molacik-' + q.n + '\')">' +
-          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5">' + q.n + '. ' + q.t + '</div>' +
+          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5">' + q.n + '. ' + formatOncul(q.t) + '</div>' +
           '<div id="molacik-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.7">' + q.c + '</div></div>';
       });
     } else {
       MOL_COK.forEach(function(q){
         var optsHtml = q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:var(--tx2)">' + String.fromCharCode(65+i) + ') ' + o + '</div>'; }).join('');
         html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
-          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5;margin-bottom:6px">' + q.n + '. ' + q.t + '</div>' +
+          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5;margin-bottom:6px">' + q.n + '. ' + formatOncul(q.t) + '</div>' +
           '<div style="margin-bottom:8px">' + optsHtml + '</div>' +
           '<div onclick="molToggle(\'molcok-' + q.n + '\')" style="cursor:pointer;font-size:12px;font-weight:600;color:#f59e0b;padding:6px 0;border-top:1px solid rgba(255,255,255,.08)">\ud83d\udc41\ufe0f Cevabı ve çözümü göster</div>' +
           '<div id="molcok-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
@@ -7838,9 +7855,9 @@
       c:'mol NH\u2083=13,6/17=0,8 mol. 2 dk=120 s. r<sub>NH3</sub>=(0,8/2L)/120s=<b>0,00333 M/s</b>.<br>Katsayı oranı NH\u2083:N\u2082:H\u2082O=4:2:6.<br>r<sub>N2</sub>=r<sub>NH3</sub>\u00d7(2/4)=<b>0,00167 M/s</b>.<br>r<sub>H2O</sub>=r<sub>NH3</sub>\u00d7(6/4)=<b>0,005 M/s</b>.' },
     { n:5, kat:'Ortalama Hız', t:'Mg(k)+2HBr(suda)\u2192MgBr\u2082(suda)+H\u2082(g) tepkimesinde Mg kütlesi 120 saniyede 18,8 g\u2019dan 11,6 g\u2019a düşüyor. HBr \u00e7\u00f6zeltisinin harcanma hızı ka\u00e7 mol/dk\u2019dır? (Mg:24)',
       c:'\u0394m(Mg)=18,8\u221211,6=7,2 g \u2192 \u0394n(Mg)=7,2/24=0,3 mol. 120 s=2 dk.<br>r<sub>Mg</sub>=0,3/2=<b>0,15 mol/dk</b>.<br>Katsayı oranı Mg:HBr=1:2 \u2192 r<sub>HBr</sub>=2\u00d70,15=<b>0,3 mol/dk</b>.' },
-    { n:6, kat:'Ortalama/Anlık Hız', t:'X(g) \u2192 2Y(g) tepkimesinde X gazının derişiminin zamanla değişimi grafikte verilmiştir. Buna g\u00f6re: I. Tepkime tamamlandığında Y gazının ortalama oluşma hızı ka\u00e7 mol/L\u00b7s\u2019dir? II. X gazının 20. saniyedeki anlık harcanma hızı ka\u00e7 mol/L\u00b7s\u2019dir?',
+    { n:6, kat:'Ortalama/Anlık Hız', t:'X(g) \u2192 2Y(g) tepkimesinde X gazının derişiminin zamanla değişimi grafikte verilmiştir (t=0\u2019da 3,6 M, t=10s\u2019de 2,4 M, t=20s\u2019de 1,6 M). Buna g\u00f6re: I. 0-10 saniyeler arası Y gazının ortalama oluşma hızı ka\u00e7 mol/L\u00b7s\u2019dir? II. 10-20 saniyeler arası Y gazının ortalama oluşma hızı ka\u00e7 mol/L\u00b7s\u2019dir?',
       graph:'noteg-x2y',
-      c:'Grafikten [X]: t=0\u2019da 3,6 M, t=40\u2019ta yaklaşık 0 (tepkime tamamlanmış).<br><b>I)</b> \u0394[X]=3,6 M (tamamı harcandı), \u0394t=40 s. r<sub>X</sub>=3,6/40=0,09 M/s. Katsayı oranı X:Y=1:2 olduğundan r<sub>Y</sub>=2\u00d70,09=<b>0,18 mol/L\u00b7s</b>.<br><b>II)</b> 20. saniyedeki ANLIK hız, o noktadaki EĞRİYE \u00c7İZİLEN TEĞETİN eğimidir (mutlak değerce). Grafikteki eğriye g\u00f6re bu noktada [X]\u22481,6 M civarındadır ve teğetin eğimi yaklaşık <b>0,04-0,05 mol/L\u00b7s</b> civarındadır (tam değer, teğetin tam olarak nereden \u00e7izildiğine bağlıdır \u2014 anlık hız her zaman ortalama hızdan farklı ve k\u00fc\u00e7\u00fckt\u00fcr \u00e7\u00fcnk\u00fc zamanla derişim azaldık\u00e7a hız da azalır).' },
+      c:'Grafikten okunan doğrulanmış noktalar: t=0:3,6 M, t=10s:2,4 M, t=20s:1,6 M (derişim oranı her 10 saniyede sabit 2/3 katsayısıyla azalıyor).<br><b>I) 0-10s arası:</b> \u0394[X]=3,6\u22122,4=1,2 M, \u0394t=10s. r<sub>X</sub>=1,2/10=0,12 M/s. Katsayı oranı X:Y=1:2 \u2192 r<sub>Y</sub>=2\u00d70,12=<b>0,24 mol/L\u00b7s</b>.<br><b>II) 10-20s arası:</b> \u0394[X]=2,4\u22121,6=0,8 M, \u0394t=10s. r<sub>X</sub>=0,8/10=0,08 M/s \u2192 r<sub>Y</sub>=2\u00d70,08=<b>0,16 mol/L\u00b7s</b>.<br>\u2192 G\u00f6r\u00fcld\u00fcğ\u00fc gibi hız zamanla AZALIYOR (0,24\u21920,16), bu da derişim azaldık\u00e7a \u00e7arpışma sıklığının azalmasıyla tutarlıdır.' },
     { n:7, kat:'Ortalama Hız', t:'Al(k)+3HCl(suda)\u2192AlCl\u2083(suda)+\u00b3\u2044\u2082H\u2082(g) tepkimesine g\u00f6re 2 L\u2019lik bir kapta [HCl] derişimi 1. dakikada 0,5 M, 4. dakikada 0,2 M olarak \u00f6l\u00e7\u00fclm\u00fcşt\u00fcr. 1. ve 4. dakikalar arasında H\u2082(g)\u2019nin oluşma hızı ka\u00e7 g/dk\u2019dır? (H:1)',
       graph:'noteg-hcl',
       c:'\u0394[HCl]=0,5\u22120,2=0,3 M, 2 L\u2019de \u0394n(HCl)=0,6 mol. 3 dakikada: r<sub>HCl</sub>=0,6/3=<b>0,2 mol/dk</b>.<br>Katsayı oranı HCl:H\u2082=3:1,5=2:1 \u2192 r<sub>H2</sub>=0,2/2=<b>0,1 mol/dk</b>.<br>K\u00fctlece: 0,1\u00d72 g/mol=<b>0,2 g/dk</b>.' },
@@ -7856,8 +7873,8 @@
       c:'SO\u2082+\u00bdO\u2082\u2192SO\u2083: katsayılar (1,\u00bd) iken hız denklemindeki \u00fcsler (1,1) \u2014 UYUMSUZ (\u00bd\u22601) \u2192 <b>mekanizmalıdır</b>.<br>N\u2082+3H\u2082\u21922NH\u2083: katsayılar (1,3) iken \u00fcsler (1,2) \u2014 UYUMSUZ (3\u22602) \u2192 <b>mekanizmalıdır</b>.<br>(Tek adımlı olabilmesi i\u00e7in hız denklemi katsayılarla TAM uyumlu olmalıdır.)' },
     { n:13, kat:'Derişim/Piston', t:'Eşit mollerdeki A\u2082 ve B\u2082 gazları arasında A\u2082(g)+2B\u2082(g)\u2192 tepkimesi, kapalı bir kapta TEK ADIMDA ger\u00e7ekleşiyor. Sabit sıcaklık ve basın\u00e7ta, ideal pistonlu kaba, kapta bulunan İDEAL TANECİK SAYISI kadar B\u2082 gazı ilave edilirse tepkime hızı ka\u00e7 katına \u00e7ıkar?',
       c:'Başlangı\u00e7ta n(A\u2082)=n(B\u2082)=a (eşit mol), toplam=2a, hacim=V.<br>İlave edilen B\u2082 = toplam tanecik sayısı = 2a mol.<br>Yeni n(B\u2082)=a+2a=<b>3a (3 kat)</b>; n(A\u2082)=a (değişmedi).<br>Toplam mol 2a\u21924a\u2019ya \u00e7ıktığı i\u00e7in SABİT basın\u00e7ta <b>hacim de 2 katına \u00e7ıkar</b> (V\u21922V).<br>Yeni [A\u2082]=a/2V=eski [A\u2082]\u2019nin <b>yarısı (\u00d70,5)</b>.<br>Yeni [B\u2082]=3a/2V=eski [B\u2082]\u2019nin <b>1,5 katı (\u00d71,5)</b>.<br>Tek adımlı olduğu i\u00e7in hız denklemi katsayılarla aynıdır: r=k[A\u2082][B\u2082]\u00b2.<br>Yeni hız/Eski hız = (0,5)\u00b9\u00d7(1,5)\u00b2 = 0,5\u00d72,25 = <b>9/8 (1,125 kat)</b>.<br><span style="color:#fca5a5">\u26a0\ufe0f Bu soruda başlangı\u00e7ta A\u2082 ve B\u2082\u2019nin ayrı ayrı nasıl etkilendiğini (yalnızca B\u2082 eklendiği i\u00e7in derişimleri FARKLI oranda değiştiğini) g\u00f6z \u00f6n\u00fcnde bulundurmak \u00f6nemlidir \u2014 t\u00fcm derişimlerin sabit kaldığını varsaymak yaygın bir hatadır.</span>' },
-    { n:14, kat:'Sıcaklık Etkisi', t:'Aynı miktar N\u2082O\u2084 gazı, biri 25\u00b0C diğer ikisi 50\u00b0C olan ve farklı hacimlere (V, 2V) sahip \u00fc\u00e7 \u00f6zdeş kapta bulunduruluyor. Bu kaplardaki tepkimelerin (N\u2082O\u2084\u21922NO\u2082) hızlarını karşılaştırınız.',
-      c:'Sıcaklık arttık\u00e7a hız ARTAR; hacim arttık\u00e7a (derişim azaldık\u00e7a) hız AZALIR. 50\u00b0C\u2019deki KÜ\u00c7\u00dcK hacimli (V) kap en HIZLI, 25\u00b0C\u2019deki (genellikle en b\u00fcy\u00fck hacimli olan) kap en YAVAŞ tepkime verir. Sıcaklık etkisi genellikle derişim/hacim etkisinden DAHA baskındır.' },
+    { n:14, kat:'Sıcaklık Etkisi', t:'Şekildeki her kapta eşit sayıda N\u2082O\u2084 molek\u00fcl\u00fc bulunmaktadır: I. Kap: V litre, 50\u00b0C \u00b7 II. Kap: 2V litre, 50\u00b0C \u00b7 III. Kap: 2V litre, 25\u00b0C. Her kapta N\u2082O\u2084(g)\u21922NO\u2082(g) tepkimesi ger\u00e7ekleşmektedir. Bu kaplardaki tepkimelerin hızlarını karşılaştırınız.',
+      c:'Sıcaklık arttık\u00e7a hız ARTAR; hacim arttık\u00e7a (derişim azaldık\u00e7a) hız AZALIR.<br><b>I. Kap</b> (V, 50\u00b0C): K\u00dc\u00c7\u00dcK hacim + Y\u00dcKSEK sıcaklık \u2192 EN HIZLI.<br><b>II. Kap</b> (2V, 50\u00b0C): B\u00dcY\u00dcK hacim ama Y\u00dcKSEK sıcaklık \u2192 ORTA.<br><b>III. Kap</b> (2V, 25\u00b0C): B\u00dcY\u00dcK hacim + D\u00dcŞ\u00dcK sıcaklık \u2192 EN YAVAŞ.<br>\u2192 <b>Hız sıralaması: I > II > III</b>.' },
     { n:15, kat:'Sıcaklık Etkisi', t:'T\u2081 ve T\u2082 (T\u2082>T\u2081) sıcaklıklarındaki bir gazın molek\u00fcl sayısı-kinetik enerji dağılım grafiğine g\u00f6re, aşağıdakilerden hangisi YANLIŞTIR? A) T\u2082\u2019de etkin \u00e7arpışma sayısı T\u2081\u2019e g\u00f6re daha fazladır B) T\u2082\u2019de tepkime hızı T\u2081\u2019e g\u00f6re daha d\u00fcş\u00fckt\u00fcr C) Her iki sıcaklıkta Ea değeri aynıdır D) T\u2082\u2019de eşik enerjisini aşan molek\u00fcl sayısı T\u2081\u2019e g\u00f6re daha \u00e7oktur E) T\u2082\u2019de moleküllerin kinetik enerjisi T\u2081\u2019e g\u00f6re daha fazladır',
       graph:'noteg-t1t2',
       c:'T\u2082>T\u2081 olduğu i\u00e7in T\u2082\u2019de kinetik enerji, etkin \u00e7arpışma sayısı ve eşiği aşan molek\u00fcl sayısı DAHA FAZLADIR (A,D,E doğru); Ea sıcaklıktan etkilenmez, sabittir (C doğru). Ancak y\u00fcksek sıcaklıkta (T\u2082) hız DAHA D\u00dcŞ\u00dcK değil, DAHA Y\u00dcKSEK olur. \u2192 <b>YANLIŞ olan: B</b>' },
@@ -7882,37 +7899,41 @@
       c:'Grafikte 2. k\u00f6m\u00fcr numunesi CO\u2082\u2019yi daha HIZLI \u00fcretiyorsa (daha dik/erken plato), bu onun daha K\u00dc\u00c7\u00dcK par\u00e7acık boyutuna (daha b\u00fcy\u00fck y\u00fczey alanına) sahip olduğunu g\u00f6sterir. I doğru (2. k\u00f6m\u00fcr daha hızlı \u00fcr\u00fcn verir), II doğru (1. k\u00f6m\u00fcr yavaş olduğu i\u00e7in b\u00fcy\u00fck par\u00e7acıklıdır), III doğru (1. k\u00f6m\u00fcr\u00fcn par\u00e7acık boyutu B\u00dcY\u00dcKT\u00dcR). \u2192 <b>I, II ve III doğrudur.</b>' },
     { n:23, kat:'Karışık Faktörler', t:'0,2 mol Zn(k) ile 0,2 M\u2019lık HCl \u00e7\u00f6zeltisinin 1 litresi (Zn(k)+2HCl(suda)\u2192ZnCl\u2082(suda)+H\u2082(g)) tepkimeye giriyor (stokiyometriye g\u00f6re 0,4 mol HCl gerekir, HCl sınırlayıcıdır). H\u2082 gazının HEM \u00e7ıkış hızını HEM DE miktarını artırmak i\u00e7in: I. Zn\u2019yi toz haline getirmek II. Aynı derişimdeki (0,2M) HCl\u2019den 2 L kullanmak III. 0,3 M\u2019lık HCl\u2019den 1 L eklemek \u2014 hangileri AYRI AYRI uygulanabilir?',
       c:'I. Toz haline getirmek SADECE hızı artırır; derişim/toplam mol HCl değişmediği i\u00e7in TOPLAM H\u2082 miktarı DEĞİŞMEZ.<br>II. 2 L kullanmak toplam HCl molünü artırır (0,2\u21920,4 mol, miktar artar) ama DERİŞİM aynı (0,2M) kaldığı i\u00e7in başlangı\u00e7 HIZI DEĞİŞMEZ.<br>III. 0,3M\u2019lık 1L kullanmak: HEM derişim artar (0,2\u21920,3M \u2192 hız artar) HEM toplam mol HCl artar (0,2\u21920,3mol \u2192 daha \u00e7ok Zn tepkimeye girer, H\u2082 miktarı artar) \u2014 <b>ikisi de artar.</b><br>\u2192 <b>Yalnız III, hem hızı hem miktarı tek başına artırır.</b>' },
-    { n:24, kat:'Potansiyel Enerji', t:'X(g)+Y(g)\u2192Z(g)+T(g) tepkimesi iki basamakta ger\u00e7ekleşmektedir. Tepkenlerin (X+Y) potansiyel enerjisi 40 kj, birinci basamağın aktifleşmiş kompleksi 90 kj, ara \u00fcr\u00fcn 50 kj, ikinci basamağın aktifleşmiş kompleksi 70 kj, \u00fcr\u00fcnlerin (Z+T) enerjisi 20 kj\u2019dir. a) Tepkime ka\u00e7 adımlıdır? b) Hangi basamak daha yavaştır? c) Tepkimenin toplam entalpisi ka\u00e7 kJ\u2019dir? \u00e7) Ekzotermik mi, endotermik mi?',
-      graph:'noteg-pe2step',
-      c:'a) İki ayrı tepe (aktifleşmiş kompleks) olduğu i\u00e7in tepkime <b>2 ADIMLIDIR</b>.<br>b) 1. basamağın Ea\u2081=90\u221240=<b>50 kJ</b>; 2. basamağın Ea\u2082=70\u221250=<b>20 kJ</b>. Aktivasyon enerjisi B\u00dcY\u00dcK olan basamak YAVAŞTIR \u2192 <b>1. basamak daha yavaştır (hız belirleyicidir).</b><br>c) \u0394H=\u00dcr\u00fcn enerjisi\u2212Tepken enerjisi=20\u221240=<b>\u221220 kJ</b>.<br>\u00e7) \u0394H<0 olduğu i\u00e7in <b>EKZOTERMİKTİR.</b>' },
-    { n:25, kat:'Hız Denklemi', t:'X(g)+2Y(g)+3Z(g)\u21922K(g)+3M(g) tepkimesi ile ilgili sabit sıcaklıkta yapılan deneyler: Z\u2019nin derişimi sabit tutulup X ve Y\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Y\u2019nin derişimi sabit tutulup X ve Z\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Kabın hacmi yarıya indirildiğinde hız 8 katına \u00e7ıkıyor. Tepkimenin hız bağıntısı nedir?',
+    { n:24, kat:'Hız Denklemi', t:'X(g)+2Y(g)+3Z(g)\u21922K(g)+3M(g) tepkimesi ile ilgili sabit sıcaklıkta yapılan deneyler: Z\u2019nin derişimi sabit tutulup X ve Y\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Y\u2019nin derişimi sabit tutulup X ve Z\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Kabın hacmi yarıya indirildiğinde hız 8 katına \u00e7ıkıyor. Tepkimenin hız bağıntısı nedir?',
       c:'Hacim yarıya inince T\u00dcM derişimler 2 katına \u00e7ıkar ve hız 8 (=2\u00b3) katına \u00e7ıkıyor \u2192 <b>toplam derece=3</b> (a+b+c=3).<br>Z sabit, X&Y 2 kat \u2192 hız 4(=2\u00b2) kat \u2192 <b>a+b=2</b>.<br>Y sabit, X&Z 2 kat \u2192 hız 4(=2\u00b2) kat \u2192 <b>a+c=2</b>.<br>\u00dc\u00e7 denklemden: c=1, a=1, b=1.<br>\u2192 <b>r=k[X][Y][Z]</b> (toplam derece 3, her t\u00fcre g\u00f6re 1. dereceden).' },
-    { n:26, kat:'Hız Denklemi', t:'X(g)+2Y(g)+3Z(g)\u21922K(g)+3M(g) tepkimesi i\u00e7in deney verileri: Deney1:[X]=0,1,[Y]=0,2,[Z]=0,1,Hız=1,8\u00d710\u207b\u2075; Deney2:[X]=0,2,[Y]=0,2,[Z]=0,1,Hız=3,6\u00d710\u207b\u2075; Deney3:[X]=0,1,[Y]=0,4,[Z]=0,1,Hız=1,8\u00d710\u207b\u2075; Deney4:[X]=0,1,[Y]=0,2,[Z]=0,2,Hız=7,2\u00d710\u207b\u2075. a) Hız bağıntısı? b) X=Y=Z=2 mol/L iken hız ka\u00e7 mol/L\u00b7s olur?',
+    { n:25, kat:'Hız Denklemi', t:'X(g)+2Y(g)+3Z(g)\u21922K(g)+3M(g) tepkimesi i\u00e7in deney verileri: Deney1:[X]=0,1,[Y]=0,2,[Z]=0,1,Hız=1,8\u00d710\u207b\u2075; Deney2:[X]=0,2,[Y]=0,2,[Z]=0,1,Hız=3,6\u00d710\u207b\u2075; Deney3:[X]=0,1,[Y]=0,4,[Z]=0,1,Hız=1,8\u00d710\u207b\u2075; Deney4:[X]=0,1,[Y]=0,2,[Z]=0,2,Hız=7,2\u00d710\u207b\u2075. a) Hız bağıntısı? b) X=Y=Z=2 mol/L iken hız ka\u00e7 mol/L\u00b7s olur?',
       c:'1\u21922: [X] 2 kat, [Y][Z] sabit, hız 2 kat \u2192 <b>X mertebesi=1</b>.<br>1\u21923: [Y] 2 kat, hız DEĞİŞMEDİ (1,8\u21921,8) \u2192 <b>Y mertebesi=0</b> (Y, hıza etki etmiyor!).<br>1\u21924: [Z] 2 kat, hız 4 kat \u2192 <b>Z mertebesi=2</b>.<br>a) <b>r=k[X][Z]\u00b2</b> (Y hız bağıntısında YER ALMAZ, ama yine de bir tepkendir \u2014 bu, katsayı ile mertebenin farklı şeyler olduğunun g\u00fczel bir \u00f6rneğidir).<br>k=1,8\u00d710\u207b\u2075/(0,1\u00d70,1\u00b2)=<b>0,018</b>.<br>b) r=0,018\u00d72\u00d72\u00b2=<b>0,144 mol/L\u00b7s</b>.' },
-    { n:27, kat:'Derişim/Piston', t:'Sabit sıcaklıkta s\u00fcrt\u00fcnmesiz ideal pistonlu bir kaba 4\u2019er mol X ve Y gazından konularak X(g)+2Y(g)\u2192Z(g) denklemine g\u00f6re TEK basamakta tepkimeye girmesi sağlanıyor. Tepkimenin başlangı\u00e7 hızı r ise, X gazının %25\u2019inin harcandığı andaki hız ka\u00e7 r\u2019dir?',
-      c:'Başlangı\u00e7: n(X)=4, n(Y)=4, toplam=8 (V\u2080 keyfi birim).<br>%25 X harcandı: 1mol X t\u00fckendi; katsayı oranı X:Y=1:2 olduğundan 2mol Y de t\u00fckendi, 1mol Z oluştu.<br>Yeni: n(X)=3, n(Y)=2, n(Z)=1, toplam=6.<br>Piston SABİT BASIN\u00c7ta olduğu i\u00e7in hacim toplam molle orantılı azalır: V<sub>yeni</sub>=V\u2080\u00d7(6/8)=0,75V\u2080.<br>[X]<sub>yeni</sub>=3/0,75=4 (değişmedi!), [Y]<sub>yeni</sub>=2/0,75\u22482,667 (eski [Y]=4\u2019\u00fcn 2/3\u2019\u00fc).<br>Tek adımlı: r=k[X][Y]\u00b2. Yeni r/Eski r = (4/4)\u00b9\u00d7(2,667/4)\u00b2 = 1\u00d7(2/3)\u00b2 = <b>4/9</b>.<br><span style="color:#fca5a5">\u26a0\ufe0f Piston sabit BASIN\u00c7ta oldu\u011fu i\u00e7in tepkime ilerledik\u00e7e HACMİN de değiştiğini (toplam mol azaldık\u00e7a hacmin de k\u00fc\u00e7\u00fcld\u00fc\u011f\u00fcn\u00fc) hesaba katmak gerekir.</span>' }
+    { n:26, kat:'Derişim/Piston', t:'Sabit sıcaklıkta s\u00fcrt\u00fcnmesiz ideal pistonlu bir kaba 4\u2019er mol X ve Y gazından konularak X(g)+2Y(g)\u2192Z(g) denklemine g\u00f6re TEK basamakta tepkimeye girmesi sağlanıyor. Tepkimenin başlangı\u00e7 hızı r ise, X gazının %25\u2019inin harcandığı andaki hız ka\u00e7 r\u2019dir?',
+      c:'Başlangı\u00e7: n(X)=4, n(Y)=4, toplam=8 (V\u2080 keyfi birim).<br>%25 X harcandı: 1mol X t\u00fckendi; katsayı oranı X:Y=1:2 olduğundan 2mol Y de t\u00fckendi, 1mol Z oluştu.<br>Yeni: n(X)=3, n(Y)=2, n(Z)=1, toplam=6.<br>Piston SABİT BASIN\u00c7ta olduğu i\u00e7in hacim toplam molle orantılı azalır: V<sub>yeni</sub>=V\u2080\u00d7(6/8)=0,75V\u2080.<br>[X]<sub>yeni</sub>=3/0,75=4 (değişmedi!), [Y]<sub>yeni</sub>=2/0,75\u22482,667 (eski [Y]=4\u2019\u00fcn 2/3\u2019\u00fc).<br>Tek adımlı: r=k[X][Y]\u00b2. Yeni r/Eski r = (4/4)\u00b9\u00d7(2,667/4)\u00b2 = 1\u00d7(2/3)\u00b2 = <b>4/9</b>.<br><span style="color:#fca5a5">\u26a0\ufe0f Piston sabit BASIN\u00c7ta oldu\u011fu i\u00e7in tepkime ilerledik\u00e7e HACMİN de değiştiğini (toplam mol azaldık\u00e7a hacmin de k\u00fc\u00e7\u00fcld\u00fc\u011f\u00fcn\u00fc) hesaba katmak gerekir.</span>' },
+    { n:27, kat:'Mekanizma', t:'CH\u2083CHO(g)\u2192CH\u2084(g)+CO(g) tepkimesi iki basamakta ger\u00e7ekleşiyor: 1.adım (YAVAŞ): CH\u2083CHO(g)+I\u2082(g)\u2192CH\u2083I(g)+HI(g); 2.adım (HIZLI): CH\u2083I(g)+HI(g)\u2192CH\u2084(g)+CO(g)+I\u2082(g). Buna g\u00f6re: I. I\u2082 ara \u00fcr\u00fcnd\u00fcr. II. Kaba He gazı eklenirse tepkime hızı değişmez. III. Tepkime kabının hacmi yarıya indirilirse hız artar. \u2014 hangileri DOĞRUDUR?',
+      c:'I \u2014 <b>YANLIŞ</b>: I\u2082, 1. adımda harcanıp 2. adımda yeniden oluşuyor \u2014 net tepkimede g\u00f6r\u00fcnm\u00fcyor, bu y\u00fczden I\u2082 ARA \u00dcR\u00dcN değil <b>KATALİZ\u00d6RD\u00dcR</b> (CH\u2083I ve HI ara \u00fcr\u00fcnd\u00fcr).<br>II \u2014 <b>DOĞRU</b>: He (soy gaz) tepkimeye hi\u00e7 girmez; sabit hacimli kapta toplam basıncı artırsa da CH\u2083CHO ve I\u2082\u2019nin KENDİ derişimlerini (kısmi basın\u00e7larını) değiştirmediği i\u00e7in hızı etkilemez.<br>III \u2014 <b>DOĞRU</b>: Hız yavaş adıma g\u00f6re r=k[CH\u2083CHO][I\u2082] yazılır; hacim k\u00fc\u00e7\u00fcl\u00fcnce derişimler artar, hız da artar (kesin y\u00f6n DOĞRU, tam kat sayısı i\u00e7in reaksiyon derecesi bilinmelidir).<br>\u2192 <b>II ve III doğrudur.</b>' },
+    { n:28, kat:'Ortalama/Anlık Hız', t:'Mg(k)+2HCl(suda)\u2192MgCl\u2082(suda)+H\u2082(g) tepkimesinde [HCl] derişiminin zamanla değişimi DOĞRUSAL bir grafikle verilmiştir: t=10s\u2019de 0,5 M, t=50s\u2019de 0,1 M. a) Tepkimenin 10. saniyedeki hızı ka\u00e7 M/s\u2019dir? b) Tepkimenin 20. saniyedeki hızı ka\u00e7 M/s\u2019dir?',
+      c:'Grafik DOĞRUSAL olduğu i\u00e7in eğim (dolayısıyla anlık hız) HER noktada AYNIDIR \u2014 bu, Mg\u2019nin KATI olması nedeniyle tepkimenin SABİT hızla ilerlediğinin g\u00f6stergesidir (katı/saf madde derişimi değişmediği i\u00e7in hız zamanla azalmaz).<br>Eğim: \u0394[HCl]/\u0394t=(0,1\u22120,5)/(50\u221210)=\u22120,01 M/s (HCl harcanma hızı).<br>Katsayı oranı HCl:tepkime=2:1 olduğundan tepkime hızı=0,01/2=<b>0,005 M/s</b>.<br>a) 10. saniyedeki hız = <b>0,005 M/s</b>.<br>b) 20. saniyedeki hız = <b>0,005 M/s</b> (AYNI, \u00e7\u00fcnk\u00fc grafik doğrusal).' },
+    { n:29, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda ger\u00e7ekleşen: I. H\u2082(g)+I\u2082(g)\u21922HI(g) II. H\u2082(g)+I\u2082(k)\u21922HI(g) III. H\u2082(g)+Cl\u2082(g)\u21922HCl(g) tepkimelerinin hızlarını karşılaştırınız.',
+      c:'II\u2019de I\u2082 KATI halde olduğu i\u00e7in tepkime SADECE y\u00fczeyde ger\u00e7ekleşebilir \u2014 gaz halindeki I ve III\u2019e g\u00f6re \u00e7ok daha az temas alanı vardır \u2192 <b>II en YAVAŞTIR</b>.<br>I ve III\u2019te t\u00fcm tepkenler GAZ halinde olduğu i\u00e7in taneciklerin her y\u00f6nden \u00e7arpışma olasılığı y\u00fcksektir, ikisi de II\u2019den \u00e7ok daha HIZLIdır.<br>\u2192 <b>I ve III (gaz-gaz) > II (gaz-katı)</b>.' }
   ];
 
   function noteqDrawGraphs(){
-    // X(g)->2Y(g) derişim-zaman (üstel azalma, 0s:3.6M, 40s:~0)
+    // X(g)->2Y(g) derişim-zaman — SADECE doğrulanmış 3 nokta: (0,3.6) (10,2.4) (20,1.6), oran tam 2/3
     maarifChart('noteg-x2y', function(x, W, H2){
       var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman (s)', '[X] mol/L');
       var pts = [];
       for (var i = 0; i <= 100; i++) {
-        var t = i/100*40;
-        var val = 3.6 * Math.exp(-t/17);
-        pts.push([g.padL + (t/40)*g.plotW, g.padT + g.plotH - (val/3.6)*g.plotH*0.92]);
+        var t = i/100*20;
+        var val = 3.6 * Math.pow(2/3, t/10);
+        pts.push([g.padL + (t/20)*g.plotW, g.padT + g.plotH - (val/3.6)*g.plotH*0.92]);
       }
       x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.beginPath();
       pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
-      // 20. saniyedeki teğet (yaklaşık)
-      var t20x = g.padL + (20/40)*g.plotW;
-      var y20 = 3.6*Math.exp(-20/17);
-      var t20y = g.padT + g.plotH - (y20/3.6)*g.plotH*0.92;
-      x.strokeStyle = 'rgba(96,165,250,.7)'; x.setLineDash([4,3]); x.lineWidth = 1.3;
-      x.beginPath(); x.moveTo(t20x-40, t20y+22); x.lineTo(t20x+40, t20y-22); x.stroke(); x.setLineDash([]);
-      x.fillStyle = '#93c5fd'; x.font = '10px sans-serif'; x.textAlign = 'left';
-      x.fillText('20.s teğeti', t20x+6, t20y-8);
+      // Doğrulanmış 3 nokta işaretlensin
+      var marks = [[0,3.6],[10,2.4],[20,1.6]];
+      x.fillStyle = '#f59e0b';
+      marks.forEach(function(m){
+        var mx = g.padL + (m[0]/20)*g.plotW, my = g.padT + g.plotH - (m[1]/3.6)*g.plotH*0.92;
+        x.beginPath(); x.arc(mx, my, 3, 0, 6.283); x.fill();
+      });
+      x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '9px sans-serif'; x.textAlign = 'center';
+      x.fillText('doğrulanmış 3 nokta (0,10,20s)', g.padL+g.plotW/2, g.padT+g.plotH+22);
     });
     // Al+HCl derişim-zaman (doğrusal azalma 0.6->0.1, 1-5dk)
     maarifChart('noteg-hcl', function(x, W, H2){
@@ -8104,7 +8125,7 @@
           '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.18);color:#f59e0b;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
           '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
         '</div>' +
-        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + q.t + '</div>' +
+        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
         (q.graph ? '<div style="background:#050510;border:1px solid rgba(245,158,11,.25);border-radius:12px;overflow:hidden;margin-bottom:14px"><canvas id="' + q.graph + '" data-h="190" style="width:100%;display:block"></canvas></div>' : '') +
         '<div onclick="molToggle(\'noteq-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#f59e0b;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
         '<div id="noteq-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' + q.c + '</div>' +
@@ -8767,7 +8788,7 @@
           '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.18);color:#f59e0b;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
           '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
         '</div>' +
-        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + q.t + '</div>' +
+        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
         optsHtml +
         '<div onclick="molToggle(\'enerji-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#f59e0b;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f \u00c7\u00f6z\u00fcm\u00fc G\u00f6ster</div>' +
         '<div id="enerji-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' +
