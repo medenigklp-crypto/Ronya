@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v33
+   RONYA KİMYA — EKLENTİ v34
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -181,6 +181,16 @@
        kullandığım sayılar orijinal görselden değil kendi uydurduğum
        "tutarlı" değerlerden geliyormuş; tahminle doldurmak yerine
        dürüstçe kaldırıldı (29 soruya düştü).
+   59) ⚖️ YENİ ANA EKRAN: "Kimyasal Denge (Özel Not)" — el yazması
+       Denge ders notundan 18 çözümlü örnek (1. parça): denge şartları,
+       homojen/heterojen denge, Kc/Kp hesaplamaları, Kc↔Kp dönüşümü,
+       hız sabitlerinden Kc bulma, verim/sınırlayıcı reaktif problemleri.
+       Tüm sayısal problemler node.js ile hesaplanıp doğrulandı. 2 soru
+       (15, kısmen 16'nın ilk hali) orijinal notta okunması güç
+       rakamlar içerdiği için ya açık bırakıldı ya da düzeltildi —
+       tahminle doldurulmadı. Bu, Denge serisinin İLK parçası: Le
+       Chatelier grafik soruları (sayfa 10-13) ve MEB kitabı (161
+       sayfalık dosyanın 2.1 bölümü) sıradaki adımlarda gelecek.
    50) 📁 DOSYA YAPISI DEĞİŞTİ: ronya-eklenti.js artık 4 parçaya
        bölündü (ronya-eklenti-1.js .. -4.js), Claude önizlemesinin
        çökmesini önlemek için. index.html'de 4 <script> etiketi SIRAYLA
@@ -8920,6 +8930,93 @@
     box.innerHTML = html;
   }
 
+  // ---------- 29. KİMYASAL DENGE — ÖZEL DERS NOTU (1. PARÇA) ----------
+  var DENGE_Q = [
+    { n:1, kat:'Kavram', t:'Kimyasal dengenin kurulabilmesi i\u00e7in gerekli şartlar nelerdir?',
+      c:'\u2022 Sıcaklık SABİT olmalı.<br>\u2022 Sistem KAPALI olmalı (madde giriş-\u00e7ıkışı olmamalı).<br>\u2022 Minimum enerji eğilimi ile maksimum d\u00fczensizlik (entropi) eğilimi ZIT y\u00f6nl\u00fc olmalı.<br>\u2022 İleri y\u00f6ndeki hız, geri y\u00f6ndeki hıza EŞİT olmalı.<br>\u2022 Dengede B\u00dcT\u00dcN maddeler (tepken+\u00fcr\u00fcn) bulunmalı.<br>\u2022 Dengedeki t\u00fcm maddelerin derişimleri SABİT olmalı (değişmiyor, ama sıfır da değil).<br>\u2022 Denge DİNAMİKTİR (tepkime durmaz, ileri/geri sürekli devam eder).<br>\u2022 Dengede MAKROSKOBİK (g\u00f6zle g\u00f6r\u00fclen) olaylar durur, ama MİKROSKOBİK (moleküler) olaylar devam eder.' },
+    { n:2, kat:'Kavram', t:'Homojen denge ile heterojen denge arasındaki fark nedir? \u00d6rnekler veriniz.',
+      c:'<b>Homojen denge:</b> Tepkenlerle \u00fcr\u00fcnlerin AYNI FAZDA bulunduğu denge. \u00d6rn: N\u2082O\u2084(g)\u21cc2NO\u2082(g); HCN(suda)\u21ccH\u207a(suda)+CN\u207b(suda); 2Fe\u00b2\u207a(suda)+Sn\u2074\u207a(suda)\u21cc2Fe\u00b3\u207a(suda)+Sn\u00b2\u207a(suda).<br><b>Heterojen denge:</b> Tepken/\u00fcr\u00fcnlerden EN AZ BİRİNİN farklı fiziksel halde olduğu denge. \u00d6rn: CaCO\u2083(k)\u21ccCaO(k)+CO\u2082(g); Zn\u00b2\u207a(suda)+Cu(k)\u21ccZn(k)+Cu\u00b2\u207a(suda); SnO\u2082(k)+2CO(g)\u21ccSn(k)+2CO\u2082(g).' },
+    { n:3, kat:'Kavram', t:'Aşağıdaki tepkimelerden hangileri hem HETEROJEN hem de KİMYASAL dengeye \u00f6rnektir? a) H\u2082O(s)\u21ccH\u2082O(g) b) K\u2082SO\u2084(suda)\u21cc2K\u207a(suda)+SO\u2084\u00b2\u207b(suda) c) C\u2081\u2082H\u2082\u2082O\u2081\u2081(k)+H\u2082O(s)\u21ccC\u2081\u2082H\u2082\u2082O\u2081\u2081(suda) \u00e7) 2NH\u2083(g)\u21ccN\u2082(g)+3H\u2082(g) d) 2HBr(g)\u21ccH\u2082(g)+Br\u2082(g) e) C(k)+H\u2082O(g)\u21ccCO(g)+H\u2082(g) f) 2S(k)+2O\u2082(g)\u21cc2SO\u2082(g)',
+      c:'a) H\u2082O(s)\u21ccH\u2082O(g): FİZİKSEL olay (hal değişimi), kimyasal denge DEĞİL \u2014 elenir.<br>b) K\u2082SO\u2084 \u00e7\u00f6z\u00fcnmesi: FİZİKSEL (iyonlaşma/\u00e7\u00f6z\u00fcnme), kimyasal denge DEĞİL \u2014 elenir.<br>c) Şeker \u00e7\u00f6z\u00fcnmesi: FİZİKSEL, elenir.<br>\u00e7) 2NH\u2083\u21ccN\u2082+3H\u2082: T\u00fcm maddeler GAZ \u2192 HOMOJEN kimyasal denge (heterojen değil) \u2014 elenir.<br>d) 2HBr\u21ccH\u2082+Br\u2082: T\u00fcm maddeler gaz \u2192 HOMOJEN \u2014 elenir.<br>e) C(k)+H\u2082O(g)\u21ccCO(g)+H\u2082(g): C KATI, diğerleri GAZ \u2192 <b>HETEROJEN kimyasal denge \u2014 DOĞRU!</b><br>f) 2S(k)+2O\u2082(g)\u21cc2SO\u2082(g): S KATI, O\u2082/SO\u2082 gaz \u2192 <b>HETEROJEN kimyasal denge \u2014 DOĞRU!</b><br>\u2192 <b>Yalnız e ve f</b> hem heterojen hem kimyasal dengeye \u00f6rnektir.' },
+    { n:4, kat:'Kavram', t:'Maksimum d\u00fczensizlik eğilimine g\u00f6re: a) katı-sıvı-gaz arasında hangisi en d\u00fczensizdir? b) Gazlı tepkimelerde katsayılar farklıysa hangi taraf daha d\u00fczensizdir? c) Katsayılar EŞİTSE hangi taraf daha d\u00fczensizdir?',
+      c:'a) D\u00fczensizlik sıralaması: <b>gaz > sıvı > katı</b> (gaz tanecikleri en serbest hareket eder).<br>b) Gazlı bir tepkimede tepken/\u00fcr\u00fcn tarafından <b>KATSAYISI (mol sayısı) FAZLA olan taraf</b> daha d\u00fczensizdir (daha \u00e7ok tanecik = daha \u00e7ok dağınıklık).<br>c) Katsayılar eşitse, <b>farklı gaz T\u00dcR\u00dc (\u00e7eşidi) fazla bulunduran taraf</b> daha d\u00fczensizdir (\u00f6rn. H\u2082+Cl\u2082\u21cc2HCl\u2019de tepken tarafında 2 farklı gaz t\u00fcr\u00fc, \u00fcr\u00fcn tarafında 1 t\u00fcr var \u2014 tepken tarafı daha d\u00fczensiz).' },
+    { n:5, kat:'Denge Sabiti', t:'Denge bağıntısı (Kc, Kp) yazarken uyulması gereken 3 kural nedir?',
+      c:'1) Denge bağıntısında SAF KATI ve SAF SIVILAR YER ALMAZ (derişimleri sabit olduğu i\u00e7in denge sabitine dahil edilmez, sabit kabul edilip K i\u00e7ine gizlenir).<br>2) Denge bağıntısında GAZLAR ve SULU (suda) \u00e7\u00f6zeltiler YER ALIR.<br>3) Denge bağıntısı NET (toplam/son) tepkimeye g\u00f6re yazılır (ara basamaklara g\u00f6re değil).' },
+    { n:6, kat:'Denge Sabiti', t:'Kp ile Kc arasındaki ilişkiyi (formül\u00fc) yazınız. \u0394n neyi ifade eder?',
+      c:'<b>Kp = Kc\u00d7(RT)^\u0394n</b><br>Burada \u0394n = (\u00fcr\u00fcn gazlarının katsayıları toplamı) \u2212 (giren/tepken gazlarının katsayıları toplamı) \u2014 SADECE gaz halindeki maddelerin katsayıları sayılır, katı/sıvı/\u00e7\u00f6zelti katsayıları dahil edilmez.' },
+    { n:7, kat:'Hesaplama', t:'2NO(g)+O\u2082(g)\u21cc2NO\u2082(g) tepkimesine g\u00f6re 2 L\u2019lik kapta 0,4 mol NO, 0,2 mol O\u2082 ve 0,8 mol NO\u2082 gazları dengededir. Buna g\u00f6re aynı sıcaklıkta tepkimenin Kc değeri ka\u00e7tır?',
+      c:'[NO]=0,4/2=0,2 M, [O\u2082]=0,2/2=0,1 M, [NO\u2082]=0,8/2=0,4 M.<br>Kc=[NO\u2082]\u00b2/([NO]\u00b2[O\u2082])=0,4\u00b2/(0,2\u00b2\u00d70,1)=0,16/0,004=<b>40</b>.' },
+    { n:8, kat:'Hesaplama', t:'2CO(g)+O\u2082(g)\u21cc2CO\u2082(g) tepkimesinin aynı sıcaklıktaki ileri tepkimenin hız sabiti (k\u0131) 4\u00d710\u207b\u00b3 ve geri tepkimenin hız sabiti (k\u0261) 2\u00d710\u207b\u2074\u2019t\u00fcr. Buna g\u00f6re tepkimenin derişimler t\u00fcr\u00fcnden denge sabiti Kc ka\u00e7tır?',
+      c:'Dengede ileri hız = geri hız olduğundan <b>Kc = k\u0131/k\u0261</b> (tek adımlı/mekanizmalı tepkimede hız sabitlerinin oranı denge sabitini verir).<br>Kc = 4\u00d710\u207b\u00b3 / 2\u00d710\u207b\u2074 = <b>20</b>.' },
+    { n:9, kat:'Hesaplama', t:'2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g) tepkimesine g\u00f6re 0,2\u2019şer mol SO\u2082 ve O\u2082 gazları ile 0,8 mol SO\u2083 gazı dengededir. Tepkimenin denge sabiti (K) 16 olduğuna g\u00f6re tepkime kabının hacmi ka\u00e7 L\u2019dir?',
+      c:'Kc=[SO\u2083]\u00b2/([SO\u2082]\u00b2[O\u2082])=(0,8/V)\u00b2/((0,2/V)\u00b2\u00d7(0,2/V))=16 denklemini V i\u00e7in \u00e7\u00f6zersek: <b>V=0,2 L</b>.' },
+    { n:10, kat:'Hesaplama', t:'2CO(g)+O\u2082(g)\u21cc2CO\u2082(g) tepkimesinin 27\u00b0C\u2019deki derişimler t\u00fcr\u00fcnden denge sabiti (Kc) 5,6 olduğuna g\u00f6re, aynı sıcaklıktaki kısmi basın\u00e7lar t\u00fcr\u00fcnden denge sabiti (Kp) ka\u00e7tır? (R:0,082 alınız)',
+      c:'\u0394n = \u00fcr\u00fcn(2) \u2212 tepken(2+1=3) = \u22121. T=27\u00b0C=300K.<br>Kp = Kc\u00d7(RT)^\u0394n = 5,6\u00d7(0,082\u00d7300)\u207b\u00b9 = 5,6/24,6 \u2248 <b>0,228</b>.' },
+    { n:11, kat:'Hesaplama', t:'2SO\u2083(g)\u21cc2SO\u2082(g)+O\u2082(g) denklemine g\u00f6re 1 litrelik bir kapta 0,6 mol SO\u2083 gazı ile başlatılan tepkime t\u00b0C\u2019de dengeye ulaştığında kapta toplam 0,8 mol gaz bulunuyor. Buna g\u00f6re tepkimenin t\u00b0C\u2019deki denge sabiti (Kc) ka\u00e7tır?',
+      c:'x kadar SO\u2083 ayrışsın: SO\u2083=0,6\u2212x, SO\u2082=x, O\u2082=x/2. Toplam=0,6\u2212x+x+x/2=0,6+x/2=0,8 \u2192 x=0,4.<br>Denge: SO\u2083=0,2M, SO\u2082=0,4M, O\u2082=0,2M.<br>Kc=[SO\u2082]\u00b2[O\u2082]/[SO\u2083]\u00b2=0,4\u00b2\u00d70,2/0,2\u00b2=0,032/0,04=<b>0,8</b>.' },
+    { n:12, kat:'Hesaplama', t:'NH\u2084HS(k)\u21ccNH\u2083(g)+H\u2082S(g) tepkimesine g\u00f6re belirli bir sıcaklıkta kaba konan NH\u2084HS(k) dengeye ulaşıyor. Kaptaki toplam basın\u00e7 1,2 atm olduğuna g\u00f6re, bu sıcaklıktaki Kp sabiti ka\u00e7tır?',
+      c:'NH\u2083 ve H\u2082S EŞİT MOL oluşur (1:1 katsayı). Toplam basın\u00e7=P(NH\u2083)+P(H\u2082S)=1,2 atm \u2192 her biri <b>0,6 atm</b>.<br>Kp=P(NH\u2083)\u00d7P(H\u2082S)=0,6\u00d70,6=<b>0,36</b> (NH\u2084HS katı olduğu i\u00e7in denge bağıntısına girmez).' },
+    { n:13, kat:'Hesaplama', t:'1000 mL\u2019lik boş bir kaba 4 mol N\u2082 ve 4 mol H\u2082 gazları konuluyor. N\u2082(g)+3H\u2082(g)\u21cc2NH\u2083(g) denklemine g\u00f6re tepkime %75 verimle ger\u00e7ekleşiyor (H\u2082 sınırlayıcıdır). Tepkime dengeye geldiğinde ortamın toplam basıncı 12 atm oluyorsa Kp değeri ka\u00e7tır?',
+      c:'H\u2082 sınırlayıcı (4mol N\u2082 i\u00e7in 12mol H\u2082 gerekir, sadece 4mol var). %75 verimle H\u2082\u2019den 3mol harcanır \u2192 N\u2082\u2019den 1mol harcanır, NH\u2083\u2019ten 2mol oluşur.<br>Denge: N\u2082=3mol, H\u2082=1mol, NH\u2083=2mol, Toplam=6mol.<br>Kısmi basın\u00e7lar (toplam 12atm\u2019ye oranla): P(N\u2082)=6atm, P(H\u2082)=2atm, P(NH\u2083)=4atm.<br>Kp=P(NH\u2083)\u00b2/(P(N\u2082)\u00d7P(H\u2082)\u00b3)=4\u00b2/(6\u00d72\u00b3)=16/48=<b>1/3\u22480,33</b>.' },
+    { n:14, kat:'Hesaplama', t:'H\u2082(g)+Br\u2082(g)\u21cc2HBr(g) tepkimesinin t\u00b0C\u2019deki denge sabiti (Kc) 16\u2019dır. 4 litrelik kaba 0,6 mol HBr konularak tepkime (geriye doğru) başlatılıyor. Sistem dengeye ulaştığında kapta ka\u00e7 gram Br\u2082 bulunur? (Br:80)',
+      c:'Başlangı\u00e7 [HBr]=0,6/4=0,15M. y kadar H\u2082/Br\u2082 oluşsun (2HBr\u2192H\u2082+Br\u2082): HBr=0,15\u22122y, H\u2082=y, Br\u2082=y.<br>Kc=[HBr]\u00b2/([H\u2082][Br\u2082])=16 \u2192 (0,15\u22122y)\u00b2/y\u00b2=16 \u2192 (0,15\u22122y)/y=4 \u2192 0,15=6y \u2192 y=0,025M.<br>Br\u2082 mol=0,025\u00d74L=0,1mol \u2192 k\u00fctle=0,1\u00d7160=<b>16 g</b>.' },
+    { n:15, kat:'Hesaplama', t:'X\u2082(g)+3Y\u2082(g)\u21cc2Z(g) tepkimesine g\u00f6re 0,6 mol X\u2082 ve 0,3 mol Y\u2082 gazları 1 L\u2019lik kapta dengeye ulaşmaktadır. Denge anında \u00fcr\u00fcn\u00fcn mol sayısı, girenlerin (X\u2082+Y\u2082) mol sayısının yarısı kadar olmaktadır. Kc değeri ka\u00e7tır?',
+      c:'<span style="color:#fca5a5">\u26a0\ufe0f Bu problemin tam sayısal \u00e7\u00f6z\u00fcm\u00fc, el yazması notta bazı katsayı/rakamların net okunamaması nedeniyle şu an doğrulanamadı (denenen okumalarla Y\u2082 miktarı negatife d\u00fcş\u00fcyor, ki bu fiziksel olarak imkansız \u2014 orijinal denklemde farklı bir katsayı olmalı). Orijinalliği bozmamak i\u00e7in tahmini bir sayı vermek yerine bu soruyu doğrulanana kadar a\u00e7ık bırakıyorum.</span>' },
+    { n:16, kat:'Hesaplama', t:'2 L\u2019lik sabit hacimli kaba eşit mollerde H\u2082 ve I\u2082 gazları konuyor. H\u2082(g)+I\u2082(g)\u21cc2HI(g) denklemine g\u00f6re dengeye ulaştığında kapta 0,2 mol H\u2082, 0,2 mol I\u2082 ve 0,4 mol HI gazları bulunuyor. Geri y\u00f6ndeki tepkimenin denge hızı 2 M\u00b7s\u207b\u00b9 olduğuna g\u00f6re, tepkimenin BAŞLANGI\u00c7 hızı ka\u00e7 M\u00b7s\u207b\u00b9\u2019dir?',
+      c:'Denge derişimleri: [H\u2082]=[I\u2082]=0,1M, [HI]=0,2M. Kc=[HI]\u00b2/([H\u2082][I\u2082])=0,04/0,01=4.<br>Dengede r\u0261=k\u0261[HI]\u00b2=2 \u2192 k\u0261=2/0,04=50. k\u0131=k\u0261\u00d7Kc=50\u00d74=<b>200</b>.<br>Başlangı\u00e7ta HI yoktu; katsayı oranı (1:1:2) gereği HI\u2019nın yarısı kadar H\u2082 ve I\u2082 harcanmıştır: t\u00fckenen H\u2082=t\u00fckenen I\u2082=0,4/2=0,2mol. Başlangı\u00e7 [H\u2082]\u2080=[I\u2082]\u2080=(0,2+0,2)/2L=0,2M.<br>Başlangı\u00e7ta HI olmadığından r\u0261=0, sadece r\u0131 vardır: r\u0131=k\u0131[H\u2082]\u2080[I\u2082]\u2080=200\u00d70,2\u00d70,2=<b>8 M\u00b7s\u207b\u00b9</b>.' },
+    { n:17, kat:'Hesaplama', t:'1 litrelik kapalı bir kaba bir miktar X\u2082 ve Y\u2082 gazları konuluyor. Sabit sıcaklıkta X\u2082(g)+3Y\u2082(g)\u21cc2Z(g) tepkimesi ger\u00e7ekleşiyor. Başlangı\u00e7ta X\u2082=1,0M, Y\u2082=1,4M; 10. saniyede X\u2082=0,6M, Y\u2082=0,2M, Z=0,8M olup 15. saniyede de AYNI kalıyor (denge). Buna g\u00f6re: I. Tepkime 10 saniyede dengeye ulaşmıştır. II. Denge anında kapta toplam 1,6 mol gaz vardır. \u2014 hangileri DOĞRUDUR?',
+      c:'I \u2014 <b>DOĞRU</b>: 10. ve 15. saniyedeki derişimler AYNI olduğu i\u00e7in denge 10. saniyede kurulmuştur.<br>II \u2014 <b>DOĞRU</b>: Toplam derişim=0,6+0,2+0,8=1,6M, 1L kapta olduğu i\u00e7in toplam mol=1,6 mol.<br>Kc=[Z]\u00b2/([X\u2082][Y\u2082]\u00b3)=0,8\u00b2/(0,6\u00d70,2\u00b3)=0,64/0,0048\u2248<b>133,3</b> (verilen \u201cK=10\u201d iddiası varsa bu YANLIŞTIR, doğru değer \u2248133,3\u2019t\u00fcr).' },
+    { n:18, kat:'Hesaplama (\u00c7ok Y\u00f6nl\u00fc)', t:'2X(g)+3Y(g)\u21cc2Z(g)+T(g) tepkimesi tek basamakta ger\u00e7ekleşiyor. Sabit sıcaklıkta 2 litrelik kaba 6 mol X ve 12 mol Y konularak başlatılan tepkimede 2 mol Z oluşunca dengeye ulaşılıyor; dengede ileri tepkime hızı 2 mol/L\u00b7s\u2019dir. a) Kc ka\u00e7tır? b) k\u0131 ve k\u0261 ka\u00e7tır? c) Başlangı\u00e7taki tepkime hızı ka\u00e7 mol/L\u00b7s\u2019dir?',
+      c:'2mol Z oluşunca (katsayı oranı X:Y:Z:T=2:3:2:1): dX=2,dY=3,dT=1. Denge: X=4mol,Y=9mol,Z=2mol,T=1mol (2L kapta).<br>Derişimler: [X]=2M,[Y]=4,5M,[Z]=1M,[T]=0,5M.<br>a) Kc=[Z]\u00b2[T]/([X]\u00b2[Y]\u00b3)=(1\u00b2\u00d70,5)/(2\u00b2\u00d74,5\u00b3)=0,5/364,5\u2248<b>0,00137</b>.<br>b) Dengede r\u0131=k\u0131[X]\u00b2[Y]\u00b3=2 \u2192 k\u0131=2/(4\u00d791,125)\u2248<b>0,00549</b>. k\u0261=k\u0131/Kc=<b>4</b> (temiz bir sayı \u2014 kontrol amacıyla: r\u0261=k\u0261[Z]\u00b2[T]=4\u00d7(1\u00d70,5)=2 ✓ dengede eşit \u00e7ıkıyor).<br>c) Başlangı\u00e7ta [X]\u2080=6/2=3M,[Y]\u2080=12/2=6M, hen\u00fcz Z/T yok (r\u0261=0). r\u0131(başlangı\u00e7)=k\u0131[X]\u2080\u00b2[Y]\u2080\u00b3=0,00549\u00d79\u00d7216\u2248<b>10,67 mol/L\u00b7s</b>.' }
+  ];
+
+  function setupDenge2(){
+    if (document.getElementById('s-denge2')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var cats = ['Tümü'];
+    DENGE_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-denge2" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\u2696\ufe0f Kimyasal Denge</h1>' +
+        '<p class="psub">El yazması ders notundan çözümlü örnekler \u2014 1. parça (' + DENGE_Q.length + ' soru). MEB kitabı ve kalan sorular sıradaki güncellemede.</p>' +
+        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="denge2-cats">' +
+          cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="denge2SetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
+        '</div></div>' +
+        '<div id="denge2-list"></div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-denge2') === -1) SCREENS.push('s-denge2');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-denge2'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-denge2" onclick="nav(\'denge2\')">\u2696\ufe0f Kimyasal Denge (Özel Not)</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-denge2'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-denge2" onclick="nav(\'denge2\')"><div class="ti">\u2696\ufe0f</div><div class="tt">Kimyasal Denge (Özel Not)</div><div class="td">Denge sabiti, Kp/Kc, Le Chatelier \u2014 çözümlü örnekler.</div></div>');
+    denge2RenderList();
+  }
+  var denge2St = { cat: 'Tümü' };
+  window.denge2SetCat = function(cat, btn){ denge2St.cat = cat; if (btn) selectInRow(btn); denge2RenderList(); };
+
+  function denge2RenderList(){
+    var box = document.getElementById('denge2-list');
+    if (!box) return;
+    var html = '';
+    DENGE_Q.forEach(function(q){
+      if (denge2St.cat !== 'Tümü' && q.kat !== denge2St.cat) return;
+      html += '<div class="card" style="margin-bottom:18px;padding:18px 16px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+          '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(96,165,250,.18);color:#93c5fd;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
+          '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
+        '</div>' +
+        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
+        '<div onclick="molToggle(\'denge2-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#60a5fa;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
+        '<div id="denge2-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' + q.c + '</div>' +
+      '</div>';
+    });
+    box.innerHTML = html;
+  }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -8944,6 +9041,7 @@
     try { setupFizKim(); } catch (e) { /* sessiz */ }
     try { setupEnerji(); } catch (e) { /* sessiz */ }
     try { setupVideoLib(); } catch (e) { /* sessiz */ }
+    try { setupDenge2(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
