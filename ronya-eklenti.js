@@ -143,6 +143,29 @@
        katalizörsüz PE-TK, 3-etki hız-zaman, CS₂ PE-TK, H₂ mol-zaman,
        kömür parçacık boyutu CO₂ grafiği, 2 basamaklı PE-TK) artık
        gerçek canvas grafikleri eklendi.
+   50) 📁 DOSYA YAPISI DEĞİŞTİ: ronya-eklenti.js artık 4 parçaya
+       bölündü (ronya-eklenti-1.js .. -4.js), Claude önizlemesinin
+       çökmesini önlemek için. index.html'de 4 <script> etiketi SIRAYLA
+       eklenmeli. Sarmalayıcı IIFE kaldırıldı (paylaşılan global kapsam
+       gerektiği için); kod DAVRANIŞI hiç değişmedi, sadece organizasyon.
+   51) 🔄 Tepkime Hızı ekranı 3 ANA GRUBA ayrıldı (eskiden 6 düz sekme +
+       iç içe alt sekmeler karışıklığı vardı): 🔬 Araçlar (3D Sim, PE
+       Diyagramı, Hız Hesapla, Hız Bağıntısı), 📘 MEB Konu Anlatımı
+       (1.2.1-1.2.4 + 66 Soru), 📓 Özel Ders Notu.
+   52) 📝 Özel Ders Notu'na notlardan 3 yeni doğrulanmış soru eklendi
+       (25: X+2Y+3Z hız bağıntısı türetme, 26: deney tablosundan
+       mertebe bulma — Y'nin hıza etkisi olmadığı ilginç örnek, 27:
+       pistonlu kapta %25 tepkime sonrası hız oranı — 4/9).
+   53) 🛡️ MİMARİ DÜZELTME (kritik): Önceki 4-parça bölmede IIFE
+       sarmalayıcısını TAMAMEN kaldırmıştım — bu, taban index.html'in
+       kendi scriptleriyle isim çakışması riskini artırıyordu ve
+       muhtemelen "fonksiyonlar kayboldu" sorununun asıl nedeniydi.
+       Şimdi her parça yeniden KENDİ İZOLE IIFE'sine sarıldı (taban
+       siteyle çakışma riski ortadan kalktı); parçalar arası GERÇEKTEN
+       ihtiyaç duyulan 74 fonksiyon/değişken tek tek tespit edilip
+       SADECE onlar dışa açıldı (window.X=X). Otomatik çapraz-referans
+       analizi + gerçekçi DOM taklidiyle 16 farklı özellik tek tek
+       doğrulandı.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -7027,6 +7050,12 @@
       '<div id="s-kinetik" style="display:none"><div class="pw narrow">' +
         '<h1 class="ptitle">\ud83d\udca5 Tepkime H\u0131z\u0131 (Kinetik)</h1>' +
         '<p class="psub">\u00c7arp\u0131\u015fma teorisi, potansiyel enerji diyagram\u0131, h\u0131z hesaplamalar\u0131 ve h\u0131z bağ\u0131nt\u0131s\u0131.</p>' +
+        '<div class="ltabs" id="kin-maingroup" style="margin-bottom:14px">' +
+          '<button class="ltab on" onclick="kinGroupSet(0,this)">\ud83d\udd2c Araçlar</button>' +
+          '<button class="ltab" onclick="kinGroupSet(1,this)">\ud83d\udcd8 MEB Konu Anlat\u0131m\u0131</button>' +
+          '<button class="ltab" onclick="kinGroupSet(2,this)">\ud83d\udcd3 Özel Ders Notu</button>' +
+        '</div>' +
+        '<div id="kin-group-0" style="display:block">' +
         '<div class="ltabs" id="kin-tabs">' +
           '<button class="ltab on" onclick="tswitch(\'kin-tabs\',\'kin-tps\',0)">\ud83d\udca5 3D Sim\u00fclasyon</button>' +
           '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',1)">\u26f0\ufe0f PE Diyagram\u0131</button>' +
@@ -7112,6 +7141,9 @@
           '<div style="margin-top:12px">' + RLAW_THEORY_HTML + '</div>' +
         '</div>' +
         '</div>' +
+        '</div>' +
+        '<div id="kin-group-1" style="display:none"></div>' +
+        '<div id="kin-group-2" style="display:none"></div>' +
       '</div></div>');
     if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-kinetik') === -1) SCREENS.push('s-kinetik');
     var mn = document.getElementById('mn');
@@ -7128,6 +7160,13 @@
     setupMaarif();
     setupNoteQ();
   }
+  window.kinGroupSet = function(i, btn){
+    for (var g = 0; g < 3; g++) { var el = document.getElementById('kin-group-' + g); if (el) el.style.display = (g === i) ? 'block' : 'none'; }
+    var bar = document.getElementById('kin-maingroup');
+    if (bar && btn) { var bs = bar.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].classList.remove('on'); btn.classList.add('on'); }
+    if (i === 1) setTimeout(maarifDrawGraphs, 60);
+    if (i === 2) setTimeout(noteqDrawGraphs, 60);
+  };
 
   window.kinSetConc = kinSetConc;
   window.kinSetTemp = kinSetTemp;
@@ -7837,7 +7876,13 @@
       c:'I. Toz haline getirmek SADECE hızı artırır; derişim/toplam mol HCl değişmediği i\u00e7in TOPLAM H\u2082 miktarı DEĞİŞMEZ.<br>II. 2 L kullanmak toplam HCl molünü artırır (0,2\u21920,4 mol, miktar artar) ama DERİŞİM aynı (0,2M) kaldığı i\u00e7in başlangı\u00e7 HIZI DEĞİŞMEZ.<br>III. 0,3M\u2019lık 1L kullanmak: HEM derişim artar (0,2\u21920,3M \u2192 hız artar) HEM toplam mol HCl artar (0,2\u21920,3mol \u2192 daha \u00e7ok Zn tepkimeye girer, H\u2082 miktarı artar) \u2014 <b>ikisi de artar.</b><br>\u2192 <b>Yalnız III, hem hızı hem miktarı tek başına artırır.</b>' },
     { n:24, kat:'Potansiyel Enerji', t:'X(g)+Y(g)\u2192Z(g)+T(g) tepkimesi iki basamakta ger\u00e7ekleşmektedir. Tepkenlerin (X+Y) potansiyel enerjisi 40 kj, birinci basamağın aktifleşmiş kompleksi 90 kj, ara \u00fcr\u00fcn 50 kj, ikinci basamağın aktifleşmiş kompleksi 70 kj, \u00fcr\u00fcnlerin (Z+T) enerjisi 20 kj\u2019dir. a) Tepkime ka\u00e7 adımlıdır? b) Hangi basamak daha yavaştır? c) Tepkimenin toplam entalpisi ka\u00e7 kJ\u2019dir? \u00e7) Ekzotermik mi, endotermik mi?',
       graph:'noteg-pe2step',
-      c:'a) İki ayrı tepe (aktifleşmiş kompleks) olduğu i\u00e7in tepkime <b>2 ADIMLIDIR</b>.<br>b) 1. basamağın Ea\u2081=90\u221240=<b>50 kJ</b>; 2. basamağın Ea\u2082=70\u221250=<b>20 kJ</b>. Aktivasyon enerjisi B\u00dcY\u00dcK olan basamak YAVAŞTIR \u2192 <b>1. basamak daha yavaştır (hız belirleyicidir).</b><br>c) \u0394H=\u00dcr\u00fcn enerjisi\u2212Tepken enerjisi=20\u221240=<b>\u221220 kJ</b>.<br>\u00e7) \u0394H<0 olduğu i\u00e7in <b>EKZOTERMİKTİR.</b>' }
+      c:'a) İki ayrı tepe (aktifleşmiş kompleks) olduğu i\u00e7in tepkime <b>2 ADIMLIDIR</b>.<br>b) 1. basamağın Ea\u2081=90\u221240=<b>50 kJ</b>; 2. basamağın Ea\u2082=70\u221250=<b>20 kJ</b>. Aktivasyon enerjisi B\u00dcY\u00dcK olan basamak YAVAŞTIR \u2192 <b>1. basamak daha yavaştır (hız belirleyicidir).</b><br>c) \u0394H=\u00dcr\u00fcn enerjisi\u2212Tepken enerjisi=20\u221240=<b>\u221220 kJ</b>.<br>\u00e7) \u0394H<0 olduğu i\u00e7in <b>EKZOTERMİKTİR.</b>' },
+    { n:25, kat:'Hız Denklemi', t:'X(g)+2Y(g)+3Z(g)\u21922K(g)+3M(g) tepkimesi ile ilgili sabit sıcaklıkta yapılan deneyler: Z\u2019nin derişimi sabit tutulup X ve Y\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Y\u2019nin derişimi sabit tutulup X ve Z\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Kabın hacmi yarıya indirildiğinde hız 8 katına \u00e7ıkıyor. Tepkimenin hız bağıntısı nedir?',
+      c:'Hacim yarıya inince T\u00dcM derişimler 2 katına \u00e7ıkar ve hız 8 (=2\u00b3) katına \u00e7ıkıyor \u2192 <b>toplam derece=3</b> (a+b+c=3).<br>Z sabit, X&Y 2 kat \u2192 hız 4(=2\u00b2) kat \u2192 <b>a+b=2</b>.<br>Y sabit, X&Z 2 kat \u2192 hız 4(=2\u00b2) kat \u2192 <b>a+c=2</b>.<br>\u00dc\u00e7 denklemden: c=1, a=1, b=1.<br>\u2192 <b>r=k[X][Y][Z]</b> (toplam derece 3, her t\u00fcre g\u00f6re 1. dereceden).' },
+    { n:26, kat:'Hız Denklemi', t:'X(g)+2Y(g)+3Z(g)\u21922K(g)+3M(g) tepkimesi i\u00e7in deney verileri: Deney1:[X]=0,1,[Y]=0,2,[Z]=0,1,Hız=1,8\u00d710\u207b\u2075; Deney2:[X]=0,2,[Y]=0,2,[Z]=0,1,Hız=3,6\u00d710\u207b\u2075; Deney3:[X]=0,1,[Y]=0,4,[Z]=0,1,Hız=1,8\u00d710\u207b\u2075; Deney4:[X]=0,1,[Y]=0,2,[Z]=0,2,Hız=7,2\u00d710\u207b\u2075. a) Hız bağıntısı? b) X=Y=Z=2 mol/L iken hız ka\u00e7 mol/L\u00b7s olur?',
+      c:'1\u21922: [X] 2 kat, [Y][Z] sabit, hız 2 kat \u2192 <b>X mertebesi=1</b>.<br>1\u21923: [Y] 2 kat, hız DEĞİŞMEDİ (1,8\u21921,8) \u2192 <b>Y mertebesi=0</b> (Y, hıza etki etmiyor!).<br>1\u21924: [Z] 2 kat, hız 4 kat \u2192 <b>Z mertebesi=2</b>.<br>a) <b>r=k[X][Z]\u00b2</b> (Y hız bağıntısında YER ALMAZ, ama yine de bir tepkendir \u2014 bu, katsayı ile mertebenin farklı şeyler olduğunun g\u00fczel bir \u00f6rneğidir).<br>k=1,8\u00d710\u207b\u2075/(0,1\u00d70,1\u00b2)=<b>0,018</b>.<br>b) r=0,018\u00d72\u00d72\u00b2=<b>0,144 mol/L\u00b7s</b>.' },
+    { n:27, kat:'Derişim/Piston', t:'Sabit sıcaklıkta s\u00fcrt\u00fcnmesiz ideal pistonlu bir kaba 4\u2019er mol X ve Y gazından konularak X(g)+2Y(g)\u2192Z(g) denklemine g\u00f6re TEK basamakta tepkimeye girmesi sağlanıyor. Tepkimenin başlangı\u00e7 hızı r ise, X gazının %25\u2019inin harcandığı andaki hız ka\u00e7 r\u2019dir?',
+      c:'Başlangı\u00e7: n(X)=4, n(Y)=4, toplam=8 (V\u2080 keyfi birim).<br>%25 X harcandı: 1mol X t\u00fckendi; katsayı oranı X:Y=1:2 olduğundan 2mol Y de t\u00fckendi, 1mol Z oluştu.<br>Yeni: n(X)=3, n(Y)=2, n(Z)=1, toplam=6.<br>Piston SABİT BASIN\u00c7ta olduğu i\u00e7in hacim toplam molle orantılı azalır: V<sub>yeni</sub>=V\u2080\u00d7(6/8)=0,75V\u2080.<br>[X]<sub>yeni</sub>=3/0,75=4 (değişmedi!), [Y]<sub>yeni</sub>=2/0,75\u22482,667 (eski [Y]=4\u2019\u00fcn 2/3\u2019\u00fc).<br>Tek adımlı: r=k[X][Y]\u00b2. Yeni r/Eski r = (4/4)\u00b9\u00d7(2,667/4)\u00b2 = 1\u00d7(2/3)\u00b2 = <b>4/9</b>.<br><span style="color:#fca5a5">\u26a0\ufe0f Piston sabit BASIN\u00c7ta oldu\u011fu i\u00e7in tepkime ilerledik\u00e7e HACMİN de değiştiğini (toplam mol azaldık\u00e7a hacmin de k\u00fc\u00e7\u00fcld\u00fc\u011f\u00fcn\u00fc) hesaba katmak gerekir.</span>' }
   ];
 
   function noteqDrawGraphs(){
@@ -8022,12 +8067,9 @@
 
   function setupNoteQ(){
     if (document.getElementById('noteq-wrap')) return;
-    var host = document.getElementById('kin-tps');
+    var host = document.getElementById('kin-group-2');
     if (!host) return;
-    host.insertAdjacentHTML('beforeend', '<div class="tp" id="noteq-wrap"></div>');
-    var tabsBar = document.getElementById('kin-tabs');
-    if (tabsBar && !document.getElementById('mn-noteqtab'))
-      tabsBar.insertAdjacentHTML('beforeend', '<button class="ltab" id="mn-noteqtab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',5)">\ud83d\udcd3 Özel Ders Notu</button>');
+    host.insertAdjacentHTML('beforeend', '<div id="noteq-wrap"></div>');
     var wrap = document.getElementById('noteq-wrap');
     var cats = ['Tümü'];
     NOTE_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
@@ -8041,6 +8083,7 @@
   }
   var noteqSt = { cat: 'Tümü' };
   window.noteqSetCat = function(cat, btn){ noteqSt.cat = cat; if (btn) selectInRow(btn); noteqRenderList(); };
+
 
   function noteqRenderList(){
     var box = document.getElementById('noteq-list');
@@ -8065,14 +8108,9 @@
 
   function setupMaarif(){
     if (document.getElementById('maarif-wrap')) return;
-    var host = document.getElementById('kin-tps');
+    var host = document.getElementById('kin-group-1');
     if (!host) return;
-    host.insertAdjacentHTML('beforeend', '<div class="tp" id="maarif-wrap"></div>');
-    if (!document.getElementById('mn-maariftab')) {
-      // 5. sekme butonunu kin-tabs'e ekle
-      var tabsBar = document.getElementById('kin-tabs');
-      if (tabsBar) tabsBar.insertAdjacentHTML('beforeend', '<button class="ltab" id="mn-maariftab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',4)">\ud83d\udcd8 Maarif Hız</button>');
-    }
+    host.insertAdjacentHTML('beforeend', '<div id="maarif-wrap"></div>');
     var wrap = document.getElementById('maarif-wrap');
     wrap.innerHTML =
       '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cKimyasal Tepkimelerde Hız\u201d ünitesinin tam konu anlatımı \u2014 tüm etkinlik, örnek ve grafikleriyle.</p>' +
@@ -8081,7 +8119,7 @@
         '<button type="button" class="ob" onclick="maarifSetSub(1,this)">1.2.2 Ortalama Hız</button>' +
         '<button type="button" class="ob" onclick="maarifSetSub(2,this)">1.2.3 Etkileyen Faktörler</button>' +
         '<button type="button" class="ob" onclick="maarifSetSub(3,this)">1.2.4 Hız Denklemi</button>' +
-        '<button type="button" class="ob" onclick="maarifSetSub(4,this)">\ud83d\udcdd Ölçme-Değerlendirme</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(4,this)">\ud83d\udcdd 66 Soru (Ölçme-Değerlendirme)</button>' +
       '</div></div>' +
       '<div id="maarif-content"></div>';
     maarifRender();
