@@ -1,5 +1,6 @@
 /* RONYA KİMYA — EKLENTİ PARÇA 2/4 (devamı — parça 1'den SONRA yüklenmelidir) */
-'use strict';
+(function () {
+  'use strict';
   // ---------- 9c. Faraday hesaplayıcısı ----------
   var ELZ_SP = [
     {k:'Ag', l:'G\u00fcm\u00fc\u015f \u2014 Ag\u207a+e\u207b', M:108, n:1},
@@ -1934,3 +1935,29 @@
   function organicMolFormula(mol){
     return 'C' + mol.nC + 'H' + mol.nH;
   }
+
+
+  // --- Diğer parçaların kullanabilmesi için gerekli isimleri dışa aç ---
+  window.IUPAC_PARENTS = IUPAC_PARENTS;
+  window.capStop = capStop;
+  window.drawErr = drawErr;
+  window.foldOrg = foldOrg;
+  window.freeDirs = freeDirs;
+  window.g3Box = g3Box;
+  window.growChain = growChain;
+  window.hcBg = hcBg;
+  window.hcDraw = hcDraw;
+  window.hcEnter = hcEnter;
+  window.hcLeave = hcLeave;
+  window.hcList = hcList;
+  window.hcProj = hcProj;
+  window.setupElz = setupElz;
+  window.setupHC = setupHC;
+  window.ssRgb = ssRgb;
+  window.ssVisStop = ssVisStop;
+  window.v3 = v3;
+  window.vAdd = vAdd;
+  window.vNorm = vNorm;
+  window.vScale = vScale;
+  window.vSub = vSub;
+})();
