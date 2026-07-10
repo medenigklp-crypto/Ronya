@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v32
+   RONYA KİMYA — EKLENTİ v33
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -159,6 +159,28 @@
        Kullanıcının kendi el yazması notlarındaki 2019-2024 AYT
        soruları (kişisel çalışma notu olduğu için) korunuyor. Enerji
        modülü 19 doğrulanmış soruya geri döndü.
+   56) 🎬 VİDEO DERSLER tamamen elden geçirildi (index.html'e hiç
+       dokunulmadı, mevcut elemanlar kullanıldı): a) closeVideo()
+       fonksiyonu index.html'de ÇAĞRILIYOR ama HİÇ TANIMLANMAMIŞTI
+       ("Kapat" butonu hata veriyordu) — düzeltildi. b) video-list
+       kutusu hiçbir zaman doldurulmuyordu — artık kalıcı bir kütüphane
+       (localStorage, sayfa yenilense de kalıcı) olarak çalışıyor.
+       c) Video ekleme artık sadece anlık oynatmıyor, kalıcı listeye
+       de kaydediyor; aynı dosya tekrar eklenmiyor (duplike engelleme);
+       geçersiz uzantılar reddediliyor; her video kartından silinebiliyor;
+       dosya adından otomatik okunaklı başlık üretiliyor ("kimya-1.mp4"
+       → "Kimya 1").
+   57) 📐 Öncüllü (I./II./III.) soru metinleri artık test kağıdı gibi
+       her öncül kendi satırında görünüyor (yeni formatOncul() yardımcı
+       fonksiyonu, Özel Ders Notu + Kimyasal Enerji + Maarif 66 Soru'nun
+       tamamında otomatik uygulanıyor).
+   58) 🐛 DÜZELTME (Özel Ders Notu grafik doğruluğu): Q6 (X→2Y grafiği)
+       "40.saniyede tepkime tamamlandı" yanlış varsayımı düzeltildi —
+       artık sadece doğrulanmış 3 nokta (0s:3,6M 10s:2,4M 20s:1,6M)
+       kullanılıyor. Q24 (PE-TK mekanizma sorusu) TAMAMEN KALDIRILDI —
+       kullandığım sayılar orijinal görselden değil kendi uydurduğum
+       "tutarlı" değerlerden geliyormuş; tahminle doldurmak yerine
+       dürüstçe kaldırıldı (29 soruya düştü).
    50) 📁 DOSYA YAPISI DEĞİŞTİ: ronya-eklenti.js artık 4 parçaya
        bölündü (ronya-eklenti-1.js .. -4.js), Claude önizlemesinin
        çökmesini önlemek için. index.html'de 4 <script> etiketi SIRAYLA
@@ -8799,6 +8821,105 @@
     box.innerHTML = html;
   }
 
+  // ---------- 28. VİDEO DERSLER — KALICI KÜT\u00dcPHANE (bug düzeltmeleri + geliştirme) ----------
+  var videoSt = { list: sget('ronya_videos', []), current: null };
+
+  function videoNiceTitle(filename){
+    var base = filename.replace(/\.[^.]+$/, '');
+    base = base.replace(/[_\-]+/g, ' ').trim();
+    return base.charAt(0).toUpperCase() + base.slice(1);
+  }
+
+  function setupVideoLib(){
+    if (window.__rkVideoLibReady) return;
+    window.__rkVideoLibReady = true;
+
+    // 1) addVideo() — taban index.html'deki sürümü GEÇERSİZ KILAR: artık oynatmakla
+    //    kalmıyor, kalıcı listeye de ekliyor (localStorage, sayfa yenilense de kalıcı).
+    window.addVideo = function(){
+      var input = document.getElementById('video-url-input');
+      if (!input) return;
+      var filename = input.value.trim();
+      if (!filename) return;
+      if (!/\.(mp4|webm|ogg|mov|m4v)$/i.test(filename)) {
+        if (typeof toast === 'function') toast('Dosya adı .mp4/.webm/.mov gibi bir uzantıyla bitmeli');
+        return;
+      }
+      // Kalıcı listeye ekle (aynı dosya adı zaten varsa tekrar eklemez, sadece oynatır)
+      var exists = videoSt.list.some(function(v){ return v.filename === filename; });
+      if (!exists) {
+        videoSt.list.unshift({ filename: filename, title: videoNiceTitle(filename), addedAt: Date.now() });
+        sset('ronya_videos', videoSt.list);
+      }
+      input.value = '';
+      renderVideoList();
+      playVideo(filename);
+    };
+
+    // 2) closeVideo() — index.html'de ÇAĞRILIYOR ama HİÇ TANIMLANMAMIŞTI (buton hata veriyordu). Düzeltildi.
+    window.closeVideo = function(){
+      var player = document.getElementById('video-player');
+      var wrap = document.getElementById('video-player-wrap');
+      if (player) { try { player.pause(); } catch (e) {} player.removeAttribute('src'); try { player.load(); } catch (e) {} }
+      if (wrap) wrap.style.display = 'none';
+      videoSt.current = null;
+    };
+
+    // 3) Videoyu oynat (listeden tıklanınca da kullanılır)
+    window.playVideo = function(filename){
+      var player = document.getElementById('video-player');
+      var wrap = document.getElementById('video-player-wrap');
+      var name = document.getElementById('video-current-name');
+      if (!player) return;
+      player.src = 'videos/' + filename;
+      player.load();
+      player.play().catch(function(){});
+      if (wrap) wrap.style.display = 'block';
+      var v = videoSt.list.find(function(x){ return x.filename === filename; });
+      if (name) name.innerText = v ? v.title : filename;
+      videoSt.current = filename;
+      var wrapEl = document.getElementById('video-player-wrap');
+      if (wrapEl && wrapEl.scrollIntoView) wrapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // 4) Videoyu kütüphaneden sil
+    window.deleteVideo = function(filename, ev){
+      if (ev) ev.stopPropagation();
+      videoSt.list = videoSt.list.filter(function(v){ return v.filename !== filename; });
+      sset('ronya_videos', videoSt.list);
+      if (videoSt.current === filename) window.closeVideo();
+      renderVideoList();
+    };
+
+    renderVideoList();
+  }
+
+  function renderVideoList(){
+    var box = document.getElementById('video-list');
+    if (!box) return;
+    if (videoSt.list.length === 0) {
+      box.innerHTML = '<div class="card" style="text-align:center;padding:24px 16px;color:var(--tx3)">' +
+        '<div style="font-size:32px;margin-bottom:8px">\ud83c\udfac</div>' +
+        '<div style="font-size:13px">Hen\u00fcz video eklenmedi.<br>Y\u0131kar\u0131daki kutuya bir dosya ad\u0131 yaz\u0131p \u201cEkle\u201d ye bas.</div>' +
+      '</div>';
+      return;
+    }
+    var html = '<div class="slbl" style="margin-bottom:8px">\ud83d\udcda K\u00fct\u00fcphane (' + videoSt.list.length + ')</div>';
+    videoSt.list.forEach(function(v){
+      var active = videoSt.current === v.filename;
+      html += '<div class="card" style="display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:8px;cursor:pointer;' +
+        (active ? 'border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.06)' : '') + '" onclick="playVideo(\'' + v.filename.replace(/'/g, "\\'") + '\')">' +
+        '<div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">' + (active ? '\u25b6\ufe0f' : '\ud83c\udfa5') + '</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + v.title + '</div>' +
+          '<div style="font-size:11px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + v.filename + '</div>' +
+        '</div>' +
+        '<button type="button" onclick="deleteVideo(\'' + v.filename.replace(/'/g, "\\'") + '\', event)" style="background:none;border:none;color:var(--tx3);font-size:16px;padding:6px;flex-shrink:0">\ud83d\uddd1\ufe0f</button>' +
+      '</div>';
+    });
+    box.innerHTML = html;
+  }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -8822,6 +8943,7 @@
     try { setupKin(); } catch (e) { /* sessiz */ }
     try { setupFizKim(); } catch (e) { /* sessiz */ }
     try { setupEnerji(); } catch (e) { /* sessiz */ }
+    try { setupVideoLib(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
