@@ -1934,4 +1934,3 @@
   function organicMolFormula(mol){
     return 'C' + mol.nC + 'H' + mol.nH;
   }
-
