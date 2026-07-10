@@ -143,6 +143,19 @@
        katalizörsüz PE-TK, 3-etki hız-zaman, CS₂ PE-TK, H₂ mol-zaman,
        kömür parçacık boyutu CO₂ grafiği, 2 basamaklı PE-TK) artık
        gerçek canvas grafikleri eklendi.
+   50) 📁 DOSYA YAPISI DEĞİŞTİ: ronya-eklenti.js artık 4 parçaya
+       bölündü (ronya-eklenti-1.js .. -4.js), Claude önizlemesinin
+       çökmesini önlemek için. index.html'de 4 <script> etiketi SIRAYLA
+       eklenmeli. Sarmalayıcı IIFE kaldırıldı (paylaşılan global kapsam
+       gerektiği için); kod DAVRANIŞI hiç değişmedi, sadece organizasyon.
+   51) 🔄 Tepkime Hızı ekranı 3 ANA GRUBA ayrıldı (eskiden 6 düz sekme +
+       iç içe alt sekmeler karışıklığı vardı): 🔬 Araçlar (3D Sim, PE
+       Diyagramı, Hız Hesapla, Hız Bağıntısı), 📘 MEB Konu Anlatımı
+       (1.2.1-1.2.4 + 66 Soru), 📓 Özel Ders Notu.
+   52) 📝 Özel Ders Notu'na notlardan 3 yeni doğrulanmış soru eklendi
+       (25: X+2Y+3Z hız bağıntısı türetme, 26: deney tablosundan
+       mertebe bulma — Y'nin hıza etkisi olmadığı ilginç örnek, 27:
+       pistonlu kapta %25 tepkime sonrası hız oranı — 4/9).
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -2387,4 +2400,3 @@
   window.elzToggleSpin = function(){ elz.spin = !elz.spin; };
   window.elzResetView = function(){ elz.rotX = 0.32; elz.rotY = -0.55; };
   window.elzSetCur = function(v){ elz.cur = v / 10; };
-
