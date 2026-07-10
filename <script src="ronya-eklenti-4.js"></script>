@@ -1,5 +1,6 @@
 /* RONYA KİMYA — EKLENTİ PARÇA 4/4 (devamı — parça 1'den SONRA yüklenmelidir) */
-'use strict';
+(function () {
+  'use strict';
   // ---------- 20. TEPKİME HIZI (KİNETİK) 3D — ÇARPIŞMA TEORİSİ ----------
   var kinSt = {
     rotX: 0.3, rotY: 0.4, zoom: 1, fit: 1, spin: true, drag: false, lx:0, ly:0, dist:0,
@@ -2076,3 +2077,8 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
+
+  // --- Diğer parçaların kullanabilmesi için gerekli isimleri dışa aç ---
+  window.fmtOx = fmtOx;
+  window.identifyRedoxChanges = identifyRedoxChanges;
+})();
