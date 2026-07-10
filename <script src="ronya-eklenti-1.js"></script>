@@ -156,13 +156,24 @@
        (25: X+2Y+3Z hız bağıntısı türetme, 26: deney tablosundan
        mertebe bulma — Y'nin hıza etkisi olmadığı ilginç örnek, 27:
        pistonlu kapta %25 tepkime sonrası hız oranı — 4/9).
+   53) 🛡️ MİMARİ DÜZELTME (kritik): Önceki 4-parça bölmede IIFE
+       sarmalayıcısını TAMAMEN kaldırmıştım — bu, taban index.html'in
+       kendi scriptleriyle isim çakışması riskini artırıyordu ve
+       muhtemelen "fonksiyonlar kayboldu" sorununun asıl nedeniydi.
+       Şimdi her parça yeniden KENDİ İZOLE IIFE'sine sarıldı (taban
+       siteyle çakışma riski ortadan kalktı); parçalar arası GERÇEKTEN
+       ihtiyaç duyulan 74 fonksiyon/değişken tek tek tespit edilip
+       SADECE onlar dışa açıldı (window.X=X). Otomatik çapraz-referans
+       analizi + gerçekçi DOM taklidiyle 16 farklı özellik tek tek
+       doğrulandı.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
    Başka hiçbir değişiklik gerekmez — eski balEq() otomatik
    olarak devre dışı kalır, EL_DATA otomatik tamamlanır.
    ============================================================ */
-'use strict';
+(function () {
+  'use strict';
 
   /* ============================================================
      BÖLÜM 1 — TAM ELEMENT VERİSİ (Z = 21..118)
@@ -2400,3 +2411,34 @@
   window.elzToggleSpin = function(){ elz.spin = !elz.spin; };
   window.elzResetView = function(){ elz.rotX = 0.32; elz.rotY = -0.55; };
   window.elzSetCur = function(v){ elz.cur = v / 10; };
+
+
+  // --- Diğer parçaların kullanabilmesi için gerekli isimleri dışa aç ---
+  window.BADGES = BADGES;
+  window.ELZ_MODES = ELZ_MODES;
+  window.F = F;
+  window.balanceEquation = balanceEquation;
+  window.bohrStop = bohrStop;
+  window.checkBadges = checkBadges;
+  window.elz = elz;
+  window.elzStart = elzStart;
+  window.elzStop = elzStop;
+  window.enrichElements = enrichElements;
+  window.injectBohr = injectBohr;
+  window.parseFormula = parseFormula;
+  window.pretty = pretty;
+  window.refreshWeakBtn = refreshWeakBtn;
+  window.renderBoard = renderBoard;
+  window.selectInRow = selectInRow;
+  window.setupBalanceGame = setupBalanceGame;
+  window.setupCompareScreen = setupCompareScreen;
+  window.setupDayElement = setupDayElement;
+  window.setupFlashcards = setupFlashcards;
+  window.setupMolFormula = setupMolFormula;
+  window.setupOxFinder = setupOxFinder;
+  window.setupQuizUI = setupQuizUI;
+  window.sget = sget;
+  window.sset = sset;
+  window.sup = sup;
+  window.updateRangeNote = updateRangeNote;
+})();
