@@ -1,5 +1,5 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v30
+   RONYA KİMYA — EKLENTİ v31
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -143,6 +143,14 @@
        katalizörsüz PE-TK, 3-etki hız-zaman, CS₂ PE-TK, H₂ mol-zaman,
        kömür parçacık boyutu CO₂ grafiği, 2 basamaklı PE-TK) artık
        gerçek canvas grafikleri eklendi.
+   54) ⚡ YENİ ANA EKRAN: "Kimyasal Enerji" — el yazması ders
+       notundan 19 çözümlü örnek (Entalpi kavramları, endo/ekzotermik
+       sınıflandırma, Hess Yasası, standart oluşum entalpisi, bağ
+       enerjisi). 6 GERÇEK AYT sorusu (2019-2024) dahil, hepsi elle
+       hesaplanıp doğrulandı ve kitabın kendi şıklarıyla birebir
+       eşleşti. Bu, Enerji/Denge/Asit-Baz/Çözünürlük Dengesi
+       serisinin İLK parçası — MEB kitap bölümleri ve diğer 3 konu
+       sıradaki adımlarda gelecek.
    50) 📁 DOSYA YAPISI DEĞİŞTİ: ronya-eklenti.js artık 4 parçaya
        bölündü (ronya-eklenti-1.js .. -4.js), Claude önizlemesinin
        çökmesini önlemek için. index.html'de 4 <script> etiketi SIRAYLA
@@ -8670,6 +8678,106 @@
     });
   }
 
+  // ---------- 27. KİMYASAL ENERJİ — ÖZEL DERS NOTU SORULARI ----------
+  var ENERJI_Q = [
+    { n:1, kat:'Kavram', t:'Ekzotermik olaylar ortamın sıcaklığını nasıl etkiler? Endotermik olaylar ortamın sıcaklığını nasıl etkiler? D\u00fcş\u00fck ve y\u00fcksek sıcaklıkta hangi enerji seviyesi kararlıdır?',
+      c:'<b>Ekzotermik</b> olaylar \u00e7evreye ısı VERDİĞİ i\u00e7in ortamın sıcaklığını <b>ARTIRIR</b>.<br><b>Endotermik</b> olaylar \u00e7evreden ısı ALDIĞI i\u00e7in ortamın sıcaklığını <b>AZALTIR</b>.<br>D\u00fcş\u00fck sıcaklıkta enerjisi <b>D\u00dcŞ\u00dcK (az)</b> olan kararlıdır (sistem en d\u00fcş\u00fck enerji durumuna eğilimlidir).<br>Y\u00fcksek sıcaklıkta enerjisi <b>Y\u00dcKSEK (fazla)</b> olan da kararlı olabilir (entropi/dağınıklık etkisi baskın \u00e7ıkar).' },
+    { n:2, kat:'Kavram', t:'Aşağıdaki olayları ENDOTERMİK ya da EKZOTERMİK olarak sınıflandırınız: Erime/buharlaşma/s\u00fcblimleşme; Donma/yoğuşma/kırağılaşma; Bağ oluşumu; Bağ kırılması; İyonlaşma enerjisi; Elektron ilgisi; Gazların suda \u00e7\u00f6z\u00fcnmesi; Tuzun suda \u00e7\u00f6z\u00fcnmesi; Metallerin suda \u00e7\u00f6z\u00fcnmesi; Asit-baz tepkimeleri; Metal-asit tepkimeleri; Elektroliz; Pil tepkimeleri; Yanma; Radyoaktif tepkimeler.',
+      c:'<b>ENDOTERMİK:</b> Erime/buharlaşma/s\u00fcblimleşme (hâl değişimi i\u00e7in enerji alınır) \u00b7 Bağ kırılması (her zaman enerji ister) \u00b7 İyonlaşma enerjisi (elektron koparmak enerji ister) \u00b7 Tuzun suda \u00e7\u00f6z\u00fcnmesi (\u00e7oğu tuzda, \u00f6rn. NH\u2084NO\u2083) \u00b7 Elektroliz (dışarıdan elektrik enerjisi verilir).<br><br><b>EKZOTERMİK:</b> Donma/yoğuşma/kırağılaşma (hâl değişiminin tersi, ısı verir) \u00b7 Bağ oluşumu (her zaman enerji açığa \u00e7ıkarır) \u00b7 Elektron ilgisi (\u00e7oğu element i\u00e7in enerji açığa \u00e7ıkar) \u00b7 Gazların suda \u00e7\u00f6z\u00fcnmesi (genelde) \u00b7 Metallerin suda \u00e7\u00f6z\u00fcnmesi (\u00f6rn. Na+H\u2082O) \u00b7 Asit-baz (n\u00f6tralleşme) \u00b7 Metal-asit tepkimeleri \u00b7 Pil tepkimeleri \u00b7 Yanma \u00b7 Radyoaktif tepkimeler.<br><br><i>Not: Bağ oluşumu/kırılması ve iyonlaşma/elektron ilgisi \u00e7iftleri, \u201changisi zıt işlemin tersidir\u201d mantığıyla kolayca hatırlanabilir \u2014 bir işlem enerji verirse tersi enerji alır.</i>' },
+    { n:3, kat:'Hesaplama', t:'2Fe\u2082O\u2083(k)+3C(k)+360 kJ\u21924Fe(k)+3CO\u2082(g) tepkimesi ile ilgili: a) Tepkime entalpisi ka\u00e7 kJ\u2019d\u00fcr? b) 0,4 mol Fe(k) oluşması i\u00e7in ka\u00e7 kJ enerji gerekir? c) 32 gram Fe\u2082O\u2083(k)\u2019ın yeterince C(k) ile tepkimeye girmesi i\u00e7in ka\u00e7 kJ enerji gerekir? d) 14,4 gram C(k) tamamının harcanması i\u00e7in ka\u00e7 kJ enerji gerekir? (Fe\u2082O\u2083:160 g/mol, C:12 g/mol)',
+      c:'a) 360 kJ tepken tarafında yazıldığı i\u00e7in tepkime ENERJİ ALIYOR \u2192 <b>\u0394H=+360 kJ (endotermik)</b>.<br>b) 4 mol Fe i\u00e7in 360 kJ gerekiyor. 0,4 mol Fe i\u00e7in: (360/4)\u00d70,4=<b>36 kJ</b>.<br>c) 32g Fe\u2082O\u2083=0,2 mol. 2 mol Fe\u2082O\u2083 i\u00e7in 360kJ gerekiyor. 0,2 mol i\u00e7in: (360/2)\u00d70,2=<b>36 kJ</b>.<br>d) 14,4g C=1,2 mol. 3 mol C i\u00e7in 360kJ gerekiyor. 1,2 mol i\u00e7in: (360/3)\u00d71,2=<b>144 kJ</b>.' },
+    { n:4, kat:'Hesaplama', t:'4X(k)+2O\u2082(g)\u21924XO(k), \u0394H=\u22121250 kJ tepkimesinde 14,4 gram XO oluştuğunda 62,5 kJ enerji açığa \u00e7ıktığına g\u00f6re, X\u2019in atom k\u00fctlesi ka\u00e7tır? (O:16)',
+      c:'4 mol XO oluşumunda 1250 kJ a\u00e7ığa \u00e7ıkar. 62,5 kJ i\u00e7in oluşan XO: (62,5/1250)\u00d74=<b>0,2 mol</b>.<br>Molar k\u00fctle M(XO)=14,4/0,2=<b>72 g/mol</b>.<br>X\u2019in atom k\u00fctlesi = 72\u221216(O) = <b>56</b>.' },
+    { n:5, kat:'Hesaplama', t:'CaO(k)+H\u2082O(s)\u2192Ca(OH)\u2082(k), \u0394H=\u221262,5 kJ tepkimesine g\u00f6re, 2,8 gram CaO katısının yeterli miktarda su ile etkileşmesiyle açığa \u00e7ıkan enerji ka\u00e7 joule\u2019d\u00fcr? (Ca:40, O:16)',
+      c:'M(CaO)=56 g/mol. mol CaO=2,8/56=<b>0,05 mol</b>.<br>1 mol CaO\u219262,5 kJ a\u00e7ığa \u00e7ıkarır. 0,05 mol i\u00e7in: 0,05\u00d762,5=3,125 kJ = <b>3125 J</b>.' },
+    { n:6, kat:'Hesaplama', t:'CaO(k)+H\u2082O(s)\u2192Ca(OH)\u2082(k), \u0394H=\u221265,2 kJ tepkimesine g\u00f6re, 2,8 gram CaO ile 0,36 gram H\u2082O\u2019nun %25 verimle etkileşmesinden ka\u00e7 joule enerji açığa \u00e7ıkar? (CaO:56, H\u2082O:18)',
+      c:'mol CaO=2,8/56=0,05 mol; mol H\u2082O=0,36/18=0,02 mol. Katsayı oranı 1:1 olduğundan <b>H\u2082O sınırlayıcıdır</b> (0,02<0,05).<br>%100 verimle: 0,02\u00d765,2=1,304 kJ.<br>%25 verimle: 1,304\u00d70,25=0,326 kJ = <b>326 J</b>.' },
+    { n:7, kat:'Hesaplama', t:'S(k)+\u00b3\u2044\u2082O\u2082(g)\u2192SO\u2083(g) tepkimesine g\u00f6re, 9,6\u2019şar gram S ve O\u2082 tam verimle etkileştiğinde 39,5 kJ ısı açığa \u00e7ıkıyor. Buna g\u00f6re, SO\u2083(g)\u2019nin molar oluşum ısısı ka\u00e7 kJ/mol\u2019d\u00fcr? (S:32, O:16)',
+      c:'mol S=9,6/32=<b>0,3 mol</b>. Katsayı oranı S:SO\u2083=1:1 olduğundan 0,3 mol SO\u2083 oluşur.<br>Molar oluşum ısısı = \u221239,5/0,3 = <b>\u2212131,7 kJ/mol</b> (yaklaşık).' },
+    { n:8, kat:'Standart Oluşum Entalpisi', t:'Aşağıdaki tepkimelerden hangileri OLUŞUM ENTALPİSİdir, hangileri MOLAR OLUŞUM ENTALPİSİdir? I. CO(g)+\u00bdO\u2082(g)\u2192CO\u2082(g) II. N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g) III. 2H(g)+Cl\u2082(g)\u21922HCl(g) IV. H\u2082(g)+2O\u2082(g)\u2192H\u2082O(g) V. C(k,elmas)+O\u2082(g)\u2192CO\u2082(g) VI. 2C(k)+3H\u2082(g)+\u00bdO\u2082(g)\u2192C\u2082H\u2085OH(s) VII. Ag\u207a(suda)+Cl\u207b(suda)\u2192AgCl(suda) VIII. \u2081\u00b2H+\u2081\u00b3H\u2192\u2082\u2074He+\u2080\u00b9n',
+      c:'Oluşum entalpisi olabilmesi i\u00e7in tepkenler ELEMENTLERİN STANDART HALİ olmalı, \u00fcr\u00fcn TEK bir bileşik olmalı; \u201cmolar\u201d olması i\u00e7in \u00fcr\u00fcn KATSAYISI 1 olmalıdır.<br>I \u2014 CO bir ELEMENT değil (bileşik), oluşum entalpisi DEĞİL.<br>II \u2014 Elementlerden bileşik oluşuyor (oluşum entalpisi) ama 2 mol NH\u2083 oluşuyor, MOLAR DEĞİL.<br>III \u2014 2H(g) atomik hidrojen, hidrojenin standart hali H\u2082(g)\u2019dir \u2014 oluşum entalpisi DEĞİL.<br>IV \u2014 Hatalı dengelenmiş (H\u2082O i\u00e7in \u00bdO\u2082 olmalıydı) \u2014 ge\u00e7erli değil.<br>V \u2014 Karbonun standart hali GRAFİTTİR, ELMAS değil \u2014 standart oluşum entalpisi DEĞİL.<br>VI \u2014 T\u00fcm tepkenler standart element hali, \u00fcr\u00fcn 1 mol \u2014 <b>HEM oluşum HEM molar oluşum entalpisidir.</b><br>VII \u2014 Tepkenler İYONLAR, element değil \u2014 oluşum entalpisi DEĞİL.<br>VIII \u2014 N\u00dcKLEER tepkime, kimyasal oluşum entalpisi kapsamında DEĞİL.<br>\u2192 Sadece <b>VI</b> hem oluşum hem molar oluşum entalpisidir; <b>II</b> sadece oluşum entalpisidir (molar değil).' },
+    { n:9, kat:'Standart Oluşum Entalpisi', t:'Aşağıdakilerden hangilerinin standart koşullarda molar oluşum entalpisi SIFIR kabul edilir? I. Fe(k) II. H\u2082(g) III. C(k)(elmas) IV. C(k)(grafit) V. Hg(k) VI. H\u2082O(s) VII. O\u2082(g) VIII. O\u2083(g) IX. I\u2082(k) X. F(g) XI. Br\u2082(g)',
+      c:'Bir elementin standart oluşum entalpisi, YALNIZCA o element standart koşullarda EN KARARLI (doğal) haldeyse sıfırdır.<br>I. Fe(k) \u2014 <b>DOĞRU (0)</b>, demirin standart hali katıdır.<br>II. H\u2082(g) \u2014 <b>DOĞRU (0)</b>.<br>III. C(elmas) \u2014 YANLIŞ, karbonun standart hali GRAFİTTİR, elmas değil.<br>IV. C(grafit) \u2014 <b>DOĞRU (0)</b>.<br>V. Hg(k) \u2014 YANLIŞ, cıvanın standart hali oda sıcaklığında SIVIdır, katı değil.<br>VI. H\u2082O(s) \u2014 YANLIŞ, su bir BİLEŞİKTİR, element değil (element sorusu i\u00e7in ge\u00e7ersiz).<br>VII. O\u2082(g) \u2014 <b>DOĞRU (0)</b>.<br>VIII. O\u2083(g) \u2014 YANLIŞ, oksijenin standart hali O\u2082\u2019dir, O\u2083 (ozon) değil.<br>IX. I\u2082(k) \u2014 <b>DOĞRU (0)</b>, iyodun standart hali odasıcaklığında katıdır.<br>X. F(g) \u2014 YANLIŞ, florun standart hali F\u2082(g)\u2019dir, atomik F değil.<br>XI. Br\u2082(g) \u2014 YANLIŞ, bromun standart hali oda sıcaklığında SIVIdır (Br\u2082(s)), gaz değil.<br>\u2192 <b>I, II, IV, VII, IX</b> sıfır kabul edilir.' },
+    { n:10, kat:'AYT 2023', t:'HBr(g) i\u00e7in standart oluşum entalpisi \u221236 kJ/mol ve H\u2082O(s) i\u00e7in standart oluşum entalpisi \u2212286 kJ/mol\u2019d\u00fcr. Buna g\u00f6re, 4HBr(g)+O\u2082(g)\u21922H\u2082O(s)+Br\u2082(s) tepkimesinin standart entalpi değişimi ka\u00e7 kJ\u2019dir?',
+      o:['-428','-250','250','428','716'], c:3,
+      ac:'\u0394H=[\u00fcr\u00fcnler]\u2212[tepkenler]=[2\u00d7(\u2212286)+0]\u2212[4\u00d7(\u221236)+0]=\u2212572\u2212(\u2212144)=<b>\u2212428 kJ</b> (Br\u2082(s) ve O\u2082(g) elementlerin standart hali olduğu i\u00e7in ΔHf=0). \u2192 <b>A) -428</b>' },
+    { n:11, kat:'Hesaplama', t:'H\u2082SO\u2084(suda)+2KOH(suda)\u2192K\u2082SO\u2084(suda)+2H\u2082O(s) tepkimesine g\u00f6re 0,4 M 500 mL KOH ve yeterince H\u2082SO\u2084 tepkimeye girdiğinde 16 kJ enerji açığa \u00e7ıkıyor. a) H\u2082SO\u2084\u2019\u00fcn molar n\u00f6trleşme entalpisi ka\u00e7 kJ olur? b) KOH\u2019un molar n\u00f6trleşme entalpisi ka\u00e7 kJ olur?',
+      c:'mol KOH=0,4\u00d70,5=<b>0,2 mol</b>. Katsayı oranı KOH:H\u2082SO\u2084=2:1 olduğundan stokiyometrik H\u2082SO\u2084=0,1 mol.<br>a) 0,1 mol H\u2082SO\u2084 16 kJ açığa \u00e7ıkarıyor \u2192 1 mol i\u00e7in: 16/0,1=<b>\u2212160 kJ</b>.<br>b) 0,2 mol KOH 16 kJ açığa \u00e7ıkarıyor \u2192 1 mol i\u00e7in: 16/0,2=<b>\u221280 kJ</b>.<br><i>Kontrol: 2 mol KOH\u2019a karşılık 1 mol H\u2082SO\u2084 olduğu i\u00e7in H\u2082SO\u2084\u2019\u00fcn molar değeri KOH\u2019un TAM 2 katı olmalı (160=2\u00d780) \u2014 tutarlı.</i>' },
+    { n:12, kat:'Kavramsal', t:'Yalıtılmış (\u00e7evreyle ısı alışverişi olmayan) sabit hacimli kaplarda ayrı ayrı ger\u00e7ekleşen I. PCl\u2083(g)+Cl\u2082(g)\u21ccPCl\u2085(g) II. N\u2082O\u2084(g)\u21cc2NO\u2082(g) III. H\u2082(g)+F\u2082(g)\u21cc2HF(g) tepkimelerinde kap i\u00e7indeki toplam gaz basıncı ARTMIŞTIR. Yalnız bu bilgiden yararlanarak, hangi tepkimelerin EKZOTERMİK olduğu KESİN olarak s\u00f6ylenebilir?',
+      c:'Yalıtılmış sabit hacimli bir kapta P, hem MOL SAYISI DEĞİŞİMİNDEN hem de EKZO/ENDOTERMİK olmaya bağlı SICAKLIK DEĞİŞİMİNDEN etkilenir (ısı dışarı \u00e7ıkamadığı i\u00e7in ekzotermikse T artar, endotermikse T azalır).<br><b>I</b> (2mol\u21921mol, AZALIR): Mol sayısı AZALDIĞI halde P ARTTIYSA, bunu sadece SICAKLIK ARTIŞI (yani EKZOTERMİK olma) telafi edebilir \u2192 <b>KESİN EKZOTERMİK</b>.<br><b>II</b> (1mol\u21922mol, ARTAR): Mol sayısı zaten ARTTIĞI i\u00e7in P\u2019nin artması sıcaklıktan BAĞIMSIZ olarak da a\u00e7ıklanabilir \u2192 <b>BELİRSİZ</b> (ekzo ya da endo olabilir).<br><b>III</b> (2mol\u21922mol, DEĞİŞMEZ): Mol sayısı SABİT olduğu i\u00e7in P\u2019nin artması SADECE sıcaklık artışıyla (EKZOTERMİK) a\u00e7ıklanabilir \u2192 <b>KESİN EKZOTERMİK</b>.<br>\u2192 <b>I ve III kesinlikle ekzotermiktir.</b>' },
+    { n:13, kat:'Kavramsal', t:'Aynı miktarda H\u2082O oluştuğu şu 4 tepkimeyi karşılaştırın: 1) H\u2082(g)+\u00bdO\u2082(g)\u2192H\u2082O(g) 2) H\u2082(g)+\u00bdO\u2082(g)\u2192H\u2082O(s) 3) 2H(g)+\u00bdO\u2082(g)\u2192H\u2082O(s) (atomik hidrojenden). a) Açığa \u00e7ıkan ısıları karşılaştırın. b) Entalpi değişimlerini (\u0394H) karşılaştırın.',
+      c:'a) Sıvı su OLUŞUMU, gaz suya g\u00f6re DAHA FAZLA ısı a\u00e7ığa \u00e7ıkarır (yoğuşma ısısı da eklenir) \u2192 tepkime (2), tepkime (1)\u2019den daha \u00e7ok ısı verir. Atomik hidrojenden (3) başlamak, molek\u00fcler H\u2082\u2019nin H-H bağını KIRMADAN başladığı i\u00e7in (bu enerji zaten \u201cdepoda\u201d olduğu i\u00e7in) EN FAZLA ısıyı a\u00e7ığa \u00e7ıkarır.<br>Sıralama (a\u00e7ığa \u00e7ıkan ısı, \u00e7oktan aza): <b>(3) > (2) > (1)</b>.<br>b) T\u00fcm tepkimeler EKZOTERMİK olduğu i\u00e7in \u0394H NEGATİFTİR; ısı b\u00fcy\u00fckl\u00fcğ\u00fc arttık\u00e7a \u0394H DAHA K\u00dc\u00c7\u00dcK (daha negatif) olur \u2192 \u0394H sıralaması (en negatiften en az negatife): <b>\u0394H\u2083 < \u0394H\u2082 < \u0394H\u2081</b>.' },
+    { n:14, kat:'Hess Yasası', t:'AYT 2022: C(k)+O\u2082(g)\u2192CO\u2082(g), \u0394H\u00b0=\u2212393,5 kJ/mol; H\u2082(g)+\u00bdO\u2082(g)\u2192H\u2082O(s), \u0394H\u00b0=\u2212285,8 kJ/mol; C(k)+2H\u2082(g)\u2192CH\u2084(g), \u0394H\u00b0=\u221274,8 kJ/mol. Buna g\u00f6re, CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(s) tepkimesinin standart entalpi değişimi ka\u00e7 kJ/mol\u2019d\u00fcr?',
+      o:['-998,0','-890,3','-604,5','+604,5','+890,3'], c:1,
+      ac:'Hess Yasası: Hedef = [C+O\u2082\u2192CO\u2082] + 2\u00d7[H\u2082+\u00bdO\u2082\u2192H\u2082O] \u2212 [C+2H\u2082\u2192CH\u2084]<br>\u0394H=\u2212393,5+2\u00d7(\u2212285,8)\u2212(\u221274,8)=\u2212393,5\u2212571,6+74,8=<b>\u2212890,3 kJ</b>. \u2192 <b>B) -890,3</b>' },
+    { n:15, kat:'Hess Yasası', t:'AYT 2021: \u00bdN\u2082(g)+O\u2082(g)\u2192NO\u2082(g), \u0394H\u00b0=33,2 kJ/mol; N\u2082(g)+2O\u2082(g)\u2192N\u2082O\u2084(g), \u0394H\u00b0=11,1 kJ/mol. Buna g\u00f6re 2NO\u2082(g)\u2192N\u2082O\u2084(g) tepkimesi i\u00e7in standart entalpi değişimi ka\u00e7 kJ\u2019dir?',
+      o:['-55,3','-22,1','11,0','22,1','44,2'], c:0,
+      ac:'İlk denklemi 2 ile \u00e7arp: N\u2082+2O\u2082\u21922NO\u2082, \u0394H=66,4 kJ. Hedef=[N\u2082+2O\u2082\u2192N\u2082O\u2084]\u2212[N\u2082+2O\u2082\u21922NO\u2082]=11,1\u221266,4=<b>\u221255,3 kJ</b>. \u2192 <b>A) -55,3</b>' },
+    { n:16, kat:'Hess Yasası', t:'AYT 2020: C\u2082H\u2082(g)+\u2075\u2044\u2082O\u2082(g)\u21922CO\u2082(g)+H\u2082O(s), \u0394H=\u22121300 kJ; C(k)+O\u2082(g)\u2192CO\u2082(g), \u0394H=\u2212394 kJ; H\u2082(g)+\u00bdO\u2082(g)\u2192H\u2082O(s), \u0394H=\u2212286 kJ. Buna g\u00f6re, 2C(k)+H\u2082(g)\u2192C\u2082H\u2082(g) tepkimesinin standart entalpi değişimi ka\u00e7 kilojoule\u2019d\u00fcr?',
+      o:['-1980','-1122','226','334','620'], c:2,
+      ac:'Hedef = 2\u00d7[C+O\u2082\u2192CO\u2082] + [H\u2082+\u00bdO\u2082\u2192H\u2082O] \u2212 [C\u2082H\u2082+\u2075\u2044\u2082O\u2082\u21922CO\u2082+H\u2082O]<br>\u0394H=2\u00d7(\u2212394)+(\u2212286)\u2212(\u22121300)=\u2212788\u2212286+1300=<b>226 kJ</b>. \u2192 <b>C) 226</b>' },
+    { n:17, kat:'Hess Yasası', t:'AYT 2019: C(k)+\u00bdO\u2082(g)\u2192CO(g), \u0394H=\u2212110,5 kJ/mol; CO\u2082(g)\u2192\u00bdO\u2082(g)+CO(g), \u0394H=+283 kJ/mol. Buna g\u00f6re, CO\u2082(g)\u2019nin standart oluşum entalpisi ka\u00e7 kJ/mol\u2019d\u00fcr?',
+      o:['+393,5','+172,5','+110,5','-172,5','-393,5'], c:4,
+      ac:'İkinci denklemi TERS \u00e7evir: CO+\u00bdO\u2082\u2192CO\u2082, \u0394H=\u2212283. Topla: [C+\u00bdO\u2082\u2192CO]+[CO+\u00bdO\u2082\u2192CO\u2082]=C+O\u2082\u2192CO\u2082<br>\u0394H=\u2212110,5+(\u2212283)=<b>\u2212393,5 kJ</b>. \u2192 <b>E) -393,5</b>' },
+    { n:18, kat:'Hess Yasası', t:'AYT 2024: H\u2082(g)+O\u2082(g)\u2192H\u2082O\u2082(s), \u0394H\u00b0=\u2212188 kJ/mol; H\u2082(g)+\u00bdO\u2082(g)\u2192H\u2082O(s), \u0394H\u00b0=\u2212286 kJ/mol. Buna g\u00f6re \u00e7alışılan sıcaklık ve basın\u00e7ta 0,5 mol H\u2082O\u2082(s)\u2019den H\u2082O(s)\u2019nun oluşmasına ilişkin tepkimenin entalpi değişim değeri ka\u00e7 kJ\u2019dir?',
+      o:['-143','-98','-49','+49','+98'], c:2,
+      ac:'Hedef (1 mol i\u00e7in): H\u2082O\u2082\u2192H\u2082O+\u00bdO\u2082 = [H\u2082+\u00bdO\u2082\u2192H\u2082O]\u2212[H\u2082+O\u2082\u2192H\u2082O\u2082]=\u2212286\u2212(\u2212188)=\u221298 kJ/mol.<br>0,5 mol i\u00e7in: 0,5\u00d7(\u221298)=<b>\u221249 kJ</b>. \u2192 <b>C) -49</b>' },
+    { n:19, kat:'Bağ Enerjisi', t:'Bağ enerjisi hakkında: Bir bağ ne kadar sağlamsa, o bağı kırmak i\u00e7in gereken enerji nasıldır? \u0394H\u2019yi bağ enerjileriyle hesaplama form\u00fcl\u00fc nedir?',
+      c:'Bir bağ ne kadar SAĞLAMsa (g\u00fc\u00e7l\u00fcyse), o bağı KIRMAK i\u00e7in gereken enerji o kadar <b>FAZLADIR</b> (bağ enerjisi b\u00fcy\u00fckt\u00fcr).<br>Form\u00fcl: <b>\u0394H = \u03a3(Kırılan bağ enerjileri) \u2212 \u03a3(Oluşan bağ enerjileri)</b><br>Kırılan bağlar (tepkenler) her zaman ENERJİ GEREKTİRİR (+); oluşan bağlar (\u00fcr\u00fcnler) her zaman ENERJİ AÇIĞA ÇIKARIR (\u2212 katkı). Bu y\u00fczden oluşan bağların toplam enerjisi, kırılan bağların toplamından B\u00dcY\u00dcKSE tepkime EKZOTERMİKTİR.' }
+  ];
+
+  function setupEnerji(){
+    if (document.getElementById('s-enerji')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var cats = ['Tümü'];
+    ENERJI_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-enerji" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\u26a1 Kimyasal Enerji</h1>' +
+        '<p class="psub">Entalpi, Hess Yasası, bağ enerjisi \u2014 el yazması ders notundan ' + ENERJI_Q.length + ' \u00e7\u00f6z\u00fcml\u00fc \u00f6rnek (ger\u00e7ek AYT sorularıyla).</p>' +
+        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="enerji-cats">' +
+          cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="enerjiSetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
+        '</div></div>' +
+        '<div id="enerji-list"></div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-enerji') === -1) SCREENS.push('s-enerji');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-enerji'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-enerji" onclick="nav(\'enerji\')">\u26a1 Kimyasal Enerji</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-enerji'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-enerji" onclick="nav(\'enerji\')"><div class="ti">\u26a1</div><div class="tt">Kimyasal Enerji</div><div class="td">Entalpi, Hess Yasası, bağ enerjisi \u2014 çözümlü örnekler ve AYT soruları.</div></div>');
+    enerjiRenderList();
+  }
+  var enerjiSt = { cat: 'Tümü' };
+  window.enerjiSetCat = function(cat, btn){ enerjiSt.cat = cat; if (btn) selectInRow(btn); enerjiRenderList(); };
+
+  function enerjiRenderList(){
+    var box = document.getElementById('enerji-list');
+    if (!box) return;
+    var html = '';
+    ENERJI_Q.forEach(function(q){
+      if (enerjiSt.cat !== 'Tümü' && q.kat !== enerjiSt.cat) return;
+      var optsHtml = '';
+      if (q.o) optsHtml = '<div style="margin-bottom:8px">' + q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:var(--tx2)">' + String.fromCharCode(65+i) + ') ' + o + '</div>'; }).join('') + '</div>';
+      html += '<div class="card" style="margin-bottom:18px;padding:18px 16px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+          '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.18);color:#f59e0b;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
+          '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
+        '</div>' +
+        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + q.t + '</div>' +
+        optsHtml +
+        '<div onclick="molToggle(\'enerji-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#f59e0b;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f \u00c7\u00f6z\u00fcm\u00fc G\u00f6ster</div>' +
+        '<div id="enerji-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' +
+          (q.o ? '<div style="font-size:13px;font-weight:700;color:#86efac;margin-bottom:6px">Doğru cevap: ' + String.fromCharCode(65+q.c) + ') ' + q.o[q.c] + '</div>' + q.ac : q.c) +
+        '</div>' +
+      '</div>';
+    });
+    box.innerHTML = html;
+  }
+
   // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -8692,6 +8800,7 @@
     try { setupRedox(); } catch (e) { /* sessiz */ }
     try { setupKin(); } catch (e) { /* sessiz */ }
     try { setupFizKim(); } catch (e) { /* sessiz */ }
+    try { setupEnerji(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
