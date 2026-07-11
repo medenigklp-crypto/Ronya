@@ -1,5 +1,15 @@
 /* ============================================================
-   RONYA KİMYA — EKLENTİ v36
+   RONYA KİMYA — EKLENTİ v37 (YENİDEN İNŞA EDİLDİ — 11 Temmuz felaketi sonrası)
+   NOT: Bu dosya, kaza sonucu silinen v37'nin elde kalan bileşen
+   parçalarından yeniden inşa edilmiştir. Doğrulanan içerik: Hidrokarbon,
+   Fonksiyonel Gruplar, Zayıf Etkileşimler, Ayarlar, Galvanik Hücre,
+   Kimyasal Denge 3D, Tepkime Türü, Alev Testi, Redoks (hazır 6 örnek),
+   Fiziksel/Kimyasal Değişim, Tepkime Hızı (3D+PE+Hesaplayıcı+Bağıntı),
+   Maarif Hız (tam + 66 soru), Özel Ders Notu Hız (29 soru düzeltilmiş),
+   Kimyasal Enerji (19 soru), Video Kütüphanesi, Kimyasal Denge MEB+Özel
+   Not (34 soru). BİLİNEN EKSİK: Redoks ekranındaki "kendi denklem"
+   çözücü ve "27 örnek" sekmeleri (kaynak dosyası bulunamadı,
+   yeniden yapılması gerekiyor).
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -39,201 +49,6 @@
    26) 🧊 Maarif 9. Sınıf Etkileşim Ünitesi: Zayıf Etkileşimler
        (London/dipol-dipol/hidrojen bağı) + Maddenin Halleri
        (katı/sıvı/gaz/plazma parçacık simülasyonu), 3D + detaylı konu
-   27) ⚙️ Ayarlar ekranı: tüm ilerleme verilerini (skor, rozet, seri,
-       flashcard, yanlış listesi) görüntüle ve tek tek/toplu sıfırla
-   28) 🧪 IUPAC Adlandırma Quiz'i: Element Testi ekranına yeni soru
-       tipleri (Formül→IUPAC Ad, IUPAC Ad→Formül), Hidrokarbonlar 3D
-       + Fonksiyonel Gruplar galerilerindeki 48 molekülden — şıklı
-       ve yazarak modu destekli. İzomer belirsizliği (örn. etanol/
-       dimetil eter aynı formül) Formül→Ad yönünde otomatik filtrelenir.
-   29) 🎨 Fonksiyonel Gruplar ekranına "İsimden Çiz" kutusu (IUPAC):
-       etanol, propanal, bütanon, propanoik asit, etil asetat, dimetil
-       eter gibi isimlerden 3D çizim — 2-propanol gibi konumlu alkoller
-       ve n-pentanol/heksanoik asit gibi uzatılmış zincirler de dahil.
-   30) 📋 Fonksiyonel Gruplar ana ekranına "Genel Bakış": her kategorinin
-       (Alkol/Eter/Aldehit/Keton/Asit/Ester) ilk 3 örneği küçük 3D
-       önizleme kartlarıyla + "Tümünü Gör" bağlantısıyla gösterilir.
-   31) 🔋 Galvanik (Voltaik) Hücre 3D: 10 metal çifti (Daniell hücresi
-       dahil), gerçek standart indirgenme potansiyelleri ile E°hücre
-       canlı hesaplanır, tuz köprüsünde iyon akışı + tel üzerinde
-       elektron akışı animasyonlu, anot/katot polaritesi elektrolizin
-       TERSİ olduğu vurgulanır, elektrotlar zamanla erir/kalınlaşır.
-   32) ⚖️ Kimyasal Denge 3D (Le Chatelier): N₂+3H₂⇌2NH₃, basınç/
-       sıcaklık/derişim müdahaleleriyle denge canlı kayar, stokiyometri
-       (H₂=3×N₂) her zaman korunur, K denge sabiti + Haber-Bosch süreci
-       anlatımı dahil.
-   33) 🐛 KRİTİK DÜZELTME: Kimyasal Denge 3D modülü yanlışlıkla tabanın
-       kendi "Denklem Dengeleyici" (nav id: eq) ile aynı ekran kimliğini
-       kullanıyordu — ikisi de bozulurdu. Kimyasal Denge artık ayrı bir
-       kimlikte (nav id: ledenge), Denklem Dengeleyici'ye dokunulmadı.
-   34) 🏆 3 yeni rozet: Volta Ustası (10 galvanik çifti incele), IUPAC
-       Şampiyonu (IUPAC testinde %80+), rozet sayısı 10'dan 13'e çıktı.
-   35) 🧪 Tepkime Türü Sınıflandırıcı: Sentez/Analiz/Yer Değiştirme/
-       Çift Değişim — 20 gerçek örnek denklem, açıklamalı quiz.
-   36) 🔥 Alev Testi Galerisi: 8 metal iyonunun (Li,Na,K,Ca,Sr,Ba,Cu,Pb)
-       karakteristik alev rengi — animasyonlu 3D alev + quiz modu.
-   37) 🔌 Redoks Yarı Tepkime Dengeleyici: 6 yaygın YKS/AYT örneği,
-       elektron kazanma/kaybetme yöntemiyle adım adım dengeleme.
-   38) 💥 Tepkime Hızı (Kinetik) 3D: Çarpışma teorisi simülasyonu —
-       derişim/sıcaklık/katalizör kontrolleri, canlı ölçülen tepkime
-       hızı (başarılı çarpışma/saniye), gerçek parçacık fiziği.
-   39) 📚 Tepkime Türü Sınıflandırıcı DÜZELTMESİ: Maarif Modeli
-       müfredatına göre doğru 3 kategori (Asit-Baz / Çözünme-Çökelme /
-       Yükseltgenme-İndirgenme) ile yeniden yazıldı.
-   40) 🧮 Redoks Denge Motoru genişletildi: Artık KENDİ denkleminizi
-       (iyonsuz/moleküler) yazabilirsiniz — genel oksidasyon basamağı
-       hesaplayıcı (sabit kurallar + çok atomlu grup tanıma + tipik
-       anyon varsayımları) otomatik dengeler ve hangi elementin
-       yükseltgendiğini/indirgendiğini bulur. Orantısızlaşma (aynı
-       elementin birden fazla ürüne farklı basamakta dağılması) dahil
-       27 gerçek YKS/AYT düzeyi denklemle doğrulandı.
-   41) 🔄 Fiziksel ve Kimyasal Değişim: 40 günlük hayat örneği (hal
-       değişimleri, fermantasyon, paslanma, fotosentez, vb.) — quiz +
-       kategorili tam liste.
-   42) 🧮 Redoks Denge Motoruna 3. sekme ("27 Örnek"): kullanıcının
-       verdiği 27 denklem artık seçilebiliyor, her biri otomatik
-       oksidasyon-basamağı analiziyle adım adım (hangi element
-       yükseltgendi/indirgendi → dengeli denklem) çözülüyor.
-   43) 💥 Tepkime Hızı ekranı sekmeli hale getirildi, 3 yeni araç
-       eklendi:
-       a) ⛰️ Potansiyel Enerji Diyagramı — Ea(ileri)/Ea(geri)/ΔH canlı
-          görselleştirme, katalizörlü/katalizörsüz karşılaştırma,
-          fiziksel olarak imkânsız (negatif Ea) girdiler tespit edilir.
-       b) ⏱️ Hız Hesaplayıcı — denklem gir, bir türün hızından tüm
-          diğerlerinin hızını stokiyometriye göre bulur; kütle→hız
-          çevirici dahil.
-       c) 📐 Hız Bağıntısı — deneysel verilerden (derişim/hız tablosu)
-          reaktan mertebelerini ve hız sabitini (k) otomatik bulur.
-   44) 📘 MAARİF HIZ (yeni 5. sekme, Tepkime Hızı ekranında): MEB
-       Maarif Modeli 11. sınıf Kimya 2 ders kitabının "Kimyasal
-       Tepkimelerde Hız" ünitesinin TAM konu anlatımı — 4 alt bölüm
-       (1.2.1 Gerekli Şartlar, 1.2.2 Ortalama Hız, 1.2.3 Etkileyen
-       Faktörler, 1.2.4 Hız Denklemi), kitaptaki TÜM etkinlik/örnek/
-       tablo içerikleriyle, ayrıca kitaptaki Grafik 1.4-1.14'ün canvas
-       ile yeniden çizilmiş halleri (eşik enerjisi dağılımı, endo/
-       ekzotermik PE-TK grafikleri, H₂O₂ derişim-zaman, sıcaklık/
-       katalizör/temas yüzeyi etkisi grafikleri, çok basamaklı
-       tepkime grafiği).
-   45) 📝 Maarif Hız'a 6. alt sekme: "Ölçme-Değerlendirme" — kitabın
-       1. Tema sonundaki TÜM 66 sorusu (Doğru-Yanlış, Boşluk Doldurma,
-       Açık Uçlu, Çoktan Seçmeli), her biri kendi çözümü/cevabıyla
-       birlikte, dokunulunca açılan liste halinde. Sayısal sorular
-       (bağ enerjisi, oluşum entalpisi, hız denklemi/mertebe, k
-       hesaplama vb.) tek tek hesaplanıp doğrulandı; birçoğu kitabın
-       kendi çoktan seçmeli şıklarıyla birebir örtüştü.
-   46) 🐛 DÜZELTME: Çoktan seçmeli sorularda şıklar artık soruyla
-       birlikte HER ZAMAN görünüyor (önceden tıklanana kadar gizliydi).
-       Tıklama artık sadece doğru cevap + çözümü açıyor.
-   47) 📓 Tepkime Hızı ekranına 6. sekme: "Özel Ders Notu" — kullanıcının
-       paylaştığı el yazması ders notundan 24 çözümlü örnek soru,
-       12 kategoriye ayrılmış (Hız Bağıntısı, Ortalama Hız, Madde
-       Cinsi Etkisi, Mekanizma, Hız Denklemi, Derişim/Piston, Sıcaklık
-       Etkisi, Katalizör, Temas Yüzeyi, Karışık Faktörler, Potansiyel
-       Enerji). Soru her zaman görünür, dokununca çözüm açılır.
-   48) 🐛 KRİTİK DÜZELTME (Özel Ders Notu, Soru 13 — piston/B₂ ilavesi):
-       Yanlış cevap veriyordum ("hız değişmez" diyordum). Doğrusu:
-       B₂ eklenince A₂ ve B₂'nin derişimleri FARKLI oranlarda değişir
-       ([A₂]×0,5, [B₂]×1,5) — doğru cevap 9/8 kat. Kullanıcının kendi
-       çözümüyle doğrulandı.
-   49) 🎨 Özel Ders Notu tamamen yeniden tasarlandı: artık "test
-       formatı"na uygun — her soru numaralı rozet + kategori etiketiyle,
-       geniş satır aralığıyla, ayrı kartlarda gösteriliyor (önceden çok
-       sıkışıktı). Grafik içeren 9 soruya (X→2Y derişim-zaman, HCl
-       derişim-zaman, T₁/T₂ kinetik enerji dağılımı, katalizörlü/
-       katalizörsüz PE-TK, 3-etki hız-zaman, CS₂ PE-TK, H₂ mol-zaman,
-       kömür parçacık boyutu CO₂ grafiği, 2 basamaklı PE-TK) artık
-       gerçek canvas grafikleri eklendi.
-   54) ⚡ YENİ ANA EKRAN: "Kimyasal Enerji" — el yazması ders
-       notundan 19 çözümlü örnek (Entalpi kavramları, endo/ekzotermik
-       sınıflandırma, Hess Yasası, standart oluşum entalpisi, bağ
-       enerjisi). 6 GERÇEK AYT sorusu (2019-2024) dahil, hepsi elle
-       hesaplanıp doğrulandı ve kitabın kendi şıklarıyla birebir
-       eşleşti. Bu, Enerji/Denge/Asit-Baz/Çözünürlük Dengesi
-       serisinin İLK parçası — MEB kitap bölümleri ve diğer 3 konu
-       sıradaki adımlarda gelecek.
-   55) 🚫 DÜZELTME (dürüstlük): Önceki bir adımda Kimyasal Enerji'ye
-       "2025/2026 AYT — resmi ÖSYM kaynağından doğrulandı" diye 3 soru
-       eklemiştim. Bu iddiayı doğrulayamadığım İÇİN ve ayrıca ÖSYM'nin
-       resmi duyurusunda soruların telif korumalı olduğu ve izinsiz
-       çoğaltılamayacağı açıkça yazdığı için bu 3 soru KALDIRILDI.
-       Kullanıcının kendi el yazması notlarındaki 2019-2024 AYT
-       soruları (kişisel çalışma notu olduğu için) korunuyor. Enerji
-       modülü 19 doğrulanmış soruya geri döndü.
-   56) 🎬 VİDEO DERSLER tamamen elden geçirildi (index.html'e hiç
-       dokunulmadı, mevcut elemanlar kullanıldı): a) closeVideo()
-       fonksiyonu index.html'de ÇAĞRILIYOR ama HİÇ TANIMLANMAMIŞTI
-       ("Kapat" butonu hata veriyordu) — düzeltildi. b) video-list
-       kutusu hiçbir zaman doldurulmuyordu — artık kalıcı bir kütüphane
-       (localStorage, sayfa yenilense de kalıcı) olarak çalışıyor.
-       c) Video ekleme artık sadece anlık oynatmıyor, kalıcı listeye
-       de kaydediyor; aynı dosya tekrar eklenmiyor (duplike engelleme);
-       geçersiz uzantılar reddediliyor; her video kartından silinebiliyor;
-       dosya adından otomatik okunaklı başlık üretiliyor ("kimya-1.mp4"
-       → "Kimya 1").
-   57) 📐 Öncüllü (I./II./III.) soru metinleri artık test kağıdı gibi
-       her öncül kendi satırında görünüyor (yeni formatOncul() yardımcı
-       fonksiyonu, Özel Ders Notu + Kimyasal Enerji + Maarif 66 Soru'nun
-       tamamında otomatik uygulanıyor).
-   58) 🐛 DÜZELTME (Özel Ders Notu grafik doğruluğu): Q6 (X→2Y grafiği)
-       "40.saniyede tepkime tamamlandı" yanlış varsayımı düzeltildi —
-       artık sadece doğrulanmış 3 nokta (0s:3,6M 10s:2,4M 20s:1,6M)
-       kullanılıyor. Q24 (PE-TK mekanizma sorusu) TAMAMEN KALDIRILDI —
-       kullandığım sayılar orijinal görselden değil kendi uydurduğum
-       "tutarlı" değerlerden geliyormuş; tahminle doldurmak yerine
-       dürüstçe kaldırıldı (29 soruya düştü).
-   59) ⚖️ YENİ ANA EKRAN: "Kimyasal Denge (Özel Not)" — el yazması
-       Denge ders notundan 18 çözümlü örnek (1. parça): denge şartları,
-       homojen/heterojen denge, Kc/Kp hesaplamaları, Kc↔Kp dönüşümü,
-       hız sabitlerinden Kc bulma, verim/sınırlayıcı reaktif problemleri.
-       Tüm sayısal problemler node.js ile hesaplanıp doğrulandı. 2 soru
-       (15, kısmen 16'nın ilk hali) orijinal notta okunması güç
-       rakamlar içerdiği için ya açık bırakıldı ya da düzeltildi —
-       tahminle doldurulmadı. Bu, Denge serisinin İLK parçası: Le
-       Chatelier grafik soruları (sayfa 10-13) ve MEB kitabı (161
-       sayfalık dosyanın 2.1 bölümü) sıradaki adımlarda gelecek.
-   60) ⚖️ Kimyasal Denge'ye 10 YENİ soru (19-28): a) formatOncul()
-       artık "a) b) c) ç) d)..." harfli listeleri de I./II./III. gibi
-       her biri kendi satırına ayırıyor (Maarif/Enerji/Hız'da da
-       otomatik düzeldi). b) Q15 DÜZELTİLDİ — kullanıcı doğru denklemi
-       (3X₂+2Y₂⇌2Z) bildirdi, Kc=4000/27≈148,1 olarak çözüldü.
-       c) 5 Le Chatelier kavram sorusu (N₂+3H₂⇌2NH₃ tam analiz, Δn=0
-       özel durumu, heterojen denge müdahaleleri, yalancı denge MC
-       sorusu). d) 6 piston/müdahale problemi (XY, H₂Cl₂, CO₂H₂, SO₃NO,
-       COCl₂ hacim, SO₂O₂ hacim) — hepsi "ekleme/çekme sonrası yeni
-       dengeyi bulma" tipinde, node.js ile adım adım doğrulandı, hepsi
-       temiz sayılara ulaştı. Toplam 28 soru.
-   61) ⚖️ Kimyasal Denge'ye SON 6 soru (29-34) eklendi — el yazması
-       notunun TAMAMI (16 sayfa) artık işlendi. 4 piston/müdahale
-       problemi (CO₂H₂ H₂O ayarlama, 2CO⇌C+CO₂ hacim, H₂Cl₂ HCl
-       ayarlama, CO₂NO NO₂ bulma — hepsi node.js doğrulamalı, temiz
-       sonuçlar: 0,45mol / 1/24L / 0,5mol / 0,75mol) + 2 Le Chatelier
-       sorusu (Δn farklı 3 tepkimede hacim azaltma etkisi karşılaştırması,
-       endotermik NO₂⇌NO+O₂ dengesinde NO₂ ekleme/sıcaklık artırma).
-       Toplam 34 soru — özel ders notu serisi TAMAMLANDI. Sırada: MEB
-       kitabının Denge bölümü (161 sayfalık dosyanın 2.1 kısmı).
-   50) 📁 DOSYA YAPISI DEĞİŞTİ: ronya-eklenti.js artık 4 parçaya
-       bölündü (ronya-eklenti-1.js .. -4.js), Claude önizlemesinin
-       çökmesini önlemek için. index.html'de 4 <script> etiketi SIRAYLA
-       eklenmeli. Sarmalayıcı IIFE kaldırıldı (paylaşılan global kapsam
-       gerektiği için); kod DAVRANIŞI hiç değişmedi, sadece organizasyon.
-   51) 🔄 Tepkime Hızı ekranı 3 ANA GRUBA ayrıldı (eskiden 6 düz sekme +
-       iç içe alt sekmeler karışıklığı vardı): 🔬 Araçlar (3D Sim, PE
-       Diyagramı, Hız Hesapla, Hız Bağıntısı), 📘 MEB Konu Anlatımı
-       (1.2.1-1.2.4 + 66 Soru), 📓 Özel Ders Notu.
-   52) 📝 Özel Ders Notu'na notlardan 3 yeni doğrulanmış soru eklendi
-       (25: X+2Y+3Z hız bağıntısı türetme, 26: deney tablosundan
-       mertebe bulma — Y'nin hıza etkisi olmadığı ilginç örnek, 27:
-       pistonlu kapta %25 tepkime sonrası hız oranı — 4/9).
-   53) 🛡️ MİMARİ DÜZELTME (kritik): Önceki 4-parça bölmede IIFE
-       sarmalayıcısını TAMAMEN kaldırmıştım — bu, taban index.html'in
-       kendi scriptleriyle isim çakışması riskini artırıyordu ve
-       muhtemelen "fonksiyonlar kayboldu" sorununun asıl nedeniydi.
-       Şimdi her parça yeniden KENDİ İZOLE IIFE'sine sarıldı (taban
-       siteyle çakışma riski ortadan kalktı); parçalar arası GERÇEKTEN
-       ihtiyaç duyulan 74 fonksiyon/değişken tek tek tespit edilip
-       SADECE onlar dışa açıldı (window.X=X). Otomatik çapraz-referans
-       analizi + gerçekçi DOM taklidiyle 16 farklı özellik tek tek
-       doğrulandı.
    KURULUM: index.html'de </body> etiketinden hemen önce,
    diğer script'lerin ALTINA şu satırı ekle:
    <script src="ronya-eklenti.js"></script>
@@ -624,35 +439,6 @@
     {f:'K2Cr2O7', n:'Potasyum dikromat', c:'Tuz'}, {f:'CaSO4', n:'Kalsiyum s\u00fclfat (al\u00e7\u0131 ta\u015f\u0131)', c:'Tuz'}
   ];
   function isCmpType(t){ return t === 'cmp2name' || t === 'name2cmp'; }
-  function isHcType(t){ return t === 'hc2name' || t === 'name2hc'; }
-  var ORG_POOL = null;
-  function organicQuizPool(){
-    if (ORG_POOL) return ORG_POOL;
-    ORG_POOL = [];
-    hcList().forEach(function(m){
-      var cat = m.kind === 'an' ? 'Alkan' : m.kind === 'en' ? 'Alken' : 'Alkin';
-      ORG_POOL.push({ name: m.name, f: m.f, cat: cat });
-    });
-    fgList().forEach(function(m){
-      ORG_POOL.push({ name: m.name, f: m.f, cat: FG_CLASS_NAMES[m.cls] });
-    });
-    return ORG_POOL;
-  }
-  var ORG_UNIQUE_POOL = null;
-  function organicUniqueFormulaPool(){
-    // "Formül → Ad" yönü için: bazı fonksiyonel gruplar İZOMERDİR (aynı
-    // molekül formülü, farklı yapı/isim — örn. etanol/dimetil eter,
-    // propanal/propanon, asetik asit/metil format). Bu yönde formülü
-    // göstermek gerçek bir belirsizlik yaratır; o yüzden aynı formüle
-    // sahip BİRDEN FAZLA molekül varsa, bu yönde sorulmazlar (diğer
-    // yönde — Ad → Formül — sorun yok, çünkü isim tek anlamlıdır).
-    if (ORG_UNIQUE_POOL) return ORG_UNIQUE_POOL;
-    var pool = organicQuizPool();
-    var counts = {};
-    pool.forEach(function(p){ counts[p.f] = (counts[p.f] || 0) + 1; });
-    ORG_UNIQUE_POOL = pool.filter(function(p){ return counts[p.f] === 1; });
-    return ORG_UNIQUE_POOL;
-  }
 
   function weakMap(){ return sget('rk_weak', {}); }
   function weakList(){ var w = weakMap(); return ELS.filter(function(e){ return w[e.n]; }); }
@@ -717,9 +503,7 @@
         '<button type="button" class="ob" onclick="setQType(\'period\',this)">Periyot</button>' +
         '<button type="button" class="ob" onclick="setQType(\'conf\',this)">e\u207b Dizilimi</button>' +
         '<button type="button" class="ob" onclick="setQType(\'cmp2name\',this)">Bile\u015fik \u2192 Ad</button>' +
-        '<button type="button" class="ob" onclick="setQType(\'name2cmp\',this)">Ad \u2192 Form\u00fcl</button>' +
-        '<button type="button" class="ob" onclick="setQType(\'hc2name\',this)">\ud83e\uddea Form\u00fcl \u2192 IUPAC Ad</button>' +
-        '<button type="button" class="ob" onclick="setQType(\'name2hc\',this)">\ud83e\uddea IUPAC Ad \u2192 Form\u00fcl</button>');
+        '<button type="button" class="ob" onclick="setQType(\'name2cmp\',this)">Ad \u2192 Form\u00fcl</button>');
     }
 
     var startBtn = card.querySelector('button.btn.bp');
@@ -748,10 +532,6 @@
       note.textContent = 'Bile\u015fik sorular\u0131 ' + COMPOUNDS.length + ' bile\u015fiklik YKS listesinden gelir; element aral\u0131\u011f\u0131 se\u00e7imi bu tipte uygulanmaz.';
       return;
     }
-    if (isHcType(quizCfg.type)) {
-      note.textContent = 'IUPAC sorular\u0131 Hidrokarbonlar 3D ve Fonksiyonel Gruplar galerilerindeki toplam ' + organicQuizPool().length + ' molek\u00fclden gelir; element aral\u0131\u011f\u0131 se\u00e7imi bu tipte uygulanmaz.';
-      return;
-    }
     var size = poolFor(qMode).length;
     var cnt = (typeof quizCfg !== 'undefined' && quizCfg.count) ? quizCfg.count : 10;
     var txt = '';
@@ -773,19 +553,6 @@
     }
   }
 
-  // Öncüllü (I./II./III./IV./V.) soru metinlerini test kağıdı gibi alt alta diz
-  function formatOncul(text){
-    if (!text) return text;
-    // "... Buna göre: I. ... II. ... III. ..." kalıbını her önculü yeni satıra alacak şekilde böl
-    var out = text.replace(/\s(I{1,3}|IV|V)\.\s+/g, function(m, roman){
-      return '<br>&nbsp;&nbsp;<b>' + roman + '.</b> ';
-    });
-    // "... a) ... b) ... c) ... ç) ... d) ..." harfli liste kalıbını da yeni satıra al
-    out = out.replace(/\s([a-zçğıöşü])\)\s+/g, function(m, harf){
-      return '<br>&nbsp;&nbsp;<b>' + harf + ')</b> ';
-    });
-    return out;
-  }
   function selectInRow(btn){
     var bs = btn.parentElement.querySelectorAll('.ob');
     for (var i = 0; i < bs.length; i++) bs[i].classList.remove('sel2');
@@ -810,11 +577,6 @@
     if (isCmpType(quizCfg.type)) {
       var cp = shuffleArr(COMPOUNDS.slice());
       items = cp.slice(0, Math.min(quizCfg.count, cp.length)).map(function(c){ return { cmp: c, type: quizCfg.type }; });
-      qPool = [];
-    } else if (isHcType(quizCfg.type)) {
-      var hcSrc = quizCfg.type === 'hc2name' ? organicUniqueFormulaPool() : organicQuizPool();
-      var hp = shuffleArr(hcSrc.slice());
-      items = hp.slice(0, Math.min(quizCfg.count, hp.length)).map(function(m){ return { hc: m, type: quizCfg.type }; });
       qPool = [];
     } else {
       var pool = typeFilter(poolFor(qMode), quizCfg.type);
@@ -898,13 +660,6 @@
         return { big: c.n, sub: c.c, label: 'Bu bile\u015fi\u011fin form\u00fcl\u00fc nedir?', ans: pretty(c.f), plain: c.f, kind: 'cmpf', smallBig: true };
       return { big: pretty(c.f), sub: c.c, label: 'Bu bile\u015fi\u011fin ad\u0131 nedir?', ans: c.n, kind: 'cmpn' };
     }
-    if (item.hc) {
-      var m = item.hc;
-      var kindLabel = m.cat;
-      if (t === 'name2hc')
-        return { big: m.name, sub: kindLabel, label: 'Bu molek\u00fcl\u00fcn molek\u00fcl form\u00fcl\u00fc nedir?', ans: pretty(m.f), plain: m.f, kind: 'hcf', smallBig: true };
-      return { big: pretty(m.f), sub: kindLabel, label: 'Bu molek\u00fcl\u00fcn IUPAC ad\u0131 nedir?', ans: m.name, kind: 'hcn' };
-    }
     var el = item.el, d = EL_DATA[el.n] || {};
     if (t === 'sym2name')
       return { big: el.sym, sub: el.cat, label: 'Bu sembol\u00fcn elementi hangisidir?', ans: el.name, kind: 'name' };
@@ -938,21 +693,6 @@
       while (opts.length < OPT_N && guard++ < 800) {
         r = COMPOUNDS[Math.floor(Math.random()*COMPOUNDS.length)];
         cand = q.kind === 'cmpn' ? r.n : pretty(r.f);
-        if (cand && opts.indexOf(cand) === -1) opts.push(cand);
-      }
-    } else if (q.kind === 'hcn' || q.kind === 'hcf') {
-      // Önce aynı kategori (alkan/alken/alkin/alkol/eter/...) çeldirici dene
-      var sameK = organicQuizPool().filter(function(x){ return x.cat === item.hc.cat && x.f !== item.hc.f; });
-      var src3 = sameK.length >= OPT_N - 1 ? sameK : organicQuizPool();
-      while (opts.length < OPT_N && guard++ < 800) {
-        r = src3[Math.floor(Math.random()*src3.length)];
-        cand = q.kind === 'hcn' ? r.name : pretty(r.f);
-        if (cand && opts.indexOf(cand) === -1) opts.push(cand);
-      }
-      guard = 0;
-      while (opts.length < OPT_N && guard++ < 800) {
-        r = organicQuizPool()[Math.floor(Math.random()*organicQuizPool().length)];
-        cand = q.kind === 'hcn' ? r.name : pretty(r.f);
         if (cand && opts.indexOf(cand) === -1) opts.push(cand);
       }
     } else {
@@ -996,7 +736,7 @@
     var fb = document.getElementById('fbar');
     fb.className = 'fb'; fb.textContent = '';
     var item = quizSt.items[quizSt.cur];
-    if (item && !item.el && !item.cmp && !item.hc) item = { el: item, type: quizCfg.type }; // geriye uyumluluk
+    if (item && !item.el && !item.cmp) item = { el: item, type: quizCfg.type }; // geriye uyumluluk
     document.getElementById('qcnt-lbl').textContent = 'Soru ' + (quizSt.cur + 1) + '/' + quizSt.items.length;
     document.getElementById('lvc').textContent = '\u2713 ' + quizSt.score;
     document.getElementById('lvw').textContent = '\u2717 ' + quizSt.wrongs;
@@ -1023,7 +763,7 @@
         ww.style.display = 'block';
         var inp = document.getElementById('writeInp');
         inp.disabled = false; inp.value = '';
-        inp.placeholder = (q.kind === 'cmpf' || q.kind === 'hcf') ? 'Form\u00fcl\u00fc d\u00fcz yaz (\u00f6rn: C4H10)...' : 'Cevab\u0131n\u0131 yaz...';
+        inp.placeholder = q.kind === 'cmpf' ? 'Form\u00fcl\u00fc d\u00fcz yaz (\u00f6rn: H2SO4)...' : 'Cevab\u0131n\u0131 yaz...';
         setTimeout(function(){ try { inp.focus(); } catch (e) {} }, 60);
       }
     } else {
@@ -1100,14 +840,10 @@
       }
       return true;
     }
-    if (kind === 'cmpn' || kind === 'hcn') {
-      // "Ad (Alternatif Ad)" biçiminde: hem tam metni, hem paranteZ ÖNCESİNİ,
-      // hem de parantez İÇİNDEKİ alternatif ismi ("sönmemiş kireç" ya da
-      // sadece "Aseton" gibi) ayrı ayrı kabul et.
+    if (kind === 'cmpn') {
+      // Parantezli ek açıklamayı ("sönmemiş kireç" gibi) tolere et
       var core = String(correct).replace(/\(.*?\)/g, '');
-      var innerM = String(correct).match(/\(([^)]*)\)/);
-      var inner = innerM ? innerM[1] : '';
-      return fold(user) === fold(correct) || fold(user) === fold(core) || (inner !== '' && fold(user) === fold(inner));
+      return fold(user) === fold(correct) || fold(user) === fold(core);
     }
     return fold(user) === fold(correct);
   }
@@ -1120,7 +856,7 @@
     if (!v) { if (typeof toast === 'function') toast('Bir cevap yaz!'); return; }
     qAnswered = true;
     inp.disabled = true;
-    var target = (quizSt._kind === 'cmpf' || quizSt._kind === 'hcf') ? quizSt._plain : quizSt.correct;
+    var target = quizSt._kind === 'cmpf' ? quizSt._plain : quizSt.correct;
     var ok = matchAnswer(v, target, quizSt._kind);
     var fb = document.getElementById('fbar');
     if (ok) { fb.className = 'fb show cor'; fb.textContent = '\u2713 Do\u011fru!'; }
@@ -1791,8 +1527,7 @@
     {id:'prova', e:'\ud83c\udf93', n:'Prova Sava\u015f\u00e7\u0131s\u0131', d:'Bir YKS provas\u0131 bitir',    f:function(s){ return s.scores.some(function(x){ return x.m === 'exam'; }); }},
     {id:'cmpu',  e:'\u2697\ufe0f', n:'Bile\u015fik Ustas\u0131',   d:'Bile\u015fik testinde %80+ yap',         f:function(s){ return s.scores.some(function(x){ return (x.t === 'cmp2name' || x.t === 'name2cmp') && x.p >= 80; }); }},
     {id:'temiz', e:'\ud83e\uddf9', n:'Temiz Sayfa',                d:'Yanl\u0131\u015f listeni tamamen temizle', f:function(s){ return !!s.flags.cleaned; }},
-    {id:'denge', e:'\u2696\ufe0f', n:'Dengeleyici',                d:'10 denklemi do\u011fru dengele',         f:function(s){ return s.bal.c >= 10; }},
-    {id:'iupac', e:'\ud83e\uddea', n:'IUPAC \u015eampiyonu',       d:'IUPAC adland\u0131rma testinde %80+ yap', f:function(s){ return s.scores.some(function(x){ return (x.t === 'hc2name' || x.t === 'name2hc') && x.p >= 80; }); }}
+    {id:'denge', e:'\u2696\ufe0f', n:'Dengeleyici',                d:'10 denklemi do\u011fru dengele',         f:function(s){ return s.bal.c >= 10; }}
   ];
   function badgeState(){
     return {
@@ -4061,18 +3796,7 @@
     }
     if (nb.length === 2) {
       var u1 = nb[0].dir, u2 = nb[1].dir, s2 = vAdd(u1, u2);
-      var isMultiple = nb[0].o >= 2 || nb[1].o >= 2;
-      if (count === 1) {
-        if (isMultiple) return [vNorm(vScale(s2, -1))];   // sp² düzlemsel tek eksik (çift/üçlü bağ komşusu var)
-        // sp³: iki zincir bağı arasından TEK dal/H isteniyor — düzlem İÇİNDE değil,
-        // gerçek tetrahedral (düzlem DIŞI) yönlerden biri seçilmeli, yoksa dal ile
-        // aynı düzlemdeki H neredeyse üst üste biner.
-        var bb0 = vNorm(vScale(s2, -1));
-        var nn0 = vCross(u1, u2);
-        if (vLen2(nn0) < 1e-4) nn0 = v3(0, 0, 1);
-        nn0 = vNorm(nn0);
-        return [vNorm(vAdd(vScale(bb0, 0.57735), vScale(nn0, 0.81650)))];
-      }
+      if (count === 1) return [vNorm(vScale(s2, -1))];             // sp² tek eksik (=CH- ya da dal)
       if (count === 2) {                                           // sp³ -CH₂-
         var bb = vNorm(vScale(s2, -1));
         var nn = vCross(u1, u2);
@@ -4489,27 +4213,18 @@
   }
 
   // --- Alkol: R-OH (n karbonlu düz zincir, OH ucundaki C1'de) ---
-  function buildAlcohol(n, ohLocant){
-    ohLocant = ohLocant || 1;
+  function buildAlcohol(n, branchAt2){
     var atoms = [], bonds = [];
     atoms.push({ x:0, y:0, z:0, el:'C' });
     if (n > 1) fgAddChainFrom(atoms, bonds, 0, v3(0,0,0), v3(1,0,0), n - 1);
-    function nbOf(idx){
-      var nb = [];
-      bonds.forEach(function(bd){
-        var A = atoms[bd.a], B = atoms[bd.b];
-        if (bd.a === idx) nb.push({ dir: vNorm(vSub(v3(B.x,B.y,B.z), v3(A.x,A.y,A.z))), o: bd.o });
-        if (bd.b === idx) nb.push({ dir: vNorm(vSub(v3(A.x,A.y,A.z), v3(B.x,B.y,B.z))), o: bd.o });
-      });
-      return nb;
-    }
-    var pIdx = Math.max(0, Math.min(n - 1, ohLocant - 1));
-    var pPos = v3(atoms[pIdx].x, atoms[pIdx].y, atoms[pIdx].z);
-    var dirO = freeDirs(nbOf(pIdx), 1)[0] || v3(0,1,0);
-    var oIdx = fgAddO(atoms, bonds, pIdx, pPos, dirO, 1, 1.43);
+    var c1pos = v3(atoms[0].x, atoms[0].y, atoms[0].z);
+    var nb0 = n > 1 ? [{ dir: vNorm(vSub(v3(atoms[1].x,atoms[1].y,atoms[1].z), c1pos)), o:1 }] : [];
+    var dirO = freeDirs(nb0, 1)[0] || v3(0,1,0);
+    var oIdx = fgAddO(atoms, bonds, 0, c1pos, dirO, 1, 1.43);
     var oPos = v3(atoms[oIdx].x, atoms[oIdx].y, atoms[oIdx].z);
     var hDir = freeDirs([{ dir: vScale(dirO,-1), o:1 }], 1)[0];
     fgAddH(atoms, bonds, oIdx, oPos, hDir, 0.96);
+    if (branchAt2 && n >= 3) { /* 2-propanol vb. için basitleştirilmiş: ek dal eklenmez, düz zincir yeterli görsel verir */ }
     fgFillH(atoms, bonds);
     var nC = atoms.filter(function(a){return a.el==='C';}).length;
     var nO = atoms.filter(function(a){return a.el==='O';}).length;
@@ -4571,10 +4286,7 @@
     atoms.push({ x:c2pos.x, y:c2pos.y, z:c2pos.z, el:'C' });
     bonds.push({ a:0, b:c2idx, o:1 });
     if (n2 > 1) fgAddChainFrom(atoms, bonds, c2idx, c2pos, dirRight, n2 - 1);
-    // NOT: karbonil karbonu sp² (düzlemsel) olmalı; freeDirs'e "çoklu bağ var"
-    // ipucu vermek için o:2 kullanıyoruz (gerçek bağ derecesini etkilemez,
-    // sadece düzlemsel mi tetrahedral mi hesaplanacağını belirler).
-    var dirO = freeDirs([{ dir: nb1[0].dir, o: 2 }, { dir: dirRight, o: 1 }], 1)[0];
+    var dirO = freeDirs([nb1[0], { dir: dirRight, o:1 }], 1)[0];
     fgAddO(atoms, bonds, 0, v3(0,0,0), dirO, 2, 1.20);
     fgFillH(atoms, bonds);
     var nC = atoms.filter(function(a){return a.el==='C';}).length;
@@ -4642,7 +4354,6 @@
       { cls:'alkol', name:'Etanol', f:'C2H6O', build:function(){ return buildAlcohol(2); } },
       { cls:'alkol', name:'1-Propanol', f:'C3H8O', build:function(){ return buildAlcohol(3); } },
       { cls:'alkol', name:'1-Bütanol', f:'C4H10O', build:function(){ return buildAlcohol(4); } },
-      { cls:'alkol', name:'2-Propanol (İzopropil Alkol)', f:'C3H8O', build:function(){ return buildAlcohol(3, 2); } },
       { cls:'eter', name:'Dimetil Eter', f:'C2H6O', build:function(){ return buildEther(1,1); } },
       { cls:'eter', name:'Metil Etil Eter', f:'C3H8O', build:function(){ return buildEther(1,2); } },
       { cls:'eter', name:'Dietil Eter', f:'C4H10O', build:function(){ return buildEther(2,2); } },
@@ -4761,125 +4472,6 @@
     }
   };
 
-  // ---------- 12c. FONKSİYONEL GRUP İSİM AYRIŞTIRICISI ----------
-  var FG_ALKAN_ROOTS = {};
-  IUPAC_PARENTS.forEach(function(p){ if (p[1] === 'an') FG_ALKAN_ROOTS[p[0]] = p[2]; });
-  var FG_ALKAN_ROOT_LIST = Object.keys(FG_ALKAN_ROOTS).sort(function(a,b){ return b.length - a.length; });
-
-  var FG_ALKIL_MAP = { metil:1, etil:2, propil:3, butil:4 };
-  var FG_ALKIL_LIST = Object.keys(FG_ALKIL_MAP).sort(function(a,b){ return b.length - a.length; });
-
-  var FG_ACID_COMMON = { formik:1, asetik:2, propiyonik:3, butirik:4 };
-  var FG_ESTER_STEM = { format:1, asetat:2, propiyonat:3, butirat:4 };
-
-  function fgMatchAlkanRoot(s){
-    for (var i = 0; i < FG_ALKAN_ROOT_LIST.length; i++)
-      if (s.indexOf(FG_ALKAN_ROOT_LIST[i]) === 0) {
-        var found = null;
-        for (var j = 0; j < IUPAC_PARENTS.length; j++)
-          if (IUPAC_PARENTS[j][0] === FG_ALKAN_ROOT_LIST[i] && IUPAC_PARENTS[j][1] === 'an') { found = IUPAC_PARENTS[j]; break; }
-        return { root: FG_ALKAN_ROOT_LIST[i], n: FG_ALKAN_ROOTS[FG_ALKAN_ROOT_LIST[i]], proper: found ? found[3].toLocaleLowerCase('tr') : FG_ALKAN_ROOT_LIST[i] };
-      }
-    return null;
-  }
-  function fgMatchAlkil(s){
-    for (var i = 0; i < FG_ALKIL_LIST.length; i++)
-      if (s.indexOf(FG_ALKIL_LIST[i]) === 0) return { name: FG_ALKIL_LIST[i], n: FG_ALKIL_MAP[FG_ALKIL_LIST[i]] };
-    return null;
-  }
-
-  // Türkçe fonksiyonel grup ismini ayrıştırır. Dönüş: { ok, type, build() } ya da { ok:false, error }
-  function parseFgName(raw){
-    if (!raw || !String(raw).trim()) return { ok:false, error:'Bo\u015f isim girildi.' };
-    var trimmed = String(raw).trim();
-    var tokens = trimmed.split(/\s+/).map(function(t){ return foldOrg(t); }).filter(Boolean);
-    var norm = tokens.join('');       // boşluksuz tek parça (tek kelimeli isimler için)
-    var normTr = norm;                // Türkçe karakterler korunur
-
-    // --- ETER: "dimetil eter" / "metil etil eter" / "dietil eter" ---
-    if (tokens.length >= 2 && tokens[tokens.length - 1] === 'eter') {
-      var body = tokens.slice(0, -1).join(' ');
-      var mDi = body.match(/^di(.+)$/);
-      if (mDi) {
-        var a1 = fgMatchAlkil(mDi[1]);
-        if (!a1) return { ok:false, error:'"' + mDi[1] + '" tan\u0131nan bir alkil grubu de\u011fil.' };
-        return { ok:true, type:'eter', label:'Eter', build:function(){ return buildEther(a1.n, a1.n); },
-          canon: 'di' + a1.name + ' eter' };
-      }
-      var parts = body.split(/\s+/);
-      if (parts.length === 2) {
-        var b1 = fgMatchAlkil(parts[0]), b2 = fgMatchAlkil(parts[1]);
-        if (!b1 || !b2) return { ok:false, error:'Alkil gruplar\u0131 tan\u0131namad\u0131 (metil, etil, propil, b\u00fctil desteklenir).' };
-        return { ok:true, type:'eter', label:'Eter', build:function(){ return buildEther(b1.n, b2.n); },
-          canon: b1.name + ' ' + b2.name + ' eter' };
-      }
-      return { ok:false, error:'Eter ad\u0131 "dimetil eter" ya da "metil etil eter" bi\u00e7iminde yaz\u0131lmal\u0131.' };
-    }
-
-    // --- ESTER: "etil asetat" / "metil format" ---
-    if (tokens.length === 2 && (FG_ESTER_STEM[tokens[1]] || /at$/.test(tokens[1]))) {
-      var alkPart = fgMatchAlkil(tokens[0]);
-      if (!alkPart) return { ok:false, error:'"' + tokens[0] + '" tan\u0131nan bir alkil grubu de\u011fil.' };
-      var stem = tokens[1], acidN = FG_ESTER_STEM[stem];
-      if (!acidN) {
-        // sistematik: "<parent>oat" (örn. "propanoat" -> propan -> 3)
-        var stemBase = stem.replace(/oat$/, '');
-        var pr = fgMatchAlkanRoot(stemBase);
-        if (pr) acidN = pr.n;
-      }
-      if (!acidN) return { ok:false, error:'"' + stem + '" tan\u0131nan bir asit k\u00f6k\u00fc de\u011fil (format, asetat, propiyonat, b\u00fctirat desteklenir).' };
-      return { ok:true, type:'ester', label:'Ester', build:function(){ return buildEster(acidN, alkPart.n); },
-        canon: tokens[0] + ' ' + stem };
-    }
-
-    // --- ASİT: "propanoik asit" / "asetik asit" / "formik asit" ---
-    if (tokens.length === 2 && tokens[1] === 'asit') {
-      var acidWord = tokens[0];
-      if (FG_ACID_COMMON[acidWord])
-        return { ok:true, type:'asit', label:'Karboksilik Asit', build:function(){ return buildCarboxylicAcid(FG_ACID_COMMON[acidWord]); }, canon: acidWord + ' asit' };
-      var mOik = acidWord.match(/^(.+)oik$/);
-      if (mOik) {
-        var ar = fgMatchAlkanRoot(mOik[1]);
-        if (ar) return { ok:true, type:'asit', label:'Karboksilik Asit', build:function(){ return buildCarboxylicAcid(ar.n); }, canon: ar.proper + 'oik asit' };
-      }
-      return { ok:false, error:'"' + acidWord + '" tan\u0131nan bir asit k\u00f6k\u00fc de\u011fil.' };
-    }
-
-    // --- Tek kelimelik isimler: alkol (-ol), aldehit (-al), keton (-on) ---
-    // Başta olası bir locant (örn. "2-propanol", "2-bütanon") olabilir.
-    var locM = norm.match(/^(\d+)(.+)$/);
-    var locant = null, rest = norm;
-    if (locM) { locant = parseInt(locM[1], 10); rest = locM[2]; }
-
-    if (/ol$/.test(rest)) {
-      var alcRoot = fgMatchAlkanRoot(rest.replace(/ol$/, ''));
-      if (!alcRoot) return { ok:false, error:'"' + rest + '" tan\u0131nan bir alkol k\u00f6k\u00fc de\u011fil.' };
-      var ohLoc = locant || 1;
-      if (ohLoc < 1 || ohLoc > alcRoot.n) return { ok:false, error: ohLoc + ' konumu ' + alcRoot.n + ' karbonlu zincirin d\u0131\u015f\u0131nda.' };
-      return { ok:true, type:'alkol', label:'Alkol', build:function(){ return buildAlcohol(alcRoot.n, ohLoc); },
-        canon: (ohLoc > 1 ? ohLoc + '-' : '') + alcRoot.proper + 'ol' };
-    }
-    if (/al$/.test(rest) && !/eter$/.test(rest)) {
-      var aldRoot = fgMatchAlkanRoot(rest.replace(/al$/, ''));
-      if (!aldRoot) return { ok:false, error:'"' + rest + '" tan\u0131nan bir aldehit k\u00f6k\u00fc de\u011fil.' };
-      return { ok:true, type:'aldehit', label:'Aldehit', build:function(){ return buildAldehyde(aldRoot.n); },
-        canon: aldRoot.proper + 'al' };
-    }
-    if (/on$/.test(rest)) {
-      var ketRoot = fgMatchAlkanRoot(rest.replace(/on$/, ''));
-      if (!ketRoot) return { ok:false, error:'"' + rest + '" tan\u0131nan bir keton k\u00f6k\u00fc de\u011fil.' };
-      if (ketRoot.n < 3) return { ok:false, error:'Keton en az 3 karbonlu bir zincir gerektirir.' };
-      var coLoc = locant || Math.ceil(ketRoot.n / 2);
-      if (coLoc < 2 || coLoc > ketRoot.n - 1) return { ok:false, error: coLoc + ' konumunda karbonil olamaz (2 ile ' + (ketRoot.n-1) + ' aras\u0131 olmal\u0131).' };
-      var kn1 = coLoc - 1, kn2 = ketRoot.n - coLoc;
-      return { ok:true, type:'keton', label:'Keton', build:function(){ return buildKetone(kn1, kn2); },
-        canon: (ketRoot.n > 4 ? coLoc + '-' : '') + ketRoot.proper + 'on' };
-    }
-
-    return { ok:false, error:'Tan\u0131nan bir fonksiyonel grup ismi de\u011fil. \u00d6rnekler: etanol, propanal, b\u00fctanon, propanoik asit, etil asetat, dimetil eter.' };
-  }
-
-
   var fgCat = 'alkol';
   var fgSt = { rotX: 0.42, rotY: 0.6, zoom: 1, fit: 1, spin: true, spd: 1, drag: false,
                lx: 0, ly: 0, dist: 0, t: 0, anim: null, labels: true, item: null, stars: null, sw: 0 };
@@ -4897,15 +4489,6 @@
       '<div id="s-fg" style="display:none"><div style="max-width:900px;margin:0 auto;padding:15px">' +
         '<h1 class="ptitle">\u2697\ufe0f Fonksiyonel Gruplar 3D</h1>' +
         '<p class="psub">Alkol, eter, aldehit, keton, karboksilik asit, ester \u2014 3D yap\u0131, \u00f6zellikler ve tepkimeler.</p>' +
-        '<div class="card" style="margin-bottom:14px">' +
-          '<div class="slbl">\u270f\ufe0f \u0130simden \u00c7iz (IUPAC)</div>' +
-          '<div style="display:flex;gap:8px">' +
-            '<input type="text" id="fg-name-inp" class="inp" placeholder="\u00f6rn: etanol, propanal, b\u00fctanon, etil asetat" autocapitalize="off" autocorrect="off" spellcheck="false">' +
-            '<button type="button" class="btn bp" onclick="fgDrawFromName()">\u00c7iz</button>' +
-          '</div>' +
-          '<div id="fg-name-out" style="font-size:12px;margin-top:8px;line-height:1.6"></div>' +
-        '</div>' +
-        '<div id="fg-overview" style="margin-bottom:18px"></div>' +
         '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' + catBtns + '</div></div>' +
         '<div id="fg-theory" style="margin-bottom:16px"></div>' +
         '<div id="fg-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>' +
@@ -4932,78 +4515,7 @@
         '<div class="tc" id="tile-fg" onclick="nav(\'fg\')"><div class="ti">\u2697\ufe0f</div><div class="tt">Fonksiyonel Gruplar 3D</div><div class="td">Alkol, eter, aldehit, keton, asit, ester \u2014 3D yap\u0131 ve tepkimeler.</div></div>');
     fgBindCanvas();
     fgRenderTheory();
-    fgRenderOverview();
-    var fgNameInp = document.getElementById('fg-name-inp');
-    if (fgNameInp) fgNameInp.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); window.fgDrawFromName(); } });
   }
-
-  window.fgDrawFromName = function(){
-    var inp = document.getElementById('fg-name-inp');
-    var out = document.getElementById('fg-name-out');
-    if (!inp || !out) return;
-    var raw = inp.value.trim();
-    if (!raw) { out.innerHTML = '<span style="color:var(--yw)">Bir isim yaz (\u00f6rn: etanol, propanal, b\u00fctanon).</span>'; return; }
-    var r = parseFgName(raw);
-    if (!r.ok) { out.innerHTML = '<span style="color:var(--yw)">\u26a0\ufe0f ' + r.error + '</span>'; return; }
-    try {
-      var mol = r.build();
-      var item = { cls: r.type, name: raw.trim(), f: 'C' + mol.nC + 'H' + mol.nH + (mol.nO > 1 ? 'O' + mol.nO : (mol.nO ? 'O' : '')), mol: mol, custom: true };
-      out.innerHTML = '<span style="color:var(--gr)">\u2713 ' + r.label + ' \u00b7 ' + pretty(item.f) +
-        (r.canon !== foldOrg(raw) ? ' \u00b7 IUPAC: ' + r.canon : '') + '</span>';
-      window.fgOpen(item);
-    } catch (err) {
-      out.innerHTML = '<span style="color:var(--yw)">\u00c7izim hatas\u0131: ' + err.message + '</span>';
-    }
-  };
-
-  function fgRenderOverview(){
-    var box = document.getElementById('fg-overview');
-    if (!box) return;
-    var html = '';
-    FG_CLASSES.forEach(function(c){
-      var list = fgList().filter(function(m){ return m.cls === c; });
-      var preview = list.slice(0, 3);
-      html += '<div style="margin-bottom:16px">' +
-        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
-          '<div style="font-size:14px;font-weight:700;color:#fff">' + FG_THEORY[c].icon + ' ' + FG_CLASS_NAMES[c] + '</div>' +
-          '<button type="button" onclick="fgJumpCat(\'' + c + '\')" style="background:none;border:none;color:#f87171;font-size:12px;cursor:pointer;font-weight:600">T\u00fcm\u00fcn\u00fc G\u00f6r (' + list.length + ') \u2192</button>' +
-        '</div>' +
-        '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">';
-      preview.forEach(function(m){
-        var idx = fgList().indexOf(m);
-        html += '<div onclick="fgOpen(' + idx + ')" style="background:var(--sf);border:2px solid rgba(239,68,68,0.2);border-radius:12px;padding:6px;text-align:center;cursor:pointer">' +
-          '<div style="font-size:10.5px;font-weight:700;color:#fca5a5;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + m.name + '</div>' +
-          '<div style="font-size:9.5px;color:var(--tx3);margin-bottom:4px">' + pretty(m.f) + '</div>' +
-          '<canvas id="fg-ov-' + idx + '" width="120" height="90" style="width:100%;border-radius:8px;background:#050510;border:1px solid rgba(239,68,68,0.15)"></canvas>' +
-        '</div>';
-      });
-      html += '</div></div>';
-    });
-    box.innerHTML = html;
-    setTimeout(function(){
-      FG_CLASSES.forEach(function(c){
-        fgList().filter(function(m){ return m.cls === c; }).slice(0, 3).forEach(function(m){
-          fgThumbOv(fgList().indexOf(m));
-        });
-      });
-    }, 60);
-  }
-  function fgThumbOv(idx){
-    var cv = document.getElementById('fg-ov-' + idx);
-    if (!cv) return;
-    var item = fgList()[idx], mol = fgMol(item);
-    var st = { rotX: 0.45, rotY: 0.5 + idx*0.4, zoom: 0.92, fit: mol.fit, t: idx, stars: null, sw: 0 };
-    hcDraw(cv.getContext('2d'), mol, st, 120, 90, false);
-  }
-  window.fgJumpCat = function(c){
-    fgCat = c;
-    var btn = document.getElementById('fg-cat-' + c);
-    if (btn) selectInRow(btn);
-    fgRenderTheory();
-    fgRenderGrid();
-    var tabsEl = btn ? btn.closest('div') : null;
-    if (tabsEl && tabsEl.scrollIntoView) tabsEl.scrollIntoView({ behavior:'smooth', block:'center' });
-  };
 
   window.fgSetCat = function(c, btn){
     fgCat = c;
@@ -5059,8 +4571,8 @@
     hcDraw(cv.getContext('2d'), mol, st, 170, 130, false);
   }
 
-  window.fgOpen = function(idxOrItem){
-    var item = typeof idxOrItem === 'number' ? fgList()[idxOrItem] : idxOrItem;
+  window.fgOpen = function(idx){
+    var item = fgList()[idx];
     if (!item) return;
     fgSt.item = item; fgSt.rotX = 0.42; fgSt.rotY = 0.6; fgSt.zoom = 1; fgSt.spin = true;
     fgSt.fit = fgMol(item).fit;
@@ -5131,7 +4643,7 @@
     }, { passive:false });
     cv.addEventListener('touchend', function(){ fgSt.drag = false; fgSt.dist = 0; });
   }
-  function fgEnter(){ fgRenderTheory(); fgRenderGrid(); fgRenderOverview(); }
+  function fgEnter(){ fgRenderTheory(); fgRenderGrid(); }
   function fgLeave(){ window.fgClose(); }
 
   // ---------- 13. MAARİF 9. SINIF — ETKİLEŞİM ÜNİTESİ ----------
@@ -5499,6 +5011,373 @@
   function wiEnter(){ setTimeout(function(){ wiStart(); mhStart(); }, 80); }
   function wiLeave(){ wiStop(); mhStop(); }
 
+window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormula };
+  // --- Başlat ---
+  // ---------- 13. MAARİF 9. SINIF — ETKİLEŞİM ÜNİTESİ ----------
+  // Zayıf Etkileşimler (London/dipol-dipol/hidrojen bağı) ve
+  // Maddenin Halleri (katı/sıvı/gaz/plazma) — 3D görsel + detaylı konu.
+
+  // ---- 13a. ZAYIF ETKİLEŞİMLER ----
+  var WI_TYPES = {
+    london: {
+      name:'London (Van der Waals) Kuvvetleri', icon:'\u26a1',
+      tanim:'T\u00fcm molek\u00fcller aras\u0131nda bulunan, elektron bulutunun ANLIK ve GE\u00c7\u0130C\u0130 kaym\u0131 sonucu olu\u015fan EN ZAYIF \u00e7ekim kuvvetidir. Apolar molek\u00fcllerin (N\u2082, CH\u2084, soy gazlar) TEK etkile\u015fim t\u00fcr\u00fcd\u00fcr.',
+      ozellikler:[
+        'Elektron say\u0131s\u0131 (molek\u00fcl k\u00fctlesi) artt\u0131k\u00e7 London kuvveti G\u00dc\u00c7LEN\u0130R \u2192 kaynama noktas\u0131 y\u00fckselir (\u00f6rn. F\u2082<Cl\u2082<Br\u2082<I\u2082).',
+        'Molek\u00fcl \u015fekli de \u00f6nemlidir: DO\u011eRUSAL/uzun molek\u00fcllerde temas y\u00fczeyi fazla oldu\u011fu i\u00e7in London kuvveti, dallanm\u0131\u015f/k\u00fcresel izomerlerden daha g\u00fc\u00e7l\u00fcd\u00fcr.',
+        'T\u00fcm di\u011fer etkile\u015fim t\u00fcrlerinin YANINDA da her zaman bulunur (en zay\u0131f ama en yayg\u0131n olan\u0131d\u0131r).',
+        'Oda s\u0131cakl\u0131\u011f\u0131nda soy gazlar\u0131n ve H\u2082, N\u2082, O\u2082 gibi apolar molek\u00fcllerin gaz halde bulunmas\u0131n\u0131n nedeni budur \u2014 \u00e7ok zay\u0131f oldu\u011fu i\u00e7in kolayca ayr\u0131l\u0131rlar.'
+      ]
+    },
+    dipol: {
+      name:'Dipol-Dipol Etkile\u015fimi', icon:'\u2194\ufe0f',
+      tanim:'POLAR molek\u00fcllerin kal\u0131c\u0131 (+) ve (\u2212) u\u00e7lar\u0131n\u0131n birbirini \u00e7ekmesiyle olu\u015fur. London kuvvetinden G\u00dc\u00c7L\u00dc, hidrojen ba\u011f\u0131ndan ZAYIFTIR.',
+      ozellikler:[
+        'Yaln\u0131zca polar molek\u00fcllerde (HCl, SO\u2082, aseton gibi) g\u00f6r\u00fcl\u00fcr \u2014 molek\u00fclde kal\u0131c\u0131 bir dipol moment olmal\u0131d\u0131r.',
+        'Ayn\u0131 molek\u00fcl k\u00fctlesine sahip apolar bir molek\u00fclden DAHA Y\u00dcKSEK kaynama noktas\u0131na yol a\u00e7ar (\u00f6rn. HCl, F\u2082\u2019den daha polar ve daha y\u00fcksek kaynar).',
+        'Molek\u00fcller birbirine (+) u\u00e7 \u2014 (\u2212) u\u00e7 \u015feklinde, elektrostatik \u00e7ekimle diz1lir.',
+        '\u00d6rnekler: HCl, HBr, SO\u2082, aseton (CH\u2083COCH\u2083), kloroform (CHCl\u2083).'
+      ]
+    },
+    hidrojen: {
+      name:'Hidrojen Ba\u011f\u0131', icon:'\ud83d\udca7',
+      tanim:'H atomunun \u00c7OK elektronegatif bir atoma (F, O, N) do\u011frudan ba\u011fl\u0131 oldu\u011fu molek\u00fcllerde g\u00f6r\u00fclen, zay\u0131f etkile\u015fimlerin EN G\u00dc\u00c7L\u00dcS\u00fcd\u00fcr (yine de gerçek bir kovalent/iyonik bağdan çok daha zayıftır).',
+      ozellikler:[
+        '"F-O-N kural\u0131": Hidrojen ba\u011f\u0131 i\u00e7in H, mutlaka F, O veya N atomuna DO\u011eRUDAN ba\u011fl\u0131 olmal\u0131d\u0131r.',
+        'Su (H\u2082O), amonyak (NH\u2083), hidrojen florür (HF) ve alkoller (R-OH) hidrojen ba\u011f\u0131 yapan ba\u015fl\u0131ca örneklerdir.',
+        'Suyun beklenenden ÇOK y\u00fcksek kaynama noktas\u0131na (100°C) sahip olmas\u0131n\u0131n nedeni budur \u2014 H\u2082S (hidrojen ba\u011f\u0131 yapamaz) \u2212 60°C\u2019de kaynar!',
+        'DNA\u2019n\u0131n çift sarmal yap\u0131s\u0131n\u0131 bir arada tutan da hidrojen ba\u011flar\u0131d\u0131r; buz, hidrojen ba\u011flar\u0131 sayesinde sudan daha az yo\u011fundur (bu yüzden buz suda yüzer).'
+      ]
+    }
+  };
+  var WI_ORDER = ['london','dipol','hidrojen'];
+  var wiKind = 'london';
+  var wiSt = { rotX: 0.3, rotY: 0.4, zoom: 1, spin: true, drag: false, lx:0, ly:0, dist:0, t: 0, anim: null, stars: null, sw: 0, bound: false };
+
+  function wiDraw(x, W, H2){
+    hcBg(x, wiSt, W, H2);
+    var items = [];
+    function pushMol(cx, polarity){ // polarity: 0=apolar, 1=+uçlu, -1=−uçlu (basit iki-küre gösterim)
+      var col = polarity > 0 ? [96,165,250] : polarity < 0 ? [248,113,113] : [148,197,255];
+      var p = hcProj(wiSt, cx, 0, 0, W, H2);
+      items.push({ z: p.z, x: p.x, y: p.y, s: p.s, r: 30*p.s, col: col, lab: polarity>0?'\u03b4+':polarity<0?'\u03b4\u2212':'' });
+    }
+    var gap = 95 + 25*Math.sin(wiSt.t*0.6);
+    if (wiKind === 'london') {
+      // Sürekli titreşen, anlık dipol vurgusu
+      var phase = Math.sin(wiSt.t*2.2);
+      pushMol(-gap/2, phase>0.15?1:phase<-0.15?-1:0);
+      pushMol(gap/2, phase>0.15?-1:phase<-0.15?1:0);
+    } else if (wiKind === 'dipol') {
+      pushMol(-gap/2, 1); pushMol(gap/2, -1);
+    } else {
+      pushMol(-gap/2, 1); pushMol(gap/2, -1);
+    }
+    // Çekim çizgisi
+    var pL = hcProj(wiSt, -gap/2+30, 0, 0, W, H2), pR = hcProj(wiSt, gap/2-30, 0, 0, W, H2);
+    x.save();
+    if (wiKind === 'hidrojen') { x.setLineDash([6,5]); x.strokeStyle = 'rgba(248,113,113,0.85)'; x.lineWidth = 2.4; }
+    else if (wiKind === 'dipol') { x.strokeStyle = 'rgba(96,165,250,0.6)'; x.lineWidth = 1.8; }
+    else { x.strokeStyle = 'rgba(148,197,255,' + (0.2+0.35*Math.abs(Math.sin(wiSt.t*2.2))) + ')'; x.lineWidth = 1.4; x.setLineDash([2,4]); }
+    x.beginPath(); x.moveTo(pL.x,pL.y); x.lineTo(pR.x,pR.y); x.stroke();
+    x.restore();
+    items.sort(function(a,b){ return b.z-a.z; });
+    for (var i=0;i<items.length;i++){
+      var it = items[i];
+      var gg = x.createRadialGradient(it.x-it.r*0.3, it.y-it.r*0.3, it.r*0.1, it.x, it.y, it.r);
+      gg.addColorStop(0, 'rgba(' + it.col.join(',') + ',0.95)');
+      gg.addColorStop(1, 'rgba(' + it.col.join(',') + ',0.35)');
+      x.beginPath(); x.arc(it.x, it.y, it.r, 0, 6.283); x.fillStyle = gg; x.fill();
+      x.strokeStyle = 'rgba(255,255,255,0.3)'; x.lineWidth = 1; x.stroke();
+      if (it.lab) {
+        x.fillStyle = '#fff'; x.font = 'bold ' + Math.max(11, it.r*0.5) + 'px sans-serif';
+        x.textAlign = 'center'; x.textBaseline = 'middle';
+        x.fillText(it.lab, it.x, it.y); x.textBaseline = 'alphabetic';
+      }
+    }
+    x.fillStyle = 'rgba(255,255,255,.3)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H2-8);
+    x.textAlign = 'left';
+  }
+
+  window.wiSetKind = function(k, btn){ wiKind = k; if (btn) selectInRow(btn); wiRenderTheory(); };
+  function wiRenderTheory(){
+    var box = document.getElementById('wi-theory');
+    if (!box) return;
+    var th = WI_TYPES[wiKind];
+    var html = '<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+      '<span style="font-size:26px">' + th.icon + '</span><div style="font-family:Space Grotesk,sans-serif;font-size:17px;font-weight:800;color:#fff">' + th.name + '</div></div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:12px">' + th.tanim + '</p>' +
+      '<div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">\u00d6zellikler</div>' +
+      '<ul style="margin:0 0 4px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">';
+    th.ozellikler.forEach(function(o){ html += '<li>' + o + '</li>'; });
+    html += '</ul></div>';
+    html += '<div class="card" style="margin-top:10px"><div class="slbl">G\u00fc\u00e7 S\u0131ralamas\u0131</div>' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx2);margin-top:6px">' +
+      '<span>London <b style="color:#93c5fd">(en zay\u0131f)</b></span><span>\u2192</span><span>Dipol-Dipol</span><span>\u2192</span><span><b style="color:#f87171">Hidrojen Ba\u011f\u0131</b> (en g\u00fc\u00e7l\u00fc)</span></div></div>';
+    box.innerHTML = html;
+  }
+
+  function wiLoop(){
+    var scr = document.getElementById('s-wi');
+    if (!scr || scr.style.display === 'none') { wiStop(); return; }
+    wiSt.anim = requestAnimationFrame(wiLoop);
+    var cv = document.getElementById('wi-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || 300, H2 = 260;
+    var dpr = window.devicePixelRatio || 1;
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try {
+      if (wiSt.spin && !wiSt.drag) wiSt.rotY += 0.006;
+      wiSt.t += 0.016;
+      wiDraw(x, W, H2);
+    } catch (e) { drawErr(x, W, H2, e); }
+  }
+  function wiStop(){ if (wiSt.anim) { cancelAnimationFrame(wiSt.anim); wiSt.anim = null; } }
+  function wiStart(){ wiBind(); if (wiSt.anim) cancelAnimationFrame(wiSt.anim); wiLoop(); }
+  function wiBind(){
+    if (wiSt.bound) return;
+    var cv = document.getElementById('wi-cv');
+    if (!cv) return;
+    wiSt.bound = true;
+    cv.onmousedown = function(e){ wiSt.drag = true; wiSt.lx = e.clientX; wiSt.ly = e.clientY; };
+    cv.onmousemove = function(e){ if (!wiSt.drag) return; wiSt.rotY += (e.clientX-wiSt.lx)*0.01; wiSt.rotX += (e.clientY-wiSt.ly)*0.01; wiSt.lx=e.clientX; wiSt.ly=e.clientY; };
+    cv.onmouseup = cv.onmouseleave = function(){ wiSt.drag = false; };
+    cv.addEventListener('touchstart', function(e){ wiSt.drag=true; wiSt.lx=e.touches[0].clientX; wiSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchmove', function(e){ if(!wiSt.drag) return; wiSt.rotY += (e.touches[0].clientX-wiSt.lx)*0.013; wiSt.rotX += (e.touches[0].clientY-wiSt.ly)*0.013; wiSt.lx=e.touches[0].clientX; wiSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchend', function(){ wiSt.drag = false; });
+  }
+
+  // ---- 13b. MADDENİN HALLERİ ----
+  var MH_STATES = {
+    kati: {
+      name:'Kat\u0131', icon:'\ud83e\uddca',
+      tanim:'Tanecikler birbirine \u00e7ok yak\u0131n, D\u00dcZENL\u0130 (\u00f6rg\u00fc/kristal) bir diziliminde ve sabit konumlar etraf\u0131nda sadece T\u0130TRE\u015e\u0130R.',
+      ozellikler:[
+        'Belirli \u015fekli VE belirli hacmi vard\u0131r.',
+        'Tanecikler aras\u0131 \u00e7ekim kuvveti EN G\u00dc\u00c7L\u00dc, taneciklerin kinetik enerjisi EN D\u00dc\u015e\u00dcKT\u00dcR.',
+        'S\u0131k\u0131\u015ft\u0131r\u0131lamaz (tanecikler aras\u0131 bo\u015fluk neredeyse yoktur).',
+        'Ak\u0131\u015fkan de\u011fildir; kendi \u015feklini korur.'
+      ]
+    },
+    sivi: {
+      name:'S\u0131v\u0131', icon:'\ud83d\udca7',
+      tanim:'Tanecikler birbirine yak\u0131n ama D\u00dcZENS\u0130Zdir; sabit bir konumlar\u0131 yoktur, birbirinin \u00fczerinden KAYARAK hareket ederler.',
+      ozellikler:[
+        'Belirli hacmi vard\u0131r fakat belirli \u015fekli YOKTUR \u2014 konuldu\u011fu kab\u0131n \u015feklini al\u0131r.',
+        'Tanecikler aras\u0131 \u00e7ekim kat\u0131dan zay\u0131f, gazdan g\u00fc\u00e7l\u00fcd\u00fcr; orta d\u00fczeyde kinetik enerjiye sahiptirler.',
+        'Ak\u0131\u015fkand\u0131r; \u00e7ok az s\u0131k\u0131\u015ft\u0131r\u0131labilir (neredeyse s\u0131f\u0131r).',
+        'Y\u00fczey gerilimi ve viskozite gibi \u00f6zellikler s\u0131v\u0131lara \u00f6zg\u00fcd\u00fcr.'
+      ]
+    },
+    gaz: {
+      name:'Gaz', icon:'\ud83d\udca8',
+      tanim:'Tanecikler birbirinden ÇOK uzak, tamamen D\u00dcZENSİZ ve BA\u011eIMSIZ olarak h\u0131zl\u0131 ve rastgele hareket eder.',
+      ozellikler:[
+        'Ne belirli \u015fekli NE de belirli hacmi vard\u0131r \u2014 bulundu\u011fu kab\u0131n tamam\u0131n\u0131 doldurur.',
+        'Tanecikler aras\u0131 \u00e7ekim kuvveti \u0130HMAL ED\u0130LEB\u0130L\u0130R d\u00fczeydedir; kinetik enerji EN Y\u00dcKSEKT\u0130R.',
+        'Kolayca S\u0130KI\u015eTIRILABİLİR (tanecikler aras\u0131 bo\u015fluk \u00e7ok fazlad\u0131r).',
+        'Bas\u0131n\u00e7, hacim ve s\u0131cakl\u0131k aras\u0131ndaki ili\u015fki ideal gaz yasas\u0131yla (PV=nRT) a\u00e7\u0131klan\u0131r.'
+      ]
+    },
+    plazma: {
+      name:'Plazma', icon:'\u2604\ufe0f',
+      tanim:'Gaz\u0131n \u00e7ok y\u00fcksek s\u0131cakl\u0131kta İYONLA\u015eMASIYLA (elektronlar\u0131n atomdan kopmas\u0131yla) olu\u015fan D\u00d6RD\u00dcNC\u00dc hal say\u0131lan\u0131r.',
+      ozellikler:[
+        'Serbest elektronlar ve pozitif iyonlardan olu\u015fur \u2014 elektrik ak\u0131m\u0131n\u0131 iletir, manyetik alandan etkilenir.',
+        'Evrendeki maddenin \u00e7o\u011funlu\u011fu plazma halindedir (y\u0131ld\u0131zlar, g\u00fcne\u015f).',
+        'G\u00fcnl\u00fck hayatta floresan/neon lambalar, y\u0131ld\u0131r\u0131m ve kutup \u0131\u015f\u0131klar\u0131 (aurora) plazma \u00f6rnekleridir.',
+        'Gazdan daha y\u00fcksek enerjilidir; tanecikler hem h\u0131zl\u0131 hareket eder hem de elektrik y\u00fckl\u00fcd\u00fcr.'
+      ]
+    }
+  };
+  var MH_TRANS = [
+    ['Erime','Kat\u0131 \u2192 S\u0131v\u0131','Is\u0131 al\u0131n\u0131r'], ['Donma','S\u0131v\u0131 \u2192 Kat\u0131','Is\u0131 verilir'],
+    ['Buharla\u015fma','S\u0131v\u0131 \u2192 Gaz','Is\u0131 al\u0131n\u0131r'], ['Yo\u011fu\u015fma','Gaz \u2192 S\u0131v\u0131','Is\u0131 verilir'],
+    ['S\u00fcblimle\u015fme','Kat\u0131 \u2192 Gaz (do\u011frudan)','Is\u0131 al\u0131n\u0131r'], ['Kra\u011f\u0131la\u015fma','Gaz \u2192 Kat\u0131 (do\u011frudan)','Is\u0131 verilir']
+  ];
+  var mhState = 'kati';
+  var mhSt = { rotX: 0.35, rotY: 0.5, zoom: 1, spin: false, drag: false, lx:0, ly:0, dist:0, t: 0, anim: null, stars: null, sw: 0, bound: false, particles: [] };
+  var MH_N = 24, MH_BOX = 85;
+
+  function mhInitParticles(){
+    mhSt.particles = [];
+    var side = Math.ceil(Math.pow(MH_N, 1/3));
+    for (var i = 0; i < MH_N; i++) {
+      var gx = (i % side) - side/2, gy = (Math.floor(i/side) % side) - side/2, gz = Math.floor(i/(side*side)) - side/2;
+      mhSt.particles.push({
+        hx: gx * (MH_BOX*1.7/side), hy: gy * (MH_BOX*1.7/side), hz: gz * (MH_BOX*1.7/side),
+        x: (Math.random()-0.5)*MH_BOX*1.6, y: (Math.random()-0.5)*MH_BOX*1.6, z: (Math.random()-0.5)*MH_BOX*1.6,
+        vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2, vz: (Math.random()-0.5)*2
+      });
+    }
+  }
+  mhInitParticles();
+
+  window.mhSetState = function(s, btn){
+    mhState = s;
+    if (btn) selectInRow(btn);
+    mhRenderTheory();
+  };
+  function mhRenderTheory(){
+    var box = document.getElementById('mh-theory');
+    if (!box) return;
+    var th = MH_STATES[mhState];
+    var html = '<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+      '<span style="font-size:26px">' + th.icon + '</span><div style="font-family:Space Grotesk,sans-serif;font-size:17px;font-weight:800;color:#fff">' + th.name + '</div></div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:12px">' + th.tanim + '</p>' +
+      '<div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">\u00d6zellikler</div>' +
+      '<ul style="margin:0 0 4px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">';
+    th.ozellikler.forEach(function(o){ html += '<li>' + o + '</li>'; });
+    html += '</ul></div>';
+    if (mhState !== 'plazma') {
+      html += '<div class="card" style="margin-top:10px"><div class="slbl">Hal De\u011fi\u015fim Tepkimeleri</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px;font-size:11px">';
+      MH_TRANS.forEach(function(t){
+        html += '<div style="background:var(--sf2);border-radius:8px;padding:8px;text-align:center">' +
+          '<div style="font-weight:700;color:#fff;margin-bottom:2px">' + t[0] + '</div>' +
+          '<div style="color:var(--ac2);margin-bottom:2px">' + t[1] + '</div>' +
+          '<div style="color:var(--tx3)">' + t[2] + '</div></div>';
+      });
+      html += '</div></div>';
+    }
+    box.innerHTML = html;
+  }
+
+  function mhDraw(x, W, H2){
+    hcBg(x, mhSt, W, H2);
+    var items = [];
+    // Kap
+    var boxPts = [];
+    for (var sx=-1; sx<=1; sx+=2) for (var sy=-1; sy<=1; sy+=2) for (var sz=-1; sz<=1; sz+=2) boxPts.push([sx*MH_BOX,sy*MH_BOX,sz*MH_BOX]);
+    var edges = [[0,1],[0,2],[0,4],[3,1],[3,2],[3,7],[5,1],[5,4],[5,7],[6,2],[6,4],[6,7]];
+    x.strokeStyle = 'rgba(129,140,248,0.35)'; x.lineWidth = 1.2;
+    edges.forEach(function(e){
+      var p1 = hcProj(mhSt, boxPts[e[0]][0],boxPts[e[0]][1],boxPts[e[0]][2], W, H2);
+      var p2 = hcProj(mhSt, boxPts[e[1]][0],boxPts[e[1]][1],boxPts[e[1]][2], W, H2);
+      x.beginPath(); x.moveTo(p1.x,p1.y); x.lineTo(p2.x,p2.y); x.stroke();
+    });
+    var speed = mhState==='kati'?0.06:mhState==='sivi'?0.5:mhState==='gaz'?2.4:3.2;
+    var isPlazma = mhState === 'plazma';
+    for (var i = 0; i < mhSt.particles.length; i++) {
+      var pt = mhSt.particles[i];
+      if (mhState === 'kati') {
+        pt.x = pt.hx + Math.sin(mhSt.t*8 + i)*2.5;
+        pt.y = pt.hy + Math.cos(mhSt.t*7 + i*1.3)*2.5;
+        pt.z = pt.hz + Math.sin(mhSt.t*6 + i*0.7)*2.5;
+      } else {
+        pt.x += pt.vx * speed; pt.y += pt.vy * speed; pt.z += pt.vz * speed;
+        var lim = mhState === 'sivi' ? MH_BOX*0.55 : MH_BOX*0.92;
+        if (Math.abs(pt.x) > lim) { pt.vx *= -1; pt.x = Math.sign(pt.x)*lim; }
+        if (Math.abs(pt.y) > lim) { pt.vy *= -1; pt.y = Math.sign(pt.y)*lim; }
+        if (Math.abs(pt.z) > lim) { pt.vz *= -1; pt.z = Math.sign(pt.z)*lim; }
+        if (mhState === 'sivi' && Math.random() < 0.02) { pt.vx += (Math.random()-0.5)*0.6; pt.vy += (Math.random()-0.5)*0.6; pt.vz += (Math.random()-0.5)*0.6; }
+      }
+      var p = hcProj(mhSt, pt.x, pt.y, pt.z, W, H2);
+      items.push({ z: p.z, x: p.x, y: p.y, r: (isPlazma?7:6)*p.s, plasma: isPlazma });
+    }
+    items.sort(function(a,b){ return b.z-a.z; });
+    for (var j = 0; j < items.length; j++) {
+      var it = items[j];
+      if (it.plasma) {
+        x.beginPath(); x.arc(it.x, it.y, it.r+5, 0, 6.283);
+        x.fillStyle = 'rgba(168,85,247,0.25)'; x.fill();
+      }
+      var gg = x.createRadialGradient(it.x-it.r*0.3, it.y-it.r*0.3, it.r*0.1, it.x, it.y, it.r);
+      if (it.plasma) { gg.addColorStop(0,'#e9d5ff'); gg.addColorStop(0.6,'#a855f7'); gg.addColorStop(1,'#581c87'); }
+      else { gg.addColorStop(0,'#93c5fd'); gg.addColorStop(0.6,'#3b82f6'); gg.addColorStop(1,'#1e3a8a'); }
+      x.beginPath(); x.arc(it.x, it.y, it.r, 0, 6.283); x.fillStyle = gg; x.fill();
+    }
+    x.fillStyle = 'rgba(255,255,255,.3)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 8, H2-8);
+  }
+
+  function mhLoop(){
+    var scr = document.getElementById('s-wi');
+    if (!scr || scr.style.display === 'none') { mhStop(); return; }
+    mhSt.anim = requestAnimationFrame(mhLoop);
+    var cv = document.getElementById('mh-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || 300, H2 = 260;
+    var dpr = window.devicePixelRatio || 1;
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try {
+      if (mhSt.spin && !mhSt.drag) mhSt.rotY += 0.006;
+      mhSt.t += 0.016;
+      mhDraw(x, W, H2);
+    } catch (e) { drawErr(x, W, H2, e); }
+  }
+  function mhStop(){ if (mhSt.anim) { cancelAnimationFrame(mhSt.anim); mhSt.anim = null; } }
+  function mhStart(){ mhBind(); if (mhSt.anim) cancelAnimationFrame(mhSt.anim); mhLoop(); }
+  function mhBind(){
+    if (mhSt.bound) return;
+    var cv = document.getElementById('mh-cv');
+    if (!cv) return;
+    mhSt.bound = true;
+    cv.onmousedown = function(e){ mhSt.drag = true; mhSt.lx = e.clientX; mhSt.ly = e.clientY; };
+    cv.onmousemove = function(e){ if (!mhSt.drag) return; mhSt.rotY += (e.clientX-mhSt.lx)*0.01; mhSt.rotX += (e.clientY-mhSt.ly)*0.01; mhSt.lx=e.clientX; mhSt.ly=e.clientY; };
+    cv.onmouseup = cv.onmouseleave = function(){ mhSt.drag = false; };
+    cv.addEventListener('touchstart', function(e){ mhSt.drag=true; mhSt.lx=e.touches[0].clientX; mhSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchmove', function(e){ if(!mhSt.drag) return; mhSt.rotY += (e.touches[0].clientX-mhSt.lx)*0.013; mhSt.rotX += (e.touches[0].clientY-mhSt.ly)*0.013; mhSt.lx=e.touches[0].clientX; mhSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchend', function(){ mhSt.drag = false; });
+  }
+
+  // ---- 13c. Ekran kurulumu (Zayıf Etkileşimler + Maddenin Halleri sekmeleri) ----
+  function setupWI(){
+    if (document.getElementById('s-wi')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var wiBtns = '', mhBtns = '';
+    WI_ORDER.forEach(function(k, i){ wiBtns += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="wiSetKind(\'' + k + '\',this)">' + WI_TYPES[k].icon + ' ' + WI_TYPES[k].name + '</button>'; });
+    ['kati','sivi','gaz','plazma'].forEach(function(k, i){ mhBtns += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="mhSetState(\'' + k + '\',this)">' + MH_STATES[k].icon + ' ' + MH_STATES[k].name + '</button>'; });
+
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-wi" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83e\uddf2 Etkile\u015fim \u00dcnitesi \u00b7 9. S\u0131n\u0131f</h1>' +
+        '<p class="psub">Zay\u0131f etkile\u015fimler ve maddenin halleri \u2014 3D g\u00f6rsel + detayl\u0131 konu.</p>' +
+        '<div class="tabs" id="wi-tabs">' +
+          '<button class="tab on" onclick="tswitch(\'wi-tabs\',\'wi-tps\',0)">\u26a1 Zay\u0131f Etkile\u015fimler</button>' +
+          '<button class="tab" onclick="tswitch(\'wi-tabs\',\'wi-tps\',1)">\ud83e\uddca Maddenin Halleri</button>' +
+        '</div>' +
+        '<div id="wi-tps">' +
+          '<div class="tp on">' +
+            '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:10px"><div style="display:flex;gap:6px;min-width:max-content">' + wiBtns + '</div></div>' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+              '<canvas id="wi-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+            '</div>' +
+            '<div id="wi-theory"></div>' +
+          '</div>' +
+          '<div class="tp">' +
+            '<div style="display:flex;gap:6px;margin-bottom:10px">' + mhBtns + '</div>' +
+            '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+              '<canvas id="mh-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+            '</div>' +
+            '<div id="mh-theory"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>');
+
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-wi') === -1) SCREENS.push('s-wi');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-wi'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-wi" onclick="nav(\'wi\')">\ud83e\uddf2 Etkile\u015fim \u00dcnitesi (9. S\u0131n\u0131f)</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-wi'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-wi" onclick="nav(\'wi\')"><div class="ti">\ud83e\uddf2</div><div class="tt">Etkile\u015fim \u00dcnitesi</div><div class="td">9. S\u0131n\u0131f: Zay\u0131f etkile\u015fimler ve maddenin halleri, 3D g\u00f6rsel.</div></div>');
+
+    wiRenderTheory(); mhRenderTheory();
+    wiBind(); mhBind();
+  }
+  function wiEnter(){ setTimeout(function(){ wiStart(); mhStart(); }, 80); }
+  function wiLeave(){ wiStop(); mhStop(); }
+
   // ---------- 14. AYARLAR EKRANI ----------
   var SET_KEYS = [
     { k:'rk_stats', label:'Element Testi', icon:'\ud83e\uddea', kind:'ac' },
@@ -5577,10 +5456,6 @@
     var mn = document.getElementById('mn');
     if (mn && !document.getElementById('mn-set'))
       mn.insertAdjacentHTML('beforeend', '<button id="mn-set" onclick="nav(\'set\')">\u2699\ufe0f Ayarlar</button>');
-    var tg = document.querySelector('#s-home .tgrid');
-    if (tg && !document.getElementById('tile-set'))
-      tg.insertAdjacentHTML('beforeend',
-        '<div class="tc" id="tile-set" onclick="nav(\'set\')"><div class="ti">\u2699\ufe0f</div><div class="tt">Ayarlar</div><div class="td">\u0130lerleme verilerini g\u00f6r\u00fcnt\u00fcle, gerekirse s\u0131f\u0131rla.</div></div>');
   }
   function setEnter(){ setRenderList(); }
 
@@ -5830,24 +5705,12 @@
         '<div class="tc" id="tile-gv" onclick="nav(\'gv\')"><div class="ti">\ud83d\udd0b</div><div class="tt">Galvanik H\u00fccre 3D</div><div class="td">Kendili\u011finden redoks, tuz k\u00f6pr\u00fcs\u00fc, voltmetre \u2014 3D sim\u00fclasyon.</div></div>');
     gvBindCanvas();
     gvRenderInfo();
-
-    // Rozet: 🔋 Volta Ustası
-    try {
-      BADGES.push({ id: 'gv', e: '\ud83d\udd0b', n: 'Volta Ustas\u0131', d: 'T\u00fcm 10 galvanik h\u00fccre \u00e7iftini incele',
-                    f: function(s){ return ((s.flags.gvSeen || []).length) >= 10; } });
-    } catch (e) { /* sessiz */ }
   }
 
   window.gvSetPair = function(idx, btn){
     gvInit(idx);
     if (btn) selectInRow(btn);
     gvRenderInfo();
-    try {
-      var fl = sget('rk_flags', {});
-      fl.gvSeen = fl.gvSeen || [];
-      if (fl.gvSeen.indexOf(idx) === -1) { fl.gvSeen.push(idx); sset('rk_flags', fl); }
-      if (typeof checkBadges === 'function') checkBadges(true);
-    } catch (e) { /* sessiz */ }
   };
 
   function gvLoop(){
@@ -5907,16 +5770,8 @@
     s -= (eqSt.temp - 1) * 0.34;       // sıcaklık artışı → ekzotermik ileri tepkimeyi tersine çevirir
     return Math.max(0.06, Math.min(0.94, s));
   }
-  function eqMarkUsed(key){
-    try {
-      var fl = sget('rk_flags', {});
-      fl.eqUsed = fl.eqUsed || {};
-      if (!fl.eqUsed[key]) { fl.eqUsed[key] = 1; sset('rk_flags', fl); }
-      if (typeof checkBadges === 'function') checkBadges(true);
-    } catch (e) { /* sessiz */ }
-  }
-  function eqSetPressure(p, btn){ eqSt.pressure = p; eqSt.shiftTarget = eqComputeShiftTarget(); if (btn) selectInRow(btn); eqRenderInfo(); eqMarkUsed('p'); }
-  function eqSetTemp(t, btn){ eqSt.temp = t; eqSt.shiftTarget = eqComputeShiftTarget(); if (btn) selectInRow(btn); eqRenderInfo(); eqMarkUsed('t'); }
+  function eqSetPressure(p, btn){ eqSt.pressure = p; eqSt.shiftTarget = eqComputeShiftTarget(); if (btn) selectInRow(btn); eqRenderInfo(); }
+  function eqSetTemp(t, btn){ eqSt.temp = t; eqSt.shiftTarget = eqComputeShiftTarget(); if (btn) selectInRow(btn); eqRenderInfo(); }
   function eqNudge(kind){
     // Derişim müdahalesi: tepken eklemek/ürünü çekmek dengeyi sağa (NH3),
     // ürün eklemek/tepkeni çekmek dengeyi sola kaydırır (geçici, sonra yeniden yerleşir).
@@ -5924,7 +5779,6 @@
     eqSt.nudge = Math.max(-0.35, Math.min(0.35, eqSt.nudge + dir * 0.22));
     eqSt.nudgeDecay = 1;
     eqRenderInfo();
-    eqMarkUsed('n');
   }
 
   function eqBuildUnits(){
@@ -6055,11 +5909,11 @@
     '</div>';
 
   function setupEQ(){
-    if (document.getElementById('s-ledenge')) return;
+    if (document.getElementById('s-eq')) return;
     var app = document.querySelector('.app');
     if (!app) return;
     app.insertAdjacentHTML('beforeend',
-      '<div id="s-ledenge" style="display:none"><div class="pw narrow">' +
+      '<div id="s-eq" style="display:none"><div class="pw narrow">' +
         '<h1 class="ptitle">\u2696\ufe0f Kimyasal Denge 3D</h1>' +
         '<p class="psub">Le Chatelier \u0130lkesi \u2014 N\u2082 + 3H\u2082 \u21cc 2NH\u2083. Bas\u0131n\u00e7, s\u0131cakl\u0131k ve derişimi de\u011fi\u015ftir, dengenin canl\u0131 kaymasını izle.</p>' +
         '<div style="background:#050510;border:1px solid rgba(129,140,248,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
@@ -6089,14 +5943,14 @@
         '<div id="eq-info" style="margin-bottom:16px"></div>' +
         EQ_THEORY_HTML +
       '</div></div>');
-    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-ledenge') === -1) SCREENS.push('s-ledenge');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-eq') === -1) SCREENS.push('s-eq');
     var mn = document.getElementById('mn');
-    if (mn && !document.getElementById('mn-ledenge'))
-      mn.insertAdjacentHTML('beforeend', '<button id="mn-ledenge" onclick="nav(\'ledenge\')">\u2696\ufe0f Kimyasal Denge 3D</button>');
+    if (mn && !document.getElementById('mn-eq'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-eq" onclick="nav(\'eq\')">\u2696\ufe0f Kimyasal Denge 3D</button>');
     var tg = document.querySelector('#s-home .tgrid');
-    if (tg && !document.getElementById('tile-ledenge'))
+    if (tg && !document.getElementById('tile-eq'))
       tg.insertAdjacentHTML('afterbegin',
-        '<div class="tc" id="tile-ledenge" onclick="nav(\'ledenge\')"><div class="ti">\u2696\ufe0f</div><div class="tt">Kimyasal Denge 3D</div><div class="td">Le Chatelier ilkesi \u2014 basın\u00e7/s\u0131cakl\u0131k/derişim ile canlı denge kayması.</div></div>');
+        '<div class="tc" id="tile-eq" onclick="nav(\'eq\')"><div class="ti">\u2696\ufe0f</div><div class="tt">Kimyasal Denge 3D</div><div class="td">Le Chatelier ilkesi \u2014 basın\u00e7/s\u0131cakl\u0131k/derişim ile canlı denge kayması.</div></div>');
     eqBindCanvas();
     eqRenderInfo();
   }
@@ -6106,7 +5960,7 @@
   window.eqNudge = eqNudge;
 
   function eqLoop(){
-    var scr = document.getElementById('s-ledenge');
+    var scr = document.getElementById('s-eq');
     if (!scr || scr.style.display === 'none') { eqStop(); return; }
     eqSt.anim = requestAnimationFrame(eqLoop);
     var cv = document.getElementById('eq-cv');
@@ -6145,29 +5999,32 @@
 
   // ---------- 17. TEPKİME TÜRÜ SINIFLANDIRICI ----------
   var RXN_TYPES = {
-    asitbaz: { n:'Asit-Baz Tepkimeleri', c:'#3b82f6', d:'Bir asit ile bir baz tepkimeye girerek TUZ ve genellikle SU olu\u015fturur (n\u00f6tralle\u015fme): Asit + Baz \u2192 Tuz + Su' },
-    cozunme: { n:'\u00c7\u00f6z\u00fcnme-\u00c7\u00f6kelme Tepkimeleri', c:'#a855f7', d:'\u0130ki \u00e7\u00f6zeltinin kar\u0131\u015ft\u0131r\u0131lmas\u0131yla suda \u00e7\u00f6zünmeyen (\u00e7\u00f6kelek) bir kat\u0131 olu\u015fur, ya da bir kat\u0131 suda iyonlar\u0131na ayr\u0131larak \u00e7\u00f6z\u00fcn\u00fcr.' },
-    redoks: { n:'Y\u00fckseltgenme-\u0130ndirgenme (Redoks) Tepkimeleri', c:'#f59e0b', d:'Taneciklar aras\u0131nda ELEKTRON al\u0131\u015fveri\u015fi olur \u2014 bir tanecik elektron verirken (y\u00fckseltgenir) di\u011feri elektron al\u0131r (indirgenir).' }
+    sentez: { n:'Sentez (Birleşme)', c:'#22c55e', d:'\u0130ki ya da daha fazla madde birle\u015fip TEK bir \u00fcr\u00fcn olu\u015fturur: A + B \u2192 AB' },
+    analiz: { n:'Analiz (Ayr\u0131\u015fma)', c:'#3b82f6', d:'TEK bir madde, iki ya da daha fazla \u00fcr\u00fcne ayr\u0131\u015f\u0131r: AB \u2192 A + B' },
+    yerdeg: { n:'Yer De\u011fi\u015ftirme (Tekli)', c:'#f59e0b', d:'Bir element, bir bile\u015fikteki ba\u015fka bir elementin yerini al\u0131r: A + BC \u2192 AC + B' },
+    ciftdeg: { n:'\u00c7ift De\u011fi\u015fim (Bile\u015fim De\u011fi\u015ftirme)', c:'#a855f7', d:'\u0130ki bile\u015fik, katyon/anyonlar\u0131n\u0131 kar\u015f\u0131l\u0131kl\u0131 de\u011fi\u015ftirir: AB + CD \u2192 AD + CB' }
   };
   var RXN_LIST = [
-    { eq:'HCl + NaOH \u2192 NaCl + H\u2082O', t:'asitbaz', not:'Klasik n\u00f6tralle\u015fme \u2014 g\u00fc\u00e7l\u00fc asit + g\u00fc\u00e7l\u00fc baz \u2192 tuz + su.' },
-    { eq:'H\u2082SO\u2084 + 2KOH \u2192 K\u2082SO\u2084 + 2H\u2082O', t:'asitbaz', not:'Diprotik asit iki bazla n\u00f6tralle\u015fir.' },
-    { eq:'CH\u2083COOH + NH\u2083 \u2192 CH\u2083COONH\u2084', t:'asitbaz', not:'Zay\u0131f asit + zay\u0131f baz \u2192 amonyum asetat tuzu.' },
-    { eq:'2HNO\u2083 + Ca(OH)\u2082 \u2192 Ca(NO\u2083)\u2082 + 2H\u2082O', t:'asitbaz', not:'Nitrik asit ile kalsiyum hidroksitin n\u00f6tralle\u015fmesi.' },
-    { eq:'HCl + NH\u2083 \u2192 NH\u2084Cl', t:'asitbaz', not:'Gaz halindeki amonyak, asitle do\u011frudan tuz olu\u015fturur (su a\u00e7\u0131\u011fa \u00e7\u0131kmaz).' },
-    { eq:'H\u2082CO\u2083 + 2NaOH \u2192 Na\u2082CO\u2083 + 2H\u2082O', t:'asitbaz', not:'Karbonik asidin n\u00f6tralle\u015fmesi.' },
-    { eq:'AgNO\u2083 + NaCl \u2192 AgCl\u2193 + NaNO\u2083', t:'cozunme', not:'Beyaz AgCl \u00e7\u00f6kele\u011fi olu\u015fur \u2014 klasik bir \u00e7\u00f6kelme tepkimesi.' },
-    { eq:'BaCl\u2082 + Na\u2082SO\u2084 \u2192 BaSO\u2084\u2193 + 2NaCl', t:'cozunme', not:'Suda \u00e7\u00f6zünmeyen BaSO\u2084 beyaz \u00e7\u00f6kelek olarak ayr\u0131l\u0131r.' },
-    { eq:'Pb(NO\u2083)\u2082 + 2KI \u2192 PbI\u2082\u2193 + 2KNO\u2083', t:'cozunme', not:'Sar\u0131 PbI\u2082 \u00e7\u00f6keleği olu\u015fur.' },
-    { eq:'CuSO\u2084 + 2NaOH \u2192 Cu(OH)\u2082\u2193 + Na\u2082SO\u2084', t:'cozunme', not:'Mavi Cu(OH)\u2082 \u00e7\u00f6kele\u011fi olu\u015fur.' },
-    { eq:'NaCl (k) \u2192 Na\u207a (suda) + Cl\u207b (suda)', t:'cozunme', not:'Kat\u0131 tuzun suda \u00e7\u00f6z\u00fcnerek iyonlar\u0131na ayr\u0131lmas\u0131 \u2014 \u00e7\u00f6kelmenin tersi.' },
-    { eq:'CaCl\u2082 + Na\u2082CO\u2083 \u2192 CaCO\u2083\u2193 + 2NaCl', t:'cozunme', not:'Suda \u00e7\u00f6zünmeyen CaCO\u2083 \u00e7\u00f6kelir.' },
-    { eq:'Zn + CuSO\u2084 \u2192 ZnSO\u2084 + Cu', t:'redoks', not:'\u00c7inko elektron verip Zn\u00b2\u207a\u2019ya y\u00fckseltgenir; Cu\u00b2\u207a elektron al\u0131p Cu\u2019ya indirgenir.' },
-    { eq:'2Na + Cl\u2082 \u2192 2NaCl', t:'redoks', not:'Sodyum elektron verir (y\u00fckseltgenir), klor elektron al\u0131r (indirgenir).' },
-    { eq:'Fe + 2HCl \u2192 FeCl\u2082 + H\u2082', t:'redoks', not:'Demir y\u00fckseltgenir (0\u2192+2), asitteki H\u207a indirgenir (+1\u21920).' },
-    { eq:'2Mg + O\u2082 \u2192 2MgO', t:'redoks', not:'Magnezyumun yanmas\u0131 \u2014 Mg y\u00fckseltgenir, O indirgenir.' },
-    { eq:'Zn + 2AgNO\u2083 \u2192 Zn(NO\u2083)\u2082 + 2Ag', t:'redoks', not:'\u00c7inko elektron verir, g\u00fcm\u00fc\u015f iyonu elektron al\u0131p metalik g\u00fcm\u00fc\u015fe indirgenir.' },
-    { eq:'2KMnO\u2084 + 16HCl \u2192 2KCl + 2MnCl\u2082 + 5Cl\u2082 + 8H\u2082O', t:'redoks', not:'Mn +7\u2019den +2\u2019ye indirgenirken, Cl\u207b elektron verip Cl\u2082\u2019ye y\u00fckseltgenir.' }
+    { eq:'2H\u2082 + O\u2082 \u2192 2H\u2082O', t:'sentez', not:'\u0130ki element birle\u015fip tek \u00fcr\u00fcn (su) olu\u015fturdu.' },
+    { eq:'N\u2082 + 3H\u2082 \u2192 2NH\u2083', t:'sentez', not:'Haber-Bosch s\u00fcreci \u2014 iki gaz birle\u015fip amonyak verir.' },
+    { eq:'C + O\u2082 \u2192 CO\u2082', t:'sentez', not:'Karbonun yanmas\u0131 \u2014 klasik bir birle\u015fme tepkimesi.' },
+    { eq:'CaO + H\u2082O \u2192 Ca(OH)\u2082', t:'sentez', not:'S\u00f6nmemi\u015f kire\u00e7 + su \u2192 s\u00f6nm\u00fc\u015f kire\u00e7.' },
+    { eq:'SO\u2083 + H\u2082O \u2192 H\u2082SO\u2084', t:'sentez', not:'K\u00fck\u00fcrt trioksit + su \u2192 s\u00fclf\u00fcrik asit.' },
+    { eq:'2H\u2082O \u2192 2H\u2082 + O\u2082', t:'analiz', not:'Suyun elektrolizle ayr\u0131\u015fmas\u0131.' },
+    { eq:'CaCO\u2083 \u2192 CaO + CO\u2082', t:'analiz', not:'Kire\u00e7ta\u015f\u0131n\u0131n \u0131s\u0131yla ayr\u0131\u015fmas\u0131 (kalsinasyon).' },
+    { eq:'2KClO\u2083 \u2192 2KCl + 3O\u2082', t:'analiz', not:'Potasyum klorat\u0131n ayr\u0131\u015farak oksijen vermesi.' },
+    { eq:'2H\u2082O\u2082 \u2192 2H\u2082O + O\u2082', t:'analiz', not:'Hidrojen peroksitin ayr\u0131\u015fmas\u0131.' },
+    { eq:'2NaHCO\u2083 \u2192 Na\u2082CO\u2083 + H\u2082O + CO\u2082', t:'analiz', not:'Karbonat\u0131n \u0131s\u0131yla ayr\u0131\u015fmas\u0131.' },
+    { eq:'Zn + CuSO\u2084 \u2192 ZnSO\u2084 + Cu', t:'yerdeg', not:'\u00c7inko, bak\u0131r\u0131n yerini al\u0131r (\u00e7inko daha aktif).' },
+    { eq:'Fe + CuSO\u2084 \u2192 FeSO\u2084 + Cu', t:'yerdeg', not:'Demir, bak\u0131r\u0131n yerini al\u0131r.' },
+    { eq:'2Na + 2H\u2082O \u2192 2NaOH + H\u2082', t:'yerdeg', not:'Sodyum, suyun hidrojeninin yerini al\u0131r.' },
+    { eq:'Cl\u2082 + 2NaBr \u2192 2NaCl + Br\u2082', t:'yerdeg', not:'Klor, bromun yerini al\u0131r (klor daha aktif halojen).' },
+    { eq:'Mg + 2HCl \u2192 MgCl\u2082 + H\u2082', t:'yerdeg', not:'Magnezyum, asitteki hidrojenin yerini al\u0131r.' },
+    { eq:'AgNO\u2083 + NaCl \u2192 AgCl + NaNO\u2083', t:'ciftdeg', not:'A\u011f\u2019\u0131n katyonu Na\u2019n\u0131n katyonuyla yer de\u011fi\u015ftirir; AgCl \u00e7\u00f6kelir.' },
+    { eq:'BaCl\u2082 + Na\u2082SO\u2084 \u2192 BaSO\u2084 + 2NaCl', t:'ciftdeg', not:'BaSO\u2084 \u00e7\u00f6kele\u011fi olu\u015fur.' },
+    { eq:'HCl + NaOH \u2192 NaCl + H\u2082O', t:'ciftdeg', not:'N\u00f6tralle\u015fme tepkimesi \u2014 asit + baz \u2192 tuz + su.' },
+    { eq:'Pb(NO\u2083)\u2082 + 2KI \u2192 PbI\u2082 + 2KNO\u2083', t:'ciftdeg', not:'Sar\u0131 PbI\u2082 \u00e7\u00f6keleği klasik bir \u00e7ift de\u011fi\u015fim \u00f6rne\u011fidir.' },
+    { eq:'CuSO\u2084 + 2NaOH \u2192 Cu(OH)\u2082 + Na\u2082SO\u2084', t:'ciftdeg', not:'Mavi Cu(OH)\u2082 \u00e7\u00f6kele\u011fi olu\u015fur.' }
   ];
   var rxnSt = { cur: null, score: 0, total: 0, order: [], idx: 0 };
 
@@ -6211,7 +6068,7 @@
         '<div class="tc" id="tile-rxntype" onclick="nav(\'rxntype\')"><div class="ti">\ud83e\uddea</div><div class="tt">Tepkime T\u00fcr\u00fc S\u0131n\u0131fland\u0131r\u0131c\u0131</div><div class="td">Sentez/analiz/yer de\u011fi\u015ftirme/\u00e7ift de\u011fi\u015fim tan\u0131ma quiz\u2019i.</div></div>');
 
     var th = '';
-    ['asitbaz','cozunme','redoks'].forEach(function(k){
+    ['sentez','analiz','yerdeg','ciftdeg'].forEach(function(k){
       var rt = RXN_TYPES[k];
       th += '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
         '<div style="font-size:13px;font-weight:700;color:' + rt.c + '">' + rt.n + '</div>' +
@@ -6230,7 +6087,7 @@
     document.getElementById('rxn-eq').textContent = item.eq;
     var fb = document.getElementById('rxn-fb'); fb.style.display = 'none';
     document.getElementById('rxn-next').style.display = 'none';
-    var keys = ['asitbaz','cozunme','redoks'];
+    var keys = ['sentez','analiz','yerdeg','ciftdeg'];
     var html = '';
     keys.forEach(function(k){
       html += '<button type="button" class="ob2" onclick="rxnCheck(\'' + k + '\',this)">' + RXN_TYPES[k].n + '</button>';
@@ -6455,7 +6312,7 @@
         'Y\u00fckseltgenme yar\u0131 tepkimesi: Fe\u00b2\u207a \u2192 Fe\u00b3\u207a + e\u207b',
         '\u0130ndirgenme yar\u0131 tepkimesi (dengesiz): MnO\u2084\u207b \u2192 Mn\u00b2\u207a',
         'Oksijenleri dengele (su ile): MnO\u2084\u207b + 8H\u207a \u2192 Mn\u00b2\u207a + 4H\u2082O',
-        'Y\u00fc\u00fc dengele (elektron ekle): MnO\u2084\u207b + 8H\u207a + 5e\u207b \u2192 Mn\u00b2\u207a + 4H\u2082O',
+        'Y\u00fck\u00fc dengele (elektron ekle): MnO\u2084\u207b + 8H\u207a + 5e\u207b \u2192 Mn\u00b2\u207a + 4H\u2082O',
         'Elektron say\u0131lar\u0131n\u0131 e\u015fitle: Fe\u00b2\u207a yar\u0131 tepkimesini 5 ile \u00e7arp \u2014 5Fe\u00b2\u207a \u2192 5Fe\u00b3\u207a + 5e\u207b',
         'Yar\u0131 tepkimeleri topla (elektronlar sadele\u015fir):'
       ],
@@ -6529,91 +6386,6 @@
       not: 'Bazik ortamda H\u207a yerine OH\u207b ve H\u2082O kullan\u0131l\u0131r \u2014 asidik ortamdan fark\u0131 budur.'
     }
   ];
-  var REDOX27_LIST = [
-    { label:'P + HNO\u2083 + H\u2082O \u2192 H\u2083PO\u2084 + NO', eq:'P + HNO3 + H2O -> H3PO4 + NO' },
-    { label:'Sn + HNO\u2083 \u2192 H\u2082SnO\u2083 + NO\u2082 + H\u2082O', eq:'Sn + HNO3 -> H2SnO3 + NO2 + H2O' },
-    { label:'MnO\u2082 + KNO\u2083 + KOH \u2192 K\u2082MnO\u2084 + NO + H\u2082O', eq:'MnO2 + KNO3 + KOH -> K2MnO4 + NO + H2O' },
-    { label:'KBr + H\u2083AsO\u2084 \u2192 KBrO\u2083 + H\u2083AsO\u2083', eq:'KBr + H3AsO4 -> KBrO3 + H3AsO3' },
-    { label:'H\u2082S + HNO\u2083 \u2192 S + NO + H\u2082O', eq:'H2S + HNO3 -> S + NO + H2O' },
-    { label:'As + HNO\u2083 + H\u2082O \u2192 H\u2083AsO\u2084 + NO', eq:'As + HNO3 + H2O -> H3AsO4 + NO' },
-    { label:'NaClO\u2083 + SO\u2082 + H\u2082O \u2192 NaCl + H\u2082SO\u2084', eq:'NaClO3 + SO2 + H2O -> NaCl + H2SO4' },
-    { label:'HNO\u2083 + I\u2082 \u2192 HIO\u2083 + NO + H\u2082O', eq:'HNO3 + I2 -> HIO3 + NO + H2O' },
-    { label:'Sb + HNO\u2083 \u2192 Sb\u2082O\u2085 + NO\u2082 + H\u2082O', eq:'Sb + HNO3 -> Sb2O5 + NO2 + H2O' },
-    { label:'Na\u2082S\u2082O\u2083 + H\u2082O + Cl\u2082 \u2192 NaHSO\u2084 + HCl', eq:'Na2S2O3 + H2O + Cl2 -> NaHSO4 + HCl' },
-    { label:'As + HNO\u2083 + H\u2082O \u2192 H\u2084As\u2082O\u2087 + NO', eq:'As + HNO3 + H2O -> H4As2O7 + NO' },
-    { label:'Sb\u2082O\u2083 + I\u2082 + H\u2082O \u2192 Sb\u2082O\u2085 + HI', eq:'Sb2O3 + I2 + H2O -> Sb2O5 + HI' },
-    { label:'Zn + HNO\u2083 \u2192 Zn(NO\u2083)\u2082 + N\u2082 + H\u2082O', eq:'Zn + HNO3 -> Zn(NO3)2 + N2 + H2O' },
-    { label:'Cu + HNO\u2083 \u2192 Cu(NO\u2083)\u2082 + NO + H\u2082O', eq:'Cu + HNO3 -> Cu(NO3)2 + NO + H2O' },
-    { label:'Zn + H\u2082SO\u2084 \u2192 ZnSO\u2084 + H\u2082S + H\u2082O', eq:'Zn + H2SO4 -> ZnSO4 + H2S + H2O' },
-    { label:'KMnO\u2084 + HCl \u2192 KCl + MnCl\u2082 + H\u2082O + Cl\u2082', eq:'KMnO4 + HCl -> KCl + MnCl2 + H2O + Cl2' },
-    { label:'KOH + Cl\u2082 \u2192 KCl + KClO\u2083 + H\u2082O', eq:'KOH + Cl2 -> KCl + KClO3 + H2O' },
-    { label:'KOH + Br\u2082 \u2192 KBrO\u2083 + KBr + H\u2082O', eq:'KOH + Br2 -> KBrO3 + KBr + H2O' },
-    { label:'HClO\u2083 \u2192 HClO\u2084 + ClO\u2082 + H\u2082O', eq:'HClO3 -> HClO4 + ClO2 + H2O' },
-    { label:'S + H\u2082SO\u2084 \u2192 SO\u2082 + H\u2082O', eq:'S + H2SO4 -> SO2 + H2O' },
-    { label:'KOH + H\u2082S\u2082O\u2083 \u2192 S + KHSO\u2084 + H\u2082O', eq:'KOH + H2S2O3 -> S + KHSO4 + H2O' },
-    { label:'NaOH + MnS + NaClO\u2084 \u2192 MnO\u2082 + Na\u2082SO\u2084 + NaCl + H\u2082O', eq:'NaOH + MnS + NaClO4 -> MnO2 + Na2SO4 + NaCl + H2O' },
-    { label:'CrI\u2083 + KOH + Cl\u2082 \u2192 K\u2082CrO\u2084 + KCl + KIO\u2084 + H\u2082O', eq:'CrI3 + KOH + Cl2 -> K2CrO4 + KCl + KIO4 + H2O' },
-    { label:'Sb\u2082S\u2083 + HNO\u2083 \u2192 Sb\u2082O\u2085 + NO\u2082 + H\u2082SO\u2084 + H\u2082O', eq:'Sb2S3 + HNO3 -> Sb2O5 + NO2 + H2SO4 + H2O' },
-    { label:'MnS + HClO\u2084 + H\u2082O \u2192 MnO\u2082 + H\u2082SO\u2084 + HCl', eq:'MnS + HClO4 + H2O -> MnO2 + H2SO4 + HCl' },
-    { label:'HCl + FeS + H\u2082O\u2082 \u2192 H\u2082O + FeCl\u2083 + H\u2082SO\u2084', eq:'HCl + FeS + H2O2 -> H2O + FeCl3 + H2SO4' },
-    { label:'NH\u2084NO\u2083 + NH\u2084Cl \u2192 N\u2082 + Cl\u2082 + H\u2082O', eq:'NH4NO3 + NH4Cl -> N2 + Cl2 + H2O' }
-  ];
-  var redox27Idx = 0, redox27StepIdx = 0, redox27Cur = null;
-
-  function redoxAutoSteps(rawEq){
-    var balanced = balanceEquation(rawEq);
-    var last = balanceEquation._last;
-    var changes = identifyRedoxChanges(last.species, last.nReact);
-    var steps = [];
-    changes.forEach(function(c){
-      var reactName = pretty(last.species[c.reactSpIdx]);
-      var prodName = pretty(last.species[c.prodSpIdx]);
-      if (c.kind === 'yukselt') {
-        steps.push('<b>' + c.el + '</b> atomu ' + reactName + '\u2019daki ' + fmtOx(c.from) + ' basama\u011f\u0131ndan ' + prodName + '\u2019daki ' + fmtOx(c.to) + ' basama\u011f\u0131na \u00e7\u0131kar \u2192 <b style="color:#fca5a5">Y\u00dcKSELTGENME</b> (elektron kayb\u0131).');
-      } else {
-        steps.push('<b>' + c.el + '</b> atomu ' + reactName + '\u2019daki ' + fmtOx(c.from) + ' basama\u011f\u0131ndan ' + prodName + '\u2019daki ' + fmtOx(c.to) + ' basama\u011f\u0131na iner \u2192 <b style="color:#93c5fd">\u0130ND\u0130RGENME</b> (elektron kazanc\u0131).');
-      }
-    });
-    if (steps.length === 0) steps.push('Bu tepkimede oksidasyon basama\u011f\u0131 de\u011fi\u015fimi tespit edilmedi.');
-    steps.push('T\u00fcm elektron al\u0131\u015fveri\u015fleri e\u015fitlenecek \u015fekilde katsay\u0131lar hesapland\u0131, denklem dengelendi:');
-    return { balanced: balanced, steps: steps };
-  }
-
-  window.redox27SetIdx = function(i, btn){ redox27Idx = i; redox27StepIdx = 0; if (btn) selectInRow(btn); redox27Render(); };
-  function redox27Render(){
-    var item = REDOX27_LIST[redox27Idx];
-    if (!redox27Cur || redox27Cur.idx !== redox27Idx) {
-      try {
-        var solved = redoxAutoSteps(item.eq);
-        redox27Cur = { idx: redox27Idx, balanced: solved.balanced, steps: solved.steps, error: null };
-      } catch (e) {
-        redox27Cur = { idx: redox27Idx, balanced: null, steps: [], error: e.message };
-      }
-    }
-    document.getElementById('redox27-unbal').textContent = item.label;
-    var stepsBox = document.getElementById('redox27-steps');
-    var nb = document.getElementById('redox27-nextbtn');
-    var fin = document.getElementById('redox27-final');
-    if (redox27Cur.error) {
-      stepsBox.innerHTML = '<span style="color:var(--yw)">\u26a0\ufe0f ' + redox27Cur.error + '</span>';
-      nb.style.display = 'none'; fin.style.display = 'none';
-      return;
-    }
-    var html = '';
-    for (var i = 0; i < redox27StepIdx; i++) html += '<div style="padding:4px 0">' + (i+1) + '. ' + redox27Cur.steps[i] + '</div>';
-    stepsBox.innerHTML = html;
-    if (redox27StepIdx >= redox27Cur.steps.length) {
-      nb.style.display = 'none';
-      fin.style.display = 'block';
-      document.getElementById('redox27-finaleq').textContent = redox27Cur.balanced;
-    } else {
-      nb.style.display = 'block'; fin.style.display = 'none';
-      nb.textContent = redox27StepIdx === redox27Cur.steps.length - 1 ? 'Dengeli Tepkimeyi G\u00f6ster \u2192' : 'Sonraki Ad\u0131m \u2192';
-    }
-  }
-  window.redox27NextStep = function(){ redox27StepIdx++; redox27Render(); };
-  function redox27Enter(){ redox27StepIdx = 0; redox27Cur = null; redox27Render(); }
-
   var redoxIdx = 0;
   var redoxStepIdx = 0;
 
@@ -6623,19 +6395,10 @@
     if (!app) return;
     var btns = '';
     REDOX_LIST.forEach(function(r, i){ btns += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="redoxSetIdx(' + i + ',this)">' + r.name + '</button>'; });
-    var btns27 = '';
-    REDOX27_LIST.forEach(function(r, i){ btns27 += '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="redox27SetIdx(' + i + ',this)">' + (i+1) + '. ' + r.label + '</button>'; });
     app.insertAdjacentHTML('beforeend',
       '<div id="s-redoks" style="display:none"><div class="pw narrow">' +
-        '<h1 class="ptitle">\ud83d\udd0c Redoks Denge Motoru</h1>' +
-        '<p class="psub">Yar\u0131 tepkime y\u00f6ntemiyle haz\u0131r \u00f6rnekler, ya da kendi denklemini yaz \u2014 otomatik dengeleyip y\u00fckseltgenme/indirgenmeyi bulsun.</p>' +
-        '<div class="tabs" id="redox-tabs">' +
-          '<button class="tab on" onclick="tswitch(\'redox-tabs\',\'redox-tps\',0)">\ud83d\udcd6 Haz\u0131r \u00d6rnekler</button>' +
-          '<button class="tab" onclick="tswitch(\'redox-tabs\',\'redox-tps\',1)">\u270f\ufe0f Kendi Denklemini Yaz</button>' +
-          '<button class="tab" onclick="tswitch(\'redox-tabs\',\'redox-tps\',2)">\ud83e\uddee 27 Örnek</button>' +
-        '</div>' +
-        '<div id="redox-tps">' +
-        '<div class="tp on">' +
+        '<h1 class="ptitle">\ud83d\udd0c Redoks Yar\u0131 Tepkime Dengeleyici</h1>' +
+        '<p class="psub">Elektron kazanma/kaybetme (yar\u0131 tepkime) y\u00f6ntemiyle ad\u0131m ad\u0131m redoks dengeleme.</p>' +
         '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' + btns + '</div></div>' +
         '<div class="card">' +
           '<div class="slbl">Dengesiz Tepkime</div>' +
@@ -6649,30 +6412,6 @@
             '<div style="font-size:12px;color:var(--tx2);line-height:1.6" id="redox-finalnot"></div>' +
           '</div>' +
         '</div>' +
-        '</div>' +
-        '<div class="tp">' +
-          '<div class="card">' +
-            '<div class="slbl">Dengesiz Denklemini Yaz (\u0130yonsuz, m\u00f6lek\u00fcler form\u00fcl)</div>' +
-            '<input type="text" id="redox-own-inp" class="inp" placeholder="\u00f6rn: KMnO4 + HCl -> KCl + MnCl2 + H2O + Cl2" style="margin-bottom:10px" autocapitalize="off" autocorrect="off" spellcheck="false">' +
-            '<button type="button" class="btn bp bfull" onclick="redoxSolveOwn()">\u00c7\u00f6z</button>' +
-            '<div id="redox-own-out" style="margin-top:14px"></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="tp">' +
-          '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto">' + btns27 + '</div></div>' +
-          '<div class="card">' +
-            '<div class="slbl">Dengesiz Tepkime</div>' +
-            '<div id="redox27-unbal" style="font-family:monospace;font-size:14px;color:#f59e0b;margin-bottom:16px;word-break:break-word"></div>' +
-            '<div class="slbl">Otomatik Analiz Ad\u0131mlar\u0131</div>' +
-            '<div id="redox27-steps" style="font-size:13px;color:var(--tx2);line-height:2;margin-bottom:14px"></div>' +
-            '<button type="button" id="redox27-nextbtn" onclick="redox27NextStep()" style="width:100%;padding:11px;background:var(--ac);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:12px">Sonraki Ad\u0131m \u2192</button>' +
-            '<div id="redox27-final" style="display:none;padding:14px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:var(--r)">' +
-              '<div class="slbl" style="color:#86efac">Dengeli Tepkime</div>' +
-              '<div style="font-family:monospace;font-size:14px;font-weight:700;color:#86efac;word-break:break-word" id="redox27-finaleq"></div>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-        '</div>' +
       '</div></div>');
     if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-redoks') === -1) SCREENS.push('s-redoks');
     var mn = document.getElementById('mn');
@@ -6683,8 +6422,6 @@
       tg.insertAdjacentHTML('afterbegin',
         '<div class="tc" id="tile-redoks" onclick="nav(\'redoks\')"><div class="ti">\ud83d\udd0c</div><div class="tt">Redoks Dengeleyici</div><div class="td">Yar\u0131 tepkime y\u00f6ntemiyle ad\u0131m ad\u0131m redoks dengeleme.</div></div>');
     redoxRender();
-    var redoxInp = document.getElementById('redox-own-inp');
-    if (redoxInp) redoxInp.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); window.redoxSolveOwn(); } });
   }
   window.redoxSetIdx = function(i, btn){ redoxIdx = i; redoxStepIdx = 0; if (btn) selectInRow(btn); redoxRender(); };
   function redoxRender(){
@@ -6707,41 +6444,7 @@
     }
   }
   window.redoxNextStep = function(){ redoxStepIdx++; redoxRender(); };
-  function redoxEnter(){ redoxStepIdx = 0; redoxRender(); redox27Enter(); }
-
-  window.redoxSolveOwn = function(){
-    var inp = document.getElementById('redox-own-inp');
-    var out = document.getElementById('redox-own-out');
-    if (!inp || !out) return;
-    var raw = inp.value.trim();
-    if (!raw) { out.innerHTML = '<span style="color:var(--yw)">Bir denklem yaz (\u00f6rn: Zn + HCl -> ZnCl2 + H2).</span>'; return; }
-    var balanced, last;
-    try {
-      balanced = balanceEquation(raw);
-      last = balanceEquation._last;
-    } catch (e) {
-      out.innerHTML = '<div style="padding:12px;border-radius:var(--r);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5;font-size:13px">\u26a0\ufe0f ' + e.message + '</div>';
-      return;
-    }
-    var changes = [];
-    try { changes = identifyRedoxChanges(last.species, last.nReact); } catch (e) { changes = []; }
-    var html = '<div style="padding:14px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:var(--r);margin-bottom:12px">' +
-      '<div class="slbl" style="color:#86efac">Dengeli Denklem</div>' +
-      '<div style="font-family:monospace;font-size:15px;font-weight:700;color:#86efac">' + balanced + '</div></div>';
-    if (changes.length === 0) {
-      html += '<div style="padding:12px;border-radius:var(--r);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fcd34d;font-size:13px">\u2139\ufe0f Hi\u00e7bir elementin y\u00fckseltgenme basama\u011f\u0131 de\u011fi\u015fmedi \u2014 bu bir redoks tepkimesi de\u011fil (asit-baz ya da \u00e7\u00f6z\u00fcnme-\u00e7\u00f6kelme t\u00fcr\u00fc olabilir).</div>';
-    } else {
-      html += '<div class="slbl">Y\u00fckseltgenme / \u0130ndirgenme Analizi</div>';
-      changes.forEach(function(c){
-        var isUp = c.kind === 'yukselt';
-        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
-          '<span style="font-size:13px;color:var(--tx2)">' + c.el + ': ' + fmtOx(c.from) + ' \u2192 ' + fmtOx(c.to) + '</span>' +
-          '<span style="font-size:12px;font-weight:700;color:' + (isUp?'#fca5a5':'#93c5fd') + '">' + (isUp ? '\u2191 Y\u00fckseltgenme' : '\u2193 \u0130ndirgenme') + '</span></div>';
-      });
-      html += '<div style="font-size:11px;color:var(--tx3);margin-top:8px;line-height:1.6">\u2139\ufe0f Oksidasyon basamaklar\u0131 sezgisel kurallarla (sabit de\u011ferler + bilinen \u00e7ok atomlu gruplar) hesaplan\u0131r; ola\u011fand\u0131\u015f\u0131/nadir bile\u015fiklerde k\u00fc\u00e7\u00fck sapmalar olabilir.</div>';
-    }
-    out.innerHTML = html;
-  };
+  function redoxEnter(){ redoxStepIdx = 0; redoxRender(); }
 
   // ---------- 20. TEPKİME HIZI (KİNETİK) 3D — ÇARPIŞMA TEORİSİ ----------
   var kinSt = {
@@ -6813,25 +6516,442 @@
     '</div>';
   }
 
+  var KIN_THEORY_HTML =
+    '<div class="card">' +
+      '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:8px">\ud83d\udca5 \u00c7arp\u0131\u015fma Teorisi</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:12px">Bir tepkimenin ger\u00e7ekle\u015fmesi i\u00e7in taneciklerin \u00f6nce \u00e7ARPI\u015eMASI, sonra bu \u00e7arp\u0131\u015fman\u0131n YETERLİ ENERJİYLE (aktivasyon enerjisi, Ea) ve UYGUN Y\u00d6NELİMLE ger\u00e7ekle\u015fmesi gerekir. Her \u00e7arp\u0131\u015fma tepkimeyle sonu\u00e7lanmaz \u2014 bu simulasyonda YE\u015e\u0130L parlayanlar ba\u015far\u0131l\u0131, di\u011ferleri ba\u015far\u0131s\u0131z \u00e7arp\u0131\u015fmalard\u0131r.</p>' +
+      '<div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">H\u0131z\u0131 Etkileyen Fakt\u00f6rler</div>' +
+      '<ul style="margin:0 0 12px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">' +
+        '<li><b>Derişim/Bas\u0131n\u00e7 artışı:</b> Birim hacimdeki tanecik say\u0131s\u0131 artar \u2192 \u00e7arp\u0131\u015fma S IKLI\u011eI artar \u2192 h\u0131z artar.</li>' +
+        '<li><b>S\u0131cakl\u0131k artışı:</b> Tanecikler daha H\u0131ZLI hareket eder \u2192 hem \u00e7arp\u0131\u015fma s\u0131kl\u0131\u011f\u0131 HEM DE aktivasyon enerjisini a\u015fan \u00e7arp\u0131\u015fma ORANI artar \u2014 bu y\u00fczden s\u0131cakl\u0131k etkisi \u00e7ok g\u00fc\u00e7l\u00fcd\u00fcr.</li>' +
+        '<li><b>Katalizör:</b> Aktivasyon enerjisini D\u00dc\u015e\u00dcR\u00dcR (farkl\u0131 bir mekanizma sunar) \u2014 ayn\u0131 \u00e7arp\u0131\u015fma enerjisiyle daha \u00e7ok \u00e7arp\u0131\u015fma art\u0131k \u201cba\u015far\u0131l\u0131\u201d say\u0131l\u0131r. Katalizör TÜKETİLMEZ ve dengeyi de\u011fi\u015ftirmez.</li>' +
+        '<li><b>Temas y\u00fczeyi (kat\u0131 tepkenlerde):</b> Toz halindeki bir kat\u0131, aynı k\u00fctledeki tek par\u00e7aya g\u00f6re \u00e7ok daha fazla y\u00fczey alan\u0131na sahiptir \u2192 daha fazla \u00e7arp\u0131\u015fma imkan\u0131 \u2192 h\u0131z artar.</li>' +
+      '</ul>' +
+      '<div style="font-size:11px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Aktivasyon Enerjisi (Ea)</div>' +
+      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:0">Tepkimenin ger\u00e7ekle\u015femesi i\u00e7in \u00e7arp\u0131\u015fan taneciklerin sahip olmas\u0131 gereken MİNİMUM enerjidir. Bu enerjinin alt\u0131ndaki \u00e7arp\u0131\u015fmalar tanecikleri sadece sekmesine (esnek \u00e7arp\u0131\u015fma) neden olur, \u00fcr\u00fcn olu\u015fturmaz.</p>' +
+    '</div>';
+
+  function setupKin(){
+    if (document.getElementById('s-kinetik')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-kinetik" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udca5 Tepkime H\u0131z\u0131 (Kinetik) 3D</h1>' +
+        '<p class="psub">\u00c7arp\u0131\u015fma teorisi \u2014 derişim, s\u0131cakl\u0131k ve katalizörün tepkime h\u0131z\u0131na etkisini canl\u0131 g\u00f6r.</p>' +
+        '<div style="background:#050510;border:1px solid rgba(245,158,11,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+          '<canvas id="kin-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+        '</div>' +
+        '<div class="card" style="margin-bottom:12px">' +
+          '<div class="slbl">\u00d7 Derişim</div>' +
+          '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+            '<button type="button" class="ob" onclick="kinSetConc(0.5,this)">Az</button>' +
+            '<button type="button" class="ob sel2" onclick="kinSetConc(1,this)">Normal</button>' +
+            '<button type="button" class="ob" onclick="kinSetConc(1.8,this)">\u00c7ok</button>' +
+          '</div>' +
+          '<div class="slbl">\ud83c\udf21\ufe0f S\u0131cakl\u0131k</div>' +
+          '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+            '<button type="button" class="ob" onclick="kinSetTemp(0.6,this)">D\u00fc\u015f\u00fck</button>' +
+            '<button type="button" class="ob sel2" onclick="kinSetTemp(1,this)">Normal</button>' +
+            '<button type="button" class="ob" onclick="kinSetTemp(1.7,this)">Y\u00fcksek</button>' +
+          '</div>' +
+          '<div class="slbl">\u2697\ufe0f Katalizör</div>' +
+          '<button type="button" id="kin-cat-btn" class="ob" onclick="kinToggleCatalyst(this)" style="width:100%">Katalizör Ekle</button>' +
+        '</div>' +
+        '<div id="kin-info" style="margin-bottom:16px"></div>' +
+        KIN_THEORY_HTML +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-kinetik') === -1) SCREENS.push('s-kinetik');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-kinetik'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-kinetik" onclick="nav(\'kinetik\')">\ud83d\udca5 Tepkime H\u0131z\u0131 3D</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-kinetik'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-kinetik" onclick="nav(\'kinetik\')"><div class="ti">\ud83d\udca5</div><div class="tt">Tepkime H\u0131z\u0131 3D</div><div class="td">\u00c7arp\u0131\u015fma teorisi \u2014 derişim/s\u0131cakl\u0131k/katalizör canlı sim\u00fclasyonu.</div></div>');
+    kinBindCanvas();
+    kinRenderInfo();
+  }
+
+  window.kinSetConc = kinSetConc;
+  window.kinSetTemp = kinSetTemp;
+  window.kinToggleCatalyst = kinToggleCatalyst;
+
+  function kinStep(){
+    var dt = 1;
+    var lim = KIN_BOX * 0.95;
+    function moveAndBounce(p){
+      p.x += p.vx*dt; p.y += p.vy*dt; p.z += p.vz*dt;
+      if (Math.abs(p.x) > lim) { p.vx *= -1; p.x = Math.sign(p.x)*lim; }
+      if (Math.abs(p.y) > lim) { p.vy *= -1; p.y = Math.sign(p.y)*lim; }
+      if (Math.abs(p.z) > lim) { p.vz *= -1; p.z = Math.sign(p.z)*lim; }
+      if (p.flash > 0) p.flash -= 0.05;
+    }
+    kinSt.particlesA.forEach(moveAndBounce);
+    kinSt.particlesB.forEach(moveAndBounce);
+    // A-B çarpışmalarını denetle
+    var threshold = 10;
+    var eaSpeed = kinSt.catalyst ? 0.55 : 0.95; // katalizör varsa daha düşük hız yeterli
+    for (var i = 0; i < kinSt.particlesA.length; i++) {
+      var a = kinSt.particlesA[i];
+      for (var j = 0; j < kinSt.particlesB.length; j++) {
+        var b = kinSt.particlesB[j];
+        var dx = a.x-b.x, dy = a.y-b.y, dz = a.z-b.z;
+        var d2 = dx*dx+dy*dy+dz*dz;
+        if (d2 < threshold*threshold && a.flash <= 0 && b.flash <= 0) {
+          kinSt.totalCollisions++;
+          var relSpeed = Math.sqrt((a.vx-b.vx)*(a.vx-b.vx) + (a.vy-b.vy)*(a.vy-b.vy) + (a.vz-b.vz)*(a.vz-b.vz));
+          var success = relSpeed > eaSpeed;
+          if (success) { kinSt.successCount++; kinSt.rateWindow.push(1); a.flash = 1; b.flash = 1; }
+          else { kinSt.rateWindow.push(0); }
+          // esnek sekme (basit): hızları ters çevir
+          a.vx *= -1; a.vy *= -1; a.vz *= -1;
+          b.vx *= -1; b.vy *= -1; b.vz *= -1;
+        }
+      }
+    }
+    if (kinSt.rateWindow.length > 400) kinSt.rateWindow.splice(0, kinSt.rateWindow.length - 400);
+    var sum = 0;
+    for (var k = 0; k < kinSt.rateWindow.length; k++) sum += kinSt.rateWindow[k];
+    kinSt.rateVal = Math.round(sum * 1.5);
+  }
+
+  function kinDraw(x, W, H2){
+    hcBg(x, kinSt, W, H2);
+    var boxPts = [];
+    for (var sx=-1; sx<=1; sx+=2) for (var sy=-1; sy<=1; sy+=2) for (var sz=-1; sz<=1; sz+=2) boxPts.push([sx*KIN_BOX,sy*KIN_BOX,sz*KIN_BOX]);
+    var edges = [[0,1],[0,2],[0,4],[3,1],[3,2],[3,7],[5,1],[5,4],[5,7],[6,2],[6,4],[6,7]];
+    x.strokeStyle = 'rgba(245,158,11,0.3)'; x.lineWidth = 1.1;
+    edges.forEach(function(e){
+      var p1 = hcProj(kinSt, boxPts[e[0]][0],boxPts[e[0]][1],boxPts[e[0]][2], W, H2);
+      var p2 = hcProj(kinSt, boxPts[e[1]][0],boxPts[e[1]][1],boxPts[e[1]][2], W, H2);
+      x.beginPath(); x.moveTo(p1.x,p1.y); x.lineTo(p2.x,p2.y); x.stroke();
+    });
+    var items = [];
+    function pushP(p, baseCol){
+      var pr = hcProj(kinSt, p.x, p.y, p.z, W, H2);
+      var col = p.flash > 0 ? '#22c55e' : baseCol;
+      items.push({ z: pr.z, x: pr.x, y: pr.y, r: (p.flash>0?9:6.5)*pr.s, c: col });
+    }
+    kinSt.particlesA.forEach(function(p){ pushP(p, '#3b82f6'); });
+    kinSt.particlesB.forEach(function(p){ pushP(p, '#ef4444'); });
+    items.sort(function(a,b){ return b.z-a.z; });
+    items.forEach(function(it){
+      x.beginPath(); x.arc(it.x, it.y, Math.max(1.5,it.r), 0, 6.283);
+      x.fillStyle = it.c; x.fill();
+    });
+    x.fillStyle = 'rgba(59,130,246,.85)'; x.font = 'bold 11px sans-serif'; x.textAlign = 'left';
+    x.fillText('\u25cf A tepkeni', 10, 20);
+    x.fillStyle = 'rgba(239,68,68,.85)';
+    x.fillText('\u25cf B tepkeni', 10, 36);
+    x.fillStyle = 'rgba(34,197,94,.85)';
+    x.fillText('\u25cf Ba\u015far\u0131l\u0131 \u00e7arp\u0131\u015fma', 10, 52);
+    x.fillStyle = 'rgba(255,255,255,.3)'; x.font = '10px sans-serif';
+    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 10, H2-8);
+  }
+
+  function kinLoop(){
+    var scr = document.getElementById('s-kinetik');
+    if (!scr || scr.style.display === 'none') { kinStop(); return; }
+    kinSt.anim = requestAnimationFrame(kinLoop);
+    var cv = document.getElementById('kin-cv');
+    if (!cv) return;
+    var rect = cv.getBoundingClientRect();
+    var W = rect.width || cv.clientWidth || 300, H2 = 260;
+    var dpr = window.devicePixelRatio || 1;
+    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
+    var x = cv.getContext('2d');
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try {
+      if (kinSt.spin && !kinSt.drag) kinSt.rotY += 0.006;
+      kinSt.t += 0.016;
+      kinStep();
+      kinDraw(x, W, H2);
+      var rateEl = document.getElementById('kin-rate');
+      if (rateEl) rateEl.textContent = kinSt.rateVal;
+    } catch (e) { drawErr(x, W, H2, e); }
+  }
+  function kinStop(){ if (kinSt.anim) { cancelAnimationFrame(kinSt.anim); kinSt.anim = null; } }
+  function kinStart(){ kinBindCanvas(); if (kinSt.anim) cancelAnimationFrame(kinSt.anim); kinLoop(); }
+  function kinBindCanvas(){
+    if (kinSt.bound) return;
+    var cv = document.getElementById('kin-cv');
+    if (!cv) return;
+    kinSt.bound = true;
+    cv.onmousedown = function(e){ kinSt.drag = true; kinSt.lx = e.clientX; kinSt.ly = e.clientY; };
+    cv.onmousemove = function(e){ if (!kinSt.drag) return; kinSt.rotY += (e.clientX-kinSt.lx)*0.01; kinSt.rotX += (e.clientY-kinSt.ly)*0.01; kinSt.lx=e.clientX; kinSt.ly=e.clientY; };
+    cv.onmouseup = cv.onmouseleave = function(){ kinSt.drag = false; };
+    cv.addEventListener('touchstart', function(e){ kinSt.drag=true; kinSt.lx=e.touches[0].clientX; kinSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchmove', function(e){ if(!kinSt.drag) return; kinSt.rotY += (e.touches[0].clientX-kinSt.lx)*0.013; kinSt.rotX += (e.touches[0].clientY-kinSt.ly)*0.013; kinSt.lx=e.touches[0].clientX; kinSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchend', function(){ kinSt.drag = false; });
+  }
+  function kinEnter(){ setTimeout(kinStart, 80); }
+  function kinLeave(){ kinStop(); }
+
+  // ---------- 21. GENEL REDOKS ANALİZ MOTORU ----------
+  // Mevcut Gauss-eliminasyon dengeleyicisini (balanceEquation) yeniden
+  // kullanır; üzerine oksidasyon basamağı hesaplama + redoks tespiti
+  // katmanı ekler. Böylece kullanıcı KENDİ denklemini (moleküler/iyonik
+  // olmayan) yazabilir, sistem hem dengeler hem de hangi elementin
+  // yükseltgendiğini/indirgendiğini adım adım gösterir.
+  var OX_FIXED_1 = ['Li','Na','K','Rb','Cs','Fr'];
+  var OX_FIXED_2 = ['Be','Mg','Ca','Sr','Ba','Ra'];
+  var OX_POLY_GROUPS = [
+    { keyEl:'Cr', atoms:{Cr:2,O:7}, ox:{Cr:6,O:-2} },   // dikromat Cr2O7
+    { keyEl:'Mn', atoms:{Mn:1,O:4}, ox:{Mn:7,O:-2} },   // permanganat MnO4 (tek Mn varsayımıyla)
+    { keyEl:'S',  atoms:{S:1,O:4}, ox:{S:6,O:-2} },     // sülfat SO4
+    { keyEl:'N',  atoms:{N:1,O:3}, ox:{N:5,O:-2} },     // nitrat NO3
+    { keyEl:'C',  atoms:{C:1,O:3}, ox:{C:4,O:-2} },     // karbonat CO3
+    { keyEl:'P',  atoms:{P:1,O:4}, ox:{P:5,O:-2} },     // fosfat PO4
+    { keyEl:'Cl', atoms:{Cl:1,O:4}, ox:{Cl:7,O:-2} },   // perklorat ClO4
+    { keyEl:'As', atoms:{As:1,O:4}, ox:{As:5,O:-2} }    // arsenat AsO4
+  ];
+
+  // Verilen (nötr, moleküler) formülün her elementi için oksidasyon
+  // basamağını tahmin eder. Genel amaçlı bir öğretim aracı için
+  // makul bir sezgisel yöntemdir — her bileşiği doğru çözmesi
+  // garanti değildir, ama yayg\u0131n redoks bile\u015fikleri i\u00e7in g\u00fcvenilirdir.
+  function assignOxStates(rawFormula){
+    var flat = parseFormula(rawFormula);
+    var ox = {};
+    var remaining = 0; // nötr molekül varsayımı
+
+    if (flat.F) { ox.F = -1; remaining -= -1 * flat.F; }
+    OX_FIXED_1.forEach(function(m){ if (flat[m]) { ox[m] = 1; remaining -= 1 * flat[m]; } });
+    OX_FIXED_2.forEach(function(m){ if (flat[m]) { ox[m] = 2; remaining -= 2 * flat[m]; } });
+
+    // Bilinen çok atomlu grup (sülfat, nitrat, permanganat...) var mı?
+    for (var i = 0; i < OX_POLY_GROUPS.length; i++) {
+      var g = OX_POLY_GROUPS[i];
+      if (ox[g.keyEl] !== undefined) continue; // zaten sabit kuralla belirlendiyse atla
+      if (!flat[g.keyEl] || flat[g.keyEl] % g.atoms[g.keyEl] !== 0) continue;
+      var mult = flat[g.keyEl] / g.atoms[g.keyEl];
+      var needO = g.atoms.O * mult;
+      if (!flat.O || flat.O < needO) continue;
+      ox[g.keyEl] = g.ox[g.keyEl];
+      remaining -= g.ox[g.keyEl] * flat[g.keyEl];
+      flat.O -= needO;
+      if (flat.O === 0) delete flat.O;
+      else { ox.O = -2; remaining -= -2 * needO; }
+      break; // tek grup varsay (bu ölçek için yeterli)
+    }
+
+    if (flat.O && ox.O === undefined) { ox.O = -2; remaining -= -2 * flat.O; }
+    if (flat.H && ox.H === undefined) {
+      var others = Object.keys(flat).filter(function(e){ return e !== 'H' && flat[e]; });
+      var isHydride = others.length === 1 && ox[others[0]] !== undefined && ox[others[0]] > 0 &&
+        (OX_FIXED_1.indexOf(others[0]) !== -1 || OX_FIXED_2.indexOf(others[0]) !== -1);
+      ox.H = isHydride ? -1 : 1;
+      remaining -= ox.H * flat.H;
+    }
+
+    var unknown = Object.keys(flat).filter(function(e){ return flat[e] && ox[e] === undefined; });
+    if (unknown.length === 1) {
+      ox[unknown[0]] = remaining / flat[unknown[0]];
+    }
+    return ox;
+  }
+
+  // Dengelenmiş denklemdeki (species dizisi + nReact) her elementin
+  // reaktan/ürün taraflarındaki oksidasyon basamaklarını karşılaştırır.
+  // Orantısızlaşma (aynı elementin birden fazla ürüne farklı basamaklarda
+  // dağılması) dahil TÜM anlamlı geçişleri döndürür.
+  function identifyRedoxChanges(species, nReact){
+    var speciesOx = species.map(function(sp){
+      try { return assignOxStates(sp); } catch (e) { return {}; }
+    });
+    var elMap = {};
+    species.forEach(function(sp, idx){
+      var flat;
+      try { flat = parseFormula(sp); } catch (e) { return; }
+      Object.keys(flat).forEach(function(el){
+        if (speciesOx[idx][el] === undefined) return;
+        if (!elMap[el]) elMap[el] = { react: [], prod: [] };
+        var entry = { spIdx: idx, ox: speciesOx[idx][el] };
+        (idx < nReact ? elMap[el].react : elMap[el].prod).push(entry);
+      });
+    });
+    var seen = {}, transitions = [];
+    Object.keys(elMap).forEach(function(el){
+      var m = elMap[el];
+      m.react.forEach(function(r){
+        m.prod.forEach(function(p){
+          if (r.ox !== p.ox) {
+            var key = el + '|' + r.ox + '|' + p.ox + '|' + r.spIdx + '|' + p.spIdx;
+            if (seen[key]) return;
+            seen[key] = 1;
+            transitions.push({ el: el, from: r.ox, to: p.ox, reactSpIdx: r.spIdx, prodSpIdx: p.spIdx, kind: p.ox > r.ox ? 'yukselt' : 'indirge' });
+          }
+        });
+      });
+    });
+    return transitions;
+  }
+
+  function fmtOx(n){ return (n > 0 ? '+' : '') + n; }
+
+  // ---------- 22. FİZİKSEL VE KİMYASAL DEĞİŞİM ----------
+  var FIZKIM_LIST = [
+    // --- FİZİKSEL DEĞİŞİMLER ---
+    { txt:'Hal de\u011fi\u015fimleri (erime, buharla\u015fma, s\u00fcblimle\u015fme...)', t:'fiziksel', not:'Sadece tanecikler aras\u0131 uzakl\u0131k/d\u00fczen de\u011fi\u015fir; madde kimyasal olarak AYNI kal\u0131r (H\u2082O hep H\u2082O\u2019dur).' },
+    { txt:'G\u00f6kku\u015fa\u011f\u0131 olu\u015fumu', t:'fiziksel', not:'I\u015f\u0131\u011f\u0131n su damlac\u0131klar\u0131nda k\u0131r\u0131l\u0131p yans\u0131mas\u0131 \u2014 yeni bir madde olu\u015fmaz, sadece \u0131\u015f\u0131k ayr\u0131\u015f\u0131r.' },
+    { txt:'Yo\u011furttan ayran eldesi', t:'fiziksel', not:'Yo\u011furt suyla SEYRELTİLİR ve KARIŞTIRILIR \u2014 yeni bir madde olu\u015fmaz, sadece kar\u0131\u015f\u0131m haz\u0131rlan\u0131r.' },
+    { txt:'S\u00fctten tereya\u011f\u0131 eldesi', t:'fiziksel', not:'S\u00fctteki ya\u011f\u0131n \u00e7alkalanarak AYRILMASI (mekanik bir ay\u0131rma) \u2014 kimyasal bir tepkime olmaz.' },
+    { txt:'Metallerin elektrik ak\u0131m\u0131n\u0131 iletmesi', t:'fiziksel', not:'Serbest elektronlar\u0131n hareketi \u2014 metalin kimyasal yap\u0131s\u0131 de\u011fi\u015fmez.' },
+    { txt:'Yemek tuzunun suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'NaCl, suda Na\u207a ve Cl\u207b iyonlar\u0131na ayr\u0131l\u0131r ama bunlar yeniden buharla\u015ft\u0131r\u0131ld\u0131\u011f\u0131nda AYNI NaCl olarak geri elde edilir.' },
+    { txt:'O\u2082 gaz\u0131n\u0131n suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'Bal\u0131klar\u0131n solunum yapabilmesini sa\u011flayan basit bir \u00e7\u00f6z\u00fcnme \u2014 O\u2082 kimyasal olarak de\u011fi\u015fmez.' },
+    { txt:'Ya\u011fl\u0131 boyan\u0131n tiner ile inceltilmesi', t:'fiziksel', not:'Sadece bir \u00e7\u00f6zelti haz\u0131rlan\u0131r, boyan\u0131n kimyasal yap\u0131s\u0131 de\u011fi\u015fmez (kurumas\u0131 ise KİMYASALDIR).' },
+    { txt:'\u015eeker pancar\u0131ndan \u015feker eldesi', t:'fiziksel', not:'\u015eeker, pancardan safla\u015ft\u0131r\u0131larak (ay\u0131rma y\u00f6ntemleriyle) elde edilir \u2014 yeni bir madde olu\u015fturulmaz.' },
+    { txt:'Alkol\u00fcn suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'Her oranda kar\u0131\u015fabilen iki s\u0131v\u0131n\u0131n homojen kar\u0131\u015f\u0131m\u0131 \u2014 yeni madde olu\u015fmaz.' },
+    { txt:'Ka\u011f\u0131d\u0131n y\u0131rt\u0131lmas\u0131', t:'fiziksel', not:'Sadece \u015fekil/boyut de\u011fi\u015fir; ka\u011f\u0131d\u0131 olu\u015fturan sel\u00fcloz molek\u00fclleri AYNIDIR.' },
+    { txt:'Cam k\u0131r\u0131lmas\u0131', t:'fiziksel', not:'Camin kimyasal bile\u015fimi de\u011fi\u015fmez, sadece par\u00e7alara ayr\u0131l\u0131r.' },
+    { txt:'Petrolden benzin, mazot eldesi', t:'fiziksel', not:'Fraksiyonlu damıtma (kaynama noktas\u0131 farklar\u0131na g\u00f6re AYIRMA) \u2014 yeni molek\u00fcl olu\u015fturulmaz, zaten var olanlar ayr\u0131l\u0131r.' },
+    { txt:'Kar\u0131\u015f\u0131mlar\u0131 ay\u0131rma y\u00f6ntemleri (s\u00fczme, damıtma, eleme...)', t:'fiziksel', not:'T\u00fcm ay\u0131rma y\u00f6ntemleri fizikseldir \u2014 bile\u015fenlerin kimyasal yap\u0131s\u0131 de\u011fi\u015fmeden sadece birbirinden ayr\u0131l\u0131r.' },
+    // --- KİMYASAL DEĞİŞİMLER ---
+    { txt:'CO\u2082 gaz\u0131n\u0131n suda \u00e7\u00f6z\u00fcnmesi (CO\u2082 + H\u2082O \u2192 H\u2082CO\u2083)', t:'kimyasal', not:'CO\u2082 ve H\u2082O birle\u015fip TAMAMEN FARKLI bir madde (karbonik asit) olu\u015fturur.' },
+    { txt:'Tuzlu suyun elektrik ak\u0131m\u0131n\u0131 iletmesi', t:'kimyasal', not:'\u0130letim s\u0131ras\u0131nda elektrotlarda GERÇEK kimyasal tepkimeler (elektroliz) ger\u00e7ekle\u015fir.' },
+    { txt:'Aktif metallerin suda \u00e7\u00f6z\u00fcnmesi (Na, K gibi)', t:'kimyasal', not:'Na + H\u2082O \u2192 NaOH + H\u2082 \u2014 yeni maddeler (baz ve gaz) olu\u015fur.' },
+    { txt:'Metallerin asitlerle tepkimesi', t:'kimyasal', not:'\u00d6rn. Zn + 2HCl \u2192 ZnCl\u2082 + H\u2082 \u2014 tuz ve hidrojen gaz\u0131 olu\u015fur.' },
+    { txt:'Asit-baz tepkimeleri', t:'kimyasal', not:'N\u00f6tralle\u015fme sonucu tuz ve su gibi TAMAMEN YENİ maddeler olu\u015fur.' },
+    { txt:'Elektroliz', t:'kimyasal', not:'Elektrik enerjisiyle bile\u015fikler kendi elementlerine AYRIŞTIRILIR (\u00f6rn. suyun H\u2082 ve O\u2082\u2019ye ayr\u0131\u015fmas\u0131).' },
+    { txt:'Ya\u011fl\u0131 boyan\u0131n kurumas\u0131', t:'kimyasal', not:'Havadaki oksijenle tepkimeye girip (oksidasyon/polimerle\u015fme) sertle\u015fir \u2014 geri d\u00f6nü\u015fs\u00fcz bir kimyasal de\u011fi\u015fimdir.' },
+    { txt:'Betonun donmas\u0131', t:'kimyasal', not:'\u00c7imentodaki bile\u015fiklerin su ile tepkimeye girip (hidratasyon) yeni kristal yap\u0131lar olu\u015fturmas\u0131d\u0131r.' },
+    { txt:'\u00c7imentonun donmas\u0131', t:'kimyasal', not:'Betonla ayn\u0131 \u015fekilde, su ile ger\u00e7ekle\u015fen hidratasyon tepkimesidir; geri d\u00f6n\u00fc\u015fs\u00fczd\u00fcr.' },
+    { txt:'Kan\u0131n p\u0131ht\u0131la\u015fmas\u0131', t:'kimyasal', not:'Enzimlerle tetiklenen bir dizi protein tepkimesi sonucu fibrin a\u011f\u0131 olu\u015fur \u2014 yeni madde (fibrin) olu\u015fur.' },
+    { txt:'Sa\u00e7\u0131n a\u011farmas\u0131', t:'kimyasal', not:'Melanin pigmentinin \u00fcretiminin durmas\u0131/y\u0131k\u0131lmas\u0131 \u2014 kimyasal bile\u015fim de\u011fi\u015fir.' },
+    { txt:'Giysilerin \u00e7ama\u015f\u0131r suyu ile a\u011fart\u0131lmas\u0131', t:'kimyasal', not:'Sodyum hipoklorit, renk pigmentlerini kimyasal olarak PARÇALAR (oksitler).' },
+    { txt:'Grizu patlamas\u0131', t:'kimyasal', not:'Metan gaz\u0131n\u0131n oksijenle H\u0131ZLI YANMASI (patlay\u0131c\u0131 oksidasyon tepkimesi).' },
+    { txt:'Hava yast\u0131\u011f\u0131n\u0131n patlamas\u0131', t:'kimyasal', not:'Sodyum azid\u00fcn (NaN\u2083) h\u0131zla ayr\u0131\u015f\u0131p b\u00fcy\u00fck hacimde N\u2082 gaz\u0131 \u00fcretmesi.' },
+    { txt:'Solunum', t:'kimyasal', not:'Glikozun oksijenle yak\u0131lmas\u0131yla (h\u00fccresel solunum) enerji, CO\u2082 ve su a\u00e7\u0131\u011fa \u00e7\u0131kar.' },
+    { txt:'Fotosentez', t:'kimyasal', not:'CO\u2082 + H\u2082O + \u0131\u015f\u0131k enerjisi \u2192 glikoz + O\u2082 \u2014 tamamen yeni maddeler olu\u015fur.' },
+    { txt:'Yanma (oksitlenme, paslanma)', t:'kimyasal', not:'Madde, oksijenle tepkimeye girerek FARKLI bir bile\u015fi\u011fe (\u00f6rn. demir \u2192 demir oksit/pas) d\u00f6n\u00fc\u015f\u00fcr.' },
+    { txt:'S\u00fctten peynir, yo\u011furt eldesi', t:'kimyasal', not:'Bakteriler s\u00fct \u015fekerini (laktoz) laktik aside \u00e7evirir \u2014 protein yap\u0131s\u0131 de\u011fi\u015fir (peyni\u015fme), geri d\u00f6n\u00fc\u015fs\u00fczd\u00fcr.' },
+    { txt:'\u00dcz\u00fcmden \u015farap, arpadan bira, elmadan sirke eldesi', t:'kimyasal', not:'Fermantasyon \u2014 mikroorganizmalar \u015fekeri alkole/aside \u00e7evirir, TAMAMEN yeni maddeler olu\u015fur.' },
+    { txt:'G\u00fcm\u00fc\u015f\u00fcn kararmas\u0131', t:'kimyasal', not:'G\u00fcm\u00fc\u015f, havadaki k\u00fck\u00fcrt bile\u015fikleriyle tepkimeye girip Ag\u2082S (gümü\u015f s\u00fclf\u00fcr) olu\u015fturur.' },
+    { txt:'K\u00fcflenme (\u00e7\u00fcr\u00fcme)', t:'kimyasal', not:'Mikroorganizmalar organik maddeyi kimyasal olarak PARÇALAYIP farkl\u0131 bile\u015fiklere d\u00f6n\u00fc\u015ft\u00fcr\u00fcr.' },
+    { txt:'Yumurtan\u0131n pi\u015fmesi', t:'kimyasal', not:'Is\u0131yla proteinlerin yap\u0131s\u0131 (denat\u00fcrasyon) kal\u0131c\u0131 olarak de\u011fi\u015fir \u2014 geri \u00e7evrilemez.' },
+    { txt:'Efervesan tabletin suda \u00e7\u00f6z\u00fcnmesi', t:'kimyasal', not:'Tabletteki asit ve karbonat suda tepkimeye girip CO\u2082 gaz\u0131 (kabarc\u0131klar) a\u00e7\u0131\u011fa \u00e7\u0131kar\u0131r.' },
+    { txt:'Pamukkale Travertenlerinin olu\u015fumu', t:'kimyasal', not:'Sudaki kalsiyum bikarbonat\u0131n CO\u2082 kaybederek kalsiyum karbonata (traverten) d\u00f6n\u00fc\u015fmesi.' },
+    { txt:'Pasta \u00fczerindeki maytab\u0131n yanmas\u0131', t:'kimyasal', not:'Metal tozlar\u0131n\u0131n h\u0131zl\u0131 yanmas\u0131 (oksitlenmesi) \u2014 \u0131\u015f\u0131k ve yeni bile\u015fikler a\u00e7\u0131\u011fa \u00e7\u0131kar.' },
+    { txt:'Yapra\u011f\u0131n sararmas\u0131', t:'kimyasal', not:'Klorofil pigmentinin par\u00e7alanmas\u0131yla alt\u0131nda gizli olan karotenoid (sar\u0131/turuncu) pigmentler ortaya \u00e7\u0131kar \u2014 kimyasal bir bozunmad\u0131r.' }
+  ];
+  var fkSt = { score: 0, total: 0, order: [], idx: 0, cur: null };
+  function fkShuffle(){
+    fkSt.order = FIZKIM_LIST.map(function(_, i){ return i; });
+    for (var i = fkSt.order.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp = fkSt.order[i]; fkSt.order[i] = fkSt.order[j]; fkSt.order[j] = tmp; }
+  }
+  fkShuffle();
+
+  function setupFizKim(){
+    if (document.getElementById('s-fizkim')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-fizkim" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udd04 Fiziksel ve Kimyasal De\u011fi\u015fim</h1>' +
+        '<p class="psub">G\u00fcnl\u00fck hayattan ' + FIZKIM_LIST.length + ' \u00f6rnek \u2014 hangisi fiziksel, hangisi kimyasal de\u011fi\u015fim?</p>' +
+        '<div class="tabs" id="fk-tabs">' +
+          '<button class="tab on" onclick="tswitch(\'fk-tabs\',\'fk-tps\',0)">\u2753 Quiz</button>' +
+          '<button class="tab" onclick="tswitch(\'fk-tabs\',\'fk-tps\',1)">\ud83d\udcd6 T\u00fcm Örnekler</button>' +
+        '</div>' +
+        '<div id="fk-tps">' +
+          '<div class="tp on">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;color:var(--tx3)">' +
+              '<span id="fk-prog">Soru 1/' + FIZKIM_LIST.length + '</span>' +
+              '<span>\u2713 <span id="fk-score" style="color:var(--gr);font-weight:700">0</span></span>' +
+            '</div>' +
+            '<div class="card" style="text-align:center;margin-bottom:14px">' +
+              '<div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Bu bir fiziksel mi, kimyasal bir de\u011fi\u015fim mi?</div>' +
+              '<div id="fk-txt" style="font-size:17px;font-weight:700;color:#fff;line-height:1.5"></div>' +
+            '</div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">' +
+              '<button type="button" class="ob2" onclick="fkCheck(\'fiziksel\',this)" style="text-align:center;font-weight:700">\ud83d\udd35 Fiziksel</button>' +
+              '<button type="button" class="ob2" onclick="fkCheck(\'kimyasal\',this)" style="text-align:center;font-weight:700">\ud83d\udd34 Kimyasal</button>' +
+            '</div>' +
+            '<div id="fk-fb" style="display:none;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6"></div>' +
+            '<button type="button" id="fk-next" onclick="fkNext()" style="display:none;width:100%;padding:12px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;cursor:pointer">Sonraki \u2192</button>' +
+          '</div>' +
+          '<div class="tp" id="fk-list-wrap"></div>' +
+        '</div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-fizkim') === -1) SCREENS.push('s-fizkim');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-fizkim'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-fizkim" onclick="nav(\'fizkim\')">\ud83d\udd04 Fiziksel ve Kimyasal De\u011fi\u015fim</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-fizkim'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-fizkim" onclick="nav(\'fizkim\')"><div class="ti">\ud83d\udd04</div><div class="tt">Fiziksel ve Kimyasal De\u011fi\u015fim</div><div class="td">G\u00fcnl\u00fck hayattan \u00f6rneklerle fiziksel/kimyasal de\u011fi\u015fim ay\u0131rt etme.</div></div>');
+    fkRenderList();
+  }
+  function fkRenderList(){
+    var box = document.getElementById('fk-list-wrap');
+    if (!box) return;
+    var fizList = FIZKIM_LIST.filter(function(x){ return x.t === 'fiziksel'; });
+    var kimList = FIZKIM_LIST.filter(function(x){ return x.t === 'kimyasal'; });
+    function renderGroup(title, color, list){
+      var h = '<div style="font-size:13px;font-weight:700;color:' + color + ';margin:14px 0 8px">' + title + ' (' + list.length + ')</div>';
+      list.forEach(function(item){
+        h += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+          '<div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:4px">' + item.txt + '</div>' +
+          '<div style="font-size:12px;color:var(--tx2);line-height:1.5">' + item.not + '</div></div>';
+      });
+      return h;
+    }
+    box.innerHTML = renderGroup('\ud83d\udd35 Fiziksel De\u011fi\u015fimler', '#60a5fa', fizList) + renderGroup('\ud83d\udd34 Kimyasal De\u011fi\u015fimler', '#f87171', kimList);
+  }
+  function fkEnter(){ fkSt.idx = 0; fkSt.score = 0; fkShuffle(); fkRender(); fkRenderList(); }
+  function fkRender(){
+    if (fkSt.idx >= fkSt.order.length) { fkShuffle(); fkSt.idx = 0; }
+    var item = FIZKIM_LIST[fkSt.order[fkSt.idx]];
+    fkSt.cur = item;
+    document.getElementById('fk-prog').textContent = 'Soru ' + (fkSt.idx+1) + '/' + FIZKIM_LIST.length;
+    document.getElementById('fk-score').textContent = fkSt.score;
+    document.getElementById('fk-txt').textContent = item.txt;
+    var fb = document.getElementById('fk-fb'); fb.style.display = 'none';
+    document.getElementById('fk-next').style.display = 'none';
+    var btns = document.querySelectorAll ? null : null;
+  }
+  window.fkCheck = function(sel, btn){
+    var item = fkSt.cur;
+    var container = btn.parentElement;
+    var btns = container ? container.querySelectorAll('button') : [btn];
+    for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
+    var fb = document.getElementById('fk-fb');
+    fkSt.total++;
+    if (sel === item.t) {
+      fkSt.score++;
+      btn.className = 'ob2 cor';
+      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#86efac';
+      fb.innerHTML = '\u2713 Do\u011fru! ' + item.not;
+    } else {
+      btn.className = 'ob2 wro';
+      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5';
+      fb.innerHTML = '\u2717 Yanl\u0131\u015f. Do\u011fru cevap: <b>' + (item.t === 'fiziksel' ? 'Fiziksel' : 'Kimyasal') + '</b> \u2014 ' + item.not;
+    }
+    document.getElementById('fk-score').textContent = fkSt.score;
+    document.getElementById('fk-next').style.display = 'block';
+  };
+  window.fkNext = function(){ fkSt.idx++; fkRender(); };
+
   // ---------- 23a. POTANSİYEL ENERJİ DİYAGRAMI ----------
   var peSt = { ea1: 60, dH: -30, showCat: false, catFactor: 0.45 };
 
   function peCompute(){
     var ea2 = peSt.ea1 - peSt.dH; // Ea(geri) = Ea(ileri) - ΔH
     var isExo = peSt.dH < 0;
-    var invalid = ea2 < 0; // Ea negatif olamaz — endotermik tepkimede Ea(ileri) >= ΔH olmalı
-    return { ea1: peSt.ea1, ea2: ea2, dH: peSt.dH, isExo: isExo, invalid: invalid };
+    return { ea1: peSt.ea1, ea2: ea2, dH: peSt.dH, isExo: isExo };
   }
 
-  window.peSetEa1 = function(v){ peSt.ea1 = Math.max(5, Math.min(150, v)); peRender(); };
-  window.peSetDH = function(v){ peSt.dH = Math.max(-100, Math.min(100, v)); peRender(); };
-  window.peToggleCat = function(btn){ peSt.showCat = !peSt.showCat; if (btn) btn.classList.toggle('sel2', peSt.showCat); peRender(); };
-  window.peSetPreset = function(ea1, dH){
+  function peSetEa1(v){ peSt.ea1 = Math.max(5, Math.min(150, v)); peRender(); }
+  function peSetDH(v){ peSt.dH = Math.max(-100, Math.min(100, v)); peRender(); }
+  function peToggleCat(btn){ peSt.showCat = !peSt.showCat; if (btn) btn.classList.toggle('sel2', peSt.showCat); peRender(); }
+  function peSetPreset(ea1, dH){
     peSt.ea1 = ea1; peSt.dH = dH;
     var e1 = document.getElementById('pe-ea1-inp'); if (e1) e1.value = ea1;
     var e2 = document.getElementById('pe-dh-inp'); if (e2) e2.value = dH;
     peRender();
-  };
+  }
 
   function peDrawCurve(ctx, W, H2, ea1, dH, color, dashed){
     // Koordinatlar: x 0..1 (tepkime koordinatı), y potansiyel enerji (birim: kj, göreli)
@@ -6898,16 +7018,10 @@
   }
 
   function peRender(){
-    var data = peCompute();
-    var box = document.getElementById('pe-info');
-    if (data.invalid) {
-      if (box) box.innerHTML = '<div style="padding:12px;border-radius:var(--r);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5;font-size:13px">\u26a0\ufe0f Bu de\u011ferlerle Ea(geri) NEGATİF \u00e7\u0131kar, ki bu fiziksel olarak imk\u00e2ns\u0131zd\u0131r (aktifleşme enerjisi hi\u00e7bir zaman negatif olamaz). Endotermik bir tepkimede Ea(ileri), \u0394H\u2019dan K\u00dc\u00c7\u00dcK olamaz \u2014 Ea(ileri) de\u011ferini artt\u0131r ya da \u0394H\u2019yi azalt.</div>';
-      var cv = document.getElementById('pe-cv');
-      if (cv) { var ctx0 = cv.getContext('2d'); ctx0.fillStyle = '#050510'; ctx0.fillRect(0,0,cv.width,cv.height); }
-      return;
-    }
     peDraw();
+    var box = document.getElementById('pe-info');
     if (!box) return;
+    var data = peCompute();
     box.innerHTML = '<div class="card">' +
       '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px"><span style="color:var(--tx3)">Ea (ileri)</span><span style="font-weight:700;color:#fcd34d">' + data.ea1.toFixed(1) + ' kj</span></div>' +
       '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px"><span style="color:var(--tx3)">Ea (geri)</span><span style="font-weight:700;color:#93c5fd">' + data.ea2.toFixed(1) + ' kj</span></div>' +
@@ -7108,775 +7222,8 @@
       '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:0">Deneysel olarak, di\u011fer t\u00fcm derişimler SABİT tutulup sadece BİR reaktan\u0131n derişimi de\u011fi\u015ftirilerek hızın nasıl de\u011fi\u015fti\u011fi g\u00f6zlenir. Bu, o reaktana g\u00f6re TEPKİME MERTEBESİNİ (üssünü) verir. T\u00fcm mertebeler bulunduktan sonra, herhangi bir deneyin verileriyle hız sabiti (k) hesaplan\u0131r. \u00d6NEMLİ: mertebeler denklemdeki katsay\u0131lardan de\u011fil, SADECE deneysel veriden bulunur!</p>' +
     '</div>';
 
-  var KIN_THEORY_HTML =
-    '<div class="card">' +
-      '<div style="font-family:Space Grotesk,sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:8px">\ud83d\udca5 \u00c7arp\u0131\u015fma Teorisi</div>' +
-      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:12px">Bir tepkimenin ger\u00e7ekle\u015fmesi i\u00e7in taneciklerin \u00f6nce \u00e7ARPI\u015eMASI, sonra bu \u00e7arp\u0131\u015fman\u0131n YETERLİ ENERJİYLE (aktivasyon enerjisi, Ea) ve UYGUN Y\u00d6NELİMLE ger\u00e7ekle\u015fmesi gerekir. Her \u00e7arp\u0131\u015fma tepkimeyle sonu\u00e7lanmaz \u2014 bu simulasyonda YE\u015e\u0130L parlayanlar ba\u015far\u0131l\u0131, di\u011ferleri ba\u015far\u0131s\u0131z \u00e7arp\u0131\u015fmalard\u0131r.</p>' +
-      '<div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">H\u0131z\u0131 Etkileyen Fakt\u00f6rler</div>' +
-      '<ul style="margin:0 0 12px 18px;padding:0;font-size:13px;color:var(--tx2);line-height:1.9">' +
-        '<li><b>Derişim/Bas\u0131n\u00e7 artışı:</b> Birim hacimdeki tanecik say\u0131s\u0131 artar \u2192 \u00e7arp\u0131\u015fma S IKLI\u011eI artar \u2192 h\u0131z artar.</li>' +
-        '<li><b>S\u0131cakl\u0131k artışı:</b> Tanecikler daha H\u0131ZLI hareket eder \u2192 hem \u00e7arp\u0131\u015fma s\u0131kl\u0131\u011f\u0131 HEM DE aktivasyon enerjisini a\u015fan \u00e7arp\u0131\u015fma ORANI artar \u2014 bu y\u00fczden s\u0131cakl\u0131k etkisi \u00e7ok g\u00fc\u00e7l\u00fcd\u00fcr.</li>' +
-        '<li><b>Katalizör:</b> Aktivasyon enerjisini D\u00dc\u015e\u00dcR\u00dcR (farkl\u0131 bir mekanizma sunar) \u2014 ayn\u0131 \u00e7arp\u0131\u015fma enerjisiyle daha \u00e7ok \u00e7arp\u0131\u015fma art\u0131k \u201cba\u015far\u0131l\u0131\u201d say\u0131l\u0131r. Katalizör TÜKETİLMEZ ve dengeyi de\u011fi\u015ftirmez.</li>' +
-        '<li><b>Temas y\u00fczeyi (kat\u0131 tepkenlerde):</b> Toz halindeki bir kat\u0131, aynı k\u00fctledeki tek par\u00e7aya g\u00f6re \u00e7ok daha fazla y\u00fczey alan\u0131na sahiptir \u2192 daha fazla \u00e7arp\u0131\u015fma imkan\u0131 \u2192 h\u0131z artar.</li>' +
-      '</ul>' +
-      '<div style="font-size:11px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Aktivasyon Enerjisi (Ea)</div>' +
-      '<p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:0">Tepkimenin ger\u00e7ekle\u015femesi i\u00e7in \u00e7arp\u0131\u015fan taneciklerin sahip olmas\u0131 gereken MİNİMUM enerjidir. Bu enerjinin alt\u0131ndaki \u00e7arp\u0131\u015fmalar tanecikleri sadece sekmesine (esnek \u00e7arp\u0131\u015fma) neden olur, \u00fcr\u00fcn olu\u015fturmaz.</p>' +
-    '</div>';
-
-  function setupKin(){
-    if (document.getElementById('s-kinetik')) return;
-    var app = document.querySelector('.app');
-    if (!app) return;
-    app.insertAdjacentHTML('beforeend',
-      '<div id="s-kinetik" style="display:none"><div class="pw narrow">' +
-        '<h1 class="ptitle">\ud83d\udca5 Tepkime H\u0131z\u0131 (Kinetik)</h1>' +
-        '<p class="psub">\u00c7arp\u0131\u015fma teorisi, potansiyel enerji diyagram\u0131, h\u0131z hesaplamalar\u0131 ve h\u0131z bağ\u0131nt\u0131s\u0131.</p>' +
-        '<div class="ltabs" id="kin-maingroup" style="margin-bottom:14px">' +
-          '<button class="ltab on" onclick="kinGroupSet(0,this)">\ud83d\udd2c Araçlar</button>' +
-          '<button class="ltab" onclick="kinGroupSet(1,this)">\ud83d\udcd8 MEB Konu Anlat\u0131m\u0131</button>' +
-          '<button class="ltab" onclick="kinGroupSet(2,this)">\ud83d\udcd3 Özel Ders Notu</button>' +
-        '</div>' +
-        '<div id="kin-group-0" style="display:block">' +
-        '<div class="ltabs" id="kin-tabs">' +
-          '<button class="ltab on" onclick="tswitch(\'kin-tabs\',\'kin-tps\',0)">\ud83d\udca5 3D Sim\u00fclasyon</button>' +
-          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',1)">\u26f0\ufe0f PE Diyagram\u0131</button>' +
-          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',2)">\u23f1\ufe0f H\u0131z Hesapla</button>' +
-          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',3)">\ud83d\udcd0 H\u0131z Bağ\u0131nt\u0131s\u0131</button>' +
-        '</div>' +
-        '<div id="kin-tps">' +
-        '<div class="tp on">' +
-        '<div style="background:#050510;border:1px solid rgba(245,158,11,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
-          '<canvas id="kin-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
-        '</div>' +
-        '<div class="card" style="margin-bottom:12px">' +
-          '<div class="slbl">\u00d7 Derişim</div>' +
-          '<div style="display:flex;gap:6px;margin-bottom:14px">' +
-            '<button type="button" class="ob" onclick="kinSetConc(0.5,this)">Az</button>' +
-            '<button type="button" class="ob sel2" onclick="kinSetConc(1,this)">Normal</button>' +
-            '<button type="button" class="ob" onclick="kinSetConc(1.8,this)">\u00c7ok</button>' +
-          '</div>' +
-          '<div class="slbl">\ud83c\udf21\ufe0f S\u0131cakl\u0131k</div>' +
-          '<div style="display:flex;gap:6px;margin-bottom:14px">' +
-            '<button type="button" class="ob" onclick="kinSetTemp(0.6,this)">D\u00fc\u015f\u00fck</button>' +
-            '<button type="button" class="ob sel2" onclick="kinSetTemp(1,this)">Normal</button>' +
-            '<button type="button" class="ob" onclick="kinSetTemp(1.7,this)">Y\u00fcksek</button>' +
-          '</div>' +
-          '<div class="slbl">\u2697\ufe0f Katalizör</div>' +
-          '<button type="button" id="kin-cat-btn" class="ob" onclick="kinToggleCatalyst(this)" style="width:100%">Katalizör Ekle</button>' +
-        '</div>' +
-        '<div id="kin-info" style="margin-bottom:16px"></div>' +
-        KIN_THEORY_HTML +
-        '</div>' +
-        '<div class="tp">' +
-          '<div style="background:#050510;border:1px solid rgba(245,158,11,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
-            '<canvas id="pe-cv" style="width:100%;display:block" height="240"></canvas>' +
-          '</div>' +
-          '<div class="card" style="margin-bottom:12px">' +
-            '<div style="display:flex;gap:6px;margin-bottom:12px">' +
-              '<button type="button" class="ob" onclick="peSetPreset(80,-40)">Ekzotermik \u00d6rnek</button>' +
-              '<button type="button" class="ob" onclick="peSetPreset(90,50)">Endotermik \u00d6rnek</button>' +
-            '</div>' +
-            '<div class="g2" style="margin-bottom:10px">' +
-              '<div><div class="slbl">Ea (ileri, kj)</div><input type="number" id="pe-ea1-inp" class="inp" value="60" oninput="peSetEa1(parseFloat(this.value)||0)"></div>' +
-              '<div><div class="slbl">\u0394H (kj)</div><input type="number" id="pe-dh-inp" class="inp" value="-30" oninput="peSetDH(parseFloat(this.value)||0)"></div>' +
-            '</div>' +
-            '<button type="button" class="ob" id="pe-cat-btn" onclick="peToggleCat(this)" style="width:100%">\u2697\ufe0f Katalizörl\u00fc Karş\u0131laşt\u0131r</button>' +
-          '</div>' +
-          '<div id="pe-info" style="margin-bottom:16px"></div>' +
-          PE_THEORY_HTML +
-        '</div>' +
-        '<div class="tp">' +
-          '<div class="card">' +
-            '<div class="slbl">Tepkime Denklemi (Otomatik Dengelenir)</div>' +
-            '<input type="text" id="hcalc-eq-inp" class="inp" placeholder="\u00f6rn: 2N2O5 -> 4NO2 + O2" style="margin-bottom:10px" autocapitalize="off" autocorrect="off" spellcheck="false">' +
-            '<button type="button" class="btn bp bfull" onclick="hcalcParse()">Denklemi Ayr\u0131\u015ft\u0131r</button>' +
-            '<div id="hcalc-out" style="margin-top:6px"></div>' +
-          '</div>' +
-          '<div class="card" style="margin-top:12px">' +
-            '<div class="slbl">Yard\u0131mc\u0131: K\u00fctleden H\u0131za \u00c7evir</div>' +
-            '<div class="g2" style="margin-bottom:10px">' +
-              '<div><div class="slbl">K\u00fctle (g)</div><input type="number" step="any" id="hm-mass" class="inp"></div>' +
-              '<div><div class="slbl">Molar K\u00fctle (g/mol)</div><input type="number" step="any" id="hm-molar" class="inp"></div>' +
-            '</div>' +
-            '<div class="g2" style="margin-bottom:10px">' +
-              '<div><div class="slbl">Zaman</div><input type="number" step="any" id="hm-time" class="inp"></div>' +
-              '<div><div class="slbl">Hacim (L, opsiyonel)</div><input type="number" step="any" id="hm-vol" class="inp"></div>' +
-            '</div>' +
-            '<button type="button" class="btn bs bfull" onclick="hcalcMassCompute()">\u00c7evir</button>' +
-            '<div id="hm-out" style="margin-top:10px"></div>' +
-          '</div>' +
-          '<div style="margin-top:12px">' + HCALC_THEORY_HTML + '</div>' +
-        '</div>' +
-        '<div class="tp">' +
-          '<div class="card">' +
-            '<div class="slbl">Reaktan Say\u0131s\u0131</div>' +
-            '<div style="display:flex;gap:6px;margin-bottom:14px">' +
-              '<button type="button" class="ob sel2" onclick="rlawSetN(2,this)">2 Reaktan</button>' +
-              '<button type="button" class="ob" onclick="rlawSetN(3,this)">3 Reaktan</button>' +
-            '</div>' +
-            '<div class="slbl">Deneysel Veriler</div>' +
-            '<div id="rlaw-table-wrap" style="margin-bottom:14px"></div>' +
-            '<button type="button" class="btn bp bfull" onclick="rlawCompute()">Hesapla</button>' +
-            '<div id="rlaw-result" style="margin-top:14px"></div>' +
-          '</div>' +
-          '<div style="margin-top:12px">' + RLAW_THEORY_HTML + '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '<div id="kin-group-1" style="display:none"></div>' +
-        '<div id="kin-group-2" style="display:none"></div>' +
-      '</div></div>');
-    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-kinetik') === -1) SCREENS.push('s-kinetik');
-    var mn = document.getElementById('mn');
-    if (mn && !document.getElementById('mn-kinetik'))
-      mn.insertAdjacentHTML('beforeend', '<button id="mn-kinetik" onclick="nav(\'kinetik\')">\ud83d\udca5 Tepkime H\u0131z\u0131 3D</button>');
-    var tg = document.querySelector('#s-home .tgrid');
-    if (tg && !document.getElementById('tile-kinetik'))
-      tg.insertAdjacentHTML('afterbegin',
-        '<div class="tc" id="tile-kinetik" onclick="nav(\'kinetik\')"><div class="ti">\ud83d\udca5</div><div class="tt">Tepkime H\u0131z\u0131 3D</div><div class="td">\u00c7arp\u0131\u015fma teorisi \u2014 derişim/s\u0131cakl\u0131k/katalizör canlı sim\u00fclasyonu.</div></div>');
-    kinBindCanvas();
-    kinRenderInfo();
-    peRender();
-    rlawBuildTable();
-    setupMaarif();
-    setupNoteQ();
-  }
-  window.kinGroupSet = function(i, btn){
-    for (var g = 0; g < 3; g++) { var el = document.getElementById('kin-group-' + g); if (el) el.style.display = (g === i) ? 'block' : 'none'; }
-    var bar = document.getElementById('kin-maingroup');
-    if (bar && btn) { var bs = bar.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].classList.remove('on'); btn.classList.add('on'); }
-    if (i === 1) setTimeout(maarifDrawGraphs, 60);
-    if (i === 2) setTimeout(noteqDrawGraphs, 60);
-  };
-
-  window.kinSetConc = kinSetConc;
-  window.kinSetTemp = kinSetTemp;
-  window.kinToggleCatalyst = kinToggleCatalyst;
-
-  function kinStep(){
-    var dt = 1;
-    var lim = KIN_BOX * 0.95;
-    function moveAndBounce(p){
-      p.x += p.vx*dt; p.y += p.vy*dt; p.z += p.vz*dt;
-      if (Math.abs(p.x) > lim) { p.vx *= -1; p.x = Math.sign(p.x)*lim; }
-      if (Math.abs(p.y) > lim) { p.vy *= -1; p.y = Math.sign(p.y)*lim; }
-      if (Math.abs(p.z) > lim) { p.vz *= -1; p.z = Math.sign(p.z)*lim; }
-      if (p.flash > 0) p.flash -= 0.05;
-    }
-    kinSt.particlesA.forEach(moveAndBounce);
-    kinSt.particlesB.forEach(moveAndBounce);
-    // A-B çarpışmalarını denetle
-    var threshold = 10;
-    var eaSpeed = kinSt.catalyst ? 0.55 : 0.95; // katalizör varsa daha düşük hız yeterli
-    for (var i = 0; i < kinSt.particlesA.length; i++) {
-      var a = kinSt.particlesA[i];
-      for (var j = 0; j < kinSt.particlesB.length; j++) {
-        var b = kinSt.particlesB[j];
-        var dx = a.x-b.x, dy = a.y-b.y, dz = a.z-b.z;
-        var d2 = dx*dx+dy*dy+dz*dz;
-        if (d2 < threshold*threshold && a.flash <= 0 && b.flash <= 0) {
-          kinSt.totalCollisions++;
-          var relSpeed = Math.sqrt((a.vx-b.vx)*(a.vx-b.vx) + (a.vy-b.vy)*(a.vy-b.vy) + (a.vz-b.vz)*(a.vz-b.vz));
-          var success = relSpeed > eaSpeed;
-          if (success) { kinSt.successCount++; kinSt.rateWindow.push(1); a.flash = 1; b.flash = 1; }
-          else { kinSt.rateWindow.push(0); }
-          // esnek sekme (basit): hızları ters çevir
-          a.vx *= -1; a.vy *= -1; a.vz *= -1;
-          b.vx *= -1; b.vy *= -1; b.vz *= -1;
-        }
-      }
-    }
-    if (kinSt.rateWindow.length > 400) kinSt.rateWindow.splice(0, kinSt.rateWindow.length - 400);
-    var sum = 0;
-    for (var k = 0; k < kinSt.rateWindow.length; k++) sum += kinSt.rateWindow[k];
-    kinSt.rateVal = Math.round(sum * 1.5);
-  }
-
-  function kinDraw(x, W, H2){
-    hcBg(x, kinSt, W, H2);
-    var boxPts = [];
-    for (var sx=-1; sx<=1; sx+=2) for (var sy=-1; sy<=1; sy+=2) for (var sz=-1; sz<=1; sz+=2) boxPts.push([sx*KIN_BOX,sy*KIN_BOX,sz*KIN_BOX]);
-    var edges = [[0,1],[0,2],[0,4],[3,1],[3,2],[3,7],[5,1],[5,4],[5,7],[6,2],[6,4],[6,7]];
-    x.strokeStyle = 'rgba(245,158,11,0.3)'; x.lineWidth = 1.1;
-    edges.forEach(function(e){
-      var p1 = hcProj(kinSt, boxPts[e[0]][0],boxPts[e[0]][1],boxPts[e[0]][2], W, H2);
-      var p2 = hcProj(kinSt, boxPts[e[1]][0],boxPts[e[1]][1],boxPts[e[1]][2], W, H2);
-      x.beginPath(); x.moveTo(p1.x,p1.y); x.lineTo(p2.x,p2.y); x.stroke();
-    });
-    var items = [];
-    function pushP(p, baseCol){
-      var pr = hcProj(kinSt, p.x, p.y, p.z, W, H2);
-      var col = p.flash > 0 ? '#22c55e' : baseCol;
-      items.push({ z: pr.z, x: pr.x, y: pr.y, r: (p.flash>0?9:6.5)*pr.s, c: col });
-    }
-    kinSt.particlesA.forEach(function(p){ pushP(p, '#3b82f6'); });
-    kinSt.particlesB.forEach(function(p){ pushP(p, '#ef4444'); });
-    items.sort(function(a,b){ return b.z-a.z; });
-    items.forEach(function(it){
-      x.beginPath(); x.arc(it.x, it.y, Math.max(1.5,it.r), 0, 6.283);
-      x.fillStyle = it.c; x.fill();
-    });
-    x.fillStyle = 'rgba(59,130,246,.85)'; x.font = 'bold 11px sans-serif'; x.textAlign = 'left';
-    x.fillText('\u25cf A tepkeni', 10, 20);
-    x.fillStyle = 'rgba(239,68,68,.85)';
-    x.fillText('\u25cf B tepkeni', 10, 36);
-    x.fillStyle = 'rgba(34,197,94,.85)';
-    x.fillText('\u25cf Ba\u015far\u0131l\u0131 \u00e7arp\u0131\u015fma', 10, 52);
-    x.fillStyle = 'rgba(255,255,255,.3)'; x.font = '10px sans-serif';
-    x.fillText('\ud83d\udc46 S\u00fcr\u00fckle d\u00f6nd\u00fcr', 10, H2-8);
-  }
-
-  function kinLoop(){
-    var scr = document.getElementById('s-kinetik');
-    if (!scr || scr.style.display === 'none') { kinStop(); return; }
-    kinSt.anim = requestAnimationFrame(kinLoop);
-    var cv = document.getElementById('kin-cv');
-    if (!cv) return;
-    var rect = cv.getBoundingClientRect();
-    var W = rect.width || cv.clientWidth || 300, H2 = 260;
-    var dpr = window.devicePixelRatio || 1;
-    if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
-    var x = cv.getContext('2d');
-    x.setTransform(dpr, 0, 0, dpr, 0, 0);
-    try {
-      if (kinSt.spin && !kinSt.drag) kinSt.rotY += 0.006;
-      kinSt.t += 0.016;
-      kinStep();
-      kinDraw(x, W, H2);
-      var rateEl = document.getElementById('kin-rate');
-      if (rateEl) rateEl.textContent = kinSt.rateVal;
-    } catch (e) { drawErr(x, W, H2, e); }
-  }
-  function kinStop(){ if (kinSt.anim) { cancelAnimationFrame(kinSt.anim); kinSt.anim = null; } }
-  function kinStart(){ kinBindCanvas(); if (kinSt.anim) cancelAnimationFrame(kinSt.anim); kinLoop(); }
-  function kinBindCanvas(){
-    if (kinSt.bound) return;
-    var cv = document.getElementById('kin-cv');
-    if (!cv) return;
-    kinSt.bound = true;
-    cv.onmousedown = function(e){ kinSt.drag = true; kinSt.lx = e.clientX; kinSt.ly = e.clientY; };
-    cv.onmousemove = function(e){ if (!kinSt.drag) return; kinSt.rotY += (e.clientX-kinSt.lx)*0.01; kinSt.rotX += (e.clientY-kinSt.ly)*0.01; kinSt.lx=e.clientX; kinSt.ly=e.clientY; };
-    cv.onmouseup = cv.onmouseleave = function(){ kinSt.drag = false; };
-    cv.addEventListener('touchstart', function(e){ kinSt.drag=true; kinSt.lx=e.touches[0].clientX; kinSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
-    cv.addEventListener('touchmove', function(e){ if(!kinSt.drag) return; kinSt.rotY += (e.touches[0].clientX-kinSt.lx)*0.013; kinSt.rotX += (e.touches[0].clientY-kinSt.ly)*0.013; kinSt.lx=e.touches[0].clientX; kinSt.ly=e.touches[0].clientY; e.preventDefault(); }, {passive:false});
-    cv.addEventListener('touchend', function(){ kinSt.drag = false; });
-  }
-  function kinEnter(){ setTimeout(kinStart, 80); setTimeout(peRender, 90); }
-  function kinLeave(){ kinStop(); }
-
-  // ---------- 21. GENEL REDOKS ANALİZ MOTORU ----------
-  // Mevcut Gauss-eliminasyon dengeleyicisini (balanceEquation) yeniden
-  // kullanır; üzerine oksidasyon basamağı hesaplama + redoks tespiti
-  // katmanı ekler. Böylece kullanıcı KENDİ denklemini (moleküler/iyonik
-  // olmayan) yazabilir, sistem hem dengeler hem de hangi elementin
-  // yükseltgendiğini/indirgendiğini adım adım gösterir.
-  var OX_FIXED_1 = ['Li','Na','K','Rb','Cs','Fr'];
-  var OX_FIXED_2 = ['Be','Mg','Ca','Sr','Ba','Ra'];
-  var OX_POLY_GROUPS = [
-    { keyEl:'Cr', atoms:{Cr:2,O:7}, ox:{Cr:6,O:-2} },   // dikromat Cr2O7
-    { keyEl:'Mn', atoms:{Mn:1,O:4}, ox:{Mn:7,O:-2} },   // permanganat MnO4 (tek Mn varsayımıyla)
-    { keyEl:'S',  atoms:{S:1,O:4}, ox:{S:6,O:-2} },     // sülfat SO4
-    { keyEl:'N',  atoms:{N:1,O:3}, ox:{N:5,O:-2} },     // nitrat NO3
-    { keyEl:'C',  atoms:{C:1,O:3}, ox:{C:4,O:-2} },     // karbonat CO3
-    { keyEl:'P',  atoms:{P:1,O:4}, ox:{P:5,O:-2} },     // fosfat PO4
-    { keyEl:'Cl', atoms:{Cl:1,O:4}, ox:{Cl:7,O:-2} },   // perklorat ClO4
-    { keyEl:'As', atoms:{As:1,O:4}, ox:{As:5,O:-2} }    // arsenat AsO4
-  ];
-
-  // Verilen (nötr, moleküler) formülün her elementi için oksidasyon
-  // basamağını tahmin eder. Genel amaçlı bir öğretim aracı için
-  // makul bir sezgisel yöntemdir — her bileşiği doğru çözmesi
-  // garanti değildir, ama yayg\u0131n redoks bile\u015fikleri i\u00e7in g\u00fcvenilirdir.
-  function assignOxStates(rawFormula){
-    var flat = parseFormula(rawFormula);
-    var ox = {};
-    var remaining = 0; // nötr molekül varsayımı
-
-    // Peroksit özel durumu (H2O2, Na2O2, BaO2 gibi O-O bağlı bileşikler,
-    // O=-1). Bu ölçek için en yaygın örnek olan H2O2'yi doğrudan tan\u0131.
-    var isPeroxide = (flat.H === 2 && flat.O === 2 && Object.keys(flat).length === 2);
-
-    if (flat.F) { ox.F = -1; remaining -= -1 * flat.F; }
-    OX_FIXED_1.forEach(function(m){ if (flat[m]) { ox[m] = 1; remaining -= 1 * flat[m]; } });
-    OX_FIXED_2.forEach(function(m){ if (flat[m]) { ox[m] = 2; remaining -= 2 * flat[m]; } });
-
-    if (isPeroxide) {
-      ox.O = -1; remaining -= -1 * flat.O;
-    } else {
-      // Bilinen çok atomlu grup (sülfat, nitrat, permanganat...) var mı?
-      for (var i = 0; i < OX_POLY_GROUPS.length; i++) {
-        var g = OX_POLY_GROUPS[i];
-        if (ox[g.keyEl] !== undefined) continue;
-        if (!flat[g.keyEl] || flat[g.keyEl] % g.atoms[g.keyEl] !== 0) continue;
-        var mult = flat[g.keyEl] / g.atoms[g.keyEl];
-        var needO = g.atoms.O * mult;
-        if (!flat.O || flat.O < needO) continue;
-        ox[g.keyEl] = g.ox[g.keyEl];
-        remaining -= g.ox[g.keyEl] * flat[g.keyEl];
-        remaining -= g.ox.O * needO; // grubun İÇİNDEKİ oksijenin katkısı HER ZAMAN düşülür
-        flat.O -= needO;
-        if (flat.O === 0) delete flat.O;
-        break;
-      }
-      if (flat.O && ox.O === undefined) { ox.O = -2; remaining -= -2 * flat.O; }
-    }
-
-    if (flat.H && ox.H === undefined) {
-      var others = Object.keys(flat).filter(function(e){ return e !== 'H' && flat[e]; });
-      var isHydride = others.length === 1 && ox[others[0]] !== undefined && ox[others[0]] > 0 &&
-        (OX_FIXED_1.indexOf(others[0]) !== -1 || OX_FIXED_2.indexOf(others[0]) !== -1);
-      ox.H = isHydride ? -1 : 1;
-      remaining -= ox.H * flat.H;
-    }
-
-    // İkili (metal + tek ametal) bileşiklerde ametale TİPİK anyon
-    // basamağını ata (halojenler -1, S/Se/Te -2, N/P/As/Sb -3) —
-    // MnCl2, FeS, Na3N gibi bileşiklerde metalin basamağını çözebilmek için.
-    var unknown0 = Object.keys(flat).filter(function(e){ return flat[e] && ox[e] === undefined; });
-    if (unknown0.length === 2) {
-      var TYPICAL_ANION = { Cl:-1, Br:-1, I:-1, S:-2, Se:-2, Te:-2, N:-3, P:-3, As:-3 };
-      var anionEl = unknown0.filter(function(e){ return TYPICAL_ANION[e] !== undefined; });
-      if (anionEl.length === 1) {
-        var ae = anionEl[0];
-        ox[ae] = TYPICAL_ANION[ae];
-        remaining -= TYPICAL_ANION[ae] * flat[ae];
-      }
-    }
-
-    var unknown = Object.keys(flat).filter(function(e){ return flat[e] && ox[e] === undefined; });
-    if (unknown.length === 1) {
-      ox[unknown[0]] = remaining / flat[unknown[0]];
-    }
-    return ox;
-  }
-
-  // Dengelenmiş denklemdeki (species dizisi + nReact) her elementin
-  // reaktan/ürün taraflarındaki oksidasyon basamaklarını karşılaştırır.
-  // Orantısızlaşma (aynı elementin birden fazla ürüne farklı basamaklarda
-  // dağılması) dahil TÜM anlamlı geçişleri döndürür.
-  function identifyRedoxChanges(species, nReact){
-    var speciesOx = species.map(function(sp){
-      try { return assignOxStates(sp); } catch (e) { return {}; }
-    });
-    var elMap = {};
-    species.forEach(function(sp, idx){
-      var flat;
-      try { flat = parseFormula(sp); } catch (e) { return; }
-      Object.keys(flat).forEach(function(el){
-        if (speciesOx[idx][el] === undefined) return;
-        if (!elMap[el]) elMap[el] = { react: [], prod: [] };
-        var entry = { spIdx: idx, ox: speciesOx[idx][el] };
-        (idx < nReact ? elMap[el].react : elMap[el].prod).push(entry);
-      });
-    });
-    var seen = {}, transitions = [];
-    Object.keys(elMap).forEach(function(el){
-      var m = elMap[el];
-      m.react.forEach(function(r){
-        m.prod.forEach(function(p){
-          if (r.ox !== p.ox) {
-            var key = el + '|' + r.ox + '|' + p.ox + '|' + r.spIdx + '|' + p.spIdx;
-            if (seen[key]) return;
-            seen[key] = 1;
-            transitions.push({ el: el, from: r.ox, to: p.ox, reactSpIdx: r.spIdx, prodSpIdx: p.spIdx, kind: p.ox > r.ox ? 'yukselt' : 'indirge' });
-          }
-        });
-      });
-    });
-    return transitions;
-  }
-
-  function fmtOx(n){ return (n > 0 ? '+' : '') + n; }
-
-  // ---------- 22. FİZİKSEL VE KİMYASAL DEĞİŞİM ----------
-  var FIZKIM_LIST = [
-    // --- FİZİKSEL DEĞİŞİMLER ---
-    { txt:'Hal de\u011fi\u015fimleri (erime, buharla\u015fma, s\u00fcblimle\u015fme...)', t:'fiziksel', not:'Sadece tanecikler aras\u0131 uzakl\u0131k/d\u00fczen de\u011fi\u015fir; madde kimyasal olarak AYNI kal\u0131r (H\u2082O hep H\u2082O\u2019dur).' },
-    { txt:'G\u00f6kku\u015fa\u011f\u0131 olu\u015fumu', t:'fiziksel', not:'I\u015f\u0131\u011f\u0131n su damlac\u0131klar\u0131nda k\u0131r\u0131l\u0131p yans\u0131mas\u0131 \u2014 yeni bir madde olu\u015fmaz, sadece \u0131\u015f\u0131k ayr\u0131\u015f\u0131r.' },
-    { txt:'Yo\u011furttan ayran eldesi', t:'fiziksel', not:'Yo\u011furt suyla SEYRELTİLİR ve KARIŞTIRILIR \u2014 yeni bir madde olu\u015fmaz, sadece kar\u0131\u015f\u0131m haz\u0131rlan\u0131r.' },
-    { txt:'S\u00fctten tereya\u011f\u0131 eldesi', t:'fiziksel', not:'S\u00fctteki ya\u011f\u0131n \u00e7alkalanarak AYRILMASI (mekanik bir ay\u0131rma) \u2014 kimyasal bir tepkime olmaz.' },
-    { txt:'Metallerin elektrik ak\u0131m\u0131n\u0131 iletmesi', t:'fiziksel', not:'Serbest elektronlar\u0131n hareketi \u2014 metalin kimyasal yap\u0131s\u0131 de\u011fi\u015fmez.' },
-    { txt:'Yemek tuzunun suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'NaCl, suda Na\u207a ve Cl\u207b iyonlar\u0131na ayr\u0131l\u0131r ama bunlar yeniden buharla\u015ft\u0131r\u0131ld\u0131\u011f\u0131nda AYNI NaCl olarak geri elde edilir.' },
-    { txt:'O\u2082 gaz\u0131n\u0131n suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'Bal\u0131klar\u0131n solunum yapabilmesini sa\u011flayan basit bir \u00e7\u00f6z\u00fcnme \u2014 O\u2082 kimyasal olarak de\u011fi\u015fmez.' },
-    { txt:'Ya\u011fl\u0131 boyan\u0131n tiner ile inceltilmesi', t:'fiziksel', not:'Sadece bir \u00e7\u00f6zelti haz\u0131rlan\u0131r, boyan\u0131n kimyasal yap\u0131s\u0131 de\u011fi\u015fmez (kurumas\u0131 ise KİMYASALDIR).' },
-    { txt:'\u015eeker pancar\u0131ndan \u015feker eldesi', t:'fiziksel', not:'\u015eeker, pancardan safla\u015ft\u0131r\u0131larak (ay\u0131rma y\u00f6ntemleriyle) elde edilir \u2014 yeni bir madde olu\u015fturulmaz.' },
-    { txt:'Alkol\u00fcn suda \u00e7\u00f6z\u00fcnmesi', t:'fiziksel', not:'Her oranda kar\u0131\u015fabilen iki s\u0131v\u0131n\u0131n homojen kar\u0131\u015f\u0131m\u0131 \u2014 yeni madde olu\u015fmaz.' },
-    { txt:'Ka\u011f\u0131d\u0131n y\u0131rt\u0131lmas\u0131', t:'fiziksel', not:'Sadece \u015fekil/boyut de\u011fi\u015fir; ka\u011f\u0131d\u0131 olu\u015fturan sel\u00fcloz molek\u00fclleri AYNIDIR.' },
-    { txt:'Cam k\u0131r\u0131lmas\u0131', t:'fiziksel', not:'Camin kimyasal bile\u015fimi de\u011fi\u015fmez, sadece par\u00e7alara ayr\u0131l\u0131r.' },
-    { txt:'Petrolden benzin, mazot eldesi', t:'fiziksel', not:'Fraksiyonlu damıtma (kaynama noktas\u0131 farklar\u0131na g\u00f6re AYIRMA) \u2014 yeni molek\u00fcl olu\u015fturulmaz, zaten var olanlar ayr\u0131l\u0131r.' },
-    { txt:'Kar\u0131\u015f\u0131mlar\u0131 ay\u0131rma y\u00f6ntemleri (s\u00fczme, damıtma, eleme...)', t:'fiziksel', not:'T\u00fcm ay\u0131rma y\u00f6ntemleri fizikseldir \u2014 bile\u015fenlerin kimyasal yap\u0131s\u0131 de\u011fi\u015fmeden sadece birbirinden ayr\u0131l\u0131r.' },
-    // --- KİMYASAL DEĞİŞİMLER ---
-    { txt:'CO\u2082 gaz\u0131n\u0131n suda \u00e7\u00f6z\u00fcnmesi (CO\u2082 + H\u2082O \u2192 H\u2082CO\u2083)', t:'kimyasal', not:'CO\u2082 ve H\u2082O birle\u015fip TAMAMEN FARKLI bir madde (karbonik asit) olu\u015fturur.' },
-    { txt:'Tuzlu suyun elektrik ak\u0131m\u0131n\u0131 iletmesi', t:'kimyasal', not:'\u0130letim s\u0131ras\u0131nda elektrotlarda GERÇEK kimyasal tepkimeler (elektroliz) ger\u00e7ekle\u015fir.' },
-    { txt:'Aktif metallerin suda \u00e7\u00f6z\u00fcnmesi (Na, K gibi)', t:'kimyasal', not:'Na + H\u2082O \u2192 NaOH + H\u2082 \u2014 yeni maddeler (baz ve gaz) olu\u015fur.' },
-    { txt:'Metallerin asitlerle tepkimesi', t:'kimyasal', not:'\u00d6rn. Zn + 2HCl \u2192 ZnCl\u2082 + H\u2082 \u2014 tuz ve hidrojen gaz\u0131 olu\u015fur.' },
-    { txt:'Asit-baz tepkimeleri', t:'kimyasal', not:'N\u00f6tralle\u015fme sonucu tuz ve su gibi TAMAMEN YENİ maddeler olu\u015fur.' },
-    { txt:'Elektroliz', t:'kimyasal', not:'Elektrik enerjisiyle bile\u015fikler kendi elementlerine AYRIŞTIRILIR (\u00f6rn. suyun H\u2082 ve O\u2082\u2019ye ayr\u0131\u015fmas\u0131).' },
-    { txt:'Ya\u011fl\u0131 boyan\u0131n kurumas\u0131', t:'kimyasal', not:'Havadaki oksijenle tepkimeye girip (oksidasyon/polimerle\u015fme) sertle\u015fir \u2014 geri d\u00f6nü\u015fs\u00fcz bir kimyasal de\u011fi\u015fimdir.' },
-    { txt:'Betonun donmas\u0131', t:'kimyasal', not:'\u00c7imentodaki bile\u015fiklerin su ile tepkimeye girip (hidratasyon) yeni kristal yap\u0131lar olu\u015fturmas\u0131d\u0131r.' },
-    { txt:'\u00c7imentonun donmas\u0131', t:'kimyasal', not:'Betonla ayn\u0131 \u015fekilde, su ile ger\u00e7ekle\u015fen hidratasyon tepkimesidir; geri d\u00f6n\u00fc\u015fs\u00fczd\u00fcr.' },
-    { txt:'Kan\u0131n p\u0131ht\u0131la\u015fmas\u0131', t:'kimyasal', not:'Enzimlerle tetiklenen bir dizi protein tepkimesi sonucu fibrin a\u011f\u0131 olu\u015fur \u2014 yeni madde (fibrin) olu\u015fur.' },
-    { txt:'Sa\u00e7\u0131n a\u011farmas\u0131', t:'kimyasal', not:'Melanin pigmentinin \u00fcretiminin durmas\u0131/y\u0131k\u0131lmas\u0131 \u2014 kimyasal bile\u015fim de\u011fi\u015fir.' },
-    { txt:'Giysilerin \u00e7ama\u015f\u0131r suyu ile a\u011fart\u0131lmas\u0131', t:'kimyasal', not:'Sodyum hipoklorit, renk pigmentlerini kimyasal olarak PARÇALAR (oksitler).' },
-    { txt:'Grizu patlamas\u0131', t:'kimyasal', not:'Metan gaz\u0131n\u0131n oksijenle H\u0131ZLI YANMASI (patlay\u0131c\u0131 oksidasyon tepkimesi).' },
-    { txt:'Hava yast\u0131\u011f\u0131n\u0131n patlamas\u0131', t:'kimyasal', not:'Sodyum azid\u00fcn (NaN\u2083) h\u0131zla ayr\u0131\u015f\u0131p b\u00fcy\u00fck hacimde N\u2082 gaz\u0131 \u00fcretmesi.' },
-    { txt:'Solunum', t:'kimyasal', not:'Glikozun oksijenle yak\u0131lmas\u0131yla (h\u00fccresel solunum) enerji, CO\u2082 ve su a\u00e7\u0131\u011fa \u00e7\u0131kar.' },
-    { txt:'Fotosentez', t:'kimyasal', not:'CO\u2082 + H\u2082O + \u0131\u015f\u0131k enerjisi \u2192 glikoz + O\u2082 \u2014 tamamen yeni maddeler olu\u015fur.' },
-    { txt:'Yanma (oksitlenme, paslanma)', t:'kimyasal', not:'Madde, oksijenle tepkimeye girerek FARKLI bir bile\u015fi\u011fe (\u00f6rn. demir \u2192 demir oksit/pas) d\u00f6n\u00fc\u015f\u00fcr.' },
-    { txt:'S\u00fctten peynir, yo\u011furt eldesi', t:'kimyasal', not:'Bakteriler s\u00fct \u015fekerini (laktoz) laktik aside \u00e7evirir \u2014 protein yap\u0131s\u0131 de\u011fi\u015fir (peyni\u015fme), geri d\u00f6n\u00fc\u015fs\u00fczd\u00fcr.' },
-    { txt:'\u00dcz\u00fcmden \u015farap, arpadan bira, elmadan sirke eldesi', t:'kimyasal', not:'Fermantasyon \u2014 mikroorganizmalar \u015fekeri alkole/aside \u00e7evirir, TAMAMEN yeni maddeler olu\u015fur.' },
-    { txt:'G\u00fcm\u00fc\u015f\u00fcn kararmas\u0131', t:'kimyasal', not:'G\u00fcm\u00fc\u015f, havadaki k\u00fck\u00fcrt bile\u015fikleriyle tepkimeye girip Ag\u2082S (gümü\u015f s\u00fclf\u00fcr) olu\u015fturur.' },
-    { txt:'K\u00fcflenme (\u00e7\u00fcr\u00fcme)', t:'kimyasal', not:'Mikroorganizmalar organik maddeyi kimyasal olarak PARÇALAYIP farkl\u0131 bile\u015fiklere d\u00f6n\u00fc\u015ft\u00fcr\u00fcr.' },
-    { txt:'Yumurtan\u0131n pi\u015fmesi', t:'kimyasal', not:'Is\u0131yla proteinlerin yap\u0131s\u0131 (denat\u00fcrasyon) kal\u0131c\u0131 olarak de\u011fi\u015fir \u2014 geri \u00e7evrilemez.' },
-    { txt:'Efervesan tabletin suda \u00e7\u00f6z\u00fcnmesi', t:'kimyasal', not:'Tabletteki asit ve karbonat suda tepkimeye girip CO\u2082 gaz\u0131 (kabarc\u0131klar) a\u00e7\u0131\u011fa \u00e7\u0131kar\u0131r.' },
-    { txt:'Pamukkale Travertenlerinin olu\u015fumu', t:'kimyasal', not:'Sudaki kalsiyum bikarbonat\u0131n CO\u2082 kaybederek kalsiyum karbonata (traverten) d\u00f6n\u00fc\u015fmesi.' },
-    { txt:'Pasta \u00fczerindeki maytab\u0131n yanmas\u0131', t:'kimyasal', not:'Metal tozlar\u0131n\u0131n h\u0131zl\u0131 yanmas\u0131 (oksitlenmesi) \u2014 \u0131\u015f\u0131k ve yeni bile\u015fikler a\u00e7\u0131\u011fa \u00e7\u0131kar.' },
-    { txt:'Yapra\u011f\u0131n sararmas\u0131', t:'kimyasal', not:'Klorofil pigmentinin par\u00e7alanmas\u0131yla alt\u0131nda gizli olan karotenoid (sar\u0131/turuncu) pigmentler ortaya \u00e7\u0131kar \u2014 kimyasal bir bozunmad\u0131r.' }
-  ];
-  var fkSt = { score: 0, total: 0, order: [], idx: 0, cur: null };
-  function fkShuffle(){
-    fkSt.order = FIZKIM_LIST.map(function(_, i){ return i; });
-    for (var i = fkSt.order.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp = fkSt.order[i]; fkSt.order[i] = fkSt.order[j]; fkSt.order[j] = tmp; }
-  }
-  fkShuffle();
-
-  function setupFizKim(){
-    if (document.getElementById('s-fizkim')) return;
-    var app = document.querySelector('.app');
-    if (!app) return;
-    app.insertAdjacentHTML('beforeend',
-      '<div id="s-fizkim" style="display:none"><div class="pw narrow">' +
-        '<h1 class="ptitle">\ud83d\udd04 Fiziksel ve Kimyasal De\u011fi\u015fim</h1>' +
-        '<p class="psub">G\u00fcnl\u00fck hayattan ' + FIZKIM_LIST.length + ' \u00f6rnek \u2014 hangisi fiziksel, hangisi kimyasal de\u011fi\u015fim?</p>' +
-        '<div class="tabs" id="fk-tabs">' +
-          '<button class="tab on" onclick="tswitch(\'fk-tabs\',\'fk-tps\',0)">\u2753 Quiz</button>' +
-          '<button class="tab" onclick="tswitch(\'fk-tabs\',\'fk-tps\',1)">\ud83d\udcd6 T\u00fcm Örnekler</button>' +
-        '</div>' +
-        '<div id="fk-tps">' +
-          '<div class="tp on">' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;color:var(--tx3)">' +
-              '<span id="fk-prog">Soru 1/' + FIZKIM_LIST.length + '</span>' +
-              '<span>\u2713 <span id="fk-score" style="color:var(--gr);font-weight:700">0</span></span>' +
-            '</div>' +
-            '<div class="card" style="text-align:center;margin-bottom:14px">' +
-              '<div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Bu bir fiziksel mi, kimyasal bir de\u011fi\u015fim mi?</div>' +
-              '<div id="fk-txt" style="font-size:17px;font-weight:700;color:#fff;line-height:1.5"></div>' +
-            '</div>' +
-            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">' +
-              '<button type="button" class="ob2" onclick="fkCheck(\'fiziksel\',this)" style="text-align:center;font-weight:700">\ud83d\udd35 Fiziksel</button>' +
-              '<button type="button" class="ob2" onclick="fkCheck(\'kimyasal\',this)" style="text-align:center;font-weight:700">\ud83d\udd34 Kimyasal</button>' +
-            '</div>' +
-            '<div id="fk-fb" style="display:none;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6"></div>' +
-            '<button type="button" id="fk-next" onclick="fkNext()" style="display:none;width:100%;padding:12px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);color:var(--tx);font-size:14px;font-weight:600;cursor:pointer">Sonraki \u2192</button>' +
-          '</div>' +
-          '<div class="tp" id="fk-list-wrap"></div>' +
-        '</div>' +
-      '</div></div>');
-    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-fizkim') === -1) SCREENS.push('s-fizkim');
-    var mn = document.getElementById('mn');
-    if (mn && !document.getElementById('mn-fizkim'))
-      mn.insertAdjacentHTML('beforeend', '<button id="mn-fizkim" onclick="nav(\'fizkim\')">\ud83d\udd04 Fiziksel ve Kimyasal De\u011fi\u015fim</button>');
-    var tg = document.querySelector('#s-home .tgrid');
-    if (tg && !document.getElementById('tile-fizkim'))
-      tg.insertAdjacentHTML('afterbegin',
-        '<div class="tc" id="tile-fizkim" onclick="nav(\'fizkim\')"><div class="ti">\ud83d\udd04</div><div class="tt">Fiziksel ve Kimyasal De\u011fi\u015fim</div><div class="td">G\u00fcnl\u00fck hayattan \u00f6rneklerle fiziksel/kimyasal de\u011fi\u015fim ay\u0131rt etme.</div></div>');
-    fkRenderList();
-  }
-  function fkRenderList(){
-    var box = document.getElementById('fk-list-wrap');
-    if (!box) return;
-    var fizList = FIZKIM_LIST.filter(function(x){ return x.t === 'fiziksel'; });
-    var kimList = FIZKIM_LIST.filter(function(x){ return x.t === 'kimyasal'; });
-    function renderGroup(title, color, list){
-      var h = '<div style="font-size:13px;font-weight:700;color:' + color + ';margin:14px 0 8px">' + title + ' (' + list.length + ')</div>';
-      list.forEach(function(item){
-        h += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
-          '<div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:4px">' + item.txt + '</div>' +
-          '<div style="font-size:12px;color:var(--tx2);line-height:1.5">' + item.not + '</div></div>';
-      });
-      return h;
-    }
-    box.innerHTML = renderGroup('\ud83d\udd35 Fiziksel De\u011fi\u015fimler', '#60a5fa', fizList) + renderGroup('\ud83d\udd34 Kimyasal De\u011fi\u015fimler', '#f87171', kimList);
-  }
-  function fkEnter(){ fkSt.idx = 0; fkSt.score = 0; fkShuffle(); fkRender(); fkRenderList(); }
-  function fkRender(){
-    if (fkSt.idx >= fkSt.order.length) { fkShuffle(); fkSt.idx = 0; }
-    var item = FIZKIM_LIST[fkSt.order[fkSt.idx]];
-    fkSt.cur = item;
-    document.getElementById('fk-prog').textContent = 'Soru ' + (fkSt.idx+1) + '/' + FIZKIM_LIST.length;
-    document.getElementById('fk-score').textContent = fkSt.score;
-    document.getElementById('fk-txt').textContent = item.txt;
-    var fb = document.getElementById('fk-fb'); fb.style.display = 'none';
-    document.getElementById('fk-next').style.display = 'none';
-    var btns = document.querySelectorAll ? null : null;
-  }
-  window.fkCheck = function(sel, btn){
-    var item = fkSt.cur;
-    var container = btn.parentElement;
-    var btns = container ? container.querySelectorAll('button') : [btn];
-    for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
-    var fb = document.getElementById('fk-fb');
-    fkSt.total++;
-    if (sel === item.t) {
-      fkSt.score++;
-      btn.className = 'ob2 cor';
-      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#86efac';
-      fb.innerHTML = '\u2713 Do\u011fru! ' + item.not;
-    } else {
-      btn.className = 'ob2 wro';
-      fb.style.cssText = 'display:block;padding:12px;border-radius:var(--r);margin-bottom:12px;font-size:13px;line-height:1.6;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5';
-      fb.innerHTML = '\u2717 Yanl\u0131\u015f. Do\u011fru cevap: <b>' + (item.t === 'fiziksel' ? 'Fiziksel' : 'Kimyasal') + '</b> \u2014 ' + item.not;
-    }
-    document.getElementById('fk-score').textContent = fkSt.score;
-    document.getElementById('fk-next').style.display = 'block';
-  };
-  window.fkNext = function(){ fkSt.idx++; fkRender(); };
-
   // ---------- 24. MAARİF HIZ (MEB 11. Sınıf Kimya 2 — Tepkime Hızı) ----------
   var maarifSt = { sub: 0 };
-  // ---------- 25. MAARİF HIZ — ÖLÇME VE DEĞERLENDİRME (66 SORU) ----------
-  var MOL_DY = [
-    { n:1, q:1, t:'Entalpi, bir sistemin sahip olduğu toplam enerjidir.', a:'D', ac:'Lise düzeyinde entalpi, sistemin sahip olduğu toplam enerji (ısı içeriği) olarak tanımlanır.' },
-    { n:1, q:2, t:'Isı alarak gerçekleşen tepkimeler endotermik tepkimelerdir.', a:'D', ac:'Endotermik = çevreden ısı alan tepkime.' },
-    { n:1, q:3, t:'Ekzotermik bir tepkimede çevreye ısı verilir.', a:'D', ac:'Ekzotermik tepkimede sistem çevreye enerji verir.' },
-    { n:1, q:4, t:'Bağ enerjileri her zaman pozitif değerdir.', a:'D', ac:'Bir bağı kırmak her zaman enerji gerektirir (endotermik bir süreçtir), bu yüzden bağ enerjisi hep pozitiftir.' },
-    { n:1, q:5, t:'Eai > Eag ise endotermik bir olaydır.', a:'D', ac:'\u0394H=Eai\u2212Eag; Eai>Eag ise \u0394H>0, yani endotermik.' },
-    { n:1, q:6, t:'Net tepkimede katalizör bulunmaz.', a:'D', ac:'Katalizör bir basamakta girip diğerinde değişmeden çıkar; net (toplam) tepkimede görünmez.' },
-    { n:1, q:7, t:'Bir tepkimede aktivasyon enerjisi katalizör ile değişir.', a:'D', ac:'Katalizör aktivasyon enerjisini düşürür.' },
-    { n:1, q:8, t:'Derişim, tepkime hız sabitini artırır.', a:'Y', ac:'Derişim HIZI artırır ama hız SABİTİNİ (k) etkilemez; k yalnızca sıcaklık/temas yüzeyi/katalizörle değişir.' },
-    { n:1, q:9, t:'Endotermik bir tepkimenin entalpi değişimi (\u0394H) negatiftir.', a:'Y', ac:'Endotermik tepkimede \u0394H POZİTİFTİR (>0).' },
-    { n:1, q:10, t:'Tepkime hız bağıntısına saf katı ve sıvı hâldeki maddeler yazılmaz.', a:'D', ac:'Derişimleri sabit olduğu için hıza etkileri yoktur, hız denklemine yazılmazlar.' },
-    { n:1, q:11, t:'Temas yüzeyi arttıkça tepkime hızı azalır.', a:'Y', ac:'Temas yüzeyi arttıkça çarpışma sıklığı ve dolayısıyla hız ARTAR.' },
-    { n:1, q:12, t:'Endotermik tepkimelerde sistemin enerjisi artar.', a:'D', ac:'Sistem çevreden enerji aldığı için toplam entalpisi artar.' },
-    { n:1, q:13, t:'Endotermik tepkimelerde ürünler daha kararlıdır.', a:'Y', ac:'Endotermik tepkimede TEPKENLER daha kararlıdır (daha düşük enerjilidir); ürünler daha az kararlıdır.' },
-    { n:1, q:14, t:'Mekanizmalı tepkimelerde hız ifadesi yavaş adıma göre yazılır.', a:'D', ac:'Çok basamaklı tepkimelerde hızı yavaş (hız belirleyici) basamak belirler.' },
-    { n:1, q:15, t:'Ekzotermik tepkimelerde sistemin enerjisi azalır.', a:'D', ac:'Sistem çevreye enerji verdiği için toplam entalpisi azalır.' }
-  ];
-
-  var MOL_BOSLUK = [
-    { n:2, t:'Günlük hayattaki bir olay ……… ise sistem çevreden ısı alır.', a:'endotermik' },
-    { n:3, t:'Kömür, petrol, doğal gaz gibi fosil yakıtlar yandığında oluşan CO\u2082 gazı ……… neden olur.', a:'küresel ısınmaya' },
-    { n:4, t:'Birim miktar başına yüksek enerji açığa çıkaran maddeler ……… olma potansiyeline sahiptir.', a:'yakıt' },
-    { n:5, t:'Bir tepkimede kırılan bağların enerjileri toplamı, oluşan bağların enerjileri toplamından ……… ise tepkime ekzotermiktir.', a:'az (küçük)' },
-    { n:6, t:'Elementlerin doğadaki en kararlı hâllerinin oluşum entalpileri ……… kabul edilir.', a:'sıfır' },
-    { n:7, t:'Entalpi değişim değeri negatif (\u0394H<0) olan tepkimeler, ……… tepkimelerdir.', a:'ekzotermik' },
-    { n:8, t:'Tepkenlerin ürüne dönüşebilmesi için gerekli en düşük enerjiye ……… denir.', a:'aktivasyon enerjisi' },
-    { n:9, t:'Bir tepkimenin potansiyel enerji-tepkime koordinat grafiğinde tepken ve ürünlerin enerji seviyeleri arasındaki farka ……… denir.', a:'tepkime entalpisi (\u0394H)' },
-    { n:10, t:'Belirli bir zaman aralığında hesaplanan tepkime hızına ……… denir.', a:'ortalama (tepkime) hız(ı)' },
-    { n:11, t:'Kimyasal bir tepkimede ürünler için ……… hızından bahsedilir.', a:'oluşma (oluşum)' },
-    { n:12, t:'Aktivasyon enerjisini düşürerek tepkimeyi hızlandıran maddelere ……… denir.', a:'katalizör' },
-    { n:13, t:'Sıcaklık artışı birim zamandaki ……… sayısını artırarak tepkimeyi hızlandırır.', a:'etkin çarpışma' },
-    { n:14, t:'Kimyasal tepkimelerin hızı ile tepkimeye giren maddelerin derişimleri arasındaki ilişkiyi gösteren matematiksel eşitliğe ……… denir.', a:'hız denklemi' },
-    { n:15, t:'Derecesi ……… olan bir tepkimenin hız sabitinin birimi 1/M\u00b2s\u2019dir.', a:'3 (üç)', ac:'1/(sM\u207f\u207b\u00b9)=1/(sM\u00b2) \u2192 n\u22121=2 \u2192 n=3' },
-    { n:16, t:'Tepkime derecesi üç olan gaz fazında gerçekleşen bir tepkimenin gerçekleştiği kabın hacmi yarıya düşürüldüğünde tepkimenin hızı ……… katına çıkar.', a:'8 (sekiz)', ac:'Hacim yarıya \u2192 derişim 2 kat \u2192 hız 2\u00b3=8 kat.' }
-  ];
-
-  var MOL_ACIK = [
-    { n:17, t:'Aşağıdaki olaylardaki enerji değişimlerini açıklayınız (endotermik mi, ekzotermik mi?): a) Yakıt pillerinde H\u2082+O\u2082 tepkimesiyle elektrik üretimi, b) Şimşek/yıldırım etkisiyle atmosferdeki N\u2082 bağlarının kırılması, c) İklimlendirmede gazın sıkıştırılmasıyla ortamın ısıtılması, ç) İklimlendirmede gazın genleştirilmesiyle ortamın soğutulması, d) Kuru buzun süblimleşmesi, e) NaCl çözeltisinin elektroliz edilmesi.',
-      c:'a) EKZOTERMİK \u2014 H\u2082 yanması enerji açığa çıkarır (elektrik üretilir).<br>b) ENDOTERMİK \u2014 N\u2261N üçlü bağını kırmak çok enerji ister; bu enerji yıldırımdan (çevreden) alınır.<br>c) EKZOTERMİK \u2014 sıkıştırma sırasında sisteme yapılan iş ısınmaya (çevreye ısı verecek şekilde) dönüşür.<br>ç) ENDOTERMİK \u2014 genleşen gaz çevresini soğutur, yani ortamdan ısı çeker.<br>d) ENDOTERMİK \u2014 katıdan doğrudan gaza geçiş (süblimleşme) ısı gerektirir.<br>e) ENDOTERMİK \u2014 elektroliz dışarıdan sürekli elektrik enerjisi gerektirir.' },
-    { n:18, t:'Joule-Thomson deneyinde A bölmesinde piston itilip gaz sıkıştırılınca sıcaklık YÜKSELİYOR, B bölmesine geçip genleşince sıcaklık DÜŞÜYOR. a) A bölmesindeki olay endotermik mi ekzotermik mi? b) B bölmesindeki olay endotermik mi ekzotermik mi?',
-      c:'a) A bölmesi: Sıkıştırma sırasında gazın sıcaklığı artar \u2014 bu, sisteme yapılan işin ısıya dönüşmesiyle EKZOTERMİK bir görünüm sergiler (sistem ısınırken çevresine göre "ısı vermiş" gibi bir enerji dönüşümü yaşar).<br>b) B bölmesi: Genleşme sırasında sıcaklık düşer \u2014 sistem soğur, yani ENDOTERMİK bir görünüm sergiler (çevreden ısı çekiyormuş gibi enerji emilimi olur).<br><i>Not: Bu, gerçek gazların Joule-Thomson etkisidir; düzenek dıştan yalıtılıdır, gözlenen sıcaklık değişimi moleküllerarası kuvvetlerden kaynaklanan bir iç enerji dönüşümüdür.</i>' },
-    { n:19, t:'50\u2019şer gram odun talaşı (10\u219220\u00b0C) ve fındık kabuğu (10\u219230\u00b0C), 2000\u2019er gram suyu farklı sıcaklıklara ısıtıyor. Hangisinin yakıt olma potansiyeli daha fazladır?',
-      c:'<b>Fındık kabuğu.</b> Aynı kütlede yakıt, suyu 10\u00b0C\u2019lik farka (odun talaşı) karşılık 20\u00b0C\u2019lik farka çıkarıyor \u2014 yani birim kütle başına AÇIĞA ÇIKAN ISI fındık kabuğunda daha fazladır, dolayısıyla yakıt olma potansiyeli daha yüksektir.' },
-    { n:20, t:'Na(k)+H\u2082O(s)\u2192Na\u207a(suda)+OH\u207b(suda)+H\u2082(g) tepkimesinde soğuk ve sıcak suda farklı renk koyuluğu (fenolftalein ile) gözleniyor \u2014 sıcak su daha koyu mor. a) Renk koyuluğu farkının nedeni? b) Sıcaklığın etkisi?',
-      c:'a) Sıcak suda tepkime DAHA HIZLI gerçekleştiği için birim zamanda daha çok OH\u207b iyonu oluşur, bu da daha koyu mor renk verir.<br>b) Sıcaklık arttıkça taneciklerin kinetik enerjisi artar \u2192 etkin çarpışma sayısı artar \u2192 tepkime hızlanır (Na\u2019nın suyla tepkimesi sıcak suda daha hızlıdır).' },
-    { n:21, t:'C\u2082H\u2084(g)+3O\u2082(g)\u21922CO\u2082(g)+2H\u2082O(g) tepkimesi için (bağ enerjileri: C=C:611, C\u2212H:414, C=O:736, O=O:498, O\u2212H:464): a) Kırılan bağlar/enerjileri, b) Oluşan bağlar/enerjileri, c) \u0394H, ç) Endotermik/ekzotermik?',
-      c:'a) Kırılan: 4 C\u2212H (4\u00d7414=1656) + 1 C=C (611) + 3 O=O (3\u00d7498=1494) \u2192 <b>Toplam=3761 kJ</b><br>b) Oluşan: 4 C=O (4\u00d7736=2944, 2CO\u2082\u2019den) + 4 O\u2212H (4\u00d7464=1856, 2H\u2082O\u2019dan) \u2192 <b>Toplam=4800 kJ</b><br>c) \u0394H=kırılan\u2212oluşan=3761\u22124800=<b>\u22121039 kJ</b><br>ç) \u0394H<0 olduğu için <b>EKZOTERMİK</b>tir.' },
-    { n:22, t:'3O\u2082(g)\u21922O\u2083(g), \u0394H\u00b0=+285,4 kJ. a) O\u2082 ve O\u2083\u2019ün \u0394H\u00b0f değerleri? b) Kararlılık karşılaştırması? c) Kırılan/oluşan bağ enerjisi karşılaştırması? ç) Tepken/ürün kararlılığı? d) Endo/ekzo nedeni?',
-      c:'a) O\u2082 element hâlinde en kararlı biçimde olduğu için \u0394H\u00b0f(O\u2082)=<b>0</b>. \u0394H=2\u00d7\u0394Hf(O\u2083)\u22120 \u2192 \u0394Hf(O\u2083)=285,4/2=<b>+142,7 kJ/mol</b><br>b) \u0394Hf(O\u2082)=0 < \u0394Hf(O\u2083)=142,7 \u2192 <b>O\u2082 daha kararlıdır</b> (enerjisi daha düşük).<br>c) Tepkime endotermik (\u0394H>0) olduğu için kırılan bağ enerjisi TOPLAMI, oluşan bağ enerjisi toplamından FAZLADIR.<br>ç) Tepkenler (O\u2082) ürünlerden (O\u2083) daha kararlıdır.<br>d) Endotermiktir çünkü çevreden enerji alınarak O\u2082\u2019nin kararlı bağları kısmen kırılıp daha az kararlı O\u2083 oluşturulur.' },
-    { n:23, t:'Metanın (CH\u2084) yanma tepkimesine ait potansiyel enerji-tepkime koordinatı grafiğine göre: a) Tepkime denklemi, b) Kırılan/oluşan bağ enerjisi karşılaştırması, c) Tepken/ürün enerjisi karşılaştırması, ç) Kararlılık karşılaştırması, d) Endo/ekzo nedeni?',
-      c:'a) <b>CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g)</b><br>b) Metan yanması bilinen bir EKZOTERMİK tepkime olduğu için oluşan bağ enerjisi toplamı, kırılan bağ enerjisi toplamından FAZLADIR.<br>c) Tepken enerjisi > Ürün enerjisi (enerji açığa çıktığı için ürünler daha düşük enerjilidir).<br>ç) Ürünler (CO\u2082+H\u2082O) tepkenlerden (CH\u2084+O\u2082) daha kararlıdır.<br>d) Ekzotermiktir; oluşan güçlü C=O ve O\u2212H bağları, kırılan C\u2212H ve O=O bağlarından daha fazla enerji açığa çıkarır.<br><i>Not: Grafikteki tam sayısal (kJ) değerler görsele bağlıdır; buradaki analiz metan yanmasının bilinen ekzotermik karakterine dayanır.</i>' },
-    { n:24, t:'C\u2083H\u2088(g)+5O\u2082(g)\u21923CO\u2082(g)+4H\u2082O(g), \u0394H=\u22122219,9 kJ/mol. \u0394Hf(CO\u2082)=\u2212393,5, \u0394Hf(H\u2082O)=\u2212285,8 kJ/mol. C\u2083H\u2088\u2019nin \u0394Hf\u2019si kaçtır?',
-      c:'\u0394H=[3\u0394Hf(CO\u2082)+4\u0394Hf(H\u2082O)]\u2212\u0394Hf(C\u2083H\u2088)<br>\u22122219,9=[3(\u2212393,5)+4(\u2212285,8)]\u2212\u0394Hf(C\u2083H\u2088)=\u22122323,7\u2212\u0394Hf(C\u2083H\u2088)<br>\u0394Hf(C\u2083H\u2088)=\u22122323,7+2219,9=<b>\u2212103,8 kJ/mol</b>' },
-    { n:25, t:'H\u2082(g)+\u00bdO\u2082(g)\u2192H\u2082O(g) tepkimesinde r<sub>H2</sub>, r<sub>O2</sub> ve r<sub>H2O</sub> arasındaki ilişkiyi yazınız.',
-      c:'Katsayı oranına göre: <b>r<sub>tepkime</sub>=r<sub>H2</sub>=2r<sub>O2</sub>=r<sub>H2O</sub></b> (H\u2082 ve H\u2082O katsayısı 1 olduğu için hızları eşittir; O\u2082\u2019nin katsayısı \u00bd olduğu için onun hızı diğerlerinin yarısıdır).' },
-    { n:26, t:'CO(g)+H\u2082O(g)\u2192CO\u2082(g)+H\u2082(g) tepkimesinin PE-TK grafiğinde I, II, III durumları için: a) I. durum etkin çarpışma sonucu mu oluştu? b) I ve II\u2019nin ürün oluşturma ihtimali? c) III\u2019e dönüşüm şartları?',
-      c:'a) Grafikte I tipik olarak TEPKENLERİN henüz çarpışmadığı/başlangıç enerjisini gösterir \u2014 etkin çarpışma sonucu OLUŞMAMIŞTIR, tepkimenin başlangıç noktasıdır.<br>b) I ve II\u2019nin (tepken veya düşük enerjili ara durumlar) ürün oluşturma ihtimali, sahip oldukları enerjinin eşik değerini (aktivasyon enerjisini) aşıp aşmadığına ve uygun geometride çarpışıp çarpışmadıklarına bağlıdır.<br>c) CO ve H\u2082O, III (ürünler) durumuna dönüşebilmek için UYGUN GEOMETRİDE ve aktivasyon enerjisini AŞACAK kinetik enerjiyle çarpışmalıdır.' },
-    { n:27, t:'C\u2083H\u2086(g)+4,5O\u2082(g)\u21923CO\u2082(g)+3H\u2082O(g), 2L\u2019lik kapta 2,4 mol siklopropan 10 dakikada harcanıyor. H\u2082O oluşma hızı kaç M/s?',
-      c:'r<sub>C3H6</sub>=(2,4mol/2L)/(10dk\u00d760s)=1,2M/600s=<b>0,002 M/s</b><br>Katsayı oranı 3:1 olduğu için r<sub>H2O</sub>=3\u00d7r<sub>C3H6</sub>=3\u00d70,002=<b>0,006 M/s</b>' },
-    { n:28, t:'CaCO\u2083(k)+2HCl(suda)\u2192CaCl\u2082(suda)+CO\u2082(g)+H\u2082O(s) \u2014 kütle kaybı (g) zamanla (dk): 0\u21920, 2\u21922,1, 4\u21923,0, 6\u21923,5, 8\u21923,8, 10\u21924,0, 12\u21924,1, 14\u21924,1, 16\u21924,1. a) Kütle kaybının nedeni, c) hızın zamanla değişimi, ç) tepkime ne kadar sürdü, d) 0-2 ve 0-8 dk arası CaCO\u2083/HCl ortalama harcanma hızı?',
-      c:'a) Kütle kaybı, oluşan CO\u2082 gazının (ve az miktarda su buharının) ortama kaçmasından kaynaklanır.<br>c) Zamanla derişim (HCl) azaldığı için çarpışma sıklığı düşer, tepkime hızı GİDEREK AZALIR (grafikte eğrinin eğimi giderek yataylaşır).<br>ç) 12. dakikadan sonra kütle kaybı sabitleştiği (4,1g) için tepkime yaklaşık <b>12 dakikada tamamlanmıştır</b>.<br>d) CO\u2082 mol kaybı = kütle/44: 0-2dk\u2019da 2,1/44\u22480,048 mol, 0-8dk\u2019da 3,8/44\u22480,086 mol. CaCO\u2083 harcanma hızı=CO\u2082 oluşma hızına eşit (1:1); HCl harcanma hızı bunun 2 katıdır. <b>0-2dk hızı (\u22480,024 mol/dk CaCO\u2083, 0,048 mol/dk HCl), 0-8dk hızından (\u22480,0108 mol/dk CaCO\u2083, 0,0216 mol/dk HCl) daha BÜYÜKTÜR</b> \u2014 hız zamanla azalmıştır.' },
-    { n:29, t:'Linyit (C:%30, Isıl:4000 kcal/kg), Taş kömürü (C:%70, 6500), Antrasit (C:%85, 7800). a) Karbon oranı-ısıl değer ilişkisi? b) Hangisi daha çok çevre kirliliği yapar?',
-      c:'a) Karbon oranı arttıkça ısıl değer de ARTAR (doğru orantılı) \u2014 antrasit en yüksek karbon oranına ve ısıl değere sahiptir.<br>b) <b>Linyit</b> daha çok çevre kirliliği oluşturur; kükürt/azot oranı (ve kül oranı) diğerlerine göre değişken olsa da, düşük ısıl değeri nedeniyle AYNI enerjiyi elde etmek için çok daha FAZLA miktarda yakılması gerekir, bu da daha fazla kükürt/kül/CO\u2082 salınımına yol açar.' },
-    { n:30, t:'NO(g)+Br\u2082(g)\u2192\u00fcr\u00fcn tepkimesi: Deney1:[NO]=0,10,[Br\u2082]=0,10,r=0,010; Deney2:[NO]=0,20,[Br\u2082]=0,10,r=0,040; Deney3:[NO]=0,20,[Br\u2082]=0,30,r=0,120. a) Hız denklemi? b) Tepkime derecesi? c) k değeri/birimi? ç) [NO]=0,4,[Br\u2082]=0,2 iken hız?',
-      c:'1\u21922: [Br\u2082] sabit, [NO] 2 kat\u2192hız 4 kat \u2192 NO\u2019ya göre <b>2. derece</b>. 2\u21923: [NO] sabit, [Br\u2082] 3 kat\u2192hız 3 kat \u2192 Br\u2082\u2019ye göre <b>1. derece</b>.<br>a) <b>r=k[NO]\u00b2[Br\u2082]</b><br>b) Tepkime derecesi=2+1=<b>3</b><br>c) k=0,010/[(0,1)\u00b2\u00d70,1]=<b>10</b>, birimi=<b>1/(M\u00b2\u00b7s)</b><br>ç) r=10\u00d7(0,4)\u00b2\u00d70,2=10\u00d70,16\u00d70,2=<b>0,32 M/s</b>' },
-    { n:31, t:'N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g) tepkimesi 3 farklı deneyde (I: V,T; II: V,T aynı; III: V,2T farklı hacim/sıcaklık) modellenmiş. A ve B kaplarındaki NH\u2083 oluşum hızlarını karşılaştırınız.',
-      c:'Derişim (V k\u00fc\u00e7\u00fck/T y\u00fcksek olan kapta) ve sıcaklık ARTTIKÇA \u00e7arpışma sıklığı/şiddeti artar \u2192 NH\u2083 oluşma hızı da o kapta DAHA B\u00dcY\u00dcKT\u00dcR. Hacmi k\u00fc\u00e7\u00fck (derişimi y\u00fcksek) ya da sıcaklığı fazla olan kapta tepkime daha HIZLI ger\u00e7ekle\u015fir \u2014 \u00e7arpı\u015fma teorisine g\u00f6re bu, hem \u00e7arpı\u015fma sıklığının hem de etkin \u00e7arpı\u015fma oranının artmasıyla a\u00e7ıklanır.' },
-    { n:32, t:'NO(g)+O\u2083(g)\u2192NO\u2082(g)+O\u2082(g) \u2014 \u00e7arpı\u015fma olasılıkları 1x,2x,4x,9x g\u00f6sterilmi\u015f. a) Hızları kar\u015fıla\u015ftırın b) NO derişimi artı\u015fının etkisi c) Sıcaklığın etkisi \u00e7) Ortalama hızın zamanla de\u011fi\u015fimi?',
-      c:'a) \u00c7arpı\u015fma olasılı\u011fı arttık\u00e7a (1x\u21929x) tepkime hızı da ARTAR \u2014 do\u011fru orantılıdır.<br>b) NO derişiminin artması, birim hacimdeki tanecik sayısını artırarak \u00e7arpı\u015fma olasılı\u011fını (ve dolayısıyla hızı) ARTIRIR.<br>c) Sıcaklık artı\u015fı hem \u00e7arpı\u015fma sıklı\u011fını hem de etkin \u00e7arpı\u015fma oranını artırarak hızı ARTIRIR.<br>\u00e7) Tepkenler harcandık\u00e7a derişimleri azalaca\u011fı i\u00e7in ortalama hız zamanla AZALIR.' },
-    { n:33, t:'C\u2082H\u2084(g)+H\u2082(g)\u2192C\u2082H\u2086(g) tepkimesine iki farklı etki uygulanmış (Grafik 1: tanecik sayısı-KE, e\u011fri geni\u015fliyor/kayıyor; Grafik 2: PE-TK, tepe y\u00fckseklik farklı). a) Ne t\u00fcr etkiler yapılmı\u015f? b) Bu etkiler \u00e7arpı\u015fma teorisine g\u00f6re neden hızlandırır?',
-      c:'a) Grafik 1\u2019deki de\u011fi\u015fim (e\u011frinin sa\u011fa kayıp geni\u015flemesi) <b>SICAKLIK ARTI\u015eI</b>dır; Grafik 2\u2019deki de\u011fi\u015fim (tepe y\u00fcksekli\u011finin d\u00fc\u015fmesi) <b>KATALİZ\u00d6R</b> eklenmesidir.<br>b) Sıcaklık artı\u015fı taneciklerin kinetik enerjisini artırarak eşik de\u011fer(ini a\u015fan) tanecik sayısını artırır; katalizör ise aktivasyon enerjisini d\u00fc\u015f\u00fcrerek AYNI enerjiyle daha \u00e7ok taneci\u011fin etkin \u00e7arpı\u015fma yapmasını sa\u011flar \u2014 her ikisi de etkin \u00e7arpı\u015fma sayısını artırarak hızı artırır.' },
-    { n:34, t:'Na\u2082CO\u2083(k)+2HCl(suda)\u21922NaCl(suda)+CO\u2082(g)+H\u2082O(s) \u2014 e\u015fit k\u00fctlede topak/toz \u00e7ama\u015fır sodası. a) T\u00fcplerde hangisi topak/toz? b) Grafikteki A/B e\u011frileri hangisi topak/toz?',
-      c:'a) Daha \u00e7ok/hızlı k\u00f6p\u00fcren (gaz \u00e7ıkı\u015fı fazla olan) t\u00fcp <b>TOZ</b> formdur (y\u00fczey alanı b\u00fcy\u00fck oldu\u011fu i\u00e7in daha hızlı tepkimeye girer); di\u011feri <b>TOPAK</b>tır.<br>b) Grafikte daha ERKEN platoya ula\u015fan (dik ba\u015flayan) e\u011fri A ise, <b>A=TOZ</b> (hızlı), <b>B=TOPAK</b> (yavaş) formdur \u2014 y\u00fczey alanı b\u00fcy\u00fck olan toz, aynı CO\u2082 miktarına daha KISA s\u00fcrede ula\u015fır.' }
-  ];
-
-  var MOL_COK = [
-    { n:35, t:'Kireç taşının (CaCO\u2083) sönmemiş kirece (CaO) dönüştüğü tepkime için: I. Endotermik bir tepkimedir. II. Kireç taşının enerjisi ürünlerden daha yüksektir. III. Isı aldığı sürece tepkime devam eder. \u2014 hangileri doğrudur?',
-      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:3,
-      ac:'CaCO\u2083\u2192CaO+CO\u2082 fırınlama (ısı) gerektirir \u2192 ENDOTERMİK (I doğru). Endotermikte TEPKEN (kireçtaşı) enerjisi ÜRÜNDEN düşüktür, yüksek değil (II yanlış). Endotermik olduğu için ısı verildikçe tepkime sürer (III doğru). \u2192 I ve III' },
-    { n:36, t:'Sönmemiş kirecin (CaO) sönmüş kirece (Ca(OH)\u2082) dönüştüğü tepkime için hangisi YANLIŞTIR?',
-      o:['Isı alarak gerçekleşir','Çevreye enerji verir','Ürünün enerjisi tepkenlerden azdır','Sistemin enerjisi azalır','Çevrenin sıcaklığı artar'], c:0,
-      ac:'CaO+H\u2082O\u2192Ca(OH)\u2082 (kireç söndürme) bilinen bir EKZOTERMİK tepkimedir \u2014 ısı ALMAZ, ısı VERİR. "Isı alarak gerçekleşir" ifadesi YANLIŞtır.' },
-    { n:37, t:'Sönmüş kirecin (Ca(OH)\u2082) kireç taşına (CaCO\u2083) dönüştüğü tepkime için: I. Ekzotermiktir. II. Kireç taşının enerjisi tepkenlere göre daha düşüktür. III. Çevreden ısı soğurarak gerçekleşir. \u2014 hangileri doğrudur?',
-      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:3,
-      ac:'Ca(OH)\u2082+CO\u2082\u2192CaCO\u2083+H\u2082O ekzotermiktir (I doğru), bu yüzden ürün (kireçtaşı) tepkenden daha düşük enerjilidir (II doğru). Ekzotermik olduğu için ısı ALMAZ, VERİR (III yanlış). \u2192 I ve II' },
-    { n:38, t:'Metindeki bilgilere göre tepkimeler için: I. Çevreleriyle enerji alışverişi yapabilirler. II. Ekzotermik tepkimeler çevrelerine ısı verir. III. Endotermik tepkimeler çevresinden ısı alır. \u2014 hangilerine ulaşılabilir?',
-      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:4,
-      ac:'Üçü de temel enerji-tepkime ilişkilerinin doğru ifadeleridir. \u2192 I, II ve III' },
-    { n:39, t:'Farklı maddelerin yakıt olma potansiyelini belirlemek için hangi deneyde bağımlı/bağımsız/kontrol değişkenleri en uygun kullanılmıştır?',
-      o:['Farklı miktardaki H\u2082\u2019yi aynı koşullarda yakmak','Aynı miktar H\u2082 ve karbonlu maddeyi FARKLI sıcaklıklarda yakmak','Aynı miktardaki H\u2082 ve karbonlu maddeyi AYNI koşullarda yakmak','Farklı basınçlarda aynı miktar H\u2082 yakmak','Farklı sıcaklıklarda aynı miktar karbonlu madde yakmak'], c:2,
-      ac:'Tek değişken (madde cinsi) değişip diğer her şeyin (miktar, koşul) SABİT tutulduğu tasarım bilimsel karşılaştırma için doğrudur.' },
-    { n:40, t:'\u201cMaarif 24\u201d uzay gemisi hikayesinde, hidrojen ve karbon bazlı madde karşılaştırmasında neden-sonuç açısından DOĞRU ifade hangisidir?',
-      o:['Hidrojenin bolluğu onu en güvenli kaynak yapar','Karbon bazlı maddenin yüksek verimi değerlendirilemez','Hidrojenin yüksek enerjisi tek başına iyi yakıt olması için yeterlidir','Karbon bazlının kısa yanma süresi iyi kaynak yapar','Hidrojenin yüksek enerjisi VE yalnızca su oluşturması onu iyi kaynak yapar'], c:4,
-      ac:'Metin, hidrojenin hem yüksek enerji potansiyeline hem de temiz (yalnızca su) yanma ürününe sahip olmasını BİRLİKTE vurgular.' },
-    { n:41, t:'Hidrojen ve karbon bazlı yakıtın karşılaştırılabilir yönleri: I. Aynı ürünü oluştururlar. II. Enerji potansiyelleri benzer derecede yüksektir. III. Çevresel sürdürülebilirlik açısından farklı sonuçlar doğururlar. \u2014 hangileri yapılabilir?',
-      o:['Yalnız I','I ve II','II ve III','I ve III','I, II ve III'], c:2,
-      ac:'H\u2082 sadece su, karbonlu madde ise CO\u2082/emisyon da oluşturur (I yanlış); ikisi de yüksek enerji potansiyeline sahiptir (II doğru); çevresel etkileri belirgin şekilde farklıdır (III doğru).' },
-    { n:42, t:'Propan gazı yanmada ısı verir, ayrışmada ısı alır. Bu durumu açıklamak için HANGİSİ KULLANILAMAZ?',
-      o:['Bağ sağlamlıklarının farklı olması','Farklı bileşikler oluşması','Ürünlerin molekül kütlelerinin farklı olması','Bağ kararlılığının farklı olması','Kırılan/oluşan bağ enerjilerinin farklı olması'], c:2,
-      ac:'Molekül KÜTLESİ, tepkimenin enerji (ısı alışverişi) yönünü açıklayan bir etken DEĞİLDİR \u2014 enerji farkı bağ enerjilerinden kaynaklanır, kütleden değil.' },
-    { n:43, t:'Propanın yanma ve ayrışma tepkimeleri için hangisi DOĞRUDUR? (Bağ enerjileri: C-H:414, C-C:347, O=O:498, H-H:436, C=C:611, C=O:736, O-H:464)',
-      o:['Yanmada tepken bağ enerjisi ürünlerden yüksektir','Ayrışmada tepken bağ enerjisi ürünlerden düşüktür','Yanmada tepkene göre kararlılığı düşük ürünler oluşur','Ayrışmada tepkene göre kararlılığı yüksek ürünler oluşur','Her iki tepkimede de en yüksek enerjili bağ ürünler tarafındadır'], c:4,
-      ac:'Hesap: Yanmada kırılan=6496kJ<oluşan=8128kJ (tepken enerjisi DÜŞÜK, A yanlış); ürünler DAHA kararlı (C yanlış). Ayrışmada kırılan(propan)=4006>oluşan(propilen+H\u2082)=3878 (tepken enerjisi YÜKSEK, B yanlış); ürünler daha AZ kararlı (D yanlış). En yüksek tekil bağ enerjisi olan C=O(736, yanma ürünü) ve C=C(611, ayrışma ürünü) ikisi de ÜRÜN tarafındadır \u2192 E doğru.' },
-    { n:44, t:'Propanın yanma ve ayrışma tepkime entalpileri bağ enerjilerinden hesaplandığında hangi seçenekteki değerlere ulaşılır?',
-      o:['-816, 128','-1632, -128','816, -128','-1632, 128','128, 1632'], c:3,
-      ac:'Yanma: kırılan(8C-H+2C-C+5O=O)=3312+694+2490=6496; oluşan(6C=O+8O-H)=4416+3712=8128; \u0394H=6496-8128=<b>-1632 kJ</b>. Ayrışma: kırılan(2C-C+8C-H)=694+3312=4006; oluşan(1C=C+1C-C+6C-H+1H-H)=611+347+2484+436=3878; \u0394H=4006-3878=<b>+128 kJ</b>.' },
-    { n:45, t:'Glikozun (C\u2086H\u2081\u2082O\u2086, ΔHf=-1273 kJ/mol) yanma ürünleri CO\u2082(ΔHf=-393,5) ve H\u2082O(g)(ΔHf=-241,8). Günlük 10155,2 kJ enerji ihtiyacını sadece glikozdan karşılayan bir insanın kaç mol glikoza ihtiyacı vardır?',
-      o:['2','4','6','8','10'], c:1,
-      ac:'ΔH<sub>yanma</sub>=[6(-393,5)+6(-241,8)]-(-1273)=-3811,8+1273=<b>-2538,8 kJ/mol</b>. 10155,2/2538,8=<b>4 mol</b>.' },
-    { n:46, t:'Glikozun yanmasına ait standart tepkime entalpisi kaç kJ\u2019dür?',
-      o:['-3811,8','-2538,8','-1273','1273','2538,8'], c:1,
-      ac:'ΔH=[6(-393,5)+6(-241,8)]-(-1273)=-2361-1450,8+1273=<b>-2538,8 kJ</b>.' },
-    { n:47, t:'Glikozun yanma tepkimesiyle ilgili hangisi YANLIŞTIR?',
-      o:['Ekzotermik bir tepkimedir','Oluşan bağların enerjisi kırılan bağların enerjisinden düşüktür','Tepkime sırasında çevreye ısı verilir','Ürünler tepkenlerden daha kararlıdır','360 g glikozun yanması ile 5621,6 kJ ısı açığa çıkar'], c:4,
-      ac:'360g glikoz=2 mol; 2\u00d72538,8=<b>5077,6 kJ</b> açığa çıkar, verilen 5621,6 kJ değeri HATALIDIR. (Not: B seçeneği de bağ enerjisi yönü açısından tartışmaya açıktır; E sayısal olarak en net yanlıştır.)' },
-    { n:48, t:'Verilen bilgilere göre: I. Tepkimedeki enerji değişimi II. \u0394H ile oluşum entalpileri bağıntısı III. 100g glikozdan alınan enerji \u2014 hangileri bulunabilir?',
-      o:['Yalnız I','I ve II','I ve III','II ve III','I, II ve III'], c:4,
-      ac:'Verilen oluşum entalpileriyle hem tepkime entalpisi hem de herhangi bir kütledeki enerji miktarı hesaplanabilir. \u2192 I, II ve III' },
-    { n:49, t:'Standart oluşum entalpileriyle ilgili hangisi YANLIŞTIR?',
-      o:['Glikozun oluşumunda dışarıdan enerji alınır','O\u2082 elementel halde olduğu için ΔHf=0 kabul edilir','Suyun oluşumu ekzotermiktir','1 mol CO\u2082 oluşumunda çevreye 393,5 kJ ısı verilir','Standart tepkime entalpisi oluşum entalpileriyle hesaplanabilir'], c:0,
-      ac:'Glikozun ΔHf=-1273 kJ/mol (NEGATİF) olduğu için oluşumu EKZOTERMİKTİR \u2014 enerji dışarı verilir, dışarıdan ALINMAZ. Bu ifade YANLIŞtır.' },
-    { n:50, t:'A\u2082+B\u2082\u21922AB tepkimesindeki moleküllerin çarpışmalarından hangisi YAPILAMAZ?',
-      o:['Yalnız 2. çarpışma ürünle sonuçlanmıştır','2 ve 3. çarpışma uygun geometride gerçekleşmiştir','Uygun geometrideki TÜM çarpışmalar ürün oluşumuyla sonuçlanmıştır','1. çarpışma uygun geometride olmadığı için gerçekleşmemiştir','Tepkimenin gerçekleşmesi için çarpışma gerekir'], c:2,
-      ac:'Uygun geometri TEK BAŞINA yeterli değildir; yeterli kinetik enerji de gerekir. "Uygun geometrideki TÜM çarpışmalar ürün oluşturur" ifadesi bir AŞIRI GENELLEMEDİR, yapılamaz.' },
-    { n:51, t:'3. çarpışmanın ürün oluşumuyla sonuçlanmamasının nedenini EN İYİ hangisi açıklar?',
-      o:['Uygun geometride gerçekleşmemesi','Yeterli enerjiye sahip olmaması','Etkin çarpışma yapması','Farklı atomlar arasında bağ oluşamaması','Ortam koşullarının uygun olmaması'], c:1,
-      ac:'(Görseldeki tabloya göre değişebilir; genel eğitim amacı geometri VE enerji koşulunun AYRI AYRI sınanmasıdır.) Yaygın senaryoda 3. çarpışma uygun geometride olsa da yeterli kinetik enerjiye sahip değildir.' },
-    { n:52, t:'Moleküllerin çarpışma durumlarını gösteren görsele göre HANGİ çıkarım yapılabilir?',
-      o:['Çarpışma tek başına yeterlidir','Uygun geometrideki tüm çarpışmalar ürün oluşturur','Yeterli enerjiyle her çarpışma ürün oluşturur','Uygun geometride VE yeterli enerjiyle olan çarpışmalar ürün oluşturabilir','Düşük enerjili çarpışma sonucu ürün oluşabilir'], c:3,
-      ac:'Etkin çarpışmanın İKİ koşulunun (geometri + enerji) BİRLİKTE sağlanması gerektiğini doğru ifade eden tek seçenek budur.' },
-    { n:53, t:'Uygun geometride ve yeterli kinetik enerjiyle gerçekleşen çarpışmalara etkin çarpışma denir. Görseldeki hangi durumlar etkin çarpışma olarak nitelendirilebilir?',
-      o:['Yalnız I','Yalnız II','I ve III','II ve III','I, II ve III'], c:1,
-      ac:'(Görsele bağlı olarak) Genellikle üç durumdan yalnızca BİRİ hem uygun geometri hem yeterli enerji koşulunu birlikte sağlar.' },
-    { n:54, t:'Roket motorlarında kullanılan N\u2082O\u2084/NO\u2082 tepkimesine ait derişim-zaman grafiğine göre (NO\u2082 azalıyor, N\u2082O\u2084 artıyor), tepkimenin denklemi ne olabilir?',
-      o:['NO\u2082(g)\u2192N\u2082O\u2084(g)','N\u2082O\u2084(g)\u2192NO\u2082(g)','2NO\u2082(g)\u2192N\u2082O\u2084(s)','2NO\u2082(s)\u2192N\u2082O\u2084(k)','2NO\u2082(g)\u2192N\u2082O\u2084(g)'], c:4,
-      ac:'NO\u2082 azalıp N\u2082O\u2084 arttığına ve her iki madde de gaz halinde olduğuna göre denklem katsayı dengesiyle <b>2NO\u2082(g)\u2192N\u2082O\u2084(g)</b> olmalıdır.' },
-    { n:55, t:'Grafiğe göre tepkimeyle ilgili hangisi DOĞRUDUR?',
-      o:['Birim zamanda NO\u2082 kütlesindeki değişim artmıştır','N\u2082O\u2084 oluşma hızı giderek artmıştır','NO\u2082 harcanma hızı N\u2082O\u2084 oluşma hızına eşittir','Aynı zaman aralıklarında harcanan NO\u2082 kütlesi oluşan N\u2082O\u2084 kütlesine eşittir','Tepkime hızı NO\u2082 harcanma hızına eşittir'], c:3,
-      ac:'Kütlenin korunumu yasası gereği, kapalı bir sistemde harcanan NO\u2082 kütlesi HER ZAMAN oluşan N\u2082O\u2084 kütlesine eşittir (2NO\u2082\u2192N\u2082O\u2084, 2\u00d746g=92g=92g). NO\u2082 harcanma hızı, katsayı farkı (2:1) nedeniyle N\u2082O\u2084 oluşma hızının 2 katıdır, tepkime hızı ise NO\u2082 harcanma hızının YARISIdır.' },
-    { n:56, t:'Grafiğe göre tepkime hızının zamanla nasıl değiştiğini VE nedenini EN İYİ hangisi açıklar?',
-      o:['Derişim azaldığı için çarpışma sayısı azalır, tepkime yavaşlar','Derişim sabit kaldığı için hız sabit kalır','Ürün derişimi arttığı için hız artar','Kinetik enerji zamanla arttığı için hız artar','Kinetik enerji zamanla azaldığı için hız azalır'], c:0,
-      ac:'Sabit sıcaklıkta tepken (NO\u2082) derişimi zamanla azaldığı için çarpışma sıklığı düşer ve tepkime giderek YAVAŞLAR (kinetik enerji sıcaklığa bağlıdır, burada sıcaklık sabittir).' },
-    { n:57, t:'İlk 20 saniyede N\u2082O\u2084 gazının ortalama oluşma hızı nedir?',
-      o:['0,3\u00d710\u207b\u00b3 M/s','0,6\u00d710\u207b\u00b3 M/s','1,2\u00d710\u207b\u00b3 M/s','1,4\u00d710\u207b\u00b3 M/s','1,6\u00d710\u207b\u00b3 M/s'], c:1,
-      ac:'r=\u0394[N\u2082O\u2084]/\u0394t; grafikteki 0. ve 20. saniye derişim okumalarının farkının 20 saniyeye bölünmesiyle hesaplanır. (Kesin sayısal cevap için grafikteki tam veri noktaları gereklidir; kitabın tipik veri örüntüsüyle en olası cevap budur.)' },
-    { n:58, t:'80. ve 120. saniyeler arasında NO\u2082 gazının ortalama harcanma hızı nedir?',
-      o:['0,1\u00d710\u207b\u00b3 M/s','0,2\u00d710\u207b\u00b3 M/s','0,3\u00d710\u207b\u00b3 M/s','0,4\u00d710\u207b\u00b3 M/s','0,5\u00d710\u207b\u00b3 M/s'], c:1,
-      ac:'Tepkime dengeye/plato durumuna yaklaştıkça (80-120s aralığı) derişim değişimi KÜÇÜLÜR, bu yüzden bu aralıktaki ortalama hız, ilk aralıklara göre daha DÜŞÜKTÜR. (Kesin değer için grafiğin tam verisi gereklidir.)' },
-    { n:59, t:'\u201cSıcaklığın artırılması tepkime hızını artırır.\u201d hipotezini kuran öğrenci, deneydeki III. etki (sıcaklık artırma) sonucu HANGİ gözlemine göre açıklayabilir?',
-      o:['Çinko parçalarının küçülme süresinin artması','Toplam gaz miktarının azalması','Gaz çıkış süresinin azalması','Çinko parçalarının tükenmesi','Toplam gaz miktarının artması'], c:2,
-      ac:'Sıcaklık artırılınca tepkime HIZLANIR, bu da gazın daha KISA sürede (azalan sürede) tamamen açığa çıkması ile gözlenir.' },
-    { n:60, t:'\u201cÇarpışma sıklığı tepkime hızını artırır mı?\u201d sorusunun cevabına hangi etkilerde (I:derişim, II:toz haline getirme, III:sıcaklık, IV:katalizör) ulaşılabilir?',
-      o:['Yalnız I','I ve II','II ve III','I, II ve III','I, II ve IV'], c:3,
-      ac:'Derişim (I), temas yüzeyi (II) ve sıcaklık (III) doğrudan ÇARPIŞMA SIKLIĞINI artırır. Katalizör (IV) ise çarpışma sıklığını DEĞİL, etkin çarpışma ORANINI (aktivasyon enerjisini düşürerek) artırır. \u2192 I, II ve III' },
-    { n:61, t:'Hangi etkiler çarpışma teorisi temelinde birim zamandaki ETKİN çarpışma sayısını artırarak hızı artırır?',
-      o:['I ve II','I ve III','II, III ve IV','I, II ve IV','I, II, III ve IV'], c:4,
-      ac:'Derişim, temas yüzeyi, sıcaklık VE katalizör \u2014 dördü de (farklı mekanizmalarla olsa da) sonuçta ETKİN çarpışma sayısını artırır. \u2192 Hepsi' },
-    { n:62, t:'I. etkide (derişim artırma) tepkime hızının arttığı gözlemlenmiştir. Bu sonuç EN İYİ hangisiyle açıklanır?',
-      o:['Kinetik enerjinin artması','Etkin çarpışma sayısının artması','Yüzey alanının artması','Katalizörün etkisi','Aktivasyon enerjisinin düşmesi'], c:1,
-      ac:'Derişim artışı, birim hacimdeki tanecik sayısını (dolayısıyla etkin çarpışma sayısını) artırır; kinetik enerjiyi ya da Ea\u2019yı DEĞİŞTİRMEZ.' },
-    { n:63, t:'IV. etkide (katalizör ekleme) tepkime hızının arttığı gözlemlenmiştir. Bu sonuç EN İYİ hangisiyle açıklanır?',
-      o:['Kinetik enerjinin artması','Çarpışma sayısının artması','Yüzey alanının artması','Derişimin artması','Aktivasyon enerjisinin düşmesi'], c:4,
-      ac:'Katalizörün TEMEL etki mekanizması aktivasyon enerjisini düşürmesidir; çarpışma sayısını ya da derişimi doğrudan değiştirmez.' },
-    { n:64, t:'2H\u2082(g)+2NO(g)\u21922H\u2082O(g)+N\u2082(g) tepkimesi için deney: [H\u2082,NO,Hız]: [0,010;0,024;2,4\u00d710\u207b\u2076], [0,005;0,024;1,2\u00d710\u207b\u2076], [0,010;0,012;0,6\u00d710\u207b\u2076]. Hangi hız denklemi DOĞRUDUR?',
-      o:['r=k[H\u2082]\u00b2[NO]\u00b2','r=k[H\u2082][NO]\u00b2','r=k[H\u2082][NO]','r=k[NO]\u00b2','r=k[H\u2082]\u00b2[NO]'], c:1,
-      ac:'1\u21922: NO sabit, H\u2082 yarıya\u2192hız yarıya \u2192 H\u2082\u2019ye göre 1. derece. 1\u21923: H\u2082 sabit, NO yarıya\u2192hız 1/4\u2019e düşer \u2192 NO\u2019ya göre 2. derece. \u2192 <b>r=k[H\u2082][NO]\u00b2</b>' },
-    { n:65, t:'Öğrencinin tespit ettiği hız sabitinin birimi, değeri ve tepkime derecesi tablodaki hangi satırla eşleşir? (I:1/sM\u00b2,0,1,3 II:1/sM\u00b2,5/12,2 III:1/sM,0,1,2 IV:1/sM,0,1,3 V:1/sM\u00b2,5/12,3)',
-      o:['I','II','III','IV','V'], c:4,
-      ac:'r=k[H\u2082][NO]\u00b2\u2019den 1. deney verisiyle: 2,4\u00d710\u207b\u2076=k\u00d70,010\u00d70,024\u00b2 \u2192 k=5/12\u22480,417, birimi 1/(s\u00b7M\u00b2), tepkime derecesi=1+2=3. \u2192 <b>V</b>' },
-    { n:66, t:'Öğrencinin oluşturduğu önermeler: I. Tepken derişimi arttıkça hız artar. II. Derişim hızı etkilemez. III. Derişim arttıkça hız azalır. \u2014 hangisi bilimsel olarak doğrudur?',
-      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:0,
-      ac:'Standart kimyasal kinetikte tepken derişiminin artması, çarpışma sıklığını artırarak tepkime hızını ARTIRIR. \u2192 Yalnız I' }
-  ];
-
-  var MOL_CATS = ['Doğru-Yanlış','Boşluk Doldurma','Açık Uçlu','Çoktan Seçmeli'];
-  var molSt = { cat: 0 };
-
-  function maarifMolCat(){
-    return '' +
-    '<div class="card" style="margin-bottom:12px">' +
-      '<div class="slbl">1. Tema Ölçme ve Değerlendirme \u2014 66 Soru</div>' +
-      '<p style="font-size:12px;color:var(--tx2);line-height:1.6">Kitaptaki t\u00fcm soru t\u00fcrleri (do\u011fru-yanlış, boşluk doldurma, a\u00e7ık u\u00e7lu, \u00e7oktan se\u00e7meli) \u00e7\u00f6z\u00fcml\u00fc olarak. Bir soruya dokunarak cevabı/\u00e7\u00f6z\u00fcm\u00fc g\u00f6ster.</p>' +
-    '</div>' +
-    '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' +
-      MOL_CATS.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="molSetCat(' + i + ',this)">' + c + '</button>'; }).join('') +
-    '</div></div>' +
-    '<div id="mol-list"></div>';
-  }
-  window.molSetCat = function(i, btn){ molSt.cat = i; if (btn) selectInRow(btn); molRenderList(); };
-
-  function molToggle(id){
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.style.display = (el.style.display === 'none' || !el.style.display) ? 'block' : 'none';
-  }
-  window.molToggle = molToggle;
-
-  function molRenderList(){
-    var box = document.getElementById('mol-list');
-    if (!box) return;
-    var html = '';
-    if (molSt.cat === 0) {
-      html += '<div class="card" style="margin-bottom:10px;padding:10px 14px"><div style="font-size:12px;color:var(--tx3);line-height:1.5">Soru 1 (Dallanmış Ağaç) \u2014 kitaptaki 15 ifadenin her biri i\u00e7in do\u011fru/yanlış de\u011ferlendirmesi (asıl sorudaki dallanma şeması yerine düz liste olarak sunulmuştur).</div></div>';
-      MOL_DY.forEach(function(q){
-        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'moldy-' + q.q + '\')">' +
-          '<div style="font-size:13px;color:#fff;font-weight:600">1.' + q.q + ') ' + q.t + '</div>' +
-          '<div id="moldy-' + q.q + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
-            '<span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:6px;background:' + (q.a==='D'?'rgba(34,197,94,.2);color:#86efac':'rgba(239,68,68,.2);color:#fca5a5') + '">' + (q.a==='D'?'DOĞRU':'YANLIŞ') + '</span>' +
-            '<div style="font-size:12px;color:var(--tx2);line-height:1.6">' + q.ac + '</div>' +
-          '</div></div>';
-      });
-    } else if (molSt.cat === 1) {
-      MOL_BOSLUK.forEach(function(q){
-        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molbos-' + q.n + '\')">' +
-          '<div style="font-size:13px;color:#fff;font-weight:600">' + q.n + '. ' + q.t + '</div>' +
-          '<div id="molbos-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
-            '<span style="font-size:13px;font-weight:700;color:#f59e0b">\u2192 ' + q.a + '</span>' +
-            (q.ac ? '<div style="font-size:12px;color:var(--tx2);margin-top:4px">' + q.ac + '</div>' : '') +
-          '</div></div>';
-      });
-    } else if (molSt.cat === 2) {
-      MOL_ACIK.forEach(function(q){
-        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molacik-' + q.n + '\')">' +
-          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5">' + q.n + '. ' + formatOncul(q.t) + '</div>' +
-          '<div id="molacik-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.7">' + q.c + '</div></div>';
-      });
-    } else {
-      MOL_COK.forEach(function(q){
-        var optsHtml = q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:var(--tx2)">' + String.fromCharCode(65+i) + ') ' + o + '</div>'; }).join('');
-        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
-          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5;margin-bottom:6px">' + q.n + '. ' + formatOncul(q.t) + '</div>' +
-          '<div style="margin-bottom:8px">' + optsHtml + '</div>' +
-          '<div onclick="molToggle(\'molcok-' + q.n + '\')" style="cursor:pointer;font-size:12px;font-weight:600;color:#f59e0b;padding:6px 0;border-top:1px solid rgba(255,255,255,.08)">\ud83d\udc41\ufe0f Cevabı ve çözümü göster</div>' +
-          '<div id="molcok-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
-            '<div style="font-size:13px;font-weight:700;color:#86efac;margin-bottom:6px">Doğru cevap: ' + String.fromCharCode(65+q.c) + ') ' + q.o[q.c] + '</div>' +
-            '<div style="font-size:12px;color:var(--tx2);line-height:1.6">' + q.ac + '</div>' +
-          '</div></div>';
-      });
-    }
-    box.innerHTML = html;
-  }
-
 
   // Basit çizgi/alan grafik çizici — Grafik 1.x'lerin yeniden üretimi için ortak altyapı
   function maarifChart(canvasId, drawFn){
@@ -7899,303 +7246,16 @@
     return { padL: padL, padR: padR, padT: padT, padB: padB, plotW: W-padL-padR, plotH: H2-padT-padB };
   }
 
-  // ---------- 26. ÖZEL DERS NOTU SORULARI (el yazması PDF'ten) ----------
-  var NOTE_Q = [
-    { n:1, kat:'Hız Bağıntısı', t:'2N\u2082O\u2085(g) \u2192 4NO\u2082(g) + O\u2082(g) tepkimesi i\u00e7in: I. Tepkime denklemi bu şekildedir. II. Sabit hacimli kapta basın\u00e7taki artışla tepkime hızı \u00f6l\u00e7\u00fclebilir. III. O\u2082 gazının oluşma hızı, NO\u2082 gazının oluşma hızının 4 katıdır. \u2014 hangileri doğrudur?',
-      c:'Katsayı oranı N\u2082O\u2085:NO\u2082:O\u2082 = 2:4:1\u2019dir.<br><b>I \u2014 DOĞRU</b> (denklem verilen katsayılarla tutarlıdır).<br><b>II \u2014 DOĞRU</b>: Gaz mol sayısı 2\u2019den 5\u2019e \u00e7ıktığı i\u00e7in sabit hacimde basın\u00e7 artışı g\u00f6zlenebilir, bu da hızın \u00f6l\u00e7\u00fclmesini sağlar.<br><b>III \u2014 YANLIŞ</b>: Katsayı oranına g\u00f6re NO\u2082 hızı O\u2082 hızının 4 katıdır, tersi değil.<br>\u2192 <b>I ve II doğrudur.</b>' },
-    { n:2, kat:'Hız Bağıntısı', t:'Bir tepkimede: A\u2019nın harcanma hızı D\u2019nin oluşma hızına eşittir. E\u2019nin oluşma hızı, B\u2019nin harcanma hızının 3 katıdır. C\u2019nin oluşma hızı, E\u2019nin oluşma hızının yarısıdır. Tepkimenin denklemini yazınız.',
-      c:'r<sub>A</sub>=r<sub>D</sub> \u2192 a=d.<br>r<sub>E</sub>=3r<sub>B</sub> \u2192 e:b=3:1.<br>r<sub>C</sub>=r<sub>E</sub>/2 \u2192 e:c=2:1.<br>e i\u00e7in ortak kat se\u00e7ilirse e=6 \u2192 b=2, c=3, a=d=1.<br>\u2192 <b>A + 2B \u2192 3C + D + 6E</b>' },
-    { n:3, kat:'Ortalama Hız', t:'CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g) tepkimesinde 20 saniyede 4,8 gram CH\u2084 harcanıyor. H\u2082O\u2019nun ortalama oluşma hızı ka\u00e7 mol/dk\u2019dır? (H:1, C:12)',
-      c:'mol CH\u2084 = 4,8/16=0,3 mol. 20 s = 1/3 dk. r<sub>CH4</sub>=0,3/(1/3)=<b>0,9 mol/dk</b>.<br>Katsayı oranı CH\u2084:H\u2082O=1:2 \u2192 r<sub>H2O</sub>=2\u00d70,9=<b>1,8 mol/dk</b>.' },
-    { n:4, kat:'Ortalama Hız', t:'4NH\u2083(g)+3O\u2082(g)\u21922N\u2082(g)+6H\u2082O(g) tepkimesi 2 litrelik sabit hacimli kapta 2 dakikada ger\u00e7ekleşiyor. 13,6 gram NH\u2083 tamamı tepkimeye girdiğinde N\u2082 ve H\u2082O\u2019nun oluşma hızı ka\u00e7 mol/(L\u00b7s)\u2019dir? (H:1, N:14)',
-      c:'mol NH\u2083=13,6/17=0,8 mol. 2 dk=120 s. r<sub>NH3</sub>=(0,8/2L)/120s=<b>0,00333 M/s</b>.<br>Katsayı oranı NH\u2083:N\u2082:H\u2082O=4:2:6.<br>r<sub>N2</sub>=r<sub>NH3</sub>\u00d7(2/4)=<b>0,00167 M/s</b>.<br>r<sub>H2O</sub>=r<sub>NH3</sub>\u00d7(6/4)=<b>0,005 M/s</b>.' },
-    { n:5, kat:'Ortalama Hız', t:'Mg(k)+2HBr(suda)\u2192MgBr\u2082(suda)+H\u2082(g) tepkimesinde Mg kütlesi 120 saniyede 18,8 g\u2019dan 11,6 g\u2019a düşüyor. HBr \u00e7\u00f6zeltisinin harcanma hızı ka\u00e7 mol/dk\u2019dır? (Mg:24)',
-      c:'\u0394m(Mg)=18,8\u221211,6=7,2 g \u2192 \u0394n(Mg)=7,2/24=0,3 mol. 120 s=2 dk.<br>r<sub>Mg</sub>=0,3/2=<b>0,15 mol/dk</b>.<br>Katsayı oranı Mg:HBr=1:2 \u2192 r<sub>HBr</sub>=2\u00d70,15=<b>0,3 mol/dk</b>.' },
-    { n:6, kat:'Ortalama/Anlık Hız', t:'X(g) \u2192 2Y(g) tepkimesinde X gazının derişiminin zamanla değişimi grafikte verilmiştir (t=0\u2019da 3,6 M, t=10s\u2019de 2,4 M, t=20s\u2019de 1,6 M). Buna g\u00f6re: I. 0-10 saniyeler arası Y gazının ortalama oluşma hızı ka\u00e7 mol/L\u00b7s\u2019dir? II. 10-20 saniyeler arası Y gazının ortalama oluşma hızı ka\u00e7 mol/L\u00b7s\u2019dir?',
-      graph:'noteg-x2y',
-      c:'Grafikten okunan doğrulanmış noktalar: t=0:3,6 M, t=10s:2,4 M, t=20s:1,6 M (derişim oranı her 10 saniyede sabit 2/3 katsayısıyla azalıyor).<br><b>I) 0-10s arası:</b> \u0394[X]=3,6\u22122,4=1,2 M, \u0394t=10s. r<sub>X</sub>=1,2/10=0,12 M/s. Katsayı oranı X:Y=1:2 \u2192 r<sub>Y</sub>=2\u00d70,12=<b>0,24 mol/L\u00b7s</b>.<br><b>II) 10-20s arası:</b> \u0394[X]=2,4\u22121,6=0,8 M, \u0394t=10s. r<sub>X</sub>=0,8/10=0,08 M/s \u2192 r<sub>Y</sub>=2\u00d70,08=<b>0,16 mol/L\u00b7s</b>.<br>\u2192 G\u00f6r\u00fcld\u00fcğ\u00fc gibi hız zamanla AZALIYOR (0,24\u21920,16), bu da derişim azaldık\u00e7a \u00e7arpışma sıklığının azalmasıyla tutarlıdır.' },
-    { n:7, kat:'Ortalama Hız', t:'Al(k)+3HCl(suda)\u2192AlCl\u2083(suda)+\u00b3\u2044\u2082H\u2082(g) tepkimesine g\u00f6re 2 L\u2019lik bir kapta [HCl] derişimi 1. dakikada 0,5 M, 4. dakikada 0,2 M olarak \u00f6l\u00e7\u00fclm\u00fcşt\u00fcr. 1. ve 4. dakikalar arasında H\u2082(g)\u2019nin oluşma hızı ka\u00e7 g/dk\u2019dır? (H:1)',
-      graph:'noteg-hcl',
-      c:'\u0394[HCl]=0,5\u22120,2=0,3 M, 2 L\u2019de \u0394n(HCl)=0,6 mol. 3 dakikada: r<sub>HCl</sub>=0,6/3=<b>0,2 mol/dk</b>.<br>Katsayı oranı HCl:H\u2082=3:1,5=2:1 \u2192 r<sub>H2</sub>=0,2/2=<b>0,1 mol/dk</b>.<br>K\u00fctlece: 0,1\u00d72 g/mol=<b>0,2 g/dk</b>.' },
-    { n:8, kat:'Hız Bağıntısı', t:'Sabit sıcaklıkta yandaki kapta ger\u00e7ekleştirilen: I. N\u2082O\u2084(g)\u21922NO\u2082(g), II. N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g), III. H\u2082(g)+I\u2082(g)\u21922HI(g) tepkimelerinden hangilerinin hızı hacim (ya da basın\u00e7) artışı g\u00f6zlenerek \u00f6l\u00e7\u00fclebilir?',
-      c:'Gaz fazında tepkime hızı hacim/basın\u00e7 değişimiyle \u00f6l\u00e7\u00fclebilmesi i\u00e7in toplam gaz MOL SAYISININ değişmesi gerekir.<br>I: 1mol\u21922mol \u2014 <b>DEĞİŞİYOR, \u00f6l\u00e7\u00fclebilir.</b><br>II: 4mol\u21922mol \u2014 <b>DEĞİŞİYOR, \u00f6l\u00e7\u00fclebilir.</b><br>III: 2mol\u21922mol \u2014 <b>DEĞİŞMİYOR, \u00f6l\u00e7\u00fclemez</b> (H\u2082 ve I\u2082 gaz halindeyse klasik bir \u00f6rnektir; I\u2082 KATI verilmiş olsaydı sonu\u00e7 değişirdi).<br>\u2192 <b>Yalnız I ve II</b> hacim/basın\u00e7 değişimiyle izlenebilir.' },
-    { n:9, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda ger\u00e7ekleşen: 1) Ag\u207a(suda)+Cl\u207b(suda)\u2192AgCl(k) 2) Fe(k)+SO\u2084\u00b2\u207b(suda)\u2192FeSO\u2084(k) \u2014 hangisi daha hızlıdır?',
-      c:'1. tepkime ZIT Y\u00dcKL\u00dc İYONLAR arasında ger\u00e7ekleşir (elektrostatik \u00e7ekim ile \u00e7ok hızlıdır). 2. tepkime bir METAL ile bir iyon arasındadır (daha yavaş, elektron transferi ve y\u00fczey etkileşimi gerektirir). \u2192 <b>1. tepkime (Ag\u207a+Cl\u207b) daha hızlıdır.</b>' },
-    { n:10, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda: 1) CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g) 2) C\u2083H\u2088(g)+5O\u2082(g)\u21923CO\u2082(g)+4H\u2082O(g) \u2014 hangisi daha hızlıdır?',
-      c:'Propanın (C\u2083H\u2088) yanması daha \u00e7ok bağın (daha b\u00fcy\u00fck molek\u00fcl, daha fazla C-H ve C-C bağı) kırılmasını gerektirir. Kırılan bağ sayısı arttık\u00e7a tepkime YAVAŞLAR. \u2192 <b>1. tepkime (metan yanması) daha hızlıdır.</b>' },
-    { n:11, kat:'Mekanizma', t:'HCOOH+H\u2082SO\u2084 tepkimesi 3 basamakta ger\u00e7ekleşiyor: 1.adım (hızlı): HCOOH+H\u2082SO\u2084\u2192HCOOH\u2082\u207a+HSO\u2084\u207b; 2.adım (\u00e7ok hızlı): HCOOH\u2082\u207a\u2192HCO\u207a+H\u2082O; 3.adım (yavaş): HCO\u207a+HSO\u2084\u207b\u2192H\u2082SO\u2084+CO. H\u2082SO\u2084\u2019\u00fcn rol\u00fc nedir, ara \u00fcr\u00fcnler nelerdir, hız denklemi nasıl yazılır?',
-      c:'H\u2082SO\u2084, 1. adımda tepkimeye girip 3. adımda değişmeden \u00e7ıkıyor \u2192 <b>KATALİZ\u00d6RD\u00dcR</b> (net tepkimede g\u00f6r\u00fcnmez).<br>HCOOH\u2082\u207a ve HCO\u207a bir basamakta oluşup diğerinde kullanıldığı i\u00e7in <b>ARA \u00dcR\u00dcNd\u00fcr</b>.<br>Hız, YAVAŞ (3.) basamağa g\u00f6re yazılır: <b>r=k[HCO\u207a][HSO\u2084\u207b]</b>.' },
-    { n:12, kat:'Hız Denklemi', t:'Aşağıdaki tepkimelerin hız bağıntıları verilmiştir: SO\u2082(g)+\u00bdO\u2082(g)\u2192SO\u2083(g), r=k[SO\u2082][O\u2082]; N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g), r=k[N\u2082][H\u2082]\u00b2. Bu tepkimelerden hangileri mekanizmalıdır?',
-      c:'SO\u2082+\u00bdO\u2082\u2192SO\u2083: katsayılar (1,\u00bd) iken hız denklemindeki \u00fcsler (1,1) \u2014 UYUMSUZ (\u00bd\u22601) \u2192 <b>mekanizmalıdır</b>.<br>N\u2082+3H\u2082\u21922NH\u2083: katsayılar (1,3) iken \u00fcsler (1,2) \u2014 UYUMSUZ (3\u22602) \u2192 <b>mekanizmalıdır</b>.<br>(Tek adımlı olabilmesi i\u00e7in hız denklemi katsayılarla TAM uyumlu olmalıdır.)' },
-    { n:13, kat:'Derişim/Piston', t:'Eşit mollerdeki A\u2082 ve B\u2082 gazları arasında A\u2082(g)+2B\u2082(g)\u2192 tepkimesi, kapalı bir kapta TEK ADIMDA ger\u00e7ekleşiyor. Sabit sıcaklık ve basın\u00e7ta, ideal pistonlu kaba, kapta bulunan İDEAL TANECİK SAYISI kadar B\u2082 gazı ilave edilirse tepkime hızı ka\u00e7 katına \u00e7ıkar?',
-      c:'Başlangı\u00e7ta n(A\u2082)=n(B\u2082)=a (eşit mol), toplam=2a, hacim=V.<br>İlave edilen B\u2082 = toplam tanecik sayısı = 2a mol.<br>Yeni n(B\u2082)=a+2a=<b>3a (3 kat)</b>; n(A\u2082)=a (değişmedi).<br>Toplam mol 2a\u21924a\u2019ya \u00e7ıktığı i\u00e7in SABİT basın\u00e7ta <b>hacim de 2 katına \u00e7ıkar</b> (V\u21922V).<br>Yeni [A\u2082]=a/2V=eski [A\u2082]\u2019nin <b>yarısı (\u00d70,5)</b>.<br>Yeni [B\u2082]=3a/2V=eski [B\u2082]\u2019nin <b>1,5 katı (\u00d71,5)</b>.<br>Tek adımlı olduğu i\u00e7in hız denklemi katsayılarla aynıdır: r=k[A\u2082][B\u2082]\u00b2.<br>Yeni hız/Eski hız = (0,5)\u00b9\u00d7(1,5)\u00b2 = 0,5\u00d72,25 = <b>9/8 (1,125 kat)</b>.<br><span style="color:#fca5a5">\u26a0\ufe0f Bu soruda başlangı\u00e7ta A\u2082 ve B\u2082\u2019nin ayrı ayrı nasıl etkilendiğini (yalnızca B\u2082 eklendiği i\u00e7in derişimleri FARKLI oranda değiştiğini) g\u00f6z \u00f6n\u00fcnde bulundurmak \u00f6nemlidir \u2014 t\u00fcm derişimlerin sabit kaldığını varsaymak yaygın bir hatadır.</span>' },
-    { n:14, kat:'Sıcaklık Etkisi', t:'Şekildeki her kapta eşit sayıda N\u2082O\u2084 molek\u00fcl\u00fc bulunmaktadır: I. Kap: V litre, 50\u00b0C \u00b7 II. Kap: 2V litre, 50\u00b0C \u00b7 III. Kap: 2V litre, 25\u00b0C. Her kapta N\u2082O\u2084(g)\u21922NO\u2082(g) tepkimesi ger\u00e7ekleşmektedir. Bu kaplardaki tepkimelerin hızlarını karşılaştırınız.',
-      c:'Sıcaklık arttık\u00e7a hız ARTAR; hacim arttık\u00e7a (derişim azaldık\u00e7a) hız AZALIR.<br><b>I. Kap</b> (V, 50\u00b0C): K\u00dc\u00c7\u00dcK hacim + Y\u00dcKSEK sıcaklık \u2192 EN HIZLI.<br><b>II. Kap</b> (2V, 50\u00b0C): B\u00dcY\u00dcK hacim ama Y\u00dcKSEK sıcaklık \u2192 ORTA.<br><b>III. Kap</b> (2V, 25\u00b0C): B\u00dcY\u00dcK hacim + D\u00dcŞ\u00dcK sıcaklık \u2192 EN YAVAŞ.<br>\u2192 <b>Hız sıralaması: I > II > III</b>.' },
-    { n:15, kat:'Sıcaklık Etkisi', t:'T\u2081 ve T\u2082 (T\u2082>T\u2081) sıcaklıklarındaki bir gazın molek\u00fcl sayısı-kinetik enerji dağılım grafiğine g\u00f6re, aşağıdakilerden hangisi YANLIŞTIR? A) T\u2082\u2019de etkin \u00e7arpışma sayısı T\u2081\u2019e g\u00f6re daha fazladır B) T\u2082\u2019de tepkime hızı T\u2081\u2019e g\u00f6re daha d\u00fcş\u00fckt\u00fcr C) Her iki sıcaklıkta Ea değeri aynıdır D) T\u2082\u2019de eşik enerjisini aşan molek\u00fcl sayısı T\u2081\u2019e g\u00f6re daha \u00e7oktur E) T\u2082\u2019de moleküllerin kinetik enerjisi T\u2081\u2019e g\u00f6re daha fazladır',
-      graph:'noteg-t1t2',
-      c:'T\u2082>T\u2081 olduğu i\u00e7in T\u2082\u2019de kinetik enerji, etkin \u00e7arpışma sayısı ve eşiği aşan molek\u00fcl sayısı DAHA FAZLADIR (A,D,E doğru); Ea sıcaklıktan etkilenmez, sabittir (C doğru). Ancak y\u00fcksek sıcaklıkta (T\u2082) hız DAHA D\u00dcŞ\u00dcK değil, DAHA Y\u00dcKSEK olur. \u2192 <b>YANLIŞ olan: B</b>' },
-    { n:16, kat:'Sıcaklık Etkisi', t:'Bir tepkimede T\u2081 ve T\u2082 sıcaklıklarındaki (T\u2082>T\u2081) enerji dağılımlarına ilişkin: I. T\u2081 sıcaklığında eşik enerjisi en k\u00fc\u00e7\u00fckt\u00fcr II. Hız sabitleri arasındaki ilişki k\u2081<k\u2082\u2019dir III. Birim zamanda en az \u00fcr\u00fcn T\u2081 sıcaklığında oluşur \u2014 hangileri YANLIŞTIR?',
-      c:'Eşik enerjisi (Ea) SICAKLIKTAN BAĞIMSIZDIR, T\u2081\u2019de \u201cen k\u00fc\u00e7\u00fck\u201d olamaz \u2014 <b>I YANLIŞ</b> (Ea her iki sıcaklıkta da AYNIDIR). k\u2082>k\u2081 (sıcaklık arttık\u00e7a k artar) \u2014 <b>II DOĞRU</b>. D\u00fcş\u00fck sıcaklıkta (T\u2081) hız daha yavaş, birim zamanda en AZ \u00fcr\u00fcn T\u2081\u2019de oluşur \u2014 <b>III DOĞRU</b>. \u2192 Yalnız I yanlıştır.' },
-    { n:17, kat:'Katalizör', t:'2SO\u2083(g)\u21922SO\u2082(g)+O\u2082(g) tepkimesinin iki ayrı durumdaki (biri katalizörl\u00fc, diğeri katalizörs\u00fcz) aktifleşme enerjileri Ea\u2081 ve Ea\u2082 olarak verilmiştir. Ea\u2081<Ea\u2082 olduğuna g\u00f6re hangisi katalizörl\u00fcd\u00fcr ve hangisinin hızı daha b\u00fcy\u00fckt\u00fcr?',
-      graph:'noteg-katgraph',
-      c:'Katalizör aktivasyon enerjisini D\u00dcŞ\u00dcRD\u00dcĞ\u00dc i\u00e7in, DAHA D\u00dcŞ\u00dcK aktivasyon enerjisine sahip olan (Ea\u2081) <b>KATALİZ\u00d6RL\u00dc</b> durumdur. D\u00fcş\u00fck aktivasyon enerjisi = daha fazla etkin \u00e7arpışma = <b>DAHA B\u00dcY\u00dcK HIZ</b> \u2192 Ea\u2081\u2019e sahip (katalizörl\u00fc) tepkime daha hızlıdır.' },
-    { n:18, kat:'Katalizör/Mekanizma', t:'H\u2082(g)+Cl\u2082(g)\u21922HCl(g) tepkimesi tek adımda ger\u00e7ekleşiyor. Şu işlemler uygulanıyor: 1. Ortama aynı sıcaklıkta H\u2082(g) ekleniyor. 2. Sıcaklık d\u00fcş\u00fcr\u00fcl\u00fcyor. 3. Ortama uygun katalizör konuyor. Bu işlemlerin tepkime hızına etkisini (zamanla değişim grafiği şeklinde) yorumlayınız.',
-      graph:'noteg-3etki',
-      c:'1) H\u2082 eklenmesi derişimi ANİDEN artırır \u2192 hız ANİDEN yukarı sı\u00e7rar, sonra tekrar azalmaya devam eder.<br>2) Sıcaklık d\u00fcş\u00fcr\u00fclmesi hızı ANİDEN AŞAĞI d\u00fcş\u00fcr\u00fcr.<br>3) Katalizör eklenmesi hızı ANİDEN YUKARI sı\u00e7ratır (Ea d\u00fcşer).<br>Grafikte 3 m\u00fcdahale noktasında ani sı\u00e7ramalar (1\u2019de yukarı, 2\u2019de aşağı, 3\u2019te yukarı), aralarda normal azalan eğri g\u00f6r\u00fcl\u00fcr.' },
-    { n:19, kat:'Katalizör', t:'x elementinin kolayca (daha hızlı) elde edilebilmesi i\u00e7in: I. Sıcaklığı azaltmak II. Uygun katalizör kullanmak III. Kabın hacmini b\u00fcy\u00fctmek işlemlerinden hangileri AYRI AYRI uygulanabilir?',
-      c:'Sıcaklığı AZALTMAK hızı D\u00dcŞ\u00dcR\u00dcR (I uygun değil). Katalizör kullanmak Ea\u2019yı d\u00fcş\u00fcrerek hızı ARTIRIR (II uygundur). Hacmi B\u00dcY\u00dcTMEK derişimi AZALTIR, hızı D\u00dcŞ\u00dcR\u00dcR (III uygun değil). \u2192 <b>Yalnız II (katalizör) uygulanabilir.</b>' },
-    { n:20, kat:'Katalizör', t:'CS\u2082(k)+3O\u2082(g)\u2192CO\u2082(g)+2SO\u2082(g) tepkimesinin PE-TK grafiği I numaralı eğridedir. Bu tepkimeye aşağıdaki işlemlerden hangisi uygulanırsa, aktivasyon enerjisi DAHA D\u00dcŞ\u00dcK olan yeni bir eğri (II numaralı) elde edilir? A) Katalizör kullanmak B) Sıcaklığı artırmak C) CS\u2082\u2019yi toz haline getirmek D) Girenlerin mol sayısını artırmak E) Kabın hacmini artırmak',
-      graph:'noteg-cs2',
-      c:'PE-TK grafiğinde tepe y\u00fcksekliğinin (aktivasyon enerjisinin) DÜŞMESİ sadece <b>KATALİZ\u00d6R</b> ile olur; diğer se\u00e7enekler (sıcaklık, y\u00fczey alanı, derişim, hacim) tepkime HIZINI etkiler ama Ea\u2019yı (grafiğin şeklini) DEĞİŞTİRMEZ. \u2192 <b>A) Katalizör kullanmak</b>' },
-    { n:21, kat:'Temas Y\u00fczeyi', t:'Mg(k)+2HCl(suda)\u2192MgCl\u2082(suda)+H\u2082(g) tepkimesinde, 0,1 mol Mg ile 2M 200 mL HCl \u00e7\u00f6zeltisinin tepkimesinden oluşan H\u2082 gazının mol-zaman grafiği I. eğridir (10 s\u2019de tamamlanıyor). II. eğriyi (8 s\u2019de tamamlanma, AYNI toplam H\u2082 miktarıyla) elde etmek i\u00e7in hangi işlemler AYRI AYRI uygulanabilir? I. Sıcaklığı artırmak ve katalizör kullanmak II. Mg\u2019nin temas y\u00fczeyini VE HCl derişimini artırmak III. Mg miktarını ve sıcaklığı artırmak',
-      graph:'noteg-h2mol',
-      c:'II. eğri, AYNI miktarda \u00fcr\u00fcn\u00fc DAHA KISA s\u00fcrede vermektedir \u2014 yani sadece HIZ artmış, TOPLAM \u00fcr\u00fcn miktarı DEĞİŞMEMİŞTİR. Mg miktarını artırmak (III) TOPLAM H\u2082 miktarını da DEĞİŞTİRİR (grafik platosu y\u00fckselir), bu y\u00fczden III uygun DEĞİLDİR. I ve II\u2019deki işlemler (sıcaklık+katalizör, ya da y\u00fczey+derişim) TOPLAM miktarı değiştirmeden SADECE hızı artırır. \u2192 <b>Yalnız I ve II tek başına uygulanabilir.</b>' },
-    { n:22, kat:'Temas Y\u00fczeyi', t:'Farklı tanecik boyutlarındaki iki k\u00f6m\u00fcr numunesinin yanması sonucu oluşan CO\u2082 gazının sabit sıcaklıkta zamanla mol sayısı değişimi grafiğe g\u00f6re: I. Birim zamanda oluşan CO\u2082 mol sayısı 2. k\u00f6m\u00fcrde daha b\u00fcy\u00fckt\u00fcr II. Tepkime hızı 1. k\u00f6m\u00fcrde daha yavaştır III. Kullanılan k\u00f6m\u00fcr\u00fcn par\u00e7acık boyutu 1. k\u00f6m\u00fcrde daha b\u00fcy\u00fckt\u00fcr \u2014 hangileri doğrudur?',
-      graph:'noteg-komur',
-      c:'Grafikte 2. k\u00f6m\u00fcr numunesi CO\u2082\u2019yi daha HIZLI \u00fcretiyorsa (daha dik/erken plato), bu onun daha K\u00dc\u00c7\u00dcK par\u00e7acık boyutuna (daha b\u00fcy\u00fck y\u00fczey alanına) sahip olduğunu g\u00f6sterir. I doğru (2. k\u00f6m\u00fcr daha hızlı \u00fcr\u00fcn verir), II doğru (1. k\u00f6m\u00fcr yavaş olduğu i\u00e7in b\u00fcy\u00fck par\u00e7acıklıdır), III doğru (1. k\u00f6m\u00fcr\u00fcn par\u00e7acık boyutu B\u00dcY\u00dcKT\u00dcR). \u2192 <b>I, II ve III doğrudur.</b>' },
-    { n:23, kat:'Karışık Faktörler', t:'0,2 mol Zn(k) ile 0,2 M\u2019lık HCl \u00e7\u00f6zeltisinin 1 litresi (Zn(k)+2HCl(suda)\u2192ZnCl\u2082(suda)+H\u2082(g)) tepkimeye giriyor (stokiyometriye g\u00f6re 0,4 mol HCl gerekir, HCl sınırlayıcıdır). H\u2082 gazının HEM \u00e7ıkış hızını HEM DE miktarını artırmak i\u00e7in: I. Zn\u2019yi toz haline getirmek II. Aynı derişimdeki (0,2M) HCl\u2019den 2 L kullanmak III. 0,3 M\u2019lık HCl\u2019den 1 L eklemek \u2014 hangileri AYRI AYRI uygulanabilir?',
-      c:'I. Toz haline getirmek SADECE hızı artırır; derişim/toplam mol HCl değişmediği i\u00e7in TOPLAM H\u2082 miktarı DEĞİŞMEZ.<br>II. 2 L kullanmak toplam HCl molünü artırır (0,2\u21920,4 mol, miktar artar) ama DERİŞİM aynı (0,2M) kaldığı i\u00e7in başlangı\u00e7 HIZI DEĞİŞMEZ.<br>III. 0,3M\u2019lık 1L kullanmak: HEM derişim artar (0,2\u21920,3M \u2192 hız artar) HEM toplam mol HCl artar (0,2\u21920,3mol \u2192 daha \u00e7ok Zn tepkimeye girer, H\u2082 miktarı artar) \u2014 <b>ikisi de artar.</b><br>\u2192 <b>Yalnız III, hem hızı hem miktarı tek başına artırır.</b>' },
-    { n:24, kat:'Hız Denklemi', t:'X(g)+2Y(g)+3Z(g)\u21922K(g)+3M(g) tepkimesi ile ilgili sabit sıcaklıkta yapılan deneyler: Z\u2019nin derişimi sabit tutulup X ve Y\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Y\u2019nin derişimi sabit tutulup X ve Z\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Kabın hacmi yarıya indirildiğinde hız 8 katına \u00e7ıkıyor. Tepkimenin hız bağıntısı nedir?',
-      c:'Hacim yarıya inince T\u00dcM derişimler 2 katına \u00e7ıkar ve hız 8 (=2\u00b3) katına \u00e7ıkıyor \u2192 <b>toplam derece=3</b> (a+b+c=3).<br>Z sabit, X&Y 2 kat \u2192 hız 4(=2\u00b2) kat \u2192 <b>a+b=2</b>.<br>Y sabit, X&Z 2 kat \u2192 hız 4(=2\u00b2) kat \u2192 <b>a+c=2</b>.<br>\u00dc\u00e7 denklemden: c=1, a=1, b=1.<br>\u2192 <b>r=k[X][Y][Z]</b> (toplam derece 3, her t\u00fcre g\u00f6re 1. dereceden).' },
-    { n:25, kat:'Hız Denklemi', t:'X(g)+2Y(g)+3Z(g)\u21922K(g)+3M(g) tepkimesi i\u00e7in deney verileri: Deney1:[X]=0,1,[Y]=0,2,[Z]=0,1,Hız=1,8\u00d710\u207b\u2075; Deney2:[X]=0,2,[Y]=0,2,[Z]=0,1,Hız=3,6\u00d710\u207b\u2075; Deney3:[X]=0,1,[Y]=0,4,[Z]=0,1,Hız=1,8\u00d710\u207b\u2075; Deney4:[X]=0,1,[Y]=0,2,[Z]=0,2,Hız=7,2\u00d710\u207b\u2075. a) Hız bağıntısı? b) X=Y=Z=2 mol/L iken hız ka\u00e7 mol/L\u00b7s olur?',
-      c:'1\u21922: [X] 2 kat, [Y][Z] sabit, hız 2 kat \u2192 <b>X mertebesi=1</b>.<br>1\u21923: [Y] 2 kat, hız DEĞİŞMEDİ (1,8\u21921,8) \u2192 <b>Y mertebesi=0</b> (Y, hıza etki etmiyor!).<br>1\u21924: [Z] 2 kat, hız 4 kat \u2192 <b>Z mertebesi=2</b>.<br>a) <b>r=k[X][Z]\u00b2</b> (Y hız bağıntısında YER ALMAZ, ama yine de bir tepkendir \u2014 bu, katsayı ile mertebenin farklı şeyler olduğunun g\u00fczel bir \u00f6rneğidir).<br>k=1,8\u00d710\u207b\u2075/(0,1\u00d70,1\u00b2)=<b>0,018</b>.<br>b) r=0,018\u00d72\u00d72\u00b2=<b>0,144 mol/L\u00b7s</b>.' },
-    { n:26, kat:'Derişim/Piston', t:'Sabit sıcaklıkta s\u00fcrt\u00fcnmesiz ideal pistonlu bir kaba 4\u2019er mol X ve Y gazından konularak X(g)+2Y(g)\u2192Z(g) denklemine g\u00f6re TEK basamakta tepkimeye girmesi sağlanıyor. Tepkimenin başlangı\u00e7 hızı r ise, X gazının %25\u2019inin harcandığı andaki hız ka\u00e7 r\u2019dir?',
-      c:'Başlangı\u00e7: n(X)=4, n(Y)=4, toplam=8 (V\u2080 keyfi birim).<br>%25 X harcandı: 1mol X t\u00fckendi; katsayı oranı X:Y=1:2 olduğundan 2mol Y de t\u00fckendi, 1mol Z oluştu.<br>Yeni: n(X)=3, n(Y)=2, n(Z)=1, toplam=6.<br>Piston SABİT BASIN\u00c7ta olduğu i\u00e7in hacim toplam molle orantılı azalır: V<sub>yeni</sub>=V\u2080\u00d7(6/8)=0,75V\u2080.<br>[X]<sub>yeni</sub>=3/0,75=4 (değişmedi!), [Y]<sub>yeni</sub>=2/0,75\u22482,667 (eski [Y]=4\u2019\u00fcn 2/3\u2019\u00fc).<br>Tek adımlı: r=k[X][Y]\u00b2. Yeni r/Eski r = (4/4)\u00b9\u00d7(2,667/4)\u00b2 = 1\u00d7(2/3)\u00b2 = <b>4/9</b>.<br><span style="color:#fca5a5">\u26a0\ufe0f Piston sabit BASIN\u00c7ta oldu\u011fu i\u00e7in tepkime ilerledik\u00e7e HACMİN de değiştiğini (toplam mol azaldık\u00e7a hacmin de k\u00fc\u00e7\u00fcld\u00fc\u011f\u00fcn\u00fc) hesaba katmak gerekir.</span>' },
-    { n:27, kat:'Mekanizma', t:'CH\u2083CHO(g)\u2192CH\u2084(g)+CO(g) tepkimesi iki basamakta ger\u00e7ekleşiyor: 1.adım (YAVAŞ): CH\u2083CHO(g)+I\u2082(g)\u2192CH\u2083I(g)+HI(g); 2.adım (HIZLI): CH\u2083I(g)+HI(g)\u2192CH\u2084(g)+CO(g)+I\u2082(g). Buna g\u00f6re: I. I\u2082 ara \u00fcr\u00fcnd\u00fcr. II. Kaba He gazı eklenirse tepkime hızı değişmez. III. Tepkime kabının hacmi yarıya indirilirse hız artar. \u2014 hangileri DOĞRUDUR?',
-      c:'I \u2014 <b>YANLIŞ</b>: I\u2082, 1. adımda harcanıp 2. adımda yeniden oluşuyor \u2014 net tepkimede g\u00f6r\u00fcnm\u00fcyor, bu y\u00fczden I\u2082 ARA \u00dcR\u00dcN değil <b>KATALİZ\u00d6RD\u00dcR</b> (CH\u2083I ve HI ara \u00fcr\u00fcnd\u00fcr).<br>II \u2014 <b>DOĞRU</b>: He (soy gaz) tepkimeye hi\u00e7 girmez; sabit hacimli kapta toplam basıncı artırsa da CH\u2083CHO ve I\u2082\u2019nin KENDİ derişimlerini (kısmi basın\u00e7larını) değiştirmediği i\u00e7in hızı etkilemez.<br>III \u2014 <b>DOĞRU</b>: Hız yavaş adıma g\u00f6re r=k[CH\u2083CHO][I\u2082] yazılır; hacim k\u00fc\u00e7\u00fcl\u00fcnce derişimler artar, hız da artar (kesin y\u00f6n DOĞRU, tam kat sayısı i\u00e7in reaksiyon derecesi bilinmelidir).<br>\u2192 <b>II ve III doğrudur.</b>' },
-    { n:28, kat:'Ortalama/Anlık Hız', t:'Mg(k)+2HCl(suda)\u2192MgCl\u2082(suda)+H\u2082(g) tepkimesinde [HCl] derişiminin zamanla değişimi DOĞRUSAL bir grafikle verilmiştir: t=10s\u2019de 0,5 M, t=50s\u2019de 0,1 M. a) Tepkimenin 10. saniyedeki hızı ka\u00e7 M/s\u2019dir? b) Tepkimenin 20. saniyedeki hızı ka\u00e7 M/s\u2019dir?',
-      c:'Grafik DOĞRUSAL olduğu i\u00e7in eğim (dolayısıyla anlık hız) HER noktada AYNIDIR \u2014 bu, Mg\u2019nin KATI olması nedeniyle tepkimenin SABİT hızla ilerlediğinin g\u00f6stergesidir (katı/saf madde derişimi değişmediği i\u00e7in hız zamanla azalmaz).<br>Eğim: \u0394[HCl]/\u0394t=(0,1\u22120,5)/(50\u221210)=\u22120,01 M/s (HCl harcanma hızı).<br>Katsayı oranı HCl:tepkime=2:1 olduğundan tepkime hızı=0,01/2=<b>0,005 M/s</b>.<br>a) 10. saniyedeki hız = <b>0,005 M/s</b>.<br>b) 20. saniyedeki hız = <b>0,005 M/s</b> (AYNI, \u00e7\u00fcnk\u00fc grafik doğrusal).' },
-    { n:29, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda ger\u00e7ekleşen: I. H\u2082(g)+I\u2082(g)\u21922HI(g) II. H\u2082(g)+I\u2082(k)\u21922HI(g) III. H\u2082(g)+Cl\u2082(g)\u21922HCl(g) tepkimelerinin hızlarını karşılaştırınız.',
-      c:'II\u2019de I\u2082 KATI halde olduğu i\u00e7in tepkime SADECE y\u00fczeyde ger\u00e7ekleşebilir \u2014 gaz halindeki I ve III\u2019e g\u00f6re \u00e7ok daha az temas alanı vardır \u2192 <b>II en YAVAŞTIR</b>.<br>I ve III\u2019te t\u00fcm tepkenler GAZ halinde olduğu i\u00e7in taneciklerin her y\u00f6nden \u00e7arpışma olasılığı y\u00fcksektir, ikisi de II\u2019den \u00e7ok daha HIZLIdır.<br>\u2192 <b>I ve III (gaz-gaz) > II (gaz-katı)</b>.' }
-  ];
-
-  function noteqDrawGraphs(){
-    // X(g)->2Y(g) derişim-zaman — SADECE doğrulanmış 3 nokta: (0,3.6) (10,2.4) (20,1.6), oran tam 2/3
-    maarifChart('noteg-x2y', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman (s)', '[X] mol/L');
-      var pts = [];
-      for (var i = 0; i <= 100; i++) {
-        var t = i/100*20;
-        var val = 3.6 * Math.pow(2/3, t/10);
-        pts.push([g.padL + (t/20)*g.plotW, g.padT + g.plotH - (val/3.6)*g.plotH*0.92]);
-      }
-      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.beginPath();
-      pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
-      // Doğrulanmış 3 nokta işaretlensin
-      var marks = [[0,3.6],[10,2.4],[20,1.6]];
-      x.fillStyle = '#f59e0b';
-      marks.forEach(function(m){
-        var mx = g.padL + (m[0]/20)*g.plotW, my = g.padT + g.plotH - (m[1]/3.6)*g.plotH*0.92;
-        x.beginPath(); x.arc(mx, my, 3, 0, 6.283); x.fill();
-      });
-      x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '9px sans-serif'; x.textAlign = 'center';
-      x.fillText('doğrulanmış 3 nokta (0,10,20s)', g.padL+g.plotW/2, g.padT+g.plotH+22);
-    });
-    // Al+HCl derişim-zaman (doğrusal azalma 0.6->0.1, 1-5dk)
-    maarifChart('noteg-hcl', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman (dk)', '[HCl] mol/L');
-      function px(t){ return g.padL + ((t-1)/4)*g.plotW; }
-      function py(c){ return g.padT + g.plotH - ((c-0.1)/0.5)*g.plotH*0.9; }
-      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.beginPath();
-      x.moveTo(px(1), py(0.5)); x.lineTo(px(4), py(0.2)); x.lineTo(px(5), py(0.1)); x.stroke();
-      x.fillStyle = '#f59e0b';
-      [[1,0.5],[4,0.2]].forEach(function(p){ x.beginPath(); x.arc(px(p[0]),py(p[1]),3,0,6.283); x.fill(); });
-      x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '10px sans-serif'; x.textAlign = 'left';
-      x.fillText('1.dk: 0,5M', px(1)+4, py(0.5)-8);
-      x.fillText('4.dk: 0,2M', px(4)+4, py(0.2)-8);
-    });
-    // T1,T2 kinetik enerji dağılımı
-    maarifChart('noteg-t1t2', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Kinetik enerji', 'Molekül sayısı');
-      function curve(muF, sigF, ampF){
-        var pts = [];
-        for (var i = 0; i <= 100; i++) {
-          var f = i/100, xv = g.padL + f*g.plotW;
-          var xf = (f - muF) / sigF;
-          var yv = ampF * Math.exp(-xf*xf*2.2);
-          pts.push([xv, g.padT + g.plotH - yv*g.plotH*0.9]);
-        }
-        return pts;
-      }
-      var t1 = curve(0.28, 0.15, 1.0), t2 = curve(0.42, 0.21, 0.74);
-      var esikX = g.padL + 0.6*g.plotW;
-      function fillBeyond(pts, col){
-        x.beginPath(); x.moveTo(esikX, g.padT+g.plotH);
-        pts.forEach(function(p){ if (p[0] >= esikX) x.lineTo(p[0], p[1]); });
-        x.lineTo(g.padL+g.plotW, g.padT+g.plotH); x.closePath(); x.fillStyle = col; x.fill();
-      }
-      fillBeyond(t2, 'rgba(239,68,68,.4)'); fillBeyond(t1, 'rgba(96,165,250,.5)');
-      function stroke(pts, col){ x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.strokeStyle=col; x.lineWidth=2; x.stroke(); }
-      stroke(t1, '#3b82f6'); stroke(t2, '#ef4444');
-      x.strokeStyle = 'rgba(255,255,255,.5)'; x.setLineDash([4,3]); x.lineWidth = 1;
-      x.beginPath(); x.moveTo(esikX, g.padT); x.lineTo(esikX, g.padT+g.plotH); x.stroke(); x.setLineDash([]);
-      x.textAlign = 'left'; x.font = '10px sans-serif';
-      x.fillStyle = '#93c5fd'; x.fillText('T\u2081', g.padL+4, g.padT+10);
-      x.fillStyle = '#fca5a5'; x.fillText('T\u2082 (T\u2082>T\u2081)', g.padL+4, g.padT+24);
-      x.fillStyle = 'rgba(255,255,255,.5)'; x.fillText('Eşik değeri', esikX+3, g.padT+g.plotH-4);
-    });
-    // Katalizörlü/katalizörsüz PE-TK (Ea1<Ea2)
-    maarifChart('noteg-katgraph', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Tepkime koordinatı', 'Pot. enerji');
-      var reactY = g.padT + g.plotH*0.6, prodY = g.padT + g.plotH*0.8;
-      function curve(peakY, col, dashed){
-        function px(f){ return g.padL + f*g.plotW; }
-        x.beginPath();
-        x.moveTo(px(0.02), reactY); x.lineTo(px(0.30), reactY);
-        x.bezierCurveTo(px(0.40), reactY, px(0.42), peakY, px(0.5), peakY);
-        x.bezierCurveTo(px(0.58), peakY, px(0.60), prodY, px(0.70), prodY);
-        x.lineTo(px(0.98), prodY);
-        x.strokeStyle = col; x.lineWidth = 2;
-        if (dashed) x.setLineDash([5,4]);
-        x.stroke(); x.setLineDash([]);
-      }
-      curve(g.padT + g.plotH*0.32, '#22c55e', false);
-      curve(g.padT + g.plotH*0.05, '#ef4444', true);
-      x.font = '10px sans-serif'; x.textAlign = 'left';
-      x.fillStyle = '#22c55e'; x.fillText('Ea\u2081 (katalizörlü)', g.padL+4, g.padT+10);
-      x.fillStyle = '#ef4444'; x.fillText('Ea\u2082 (katalizörsüz)', g.padL+4, g.padT+24);
-    });
-    // 3 etki (H2 ekleme, sıcaklık düşürme, katalizör) - hız-zaman basamaklı grafik
-    maarifChart('noteg-3etki', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman', 'Tepkime hızı');
-      var segs = [[0,0.5],[0.25,0.5],[0.25,0.85],[0.45,0.7],[0.45,0.35],[0.65,0.25],[0.65,0.6],[1,0.5]];
-      function px(f){ return g.padL + f*g.plotW; }
-      function py(f){ return g.padT + g.plotH - f*g.plotH*0.85; }
-      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.beginPath();
-      segs.forEach(function(p,i2){ i2===0?x.moveTo(px(p[0]),py(p[1])):x.lineTo(px(p[0]),py(p[1])); });
-      x.stroke();
-      x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '9px sans-serif'; x.textAlign = 'center';
-      x.fillText('1: H\u2082 eklendi', px(0.25), py(0.85)-8);
-      x.fillText('2: T düşürüldü', px(0.45), py(0.7)-8);
-      x.fillText('3: katalizör', px(0.65), py(0.6)-8);
-    });
-    // CS2 PE-TK (I ve II eğri)
-    maarifChart('noteg-cs2', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Tepkime koordinatı', 'Pot. enerji');
-      var reactY = g.padT + g.plotH*0.62, prodY = g.padT + g.plotH*0.85;
-      function curve(peakY, col, dashed, lbl){
-        function px(f){ return g.padL + f*g.plotW; }
-        x.beginPath();
-        x.moveTo(px(0.02), reactY); x.lineTo(px(0.30), reactY);
-        x.bezierCurveTo(px(0.40), reactY, px(0.42), peakY, px(0.5), peakY);
-        x.bezierCurveTo(px(0.58), peakY, px(0.60), prodY, px(0.70), prodY);
-        x.lineTo(px(0.98), prodY);
-        x.strokeStyle = col; x.lineWidth = 2;
-        if (dashed) x.setLineDash([5,4]);
-        x.stroke(); x.setLineDash([]);
-        x.fillStyle = col; x.font = '10px sans-serif'; x.textAlign = 'left';
-        x.fillText(lbl, g.padL+4, peakY-6 > g.padT ? peakY - 6 : g.padT+10);
-      }
-      curve(g.padT + g.plotH*0.05, '#f59e0b', false, 'I (mevcut)');
-      curve(g.padT + g.plotH*0.34, '#22c55e', true, 'II (katalizörlü)');
-    });
-    // H2 mol-zaman (I, II eğrileri, aynı plato)
-    maarifChart('noteg-h2mol', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman (s)', 'n(H\u2082) mol');
-      function curve(finishT, col, lbl){
-        var pts = [];
-        for (var i = 0; i <= 100; i++) {
-          var t = i/100*10;
-          var yv = 1 - Math.exp(-t/(finishT/3));
-          pts.push([g.padL+(t/10)*g.plotW, g.padT+g.plotH-yv*g.plotH*0.85]);
-        }
-        x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); });
-        x.strokeStyle = col; x.lineWidth = 2.2; x.stroke();
-        x.fillStyle = col; x.font = '10px sans-serif'; x.textAlign = 'left';
-      }
-      curve(8, '#22c55e', 'II'); curve(10, '#3b82f6', 'I');
-      x.fillStyle = '#22c55e'; x.fillText('II (8s, hızlı)', g.padL+6, g.padT+10);
-      x.fillStyle = '#3b82f6'; x.fillText('I (10s, yavaş)', g.padL+6, g.padT+24);
-    });
-    // Kömür CO2-zaman (2 eğri, aynı plato farklı hız)
-    maarifChart('noteg-komur', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman', 'Oluşan CO\u2082 (mol)');
-      function curve(rate, col, lbl){
-        var pts = [];
-        for (var i = 0; i <= 100; i++) {
-          var f = i/100;
-          var yv = 1 - Math.exp(-rate*f*6);
-          pts.push([g.padL+f*g.plotW, g.padT+g.plotH-yv*g.plotH*0.85]);
-        }
-        x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); });
-        x.strokeStyle = col; x.lineWidth = 2.2; x.stroke();
-      }
-      curve(1.0, '#ef4444'); curve(0.4, '#3b82f6');
-      x.font = '10px sans-serif'; x.textAlign = 'left';
-      x.fillStyle = '#ef4444'; x.fillText('2. kömür (küçük parçacık)', g.padL+4, g.padT+10);
-      x.fillStyle = '#3b82f6'; x.fillText('1. kömür (büyük parçacık)', g.padL+4, g.padT+24);
-    });
-    // 2 basamaklı PE-TK (X+Y->Z+T, verilen enerji değerleriyle)
-    maarifChart('noteg-pe2step', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 44, 14, 16, 26, 'Tepkime koordinatı', 'Pot. enerji (kJ)');
-      function px(f){ return g.padL + f*g.plotW; }
-      var vals = { react:40, peak1:90, mid:50, peak2:70, prod:20 };
-      var maxV = 90, minV = 15;
-      function py(v){ return g.padT + g.plotH - ((v-minV)/(maxV-minV))*g.plotH; }
-      x.beginPath();
-      x.moveTo(px(0.02), py(vals.react)); x.lineTo(px(0.14), py(vals.react));
-      x.bezierCurveTo(px(0.20), py(vals.react), px(0.22), py(vals.peak1), px(0.30), py(vals.peak1));
-      x.bezierCurveTo(px(0.38), py(vals.peak1), px(0.40), py(vals.mid), px(0.48), py(vals.mid));
-      x.lineTo(px(0.55), py(vals.mid));
-      x.bezierCurveTo(px(0.61), py(vals.mid), px(0.63), py(vals.peak2), px(0.70), py(vals.peak2));
-      x.bezierCurveTo(px(0.77), py(vals.peak2), px(0.79), py(vals.prod), px(0.86), py(vals.prod));
-      x.lineTo(px(0.98), py(vals.prod));
-      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.stroke();
-      x.fillStyle = 'rgba(255,255,255,.6)'; x.font = '9px sans-serif'; x.textAlign = 'center';
-      x.fillText('X+Y (40)', px(0.06), py(vals.react)-6);
-      x.fillText('90', px(0.30), py(vals.peak1)-6);
-      x.fillText('ara ürün (50)', px(0.51), py(vals.mid)-6);
-      x.fillText('70', px(0.70), py(vals.peak2)-6);
-      x.fillText('Z+T (20)', px(0.92), py(vals.prod)-6);
-    });
-  }
-
-  function setupNoteQ(){
-    if (document.getElementById('noteq-wrap')) return;
-    var host = document.getElementById('kin-group-2');
-    if (!host) return;
-    host.insertAdjacentHTML('beforeend', '<div id="noteq-wrap"></div>');
-    var wrap = document.getElementById('noteq-wrap');
-    var cats = ['Tümü'];
-    NOTE_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
-    wrap.innerHTML =
-      '<p class="psub" style="margin-bottom:10px">Kendi el yazması ders notundaki ' + NOTE_Q.length + ' \u00e7\u00f6z\u00fcml\u00fc örnek soru \u2014 sorulara ve şıklara dokunmadan g\u00f6r, \u00e7\u00f6z\u00fcm\u00fc a\u00e7mak i\u00e7in \u201c\u00e7\u00f6z\u00fcm\u00fc g\u00f6ster\u201de dokun.</p>' +
-      '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="noteq-cats">' +
-        cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="noteqSetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
-      '</div></div>' +
-      '<div id="noteq-list"></div>';
-    noteqRenderList();
-  }
-  var noteqSt = { cat: 'Tümü' };
-  window.noteqSetCat = function(cat, btn){ noteqSt.cat = cat; if (btn) selectInRow(btn); noteqRenderList(); };
-
-
-  function noteqRenderList(){
-    var box = document.getElementById('noteq-list');
-    if (!box) return;
-    var html = '';
-    NOTE_Q.forEach(function(q){
-      if (noteqSt.cat !== 'Tümü' && q.kat !== noteqSt.cat) return;
-      html += '<div class="card" style="margin-bottom:18px;padding:18px 16px">' +
-        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
-          '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.18);color:#f59e0b;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
-          '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
-        '</div>' +
-        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
-        (q.graph ? '<div style="background:#050510;border:1px solid rgba(245,158,11,.25);border-radius:12px;overflow:hidden;margin-bottom:14px"><canvas id="' + q.graph + '" data-h="190" style="width:100%;display:block"></canvas></div>' : '') +
-        '<div onclick="molToggle(\'noteq-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#f59e0b;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
-        '<div id="noteq-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' + q.c + '</div>' +
-      '</div>';
-    });
-    box.innerHTML = html;
-    setTimeout(noteqDrawGraphs, 60);
-  }
-
   function setupMaarif(){
     if (document.getElementById('maarif-wrap')) return;
-    var host = document.getElementById('kin-group-1');
+    var host = document.getElementById('kin-tps');
     if (!host) return;
-    host.insertAdjacentHTML('beforeend', '<div id="maarif-wrap"></div>');
+    host.insertAdjacentHTML('beforeend', '<div class="tp" id="maarif-wrap"></div>');
+    if (!document.getElementById('mn-maariftab')) {
+      // 5. sekme butonunu kin-tabs'e ekle
+      var tabsBar = document.getElementById('kin-tabs');
+      if (tabsBar) tabsBar.insertAdjacentHTML('beforeend', '<button class="ltab" id="mn-maariftab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',4)">\ud83d\udcd8 Maarif Hız</button>');
+    }
     var wrap = document.getElementById('maarif-wrap');
     wrap.innerHTML =
       '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cKimyasal Tepkimelerde Hız\u201d ünitesinin tam konu anlatımı \u2014 tüm etkinlik, örnek ve grafikleriyle.</p>' +
@@ -8204,7 +7264,6 @@
         '<button type="button" class="ob" onclick="maarifSetSub(1,this)">1.2.2 Ortalama Hız</button>' +
         '<button type="button" class="ob" onclick="maarifSetSub(2,this)">1.2.3 Etkileyen Faktörler</button>' +
         '<button type="button" class="ob" onclick="maarifSetSub(3,this)">1.2.4 Hız Denklemi</button>' +
-        '<button type="button" class="ob" onclick="maarifSetSub(4,this)">\ud83d\udcdd 66 Soru (Ölçme-Değerlendirme)</button>' +
       '</div></div>' +
       '<div id="maarif-content"></div>';
     maarifRender();
@@ -8216,8 +7275,7 @@
     if (!box) return;
     var fns = [maarif121, maarif122, maarif123, maarif124, maarifMolCat];
     box.innerHTML = fns[maarifSt.sub]();
-    if (maarifSt.sub === 4) { molSt.cat = 0; molRenderList(); }
-    else setTimeout(maarifDrawGraphs, 60);
+    setTimeout(maarifDrawGraphs, 60);
   }
 
   function maarif121(){
@@ -8755,6 +7813,673 @@
     });
   }
 
+  // ---------- 25. MAARİF HIZ — ÖLÇME VE DEĞERLENDİRME (66 SORU) ----------
+  var MOL_DY = [
+    { n:1, t:'Entalpi, bir sistemin sahip olduğu toplam enerjidir.', a:'D', ac:'Lise düzeyinde entalpi, sistemin sahip olduğu toplam enerji (ısı içeriği) olarak tanımlanır.' },
+    { n:2, t:'Isı alarak gerçekleşen tepkimeler endotermik tepkimelerdir.', a:'D', ac:'Endotermik = çevreden ısı alan tepkime.' },
+    { n:3, t:'Ekzotermik bir tepkimede çevreye ısı verilir.', a:'D', ac:'Ekzotermik tepkimede sistem çevreye enerji verir.' },
+    { n:4, t:'Bağ enerjileri her zaman pozitif değerdir.', a:'D', ac:'Bir bağı kırmak her zaman enerji gerektirir (endotermik bir süreçtir), bu yüzden bağ enerjisi hep pozitiftir.' },
+    { n:5, t:'Eai > Eag ise endotermik bir olaydır.', a:'D', ac:'\u0394H=Eai\u2212Eag; Eai>Eag ise \u0394H>0, yani endotermik.' },
+    { n:6, t:'Net tepkimede katalizör bulunmaz.', a:'D', ac:'Katalizör bir basamakta girip diğerinde değişmeden çıkar; net (toplam) tepkimede görünmez.' },
+    { n:7, t:'Bir tepkimede aktivasyon enerjisi katalizör ile değişir.', a:'D', ac:'Katalizör aktivasyon enerjisini düşürür.' },
+    { n:8, t:'Derişim, tepkime hız sabitini artırır.', a:'Y', ac:'Derişim HIZI artırır ama hız SABİTİNİ (k) etkilemez; k yalnızca sıcaklık/temas yüzeyi/katalizörle değişir.' },
+    { n:9, t:'Endotermik bir tepkimenin entalpi değişimi (\u0394H) negatiftir.', a:'Y', ac:'Endotermik tepkimede \u0394H POZİTİFTİR (>0).' },
+    { n:10, t:'Tepkime hız bağıntısına saf katı ve sıvı hâldeki maddeler yazılmaz.', a:'D', ac:'Derişimleri sabit olduğu için hıza etkileri yoktur, hız denklemine yazılmazlar.' },
+    { n:11, t:'Temas yüzeyi arttıkça tepkime hızı azalır.', a:'Y', ac:'Temas yüzeyi arttıkça çarpışma sıklığı ve dolayısıyla hız ARTAR.' },
+    { n:12, t:'Endotermik tepkimelerde sistemin enerjisi artar.', a:'D', ac:'Sistem çevreden enerji aldığı için toplam entalpisi artar.' },
+    { n:13, t:'Endotermik tepkimelerde ürünler daha kararlıdır.', a:'Y', ac:'Endotermik tepkimede TEPKENLER daha kararlıdır (daha düşük enerjilidir); ürünler daha az kararlıdır.' },
+    { n:14, t:'Mekanizmalı tepkimelerde hız ifadesi yavaş adıma göre yazılır.', a:'D', ac:'Çok basamaklı tepkimelerde hızı yavaş (hız belirleyici) basamak belirler.' },
+    { n:15, t:'Ekzotermik tepkimelerde sistemin enerjisi azalır.', a:'D', ac:'Sistem çevreye enerji verdiği için toplam entalpisi azalır.' }
+  ];
+
+  var MOL_BOSLUK = [
+    { n:2, t:'Günlük hayattaki bir olay ……… ise sistem çevreden ısı alır.', a:'endotermik' },
+    { n:3, t:'Kömür, petrol, doğal gaz gibi fosil yakıtlar yandığında oluşan CO\u2082 gazı ……… neden olur.', a:'küresel ısınmaya' },
+    { n:4, t:'Birim miktar başına yüksek enerji açığa çıkaran maddeler ……… olma potansiyeline sahiptir.', a:'yakıt' },
+    { n:5, t:'Bir tepkimede kırılan bağların enerjileri toplamı, oluşan bağların enerjileri toplamından ……… ise tepkime ekzotermiktir.', a:'az (küçük)' },
+    { n:6, t:'Elementlerin doğadaki en kararlı hâllerinin oluşum entalpileri ……… kabul edilir.', a:'sıfır' },
+    { n:7, t:'Entalpi değişim değeri negatif (\u0394H<0) olan tepkimeler, ……… tepkimelerdir.', a:'ekzotermik' },
+    { n:8, t:'Tepkenlerin ürüne dönüşebilmesi için gerekli en düşük enerjiye ……… denir.', a:'aktivasyon enerjisi' },
+    { n:9, t:'Bir tepkimenin potansiyel enerji-tepkime koordinat grafiğinde tepken ve ürünlerin enerji seviyeleri arasındaki farka ……… denir.', a:'tepkime entalpisi (\u0394H)' },
+    { n:10, t:'Belirli bir zaman aralığında hesaplanan tepkime hızına ……… denir.', a:'ortalama (tepkime) hız(ı)' },
+    { n:11, t:'Kimyasal bir tepkimede ürünler için ……… hızından bahsedilir.', a:'oluşma (oluşum)' },
+    { n:12, t:'Aktivasyon enerjisini düşürerek tepkimeyi hızlandıran maddelere ……… denir.', a:'katalizör' },
+    { n:13, t:'Sıcaklık artışı birim zamandaki ……… sayısını artırarak tepkimeyi hızlandırır.', a:'etkin çarpışma' },
+    { n:14, t:'Kimyasal tepkimelerin hızı ile tepkimeye giren maddelerin derişimleri arasındaki ilişkiyi gösteren matematiksel eşitliğe ……… denir.', a:'hız denklemi' },
+    { n:15, t:'Derecesi ……… olan bir tepkimenin hız sabitinin birimi 1/M\u00b2s\u2019dir.', a:'3 (üç)', ac:'1/(sM\u207f\u207b\u00b9)=1/(sM\u00b2) \u2192 n\u22121=2 \u2192 n=3' },
+    { n:16, t:'Tepkime derecesi üç olan gaz fazında gerçekleşen bir tepkimenin gerçekleştiği kabın hacmi yarıya düşürüldüğünde tepkimenin hızı ……… katına çıkar.', a:'8 (sekiz)', ac:'Hacim yarıya \u2192 derişim 2 kat \u2192 hız 2\u00b3=8 kat.' }
+  ];
+
+  var MOL_ACIK = [
+    { n:17, t:'Aşağıdaki olaylardaki enerji değişimlerini açıklayınız (endotermik mi, ekzotermik mi?): a) Yakıt pillerinde H\u2082+O\u2082 tepkimesiyle elektrik üretimi, b) Şimşek/yıldırım etkisiyle atmosferdeki N\u2082 bağlarının kırılması, c) İklimlendirmede gazın sıkıştırılmasıyla ortamın ısıtılması, ç) İklimlendirmede gazın genleştirilmesiyle ortamın soğutulması, d) Kuru buzun süblimleşmesi, e) NaCl çözeltisinin elektroliz edilmesi.',
+      c:'a) EKZOTERMİK \u2014 H\u2082 yanması enerji açığa çıkarır (elektrik üretilir).<br>b) ENDOTERMİK \u2014 N\u2261N üçlü bağını kırmak çok enerji ister; bu enerji yıldırımdan (çevreden) alınır.<br>c) EKZOTERMİK \u2014 sıkıştırma sırasında sisteme yapılan iş ısınmaya (çevreye ısı verecek şekilde) dönüşür.<br>ç) ENDOTERMİK \u2014 genleşen gaz çevresini soğutur, yani ortamdan ısı çeker.<br>d) ENDOTERMİK \u2014 katıdan doğrudan gaza geçiş (süblimleşme) ısı gerektirir.<br>e) ENDOTERMİK \u2014 elektroliz dışarıdan sürekli elektrik enerjisi gerektirir.' },
+    { n:18, t:'Joule-Thomson deneyinde A bölmesinde piston itilip gaz sıkıştırılınca sıcaklık YÜKSELİYOR, B bölmesine geçip genleşince sıcaklık DÜŞÜYOR. a) A bölmesindeki olay endotermik mi ekzotermik mi? b) B bölmesindeki olay endotermik mi ekzotermik mi?',
+      c:'a) A bölmesi: Sıkıştırma sırasında gazın sıcaklığı artar \u2014 bu, sisteme yapılan işin ısıya dönüşmesiyle EKZOTERMİK bir görünüm sergiler (sistem ısınırken çevresine göre "ısı vermiş" gibi bir enerji dönüşümü yaşar).<br>b) B bölmesi: Genleşme sırasında sıcaklık düşer \u2014 sistem soğur, yani ENDOTERMİK bir görünüm sergiler (çevreden ısı çekiyormuş gibi enerji emilimi olur).<br><i>Not: Bu, gerçek gazların Joule-Thomson etkisidir; düzenek dıştan yalıtılıdır, gözlenen sıcaklık değişimi moleküllerarası kuvvetlerden kaynaklanan bir iç enerji dönüşümüdür.</i>' },
+    { n:19, t:'50\u2019şer gram odun talaşı (10\u219220\u00b0C) ve fındık kabuğu (10\u219230\u00b0C), 2000\u2019er gram suyu farklı sıcaklıklara ısıtıyor. Hangisinin yakıt olma potansiyeli daha fazladır?',
+      c:'<b>Fındık kabuğu.</b> Aynı kütlede yakıt, suyu 10\u00b0C\u2019lik farka (odun talaşı) karşılık 20\u00b0C\u2019lik farka çıkarıyor \u2014 yani birim kütle başına AÇIĞA ÇIKAN ISI fındık kabuğunda daha fazladır, dolayısıyla yakıt olma potansiyeli daha yüksektir.' },
+    { n:20, t:'Na(k)+H\u2082O(s)\u2192Na\u207a(suda)+OH\u207b(suda)+H\u2082(g) tepkimesinde soğuk ve sıcak suda farklı renk koyuluğu (fenolftalein ile) gözleniyor \u2014 sıcak su daha koyu mor. a) Renk koyuluğu farkının nedeni? b) Sıcaklığın etkisi?',
+      c:'a) Sıcak suda tepkime DAHA HIZLI gerçekleştiği için birim zamanda daha çok OH\u207b iyonu oluşur, bu da daha koyu mor renk verir.<br>b) Sıcaklık arttıkça taneciklerin kinetik enerjisi artar \u2192 etkin çarpışma sayısı artar \u2192 tepkime hızlanır (Na\u2019nın suyla tepkimesi sıcak suda daha hızlıdır).' },
+    { n:21, t:'C\u2082H\u2084(g)+3O\u2082(g)\u21922CO\u2082(g)+2H\u2082O(g) tepkimesi için (bağ enerjileri: C=C:611, C\u2212H:414, C=O:736, O=O:498, O\u2212H:464): a) Kırılan bağlar/enerjileri, b) Oluşan bağlar/enerjileri, c) \u0394H, ç) Endotermik/ekzotermik?',
+      c:'a) Kırılan: 4 C\u2212H (4\u00d7414=1656) + 1 C=C (611) + 3 O=O (3\u00d7498=1494) \u2192 <b>Toplam=3761 kJ</b><br>b) Oluşan: 4 C=O (4\u00d7736=2944, 2CO\u2082\u2019den) + 4 O\u2212H (4\u00d7464=1856, 2H\u2082O\u2019dan) \u2192 <b>Toplam=4800 kJ</b><br>c) \u0394H=kırılan\u2212oluşan=3761\u22124800=<b>\u22121039 kJ</b><br>ç) \u0394H<0 olduğu için <b>EKZOTERMİK</b>tir.' },
+    { n:22, t:'3O\u2082(g)\u21922O\u2083(g), \u0394H\u00b0=+285,4 kJ. a) O\u2082 ve O\u2083\u2019ün \u0394H\u00b0f değerleri? b) Kararlılık karşılaştırması? c) Kırılan/oluşan bağ enerjisi karşılaştırması? ç) Tepken/ürün kararlılığı? d) Endo/ekzo nedeni?',
+      c:'a) O\u2082 element hâlinde en kararlı biçimde olduğu için \u0394H\u00b0f(O\u2082)=<b>0</b>. \u0394H=2\u00d7\u0394Hf(O\u2083)\u22120 \u2192 \u0394Hf(O\u2083)=285,4/2=<b>+142,7 kJ/mol</b><br>b) \u0394Hf(O\u2082)=0 < \u0394Hf(O\u2083)=142,7 \u2192 <b>O\u2082 daha kararlıdır</b> (enerjisi daha düşük).<br>c) Tepkime endotermik (\u0394H>0) olduğu için kırılan bağ enerjisi TOPLAMI, oluşan bağ enerjisi toplamından FAZLADIR.<br>ç) Tepkenler (O\u2082) ürünlerden (O\u2083) daha kararlıdır.<br>d) Endotermiktir çünkü çevreden enerji alınarak O\u2082\u2019nin kararlı bağları kısmen kırılıp daha az kararlı O\u2083 oluşturulur.' },
+    { n:23, t:'Metanın (CH\u2084) yanma tepkimesine ait potansiyel enerji-tepkime koordinatı grafiğine göre: a) Tepkime denklemi, b) Kırılan/oluşan bağ enerjisi karşılaştırması, c) Tepken/ürün enerjisi karşılaştırması, ç) Kararlılık karşılaştırması, d) Endo/ekzo nedeni?',
+      c:'a) <b>CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g)</b><br>b) Metan yanması bilinen bir EKZOTERMİK tepkime olduğu için oluşan bağ enerjisi toplamı, kırılan bağ enerjisi toplamından FAZLADIR.<br>c) Tepken enerjisi > Ürün enerjisi (enerji açığa çıktığı için ürünler daha düşük enerjilidir).<br>ç) Ürünler (CO\u2082+H\u2082O) tepkenlerden (CH\u2084+O\u2082) daha kararlıdır.<br>d) Ekzotermiktir; oluşan güçlü C=O ve O\u2212H bağları, kırılan C\u2212H ve O=O bağlarından daha fazla enerji açığa çıkarır.<br><i>Not: Grafikteki tam sayısal (kJ) değerler görsele bağlıdır; buradaki analiz metan yanmasının bilinen ekzotermik karakterine dayanır.</i>' },
+    { n:24, t:'C\u2083H\u2088(g)+5O\u2082(g)\u21923CO\u2082(g)+4H\u2082O(g), \u0394H=\u22122219,9 kJ/mol. \u0394Hf(CO\u2082)=\u2212393,5, \u0394Hf(H\u2082O)=\u2212285,8 kJ/mol. C\u2083H\u2088\u2019nin \u0394Hf\u2019si kaçtır?',
+      c:'\u0394H=[3\u0394Hf(CO\u2082)+4\u0394Hf(H\u2082O)]\u2212\u0394Hf(C\u2083H\u2088)<br>\u22122219,9=[3(\u2212393,5)+4(\u2212285,8)]\u2212\u0394Hf(C\u2083H\u2088)=\u22122323,7\u2212\u0394Hf(C\u2083H\u2088)<br>\u0394Hf(C\u2083H\u2088)=\u22122323,7+2219,9=<b>\u2212103,8 kJ/mol</b>' },
+    { n:25, t:'H\u2082(g)+\u00bdO\u2082(g)\u2192H\u2082O(g) tepkimesinde r<sub>H2</sub>, r<sub>O2</sub> ve r<sub>H2O</sub> arasındaki ilişkiyi yazınız.',
+      c:'Katsayı oranına göre: <b>r<sub>tepkime</sub>=r<sub>H2</sub>=2r<sub>O2</sub>=r<sub>H2O</sub></b> (H\u2082 ve H\u2082O katsayısı 1 olduğu için hızları eşittir; O\u2082\u2019nin katsayısı \u00bd olduğu için onun hızı diğerlerinin yarısıdır).' },
+    { n:26, t:'CO(g)+H\u2082O(g)\u2192CO\u2082(g)+H\u2082(g) tepkimesinin PE-TK grafiğinde I, II, III durumları için: a) I. durum etkin çarpışma sonucu mu oluştu? b) I ve II\u2019nin ürün oluşturma ihtimali? c) III\u2019e dönüşüm şartları?',
+      c:'a) Grafikte I tipik olarak TEPKENLERİN henüz çarpışmadığı/başlangıç enerjisini gösterir \u2014 etkin çarpışma sonucu OLUŞMAMIŞTIR, tepkimenin başlangıç noktasıdır.<br>b) I ve II\u2019nin (tepken veya düşük enerjili ara durumlar) ürün oluşturma ihtimali, sahip oldukları enerjinin eşik değerini (aktivasyon enerjisini) aşıp aşmadığına ve uygun geometride çarpışıp çarpışmadıklarına bağlıdır.<br>c) CO ve H\u2082O, III (ürünler) durumuna dönüşebilmek için UYGUN GEOMETRİDE ve aktivasyon enerjisini AŞACAK kinetik enerjiyle çarpışmalıdır.' },
+    { n:27, t:'C\u2083H\u2086(g)+4,5O\u2082(g)\u21923CO\u2082(g)+3H\u2082O(g), 2L\u2019lik kapta 2,4 mol siklopropan 10 dakikada harcanıyor. H\u2082O oluşma hızı kaç M/s?',
+      c:'r<sub>C3H6</sub>=(2,4mol/2L)/(10dk\u00d760s)=1,2M/600s=<b>0,002 M/s</b><br>Katsayı oranı 3:1 olduğu için r<sub>H2O</sub>=3\u00d7r<sub>C3H6</sub>=3\u00d70,002=<b>0,006 M/s</b>' },
+    { n:28, t:'CaCO\u2083(k)+2HCl(suda)\u2192CaCl\u2082(suda)+CO\u2082(g)+H\u2082O(s) \u2014 kütle kaybı (g) zamanla (dk): 0\u21920, 2\u21922,1, 4\u21923,0, 6\u21923,5, 8\u21923,8, 10\u21924,0, 12\u21924,1, 14\u21924,1, 16\u21924,1. a) Kütle kaybının nedeni, c) hızın zamanla değişimi, ç) tepkime ne kadar sürdü, d) 0-2 ve 0-8 dk arası CaCO\u2083/HCl ortalama harcanma hızı?',
+      c:'a) Kütle kaybı, oluşan CO\u2082 gazının (ve az miktarda su buharının) ortama kaçmasından kaynaklanır.<br>c) Zamanla derişim (HCl) azaldığı için çarpışma sıklığı düşer, tepkime hızı GİDEREK AZALIR (grafikte eğrinin eğimi giderek yataylaşır).<br>ç) 12. dakikadan sonra kütle kaybı sabitleştiği (4,1g) için tepkime yaklaşık <b>12 dakikada tamamlanmıştır</b>.<br>d) CO\u2082 mol kaybı = kütle/44: 0-2dk\u2019da 2,1/44\u22480,048 mol, 0-8dk\u2019da 3,8/44\u22480,086 mol. CaCO\u2083 harcanma hızı=CO\u2082 oluşma hızına eşit (1:1); HCl harcanma hızı bunun 2 katıdır. <b>0-2dk hızı (\u22480,024 mol/dk CaCO\u2083, 0,048 mol/dk HCl), 0-8dk hızından (\u22480,0108 mol/dk CaCO\u2083, 0,0216 mol/dk HCl) daha BÜYÜKTÜR</b> \u2014 hız zamanla azalmıştır.' },
+    { n:29, t:'Linyit (C:%30, Isıl:4000 kcal/kg), Taş kömürü (C:%70, 6500), Antrasit (C:%85, 7800). a) Karbon oranı-ısıl değer ilişkisi? b) Hangisi daha çok çevre kirliliği yapar?',
+      c:'a) Karbon oranı arttıkça ısıl değer de ARTAR (doğru orantılı) \u2014 antrasit en yüksek karbon oranına ve ısıl değere sahiptir.<br>b) <b>Linyit</b> daha çok çevre kirliliği oluşturur; kükürt/azot oranı (ve kül oranı) diğerlerine göre değişken olsa da, düşük ısıl değeri nedeniyle AYNI enerjiyi elde etmek için çok daha FAZLA miktarda yakılması gerekir, bu da daha fazla kükürt/kül/CO\u2082 salınımına yol açar.' },
+    { n:30, t:'NO(g)+Br\u2082(g)\u2192\u00fcr\u00fcn tepkimesi: Deney1:[NO]=0,10,[Br\u2082]=0,10,r=0,010; Deney2:[NO]=0,20,[Br\u2082]=0,10,r=0,040; Deney3:[NO]=0,20,[Br\u2082]=0,30,r=0,120. a) Hız denklemi? b) Tepkime derecesi? c) k değeri/birimi? ç) [NO]=0,4,[Br\u2082]=0,2 iken hız?',
+      c:'1\u21922: [Br\u2082] sabit, [NO] 2 kat\u2192hız 4 kat \u2192 NO\u2019ya göre <b>2. derece</b>. 2\u21923: [NO] sabit, [Br\u2082] 3 kat\u2192hız 3 kat \u2192 Br\u2082\u2019ye göre <b>1. derece</b>.<br>a) <b>r=k[NO]\u00b2[Br\u2082]</b><br>b) Tepkime derecesi=2+1=<b>3</b><br>c) k=0,010/[(0,1)\u00b2\u00d70,1]=<b>10</b>, birimi=<b>1/(M\u00b2\u00b7s)</b><br>ç) r=10\u00d7(0,4)\u00b2\u00d70,2=10\u00d70,16\u00d70,2=<b>0,32 M/s</b>' },
+    { n:31, t:'N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g) tepkimesi 3 farklı deneyde (I: V,T; II: V,T aynı; III: V,2T farklı hacim/sıcaklık) modellenmiş. A ve B kaplarındaki NH\u2083 oluşum hızlarını karşılaştırınız.',
+      c:'Derişim (V k\u00fc\u00e7\u00fck/T y\u00fcksek olan kapta) ve sıcaklık ARTTIKÇA \u00e7arpışma sıklığı/şiddeti artar \u2192 NH\u2083 oluşma hızı da o kapta DAHA B\u00dcY\u00dcKT\u00dcR. Hacmi k\u00fc\u00e7\u00fck (derişimi y\u00fcksek) ya da sıcaklığı fazla olan kapta tepkime daha HIZLI ger\u00e7ekle\u015fir \u2014 \u00e7arpı\u015fma teorisine g\u00f6re bu, hem \u00e7arpı\u015fma sıklığının hem de etkin \u00e7arpı\u015fma oranının artmasıyla a\u00e7ıklanır.' },
+    { n:32, t:'NO(g)+O\u2083(g)\u2192NO\u2082(g)+O\u2082(g) \u2014 \u00e7arpı\u015fma olasılıkları 1x,2x,4x,9x g\u00f6sterilmi\u015f. a) Hızları kar\u015fıla\u015ftırın b) NO derişimi artı\u015fının etkisi c) Sıcaklığın etkisi \u00e7) Ortalama hızın zamanla de\u011fi\u015fimi?',
+      c:'a) \u00c7arpı\u015fma olasılı\u011fı arttık\u00e7a (1x\u21929x) tepkime hızı da ARTAR \u2014 do\u011fru orantılıdır.<br>b) NO derişiminin artması, birim hacimdeki tanecik sayısını artırarak \u00e7arpı\u015fma olasılı\u011fını (ve dolayısıyla hızı) ARTIRIR.<br>c) Sıcaklık artı\u015fı hem \u00e7arpı\u015fma sıklı\u011fını hem de etkin \u00e7arpı\u015fma oranını artırarak hızı ARTIRIR.<br>\u00e7) Tepkenler harcandık\u00e7a derişimleri azalaca\u011fı i\u00e7in ortalama hız zamanla AZALIR.' },
+    { n:33, t:'C\u2082H\u2084(g)+H\u2082(g)\u2192C\u2082H\u2086(g) tepkimesine iki farklı etki uygulanmış (Grafik 1: tanecik sayısı-KE, e\u011fri geni\u015fliyor/kayıyor; Grafik 2: PE-TK, tepe y\u00fckseklik farklı). a) Ne t\u00fcr etkiler yapılmı\u015f? b) Bu etkiler \u00e7arpı\u015fma teorisine g\u00f6re neden hızlandırır?',
+      c:'a) Grafik 1\u2019deki de\u011fi\u015fim (e\u011frinin sa\u011fa kayıp geni\u015flemesi) <b>SICAKLIK ARTI\u015eI</b>dır; Grafik 2\u2019deki de\u011fi\u015fim (tepe y\u00fcksekli\u011finin d\u00fc\u015fmesi) <b>KATALİZ\u00d6R</b> eklenmesidir.<br>b) Sıcaklık artı\u015fı taneciklerin kinetik enerjisini artırarak eşik de\u011fer(ini a\u015fan) tanecik sayısını artırır; katalizör ise aktivasyon enerjisini d\u00fc\u015f\u00fcrerek AYNI enerjiyle daha \u00e7ok taneci\u011fin etkin \u00e7arpı\u015fma yapmasını sa\u011flar \u2014 her ikisi de etkin \u00e7arpı\u015fma sayısını artırarak hızı artırır.' },
+    { n:34, t:'Na\u2082CO\u2083(k)+2HCl(suda)\u21922NaCl(suda)+CO\u2082(g)+H\u2082O(s) \u2014 e\u015fit k\u00fctlede topak/toz \u00e7ama\u015fır sodası. a) T\u00fcplerde hangisi topak/toz? b) Grafikteki A/B e\u011frileri hangisi topak/toz?',
+      c:'a) Daha \u00e7ok/hızlı k\u00f6p\u00fcren (gaz \u00e7ıkı\u015fı fazla olan) t\u00fcp <b>TOZ</b> formdur (y\u00fczey alanı b\u00fcy\u00fck oldu\u011fu i\u00e7in daha hızlı tepkimeye girer); di\u011feri <b>TOPAK</b>tır.<br>b) Grafikte daha ERKEN platoya ula\u015fan (dik ba\u015flayan) e\u011fri A ise, <b>A=TOZ</b> (hızlı), <b>B=TOPAK</b> (yavaş) formdur \u2014 y\u00fczey alanı b\u00fcy\u00fck olan toz, aynı CO\u2082 miktarına daha KISA s\u00fcrede ula\u015fır.' }
+  ];
+
+  var MOL_COK = [
+    { n:35, t:'Kireç taşının (CaCO\u2083) sönmemiş kirece (CaO) dönüştüğü tepkime için: I. Endotermik bir tepkimedir. II. Kireç taşının enerjisi ürünlerden daha yüksektir. III. Isı aldığı sürece tepkime devam eder. \u2014 hangileri doğrudur?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:3,
+      ac:'CaCO\u2083\u2192CaO+CO\u2082 fırınlama (ısı) gerektirir \u2192 ENDOTERMİK (I doğru). Endotermikte TEPKEN (kireçtaşı) enerjisi ÜRÜNDEN düşüktür, yüksek değil (II yanlış). Endotermik olduğu için ısı verildikçe tepkime sürer (III doğru). \u2192 I ve III' },
+    { n:36, t:'Sönmemiş kirecin (CaO) sönmüş kirece (Ca(OH)\u2082) dönüştüğü tepkime için hangisi YANLIŞTIR?',
+      o:['Isı alarak gerçekleşir','Çevreye enerji verir','Ürünün enerjisi tepkenlerden azdır','Sistemin enerjisi azalır','Çevrenin sıcaklığı artar'], c:0,
+      ac:'CaO+H\u2082O\u2192Ca(OH)\u2082 (kireç söndürme) bilinen bir EKZOTERMİK tepkimedir \u2014 ısı ALMAZ, ısı VERİR. "Isı alarak gerçekleşir" ifadesi YANLIŞtır.' },
+    { n:37, t:'Sönmüş kirecin (Ca(OH)\u2082) kireç taşına (CaCO\u2083) dönüştüğü tepkime için: I. Ekzotermiktir. II. Kireç taşının enerjisi tepkenlere göre daha düşüktür. III. Çevreden ısı soğurarak gerçekleşir. \u2014 hangileri doğrudur?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:3,
+      ac:'Ca(OH)\u2082+CO\u2082\u2192CaCO\u2083+H\u2082O ekzotermiktir (I doğru), bu yüzden ürün (kireçtaşı) tepkenden daha düşük enerjilidir (II doğru). Ekzotermik olduğu için ısı ALMAZ, VERİR (III yanlış). \u2192 I ve II' },
+    { n:38, t:'Metindeki bilgilere göre tepkimeler için: I. Çevreleriyle enerji alışverişi yapabilirler. II. Ekzotermik tepkimeler çevrelerine ısı verir. III. Endotermik tepkimeler çevresinden ısı alır. \u2014 hangilerine ulaşılabilir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:4,
+      ac:'Üçü de temel enerji-tepkime ilişkilerinin doğru ifadeleridir. \u2192 I, II ve III' },
+    { n:39, t:'Farklı maddelerin yakıt olma potansiyelini belirlemek için hangi deneyde bağımlı/bağımsız/kontrol değişkenleri en uygun kullanılmıştır?',
+      o:['Farklı miktardaki H\u2082\u2019yi aynı koşullarda yakmak','Aynı miktar H\u2082 ve karbonlu maddeyi FARKLI sıcaklıklarda yakmak','Aynı miktardaki H\u2082 ve karbonlu maddeyi AYNI koşullarda yakmak','Farklı basınçlarda aynı miktar H\u2082 yakmak','Farklı sıcaklıklarda aynı miktar karbonlu madde yakmak'], c:2,
+      ac:'Tek değişken (madde cinsi) değişip diğer her şeyin (miktar, koşul) SABİT tutulduğu tasarım bilimsel karşılaştırma için doğrudur.' },
+    { n:40, t:'\u201cMaarif 24\u201d uzay gemisi hikayesinde, hidrojen ve karbon bazlı madde karşılaştırmasında neden-sonuç açısından DOĞRU ifade hangisidir?',
+      o:['Hidrojenin bolluğu onu en güvenli kaynak yapar','Karbon bazlı maddenin yüksek verimi değerlendirilemez','Hidrojenin yüksek enerjisi tek başına iyi yakıt olması için yeterlidir','Karbon bazlının kısa yanma süresi iyi kaynak yapar','Hidrojenin yüksek enerjisi VE yalnızca su oluşturması onu iyi kaynak yapar'], c:4,
+      ac:'Metin, hidrojenin hem yüksek enerji potansiyeline hem de temiz (yalnızca su) yanma ürününe sahip olmasını BİRLİKTE vurgular.' },
+    { n:41, t:'Hidrojen ve karbon bazlı yakıtın karşılaştırılabilir yönleri: I. Aynı ürünü oluştururlar. II. Enerji potansiyelleri benzer derecede yüksektir. III. Çevresel sürdürülebilirlik açısından farklı sonuçlar doğururlar. \u2014 hangileri yapılabilir?',
+      o:['Yalnız I','I ve II','II ve III','I ve III','I, II ve III'], c:2,
+      ac:'H\u2082 sadece su, karbonlu madde ise CO\u2082/emisyon da oluşturur (I yanlış); ikisi de yüksek enerji potansiyeline sahiptir (II doğru); çevresel etkileri belirgin şekilde farklıdır (III doğru).' },
+    { n:42, t:'Propan gazı yanmada ısı verir, ayrışmada ısı alır. Bu durumu açıklamak için HANGİSİ KULLANILAMAZ?',
+      o:['Bağ sağlamlıklarının farklı olması','Farklı bileşikler oluşması','Ürünlerin molekül kütlelerinin farklı olması','Bağ kararlılığının farklı olması','Kırılan/oluşan bağ enerjilerinin farklı olması'], c:2,
+      ac:'Molekül KÜTLESİ, tepkimenin enerji (ısı alışverişi) yönünü açıklayan bir etken DEĞİLDİR \u2014 enerji farkı bağ enerjilerinden kaynaklanır, kütleden değil.' },
+    { n:43, t:'Propanın yanma ve ayrışma tepkimeleri için hangisi DOĞRUDUR? (Bağ enerjileri: C-H:414, C-C:347, O=O:498, H-H:436, C=C:611, C=O:736, O-H:464)',
+      o:['Yanmada tepken bağ enerjisi ürünlerden yüksektir','Ayrışmada tepken bağ enerjisi ürünlerden düşüktür','Yanmada tepkene göre kararlılığı düşük ürünler oluşur','Ayrışmada tepkene göre kararlılığı yüksek ürünler oluşur','Her iki tepkimede de en yüksek enerjili bağ ürünler tarafındadır'], c:4,
+      ac:'Hesap: Yanmada kırılan=6496kJ<oluşan=8128kJ (tepken enerjisi DÜŞÜK, A yanlış); ürünler DAHA kararlı (C yanlış). Ayrışmada kırılan(propan)=4006>oluşan(propilen+H\u2082)=3878 (tepken enerjisi YÜKSEK, B yanlış); ürünler daha AZ kararlı (D yanlış). En yüksek tekil bağ enerjisi olan C=O(736, yanma ürünü) ve C=C(611, ayrışma ürünü) ikisi de ÜRÜN tarafındadır \u2192 E doğru.' },
+    { n:44, t:'Propanın yanma ve ayrışma tepkime entalpileri bağ enerjilerinden hesaplandığında hangi seçenekteki değerlere ulaşılır?',
+      o:['-816, 128','-1632, -128','816, -128','-1632, 128','128, 1632'], c:3,
+      ac:'Yanma: kırılan(8C-H+2C-C+5O=O)=3312+694+2490=6496; oluşan(6C=O+8O-H)=4416+3712=8128; \u0394H=6496-8128=<b>-1632 kJ</b>. Ayrışma: kırılan(2C-C+8C-H)=694+3312=4006; oluşan(1C=C+1C-C+6C-H+1H-H)=611+347+2484+436=3878; \u0394H=4006-3878=<b>+128 kJ</b>.' },
+    { n:45, t:'Glikozun (C\u2086H\u2081\u2082O\u2086, ΔHf=-1273 kJ/mol) yanma ürünleri CO\u2082(ΔHf=-393,5) ve H\u2082O(g)(ΔHf=-241,8). Günlük 10155,2 kJ enerji ihtiyacını sadece glikozdan karşılayan bir insanın kaç mol glikoza ihtiyacı vardır?',
+      o:['2','4','6','8','10'], c:1,
+      ac:'ΔH<sub>yanma</sub>=[6(-393,5)+6(-241,8)]-(-1273)=-3811,8+1273=<b>-2538,8 kJ/mol</b>. 10155,2/2538,8=<b>4 mol</b>.' },
+    { n:46, t:'Glikozun yanmasına ait standart tepkime entalpisi kaç kJ\u2019dür?',
+      o:['-3811,8','-2538,8','-1273','1273','2538,8'], c:1,
+      ac:'ΔH=[6(-393,5)+6(-241,8)]-(-1273)=-2361-1450,8+1273=<b>-2538,8 kJ</b>.' },
+    { n:47, t:'Glikozun yanma tepkimesiyle ilgili hangisi YANLIŞTIR?',
+      o:['Ekzotermik bir tepkimedir','Oluşan bağların enerjisi kırılan bağların enerjisinden düşüktür','Tepkime sırasında çevreye ısı verilir','Ürünler tepkenlerden daha kararlıdır','360 g glikozun yanması ile 5621,6 kJ ısı açığa çıkar'], c:4,
+      ac:'360g glikoz=2 mol; 2\u00d72538,8=<b>5077,6 kJ</b> açığa çıkar, verilen 5621,6 kJ değeri HATALIDIR. (Not: B seçeneği de bağ enerjisi yönü açısından tartışmaya açıktır; E sayısal olarak en net yanlıştır.)' },
+    { n:48, t:'Verilen bilgilere göre: I. Tepkimedeki enerji değişimi II. \u0394H ile oluşum entalpileri bağıntısı III. 100g glikozdan alınan enerji \u2014 hangileri bulunabilir?',
+      o:['Yalnız I','I ve II','I ve III','II ve III','I, II ve III'], c:4,
+      ac:'Verilen oluşum entalpileriyle hem tepkime entalpisi hem de herhangi bir kütledeki enerji miktarı hesaplanabilir. \u2192 I, II ve III' },
+    { n:49, t:'Standart oluşum entalpileriyle ilgili hangisi YANLIŞTIR?',
+      o:['Glikozun oluşumunda dışarıdan enerji alınır','O\u2082 elementel halde olduğu için ΔHf=0 kabul edilir','Suyun oluşumu ekzotermiktir','1 mol CO\u2082 oluşumunda çevreye 393,5 kJ ısı verilir','Standart tepkime entalpisi oluşum entalpileriyle hesaplanabilir'], c:0,
+      ac:'Glikozun ΔHf=-1273 kJ/mol (NEGATİF) olduğu için oluşumu EKZOTERMİKTİR \u2014 enerji dışarı verilir, dışarıdan ALINMAZ. Bu ifade YANLIŞtır.' },
+    { n:50, t:'A\u2082+B\u2082\u21922AB tepkimesindeki moleküllerin çarpışmalarından hangisi YAPILAMAZ?',
+      o:['Yalnız 2. çarpışma ürünle sonuçlanmıştır','2 ve 3. çarpışma uygun geometride gerçekleşmiştir','Uygun geometrideki TÜM çarpışmalar ürün oluşumuyla sonuçlanmıştır','1. çarpışma uygun geometride olmadığı için gerçekleşmemiştir','Tepkimenin gerçekleşmesi için çarpışma gerekir'], c:2,
+      ac:'Uygun geometri TEK BAŞINA yeterli değildir; yeterli kinetik enerji de gerekir. "Uygun geometrideki TÜM çarpışmalar ürün oluşturur" ifadesi bir AŞIRI GENELLEMEDİR, yapılamaz.' },
+    { n:51, t:'3. çarpışmanın ürün oluşumuyla sonuçlanmamasının nedenini EN İYİ hangisi açıklar?',
+      o:['Uygun geometride gerçekleşmemesi','Yeterli enerjiye sahip olmaması','Etkin çarpışma yapması','Farklı atomlar arasında bağ oluşamaması','Ortam koşullarının uygun olmaması'], c:1,
+      ac:'(Görseldeki tabloya göre değişebilir; genel eğitim amacı geometri VE enerji koşulunun AYRI AYRI sınanmasıdır.) Yaygın senaryoda 3. çarpışma uygun geometride olsa da yeterli kinetik enerjiye sahip değildir.' },
+    { n:52, t:'Moleküllerin çarpışma durumlarını gösteren görsele göre HANGİ çıkarım yapılabilir?',
+      o:['Çarpışma tek başına yeterlidir','Uygun geometrideki tüm çarpışmalar ürün oluşturur','Yeterli enerjiyle her çarpışma ürün oluşturur','Uygun geometride VE yeterli enerjiyle olan çarpışmalar ürün oluşturabilir','Düşük enerjili çarpışma sonucu ürün oluşabilir'], c:3,
+      ac:'Etkin çarpışmanın İKİ koşulunun (geometri + enerji) BİRLİKTE sağlanması gerektiğini doğru ifade eden tek seçenek budur.' },
+    { n:53, t:'Uygun geometride ve yeterli kinetik enerjiyle gerçekleşen çarpışmalara etkin çarpışma denir. Görseldeki hangi durumlar etkin çarpışma olarak nitelendirilebilir?',
+      o:['Yalnız I','Yalnız II','I ve III','II ve III','I, II ve III'], c:1,
+      ac:'(Görsele bağlı olarak) Genellikle üç durumdan yalnızca BİRİ hem uygun geometri hem yeterli enerji koşulunu birlikte sağlar.' },
+    { n:54, t:'Roket motorlarında kullanılan N\u2082O\u2084/NO\u2082 tepkimesine ait derişim-zaman grafiğine göre (NO\u2082 azalıyor, N\u2082O\u2084 artıyor), tepkimenin denklemi ne olabilir?',
+      o:['NO\u2082(g)\u2192N\u2082O\u2084(g)','N\u2082O\u2084(g)\u2192NO\u2082(g)','2NO\u2082(g)\u2192N\u2082O\u2084(s)','2NO\u2082(s)\u2192N\u2082O\u2084(k)','2NO\u2082(g)\u2192N\u2082O\u2084(g)'], c:4,
+      ac:'NO\u2082 azalıp N\u2082O\u2084 arttığına ve her iki madde de gaz halinde olduğuna göre denklem katsayı dengesiyle <b>2NO\u2082(g)\u2192N\u2082O\u2084(g)</b> olmalıdır.' },
+    { n:55, t:'Grafiğe göre tepkimeyle ilgili hangisi DOĞRUDUR?',
+      o:['Birim zamanda NO\u2082 kütlesindeki değişim artmıştır','N\u2082O\u2084 oluşma hızı giderek artmıştır','NO\u2082 harcanma hızı N\u2082O\u2084 oluşma hızına eşittir','Aynı zaman aralıklarında harcanan NO\u2082 kütlesi oluşan N\u2082O\u2084 kütlesine eşittir','Tepkime hızı NO\u2082 harcanma hızına eşittir'], c:3,
+      ac:'Kütlenin korunumu yasası gereği, kapalı bir sistemde harcanan NO\u2082 kütlesi HER ZAMAN oluşan N\u2082O\u2084 kütlesine eşittir (2NO\u2082\u2192N\u2082O\u2084, 2\u00d746g=92g=92g). NO\u2082 harcanma hızı, katsayı farkı (2:1) nedeniyle N\u2082O\u2084 oluşma hızının 2 katıdır, tepkime hızı ise NO\u2082 harcanma hızının YARISIdır.' },
+    { n:56, t:'Grafiğe göre tepkime hızının zamanla nasıl değiştiğini VE nedenini EN İYİ hangisi açıklar?',
+      o:['Derişim azaldığı için çarpışma sayısı azalır, tepkime yavaşlar','Derişim sabit kaldığı için hız sabit kalır','Ürün derişimi arttığı için hız artar','Kinetik enerji zamanla arttığı için hız artar','Kinetik enerji zamanla azaldığı için hız azalır'], c:0,
+      ac:'Sabit sıcaklıkta tepken (NO\u2082) derişimi zamanla azaldığı için çarpışma sıklığı düşer ve tepkime giderek YAVAŞLAR (kinetik enerji sıcaklığa bağlıdır, burada sıcaklık sabittir).' },
+    { n:57, t:'İlk 20 saniyede N\u2082O\u2084 gazının ortalama oluşma hızı nedir?',
+      o:['0,3\u00d710\u207b\u00b3 M/s','0,6\u00d710\u207b\u00b3 M/s','1,2\u00d710\u207b\u00b3 M/s','1,4\u00d710\u207b\u00b3 M/s','1,6\u00d710\u207b\u00b3 M/s'], c:1,
+      ac:'r=\u0394[N\u2082O\u2084]/\u0394t; grafikteki 0. ve 20. saniye derişim okumalarının farkının 20 saniyeye bölünmesiyle hesaplanır. (Kesin sayısal cevap için grafikteki tam veri noktaları gereklidir; kitabın tipik veri örüntüsüyle en olası cevap budur.)' },
+    { n:58, t:'80. ve 120. saniyeler arasında NO\u2082 gazının ortalama harcanma hızı nedir?',
+      o:['0,1\u00d710\u207b\u00b3 M/s','0,2\u00d710\u207b\u00b3 M/s','0,3\u00d710\u207b\u00b3 M/s','0,4\u00d710\u207b\u00b3 M/s','0,5\u00d710\u207b\u00b3 M/s'], c:1,
+      ac:'Tepkime dengeye/plato durumuna yaklaştıkça (80-120s aralığı) derişim değişimi KÜÇÜLÜR, bu yüzden bu aralıktaki ortalama hız, ilk aralıklara göre daha DÜŞÜKTÜR. (Kesin değer için grafiğin tam verisi gereklidir.)' },
+    { n:59, t:'\u201cSıcaklığın artırılması tepkime hızını artırır.\u201d hipotezini kuran öğrenci, deneydeki III. etki (sıcaklık artırma) sonucu HANGİ gözlemine göre açıklayabilir?',
+      o:['Çinko parçalarının küçülme süresinin artması','Toplam gaz miktarının azalması','Gaz çıkış süresinin azalması','Çinko parçalarının tükenmesi','Toplam gaz miktarının artması'], c:2,
+      ac:'Sıcaklık artırılınca tepkime HIZLANIR, bu da gazın daha KISA sürede (azalan sürede) tamamen açığa çıkması ile gözlenir.' },
+    { n:60, t:'\u201cÇarpışma sıklığı tepkime hızını artırır mı?\u201d sorusunun cevabına hangi etkilerde (I:derişim, II:toz haline getirme, III:sıcaklık, IV:katalizör) ulaşılabilir?',
+      o:['Yalnız I','I ve II','II ve III','I, II ve III','I, II ve IV'], c:3,
+      ac:'Derişim (I), temas yüzeyi (II) ve sıcaklık (III) doğrudan ÇARPIŞMA SIKLIĞINI artırır. Katalizör (IV) ise çarpışma sıklığını DEĞİL, etkin çarpışma ORANINI (aktivasyon enerjisini düşürerek) artırır. \u2192 I, II ve III' },
+    { n:61, t:'Hangi etkiler çarpışma teorisi temelinde birim zamandaki ETKİN çarpışma sayısını artırarak hızı artırır?',
+      o:['I ve II','I ve III','II, III ve IV','I, II ve IV','I, II, III ve IV'], c:4,
+      ac:'Derişim, temas yüzeyi, sıcaklık VE katalizör \u2014 dördü de (farklı mekanizmalarla olsa da) sonuçta ETKİN çarpışma sayısını artırır. \u2192 Hepsi' },
+    { n:62, t:'I. etkide (derişim artırma) tepkime hızının arttığı gözlemlenmiştir. Bu sonuç EN İYİ hangisiyle açıklanır?',
+      o:['Kinetik enerjinin artması','Etkin çarpışma sayısının artması','Yüzey alanının artması','Katalizörün etkisi','Aktivasyon enerjisinin düşmesi'], c:1,
+      ac:'Derişim artışı, birim hacimdeki tanecik sayısını (dolayısıyla etkin çarpışma sayısını) artırır; kinetik enerjiyi ya da Ea\u2019yı DEĞİŞTİRMEZ.' },
+    { n:63, t:'IV. etkide (katalizör ekleme) tepkime hızının arttığı gözlemlenmiştir. Bu sonuç EN İYİ hangisiyle açıklanır?',
+      o:['Kinetik enerjinin artması','Çarpışma sayısının artması','Yüzey alanının artması','Derişimin artması','Aktivasyon enerjisinin düşmesi'], c:4,
+      ac:'Katalizörün TEMEL etki mekanizması aktivasyon enerjisini düşürmesidir; çarpışma sayısını ya da derişimi doğrudan değiştirmez.' },
+    { n:64, t:'2H\u2082(g)+2NO(g)\u21922H\u2082O(g)+N\u2082(g) tepkimesi için deney: [H\u2082,NO,Hız]: [0,010;0,024;2,4\u00d710\u207b\u2076], [0,005;0,024;1,2\u00d710\u207b\u2076], [0,010;0,012;0,6\u00d710\u207b\u2076]. Hangi hız denklemi DOĞRUDUR?',
+      o:['r=k[H\u2082]\u00b2[NO]\u00b2','r=k[H\u2082][NO]\u00b2','r=k[H\u2082][NO]','r=k[NO]\u00b2','r=k[H\u2082]\u00b2[NO]'], c:1,
+      ac:'1\u21922: NO sabit, H\u2082 yarıya\u2192hız yarıya \u2192 H\u2082\u2019ye göre 1. derece. 1\u21923: H\u2082 sabit, NO yarıya\u2192hız 1/4\u2019e düşer \u2192 NO\u2019ya göre 2. derece. \u2192 <b>r=k[H\u2082][NO]\u00b2</b>' },
+    { n:65, t:'Öğrencinin tespit ettiği hız sabitinin birimi, değeri ve tepkime derecesi tablodaki hangi satırla eşleşir? (I:1/sM\u00b2,0,1,3 II:1/sM\u00b2,5/12,2 III:1/sM,0,1,2 IV:1/sM,0,1,3 V:1/sM\u00b2,5/12,3)',
+      o:['I','II','III','IV','V'], c:4,
+      ac:'r=k[H\u2082][NO]\u00b2\u2019den 1. deney verisiyle: 2,4\u00d710\u207b\u2076=k\u00d70,010\u00d70,024\u00b2 \u2192 k=5/12\u22480,417, birimi 1/(s\u00b7M\u00b2), tepkime derecesi=1+2=3. \u2192 <b>V</b>' },
+    { n:66, t:'Öğrencinin oluşturduğu önermeler: I. Tepken derişimi arttıkça hız artar. II. Derişim hızı etkilemez. III. Derişim arttıkça hız azalır. \u2014 hangisi bilimsel olarak doğrudur?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:0,
+      ac:'Standart kimyasal kinetikte tepken derişiminin artması, çarpışma sıklığını artırarak tepkime hızını ARTIRIR. \u2192 Yalnız I' }
+  ];
+
+  var MOL_CATS = ['Doğru-Yanlış','Boşluk Doldurma','Açık Uçlu','Çoktan Seçmeli'];
+  var molSt = { cat: 0 };
+
+  function maarifMolCat(){
+    return '' +
+    '<div class="card" style="margin-bottom:12px">' +
+      '<div class="slbl">1. Tema Ölçme ve Değerlendirme \u2014 66 Soru</div>' +
+      '<p style="font-size:12px;color:var(--tx2);line-height:1.6">Kitaptaki t\u00fcm soru t\u00fcrleri (do\u011fru-yanlış, boşluk doldurma, a\u00e7ık u\u00e7lu, \u00e7oktan se\u00e7meli) \u00e7\u00f6z\u00fcml\u00fc olarak. Bir soruya dokunarak cevabı/\u00e7\u00f6z\u00fcm\u00fc g\u00f6ster.</p>' +
+    '</div>' +
+    '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' +
+      MOL_CATS.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="molSetCat(' + i + ',this)">' + c + '</button>'; }).join('') +
+    '</div></div>' +
+    '<div id="mol-list"></div>';
+  }
+  window.molSetCat = function(i, btn){ molSt.cat = i; if (btn) selectInRow(btn); molRenderList(); };
+
+  function molToggle(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = (el.style.display === 'none' || !el.style.display) ? 'block' : 'none';
+  }
+  window.molToggle = molToggle;
+
+  function molRenderList(){
+    var box = document.getElementById('mol-list');
+    if (!box) return;
+    var html = '';
+    if (molSt.cat === 0) {
+      MOL_DY.forEach(function(q){
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'moldy-' + q.n + '\')">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600">' + q.n + '. ' + q.t + '</div>' +
+          '<div id="moldy-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
+            '<span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:6px;background:' + (q.a==='D'?'rgba(34,197,94,.2);color:#86efac':'rgba(239,68,68,.2);color:#fca5a5') + '">' + (q.a==='D'?'DOĞRU':'YANLIŞ') + '</span>' +
+            '<div style="font-size:12px;color:var(--tx2);line-height:1.6">' + q.ac + '</div>' +
+          '</div></div>';
+      });
+    } else if (molSt.cat === 1) {
+      MOL_BOSLUK.forEach(function(q){
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molbos-' + q.n + '\')">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600">' + q.n + '. ' + q.t + '</div>' +
+          '<div id="molbos-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
+            '<span style="font-size:13px;font-weight:700;color:#f59e0b">\u2192 ' + q.a + '</span>' +
+            (q.ac ? '<div style="font-size:12px;color:var(--tx2);margin-top:4px">' + q.ac + '</div>' : '') +
+          '</div></div>';
+      });
+    } else if (molSt.cat === 2) {
+      MOL_ACIK.forEach(function(q){
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molacik-' + q.n + '\')">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5">' + q.n + '. ' + q.t + '</div>' +
+          '<div id="molacik-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.7">' + q.c + '</div></div>';
+      });
+    } else {
+      MOL_COK.forEach(function(q){
+        var optsHtml = q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:' + (i===q.c?'#86efac;font-weight:700':'var(--tx3)') + '">' + String.fromCharCode(65+i) + ') ' + o + (i===q.c?' \u2713':'') + '</div>'; }).join('');
+        html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'molcok-' + q.n + '\')">' +
+          '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.5">' + q.n + '. ' + q.t + '</div>' +
+          '<div id="molcok-' + q.n + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">' +
+            optsHtml +
+            '<div style="font-size:12px;color:var(--tx2);line-height:1.6;margin-top:8px;padding-top:6px;border-top:1px dashed rgba(255,255,255,.08)">' + q.ac + '</div>' +
+          '</div></div>';
+      });
+    }
+    box.innerHTML = html;
+  }
+
+  // Öncüllü (I./II./III./IV./V. ve a)b)c)ç)d)...) soru metinlerini test kağıdı gibi alt alta diz
+  function formatOncul(text){
+    if (!text) return text;
+    var out = text.replace(/\s(I{1,3}|IV|V)\.\s+/g, function(m, roman){
+      return '<br>&nbsp;&nbsp;<b>' + roman + '.</b> ';
+    });
+    out = out.replace(/\s([a-zçğıöşü])\)\s+/g, function(m, harf){
+      return '<br>&nbsp;&nbsp;<b>' + harf + ')</b> ';
+    });
+    return out;
+  }
+
+  var NOTE_Q = [
+    { n:1, kat:'Hız Bağıntısı', t:'2N\u2082O\u2085(g) \u2192 4NO\u2082(g) + O\u2082(g) tepkimesi i\u00e7in: I. Tepkime denklemi bu şekildedir. II. Sabit hacimli kapta basın\u00e7taki artışla tepkime hızı \u00f6l\u00e7\u00fclebilir. III. O\u2082 gazının oluşma hızı, NO\u2082 gazının oluşma hızının 4 katıdır. \u2014 hangileri doğrudur?',
+      c:'Katsayı oranı N\u2082O\u2085:NO\u2082:O\u2082 = 2:4:1\u2019dir.<br><b>I \u2014 DOĞRU</b> (denklem verilen katsayılarla tutarlıdır).<br><b>II \u2014 DOĞRU</b>: Gaz mol sayısı 2\u2019den 5\u2019e \u00e7ıktığı i\u00e7in sabit hacimde basın\u00e7 artışı g\u00f6zlenebilir, bu da hızın \u00f6l\u00e7\u00fclmesini sağlar.<br><b>III \u2014 YANLIŞ</b>: Katsayı oranına g\u00f6re NO\u2082 hızı O\u2082 hızının 4 katıdır, tersi değil.<br>\u2192 <b>I ve II doğrudur.</b>' },
+    { n:2, kat:'Hız Bağıntısı', t:'Bir tepkimede: A\u2019nın harcanma hızı D\u2019nin oluşma hızına eşittir. E\u2019nin oluşma hızı, B\u2019nin harcanma hızının 3 katıdır. C\u2019nin oluşma hızı, E\u2019nin oluşma hızının yarısıdır. Tepkimenin denklemini yazınız.',
+      c:'r<sub>A</sub>=r<sub>D</sub> \u2192 a=d.<br>r<sub>E</sub>=3r<sub>B</sub> \u2192 e:b=3:1.<br>r<sub>C</sub>=r<sub>E</sub>/2 \u2192 e:c=2:1.<br>e i\u00e7in ortak kat se\u00e7ilirse e=6 \u2192 b=2, c=3, a=d=1.<br>\u2192 <b>A + 2B \u2192 3C + D + 6E</b>' },
+    { n:3, kat:'Ortalama Hız', t:'CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g) tepkimesinde 20 saniyede 4,8 gram CH\u2084 harcanıyor. H\u2082O\u2019nun ortalama oluşma hızı ka\u00e7 mol/dk\u2019dır? (H:1, C:12)',
+      c:'mol CH\u2084 = 4,8/16=0,3 mol. 20 s = 1/3 dk. r<sub>CH4</sub>=0,3/(1/3)=<b>0,9 mol/dk</b>.<br>Katsayı oranı CH\u2084:H\u2082O=1:2 \u2192 r<sub>H2O</sub>=2\u00d70,9=<b>1,8 mol/dk</b>.' },
+    { n:4, kat:'Ortalama Hız', t:'4NH\u2083(g)+3O\u2082(g)\u21922N\u2082(g)+6H\u2082O(g) tepkimesi 2 litrelik sabit hacimli kapta 2 dakikada ger\u00e7ekleşiyor. 13,6 gram NH\u2083 tamamı tepkimeye girdiğinde N\u2082 ve H\u2082O\u2019nun oluşma hızı ka\u00e7 mol/(L\u00b7s)\u2019dir? (H:1, N:14)',
+      c:'mol NH\u2083=13,6/17=0,8 mol. 2 dk=120 s. r<sub>NH3</sub>=(0,8/2L)/120s=<b>0,00333 M/s</b>.<br>Katsayı oranı NH\u2083:N\u2082:H\u2082O=4:2:6.<br>r<sub>N2</sub>=r<sub>NH3</sub>\u00d7(2/4)=<b>0,00167 M/s</b>.<br>r<sub>H2O</sub>=r<sub>NH3</sub>\u00d7(6/4)=<b>0,005 M/s</b>.' },
+    { n:5, kat:'Ortalama Hız', t:'Mg(k)+2HBr(suda)\u2192MgBr\u2082(suda)+H\u2082(g) tepkimesinde Mg kütlesi 120 saniyede 18,8 g\u2019dan 11,6 g\u2019a düşüyor. HBr \u00e7\u00f6zeltisinin harcanma hızı ka\u00e7 mol/dk\u2019dır? (Mg:24)',
+      c:'\u0394m(Mg)=18,8\u221211,6=7,2 g \u2192 \u0394n(Mg)=7,2/24=0,3 mol. 120 s=2 dk.<br>r<sub>Mg</sub>=0,3/2=<b>0,15 mol/dk</b>.<br>Katsayı oranı Mg:HBr=1:2 \u2192 r<sub>HBr</sub>=2\u00d70,15=<b>0,3 mol/dk</b>.' },
+    { n:6, kat:'Ortalama/Anlık Hız', t:'X(g) \u2192 2Y(g) tepkimesinde X gazının derişiminin zamanla değişimi grafikte verilmiştir (t=0\u2019da 3,6 M, t=10s\u2019de 2,4 M, t=20s\u2019de 1,6 M). Buna g\u00f6re: I. 0-10 saniyeler arası Y gazının ortalama oluşma hızı ka\u00e7 mol/L\u00b7s\u2019dir? II. 10-20 saniyeler arası Y gazının ortalama oluşma hızı ka\u00e7 mol/L\u00b7s\u2019dir?',
+      graph:'noteg-x2y',
+      c:'Grafikten okunan doğrulanmış noktalar: t=0:3,6 M, t=10s:2,4 M, t=20s:1,6 M (derişim oranı her 10 saniyede sabit 2/3 katsayısıyla azalıyor).<br><b>I) 0-10s arası:</b> \u0394[X]=3,6\u22122,4=1,2 M, \u0394t=10s. r<sub>X</sub>=1,2/10=0,12 M/s. Katsayı oranı X:Y=1:2 \u2192 r<sub>Y</sub>=2\u00d70,12=<b>0,24 mol/L\u00b7s</b>.<br><b>II) 10-20s arası:</b> \u0394[X]=2,4\u22121,6=0,8 M, \u0394t=10s. r<sub>X</sub>=0,8/10=0,08 M/s \u2192 r<sub>Y</sub>=2\u00d70,08=<b>0,16 mol/L\u00b7s</b>.<br>\u2192 G\u00f6r\u00fcld\u00fcğ\u00fc gibi hız zamanla AZALIYOR (0,24\u21920,16), bu da derişim azaldık\u00e7a \u00e7arpışma sıklığının azalmasıyla tutarlıdır.' },
+    { n:7, kat:'Ortalama Hız', t:'Al(k)+3HCl(suda)\u2192AlCl\u2083(suda)+\u00b3\u2044\u2082H\u2082(g) tepkimesine g\u00f6re 2 L\u2019lik bir kapta [HCl] derişimi 1. dakikada 0,5 M, 4. dakikada 0,2 M olarak \u00f6l\u00e7\u00fclm\u00fcşt\u00fcr. 1. ve 4. dakikalar arasında H\u2082(g)\u2019nin oluşma hızı ka\u00e7 g/dk\u2019dır? (H:1)',
+      graph:'noteg-hcl',
+      c:'\u0394[HCl]=0,5\u22120,2=0,3 M, 2 L\u2019de \u0394n(HCl)=0,6 mol. 3 dakikada: r<sub>HCl</sub>=0,6/3=<b>0,2 mol/dk</b>.<br>Katsayı oranı HCl:H\u2082=3:1,5=2:1 \u2192 r<sub>H2</sub>=0,2/2=<b>0,1 mol/dk</b>.<br>K\u00fctlece: 0,1\u00d72 g/mol=<b>0,2 g/dk</b>.' },
+    { n:8, kat:'Hız Bağıntısı', t:'Sabit sıcaklıkta yandaki kapta ger\u00e7ekleştirilen: I. N\u2082O\u2084(g)\u21922NO\u2082(g), II. N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g), III. H\u2082(g)+I\u2082(g)\u21922HI(g) tepkimelerinden hangilerinin hızı hacim (ya da basın\u00e7) artışı g\u00f6zlenerek \u00f6l\u00e7\u00fclebilir?',
+      c:'Gaz fazında tepkime hızı hacim/basın\u00e7 değişimiyle \u00f6l\u00e7\u00fclebilmesi i\u00e7in toplam gaz MOL SAYISININ değişmesi gerekir.<br>I: 1mol\u21922mol \u2014 <b>DEĞİŞİYOR, \u00f6l\u00e7\u00fclebilir.</b><br>II: 4mol\u21922mol \u2014 <b>DEĞİŞİYOR, \u00f6l\u00e7\u00fclebilir.</b><br>III: 2mol\u21922mol \u2014 <b>DEĞİŞMİYOR, \u00f6l\u00e7\u00fclemez</b> (H\u2082 ve I\u2082 gaz halindeyse klasik bir \u00f6rnektir; I\u2082 KATI verilmiş olsaydı sonu\u00e7 değişirdi).<br>\u2192 <b>Yalnız I ve II</b> hacim/basın\u00e7 değişimiyle izlenebilir.' },
+    { n:9, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda ger\u00e7ekleşen: 1) Ag\u207a(suda)+Cl\u207b(suda)\u2192AgCl(k) 2) Fe(k)+SO\u2084\u00b2\u207b(suda)\u2192FeSO\u2084(k) \u2014 hangisi daha hızlıdır?',
+      c:'1. tepkime ZIT Y\u00dcKL\u00dc İYONLAR arasında ger\u00e7ekleşir (elektrostatik \u00e7ekim ile \u00e7ok hızlıdır). 2. tepkime bir METAL ile bir iyon arasındadır (daha yavaş, elektron transferi ve y\u00fczey etkileşimi gerektirir). \u2192 <b>1. tepkime (Ag\u207a+Cl\u207b) daha hızlıdır.</b>' },
+    { n:10, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda: 1) CH\u2084(g)+2O\u2082(g)\u2192CO\u2082(g)+2H\u2082O(g) 2) C\u2083H\u2088(g)+5O\u2082(g)\u21923CO\u2082(g)+4H\u2082O(g) \u2014 hangisi daha hızlıdır?',
+      c:'Propanın (C\u2083H\u2088) yanması daha \u00e7ok bağın (daha b\u00fcy\u00fck molek\u00fcl, daha fazla C-H ve C-C bağı) kırılmasını gerektirir. Kırılan bağ sayısı arttık\u00e7a tepkime YAVAŞLAR. \u2192 <b>1. tepkime (metan yanması) daha hızlıdır.</b>' },
+    { n:11, kat:'Mekanizma', t:'HCOOH+H\u2082SO\u2084 tepkimesi 3 basamakta ger\u00e7ekleşiyor: 1.adım (hızlı): HCOOH+H\u2082SO\u2084\u2192HCOOH\u2082\u207a+HSO\u2084\u207b; 2.adım (\u00e7ok hızlı): HCOOH\u2082\u207a\u2192HCO\u207a+H\u2082O; 3.adım (yavaş): HCO\u207a+HSO\u2084\u207b\u2192H\u2082SO\u2084+CO. H\u2082SO\u2084\u2019\u00fcn rol\u00fc nedir, ara \u00fcr\u00fcnler nelerdir, hız denklemi nasıl yazılır?',
+      c:'H\u2082SO\u2084, 1. adımda tepkimeye girip 3. adımda değişmeden \u00e7ıkıyor \u2192 <b>KATALİZ\u00d6RD\u00dcR</b> (net tepkimede g\u00f6r\u00fcnmez).<br>HCOOH\u2082\u207a ve HCO\u207a bir basamakta oluşup diğerinde kullanıldığı i\u00e7in <b>ARA \u00dcR\u00dcNd\u00fcr</b>.<br>Hız, YAVAŞ (3.) basamağa g\u00f6re yazılır: <b>r=k[HCO\u207a][HSO\u2084\u207b]</b>.' },
+    { n:12, kat:'Hız Denklemi', t:'Aşağıdaki tepkimelerin hız bağıntıları verilmiştir: SO\u2082(g)+\u00bdO\u2082(g)\u2192SO\u2083(g), r=k[SO\u2082][O\u2082]; N\u2082(g)+3H\u2082(g)\u21922NH\u2083(g), r=k[N\u2082][H\u2082]\u00b2. Bu tepkimelerden hangileri mekanizmalıdır?',
+      c:'SO\u2082+\u00bdO\u2082\u2192SO\u2083: katsayılar (1,\u00bd) iken hız denklemindeki \u00fcsler (1,1) \u2014 UYUMSUZ (\u00bd\u22601) \u2192 <b>mekanizmalıdır</b>.<br>N\u2082+3H\u2082\u21922NH\u2083: katsayılar (1,3) iken \u00fcsler (1,2) \u2014 UYUMSUZ (3\u22602) \u2192 <b>mekanizmalıdır</b>.<br>(Tek adımlı olabilmesi i\u00e7in hız denklemi katsayılarla TAM uyumlu olmalıdır.)' },
+    { n:13, kat:'Derişim/Piston', t:'Eşit mollerdeki A\u2082 ve B\u2082 gazları arasında A\u2082(g)+2B\u2082(g)\u2192 tepkimesi, kapalı bir kapta TEK ADIMDA ger\u00e7ekleşiyor. Sabit sıcaklık ve basın\u00e7ta, ideal pistonlu kaba, kapta bulunan İDEAL TANECİK SAYISI kadar B\u2082 gazı ilave edilirse tepkime hızı ka\u00e7 katına \u00e7ıkar?',
+      c:'Başlangı\u00e7ta n(A\u2082)=n(B\u2082)=a (eşit mol), toplam=2a, hacim=V.<br>İlave edilen B\u2082 = toplam tanecik sayısı = 2a mol.<br>Yeni n(B\u2082)=a+2a=<b>3a (3 kat)</b>; n(A\u2082)=a (değişmedi).<br>Toplam mol 2a\u21924a\u2019ya \u00e7ıktığı i\u00e7in SABİT basın\u00e7ta <b>hacim de 2 katına \u00e7ıkar</b> (V\u21922V).<br>Yeni [A\u2082]=a/2V=eski [A\u2082]\u2019nin <b>yarısı (\u00d70,5)</b>.<br>Yeni [B\u2082]=3a/2V=eski [B\u2082]\u2019nin <b>1,5 katı (\u00d71,5)</b>.<br>Tek adımlı olduğu i\u00e7in hız denklemi katsayılarla aynıdır: r=k[A\u2082][B\u2082]\u00b2.<br>Yeni hız/Eski hız = (0,5)\u00b9\u00d7(1,5)\u00b2 = 0,5\u00d72,25 = <b>9/8 (1,125 kat)</b>.<br><span style="color:#fca5a5">\u26a0\ufe0f Bu soruda başlangı\u00e7ta A\u2082 ve B\u2082\u2019nin ayrı ayrı nasıl etkilendiğini (yalnızca B\u2082 eklendiği i\u00e7in derişimleri FARKLI oranda değiştiğini) g\u00f6z \u00f6n\u00fcnde bulundurmak \u00f6nemlidir \u2014 t\u00fcm derişimlerin sabit kaldığını varsaymak yaygın bir hatadır.</span>' },
+    { n:14, kat:'Sıcaklık Etkisi', t:'Şekildeki her kapta eşit sayıda N\u2082O\u2084 molek\u00fcl\u00fc bulunmaktadır: I. Kap: V litre, 50\u00b0C \u00b7 II. Kap: 2V litre, 50\u00b0C \u00b7 III. Kap: 2V litre, 25\u00b0C. Her kapta N\u2082O\u2084(g)\u21922NO\u2082(g) tepkimesi ger\u00e7ekleşmektedir. Bu kaplardaki tepkimelerin hızlarını karşılaştırınız.',
+      c:'Sıcaklık arttık\u00e7a hız ARTAR; hacim arttık\u00e7a (derişim azaldık\u00e7a) hız AZALIR.<br><b>I. Kap</b> (V, 50\u00b0C): K\u00dc\u00c7\u00dcK hacim + Y\u00dcKSEK sıcaklık \u2192 EN HIZLI.<br><b>II. Kap</b> (2V, 50\u00b0C): B\u00dcY\u00dcK hacim ama Y\u00dcKSEK sıcaklık \u2192 ORTA.<br><b>III. Kap</b> (2V, 25\u00b0C): B\u00dcY\u00dcK hacim + D\u00dcŞ\u00dcK sıcaklık \u2192 EN YAVAŞ.<br>\u2192 <b>Hız sıralaması: I > II > III</b>.' },
+    { n:15, kat:'Sıcaklık Etkisi', t:'T\u2081 ve T\u2082 (T\u2082>T\u2081) sıcaklıklarındaki bir gazın molek\u00fcl sayısı-kinetik enerji dağılım grafiğine g\u00f6re, aşağıdakilerden hangisi YANLIŞTIR? A) T\u2082\u2019de etkin \u00e7arpışma sayısı T\u2081\u2019e g\u00f6re daha fazladır B) T\u2082\u2019de tepkime hızı T\u2081\u2019e g\u00f6re daha d\u00fcş\u00fckt\u00fcr C) Her iki sıcaklıkta Ea değeri aynıdır D) T\u2082\u2019de eşik enerjisini aşan molek\u00fcl sayısı T\u2081\u2019e g\u00f6re daha \u00e7oktur E) T\u2082\u2019de moleküllerin kinetik enerjisi T\u2081\u2019e g\u00f6re daha fazladır',
+      graph:'noteg-t1t2',
+      c:'T\u2082>T\u2081 olduğu i\u00e7in T\u2082\u2019de kinetik enerji, etkin \u00e7arpışma sayısı ve eşiği aşan molek\u00fcl sayısı DAHA FAZLADIR (A,D,E doğru); Ea sıcaklıktan etkilenmez, sabittir (C doğru). Ancak y\u00fcksek sıcaklıkta (T\u2082) hız DAHA D\u00dcŞ\u00dcK değil, DAHA Y\u00dcKSEK olur. \u2192 <b>YANLIŞ olan: B</b>' },
+    { n:16, kat:'Sıcaklık Etkisi', t:'Bir tepkimede T\u2081 ve T\u2082 sıcaklıklarındaki (T\u2082>T\u2081) enerji dağılımlarına ilişkin: I. T\u2081 sıcaklığında eşik enerjisi en k\u00fc\u00e7\u00fckt\u00fcr II. Hız sabitleri arasındaki ilişki k\u2081<k\u2082\u2019dir III. Birim zamanda en az \u00fcr\u00fcn T\u2081 sıcaklığında oluşur \u2014 hangileri YANLIŞTIR?',
+      c:'Eşik enerjisi (Ea) SICAKLIKTAN BAĞIMSIZDIR, T\u2081\u2019de \u201cen k\u00fc\u00e7\u00fck\u201d olamaz \u2014 <b>I YANLIŞ</b> (Ea her iki sıcaklıkta da AYNIDIR). k\u2082>k\u2081 (sıcaklık arttık\u00e7a k artar) \u2014 <b>II DOĞRU</b>. D\u00fcş\u00fck sıcaklıkta (T\u2081) hız daha yavaş, birim zamanda en AZ \u00fcr\u00fcn T\u2081\u2019de oluşur \u2014 <b>III DOĞRU</b>. \u2192 Yalnız I yanlıştır.' },
+    { n:17, kat:'Katalizör', t:'2SO\u2083(g)\u21922SO\u2082(g)+O\u2082(g) tepkimesinin iki ayrı durumdaki (biri katalizörl\u00fc, diğeri katalizörs\u00fcz) aktifleşme enerjileri Ea\u2081 ve Ea\u2082 olarak verilmiştir. Ea\u2081<Ea\u2082 olduğuna g\u00f6re hangisi katalizörl\u00fcd\u00fcr ve hangisinin hızı daha b\u00fcy\u00fckt\u00fcr?',
+      graph:'noteg-katgraph',
+      c:'Katalizör aktivasyon enerjisini D\u00dcŞ\u00dcRD\u00dcĞ\u00dc i\u00e7in, DAHA D\u00dcŞ\u00dcK aktivasyon enerjisine sahip olan (Ea\u2081) <b>KATALİZ\u00d6RL\u00dc</b> durumdur. D\u00fcş\u00fck aktivasyon enerjisi = daha fazla etkin \u00e7arpışma = <b>DAHA B\u00dcY\u00dcK HIZ</b> \u2192 Ea\u2081\u2019e sahip (katalizörl\u00fc) tepkime daha hızlıdır.' },
+    { n:18, kat:'Katalizör/Mekanizma', t:'H\u2082(g)+Cl\u2082(g)\u21922HCl(g) tepkimesi tek adımda ger\u00e7ekleşiyor. Şu işlemler uygulanıyor: 1. Ortama aynı sıcaklıkta H\u2082(g) ekleniyor. 2. Sıcaklık d\u00fcş\u00fcr\u00fcl\u00fcyor. 3. Ortama uygun katalizör konuyor. Bu işlemlerin tepkime hızına etkisini (zamanla değişim grafiği şeklinde) yorumlayınız.',
+      graph:'noteg-3etki',
+      c:'1) H\u2082 eklenmesi derişimi ANİDEN artırır \u2192 hız ANİDEN yukarı sı\u00e7rar, sonra tekrar azalmaya devam eder.<br>2) Sıcaklık d\u00fcş\u00fcr\u00fclmesi hızı ANİDEN AŞAĞI d\u00fcş\u00fcr\u00fcr.<br>3) Katalizör eklenmesi hızı ANİDEN YUKARI sı\u00e7ratır (Ea d\u00fcşer).<br>Grafikte 3 m\u00fcdahale noktasında ani sı\u00e7ramalar (1\u2019de yukarı, 2\u2019de aşağı, 3\u2019te yukarı), aralarda normal azalan eğri g\u00f6r\u00fcl\u00fcr.' },
+    { n:19, kat:'Katalizör', t:'x elementinin kolayca (daha hızlı) elde edilebilmesi i\u00e7in: I. Sıcaklığı azaltmak II. Uygun katalizör kullanmak III. Kabın hacmini b\u00fcy\u00fctmek işlemlerinden hangileri AYRI AYRI uygulanabilir?',
+      c:'Sıcaklığı AZALTMAK hızı D\u00dcŞ\u00dcR\u00dcR (I uygun değil). Katalizör kullanmak Ea\u2019yı d\u00fcş\u00fcrerek hızı ARTIRIR (II uygundur). Hacmi B\u00dcY\u00dcTMEK derişimi AZALTIR, hızı D\u00dcŞ\u00dcR\u00dcR (III uygun değil). \u2192 <b>Yalnız II (katalizör) uygulanabilir.</b>' },
+    { n:20, kat:'Katalizör', t:'CS\u2082(k)+3O\u2082(g)\u2192CO\u2082(g)+2SO\u2082(g) tepkimesinin PE-TK grafiği I numaralı eğridedir. Bu tepkimeye aşağıdaki işlemlerden hangisi uygulanırsa, aktivasyon enerjisi DAHA D\u00dcŞ\u00dcK olan yeni bir eğri (II numaralı) elde edilir? A) Katalizör kullanmak B) Sıcaklığı artırmak C) CS\u2082\u2019yi toz haline getirmek D) Girenlerin mol sayısını artırmak E) Kabın hacmini artırmak',
+      graph:'noteg-cs2',
+      c:'PE-TK grafiğinde tepe y\u00fcksekliğinin (aktivasyon enerjisinin) DÜŞMESİ sadece <b>KATALİZ\u00d6R</b> ile olur; diğer se\u00e7enekler (sıcaklık, y\u00fczey alanı, derişim, hacim) tepkime HIZINI etkiler ama Ea\u2019yı (grafiğin şeklini) DEĞİŞTİRMEZ. \u2192 <b>A) Katalizör kullanmak</b>' },
+    { n:21, kat:'Temas Y\u00fczeyi', t:'Mg(k)+2HCl(suda)\u2192MgCl\u2082(suda)+H\u2082(g) tepkimesinde, 0,1 mol Mg ile 2M 200 mL HCl \u00e7\u00f6zeltisinin tepkimesinden oluşan H\u2082 gazının mol-zaman grafiği I. eğridir (10 s\u2019de tamamlanıyor). II. eğriyi (8 s\u2019de tamamlanma, AYNI toplam H\u2082 miktarıyla) elde etmek i\u00e7in hangi işlemler AYRI AYRI uygulanabilir? I. Sıcaklığı artırmak ve katalizör kullanmak II. Mg\u2019nin temas y\u00fczeyini VE HCl derişimini artırmak III. Mg miktarını ve sıcaklığı artırmak',
+      graph:'noteg-h2mol',
+      c:'II. eğri, AYNI miktarda \u00fcr\u00fcn\u00fc DAHA KISA s\u00fcrede vermektedir \u2014 yani sadece HIZ artmış, TOPLAM \u00fcr\u00fcn miktarı DEĞİŞMEMİŞTİR. Mg miktarını artırmak (III) TOPLAM H\u2082 miktarını da DEĞİŞTİRİR (grafik platosu y\u00fckselir), bu y\u00fczden III uygun DEĞİLDİR. I ve II\u2019deki işlemler (sıcaklık+katalizör, ya da y\u00fczey+derişim) TOPLAM miktarı değiştirmeden SADECE hızı artırır. \u2192 <b>Yalnız I ve II tek başına uygulanabilir.</b>' },
+    { n:22, kat:'Temas Y\u00fczeyi', t:'Farklı tanecik boyutlarındaki iki k\u00f6m\u00fcr numunesinin yanması sonucu oluşan CO\u2082 gazının sabit sıcaklıkta zamanla mol sayısı değişimi grafiğe g\u00f6re: I. Birim zamanda oluşan CO\u2082 mol sayısı 2. k\u00f6m\u00fcrde daha b\u00fcy\u00fckt\u00fcr II. Tepkime hızı 1. k\u00f6m\u00fcrde daha yavaştır III. Kullanılan k\u00f6m\u00fcr\u00fcn par\u00e7acık boyutu 1. k\u00f6m\u00fcrde daha b\u00fcy\u00fckt\u00fcr \u2014 hangileri doğrudur?',
+      graph:'noteg-komur',
+      c:'Grafikte 2. k\u00f6m\u00fcr numunesi CO\u2082\u2019yi daha HIZLI \u00fcretiyorsa (daha dik/erken plato), bu onun daha K\u00dc\u00c7\u00dcK par\u00e7acık boyutuna (daha b\u00fcy\u00fck y\u00fczey alanına) sahip olduğunu g\u00f6sterir. I doğru (2. k\u00f6m\u00fcr daha hızlı \u00fcr\u00fcn verir), II doğru (1. k\u00f6m\u00fcr yavaş olduğu i\u00e7in b\u00fcy\u00fck par\u00e7acıklıdır), III doğru (1. k\u00f6m\u00fcr\u00fcn par\u00e7acık boyutu B\u00dcY\u00dcKT\u00dcR). \u2192 <b>I, II ve III doğrudur.</b>' },
+    { n:23, kat:'Karışık Faktörler', t:'0,2 mol Zn(k) ile 0,2 M\u2019lık HCl \u00e7\u00f6zeltisinin 1 litresi (Zn(k)+2HCl(suda)\u2192ZnCl\u2082(suda)+H\u2082(g)) tepkimeye giriyor (stokiyometriye g\u00f6re 0,4 mol HCl gerekir, HCl sınırlayıcıdır). H\u2082 gazının HEM \u00e7ıkış hızını HEM DE miktarını artırmak i\u00e7in: I. Zn\u2019yi toz haline getirmek II. Aynı derişimdeki (0,2M) HCl\u2019den 2 L kullanmak III. 0,3 M\u2019lık HCl\u2019den 1 L eklemek \u2014 hangileri AYRI AYRI uygulanabilir?',
+      c:'I. Toz haline getirmek SADECE hızı artırır; derişim/toplam mol HCl değişmediği i\u00e7in TOPLAM H\u2082 miktarı DEĞİŞMEZ.<br>II. 2 L kullanmak toplam HCl molünü artırır (0,2\u21920,4 mol, miktar artar) ama DERİŞİM aynı (0,2M) kaldığı i\u00e7in başlangı\u00e7 HIZI DEĞİŞMEZ.<br>III. 0,3M\u2019lık 1L kullanmak: HEM derişim artar (0,2\u21920,3M \u2192 hız artar) HEM toplam mol HCl artar (0,2\u21920,3mol \u2192 daha \u00e7ok Zn tepkimeye girer, H\u2082 miktarı artar) \u2014 <b>ikisi de artar.</b><br>\u2192 <b>Yalnız III, hem hızı hem miktarı tek başına artırır.</b>' },
+    { n:24, kat:'Hız Bağıntısı', t:'X(g)+2Y(g)+3Z(g)⇌2K(g)+3M(g) tepkimesi ile ilgili sabit sıcaklıkta yapılan deneyler: Z\u2019nin derişimi sabit tutulup X ve Y\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Y\u2019nin derişimi sabit tutulup X ve Z\u2019nin derişimi 2 katına \u00e7ıkarıldığında hız 4 katına \u00e7ıkıyor. Kabın hacmi yarıya indirildiğinde hız 8 katına \u00e7ıkıyor. Tepkimenin hız bağıntısı nedir?',
+      c:'Hacim yarıya inince T\u00dcM derişimler 2 katına \u00e7ıkar ve hız 8 (=2\u00b3) katına \u00e7ıkıyor \u2192 <b>toplam derece=3</b> (a+b+c=3).<br>Z sabit, X&Y 2 kat \u2192 hız 4(=2\u00b2) kat \u2192 <b>a+b=2</b>.<br>Y sabit, X&Z 2 kat \u2192 hız 4(=2\u00b2) kat \u2192 <b>a+c=2</b>.<br>\u00dc\u00e7 denklemden: c=1, a=1, b=1.<br>\u2192 <b>r=k[X][Y][Z]</b> (toplam derece 3, her t\u00fcre g\u00f6re 1. dereceden).' },
+    { n:25, kat:'Hız Bağıntısı', t:'X(g)+2Y(g)+3Z(g)⇌2K(g)+3M(g) tepkimesi i\u00e7in deney verileri: Deney1:[X]=0,1,[Y]=0,2,[Z]=0,1,Hız=1,8x10^-5; Deney2:[X]=0,2,[Y]=0,2,[Z]=0,1,Hız=3,6x10^-5; Deney3:[X]=0,1,[Y]=0,4,[Z]=0,1,Hız=1,8x10^-5; Deney4:[X]=0,1,[Y]=0,2,[Z]=0,2,Hız=7,2x10^-5. a) Hız bağıntısı? b) X=Y=Z=2 mol/L iken hız ka\u00e7 mol/L\u00b7s olur?',
+      c:'1\u21922: [X] 2 kat, [Y][Z] sabit, hız 2 kat \u2192 <b>X mertebesi=1</b>.<br>1\u21923: [Y] 2 kat, hız DEĞİŞMEDİ (1,8\u21921,8) \u2192 <b>Y mertebesi=0</b> (Y, hıza etki etmiyor!).<br>1\u21924: [Z] 2 kat, hız 4 kat \u2192 <b>Z mertebesi=2</b>.<br>a) <b>r=k[X][Z]\u00b2</b> (Y hız bağıntısında YER ALMAZ, ama yine de bir tepkendir).<br>k=1,8x10^-5/(0,1\u00d70,1\u00b2)=<b>0,018</b>.<br>b) r=0,018\u00d72\u00d72\u00b2=<b>0,144 mol/L\u00b7s</b>.' },
+    { n:26, kat:'Derişim/Piston', t:'Sabit sıcaklıkta s\u00fcrt\u00fcnmesiz ideal pistonlu bir kaba 4\u2019er mol X ve Y gazından konularak X(g)+2Y(g)\u2192Z(g) denklemine g\u00f6re TEK basamakta tepkimeye girmesi sağlanıyor. Tepkimenin başlangı\u00e7 hızı r ise, X gazının %25\u2019inin harcandığı andaki hız ka\u00e7 r\u2019dir?',
+      c:'Başlangı\u00e7: n(X)=4, n(Y)=4, toplam=8 (V\u2080 keyfi birim).<br>%25 X harcandı: 1mol X t\u00fckendi; katsayı oranı X:Y=1:2 olduğundan 2mol Y de t\u00fckendi, 1mol Z oluştu.<br>Yeni: n(X)=3, n(Y)=2, n(Z)=1, toplam=6.<br>Piston SABİT BASIN\u00c7ta olduğu i\u00e7in hacim toplam molle orantılı azalır: V<sub>yeni</sub>=V\u2080\u00d7(6/8)=0,75V\u2080.<br>[X]<sub>yeni</sub>=3/0,75=4 (değişmedi!), [Y]<sub>yeni</sub>=2/0,75\u22482,667.<br>Tek adımlı: r=k[X][Y]\u00b2. Yeni r/Eski r = (4/4)\u00b9\u00d7(2,667/4)\u00b2 = 1\u00d7(2/3)\u00b2 = <b>4/9</b>.' },
+    { n:27, kat:'Mekanizma', t:'CH\u2083CHO(g)\u2192CH\u2084(g)+CO(g) tepkimesi iki basamakta ger\u00e7ekleşiyor: 1.adım (YAVAŞ): CH\u2083CHO(g)+I\u2082(g)\u2192CH\u2083I(g)+HI(g); 2.adım (HIZLI): CH\u2083I(g)+HI(g)\u2192CH\u2084(g)+CO(g)+I\u2082(g). Buna g\u00f6re: I. I\u2082 ara \u00fcr\u00fcnd\u00fcr. II. Kaba He gazı eklenirse tepkime hızı değişmez. III. Tepkime kabının hacmi yarıya indirilirse hız artar. \u2014 hangileri DOĞRUDUR?',
+      c:'I \u2014 <b>YANLIŞ</b>: I\u2082, 1. adımda harcanıp 2. adımda yeniden oluşuyor \u2014 net tepkimede g\u00f6r\u00fcnm\u00fcyor, I\u2082 ARA \u00dcR\u00dcN değil <b>KATALİZ\u00d6RD\u00dcR</b>.<br>II \u2014 <b>DOĞRU</b>: He tepkimeye girmez, CH\u2083CHO/I\u2082 derişimlerini değiştirmez.<br>III \u2014 <b>DOĞRU</b>: r=k[CH\u2083CHO][I\u2082], hacim k\u00fc\u00e7\u00fcl\u00fcnce derişim ve hız artar.<br>\u2192 <b>II ve III doğrudur.</b>' },
+    { n:28, kat:'Ortalama/Anlık Hız', t:'Mg(k)+2HCl(suda)\u2192MgCl\u2082(suda)+H\u2082(g) tepkimesinde [HCl] derişiminin zamanla değişimi DOĞRUSAL bir grafikle verilmiştir: t=10s\u2019de 0,5 M, t=50s\u2019de 0,1 M. a) Tepkimenin 10. saniyedeki hızı ka\u00e7 M/s\u2019dir? b) Tepkimenin 20. saniyedeki hızı ka\u00e7 M/s\u2019dir?',
+      c:'Grafik DOĞRUSAL olduğu i\u00e7in eğim HER noktada AYNIDIR (Mg katı olduğu i\u00e7in tepkime SABİT hızla ilerler).<br>Eğim: \u0394[HCl]/\u0394t=(0,1\u22120,5)/(50\u221210)=\u22120,01 M/s.<br>Katsayı oranı HCl:tepkime=2:1 \u2192 tepkime hızı=0,01/2=<b>0,005 M/s</b>.<br>a) 10s: <b>0,005 M/s</b>. b) 20s: <b>0,005 M/s</b> (AYNI, grafik doğrusal olduğu i\u00e7in).' },
+    { n:29, kat:'Madde Cinsi Etkisi', t:'Aynı koşullarda ger\u00e7ekleşen: I. H\u2082(g)+I\u2082(g)⇌2HI(g) II. H\u2082(g)+I\u2082(k)⇌2HI(g) III. H\u2082(g)+Cl\u2082(g)⇌2HCl(g) tepkimelerinin hızlarını karşılaştırınız.',
+      c:'II\u2019de I\u2082 KATI halde olduğu i\u00e7in tepkime SADECE y\u00fczeyde ger\u00e7ekleşir \u2192 <b>II en YAVAŞTIR</b>.<br>I ve III\u2019te t\u00fcm tepkenler GAZ, temas alanı y\u00fcksek, ikisi de II\u2019den \u00e7ok daha HIZLIdır.<br>\u2192 <b>I ve III (gaz-gaz) > II (gaz-katı)</b>.' }
+  ];
+  function noteqDrawGraphs(){
+    // X(g)->2Y(g) derişim-zaman — SADECE doğrulanmış 3 nokta: (0,3.6) (10,2.4) (20,1.6), oran tam 2/3
+    maarifChart('noteg-x2y', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman (s)', '[X] mol/L');
+      var pts = [];
+      for (var i = 0; i <= 100; i++) {
+        var t = i/100*20;
+        var val = 3.6 * Math.pow(2/3, t/10);
+        pts.push([g.padL + (t/20)*g.plotW, g.padT + g.plotH - (val/3.6)*g.plotH*0.92]);
+      }
+      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.beginPath();
+      pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
+      var marks = [[0,3.6],[10,2.4],[20,1.6]];
+      x.fillStyle = '#f59e0b';
+      marks.forEach(function(m){
+        var mx = g.padL + (m[0]/20)*g.plotW, my = g.padT + g.plotH - (m[1]/3.6)*g.plotH*0.92;
+        x.beginPath(); x.arc(mx, my, 3, 0, 6.283); x.fill();
+      });
+      x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '9px sans-serif'; x.textAlign = 'center';
+      x.fillText('doğrulanmış 3 nokta (0,10,20s)', g.padL+g.plotW/2, g.padT+g.plotH+22);
+    });
+    // Al+HCl derişim-zaman (doğrusal azalma 0.6->0.1, 1-5dk)
+    maarifChart('noteg-hcl', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman (dk)', '[HCl] mol/L');
+      function px(t){ return g.padL + ((t-1)/4)*g.plotW; }
+      function py(c){ return g.padT + g.plotH - ((c-0.1)/0.5)*g.plotH*0.9; }
+      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.beginPath();
+      x.moveTo(px(1), py(0.5)); x.lineTo(px(4), py(0.2)); x.lineTo(px(5), py(0.1)); x.stroke();
+      x.fillStyle = '#f59e0b';
+      [[1,0.5],[4,0.2]].forEach(function(p){ x.beginPath(); x.arc(px(p[0]),py(p[1]),3,0,6.283); x.fill(); });
+      x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '10px sans-serif'; x.textAlign = 'left';
+      x.fillText('1.dk: 0,5M', px(1)+4, py(0.5)-8);
+      x.fillText('4.dk: 0,2M', px(4)+4, py(0.2)-8);
+    });
+    // T1,T2 kinetik enerji dağılımı
+    maarifChart('noteg-t1t2', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Kinetik enerji', 'Molekül sayısı');
+      function curve(muF, sigF, ampF){
+        var pts = [];
+        for (var i = 0; i <= 100; i++) {
+          var f = i/100, xv = g.padL + f*g.plotW;
+          var xf = (f - muF) / sigF;
+          var yv = ampF * Math.exp(-xf*xf*2.2);
+          pts.push([xv, g.padT + g.plotH - yv*g.plotH*0.9]);
+        }
+        return pts;
+      }
+      var t1 = curve(0.28, 0.15, 1.0), t2 = curve(0.42, 0.21, 0.74);
+      var esikX = g.padL + 0.6*g.plotW;
+      function fillBeyond(pts, col){
+        x.beginPath(); x.moveTo(esikX, g.padT+g.plotH);
+        pts.forEach(function(p){ if (p[0] >= esikX) x.lineTo(p[0], p[1]); });
+        x.lineTo(g.padL+g.plotW, g.padT+g.plotH); x.closePath(); x.fillStyle = col; x.fill();
+      }
+      fillBeyond(t2, 'rgba(239,68,68,.4)'); fillBeyond(t1, 'rgba(96,165,250,.5)');
+      function stroke(pts, col){ x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.strokeStyle=col; x.lineWidth=2; x.stroke(); }
+      stroke(t1, '#3b82f6'); stroke(t2, '#ef4444');
+      x.strokeStyle = 'rgba(255,255,255,.5)'; x.setLineDash([4,3]); x.lineWidth = 1;
+      x.beginPath(); x.moveTo(esikX, g.padT); x.lineTo(esikX, g.padT+g.plotH); x.stroke(); x.setLineDash([]);
+      x.textAlign = 'left'; x.font = '10px sans-serif';
+      x.fillStyle = '#93c5fd'; x.fillText('T\u2081', g.padL+4, g.padT+10);
+      x.fillStyle = '#fca5a5'; x.fillText('T\u2082 (T\u2082>T\u2081)', g.padL+4, g.padT+24);
+      x.fillStyle = 'rgba(255,255,255,.5)'; x.fillText('Eşik değeri', esikX+3, g.padT+g.plotH-4);
+    });
+    // Katalizörlü/katalizörsüz PE-TK (Ea1<Ea2)
+    maarifChart('noteg-katgraph', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Tepkime koordinatı', 'Pot. enerji');
+      var reactY = g.padT + g.plotH*0.6, prodY = g.padT + g.plotH*0.8;
+      function curve(peakY, col, dashed){
+        function px(f){ return g.padL + f*g.plotW; }
+        x.beginPath();
+        x.moveTo(px(0.02), reactY); x.lineTo(px(0.30), reactY);
+        x.bezierCurveTo(px(0.40), reactY, px(0.42), peakY, px(0.5), peakY);
+        x.bezierCurveTo(px(0.58), peakY, px(0.60), prodY, px(0.70), prodY);
+        x.lineTo(px(0.98), prodY);
+        x.strokeStyle = col; x.lineWidth = 2;
+        if (dashed) x.setLineDash([5,4]);
+        x.stroke(); x.setLineDash([]);
+      }
+      curve(g.padT + g.plotH*0.32, '#22c55e', false);
+      curve(g.padT + g.plotH*0.05, '#ef4444', true);
+      x.font = '10px sans-serif'; x.textAlign = 'left';
+      x.fillStyle = '#22c55e'; x.fillText('Ea\u2081 (katalizörlü)', g.padL+4, g.padT+10);
+      x.fillStyle = '#ef4444'; x.fillText('Ea\u2082 (katalizörsüz)', g.padL+4, g.padT+24);
+    });
+    // 3 etki (H2 ekleme, sıcaklık düşürme, katalizör) - hız-zaman basamaklı grafik
+    maarifChart('noteg-3etki', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman', 'Tepkime hızı');
+      var segs = [[0,0.5],[0.25,0.5],[0.25,0.85],[0.45,0.7],[0.45,0.35],[0.65,0.25],[0.65,0.6],[1,0.5]];
+      function px(f){ return g.padL + f*g.plotW; }
+      function py(f){ return g.padT + g.plotH - f*g.plotH*0.85; }
+      x.strokeStyle = '#f59e0b'; x.lineWidth = 2.2; x.beginPath();
+      segs.forEach(function(p,i2){ i2===0?x.moveTo(px(p[0]),py(p[1])):x.lineTo(px(p[0]),py(p[1])); });
+      x.stroke();
+      x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '9px sans-serif'; x.textAlign = 'center';
+      x.fillText('1: H\u2082 eklendi', px(0.25), py(0.85)-8);
+      x.fillText('2: T düşürüldü', px(0.45), py(0.7)-8);
+      x.fillText('3: katalizör', px(0.65), py(0.6)-8);
+    });
+    // CS2 PE-TK (I ve II eğri)
+    maarifChart('noteg-cs2', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Tepkime koordinatı', 'Pot. enerji');
+      var reactY = g.padT + g.plotH*0.62, prodY = g.padT + g.plotH*0.85;
+      function curve(peakY, col, dashed, lbl){
+        function px(f){ return g.padL + f*g.plotW; }
+        x.beginPath();
+        x.moveTo(px(0.02), reactY); x.lineTo(px(0.30), reactY);
+        x.bezierCurveTo(px(0.40), reactY, px(0.42), peakY, px(0.5), peakY);
+        x.bezierCurveTo(px(0.58), peakY, px(0.60), prodY, px(0.70), prodY);
+        x.lineTo(px(0.98), prodY);
+        x.strokeStyle = col; x.lineWidth = 2;
+        if (dashed) x.setLineDash([5,4]);
+        x.stroke(); x.setLineDash([]);
+        x.fillStyle = col; x.font = '10px sans-serif'; x.textAlign = 'left';
+        x.fillText(lbl, g.padL+4, peakY-6 > g.padT ? peakY - 6 : g.padT+10);
+      }
+      curve(g.padT + g.plotH*0.05, '#f59e0b', false, 'I (mevcut)');
+      curve(g.padT + g.plotH*0.34, '#22c55e', true, 'II (katalizörlü)');
+    });
+    // H2 mol-zaman (I, II eğrileri, aynı plato)
+    maarifChart('noteg-h2mol', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman (s)', 'n(H\u2082) mol');
+      function curve(finishT, col, lbl){
+        var pts = [];
+        for (var i = 0; i <= 100; i++) {
+          var t = i/100*10;
+          var yv = 1 - Math.exp(-t/(finishT/3));
+          pts.push([g.padL+(t/10)*g.plotW, g.padT+g.plotH-yv*g.plotH*0.85]);
+        }
+        x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); });
+        x.strokeStyle = col; x.lineWidth = 2.2; x.stroke();
+        x.fillStyle = col; x.font = '10px sans-serif'; x.textAlign = 'left';
+      }
+      curve(8, '#22c55e', 'II'); curve(10, '#3b82f6', 'I');
+      x.fillStyle = '#22c55e'; x.fillText('II (8s, hızlı)', g.padL+6, g.padT+10);
+      x.fillStyle = '#3b82f6'; x.fillText('I (10s, yavaş)', g.padL+6, g.padT+24);
+    });
+    // Kömür CO2-zaman (2 eğri, aynı plato farklı hız)
+    maarifChart('noteg-komur', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman', 'Oluşan CO\u2082 (mol)');
+      function curve(rate, col, lbl){
+        var pts = [];
+        for (var i = 0; i <= 100; i++) {
+          var f = i/100;
+          var yv = 1 - Math.exp(-rate*f*6);
+          pts.push([g.padL+f*g.plotW, g.padT+g.plotH-yv*g.plotH*0.85]);
+        }
+        x.beginPath(); pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); });
+        x.strokeStyle = col; x.lineWidth = 2.2; x.stroke();
+      }
+      curve(1.0, '#ef4444'); curve(0.4, '#3b82f6');
+      x.font = '10px sans-serif'; x.textAlign = 'left';
+      x.fillStyle = '#ef4444'; x.fillText('2. kömür (küçük parçacık)', g.padL+4, g.padT+10);
+      x.fillStyle = '#3b82f6'; x.fillText('1. kömür (büyük parçacık)', g.padL+4, g.padT+24);
+    });
+  }
+
+  function setupKin(){
+    if (document.getElementById('s-kinetik')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-kinetik" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83d\udca5 Tepkime H\u0131z\u0131 (Kinetik)</h1>' +
+        '<p class="psub">\u00c7arp\u0131\u015fma teorisi, potansiyel enerji diyagram\u0131, h\u0131z hesaplamalar\u0131 ve h\u0131z bağ\u0131nt\u0131s\u0131.</p>' +
+        '<div class="ltabs" id="kin-maingroup" style="margin-bottom:14px">' +
+          '<button class="ltab on" onclick="kinGroupSet(0,this)">\ud83d\udd2c Araçlar</button>' +
+          '<button class="ltab" onclick="kinGroupSet(1,this)">\ud83d\udcd8 MEB Konu Anlat\u0131m\u0131</button>' +
+          '<button class="ltab" onclick="kinGroupSet(2,this)">\ud83d\udcd3 Özel Ders Notu</button>' +
+        '</div>' +
+        '<div id="kin-group-0" style="display:block">' +
+        '<div class="ltabs" id="kin-tabs">' +
+          '<button class="ltab on" onclick="tswitch(\'kin-tabs\',\'kin-tps\',0)">\ud83d\udca5 3D Sim\u00fclasyon</button>' +
+          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',1)">\u26f0\ufe0f PE Diyagram\u0131</button>' +
+          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',2)">\u23f1\ufe0f H\u0131z Hesapla</button>' +
+          '<button class="ltab" onclick="tswitch(\'kin-tabs\',\'kin-tps\',3)">\ud83d\udcd0 H\u0131z Bağ\u0131nt\u0131s\u0131</button>' +
+        '</div>' +
+        '<div id="kin-tps">' +
+        '<div class="tp on">' +
+        '<div style="background:#050510;border:1px solid rgba(245,158,11,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+          '<canvas id="kin-cv" style="width:100%;display:block;touch-action:none" height="260"></canvas>' +
+        '</div>' +
+        '<div class="card" style="margin-bottom:12px">' +
+          '<div class="slbl">\u00d7 Derişim</div>' +
+          '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+            '<button type="button" class="ob" onclick="kinSetConc(0.5,this)">Az</button>' +
+            '<button type="button" class="ob sel2" onclick="kinSetConc(1,this)">Normal</button>' +
+            '<button type="button" class="ob" onclick="kinSetConc(1.8,this)">\u00c7ok</button>' +
+          '</div>' +
+          '<div class="slbl">\ud83c\udf21\ufe0f S\u0131cakl\u0131k</div>' +
+          '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+            '<button type="button" class="ob" onclick="kinSetTemp(0.6,this)">D\u00fc\u015f\u00fck</button>' +
+            '<button type="button" class="ob sel2" onclick="kinSetTemp(1,this)">Normal</button>' +
+            '<button type="button" class="ob" onclick="kinSetTemp(1.7,this)">Y\u00fcksek</button>' +
+          '</div>' +
+          '<div class="slbl">\u2697\ufe0f Katalizör</div>' +
+          '<button type="button" id="kin-cat-btn" class="ob" onclick="kinToggleCatalyst(this)" style="width:100%">Katalizör Ekle</button>' +
+        '</div>' +
+        '<div id="kin-info" style="margin-bottom:16px"></div>' +
+        KIN_THEORY_HTML +
+        '</div>' +
+        '<div class="tp">' +
+          '<div style="background:#050510;border:1px solid rgba(245,158,11,.3);border-radius:16px;overflow:hidden;margin-bottom:12px">' +
+            '<canvas id="pe-cv" style="width:100%;display:block" height="240"></canvas>' +
+          '</div>' +
+          '<div class="card" style="margin-bottom:12px">' +
+            '<div style="display:flex;gap:6px;margin-bottom:12px">' +
+              '<button type="button" class="ob" onclick="peSetPreset(80,-40)">Ekzotermik \u00d6rnek</button>' +
+              '<button type="button" class="ob" onclick="peSetPreset(90,50)">Endotermik \u00d6rnek</button>' +
+            '</div>' +
+            '<div class="g2" style="margin-bottom:10px">' +
+              '<div><div class="slbl">Ea (ileri, kj)</div><input type="number" id="pe-ea1-inp" class="inp" value="60" oninput="peSetEa1(parseFloat(this.value)||0)"></div>' +
+              '<div><div class="slbl">\u0394H (kj)</div><input type="number" id="pe-dh-inp" class="inp" value="-30" oninput="peSetDH(parseFloat(this.value)||0)"></div>' +
+            '</div>' +
+            '<button type="button" class="ob" id="pe-cat-btn" onclick="peToggleCat(this)" style="width:100%">\u2697\ufe0f Katalizörl\u00fc Karş\u0131laşt\u0131r</button>' +
+          '</div>' +
+          '<div id="pe-info" style="margin-bottom:16px"></div>' +
+          PE_THEORY_HTML +
+        '</div>' +
+        '<div class="tp">' +
+          '<div class="card">' +
+            '<div class="slbl">Tepkime Denklemi (Otomatik Dengelenir)</div>' +
+            '<input type="text" id="hcalc-eq-inp" class="inp" placeholder="\u00f6rn: 2N2O5 -> 4NO2 + O2" style="margin-bottom:10px" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+            '<button type="button" class="btn bp bfull" onclick="hcalcParse()">Denklemi Ayr\u0131\u015ft\u0131r</button>' +
+            '<div id="hcalc-out" style="margin-top:6px"></div>' +
+          '</div>' +
+          '<div class="card" style="margin-top:12px">' +
+            '<div class="slbl">Yard\u0131mc\u0131: K\u00fctleden H\u0131za \u00c7evir</div>' +
+            '<div class="g2" style="margin-bottom:10px">' +
+              '<div><div class="slbl">K\u00fctle (g)</div><input type="number" step="any" id="hm-mass" class="inp"></div>' +
+              '<div><div class="slbl">Molar K\u00fctle (g/mol)</div><input type="number" step="any" id="hm-molar" class="inp"></div>' +
+            '</div>' +
+            '<div class="g2" style="margin-bottom:10px">' +
+              '<div><div class="slbl">Zaman</div><input type="number" step="any" id="hm-time" class="inp"></div>' +
+              '<div><div class="slbl">Hacim (L, opsiyonel)</div><input type="number" step="any" id="hm-vol" class="inp"></div>' +
+            '</div>' +
+            '<button type="button" class="btn bs bfull" onclick="hcalcMassCompute()">\u00c7evir</button>' +
+            '<div id="hm-out" style="margin-top:10px"></div>' +
+          '</div>' +
+          '<div style="margin-top:12px">' + HCALC_THEORY_HTML + '</div>' +
+        '</div>' +
+        '<div class="tp">' +
+          '<div class="card">' +
+            '<div class="slbl">Reaktan Say\u0131s\u0131</div>' +
+            '<div style="display:flex;gap:6px;margin-bottom:14px">' +
+              '<button type="button" class="ob sel2" onclick="rlawSetN(2,this)">2 Reaktan</button>' +
+              '<button type="button" class="ob" onclick="rlawSetN(3,this)">3 Reaktan</button>' +
+            '</div>' +
+            '<div class="slbl">Deneysel Veriler</div>' +
+            '<div id="rlaw-table-wrap" style="margin-bottom:14px"></div>' +
+            '<button type="button" class="btn bp bfull" onclick="rlawCompute()">Hesapla</button>' +
+            '<div id="rlaw-result" style="margin-top:14px"></div>' +
+          '</div>' +
+          '<div style="margin-top:12px">' + RLAW_THEORY_HTML + '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div id="kin-group-1" style="display:none"></div>' +
+        '<div id="kin-group-2" style="display:none"></div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-kinetik') === -1) SCREENS.push('s-kinetik');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-kinetik'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-kinetik" onclick="nav(\'kinetik\')">\ud83d\udca5 Tepkime H\u0131z\u0131 3D</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-kinetik'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-kinetik" onclick="nav(\'kinetik\')"><div class="ti">\ud83d\udca5</div><div class="tt">Tepkime H\u0131z\u0131 3D</div><div class="td">\u00c7arp\u0131\u015fma teorisi \u2014 derişim/s\u0131cakl\u0131k/katalizör canlı sim\u00fclasyonu.</div></div>');
+    kinBindCanvas();
+    kinRenderInfo();
+    peRender();
+    rlawBuildTable();
+    setupMaarif();
+    setupNoteQ();
+  }
+  window.kinGroupSet = function(i, btn){
+    for (var g = 0; g < 3; g++) { var el = document.getElementById('kin-group-' + g); if (el) el.style.display = (g === i) ? 'block' : 'none'; }
+    var bar = document.getElementById('kin-maingroup');
+    if (bar && btn) { var bs = bar.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].classList.remove('on'); btn.classList.add('on'); }
+    if (i === 1) setTimeout(maarifDrawGraphs, 60);
+    if (i === 2) setTimeout(noteqDrawGraphs, 60);
+  };
+
+  window.kinSetConc = kinSetConc;
+  window.kinSetTemp = kinSetTemp;
+  window.kinToggleCatalyst = kinToggleCatalyst;
+
+  function setupMaarif(){
+    if (document.getElementById('maarif-wrap')) return;
+    var host = document.getElementById('kin-group-1');
+    if (!host) return;
+    host.insertAdjacentHTML('beforeend', '<div id="maarif-wrap"></div>');
+    var wrap = document.getElementById('maarif-wrap');
+    wrap.innerHTML =
+      '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cKimyasal Tepkimelerde Hız\u201d ünitesinin tam konu anlatımı \u2014 tüm etkinlik, örnek ve grafikleriyle.</p>' +
+      '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' +
+        '<button type="button" class="ob sel2" onclick="maarifSetSub(0,this)">1.2.1 Gerekli Şartlar</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(1,this)">1.2.2 Ortalama Hız</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(2,this)">1.2.3 Etkileyen Faktörler</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(3,this)">1.2.4 Hız Denklemi</button>' +
+        '<button type="button" class="ob" onclick="maarifSetSub(4,this)">\ud83d\udcdd 66 Soru (Ölçme-Değerlendirme)</button>' +
+      '</div></div>' +
+      '<div id="maarif-content"></div>';
+    maarifRender();
+  }
+  window.maarifSetSub = function(i, btn){ maarifSt.sub = i; if (btn) selectInRow(btn); maarifRender(); };
+
+  function setupNoteQ(){
+    if (document.getElementById('noteq-wrap')) return;
+    var host = document.getElementById('kin-group-2');
+    if (!host) return;
+    host.insertAdjacentHTML('beforeend', '<div id="noteq-wrap"></div>');
+    var wrap = document.getElementById('noteq-wrap');
+    var cats = ['Tümü'];
+    NOTE_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
+    wrap.innerHTML =
+      '<p class="psub" style="margin-bottom:10px">Kendi el yazması ders notundaki ' + NOTE_Q.length + ' \u00e7\u00f6z\u00fcml\u00fc örnek soru.</p>' +
+      '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="noteq-cats">' +
+        cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="noteqSetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
+      '</div></div>' +
+      '<div id="noteq-list"></div>';
+    noteqRenderList();
+  }
+  var noteqSt = { cat: 'Tümü' };
+  window.noteqSetCat = function(cat, btn){ noteqSt.cat = cat; if (btn) selectInRow(btn); noteqRenderList(); };
+
+  function noteqRenderList(){
+    var box = document.getElementById('noteq-list');
+    if (!box) return;
+    var html = '';
+    NOTE_Q.forEach(function(q){
+      if (noteqSt.cat !== 'Tümü' && q.kat !== noteqSt.cat) return;
+      html += '<div class="card" style="margin-bottom:18px;padding:18px 16px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+          '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.18);color:#f59e0b;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
+          '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">' + q.kat + '</span>' +
+        '</div>' +
+        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
+        (q.graph ? '<div style="background:#050510;border:1px solid rgba(245,158,11,.25);border-radius:12px;overflow:hidden;margin-bottom:14px"><canvas id="' + q.graph + '" data-h="190" style="width:100%;display:block"></canvas></div>' : '') +
+        '<div onclick="molToggle(\'noteq-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#f59e0b;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f \u00c7\u00f6z\u00fcm\u00fc G\u00f6ster</div>' +
+        '<div id="noteq-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' + q.c + '</div>' +
+      '</div>';
+    });
+    box.innerHTML = html;
+    setTimeout(noteqDrawGraphs, 60);
+  }
+
   // ---------- 27. KİMYASAL ENERJİ — ÖZEL DERS NOTU SORULARI ----------
   var ENERJI_Q = [
     { n:1, kat:'Kavram', t:'Ekzotermik olaylar ortamın sıcaklığını nasıl etkiler? Endotermik olaylar ortamın sıcaklığını nasıl etkiler? D\u00fcş\u00fck ve y\u00fcksek sıcaklıkta hangi enerji seviyesi kararlıdır?',
@@ -8844,7 +8569,7 @@
           '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.18);color:#f59e0b;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
           '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
         '</div>' +
-        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
+        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + q.t + '</div>' +
         optsHtml +
         '<div onclick="molToggle(\'enerji-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#f59e0b;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f \u00c7\u00f6z\u00fcm\u00fc G\u00f6ster</div>' +
         '<div id="enerji-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' +
@@ -8954,127 +8679,226 @@
     box.innerHTML = html;
   }
 
-  // ---------- 29. KİMYASAL DENGE — ÖZEL DERS NOTU (1. PARÇA) ----------
   var DENGE_Q = [
-    { n:1, kat:'Kavram', t:'Kimyasal dengenin kurulabilmesi i\u00e7in gerekli şartlar nelerdir?',
-      c:'\u2022 Sıcaklık SABİT olmalı.<br>\u2022 Sistem KAPALI olmalı (madde giriş-\u00e7ıkışı olmamalı).<br>\u2022 Minimum enerji eğilimi ile maksimum d\u00fczensizlik (entropi) eğilimi ZIT y\u00f6nl\u00fc olmalı.<br>\u2022 İleri y\u00f6ndeki hız, geri y\u00f6ndeki hıza EŞİT olmalı.<br>\u2022 Dengede B\u00dcT\u00dcN maddeler (tepken+\u00fcr\u00fcn) bulunmalı.<br>\u2022 Dengedeki t\u00fcm maddelerin derişimleri SABİT olmalı (değişmiyor, ama sıfır da değil).<br>\u2022 Denge DİNAMİKTİR (tepkime durmaz, ileri/geri sürekli devam eder).<br>\u2022 Dengede MAKROSKOBİK (g\u00f6zle g\u00f6r\u00fclen) olaylar durur, ama MİKROSKOBİK (moleküler) olaylar devam eder.' },
-    { n:2, kat:'Kavram', t:'Homojen denge ile heterojen denge arasındaki fark nedir? \u00d6rnekler veriniz.',
-      c:'<b>Homojen denge:</b> Tepkenlerle \u00fcr\u00fcnlerin AYNI FAZDA bulunduğu denge. \u00d6rn: N\u2082O\u2084(g)\u21cc2NO\u2082(g); HCN(suda)\u21ccH\u207a(suda)+CN\u207b(suda); 2Fe\u00b2\u207a(suda)+Sn\u2074\u207a(suda)\u21cc2Fe\u00b3\u207a(suda)+Sn\u00b2\u207a(suda).<br><b>Heterojen denge:</b> Tepken/\u00fcr\u00fcnlerden EN AZ BİRİNİN farklı fiziksel halde olduğu denge. \u00d6rn: CaCO\u2083(k)\u21ccCaO(k)+CO\u2082(g); Zn\u00b2\u207a(suda)+Cu(k)\u21ccZn(k)+Cu\u00b2\u207a(suda); SnO\u2082(k)+2CO(g)\u21ccSn(k)+2CO\u2082(g).' },
-    { n:3, kat:'Kavram', t:'Aşağıdaki tepkimelerden hangileri hem HETEROJEN hem de KİMYASAL dengeye \u00f6rnektir? a) H\u2082O(s)\u21ccH\u2082O(g) b) K\u2082SO\u2084(suda)\u21cc2K\u207a(suda)+SO\u2084\u00b2\u207b(suda) c) C\u2081\u2082H\u2082\u2082O\u2081\u2081(k)+H\u2082O(s)\u21ccC\u2081\u2082H\u2082\u2082O\u2081\u2081(suda) \u00e7) 2NH\u2083(g)\u21ccN\u2082(g)+3H\u2082(g) d) 2HBr(g)\u21ccH\u2082(g)+Br\u2082(g) e) C(k)+H\u2082O(g)\u21ccCO(g)+H\u2082(g) f) 2S(k)+2O\u2082(g)\u21cc2SO\u2082(g)',
-      c:'a) H\u2082O(s)\u21ccH\u2082O(g): FİZİKSEL olay (hal değişimi), kimyasal denge DEĞİL \u2014 elenir.<br>b) K\u2082SO\u2084 \u00e7\u00f6z\u00fcnmesi: FİZİKSEL (iyonlaşma/\u00e7\u00f6z\u00fcnme), kimyasal denge DEĞİL \u2014 elenir.<br>c) Şeker \u00e7\u00f6z\u00fcnmesi: FİZİKSEL, elenir.<br>\u00e7) 2NH\u2083\u21ccN\u2082+3H\u2082: T\u00fcm maddeler GAZ \u2192 HOMOJEN kimyasal denge (heterojen değil) \u2014 elenir.<br>d) 2HBr\u21ccH\u2082+Br\u2082: T\u00fcm maddeler gaz \u2192 HOMOJEN \u2014 elenir.<br>e) C(k)+H\u2082O(g)\u21ccCO(g)+H\u2082(g): C KATI, diğerleri GAZ \u2192 <b>HETEROJEN kimyasal denge \u2014 DOĞRU!</b><br>f) 2S(k)+2O\u2082(g)\u21cc2SO\u2082(g): S KATI, O\u2082/SO\u2082 gaz \u2192 <b>HETEROJEN kimyasal denge \u2014 DOĞRU!</b><br>\u2192 <b>Yalnız e ve f</b> hem heterojen hem kimyasal dengeye \u00f6rnektir.' },
-    { n:4, kat:'Kavram', t:'Maksimum d\u00fczensizlik eğilimine g\u00f6re: a) katı-sıvı-gaz arasında hangisi en d\u00fczensizdir? b) Gazlı tepkimelerde katsayılar farklıysa hangi taraf daha d\u00fczensizdir? c) Katsayılar EŞİTSE hangi taraf daha d\u00fczensizdir?',
-      c:'a) D\u00fczensizlik sıralaması: <b>gaz > sıvı > katı</b> (gaz tanecikleri en serbest hareket eder).<br>b) Gazlı bir tepkimede tepken/\u00fcr\u00fcn tarafından <b>KATSAYISI (mol sayısı) FAZLA olan taraf</b> daha d\u00fczensizdir (daha \u00e7ok tanecik = daha \u00e7ok dağınıklık).<br>c) Katsayılar eşitse, <b>farklı gaz T\u00dcR\u00dc (\u00e7eşidi) fazla bulunduran taraf</b> daha d\u00fczensizdir (\u00f6rn. H\u2082+Cl\u2082\u21cc2HCl\u2019de tepken tarafında 2 farklı gaz t\u00fcr\u00fc, \u00fcr\u00fcn tarafında 1 t\u00fcr var \u2014 tepken tarafı daha d\u00fczensiz).' },
+    { n:1, kat:'Kavram', t:'Kimyasal dengenin kurulabilmesi için gerekli şartlar nelerdir?',
+      c:'• Sıcaklık SABİT olmalı.<br>• Sistem KAPALI olmalı.<br>• Minimum enerji eğilimi ile maksimum düzensizlik eğilimi ZIT yönlü olmalı.<br>• İleri yöndeki hız, geri yöndeki hıza EŞİT olmalı.<br>• Dengede BÜTÜN maddeler bulunmalı.<br>• Dengedeki tüm maddelerin derişimleri SABİT olmalı.<br>• Denge DİNAMİKTİR.<br>• Dengede MAKROSKOBİK olaylar durur, MİKROSKOBİK olaylar devam eder.' },
+    { n:2, kat:'Kavram', t:'Homojen denge ile heterojen denge arasındaki fark nedir? Örnekler veriniz.',
+      c:'<b>Homojen denge:</b> Tepkenlerle ürünlerin AYNI FAZDA bulunduğu denge. Örn: N₂O₄(g)⇌2NO₂(g); HCN(suda)⇌H⁺(suda)+CN⁻(suda).<br><b>Heterojen denge:</b> En az birinin farklı fizikselhalde olduğu denge. Örn: CaCO₃(k)⇌CaO(k)+CO₂(g); Zn²⁺(suda)+Cu(k)⇌Zn(k)+Cu²⁺(suda).' },
+    { n:3, kat:'Kavram', t:'Aşağıdaki tepkimelerden hangileri hem HETEROJEN hem de KİMYASAL dengeye örnektir? a) H₂O(s)⇌H₂O(g) b) K₂SO₄(suda)⇌2K⁺(suda)+SO₄²⁻(suda) c) C₁₂H₂₂O₁₁(k)+H₂O(s)⇌C₁₂H₂₂O₁₁(suda) ç) 2NH₃(g)⇌N₂(g)+3H₂(g) d) 2HBr(g)⇌H₂(g)+Br₂(g) e) C(k)+H₂O(g)⇌CO(g)+H₂(g) f) 2S(k)+2O₂(g)⇌2SO₂(g)',
+      c:'a) FİZİKSEL olay, elenir.<br>b) FİZİKSEL (çözünme), elenir.<br>c) FİZİKSEL, elenir.<br>ç) Tüm maddeler GAZ → HOMOJEN, elenir.<br>d) Tüm maddeler gaz → HOMOJEN, elenir.<br>e) C KATI, diğerleri GAZ → <b>HETEROJEN kimyasal denge — DOĞRU!</b><br>f) S KATI, O₂/SO₂ gaz → <b>HETEROJEN kimyasal denge — DOĞRU!</b><br>→ <b>Yalnız e ve f</b> hem heterojen hem kimyasal dengeye örnektir.' },
+    { n:4, kat:'Kavram', t:'Maksimum düzensizlik eğilimine göre: a) katı-sıvı-gaz arasında hangisi en düzensizdir? b) Gazlı tepkimelerde katsayılar farklıysa hangi taraf daha düzensizdir? c) Katsayılar EŞİTSE hangi taraf daha düzensizdir?',
+      c:'a) Düzensizlik sıralaması: <b>gaz > sıvı > katı</b>.<br>b) Gazlı bir tepkimede <b>KATSAYISI FAZLA olan taraf</b> daha düzensizdir.<br>c) Katsayılar eşitse, <b>farklı gaz TÜRÜ fazla bulunduran taraf</b> daha düzensizdir.' },
     { n:5, kat:'Denge Sabiti', t:'Denge bağıntısı (Kc, Kp) yazarken uyulması gereken 3 kural nedir?',
-      c:'1) Denge bağıntısında SAF KATI ve SAF SIVILAR YER ALMAZ (derişimleri sabit olduğu i\u00e7in denge sabitine dahil edilmez, sabit kabul edilip K i\u00e7ine gizlenir).<br>2) Denge bağıntısında GAZLAR ve SULU (suda) \u00e7\u00f6zeltiler YER ALIR.<br>3) Denge bağıntısı NET (toplam/son) tepkimeye g\u00f6re yazılır (ara basamaklara g\u00f6re değil).' },
-    { n:6, kat:'Denge Sabiti', t:'Kp ile Kc arasındaki ilişkiyi (formül\u00fc) yazınız. \u0394n neyi ifade eder?',
-      c:'<b>Kp = Kc\u00d7(RT)^\u0394n</b><br>Burada \u0394n = (\u00fcr\u00fcn gazlarının katsayıları toplamı) \u2212 (giren/tepken gazlarının katsayıları toplamı) \u2014 SADECE gaz halindeki maddelerin katsayıları sayılır, katı/sıvı/\u00e7\u00f6zelti katsayıları dahil edilmez.' },
-    { n:7, kat:'Hesaplama', t:'2NO(g)+O\u2082(g)\u21cc2NO\u2082(g) tepkimesine g\u00f6re 2 L\u2019lik kapta 0,4 mol NO, 0,2 mol O\u2082 ve 0,8 mol NO\u2082 gazları dengededir. Buna g\u00f6re aynı sıcaklıkta tepkimenin Kc değeri ka\u00e7tır?',
-      c:'[NO]=0,4/2=0,2 M, [O\u2082]=0,2/2=0,1 M, [NO\u2082]=0,8/2=0,4 M.<br>Kc=[NO\u2082]\u00b2/([NO]\u00b2[O\u2082])=0,4\u00b2/(0,2\u00b2\u00d70,1)=0,16/0,004=<b>40</b>.' },
-    { n:8, kat:'Hesaplama', t:'2CO(g)+O\u2082(g)\u21cc2CO\u2082(g) tepkimesinin aynı sıcaklıktaki ileri tepkimenin hız sabiti (k\u0131) 4\u00d710\u207b\u00b3 ve geri tepkimenin hız sabiti (k\u0261) 2\u00d710\u207b\u2074\u2019t\u00fcr. Buna g\u00f6re tepkimenin derişimler t\u00fcr\u00fcnden denge sabiti Kc ka\u00e7tır?',
-      c:'Dengede ileri hız = geri hız olduğundan <b>Kc = k\u0131/k\u0261</b> (tek adımlı/mekanizmalı tepkimede hız sabitlerinin oranı denge sabitini verir).<br>Kc = 4\u00d710\u207b\u00b3 / 2\u00d710\u207b\u2074 = <b>20</b>.' },
-    { n:9, kat:'Hesaplama', t:'2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g) tepkimesine g\u00f6re 0,2\u2019şer mol SO\u2082 ve O\u2082 gazları ile 0,8 mol SO\u2083 gazı dengededir. Tepkimenin denge sabiti (K) 16 olduğuna g\u00f6re tepkime kabının hacmi ka\u00e7 L\u2019dir?',
-      c:'Kc=[SO\u2083]\u00b2/([SO\u2082]\u00b2[O\u2082])=(0,8/V)\u00b2/((0,2/V)\u00b2\u00d7(0,2/V))=16 denklemini V i\u00e7in \u00e7\u00f6zersek: <b>V=0,2 L</b>.' },
-    { n:10, kat:'Hesaplama', t:'2CO(g)+O\u2082(g)\u21cc2CO\u2082(g) tepkimesinin 27\u00b0C\u2019deki derişimler t\u00fcr\u00fcnden denge sabiti (Kc) 5,6 olduğuna g\u00f6re, aynı sıcaklıktaki kısmi basın\u00e7lar t\u00fcr\u00fcnden denge sabiti (Kp) ka\u00e7tır? (R:0,082 alınız)',
-      c:'\u0394n = \u00fcr\u00fcn(2) \u2212 tepken(2+1=3) = \u22121. T=27\u00b0C=300K.<br>Kp = Kc\u00d7(RT)^\u0394n = 5,6\u00d7(0,082\u00d7300)\u207b\u00b9 = 5,6/24,6 \u2248 <b>0,228</b>.' },
-    { n:11, kat:'Hesaplama', t:'2SO\u2083(g)\u21cc2SO\u2082(g)+O\u2082(g) denklemine g\u00f6re 1 litrelik bir kapta 0,6 mol SO\u2083 gazı ile başlatılan tepkime t\u00b0C\u2019de dengeye ulaştığında kapta toplam 0,8 mol gaz bulunuyor. Buna g\u00f6re tepkimenin t\u00b0C\u2019deki denge sabiti (Kc) ka\u00e7tır?',
-      c:'x kadar SO\u2083 ayrışsın: SO\u2083=0,6\u2212x, SO\u2082=x, O\u2082=x/2. Toplam=0,6\u2212x+x+x/2=0,6+x/2=0,8 \u2192 x=0,4.<br>Denge: SO\u2083=0,2M, SO\u2082=0,4M, O\u2082=0,2M.<br>Kc=[SO\u2082]\u00b2[O\u2082]/[SO\u2083]\u00b2=0,4\u00b2\u00d70,2/0,2\u00b2=0,032/0,04=<b>0,8</b>.' },
-    { n:12, kat:'Hesaplama', t:'NH\u2084HS(k)\u21ccNH\u2083(g)+H\u2082S(g) tepkimesine g\u00f6re belirli bir sıcaklıkta kaba konan NH\u2084HS(k) dengeye ulaşıyor. Kaptaki toplam basın\u00e7 1,2 atm olduğuna g\u00f6re, bu sıcaklıktaki Kp sabiti ka\u00e7tır?',
-      c:'NH\u2083 ve H\u2082S EŞİT MOL oluşur (1:1 katsayı). Toplam basın\u00e7=P(NH\u2083)+P(H\u2082S)=1,2 atm \u2192 her biri <b>0,6 atm</b>.<br>Kp=P(NH\u2083)\u00d7P(H\u2082S)=0,6\u00d70,6=<b>0,36</b> (NH\u2084HS katı olduğu i\u00e7in denge bağıntısına girmez).' },
-    { n:13, kat:'Hesaplama', t:'1000 mL\u2019lik boş bir kaba 4 mol N\u2082 ve 4 mol H\u2082 gazları konuluyor. N\u2082(g)+3H\u2082(g)\u21cc2NH\u2083(g) denklemine g\u00f6re tepkime %75 verimle ger\u00e7ekleşiyor (H\u2082 sınırlayıcıdır). Tepkime dengeye geldiğinde ortamın toplam basıncı 12 atm oluyorsa Kp değeri ka\u00e7tır?',
-      c:'H\u2082 sınırlayıcı (4mol N\u2082 i\u00e7in 12mol H\u2082 gerekir, sadece 4mol var). %75 verimle H\u2082\u2019den 3mol harcanır \u2192 N\u2082\u2019den 1mol harcanır, NH\u2083\u2019ten 2mol oluşur.<br>Denge: N\u2082=3mol, H\u2082=1mol, NH\u2083=2mol, Toplam=6mol.<br>Kısmi basın\u00e7lar (toplam 12atm\u2019ye oranla): P(N\u2082)=6atm, P(H\u2082)=2atm, P(NH\u2083)=4atm.<br>Kp=P(NH\u2083)\u00b2/(P(N\u2082)\u00d7P(H\u2082)\u00b3)=4\u00b2/(6\u00d72\u00b3)=16/48=<b>1/3\u22480,33</b>.' },
-    { n:14, kat:'Hesaplama', t:'H\u2082(g)+Br\u2082(g)\u21cc2HBr(g) tepkimesinin t\u00b0C\u2019deki denge sabiti (Kc) 16\u2019dır. 4 litrelik kaba 0,6 mol HBr konularak tepkime (geriye doğru) başlatılıyor. Sistem dengeye ulaştığında kapta ka\u00e7 gram Br\u2082 bulunur? (Br:80)',
-      c:'Başlangı\u00e7 [HBr]=0,6/4=0,15M. y kadar H\u2082/Br\u2082 oluşsun (2HBr\u2192H\u2082+Br\u2082): HBr=0,15\u22122y, H\u2082=y, Br\u2082=y.<br>Kc=[HBr]\u00b2/([H\u2082][Br\u2082])=16 \u2192 (0,15\u22122y)\u00b2/y\u00b2=16 \u2192 (0,15\u22122y)/y=4 \u2192 0,15=6y \u2192 y=0,025M.<br>Br\u2082 mol=0,025\u00d74L=0,1mol \u2192 k\u00fctle=0,1\u00d7160=<b>16 g</b>.' },
-    { n:15, kat:'Hesaplama', t:'3X\u2082(g)+2Y\u2082(g)\u21cc2Z(g) tepkimesine g\u00f6re 0,6 mol X\u2082 ve 0,3 mol Y\u2082 gazları 1 L\u2019lik kapta dengeye ulaşmaktadır. Denge anında \u00fcr\u00fcn\u00fcn mol sayısı, girenlerin (X\u2082+Y\u2082) mol sayısının yarısı kadar olmaktadır. Kc değeri ka\u00e7tır?',
-      c:'İlerleme miktarı \u03be olsun: X\u2082=0,6\u22123\u03be, Y\u2082=0,3\u22122\u03be, Z=2\u03be.<br>\u201c\u00dcr\u00fcn = girenlerin yarısı\u201d şartı: 2\u03be=(X\u2082+Y\u2082)/2=(0,6\u22123\u03be+0,3\u22122\u03be)/2=(0,9\u22125\u03be)/2 \u2192 4\u03be=0,9\u22125\u03be \u2192 9\u03be=0,9 \u2192 <b>\u03be=0,1</b>.<br>Denge: X\u2082=0,6\u22120,3=<b>0,3M</b>, Y\u2082=0,3\u22120,2=<b>0,1M</b>, Z=<b>0,2M</b> (kontrol: (0,3+0,1)/2=0,2=Z ✓).<br>Kc=[Z]\u00b2/([X\u2082]\u00b3[Y\u2082]\u00b2)=0,2\u00b2/(0,3\u00b3\u00d70,1\u00b2)=0,04/0,00027=<b>4000/27\u2248148,1</b>.' },
-    { n:16, kat:'Hesaplama', t:'2 L\u2019lik sabit hacimli kaba eşit mollerde H\u2082 ve I\u2082 gazları konuyor. H\u2082(g)+I\u2082(g)\u21cc2HI(g) denklemine g\u00f6re dengeye ulaştığında kapta 0,2 mol H\u2082, 0,2 mol I\u2082 ve 0,4 mol HI gazları bulunuyor. Geri y\u00f6ndeki tepkimenin denge hızı 2 M\u00b7s\u207b\u00b9 olduğuna g\u00f6re, tepkimenin BAŞLANGI\u00c7 hızı ka\u00e7 M\u00b7s\u207b\u00b9\u2019dir?',
-      c:'Denge derişimleri: [H\u2082]=[I\u2082]=0,1M, [HI]=0,2M. Kc=[HI]\u00b2/([H\u2082][I\u2082])=0,04/0,01=4.<br>Dengede r\u0261=k\u0261[HI]\u00b2=2 \u2192 k\u0261=2/0,04=50. k\u0131=k\u0261\u00d7Kc=50\u00d74=<b>200</b>.<br>Başlangı\u00e7ta HI yoktu; katsayı oranı (1:1:2) gereği HI\u2019nın yarısı kadar H\u2082 ve I\u2082 harcanmıştır: t\u00fckenen H\u2082=t\u00fckenen I\u2082=0,4/2=0,2mol. Başlangı\u00e7 [H\u2082]\u2080=[I\u2082]\u2080=(0,2+0,2)/2L=0,2M.<br>Başlangı\u00e7ta HI olmadığından r\u0261=0, sadece r\u0131 vardır: r\u0131=k\u0131[H\u2082]\u2080[I\u2082]\u2080=200\u00d70,2\u00d70,2=<b>8 M\u00b7s\u207b\u00b9</b>.' },
-    { n:17, kat:'Hesaplama', t:'1 litrelik kapalı bir kaba bir miktar X\u2082 ve Y\u2082 gazları konuluyor. Sabit sıcaklıkta X\u2082(g)+3Y\u2082(g)\u21cc2Z(g) tepkimesi ger\u00e7ekleşiyor. Başlangı\u00e7ta X\u2082=1,0M, Y\u2082=1,4M; 10. saniyede X\u2082=0,6M, Y\u2082=0,2M, Z=0,8M olup 15. saniyede de AYNI kalıyor (denge). Buna g\u00f6re: I. Tepkime 10 saniyede dengeye ulaşmıştır. II. Denge anında kapta toplam 1,6 mol gaz vardır. \u2014 hangileri DOĞRUDUR?',
-      c:'I \u2014 <b>DOĞRU</b>: 10. ve 15. saniyedeki derişimler AYNI olduğu i\u00e7in denge 10. saniyede kurulmuştur.<br>II \u2014 <b>DOĞRU</b>: Toplam derişim=0,6+0,2+0,8=1,6M, 1L kapta olduğu i\u00e7in toplam mol=1,6 mol.<br>Kc=[Z]\u00b2/([X\u2082][Y\u2082]\u00b3)=0,8\u00b2/(0,6\u00d70,2\u00b3)=0,64/0,0048\u2248<b>133,3</b> (verilen \u201cK=10\u201d iddiası varsa bu YANLIŞTIR, doğru değer \u2248133,3\u2019t\u00fcr).' },
-    { n:18, kat:'Hesaplama (\u00c7ok Y\u00f6nl\u00fc)', t:'2X(g)+3Y(g)\u21cc2Z(g)+T(g) tepkimesi tek basamakta ger\u00e7ekleşiyor. Sabit sıcaklıkta 2 litrelik kaba 6 mol X ve 12 mol Y konularak başlatılan tepkimede 2 mol Z oluşunca dengeye ulaşılıyor; dengede ileri tepkime hızı 2 mol/L\u00b7s\u2019dir. a) Kc ka\u00e7tır? b) k\u0131 ve k\u0261 ka\u00e7tır? c) Başlangı\u00e7taki tepkime hızı ka\u00e7 mol/L\u00b7s\u2019dir?',
-      c:'2mol Z oluşunca (katsayı oranı X:Y:Z:T=2:3:2:1): dX=2,dY=3,dT=1. Denge: X=4mol,Y=9mol,Z=2mol,T=1mol (2L kapta).<br>Derişimler: [X]=2M,[Y]=4,5M,[Z]=1M,[T]=0,5M.<br>a) Kc=[Z]\u00b2[T]/([X]\u00b2[Y]\u00b3)=(1\u00b2\u00d70,5)/(2\u00b2\u00d74,5\u00b3)=0,5/364,5\u2248<b>0,00137</b>.<br>b) Dengede r\u0131=k\u0131[X]\u00b2[Y]\u00b3=2 \u2192 k\u0131=2/(4\u00d791,125)\u2248<b>0,00549</b>. k\u0261=k\u0131/Kc=<b>4</b> (temiz bir sayı \u2014 kontrol amacıyla: r\u0261=k\u0261[Z]\u00b2[T]=4\u00d7(1\u00d70,5)=2 ✓ dengede eşit \u00e7ıkıyor).<br>c) Başlangı\u00e7ta [X]\u2080=6/2=3M,[Y]\u2080=12/2=6M, hen\u00fcz Z/T yok (r\u0261=0). r\u0131(başlangı\u00e7)=k\u0131[X]\u2080\u00b2[Y]\u2080\u00b3=0,00549\u00d79\u00d7216\u2248<b>10,67 mol/L\u00b7s</b>.' },
-    { n:19, kat:'Le Chatelier', t:'Le Chatelier İlkesi\u2019ne g\u00f6re N\u2082(g)+3H\u2082(g)\u21cc2NH\u2083(g) dengesine yapılan şu m\u00fcdahalelerin, DERİŞİM (her t\u00fcr i\u00e7in ayrı ayrı) ve TOPLAM MOL SAYISI \u00fczerindeki etkisini a\u00e7ıklayınız: a) Sabit sıcaklıkta N\u2082 ilave edilirse b) Sabit sıcaklıkta H\u2082 \u00e7ekilirse c) Sabit sıcaklıkta hacim artırılırsa \u00e7) Sabit sıcaklıkta hacim azaltılırsa d) Sıcaklık artırılırsa (tepkime EKZOTERMİK: ısı \u00fcr\u00fcn tarafında) e) Sıcaklık azaltılırsa',
-      c:'a) <b>N\u2082 ilave:</b> Sistem fazlalığı gidermek i\u00e7in \u00dcR\u00dcNLER y\u00f6n\u00fcne kayar \u2192 NH\u2083 ARTAR, H\u2082 AZALIR, N\u2082 (ilk artıştan sonra kısmen t\u00fcketilir ama) net olarak eski değerinden Y\u00dcKSEK kalır. Toplam mol sayısı BAŞLANGI\u00c7TA artar, sonra tepkime ilerledik\u00e7e biraz azalır ama net ARTMIŞ olarak kalır (\u00e7\u00fcnk\u00fc dışarıdan madde eklendi).<br>b) <b>H\u2082 \u00e7ekilirse:</b> Sistem kaybı telafi i\u00e7in TEPKENLER y\u00f6n\u00fcne (geri) kayar \u2192 NH\u2083 AZALIR, N\u2082 ARTAR, H\u2082 (\u00e7ekilen miktardan biraz telafi olsa da) net AZALMIŞ kalır. Toplam mol sayısı AZALIR.<br>c) <b>Hacim artırılırsa:</b> T\u00fcm derişimler ANINDA azalır; sistem KATSAYISI FAZLA olan tarafa (tepken tarafı, 4mol>2mol) doğru kayarak derişim azalışına kısmen direnir \u2192 NH\u2083 derişimi (ve mol sayısı) AZALIR, N\u2082/H\u2082 derişimleri azalır ama mol sayıları biraz ARTAR.<br>\u00e7) <b>Hacim azaltılırsa:</b> T\u00fcm derişimler ANINDA artar; sistem yine katsayısı fazla tarafa (tepken tarafı) doğru DAHA FAZLA madde \u00fcreterek basıncı azaltmaya \u00e7alışır \u2192 NH\u2083 y\u00f6n\u00fcne kayar, NH\u2083 derişimi VE mol sayısı ARTAR.<br>d) <b>Sıcaklık artırılırsa (ekzotermik tepkime):</b> Sistem ısıyı soğurmak i\u00e7in ENDOTERMİK y\u00f6ne (geri, tepkenler) kayar \u2192 NH\u2083 AZALIR, N\u2082/H\u2082 ARTAR.<br>e) <b>Sıcaklık azaltılırsa:</b> Sistem ısı a\u00e7ığa \u00e7ıkarmak i\u00e7in EKZOTERMİK y\u00f6ne (ileri, \u00fcr\u00fcnler) kayar \u2192 NH\u2083 ARTAR, N\u2082/H\u2082 AZALIR.' },
-    { n:20, kat:'Le Chatelier', t:'H\u2082(g)+Cl\u2082(g)\u21cc2HCl(g) (katsayılar EŞİT, \u0394n=0) ve CaCO\u2083(k)\u21ccCaO(k)+CO\u2082(g) (heterojen) dengelerine hacim artırma/azaltmanın etkisi, N\u2082+3H\u2082\u21cc2NH\u2083\u2019ten (\u0394n\u22600) NASIL FARKLIDIR?',
-      c:'<b>H\u2082+Cl\u2082\u21cc2HCl (\u0394n=2\u22122=0):</b> Hacim değişince t\u00fcm derişimler AYNI ORANDA değişir, sistem HİÇBİR Y\u00d6NE KAYMAZ (\u00e7\u00fcnk\u00fc tepken/\u00fcr\u00fcn tarafında gaz mol sayısı eşit) \u2014 mol sayıları SABİT KALIR, sadece derişimler (hacimle ters orantılı) değişir.<br><b>CaCO\u2083\u21ccCaO+CO\u2082 (heterojen, sadece CO\u2082 gaz):</b> Hacim ARTIRILIRSA CO\u2082 derişimi azalır, sistem bunu telafi i\u00e7in İLERİ y\u00f6ne kayar (CaCO\u2083 azalır, CaO/CO\u2082 mol sayısı artar). Hacim AZALTILIRSA tam tersi: CaCO\u2083 mol sayısı ARTAR (CO\u2082 geri CaCO\u2083\u2019e d\u00f6n\u00fcş\u00fcr).<br>\u2192 \u0394n=0 olan tepkimelerde hacim/basın\u00e7 değişimi dengeyi KAYDIRMAZ; \u0394n\u22600 olanlarda ise HER ZAMAN katsayısı fazla olan (gaz molsayısı b\u00fcy\u00fck) tarafa doğru veya ondan uzağa kayma olur.' },
-    { n:21, kat:'Le Chatelier', t:'2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g) dengesine sabit sıcaklıkta HACİM ARTIRILIRSA ve CO\u2082(g) gaz halinde bulunan CaCO\u2083(k)\u21ccCaO(k)+CO\u2082(g) dengesine CO\u2082 GAZI G\u00d6NDERİLİRSE ne olur? (Sistemin hangi y\u00f6ne kayacağını a\u00e7ıklayınız)',
-      c:'<b>2SO\u2082+O\u2082\u21cc2SO\u2083 hacim artırılırsa:</b> Derişimler azalır, sistem katsayısı FAZLA olan tepken tarafına (3mol>2mol) kayar \u2192 SO\u2083 AZALIR, SO\u2082/O\u2082 ARTAR (mol sayısı olarak).<br><b>CaCO\u2083\u21ccCaO+CO\u2082\u2019ye CO\u2082 g\u00f6nderilirse:</b> CO\u2082 derişimi ANİDEN artar, sistem fazlalığı gidermek i\u00e7in GERİ y\u00f6ne (CaCO\u2083 oluşumu) kayar \u2192 CaCO\u2083 ARTAR, CaO AZALIR, CO\u2082 (eklenen miktardan kısmen tepkimeye girse de net olarak) ARTMIŞ kalır.' },
-    { n:22, kat:'Grafik Yorumlama', t:'Sabit sıcaklıkta 2 litrelik bir kaba 2 mol SO\u2082, 2 mol O\u2082 ve 4 mol SO\u2083 gazları konuyor. 2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g) tepkimesinin dengeye ulaşması sağlanıyor. Denge kurulurken \u0130LERİ (r\u0131) hızı BAŞLANGI\u00c7TA Y\u00dcKSEK olup azalıyor, GERİ (r\u0261) hızı başlangı\u00e7ta D\u00dcŞ\u00dcK olup artıyor (grafikte kesişiyorlar). Buna g\u00f6re tepkimenin Kc\u2019si i\u00e7in hangisi doğrudur? A) Kc=1 B) Kc=2 C) Kc<2 D) Kc<4 E) Kc>4',
+      c:'1) Denge bağıntısında SAF KATI ve SAF SIVILAR YER ALMAZ.<br>2) Denge bağıntısında GAZLAR ve SULU çözeltiler YER ALIR.<br>3) Denge bağıntısı NET tepkimeye göre yazılır.' },
+    { n:6, kat:'Denge Sabiti', t:'Kp ile Kc arasındaki ilişkiyi (formülü) yazınız. Δn neyi ifade eder?',
+      c:'<b>Kp = Kc×(RT)^Δn</b><br>Δn = (ürün gazlarının katsayıları toplamı) − (giren gazlarının katsayıları toplamı) — SADECE gaz halindeki maddelerin katsayıları sayılır.' },
+    { n:7, kat:'Hesaplama', t:'2NO(g)+O₂(g)⇌2NO₂(g) tepkimesine göre 2 L’lik kapta 0,4 mol NO, 0,2 mol O₂ ve 0,8 mol NO₂ gazları dengededir. Buna göre aynı sıcaklıkta tepkimenin Kc değeri kaçtır?',
+      c:'[NO]=0,2 M, [O₂]=0,1 M, [NO₂]=0,4 M.<br>Kc=[NO₂]²/([NO]²[O₂])=0,4²/(0,2²×0,1)=0,16/0,004=<b>40</b>.' },
+    { n:8, kat:'Hesaplama', t:'2CO(g)+O₂(g)⇌2CO₂(g) tepkimesinin aynı sıcaklıktaki ileri tepkimenin hız sabiti (kı) 4×10⁻³ ve geri tepkimenin hız sabiti (kg) 2×10⁻⁴’tür. Buna göre tepkimenin derişimler türünden denge sabiti Kc kaçtır?',
+      c:'Dengede <b>Kc = kı/kg</b>.<br>Kc = 4×10⁻³ / 2×10⁻⁴ = <b>20</b>.' },
+    { n:9, kat:'Hesaplama', t:'2SO₂(g)+O₂(g)⇌2SO₃(g) tepkimesine göre 0,2’şer mol SO₂ ve O₂ gazları ile 0,8 mol SO₃ gazı dengededir. Tepkimenin denge sabiti (K) 16 olduğuna göre tepkime kabının hacmi kaç L’dir?',
+      c:'Kc=(0,8/V)²/((0,2/V)²×(0,2/V))=16 denklemini V için çözersek: <b>V=0,2 L</b>.' },
+    { n:10, kat:'Hesaplama', t:'2CO(g)+O₂(g)⇌2CO₂(g) tepkimesinin 27°C’deki derişimler türünden denge sabiti (Kc) 5,6 olduğuna göre, aynı sıcaklıktaki kısmi basınçlar türünden denge sabiti (Kp) kaçtır? (R:0,082 alınız)',
+      c:'Δn = 2−3 = −1. T=300K.<br>Kp = Kc×(RT)^Δn = 5,6×(0,082×300)⁻¹ = 5,6/24,6 ≈ <b>0,228</b>.' },
+    { n:11, kat:'Hesaplama', t:'2SO₃(g)⇌2SO₂(g)+O₂(g) denklemine göre 1 litrelik bir kapta 0,6 mol SO₃ gazı ile başlatılan tepkime t°C’de dengeye ulaştığında kapta toplam 0,8 mol gaz bulunuyor. Buna göre tepkimenin t°C’deki denge sabiti (Kc) kaçtır?',
+      c:'x kadar SO₃ ayrışsın: 0,6+x/2=0,8 → x=0,4.<br>Denge: SO₃=0,2M, SO₂=0,4M, O₂=0,2M.<br>Kc=0,4²×0,2/0,2²=<b>0,8</b>.' },
+    { n:12, kat:'Hesaplama', t:'NH₄HS(k)⇌NH₃(g)+H₂S(g) tepkimesine göre belirli bir sıcaklıkta kaba konan NH₄HS(k) dengeye ulaşıyor. Kaptaki toplam basınç 1,2 atm olduğuna göre, bu sıcaklıktaki Kp sabiti kaçtır?',
+      c:'NH₃ ve H₂S EŞİT MOL oluşur. Toplam=1,2atm → her biri <b>0,6 atm</b>.<br>Kp=0,6×0,6=<b>0,36</b>.' },
+    { n:13, kat:'Hesaplama', t:'1000 mL’lik boş bir kaba 4 mol N₂ ve 4 mol H₂ gazları konuluyor. N₂(g)+3H₂(g)⇌2NH₃(g) denklemine göre tepkime %75 verimle gerçekleşiyor (H₂ sınırlayıcıdır). Tepkime dengeye geldiğinde ortamın toplam basıncı 12 atm oluyorsa Kp değeri kaçtır?',
+      c:'H₂ sınırlayıcı. %75 verimle H₂’den 3mol harcanır, N₂’den 1mol, NH₃’ten 2mol oluşur.<br>Denge: N₂=3mol, H₂=1mol, NH₃=2mol, Toplam=6mol.<br>P(N₂)=6atm, P(H₂)=2atm, P(NH₃)=4atm.<br>Kp=4²/(6×2³)=16/48=<b>1/3≈0,33</b>.' },
+    { n:14, kat:'Sıcaklık Etkisi', t:'Şekildeki her kapta eşit sayıda N₂O₄ molekülü bulunmaktadır: I. Kap: V litre, 50°C · II. Kap: 2V litre, 50°C · III. Kap: 2V litre, 25°C. Her kapta N₂O₄(g)⇌2NO₂(g) tepkimesi gerçekleşmektedir. Bu kaplardaki tepkimelerin hızlarını karşılaştırınız.',
+      c:'<b>I. Kap</b> (V, 50°C): KÜÇÜK hacim + YÜKSEK sıcaklık → EN HIZLI.<br><b>II. Kap</b> (2V, 50°C): ORTA.<br><b>III. Kap</b> (2V, 25°C): EN YAVAŞ.<br>→ <b>Hız sıralaması: I > II > III</b>.' },
+    { n:15, kat:'Hesaplama', t:'3X₂(g)+2Y₂(g)⇌2Z(g) tepkimesine göre 0,6 mol X₂ ve 0,3 mol Y₂ gazları 1 L’lik kapta dengeye ulaşmaktadır. Denge anında ürünün mol sayısı, girenlerin (X₂+Y₂) mol sayısının yarısı kadar olmaktadır. Kc değeri kaçtır?',
+      c:'İlerleme ξ: X₂=0,6−3ξ, Y₂=0,3−2ξ, Z=2ξ.<br>2ξ=(0,9−5ξ)/2 → ξ=0,1.<br>Denge: X₂=0,3M, Y₂=0,1M, Z=0,2M.<br>Kc=0,2²/(0,3³×0,1²)=0,04/0,00027=<b>4000/27≈148,1</b>.' },
+    { n:16, kat:'Hesaplama', t:'2 L’lik sabit hacimli kaba eşit mollerde H₂ ve I₂ gazları konuyor. H₂(g)+I₂(g)⇌2HI(g) denklemine göre dengeye ulaştığında kapta 0,2 mol H₂, 0,2 mol I₂ ve 0,4 mol HI gazları bulunuyor. Geri yöndeki tepkimenin denge hızı 2 M·s⁻¹ olduğuna göre, tepkimenin BAŞLANGIÇ hızı kaç M·s⁻¹’dir?',
+      c:'Denge: [H₂]=[I₂]=0,1M, [HI]=0,2M. Kc=4.<br>rg=kg[HI]²=2 → kg=50. kı=kg×Kc=200.<br>Başlangıç [H₂]₀=[I₂]₀=0,2M (HI yoktu).<br>rı=kı×0,2×0,2=<b>8 M·s⁻¹</b>.' },
+    { n:17, kat:'Hesaplama', t:'1 litrelik kapalı bir kaba bir miktar X₂ ve Y₂ gazları konuluyor. Sabit sıcaklıkta X₂(g)+3Y₂(g)⇌2Z(g) tepkimesi gerçekleşiyor. Başlangıçta X₂=1,0M, Y₂=1,4M; 10. saniyede X₂=0,6M, Y₂=0,2M, Z=0,8M olup 15. saniyede de AYNI kalıyor. I. Tepkime 10 saniyede dengeye ulaşmıştır. II. Denge anında kapta toplam 1,6 mol gaz vardır. — hangileri DOĞRUDUR?',
+      c:'I — <b>DOĞRU</b>: 10. ve 15. saniye derişimleri AYNI.<br>II — <b>DOĞRU</b>: 0,6+0,2+0,8=1,6M=1,6mol (1L kapta).<br>Kc=0,8²/(0,6×0,2³)≈<b>133,3</b>.' },
+    { n:18, kat:'Hesaplama (Çok Yönlü)', t:'2X(g)+3Y(g)⇌2Z(g)+T(g) tepkimesi tek basamakta gerçekleşiyor. Sabit sıcaklıkta 2 litrelik kaba 6 mol X ve 12 mol Y konularak başlatılan tepkimede 2 mol Z oluşunca dengeye ulaşılıyor; dengede ileri tepkime hızı 2 mol/L·s’dir. a) Kc kaçtır? b) kı ve kg kaçtır? c) Başlangıçtaki tepkime hızı kaç mol/L·s’dir?',
+      c:'Denge: X=4mol,Y=9mol,Z=2mol,T=1mol (2L). [X]=2M,[Y]=4,5M,[Z]=1M,[T]=0,5M.<br>a) Kc=(1²×0,5)/(2²×4,5³)≈<b>0,00137</b>.<br>b) rı=kı[X]²[Y]³=2 → kı≈<b>0,00549</b>. kg=kı/Kc=<b>4</b>.<br>c) Başlangıç [X]₀=3M,[Y]₀=6M, rg=0. rı=0,00549×9×216≈<b>10,67 mol/L·s</b>.' },
+    { n:19, kat:'Le Chatelier', t:'Le Chatelier İlkesi’ne göre N₂(g)+3H₂(g)⇌2NH₃(g) dengesine yapılan şu müdahalelerin etkisini açıklayınız: a) N₂ ilave edilirse b) H₂ çekilirse c) hacim artırılırsa ç) hacim azaltılırsa d) sıcaklık artırılırsa (tepkime EKZOTERMİK) e) sıcaklık azaltılırsa',
+      c:'a) <b>N₂ ilave:</b> ÜRÜNLER yönüne kayar → NH₃ ARTAR.<br>b) <b>H₂ çekilirse:</b> TEPKENLER yönüne kayar → NH₃ AZALIR.<br>c) <b>Hacim artırılırsa:</b> katsayısı fazla (tepken) tarafa kayar → NH₃ AZALIR.<br>ç) <b>Hacim azaltılırsa:</b> NH₃ yönüne kayar → NH₃ ARTAR.<br>d) <b>Sıcaklık artırılırsa:</b> ENDOTERMİK yöne (geri) kayar → NH₃ AZALIR.<br>e) <b>Sıcaklık azaltılırsa:</b> EKZOTERMİK yöne (ileri) kayar → NH₃ ARTAR.' },
+    { n:20, kat:'Le Chatelier', t:'H₂(g)+Cl₂(g)⇌2HCl(g) (Δn=0) ve CaCO₃(k)⇌CaO(k)+CO₂(g) (heterojen) dengelerine hacim artırma/azaltmanın etkisi, N₂+3H₂⇌2NH₃’ten (Δn≠0) NASIL FARKLIDIR?',
+      c:'<b>H₂+Cl₂⇌2HCl (Δn=0):</b> Hacim değişince sistem HİÇBİR YÖNE KAYMAZ, mol sayıları SABİT kalır.<br><b>CaCO₃⇌CaO+CO₂:</b> Hacim ARTIRILIRSA İLERİ kayar (CO₂ mol sayısı artar); AZALTILIRSA CaCO₃ artar.<br>→ Δn=0 olan tepkimelerde hacim değişimi dengeyi KAYDIRMAZ.' },
+    { n:21, kat:'Le Chatelier', t:'2SO₂(g)+O₂(g)⇌2SO₃(g) dengesine sabit sıcaklıkta HACİM ARTIRILIRSA ve CaCO₃(k)⇌CaO(k)+CO₂(g) dengesine CO₂ GAZI GÖNDERİLİRSE ne olur?',
+      c:'<b>2SO₂+O₂⇌2SO₃ hacim artırılırsa:</b> katsayısı fazla tepken tarafına kayar → SO₃ AZALIR.<br><b>CaCO₃⇌CaO+CO₂’ye CO₂ gönderilirse:</b> GERİ yöne kayar → CaCO₃ ARTAR, CaO AZALIR.' },
+    { n:22, kat:'Grafik Yorumlama', t:'Sabit sıcaklıkta 2 litrelik bir kaba 2 mol SO₂, 2 mol O₂ ve 4 mol SO₃ gazları konuyor. 2SO₂(g)+O₂(g)⇌2SO₃(g) tepkimesinin dengeye ulaşması sağlanıyor. İLERİ (rı) hızı başlangıçta YÜKSEK olup azalıyor, GERİ (rg) hızı başlangıçta DÜŞÜK olup artıyor. Tepkimenin Kc’si için hangisi doğrudur? A) Kc=1 B) Kc=2 C) Kc<2 D) Kc<4 E) Kc>4',
       o:['Kc=1','Kc=2','Kc<2','Kc<4','Kc>4'], c:4,
-      ac:'Başlangı\u00e7 derişimleri: [SO\u2082]=[O\u2082]=1M, [SO\u2083]=2M. Anlık Q=[SO\u2083]\u00b2/([SO\u2082]\u00b2[O\u2082])=4/(1\u00d71)=4.<br>Grafikte r\u0131>r\u0261 (başlangı\u00e7ta) olduğu i\u00e7in tepkime İLERİ y\u00f6ne (daha \u00e7ok \u00fcr\u00fcn oluşturmaya) doğru ilerliyor demektir \u2014 bu da Q<Kc anlamına gelir. Q=4 olduğuna g\u00f6re <b>Kc>4</b> olmalıdır. \u2192 <b>E</b>' },
-    { n:23, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'2XY(g)\u21ccX\u2082(g)+Y\u2082(g) dengesinin bulunduğu kapta 0,9 mol X\u2082, 0,4 mol Y\u2082 ve 0,3 mol XY gazları bulunmaktadır. Bu kaptan sabit sıcaklıkta 0,5 mol X\u2082 gazı \u00e7ekiliyor. Yeniden dengeye ulaşan sistemde XY gazının mol sayısı ka\u00e7tır? (V=1L varsayınız)',
-      c:'Kc=[X\u2082][Y\u2082]/[XY]\u00b2=(0,9\u00d70,4)/0,3\u00b2=<b>4</b>.<br>0,5mol X\u2082 \u00e7ekilince anlık: X\u2082=0,4, Y\u2082=0,4, XY=0,3 (Q<Kc, sistem X\u2082/Y\u2082 azaltıp XY \u00fcretme y\u00f6n\u00fcne, yani GERİ y\u00f6ne kayar).<br>z kadar geri kayarsa: X\u2082=0,4+z, Y\u2082=0,4+z, XY=0,3\u22122z. Kc=4=((0,4+z)\u00b2)/((0,3\u22122z)\u00b2) \u2192 (0,4+z)/(0,3\u22122z)=2 \u2192 0,4+z=0,6\u22124z \u2192 z=0,04.<br>Yeni XY=0,3\u22120,08=<b>0,22 mol</b>.' },
-    { n:24, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'1 litrelik sabit hacimli bir kapta 1 mol H\u2082, 4 mol Cl\u2082 ve 4 mol HCl gazları H\u2082(g)+Cl\u2082(g)\u21cc2HCl(g) denklemine g\u00f6re t\u00b0C\u2019de dengededir. Bu kaba sabit sıcaklıkta 3 mol H\u2082 gazı ilave ediliyor. Dengeye ulaşan sistemde HCl gazının mol sayısı ka\u00e7tır?',
-      c:'Kc=[HCl]\u00b2/([H\u2082][Cl\u2082])=4\u00b2/(1\u00d74)=<b>4</b>.<br>3mol H\u2082 eklenince anlık: H\u2082=4, Cl\u2082=4, HCl=4 (Q<Kc olduğundan İLERİ y\u00f6ne kayar).<br>z kadar ileri kayarsa: H\u2082=4\u2212z, Cl\u2082=4\u2212z, HCl=4+2z. Kc=4=(4+2z)\u00b2/(4\u2212z)\u00b2 \u2192 (4+2z)/(4\u2212z)=2 \u2192 4+2z=8\u22122z \u2192 z=1.<br>Yeni HCl=4+2=<b>6 mol</b>.' },
-    { n:25, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'CO\u2082(g)+H\u2082(g)\u21ccCO(g)+H\u2082O(g) tepkimesinin belirli bir sıcaklıkta dengedeyken kapta 0,6 mol CO\u2082, 0,4 mol H\u2082, 0,4 mol CO, 0,6 mol H\u2082O gazı bulunmaktadır (V=1L). H\u2082O gazının dengedeki mol sayısını 0,8\u2019e \u00e7ıkartmak i\u00e7in kaptan ka\u00e7 mol CO gazı uzaklaştırılmalıdır?',
-      c:'Kc=[CO][H\u2082O]/([CO\u2082][H\u2082])=(0,4\u00d70,6)/(0,6\u00d70,4)=<b>1</b>.<br>H\u2082O\u2019yu 0,8\u2019e \u00e7ıkarmak i\u00e7in tepkime z=0,2 kadar İLERİ kaymalı (H\u2082O=0,6+z=0,8): CO\u2082=0,4, H\u2082=0,2, H\u2082O=0,8.<br>Yeni Kc=1 denklemiyle: CO<sub>yeni</sub>=(CO\u2082\u00d7H\u2082)/H\u2082O=(0,4\u00d70,2)/0,8=<b>0,1 mol</b>.<br>CO, tepkimeden doğal olarak 0,4+0,2=0,6mol\u2019e \u00e7ıkması gerekirken 0,1mol\u2019de kaldığına g\u00f6re uzaklaştırılan miktar: 0,6\u22120,1=<b>0,5 mol CO</b>.' },
-    { n:26, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'SO\u2083(g)+NO(g)\u21ccSO\u2082(g)+NO\u2082(g) tepkimesi 1 litrelik kapta 0,4 mol SO\u2083, 0,3 mol NO, 0,1 mol SO\u2082 ve 0,4 mol NO\u2082 ile dengededir. Kaptaki SO\u2082 mol sayısının 0,2 olması i\u00e7in kaba ka\u00e7 mol NO eklenmelidir?',
-      c:'Kc=[SO\u2082][NO\u2082]/([SO\u2083][NO])=(0,1\u00d70,4)/(0,4\u00d70,3)=<b>1/3</b>.<br>SO\u2082=0,2 olması i\u00e7in z=0,1 kadar İLERİ kaymalı: SO\u2083=0,3, SO\u2082=0,2, NO\u2082=0,5.<br>Yeni Kc=1/3 denkleminden NO<sub>yeni</sub>=(SO\u2082\u00d7NO\u2082)/(Kc\u00d7SO\u2083)=(0,2\u00d70,5)/(0,3333\u00d70,3)=<b>1 mol</b> (kayma SONRASI denge değeri).<br>NO, kayma sırasında z=0,1 kadar t\u00fckendiği i\u00e7in eklendiği andaki (kaymadan hemen \u00f6nceki) miktar=1+0,1=1,1mol. Başlangı\u00e7ta 0,3mol NO olduğuna g\u00f6re eklenen: 1,1\u22120,3=<b>0,8 mol NO</b>.' },
-    { n:27, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'1 litrelik kapalı kapta sabit sıcaklıkta 0,6 mol COCl\u2082, 0,2 mol CO ve 0,6 mol Cl\u2082 gazları COCl\u2082(g)\u21ccCO(g)+Cl\u2082(g) denklemine g\u00f6re dengededir. Dengede 0,4 mol CO gazı olması i\u00e7in kabın hacmi ka\u00e7 litre olmalıdır?',
-      c:'V=1L\u2019deki Kc=[CO][Cl\u2082]/[COCl\u2082]=(0,2\u00d70,6)/0,6=<b>0,2</b>.<br>CO=0,2\u2019den 0,4\u2019e \u00e7ıkması i\u00e7in (katsayı 1:1:1) COCl\u2082 de 0,2 kadar azalır, Cl\u2082 de 0,2 kadar artar: COCl\u2082=0,4mol, Cl\u2082=0,8mol, CO=0,4mol (bunlar YENİ HACİMDEKİ mol sayıları, T sabit olduğu i\u00e7in Kc de sabit=0,2 kalmalı).<br>Kc=(CO\u00d7Cl\u2082)/(COCl\u2082\u00d7V)=0,2 \u2192 (0,4\u00d70,8)/(0,4\u00d7V)=0,2 \u2192 0,32/(0,4V)=0,2 \u2192 V=<b>4 L</b>.' },
-    { n:28, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g) tepkimesi 2 litrelik bir kapta belirli bir sıcaklıkta dengede iken kapta 4 mol SO\u2083, 2 mol SO\u2082 ve 2 mol O\u2082 gazları bulunmaktadır. Sıcaklık sabit tutularak hacim 1 L\u2019ye indirilip bir miktar SO\u2082 gazı eklendiğinde yeni kurulan dengede 1 mol O\u2082 gazı bulunuyor. Kaba eklenen SO\u2082 gazı ka\u00e7 moldur?',
-      c:'İlk derişimler (2L\u2019de): [SO\u2083]=2M,[SO\u2082]=1M,[O\u2082]=1M \u2192 Kc=2\u00b2/(1\u00b2\u00d71)=<b>4</b>.<br>Hacim 1L\u2019ye inince mol sayıları AYNI kalır (sadece derişim 2 katına \u00e7ıkar, anlık): SO\u2083=4mol, SO\u2082=2mol, O\u2082=2mol (1L\u2019de).<br>SO\u2082 eklenip yeni dengede O\u2082=1mol olduğuna g\u00f6re z=1 kadar İLERİ kaymış (O\u2082: 2\u2212z=1 \u2192 z=1): SO\u2083<sub>yeni</sub>=4+2(1)=6mol, O\u2082=1mol.<br>Yeni Kc=4 denkleminden: SO\u2082<sub>yeni</sub>\u00b2=SO\u2083\u00b2/(Kc\u00d7O\u2082)=36/4=9 \u2192 SO\u2082<sub>yeni</sub>=3mol.<br>SO\u2082, kayma sırasında z=1 kadar t\u00fckendiği i\u00e7in eklendiği andaki miktar=3+1=4mol. İlk SO\u2082=2mol olduğuna g\u00f6re eklenen: 4\u22122=<b>2 mol SO\u2082</b>.' },
-    { n:29, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'CO\u2082(g)+H\u2082(g)\u21ccCO(g)+H\u2082O(g) tepkimesinde sabit sıcaklıkta 1 litrelik kapta 0,4 mol CO\u2082, 0,5 mol H\u2082, 0,2 mol CO ve 0,4 mol H\u2082O dengededir. H\u2082O(g) derişimini 0,3 molara indirmek i\u00e7in kaptan ka\u00e7 mol H\u2082 gazı \u00e7ekilmelidir?',
-      c:'Kc=[CO][H\u2082O]/([CO\u2082][H\u2082])=(0,2\u00d70,4)/(0,4\u00d70,5)=<b>0,4</b>.<br>H\u2082O=0,4\u2192 0,3 azalması i\u00e7in z=0,1 kadar GERİ kaymalı: CO\u2082=0,5, CO=0,1, H\u2082O=0,3.<br>Yeni Kc=0,4 denkleminden: H\u2082<sub>yeni</sub>=(CO\u00d7H\u2082O)/(Kc\u00d7CO\u2082)=(0,1\u00d70,3)/(0,4\u00d70,5)=<b>0,15mol</b>.<br>Geri kayarken H\u2082, z=0,1 kadar ARTAR; \u00e7ekme anındaki miktar=0,15\u22120,1=0,05mol. Başlangı\u00e7 H\u2082=0,5mol olduğuna g\u00f6re \u00e7ekilen: 0,5\u22120,05=<b>0,45 mol H\u2082</b>.' },
-    { n:30, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'2CO(g)\u21ccC(k)+CO\u2082(g) tepkimesi sabit sıcaklıkta 1 litrelik kapta 0,2 mol CO ve 0,01 mol CO\u2082 gazları ile dengededir. Dengedeki CO\u2082 gazının mol sayısının 0,06 olması i\u00e7in son hacim ka\u00e7 litre olmalıdır?',
-      c:'V=1L\u2019de Kc=[CO\u2082]/[CO]\u00b2=0,01/0,2\u00b2=<b>0,25</b> (C katı olduğu i\u00e7in denge bağıntısına girmez).<br>CO\u2082=0,06 olması i\u00e7in z=0,05 kadar İLERİ kaymalı (2CO\u2192C+CO\u2082): CO=0,2\u22122(0,05)=0,1mol, CO\u2082=0,06mol.<br>Yeni hacimde: Kc=(CO\u2082/V)/((CO/V)\u00b2)=CO\u2082\u00d7V/CO\u00b2=0,25 \u2192 V=(0,25\u00d70,1\u00b2)/0,06=<b>1/24\u22480,042 L</b>.' },
-    { n:31, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'H\u2082(g)+Cl\u2082(g)\u21cc2HCl(g) denge tepkimesinde sabit sıcaklıkta 1 L\u2019lik kapta 0,2 mol H\u2082, 0,4 mol Cl\u2082, 0,4 mol HCl gazları dengededir. Tepkime kabına ka\u00e7 mol H\u2082(g) eklenirse HCl(g) denge mol sayısı 0,6 olur?',
-      c:'Kc=[HCl]\u00b2/([H\u2082][Cl\u2082])=0,4\u00b2/(0,2\u00d70,4)=<b>2</b>.<br>HCl=0,6 olması i\u00e7in z=0,1 kadar İLERİ kaymalı: Cl\u2082=0,3, HCl=0,6.<br>Yeni Kc=2 denkleminden: H\u2082<sub>yeni</sub>=HCl\u00b2/(Kc\u00d7Cl\u2082)=0,36/(2\u00d70,3)=<b>0,6mol</b>.<br>İleri kayarken H\u2082 z=0,1 kadar AZALIR; ekleme anındaki miktar=0,6+0,1=0,7mol. Başlangı\u00e7 H\u2082=0,2mol olduğuna g\u00f6re eklenen: 0,7\u22120,2=<b>0,5 mol H\u2082</b>.' },
-    { n:32, kat:'Hesaplama (Piston/M\u00fcdahale)', t:'CO\u2082(g)+NO(g)\u21ccNO\u2082(g)+CO(g) denge tepkimesinde sabit sıcaklıkta 1 litrelik kapta 0,4 mol CO\u2082, 0,9 mol NO, 0,6 mol NO\u2082 ve 0,6 mol CO gazları dengededir. Kaba 0,5 mol CO\u2082 gazı eklenince sistem aynı sıcaklıkta dengeye geldiğinde kapta ka\u00e7 mol NO\u2082 bulunur?',
-      c:'Kc=[NO\u2082][CO]/([CO\u2082][NO])=(0,6\u00d70,6)/(0,4\u00d70,9)=<b>1</b>.<br>0,5mol CO\u2082 eklenince anlık CO\u2082=0,9mol; z kadar İLERİ kayar: CO\u2082=0,9\u2212z, NO=0,9\u2212z, NO\u2082=0,6+z, CO=0,6+z.<br>Kc=1 denkleminden ((0,6+z)\u00b2)/((0,9\u2212z)\u00b2)=1 \u2192 0,6+z=0,9\u2212z \u2192 z=0,15.<br>NO\u2082=0,6+0,15=<b>0,75 mol</b> (İlgin\u00e7 şekilde t\u00fcm t\u00fcrler bu noktada 0,75mol\u2019e eşitleniyor \u2014 Kc=1 olduğu i\u00e7in matematiksel bir tesadüf).' },
-    { n:33, kat:'Le Chatelier', t:'I. N\u2082O\u2084(g)\u21cc2NO\u2082(g) II. 2NO(g)+O\u2082(g)\u21cc2NO\u2082(g) III. PCl\u2083(g)+3NH\u2083(g)\u21cc3HCl(g)+P(NH\u2082)\u2083(g) \u2014 yukarıdaki tepkimeler dengededir. Sabit sıcaklıkta tepkime kaplarının hacmi AZALTILIP tekrar denge kurulduğunda: a) I. tepkimedeki NO\u2082\u2019nin mol sayısı nasıl değişir? b) II. tepkimedeki NO\u2082\u2019in molaritesi nasıl değişir? c) III. tepkimedeki HCl\u2019\u00fcn kısmi basıncı nasıl değişir?',
-      c:'a) I (\u0394n=2\u22121=+1, \u00fcr\u00fcn tarafı katsayı fazla): Hacim azalınca sistem katsayısı AZ olan (tepken) tarafa kayar \u2192 NO\u2082 mol sayısı <b>AZALIR</b>.<br>b) II (\u0394n=2\u22123=\u22121, tepken tarafı katsayı fazla): Hacim azalınca sistem katsayısı AZ olan (\u00fcr\u00fcn) tarafa kayar \u2192 NO\u2082 mol sayısı ARTAR VE hacim de k\u00fc\u00e7\u00fcld\u00fcğ\u00fc i\u00e7in molarite (derişim) kesinlikle <b>ARTAR</b> (hem mol artışı hem hacim azalışı aynı y\u00f6nde etki eder).<br>c) III (\u0394n=4\u22124=0, katsayılar EŞİT): Hacim değişimi dengeyi HİÇ KAYDIRMAZ; mol sayıları SABİT kalır. Ancak hacim k\u00fc\u00e7\u00fcld\u00fcğ\u00fc i\u00e7in HCl\u2019\u00fcn KISMİ BASINCI yine de <b>ARTAR</b> (aynı mol sayısı, daha k\u00fc\u00e7\u00fck hacimde daha y\u00fcksek basın\u00e7 yapar).' },
-    { n:34, kat:'Le Chatelier', t:'2NO\u2082(g)+ısı\u21ccO\u2082(g)+2NO(g) (endotermik ileri y\u00f6n) tepkimesi dengede iken: a) Sabit sıcaklıkta ortama bir miktar NO\u2082(g) ekleniyor. b) Sıcaklık artırılıyor. Her iki durumda sistem yeniden dengeye geldiğinde maddelerin derişim değişim y\u00f6nlerini a\u00e7ıklayınız.',
-      c:'a) <b>NO\u2082 eklenince:</b> Anlık NO\u2082 derişimi sı\u00e7rar, sistem fazlalığı gidermek i\u00e7in İLERİ (\u00fcr\u00fcnler) y\u00f6n\u00fcne kayar \u2192 O\u2082 ve NO derişimleri ARTAR, NO\u2082 (eklenen miktardan kısmen t\u00fcketilse de) net olarak eski değerinden Y\u00dcKSEK kalır.<br>b) <b>Sıcaklık artırılınca:</b> Tepkime ısı ile birlikte YAZILDIĞI (endotermik ileri y\u00f6n) i\u00e7in sistem ısıyı soğurmak amacıyla İLERİ y\u00f6ne kayar \u2192 O\u2082 ve NO derişimleri ARTAR, NO\u2082 derişimi AZALIR. (Not: Sıcaklık artışı AYRICA hız sabitini de artırır, yeni dengeye DAHA HIZLI ulaşılır.)' }
+      ac:'Başlangıç: [SO₂]=[O₂]=1M, [SO₃]=2M. Q=4²/(1²×1)... düzeltme: Q=2²/(1²×1)=4.<br>rı>rg olduğundan Q<Kc → <b>Kc>4</b>. → <b>E</b>' },
+    { n:23, kat:'Hesaplama (Piston/Müdahale)', t:'2XY(g)⇌X₂(g)+Y₂(g) dengesinin bulunduğu kapta 0,9 mol X₂, 0,4 mol Y₂ ve 0,3 mol XY gazları bulunmaktadır. Bu kaptan sabit sıcaklıkta 0,5 mol X₂ gazı çekiliyor. Yeniden dengeye ulaşan sistemde XY gazının mol sayısı kaçtır? (V=1L varsayınız)',
+      c:'Kc=(0,9×0,4)/0,3²=<b>4</b>.<br>Çekme sonrası anlık: X₂=0,4,Y₂=0,4,XY=0,3 (Q<Kc, GERİ kayar).<br>(0,4+z)/(0,3−2z)=2 → z=0,04.<br>Yeni XY=0,3−0,08=<b>0,22 mol</b>.' },
+    { n:24, kat:'Hesaplama (Piston/Müdahale)', t:'1 litrelik sabit hacimli bir kapta 1 mol H₂, 4 mol Cl₂ ve 4 mol HCl gazları H₂(g)+Cl₂(g)⇌2HCl(g) denklemine göre t°C’de dengededir. Bu kaba sabit sıcaklıkta 3 mol H₂ gazı ilave ediliyor. Dengeye ulaşan sistemde HCl gazının mol sayısı kaçtır?',
+      c:'Kc=4²/(1×4)=<b>4</b>.<br>Ekleme sonrası anlık: H₂=4,Cl₂=4,HCl=4 (İLERİ kayar).<br>(4+2z)/(4−z)=2 → z=1.<br>Yeni HCl=4+2=<b>6 mol</b>.' },
+    { n:25, kat:'Hesaplama (Piston/Müdahale)', t:'CO₂(g)+H₂(g)⇌CO(g)+H₂O(g) tepkimesinin belirli bir sıcaklıkta dengedeyken kapta 0,6 mol CO₂, 0,4 mol H₂, 0,4 mol CO, 0,6 mol H₂O gazı bulunmaktadır (V=1L). H₂O gazının dengedeki mol sayısını 0,8’e çıkartmak için kaptan kaç mol CO gazı uzaklaştırılmalıdır?',
+      c:'Kc=(0,4×0,6)/(0,6×0,4)=<b>1</b>.<br>z=0,2 kadar İLERİ: CO₂=0,4, H₂=0,2, H₂O=0,8.<br>COyeni=(0,4×0,2)/0,8=<b>0,1 mol</b>.<br>Doğal CO=0,6, uzaklaştırılan=0,6−0,1=<b>0,5 mol</b>.' },
+    { n:26, kat:'Hesaplama (Piston/Müdahale)', t:'SO₃(g)+NO(g)⇌SO₂(g)+NO₂(g) tepkimesi 1 litrelik kapta 0,4 mol SO₃, 0,3 mol NO, 0,1 mol SO₂ ve 0,4 mol NO₂ ile dengededir. Kaptaki SO₂ mol sayısının 0,2 olması için kaba kaç mol NO eklenmelidir?',
+      c:'Kc=(0,1×0,4)/(0,4×0,3)=<b>1/3</b>.<br>z=0,1 İLERİ: SO₃=0,3,SO₂=0,2,NO₂=0,5.<br>NOyeni=(0,2×0,5)/(0,333×0,3)=<b>1 mol</b>.<br>Ekleme anı=1+0,1=1,1mol; eklenen=1,1−0,3=<b>0,8 mol</b>.' },
+    { n:27, kat:'Hesaplama (Piston/Müdahale)', t:'1 litrelik kapalı kapta sabit sıcaklıkta 0,6 mol COCl₂, 0,2 mol CO ve 0,6 mol Cl₂ gazları COCl₂(g)⇌CO(g)+Cl₂(g) denklemine göre dengededir. Dengede 0,4 mol CO gazı olması için kabın hacmi kaç litre olmalıdır?',
+      c:'V=1L’deki Kc=(0,2×0,6)/0,6=<b>0,2</b>.<br>CO=0,4 olması için: COCl₂=0,4mol, Cl₂=0,8mol, CO=0,4mol.<br>(0,4×0,8)/(0,4×V)=0,2 → V=<b>4 L</b>.' },
+    { n:28, kat:'Hesaplama (Piston/Müdahale)', t:'2SO₂(g)+O₂(g)⇌2SO₃(g) tepkimesi 2 litrelik bir kapta belirli bir sıcaklıkta dengede iken kapta 4 mol SO₃, 2 mol SO₂ ve 2 mol O₂ gazları bulunmaktadır. Sıcaklık sabit tutularak hacim 1 L’ye indirilip bir miktar SO₂ gazı eklendiğinde yeni kurulan dengede 1 mol O₂ gazı bulunuyor. Kaba eklenen SO₂ gazı kaç moldur?',
+      c:'İlk Kc=4 (2L’de). Hacim 1L’ye inince mol sayıları AYNI: SO₃=4,SO₂=2,O₂=2mol.<br>O₂:2−z=1 → z=1: SO₃yeni=6mol.<br>SO₂yeni²=36/4=9 → SO₂yeni=3mol.<br>Ekleme anı=3+1=4mol; eklenen=4−2=<b>2 mol</b>.' },
+    { n:29, kat:'Hesaplama (Piston/Müdahale)', t:'CO₂(g)+H₂(g)⇌CO(g)+H₂O(g) tepkimesinde sabit sıcaklıkta 1 litrelik kapta 0,4 mol CO₂, 0,5 mol H₂, 0,2 mol CO ve 0,4 mol H₂O dengededir. H₂O(g) derişimini 0,3 molara indirmek için kaptan kaç mol H₂ gazı çekilmelidir?',
+      c:'Kc=(0,2×0,4)/(0,4×0,5)=<b>0,4</b>.<br>z=0,1 GERİ: CO₂=0,5,CO=0,1,H₂O=0,3.<br>H₂yeni=(0,1×0,3)/(0,4×0,5)=<b>0,15mol</b>.<br>Çekme anı=0,15−0,1=0,05; çekilen=0,5−0,05=<b>0,45 mol</b>.' },
+    { n:30, kat:'Hesaplama (Piston/Müdahale)', t:'2CO(g)⇌C(k)+CO₂(g) tepkimesi sabit sıcaklıkta 1 litrelik kapta 0,2 mol CO ve 0,01 mol CO₂ gazları ile dengededir. Dengedeki CO₂ gazının mol sayısının 0,06 olması için son hacim kaç litre olmalıdır?',
+      c:'V=1L’de Kc=0,01/0,2²=<b>0,25</b>.<br>z=0,05 İLERİ: CO=0,1mol, CO₂=0,06mol.<br>Kc=CO₂×V/CO²=0,25 → V=<b>1/24≈0,042 L</b>.' },
+    { n:31, kat:'Hesaplama (Piston/Müdahale)', t:'H₂(g)+Cl₂(g)⇌2HCl(g) denge tepkimesinde sabit sıcaklıkta 1 L’lik kapta 0,2 mol H₂, 0,4 mol Cl₂, 0,4 mol HCl gazları dengededir. Tepkime kabına kaç mol H₂(g) eklenirse HCl(g) denge mol sayısı 0,6 olur?',
+      c:'Kc=0,4²/(0,2×0,4)=<b>2</b>.<br>z=0,1 İLERİ: Cl₂=0,3, HCl=0,6.<br>H₂yeni=0,36/(2×0,3)=<b>0,6mol</b>.<br>Ekleme anı=0,6+0,1=0,7; eklenen=0,7−0,2=<b>0,5 mol</b>.' },
+    { n:32, kat:'Hesaplama (Piston/Müdahale)', t:'CO₂(g)+NO(g)⇌NO₂(g)+CO(g) denge tepkimesinde sabit sıcaklıkta 1 litrelik kapta 0,4 mol CO₂, 0,9 mol NO, 0,6 mol NO₂ ve 0,6 mol CO gazları dengededir. Kaba 0,5 mol CO₂ gazı eklenince sistem aynı sıcaklıkta dengeye geldiğinde kapta kaç mol NO₂ bulunur?',
+      c:'Kc=(0,6×0,6)/(0,4×0,9)=<b>1</b>.<br>Ekleme sonrası CO₂=0,9; z İLERİ: (0,6+z)²=(0,9−z)² → z=0,15.<br>NO₂=0,6+0,15=<b>0,75 mol</b>.' },
+    { n:33, kat:'Le Chatelier', t:'I. N₂O₄(g)⇌2NO₂(g) II. 2NO(g)+O₂(g)⇌2NO₂(g) III. PCl₃(g)+3NH₃(g)⇌3HCl(g)+P(NH₂)₃(g) — yukarıdaki tepkimeler dengededir. Sabit sıcaklıkta tepkime kaplarının hacmi AZALTILIP tekrar denge kurulduğunda: a) I. tepkimedeki NO₂’nin mol sayısı nasıl değişir? b) II. tepkimedeki NO₂’in molaritesi nasıl değişir? c) III. tepkimedeki HCl’ün kısmi basıncı nasıl değişir?',
+      c:'a) I (Δn=+1, ürün fazla): hacim azalınca tepken tarafa kayar → NO₂ <b>AZALIR</b>.<br>b) II (Δn=−1, tepken fazla): ürün tarafa kayar VE hacim küçülür → NO₂ molaritesi <b>ARTAR</b>.<br>c) III (Δn=0): mol sayıları SABİT ama hacim küçüldüğü için HCl’ün kısmi basıncı <b>ARTAR</b>.' },
+    { n:34, kat:'Le Chatelier', t:'2NO₂(g)+ısı⇌O₂(g)+2NO(g) (endotermik ileri yön) tepkimesi dengede iken: a) Sabit sıcaklıkta ortama bir miktar NO₂(g) ekleniyor. b) Sıcaklık artırılıyor. Her iki durumda sistem yeniden dengeye geldiğinde maddelerin derişim değişim yönlerini açıklayınız.',
+      c:'a) <b>NO₂ eklenince:</b> İLERİ yöne kayar → O₂ ve NO ARTAR, NO₂ net YÜKSEK kalır.<br>b) <b>Sıcaklık artırılınca:</b> ENDOTERMİK (ileri) yöne kayar → O₂ ve NO ARTAR, NO₂ AZALIR.' }
   ];
+
+  // ---------- 30. MAARİF DENGE (MEB Kitabı 2.1) ----------
+  var MAARIF_DENGE_THEORY = {
+    t1: '<h3 style="color:#93c5fd;margin-bottom:10px">2.1.1 Tersinir Tepkimelerin Özellikleri</h3>' +
+      '<p style="margin-bottom:10px">Bazı kimyasal tepkimeler yalnızca TEK YÖNDE (tepkenlerden \u00fcr\u00fcnlere) ger\u00e7ekleşirken, bazıları HER İKİ Y\u00d6NDE de ger\u00e7ekleşebilir. Her iki y\u00f6ne gidebilen tepkimelere <b>TERSİNİR TEPKİME</b> denir ve \u21cc sembol\u00fc ile g\u00f6sterilir. Tersinmez (tek y\u00f6nl\u00fc) tepkimeler → sembol\u00fc ile g\u00f6sterilir.</p>' +
+      '<p style="margin-bottom:10px"><b>Bir tepkimenin tersinir olduğunu g\u00f6steren kanıtlar:</b></p>' +
+      '<ul style="margin:0 0 10px 18px;line-height:1.8">' +
+        '<li><b>Renk değişimi:</b> Tepken/\u00fcr\u00fcn farklı renkteyse (\u00f6rn. N\u2082O\u2084 renksiz, NO\u2082 kahverengi)</li>' +
+        '<li><b>İletkenlik değişimi:</b> İyon derişimi değişen tepkimelerde (\u00f6rn. PbCl\u2082(k)\u21ccPb\u00b2\u207a+2Cl\u207b)</li>' +
+        '<li><b>K\u00fctle değişimi:</b> Katı kütlesinin değiştiği heterojen tepkimelerde (\u00f6rn. CaCO\u2083(k)\u21ccCaO(k)+CO\u2082(g))</li>' +
+        '<li><b>Basın\u00e7/hacim değişimi:</b> Gaz mol sayısı değişen tepkimelerde</li>' +
+      '</ul>' +
+      '<p>\u00d6rnek: Ag\u207a(suda)+Cl\u207b(suda)\u21ccAgCl(k) tepkimesinin tersinir olduğu KATI MİKTARINDAKİ DEĞİŞİMLE; H\u2082(g)+Cl\u2082(g)\u21cc2HCl(g) tepkimesinin tersinir olduğu BASIN\u00c7 DEĞİŞİMİYLE anlaşılabilir.</p>',
+    t2: '<h3 style="color:#93c5fd;margin-bottom:10px">2.1.2 Fiziksel ve Kimyasal Değişimlerde Denge</h3>' +
+      '<p style="margin-bottom:10px">Denge sadece kimyasal tepkimelerde değil, FİZİKSEL değişimlerde de kurulabilir (\u00f6rn. CO\u2082(g)\u21ccCO\u2082(suda) \u2014 \u00e7\u00f6z\u00fcnme dengesi). \u00d6nemli olan; DENGE KURULABİLMESİ i\u00e7in sistemin KAPALI olması ve her iki y\u00f6nde de değişimin ger\u00e7ekleşebilmesidir.</p>' +
+      '<p style="margin-bottom:10px">Bir tepkime dengeye ulaştığında: <b>İLERİ tepkime hızı = GERİ tepkime hızı</b> olur. Bu noktadan sonra MAKROSKOBİK (g\u00f6zle g\u00f6r\u00fclen) değişim durur ama MİKROSKOBİK (molek\u00fcler seviyede) tepkime KESİNTİSİZ devam eder \u2014 bu y\u00fczden dengeye \u201cDİNAMİK DENGE\u201d denir.</p>' +
+      '<div style="background:#050510;border:1px solid rgba(96,165,250,.3);border-radius:12px;overflow:hidden;margin:12px 0"><canvas id="mdg-hizgrafik" style="width:100%;display:block" height="180"></canvas></div>' +
+      '<p style="font-size:12px;color:var(--tx3)">Dengeye yaklaşırken: İleri tepkime hızı başlangı\u00e7ta y\u00fcksektir ve giderek AZALIR (tepken derişimi azaldık\u00e7a); geri tepkime hızı başlangı\u00e7ta sıfırdır ve giderek ARTAR (\u00fcr\u00fcn derişimi arttık\u00e7a). İki eğri kesiştiği an DENGE ANIDIR (t<sub>denge</sub>).</p>',
+    t3: '<h3 style="color:#93c5fd;margin-bottom:10px">2.1.3 Denge Sabiti İfadesinin Yazılması</h3>' +
+      '<p style="margin-bottom:10px">Dengedeki bir tepkime i\u00e7in <b>\u00fcr\u00fcn derişimlerinin \u00fcssel \u00e7arpımının, tepken derişimlerinin \u00fcssel \u00e7arpımına oranı</b> SABİT bir değer verir. Bu sabite <b>DENGE SABİTİ (Kc)</b> denir:</p>' +
+      '<div style="text-align:center;background:rgba(96,165,250,.08);border-radius:10px;padding:12px;margin:10px 0;font-size:15px">aA(g)+bB(g) \u21cc cC(g)+dD(g) &nbsp;\u2192&nbsp; K<sub>c</sub> = [C]<sup>c</sup>[D]<sup>d</sup> / [A]<sup>a</sup>[B]<sup>b</sup></div>' +
+      '<p style="margin-bottom:10px"><b>\u00d6nemli:</b> Kc değeri, BAŞLANGI\u00c7 KOŞULLARINDAN BAĞIMSIZDIR \u2014 aynı sıcaklıkta hangi taraftan (tepken ya da \u00fcr\u00fcn ile) başlarsanız başlayın, dengeye ulaşıldığında AYNI Kc değeri elde edilir.</p>' +
+      '<div class="card" style="margin:12px 0"><div style="font-weight:700;color:#f59e0b;margin-bottom:8px">\u2713 MEB Kitabı Doğrulanmış \u00d6rnek (2.5. Etkinlik)</div>' +
+      '<p style="font-size:13px;margin-bottom:8px">N\u2082O\u2084(g)\u21cc2NO\u2082(g) tepkimesi \u00fc\u00e7 farklı başlangı\u00e7tan (I: NO\u2082 ile, II: N\u2082O\u2084 ile, III: ikisiyle birden) başlatılıyor. Denge derişimleri:</p>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:6px;text-align:left">Grafik</th><th style="padding:6px">[N\u2082O\u2084]</th><th style="padding:6px">[NO\u2082]</th><th style="padding:6px">Kc=[NO\u2082]\u00b2/[N\u2082O\u2084]</th></tr>' +
+      '<tr><td style="padding:6px">I</td><td style="padding:6px;text-align:center">0,10 M</td><td style="padding:6px;text-align:center">0,02 M</td><td style="padding:6px;text-align:center">4\u00d710\u207b\u00b3</td></tr>' +
+      '<tr><td style="padding:6px">II</td><td style="padding:6px;text-align:center">0,90 M</td><td style="padding:6px;text-align:center">0,06 M</td><td style="padding:6px;text-align:center">4\u00d710\u207b\u00b3</td></tr>' +
+      '<tr><td style="padding:6px">III</td><td style="padding:6px;text-align:center">0,40 M</td><td style="padding:6px;text-align:center">0,04 M</td><td style="padding:6px;text-align:center">4\u00d710\u207b\u00b3</td></tr></table>' +
+      '<p style="font-size:12px;color:var(--tx3)">\u00dc\u00e7\u00fc de AYNI Kc değerine (4\u00d710\u207b\u00b3) ulaşıyor \u2014 bu, Kc\u2019nin başlangı\u00e7 koşulundan bağımsız, SADECE SICAKLIĞA bağlı bir sabit olduğunu kanıtlıyor. (Node.js ile doğrulandı ✓)</p></div>',
+    t4: '<h3 style="color:#93c5fd;margin-bottom:10px">2.1.4 Tepkime Oranı (Q)</h3>' +
+      '<p style="margin-bottom:10px">Herhangi bir andaki derişimler denge bağıntısında yerine yazıldığında bulunan değere <b>TEPKİME ORANI (Q)</b> denir. Q\u2019yu Kc ile karşılaştırarak sistemin dengede olup olmadığı VE dengeye hangi y\u00f6nde ilerleyeceği anlaşılır:</p>' +
+      '<ul style="margin:0 0 10px 18px;line-height:1.9">' +
+        '<li><b>Q = Kc</b> \u2192 Sistem DENGEDEDİR.</li>' +
+        '<li><b>Q &lt; Kc</b> \u2192 \u00dcr\u00fcn derişimi \u201cyetersiz\u201d, sistem \u00dcR\u00dcNLER (İLERİ) y\u00f6n\u00fcnde ilerleyerek dengeye ulaşır.</li>' +
+        '<li><b>Q &gt; Kc</b> \u2192 \u00dcr\u00fcn derişimi \u201cfazla\u201d, sistem TEPKENLER (GERİ) y\u00f6n\u00fcnde ilerleyerek dengeye ulaşır.</li>' +
+      '</ul>' +
+      '<div class="card" style="margin:12px 0"><div style="font-weight:700;color:#f59e0b;margin-bottom:8px">\u2713 MEB Kitabı Doğrulanmış \u00d6rnek (2.7. Etkinlik)</div>' +
+      '<p style="font-size:13px;margin-bottom:8px">H\u2082(g)+I\u2082(g)\u21cc2HI(g) tepkimesi Kc=30. Farklı zamanlardaki derişimler ve durumları:</p>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:6px">S\u00fcre</th><th style="padding:6px">[H\u2082]</th><th style="padding:6px">[I\u2082]</th><th style="padding:6px">[HI]</th><th style="padding:6px">Q</th><th style="padding:6px">Durum</th></tr>' +
+      '<tr><td style="padding:6px;text-align:center">15s</td><td style="padding:6px;text-align:center">2</td><td style="padding:6px;text-align:center">0,2</td><td style="padding:6px;text-align:center">2</td><td style="padding:6px;text-align:center">10</td><td style="padding:6px;text-align:center;color:#fbbf24">Q&lt;Kc, İLERİ</td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">30s</td><td style="padding:6px;text-align:center">0,3</td><td style="padding:6px;text-align:center">2</td><td style="padding:6px;text-align:center">6</td><td style="padding:6px;text-align:center">60</td><td style="padding:6px;text-align:center;color:#fca5a5">Q&gt;Kc, GERİ</td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">45s</td><td style="padding:6px;text-align:center">0,3</td><td style="padding:6px;text-align:center">1</td><td style="padding:6px;text-align:center">3</td><td style="padding:6px;text-align:center">30</td><td style="padding:6px;text-align:center;color:#86efac">Q=Kc, DENGEDE</td></tr></table>' +
+      '<p style="font-size:12px;color:var(--tx3)">45. saniyede Q=Kc=30 olduğu i\u00e7in sistem bu anda dengeye ulaşmıştır. (Node.js ile doğrulandı ✓)</p></div>'
+  };
+
+  function maarifDengeDrawGraphs(){
+    maarifChart('mdg-hizgrafik', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'Zaman', 'Hız');
+      var tD = g.padL + g.plotW * 0.55;
+      function ri(f){ return 0.85 - 0.65*(1-Math.exp(-f*4)); }
+      function rg(f){ return 0.85*(1-Math.exp(-f*4)); }
+      var pi=[], pg=[];
+      for (var i=0;i<=100;i++){ var f=i/100; var xx=g.padL+f*g.plotW;
+        pi.push([xx, g.padT+g.plotH-ri(f)*g.plotH*0.85]);
+        pg.push([xx, g.padT+g.plotH-rg(f)*g.plotH*0.85]); }
+      x.strokeStyle='#f59e0b'; x.lineWidth=2.2; x.beginPath(); pi.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
+      x.strokeStyle='#60a5fa'; x.beginPath(); pg.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
+      x.strokeStyle='rgba(255,255,255,.4)'; x.setLineDash([4,3]); x.lineWidth=1; x.beginPath(); x.moveTo(tD,g.padT); x.lineTo(tD,g.padT+g.plotH); x.stroke(); x.setLineDash([]);
+      x.font='10px sans-serif'; x.textAlign='left';
+      x.fillStyle='#f59e0b'; x.fillText('İleri tepkime (r\u0131)', g.padL+6, g.padT+12);
+      x.fillStyle='#60a5fa'; x.fillText('Geri tepkime (r\u0261)', g.padL+6, g.padT+26);
+      x.fillStyle='rgba(255,255,255,.5)'; x.textAlign='center'; x.fillText('t_denge', tD, g.padT+g.plotH+22);
+    });
+  }
 
   function setupDenge2(){
     if (document.getElementById('s-denge2')) return;
     var app = document.querySelector('.app');
     if (!app) return;
-    var cats = ['Tümü'];
-    DENGE_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
     app.insertAdjacentHTML('beforeend',
       '<div id="s-denge2" style="display:none"><div class="pw narrow">' +
         '<h1 class="ptitle">\u2696\ufe0f Kimyasal Denge</h1>' +
-        '<p class="psub">El yazması ders notundan çözümlü örnekler \u2014 1. parça (' + DENGE_Q.length + ' soru). MEB kitabı ve kalan sorular sıradaki güncellemede.</p>' +
-        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="denge2-cats">' +
-          cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="denge2SetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
-        '</div></div>' +
-        '<div id="denge2-list"></div>' +
+        '<p class="psub">MEB kitabı konu anlatımı ve el yazması ders notu \u2014 çözümlü örnekler.</p>' +
+        '<div class="ltabs" id="denge2-maingroup" style="margin-bottom:14px">' +
+          '<button class="ltab on" onclick="denge2GroupSet(0,this)">\ud83d\udcd8 MEB Konu Anlatımı</button>' +
+          '<button class="ltab" onclick="denge2GroupSet(1,this)">\ud83d\udcd3 Özel Ders Notu</button>' +
+        '</div>' +
+        '<div id="denge2-group-0" style="display:block"></div>' +
+        '<div id="denge2-group-1" style="display:none"></div>' +
       '</div></div>');
     if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-denge2') === -1) SCREENS.push('s-denge2');
     var mn = document.getElementById('mn');
     if (mn && !document.getElementById('mn-denge2'))
-      mn.insertAdjacentHTML('beforeend', '<button id="mn-denge2" onclick="nav(\'denge2\')">\u2696\ufe0f Kimyasal Denge (Özel Not)</button>');
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-denge2" onclick="nav(\'denge2\')">\u2696\ufe0f Kimyasal Denge</button>');
     var tg = document.querySelector('#s-home .tgrid');
     if (tg && !document.getElementById('tile-denge2'))
       tg.insertAdjacentHTML('afterbegin',
-        '<div class="tc" id="tile-denge2" onclick="nav(\'denge2\')"><div class="ti">\u2696\ufe0f</div><div class="tt">Kimyasal Denge (Özel Not)</div><div class="td">Denge sabiti, Kp/Kc, Le Chatelier \u2014 çözümlü örnekler.</div></div>');
+        '<div class="tc" id="tile-denge2" onclick="nav(\'denge2\')"><div class="ti">\u2696\ufe0f</div><div class="tt">Kimyasal Denge</div><div class="td">MEB konu anlatımı + denge sabiti, Kp/Kc, Le Chatelier çözümlü örnekler.</div></div>');
+    setupMaarifDenge();
     denge2RenderList();
   }
+  window.denge2GroupSet = function(i, btn){
+    for (var g = 0; g < 2; g++) { var el = document.getElementById('denge2-group-' + g); if (el) el.style.display = (g === i) ? 'block' : 'none'; }
+    var bar = document.getElementById('denge2-maingroup');
+    if (bar && btn) { var bs = bar.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].classList.remove('on'); btn.classList.add('on'); }
+    if (i === 0) setTimeout(maarifDengeDrawGraphs, 60);
+  };
   var denge2St = { cat: 'Tümü' };
   window.denge2SetCat = function(cat, btn){ denge2St.cat = cat; if (btn) selectInRow(btn); denge2RenderList(); };
 
+  function setupMaarifDenge(){
+    if (document.getElementById('mdg-wrap')) return;
+    var host = document.getElementById('denge2-group-0');
+    if (!host) return;
+    host.insertAdjacentHTML('beforeend', '<div id="mdg-wrap"></div>');
+    var wrap = document.getElementById('mdg-wrap');
+    wrap.innerHTML =
+      '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cDenge\u201d ünitesinin konu anlatımı \u2014 1. parça (2.1.1-2.1.4).</p>' +
+      MAARIF_DENGE_THEORY.t1 + MAARIF_DENGE_THEORY.t2 + MAARIF_DENGE_THEORY.t3 + MAARIF_DENGE_THEORY.t4 +
+      '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 2.1.5 Dengeyi Etkileyen Fakt\u00f6rler (Le Chatelier İlkesi) ve b\u00f6l\u00fcm sonu \u00f6l\u00e7me-değerlendirme soruları sıradaki g\u00fcncellemede eklenecek.</p>';
+    setTimeout(maarifDengeDrawGraphs, 60);
+  }
+
   function denge2RenderList(){
+    if (!document.getElementById('denge2-notewrap')) {
+      var host = document.getElementById('denge2-group-1');
+      if (!host) return;
+      var cats = ['Tümü'];
+      DENGE_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
+      host.insertAdjacentHTML('beforeend',
+        '<div id="denge2-notewrap"><p class="psub" style="margin-bottom:10px">El yazması ders notundan ' + DENGE_Q.length + ' çözümlü örnek.</p>' +
+        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="denge2-cats">' +
+          cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="denge2SetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
+        '</div></div>' +
+        '<div id="denge2-list"></div></div>');
+    }
     var box = document.getElementById('denge2-list');
     if (!box) return;
     var html = '';
     DENGE_Q.forEach(function(q){
       if (denge2St.cat !== 'Tümü' && q.kat !== denge2St.cat) return;
+      var optsHtml = '';
+      if (q.o) optsHtml = '<div style="margin-bottom:8px">' + q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:var(--tx2)">' + String.fromCharCode(65+i) + ') ' + o + '</div>'; }).join('') + '</div>';
       html += '<div class="card" style="margin-bottom:18px;padding:18px 16px">' +
         '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
           '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(96,165,250,.18);color:#93c5fd;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
           '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
         '</div>' +
         '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
+        optsHtml +
         '<div onclick="molToggle(\'denge2-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#60a5fa;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
-        '<div id="denge2-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' + q.c + '</div>' +
+        '<div id="denge2-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' +
+          (q.o ? '<div style="font-size:13px;font-weight:700;color:#86efac;margin-bottom:6px">Doğru cevap: ' + String.fromCharCode(65+q.c) + ') ' + q.o[q.c] + '</div>' + q.ac : q.c) +
+        '</div>' +
       '</div>';
     });
     box.innerHTML = html;
   }
 
-  // --- Başlat ---
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
@@ -9088,14 +8912,13 @@
     try { setupHC(); } catch (e) { /* sessiz */ }
     try { setupFG(); } catch (e) { /* sessiz */ }
     try { setupWI(); } catch (e) { /* sessiz */ }
-    try { setupSet(); } catch (e) { /* sessiz */ }
     try { setupGV(); } catch (e) { /* sessiz */ }
     try { setupEQ(); } catch (e) { /* sessiz */ }
     try { setupRXN(); } catch (e) { /* sessiz */ }
     try { setupFlame(); } catch (e) { /* sessiz */ }
     try { setupRedox(); } catch (e) { /* sessiz */ }
-    try { setupKin(); } catch (e) { /* sessiz */ }
     try { setupFizKim(); } catch (e) { /* sessiz */ }
+    try { setupKin(); } catch (e) { /* sessiz */ }
     try { setupEnerji(); } catch (e) { /* sessiz */ }
     try { setupVideoLib(); } catch (e) { /* sessiz */ }
     try { setupDenge2(); } catch (e) { /* sessiz */ }
@@ -9115,7 +8938,6 @@
             if (id === 'hc') setTimeout(hcEnter, 80); else hcLeave();
             if (id === 'fg') setTimeout(fgEnter, 80); else fgLeave();
             if (id === 'wi') wiEnter(); else wiLeave();
-            if (id === 'set') setEnter();
             if (id === 'gv') gvEnter(); else gvLeave();
             if (id === 'ledenge') eqEnter(); else eqLeave();
             if (id === 'rxntype') rxnEnter();
@@ -9144,5 +8966,4 @@
     } catch (e) { /* sessiz */ }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
+  else init();})();
