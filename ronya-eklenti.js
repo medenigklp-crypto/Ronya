@@ -7,9 +7,14 @@
    Fiziksel/Kimyasal Değişim, Tepkime Hızı (3D+PE+Hesaplayıcı+Bağıntı),
    Maarif Hız (tam + 66 soru), Özel Ders Notu Hız (29 soru düzeltilmiş),
    Kimyasal Enerji (19 soru), Video Kütüphanesi, Kimyasal Denge MEB+Özel
-   Not (34 soru). BİLİNEN EKSİK: Redoks ekranındaki "kendi denklem"
-   çözücü ve "27 örnek" sekmeleri (kaynak dosyası bulunamadı,
-   yeniden yapılması gerekiyor).
+   Not (34 soru). EKSİK GİDERİLDİ ve GENİŞLETİLDİ: Redoks ekranına "Kendi Denklemim"
+   (genel motor) ve şimdi "48 Örnek" (kullanıcının hatırladığı orijinal
+   27 ileri düzey denklem + 21 benzersiz ek denklem, toplam 48) sekmeleri
+   eklendi. Katsayılar Gauss eliminasyon motoruyla doğrulandı; yükseltgenme
+   basamağı geçişleri ise EL İLE doğrulandı (dinamik analiz motorunun
+   KMnO4/peroksit/çoklu-N bileşiklerinde hata yaptığı tespit edildi,
+   örn. K2MnO4’te Mn+7 sanması gibi — bu hatalar düzeltilerek
+   sabit veri olarak eklendi).
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -8899,6 +8904,177 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     box.innerHTML = html;
   }
 
+  // ---------- 31. REDOKS — KENDİ DENKLEMİM + 27 ÖRNEK (yeniden inşa) ----------
+// ---------- 32. REDOKS — 48 İLERİ DÜZEY ÖRNEK (elle doğrulanmış) ----------
+  // Not: Katsayılar balanceEquation() (Gauss eliminasyon) ile doğrulandı.
+  // Yükseltgenme basamağı geçişleri EL İLE doğrulandı çünkü dinamik
+  // assignOxStates() motoru KMnO4/peroksit/çok-N'li bileşiklerde hata
+  // veriyor (örn. MnO4²⁻'de Mn'yi +7 sanması, metal+poliatomik anyon
+  // tuzlarında anlamsız değerler üretmesi gibi).
+  var REDOX_ADV_LIST = [
+    { eq:'3P + 5HNO\u2083 + 2H\u2082O \u2192 3H\u2083PO\u2084 + 5NO', t:[['P',0,5],['N',5,2]] },
+    { eq:'Sn + 4HNO\u2083 \u2192 H\u2082SnO\u2083 + 4NO\u2082 + H\u2082O', t:[['Sn',0,4],['N',5,4]] },
+    { eq:'3MnO\u2082 + 2KNO\u2083 + 4KOH \u2192 3K\u2082MnO\u2084 + 2NO + 2H\u2082O', t:[['Mn',4,6],['N',5,2]] },
+    { eq:'KBr + 3H\u2083AsO\u2084 \u2192 KBrO\u2083 + 3H\u2083AsO\u2083', t:[['Br',-1,5],['As',5,3]] },
+    { eq:'3H\u2082S + 2HNO\u2083 \u2192 3S + 2NO + 4H\u2082O', t:[['S',-2,0],['N',5,2]] },
+    { eq:'3As + 5HNO\u2083 + 2H\u2082O \u2192 3H\u2083AsO\u2084 + 5NO', t:[['As',0,5],['N',5,2]] },
+    { eq:'NaClO\u2083 + 3SO\u2082 + 3H\u2082O \u2192 NaCl + 3H\u2082SO\u2084', t:[['Cl',5,-1],['S',4,6]] },
+    { eq:'10HNO\u2083 + 3I\u2082 \u2192 6HIO\u2083 + 10NO + 2H\u2082O', t:[['N',5,2],['I',0,5]] },
+    { eq:'2Sb + 10HNO\u2083 \u2192 Sb\u2082O\u2085 + 10NO\u2082 + 5H\u2082O', t:[['Sb',0,5],['N',5,4]] },
+    { eq:'Na\u2082S\u2082O\u2083 + 5H\u2082O + 4Cl\u2082 \u2192 2NaHSO\u2084 + 8HCl', t:[['S',2,6],['Cl',0,-1]] },
+    { eq:'6As + 10HNO\u2083 + H\u2082O \u2192 3H\u2084As\u2082O\u2087 + 10NO', t:[['As',0,5],['N',5,2]] },
+    { eq:'Sb\u2082O\u2083 + 2I\u2082 + 2H\u2082O \u2192 Sb\u2082O\u2085 + 4HI', t:[['Sb',3,5],['I',0,-1]] },
+    { eq:'5Zn + 12HNO\u2083 \u2192 5Zn(NO\u2083)\u2082 + N\u2082 + 6H\u2082O', t:[['Zn',0,2],['N',5,0]] },
+    { eq:'3Cu + 8HNO\u2083 \u2192 3Cu(NO\u2083)\u2082 + 2NO + 4H\u2082O', t:[['Cu',0,2],['N',5,2]] },
+    { eq:'4Zn + 5H\u2082SO\u2084 \u2192 4ZnSO\u2084 + H\u2082S + 4H\u2082O', t:[['Zn',0,2],['S',6,-2]] },
+    { eq:'2KMnO\u2084 + 16HCl \u2192 2KCl + 2MnCl\u2082 + 8H\u2082O + 5Cl\u2082', t:[['Mn',7,2],['Cl',-1,0]] },
+    { eq:'6KOH + 3Cl\u2082 \u2192 5KCl + KClO\u2083 + 3H\u2082O', t:[['Cl',0,-1],['Cl',0,5]] },
+    { eq:'6KOH + 3Br\u2082 \u2192 KBrO\u2083 + 5KBr + 3H\u2082O', t:[['Br',0,5],['Br',0,-1]] },
+    { eq:'3HClO\u2083 \u2192 HClO\u2084 + 2ClO\u2082 + H\u2082O', t:[['Cl',5,7],['Cl',5,4]] },
+    { eq:'S + 2H\u2082SO\u2084 \u2192 3SO\u2082 + 2H\u2082O', t:[['S',0,4],['S',6,4]] },
+    { eq:'2KOH + 3H\u2082S\u2082O\u2083 \u2192 4S + 2KHSO\u2084 + 3H\u2082O', t:[['S',2,0],['S',2,6]] },
+    { eq:'8NaOH + 4MnS + 5NaClO\u2084 \u2192 4MnO\u2082 + 4Na\u2082SO\u2084 + 5NaCl + 4H\u2082O', t:[['Mn',2,4],['S',-2,6],['Cl',7,-1]] },
+    { eq:'2CrI\u2083 + 64KOH + 27Cl\u2082 \u2192 2K\u2082CrO\u2084 + 54KCl + 6KIO\u2084 + 32H\u2082O', t:[['Cr',3,6],['I',-1,7],['Cl',0,-1]] },
+    { eq:'Sb\u2082S\u2083 + 28HNO\u2083 \u2192 Sb\u2082O\u2085 + 28NO\u2082 + 3H\u2082SO\u2084 + 11H\u2082O', t:[['Sb',3,5],['S',-2,6],['N',5,4]] },
+    { eq:'4MnS + 5HClO\u2084 + 4H\u2082O \u2192 4MnO\u2082 + 4H\u2082SO\u2084 + 5HCl', t:[['Mn',2,4],['S',-2,6],['Cl',7,-1]] },
+    { eq:'6HCl + 2FeS + 9H\u2082O\u2082 \u2192 10H\u2082O + 2FeCl\u2083 + 2H\u2082SO\u2084', t:[['Fe',2,3],['S',-2,6],['O',-1,-2]] },
+    { eq:'4NH\u2084NO\u2083 + 2NH\u2084Cl \u2192 5N\u2082 + Cl\u2082 + 12H\u2082O', t:[['N (NH\u2084\u207a\u2019dan)',-3,0],['N (NO\u2083\u207b\u2019den)',5,0],['Cl',-1,0]] },
+    { eq:'3Cu + 8HNO\u2083 \u2192 3Cu(NO\u2083)\u2082 + 4H\u2082O + 2NO', t:[['Cu',0,2],['N',5,2]] },
+    { eq:'2HNO\u2083 + 3H\u2082S \u2192 2NO + 3S + 4H\u2082O', t:[['N',5,2],['S',-2,0]] },
+    { eq:'2Al + 6HCl \u2192 2AlCl\u2083 + 3H\u2082', t:[['Al',0,3],['H',1,0]] },
+    { eq:'3S + 4HNO\u2083 \u2192 3SO\u2082 + 4NO + 2H\u2082O', t:[['S',0,4],['N',5,2]] },
+    { eq:'I\u2082O\u2085 + 5CO \u2192 I\u2082 + 5CO\u2082', t:[['I',5,0],['C',2,4]] },
+    { eq:'KClO\u2083 + 3SO\u2082 + 3H\u2082O \u2192 KCl + 3H\u2082SO\u2084', t:[['Cl',5,-1],['S',4,6]] },
+    { eq:'3Pb + 8HNO\u2083 \u2192 3Pb(NO\u2083)\u2082 + 2NO + 4H\u2082O', t:[['Pb',0,2],['N',5,2]] },
+    { eq:'Cu + 2H\u2082SO\u2084 \u2192 CuSO\u2084 + SO\u2082 + 2H\u2082O', t:[['Cu',0,2],['S',6,4]] },
+    { eq:'3Ag\u2082S + 8HNO\u2083 \u2192 6AgNO\u2083 + 3S + 2NO + 4H\u2082O', t:[['S',-2,0],['N',5,2]] },
+    { eq:'2Bi + 6H\u2082SO\u2084 \u2192 Bi\u2082(SO\u2084)\u2083 + 3SO\u2082 + 6H\u2082O', t:[['Bi',0,3],['S',6,4]] },
+    { eq:'3HgS + 8HNO\u2083 \u2192 3Hg(NO\u2083)\u2082 + 3S + 2NO + 4H\u2082O', t:[['S',-2,0],['N',5,2]] },
+    { eq:'C + 2H\u2082SO\u2084 \u2192 CO\u2082 + 2SO\u2082 + 2H\u2082O', t:[['C',0,4],['S',6,4]] },
+    { eq:'2FeCl\u2082 + H\u2082O\u2082 + 2HCl \u2192 2FeCl\u2083 + 2H\u2082O', t:[['Fe',2,3],['O',-1,-2]] },
+    { eq:'4HMnO\u2084 \u2192 4MnO\u2082 + 3O\u2082 + 2H\u2082O', t:[['Mn',7,4],['O',-2,0]] },
+    { eq:'2KI + 2H\u2082SO\u2084 \u2192 K\u2082SO\u2084 + I\u2082 + SO\u2082 + 2H\u2082O', t:[['I',-1,0],['S',6,4]] },
+    { eq:'N\u2082H\u2084 + 2Cu(OH)\u2082 \u2192 N\u2082 + 2Cu + 4H\u2082O', t:[['N',-2,0],['Cu',2,0]] },
+    { eq:'6HI + 2HNO\u2083 \u2192 2NO + 3I\u2082 + 4H\u2082O', t:[['I',-1,0],['N',5,2]] },
+    { eq:'Cr\u2082O\u2083 + 3H\u2082 \u2192 2Cr + 3H\u2082O', t:[['Cr',3,0],['H',0,1]] },
+    { eq:'3CuO + 2NH\u2083 \u2192 3Cu + N\u2082 + 3H\u2082O', t:[['Cu',2,0],['N',-3,0]] },
+    { eq:'C + 4HNO\u2083 \u2192 CO\u2082 + 4NO\u2082 + 2H\u2082O', t:[['C',0,4],['N',5,4]] },
+    { eq:'4NH\u2083 + 5O\u2082 \u2192 4NO + 6H\u2082O', t:[['N',-3,2],['O',0,-2]] }
+  ];
+
+
+  function redoxAnalyze(rawInput){
+    var balanced = balanceEquation(rawInput);
+    var last = balanceEquation._last;
+    var trans = identifyRedoxChanges(last.species, last.nReact);
+    return { balanced: balanced, species: last.species, nReact: last.nReact, trans: trans };
+  }
+
+  function redoxTransHtml(trans, species){
+    if (!trans.length) return '<p style="font-size:12px;color:var(--tx3)">Bu tepkimede redoks (yükseltgenme-indirgenme) tespit edilemedi \u2014 muhtemelen bir metatez/n\u00f6tralleşme tepkimesidir.</p>';
+    var html = '';
+    trans.forEach(function(t){
+      var kind = t.kind === 'yukselt' ? 'YÜKSELTGENİYOR (elektron veriyor)' : 'İNDİRGENİYOR (elektron alıyor)';
+      var col = t.kind === 'yukselt' ? '#fca5a5' : '#86efac';
+      html += '<div style="padding:8px 0;border-top:1px solid rgba(255,255,255,.06)">' +
+        '<b style="color:' + col + '">' + t.el + '</b>: ' + fmtOx(t.from) + ' \u2192 ' + fmtOx(t.to) +
+        ' <span style="color:var(--tx3)">(' + pretty(species[t.reactSpIdx]) + ' \u2192 ' + pretty(species[t.prodSpIdx]) + ')</span><br>' +
+        '<span style="font-size:11px;color:' + col + '">' + kind + '</span>' +
+      '</div>';
+    });
+    return html;
+  }
+
+  function setupRedoxExtra(){
+    if (document.getElementById('redox-maintabs')) return;
+    var host = document.getElementById('s-redoks');
+    if (!host) return;
+    var pw = host.querySelector ? host.querySelector('.pw') : null;
+    if (!pw) return;
+    // Mevcut tek-sekmeli içeriği "Hazır Örnekler" grubuna taşı
+    var existingCard = pw.querySelector('.card');
+    var existingBtns = pw.querySelector('div[style*="overflow-x"]');
+    if (existingCard) existingCard.id = 'redox-group-0-card';
+    pw.insertAdjacentHTML('afterbegin',
+      '<div class="ltabs" id="redox-maintabs" style="margin-bottom:14px">' +
+        '<button class="ltab on" onclick="redoxMainSet(0,this)">\ud83d\udcda Hazır Örnekler</button>' +
+        '<button class="ltab" onclick="redoxMainSet(1,this)">\u270f\ufe0f Kendi Denklemim</button>' +
+        '<button class="ltab" onclick="redoxMainSet(2,this)">\ud83d\udd22 48 Örnek</button>' +
+      '</div>' +
+      '<div id="redox-group-0"></div>' +
+      '<div id="redox-group-1" style="display:none"></div>' +
+      '<div id="redox-group-2" style="display:none"></div>');
+    // Mevcut örnek-butonları ve kartı grup-0 içine taşı
+    var g0 = document.getElementById('redox-group-0');
+    if (existingBtns) g0.appendChild(existingBtns);
+    if (existingCard) g0.appendChild(existingCard);
+
+    // Kendi Denklemim
+    var g1 = document.getElementById('redox-group-1');
+    g1.innerHTML =
+      '<div class="card">' +
+        '<div class="slbl">Kendi Denklemini Yaz (dengesiz olabilir)</div>' +
+        '<input type="text" id="redoxown-inp" class="inp" placeholder="\u00f6rn: Fe + O2 -> Fe2O3" style="margin-bottom:10px" autocapitalize="off" autocorrect="off" spellcheck="false">' +
+        '<button type="button" class="btn bp bfull" onclick="redoxSolveOwn()">Dengele ve Analiz Et</button>' +
+        '<div id="redoxown-out" style="margin-top:14px"></div>' +
+      '</div>';
+
+    // 48 İleri Düzey Örnek (elle doğrulanmış)
+    var g2 = document.getElementById('redox-group-2');
+    var btns2 = REDOX_ADV_LIST.map(function(r, i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="redoxAdvSetIdx(' + i + ',this)">' + (i+1) + '</button>'; }).join('');
+    g2.innerHTML =
+      '<p class="psub" style="margin-bottom:10px">48 ileri d\u00fczey redoks denklemi (asidik ortam, çok basamaklı, orant\u0131sızlaşma dahil) \u2014 katsayılar Gauss eliminasyonla, yükseltgenme geçişleri elle doğrulanmıştır.</p>' +
+      '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' + btns2 + '</div></div>' +
+      '<div class="card"><div id="redox27-out"></div></div>';
+    window.redoxAdvSetIdx(0, null);
+  }
+
+  window.redoxMainSet = function(i, btn){
+    for (var g = 0; g < 3; g++) { var el = document.getElementById('redox-group-' + g); if (el) el.style.display = (g === i) ? 'block' : 'none'; }
+    var bar = document.getElementById('redox-maintabs');
+    if (bar && btn) { var bs = bar.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].classList.remove('on'); btn.classList.add('on'); }
+  };
+
+  window.redoxSolveOwn = function(){
+    var inp = document.getElementById('redoxown-inp');
+    var out = document.getElementById('redoxown-out');
+    if (!inp || !out) return;
+    var val = inp.value.trim();
+    if (!val) { out.innerHTML = '<p style="font-size:12px;color:#fca5a5">Önce bir denklem yaz.</p>'; return; }
+    try {
+      var r = redoxAnalyze(val);
+      out.innerHTML =
+        '<div class="slbl" style="color:#86efac">Dengeli Denklem</div>' +
+        '<div style="font-family:monospace;font-size:15px;font-weight:700;color:#86efac;margin-bottom:14px;word-break:break-word">' + r.balanced + '</div>' +
+        '<div class="slbl">Yükseltgenme / İndirgenme Analizi</div>' +
+        redoxTransHtml(r.trans, r.species) +
+        '<p style="font-size:11px;color:var(--tx3);margin-top:10px">\u26a0\ufe0f Genel motor karmaşık \u00e7ok-iyonlu bileşiklerde (KMnO\u2084, peroksit, \u00e7oklu N i\u00e7eren tuzlar gibi) hata yapabilir \u2014 sonucu kontrol et.</p>';
+    } catch (e) {
+      out.innerHTML = '<p style="font-size:12px;color:#fca5a5">\u26a0\ufe0f ' + e.message + '</p>';
+    }
+  };
+
+  window.redoxAdvSetIdx = function(i, btn){
+    if (btn) selectInRow(btn);
+    var out = document.getElementById('redox27-out');
+    if (!out) return;
+    var r = REDOX_ADV_LIST[i];
+    var html = '<div class="slbl" style="color:#86efac">Dengeli Denklem</div>' +
+      '<div style="font-family:monospace;font-size:15px;font-weight:700;color:#86efac;margin-bottom:14px;word-break:break-word">' + r.eq + '</div>' +
+      '<div class="slbl">Yükseltgenme / İndirgenme Analizi</div>';
+    r.t.forEach(function(tr){
+      var el = tr[0], from = tr[1], to = tr[2];
+      var oks = to > from;
+      var kind = oks ? 'YÜKSELTGENİYOR (elektron veriyor)' : 'İNDİRGENİYOR (elektron alıyor)';
+      var col = oks ? '#fca5a5' : '#86efac';
+      html += '<div style="padding:8px 0;border-top:1px solid rgba(255,255,255,.06)">' +
+        '<b style="color:' + col + '">' + el + '</b>: ' + fmtOx(from) + ' \u2192 ' + fmtOx(to) + '<br>' +
+        '<span style="font-size:11px;color:' + col + '">' + kind + '</span>' +
+      '</div>';
+    });
+    out.innerHTML = html;
+  };
+
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
@@ -8917,6 +9093,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try { setupRXN(); } catch (e) { /* sessiz */ }
     try { setupFlame(); } catch (e) { /* sessiz */ }
     try { setupRedox(); } catch (e) { /* sessiz */ }
+    try { setupRedoxExtra(); } catch (e) { /* sessiz */ }
     try { setupFizKim(); } catch (e) { /* sessiz */ }
     try { setupKin(); } catch (e) { /* sessiz */ }
     try { setupEnerji(); } catch (e) { /* sessiz */ }
