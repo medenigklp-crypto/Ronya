@@ -15,6 +15,13 @@
    KMnO4/peroksit/çoklu-N bileşiklerinde hata yaptığı tespit edildi,
    örn. K2MnO4’te Mn+7 sanması gibi — bu hatalar düzeltilerek
    sabit veri olarak eklendi).
+   DUZELTME (kullanici geri bildirimi): "48 Ornek" ve "Kendi
+   Denklemim" sekmeleri artik REDOKS'un orijinal "Hazir Ornekler"
+   sekmesindeki gibi calisiyor -- once TUM sorular liste halinde
+   gorunur, bir soruya dokununca cozum "Sonraki Adim" butonuyla
+   asama asama (once hangi elementler degisiyor, sonra hangisi
+   yukseltgeniyor/indirgeniyor, sonunda dengeli denklem) acilir --
+   hepsi birden gosterilmiyor artik.
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9075,14 +9082,12 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
         '<div id="redoxown-out" style="margin-top:14px"></div>' +
       '</div>';
 
-    // 48 İleri Düzey Örnek (elle doğrulanmış)
+    // 48 İleri Düzey Örnek (elle doğrulanmış, adım adım)
     var g2 = document.getElementById('redox-group-2');
-    var btns2 = REDOX_ADV_LIST.map(function(r, i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="redoxAdvSetIdx(' + i + ',this)">' + (i+1) + '</button>'; }).join('');
     g2.innerHTML =
-      '<p class="psub" style="margin-bottom:10px">48 ileri d\u00fczey redoks denklemi (asidik ortam, çok basamaklı, orant\u0131sızlaşma dahil) \u2014 katsayılar Gauss eliminasyonla, yükseltgenme geçişleri elle doğrulanmıştır.</p>' +
-      '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content">' + btns2 + '</div></div>' +
-      '<div class="card"><div id="redox27-out"></div></div>';
-    window.redoxAdvSetIdx(0, null);
+      '<p class="psub" style="margin-bottom:10px">48 ileri d\u00fczey redoks denklemi (asidik ortam, çok basamaklı, orant\u0131sızlaşma dahil). Bir soruya dokun, sonra \u201cSonraki Adım\u201d ile \u00e7\u00f6z\u00fcm\u00fc aşama aşama g\u00f6r.</p>' +
+      '<div id="redoxadv-list"></div>';
+    redoxAdvRenderList();
   }
 
   window.redoxMainSet = function(i, btn){
@@ -9091,6 +9096,54 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (bar && btn) { var bs = bar.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].classList.remove('on'); btn.classList.add('on'); }
   };
 
+  // --- 48 Örnek: soru listesi hep görünür, tıklayınca "Sonraki Adım" ile ilerler ---
+  function redoxAdvUnbal(eq){
+    // Dengeli denklemden katsayıları silip "soru" (dengesiz) görünümü oluştur
+    return eq.replace(/\d+(?=[A-ZİÖÜÇĞŞ(])/g, '').replace(/\s+/g, ' ').trim();
+  }
+  function redoxAdvSteps(r){
+    var elList = r.t.map(function(tr){ return tr[0] + ': ' + fmtOx(tr[1]) + ' \u2192 ' + fmtOx(tr[2]); }).join(', ');
+    var oksList = r.t.filter(function(tr){ return tr[2] > tr[1]; }).map(function(tr){ return tr[0]; }).join(', ');
+    var indList = r.t.filter(function(tr){ return tr[2] < tr[1]; }).map(function(tr){ return tr[0]; }).join(', ');
+    return [
+      'Yükseltgenme basamağı değişen elementleri belirle: ' + elList,
+      'Yükseltgenen (elektron veren): <b style="color:#fca5a5">' + (oksList||'\u2014') + '</b> \u00b7 İndirgenen (elektron alan): <b style="color:#86efac">' + (indList||'\u2014') + '</b>',
+      'Alınan/verilen elektron sayılarını eşitleyecek katsayıları bul ve diğer atomları (H, O vb.) dengele:'
+    ];
+  }
+  var redoxAdvSt = {}; // { idx: currentStepIndex }
+  function redoxAdvRenderList(){
+    var box = document.getElementById('redoxadv-list');
+    if (!box) return;
+    var html = '';
+    REDOX_ADV_LIST.forEach(function(r, i){
+      var cur = redoxAdvSt[i] || 0;
+      var steps = redoxAdvSteps(r);
+      html += '<div class="card" style="margin-bottom:10px;padding:14px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">' +
+          '<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(245,158,11,.18);color:#f59e0b;font-weight:800;font-size:12px;flex-shrink:0">' + (i+1) + '</span>' +
+          '<div style="font-family:monospace;font-size:13px;color:#f59e0b;word-break:break-word">' + redoxAdvUnbal(r.eq) + '</div>' +
+        '</div>' +
+        '<div id="radv-steps-' + i + '" style="font-size:12px;color:var(--tx2);line-height:1.9;margin-bottom:8px">';
+      for (var s = 0; s < Math.min(cur, steps.length); s++) html += '<div style="padding:4px 0;border-top:1px solid rgba(255,255,255,.06)">' + (s+1) + '. ' + steps[s] + '</div>';
+      html += '</div>';
+      if (cur < steps.length) {
+        html += '<button type="button" class="ob" style="width:100%" onclick="redoxAdvNextStep(' + i + ')">' + (cur === 0 ? '\ud83d\udc41\ufe0f \u00c7özmeye Başla' : (cur === steps.length - 1 ? 'Dengeli Denklemi G\u00f6ster \u2192' : 'Sonraki Adım \u2192')) + '</button>';
+      } else {
+        html += '<div style="padding:10px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:10px">' +
+          '<div style="font-family:monospace;font-size:14px;font-weight:700;color:#86efac;word-break:break-word">' + r.eq + '</div>' +
+          '</div>' +
+          '<button type="button" class="ob" style="width:100%;margin-top:8px" onclick="redoxAdvReset(' + i + ')">\u21ba Baştan Başla</button>';
+      }
+      html += '</div>';
+    });
+    box.innerHTML = html;
+  }
+  window.redoxAdvNextStep = function(i){ redoxAdvSt[i] = (redoxAdvSt[i]||0) + 1; redoxAdvRenderList(); };
+  window.redoxAdvReset = function(i){ redoxAdvSt[i] = 0; redoxAdvRenderList(); };
+
+  // --- Kendi Denklemim: adım adım ilerleyen analiz ---
+  var redoxOwnSt = { step: 0, result: null };
   window.redoxSolveOwn = function(){
     var inp = document.getElementById('redoxown-inp');
     var out = document.getElementById('redoxown-out');
@@ -9099,37 +9152,40 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (!val) { out.innerHTML = '<p style="font-size:12px;color:#fca5a5">Önce bir denklem yaz.</p>'; return; }
     try {
       var r = redoxAnalyze(val);
-      out.innerHTML =
-        '<div class="slbl" style="color:#86efac">Dengeli Denklem</div>' +
-        '<div style="font-family:monospace;font-size:15px;font-weight:700;color:#86efac;margin-bottom:14px;word-break:break-word">' + r.balanced + '</div>' +
-        '<div class="slbl">Yükseltgenme / İndirgenme Analizi</div>' +
-        redoxTransHtml(r.trans, r.species) +
-        '<p style="font-size:11px;color:var(--tx3);margin-top:10px">\u26a0\ufe0f Genel motor karmaşık \u00e7ok-iyonlu bileşiklerde (KMnO\u2084, peroksit, \u00e7oklu N i\u00e7eren tuzlar gibi) hata yapabilir \u2014 sonucu kontrol et.</p>';
+      redoxOwnSt.result = r;
+      redoxOwnSt.step = 0;
+      redoxOwnRender();
     } catch (e) {
+      redoxOwnSt.result = null;
       out.innerHTML = '<p style="font-size:12px;color:#fca5a5">\u26a0\ufe0f ' + e.message + '</p>';
     }
   };
-
-  window.redoxAdvSetIdx = function(i, btn){
-    if (btn) selectInRow(btn);
-    var out = document.getElementById('redox27-out');
-    if (!out) return;
-    var r = REDOX_ADV_LIST[i];
-    var html = '<div class="slbl" style="color:#86efac">Dengeli Denklem</div>' +
-      '<div style="font-family:monospace;font-size:15px;font-weight:700;color:#86efac;margin-bottom:14px;word-break:break-word">' + r.eq + '</div>' +
-      '<div class="slbl">Yükseltgenme / İndirgenme Analizi</div>';
-    r.t.forEach(function(tr){
-      var el = tr[0], from = tr[1], to = tr[2];
-      var oks = to > from;
-      var kind = oks ? 'YÜKSELTGENİYOR (elektron veriyor)' : 'İNDİRGENİYOR (elektron alıyor)';
-      var col = oks ? '#fca5a5' : '#86efac';
-      html += '<div style="padding:8px 0;border-top:1px solid rgba(255,255,255,.06)">' +
-        '<b style="color:' + col + '">' + el + '</b>: ' + fmtOx(from) + ' \u2192 ' + fmtOx(to) + '<br>' +
-        '<span style="font-size:11px;color:' + col + '">' + kind + '</span>' +
-      '</div>';
-    });
+  function redoxOwnRender(){
+    var out = document.getElementById('redoxown-out');
+    if (!out || !redoxOwnSt.result) return;
+    var r = redoxOwnSt.result;
+    var oksList = r.trans.filter(function(t){ return t.kind === 'yukselt'; }).map(function(t){ return t.el; }).join(', ');
+    var indList = r.trans.filter(function(t){ return t.kind === 'indirge'; }).map(function(t){ return t.el; }).join(', ');
+    var steps = [
+      'Yükseltgenme basamağı değişen elementleri belirle: ' + r.trans.map(function(t){ return t.el+': '+fmtOx(t.from)+'\u2192'+fmtOx(t.to); }).join(', '),
+      'Yükseltgenen: <b style="color:#fca5a5">' + (oksList||'\u2014') + '</b> \u00b7 İndirgenen: <b style="color:#86efac">' + (indList||'\u2014') + '</b>'
+    ];
+    var cur = redoxOwnSt.step;
+    var html = '<div style="font-size:12px;color:var(--tx2);line-height:1.9;margin-bottom:8px">';
+    for (var s = 0; s < cur; s++) html += '<div style="padding:4px 0;border-top:1px solid rgba(255,255,255,.06)">' + (s+1) + '. ' + steps[s] + '</div>';
+    html += '</div>';
+    if (r.trans.length === 0) {
+      html += '<p style="font-size:12px;color:var(--tx3)">Redoks tespit edilemedi.</p>';
+    } else if (cur < steps.length) {
+      html += '<button type="button" class="ob" style="width:100%" onclick="redoxOwnNextStep()">' + (cur === 0 ? '\ud83d\udc41\ufe0f \u00c7özmeye Başla' : 'Dengeli Denklemi G\u00f6ster \u2192') + '</button>';
+    } else {
+      html += '<div style="padding:10px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:10px">' +
+        '<div style="font-family:monospace;font-size:14px;font-weight:700;color:#86efac;word-break:break-word">' + r.balanced + '</div></div>' +
+        '<p style="font-size:11px;color:var(--tx3);margin-top:10px">\u26a0\ufe0f Genel motor karmaşık \u00e7ok-iyonlu bileşiklerde hata yapabilir \u2014 sonucu kontrol et.</p>';
+    }
     out.innerHTML = html;
-  };
+  }
+  window.redoxOwnNextStep = function(){ redoxOwnSt.step++; redoxOwnRender(); };
 
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
