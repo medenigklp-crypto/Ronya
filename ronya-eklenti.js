@@ -62,6 +62,11 @@
    seyreltme (node.js dogrulamali: 99 L su, zayif asitte pH 1 birim
    artirmak icin kuvvetli asitten farkli olarak 100 kat seyreltme
    gerektigi vurgulaniyor). Toplam 18 soru.
+   2 GRAFIK DAHA EKLENDI: 1) H+/OH- derisim-zaman grafigi (2 mini
+   panel: "Asit ilave edilirse" H+ yukselir/OH- duser, "Baz ilave
+   edilirse" tam tersi -- ikisi de 10^-7 referans cizgisine gore
+   simetrik). 2) pH ve pOH sayi dogrulari (0-14, ZIT yonlu oklarla:
+   pH kuculdukce asitlik artar, pOH kuculdukce bazlik artar).
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9313,7 +9318,14 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       '<h3 style="color:#34d399;margin-bottom:10px">Suyun Otoiyonizasyonu</h3>' +
       '<p style="font-size:13px;margin-bottom:8px">Suyun kendi kendine iyonlarına ayrışmasına <b>otoiyonizasyon</b> denir: 2H\u2082O(s)\u21ccH\u2083O\u207a(suda)+OH\u207b(suda). H\u207a iyonunda elektron yoktur; sulu ortamda H\u2082O ile birleşip H\u2083O\u207a (hidronyum) oluşturur \u2014 bu y\u00fczden H\u207a ve H\u2083O\u207a birbirinin yerine kullanılabilir.</p>' +
       '<p style="font-size:13px;margin-bottom:8px"><b>K<sub>su</sub>=[H\u207a][OH\u207b]</b>. 25°C\u2019de K<sub>su</sub>=10\u207b\u00b9\u2074, saf suda [H\u207a]=[OH\u207b]=10\u207b\u2077 M.</p>' +
-      '<p style="font-size:13px">p\u2192\u2212log: <b>pH=\u2212log[H\u207a]</b>, <b>pOH=\u2212log[OH\u207b]</b>, <b>pK<sub>su</sub>=\u2212logK<sub>su</sub></b>. 25°C\u2019de <b>pH+pOH=14</b>.</p>' +
+      '<p style="font-size:13px;margin-bottom:10px">p\u2192\u2212log: <b>pH=\u2212log[H\u207a]</b>, <b>pOH=\u2212log[OH\u207b]</b>, <b>pK<sub>su</sub>=\u2212logK<sub>su</sub></b>. 25°C\u2019de <b>pH+pOH=14</b>.</p>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:8px"><canvas id="abz-hohgraph" style="width:100%;display:block" height="210"></canvas></div>' +
+      '<p style="font-size:12px;color:var(--tx3)">Saf suya ASİT ilave edilirse [H\u207a] anında sı\u00e7rar ve y\u00fcksek bir seviyede sabitlenir, [OH\u207b] ise azalıp d\u00fcş\u00fck bir seviyede sabitlenir (\u0130\u0130si \u00e7arpım hep 10\u207b\u00b9\u2074 kalacak şekilde). BAZ ilave edilirse tam tersi olur.</p>' +
+    '</div>' +
+    '<div class="card" style="margin-bottom:14px">' +
+      '<h3 style="color:#34d399;margin-bottom:10px">pH ve pOH Sayı Doğruları</h3>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:8px"><canvas id="abz-phline" style="width:100%;display:block" height="150"></canvas></div>' +
+      '<p style="font-size:12px;color:var(--tx3)">pH KÜÇÜLDÜKÇE asitlik artar (0\u2019a yaklaşır); pOH KÜÇÜLDÜKÇE bazlık artar \u2014 pH ve pOH\u2019nin \"asitlik/bazlık artışı\" y\u00f6nleri BİRBİRİNE TERSTİR.</p>' +
     '</div>' +
     '<div class="card" style="margin-bottom:14px">' +
       '<h3 style="color:#34d399;margin-bottom:10px">K<sub>su</sub>\u2019nun Sıcaklıkla Değişimi</h3>' +
@@ -9327,6 +9339,53 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     '</div>';
 
   function abzDrawGraphs(){
+    // Saf suya asit/baz ilave edildiğinde H+ ve OH- derişim-zaman grafiği (2 mini panel)
+    maarifChart('abz-hohgraph', function(x, W, H2){
+      var halfW = W/2 - 8;
+      function miniPanel(offsetX, title, hUp){
+        var padL=32, padT=20, padB=22, plotW=halfW-padL-8, plotH=H2-padT-padB;
+        x.strokeStyle='rgba(255,255,255,.25)'; x.lineWidth=1;
+        x.beginPath(); x.moveTo(offsetX+padL,padT); x.lineTo(offsetX+padL,padT+plotH); x.lineTo(offsetX+padL+plotW,padT+plotH); x.stroke();
+        var midY = padT+plotH*0.5;
+        var hY = hUp ? padT+plotH*0.22 : padT+plotH*0.78;
+        var ohY = hUp ? padT+plotH*0.78 : padT+plotH*0.22;
+        function curve(fromY,toY,color,label){
+          x.strokeStyle=color; x.lineWidth=2; x.beginPath();
+          for(var i=0;i<=40;i++){ var f=i/40; var xx=offsetX+padL+f*plotW; var yy=fromY+(toY-fromY)*(1-Math.exp(-f*5));
+            i===0?x.moveTo(xx,yy):x.lineTo(xx,yy); }
+          x.stroke();
+          x.fillStyle=color; x.font='9px sans-serif'; x.textAlign='left';
+          x.fillText(label, offsetX+padL+plotW*0.55, toY + (toY<midY?-5:12));
+        }
+        curve(midY, hY, '#f59e0b', 'H\u207a');
+        curve(midY, ohY, '#60a5fa', 'OH\u207b');
+        x.strokeStyle='rgba(255,255,255,.15)'; x.setLineDash([3,3]); x.beginPath(); x.moveTo(offsetX+padL,midY); x.lineTo(offsetX+padL+plotW,midY); x.stroke(); x.setLineDash([]);
+        x.fillStyle='rgba(255,255,255,.4)'; x.font='8px sans-serif'; x.fillText('10\u207b\u2077', offsetX+4, midY+3);
+        x.fillStyle='#fff'; x.font='10px sans-serif'; x.textAlign='center'; x.fillText(title, offsetX+padL+plotW/2, H2-6);
+      }
+      miniPanel(0, 'Asit ilave edilirse', true);
+      miniPanel(W/2+8, 'Baz ilave edilirse', false);
+      x.fillStyle='rgba(255,255,255,.5)'; x.font='9px sans-serif'; x.textAlign='left';
+      x.fillText('Derişim', 2, 10);
+    });
+    // pH ve pOH sayı doğruları (zıt yönlü)
+    maarifChart('abz-phline', function(x, W, H2){
+      var padL=30, padR=30, plotW=W-padL-padR;
+      function numberLine(y, label, leftTxt, rightTxt, leftColor, rightColor){
+        x.strokeStyle='rgba(255,255,255,.4)'; x.lineWidth=1.5; x.beginPath();
+        x.moveTo(padL,y); x.lineTo(padL+plotW,y); x.stroke();
+        for(var v=0; v<=14; v+=7){
+          var xx = padL + (v/14)*plotW;
+          x.beginPath(); x.moveTo(xx,y-5); x.lineTo(xx,y+5); x.stroke();
+          x.fillStyle='#fff'; x.font='10px sans-serif'; x.textAlign='center'; x.fillText(v, xx, y+18);
+        }
+        x.fillStyle=leftColor; x.font='9px sans-serif'; x.textAlign='left'; x.fillText('\u2190 '+leftTxt, padL, y-10);
+        x.fillStyle=rightColor; x.textAlign='right'; x.fillText(rightTxt+' \u2192', padL+plotW, y-10);
+        x.fillStyle='#93c5fd'; x.font='bold 10px sans-serif'; x.textAlign='left'; x.fillText(label, 2, y+4);
+      }
+      numberLine(H2*0.32, 'pH', 'Asitlik artar', 'Bazlık artar', '#fca5a5', '#86efac');
+      numberLine(H2*0.75, 'pOH', 'Bazlık artar', 'Asitlik artar', '#86efac', '#fca5a5');
+    });
     maarifChart('abz-ksugraph', function(x, W, H2){
       var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'pOH', 'pH');
       var lines = [
