@@ -22,6 +22,14 @@
    asama asama (once hangi elementler degisiyor, sonra hangisi
    yukseltgeniyor/indirgeniyor, sonunda dengeli denklem) acilir --
    hepsi birden gosterilmiyor artik.
+   GELISTIRME: Adimlar artik MEB'in 5 adimli resmi yontemini takip
+   ediyor: 1) yukseltgenme basamaklari, 2) yukseltgenen/indirgenen
+   belirleme, 3) GERCEK yari tepkimeler (ornek: "HCl -> KCl + e-",
+   "KMnO4 + 5e- -> MnCl2" -- gercek tur isimleri VE elektron sayilariyla),
+   4) elektron sayilarini esitleme, 5) diger atomlari dengeleme. Yari
+   tepkimeler dengeli denklem stringinden OTOMATIK turetiliyor (48
+   ornegi elle yeniden yazmadan), parseFormula ile her turdeki atom
+   sayisi hesaplaniyor.
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9101,15 +9109,60 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     // Dengeli denklemden katsayıları silip "soru" (dengesiz) görünümü oluştur
     return eq.replace(/\d+(?=[A-ZİÖÜÇĞŞ(])/g, '').replace(/\s+/g, ' ').trim();
   }
+  function subToNormDigits(s){
+    var map = {'\u2080':'0','\u2081':'1','\u2082':'2','\u2083':'3','\u2084':'4','\u2085':'5','\u2086':'6','\u2087':'7','\u2088':'8','\u2089':'9'};
+    return s.replace(/[\u2080-\u2089]/g, function(c){ return map[c]; });
+  }
+  function redoxSplitEq(eq){
+    var sides = eq.split('\u2192').map(function(s){ return s.trim(); });
+    function parseSide(side){
+      return side.split('+').map(function(term){
+        term = term.trim();
+        var m = term.match(/^(\d+)?(.+)$/);
+        var coef = m[1] ? parseInt(m[1], 10) : 1;
+        var formula = m[2].trim();
+        return { coef: coef, formula: formula, norm: subToNormDigits(formula) };
+      });
+    }
+    return { react: parseSide(sides[0]), prod: parseSide(sides[1]) };
+  }
+  function redoxFindSpecies(terms, el){
+    for (var i = 0; i < terms.length; i++) {
+      try {
+        var flat = parseFormula(terms[i].norm);
+        if (flat[el]) return { term: terms[i], atoms: flat[el] };
+      } catch (e) {}
+    }
+    return null;
+  }
   function redoxAdvSteps(r){
+    var split = redoxSplitEq(r.eq);
     var elList = r.t.map(function(tr){ return tr[0] + ': ' + fmtOx(tr[1]) + ' \u2192 ' + fmtOx(tr[2]); }).join(', ');
-    var oksList = r.t.filter(function(tr){ return tr[2] > tr[1]; }).map(function(tr){ return tr[0]; }).join(', ');
-    var indList = r.t.filter(function(tr){ return tr[2] < tr[1]; }).map(function(tr){ return tr[0]; }).join(', ');
-    return [
-      'Yükseltgenme basamağı değişen elementleri belirle: ' + elList,
-      'Yükseltgenen (elektron veren): <b style="color:#fca5a5">' + (oksList||'\u2014') + '</b> \u00b7 İndirgenen (elektron alan): <b style="color:#86efac">' + (indList||'\u2014') + '</b>',
-      'Alınan/verilen elektron sayılarını eşitleyecek katsayıları bul ve diğer atomları (H, O vb.) dengele:'
+    var halfRx = r.t.map(function(tr){
+      var el = tr[0], from = tr[1], to = tr[2];
+      var rs = redoxFindSpecies(split.react, el);
+      var ps = redoxFindSpecies(split.prod, el);
+      if (!rs || !ps) return null;
+      var dPerAtom = Math.abs(to - from);
+      var totalE = dPerAtom * rs.atoms;
+      var oks = to > from;
+      var eSide = oks ? (' \u2192 ' + ps.term.formula + ' + ' + (totalE>1?totalE:'') + 'e\u207b') : (' + ' + (totalE>1?totalE:'') + 'e\u207b \u2192 ' + ps.term.formula);
+      return {
+        el: el, oks: oks,
+        text: (oks ? 'Yükseltgenme' : 'İndirgenme') + ' yarı tepkimesi (' + el + '): ' + rs.term.formula + eSide,
+        totalE: totalE
+      };
+    }).filter(Boolean);
+    var oksHalf = halfRx.filter(function(h){ return h.oks; });
+    var indHalf = halfRx.filter(function(h){ return !h.oks; });
+    var steps = [
+      '<b>1) Yükseltgenme basamaklarını hesapla:</b> ' + elList,
+      '<b>2) İndirgenen/yükseltgenen maddeleri belirle:</b> Yükseltgenen (elektron veren) \u2192 <b style="color:#fca5a5">' + oksHalf.map(function(h){return h.el;}).join(', ') + '</b> \u00b7 İndirgenen (elektron alan) \u2192 <b style="color:#86efac">' + indHalf.map(function(h){return h.el;}).join(', ') + '</b>',
+      '<b>3) Yarı tepkimeleri yaz:</b><br>' + oksHalf.map(function(h){ return '<span style="color:#fca5a5">'+h.text+'</span>'; }).join('<br>') + '<br>' + indHalf.map(function(h){ return '<span style="color:#86efac">'+h.text+'</span>'; }).join('<br>'),
+      '<b>4) Elektron sayılarını eşitle:</b> Yükseltgenme yarı tepkimesinde verilen toplam e\u207b sayısı (' + oksHalf.map(function(h){return h.totalE;}).join('+') + '), indirgenmede alınan toplam e\u207b sayısına (' + indHalf.map(function(h){return h.totalE;}).join('+') + ') eşit olacak şekilde yarı tepkimeler uygun katsayılarla \u00e7arpılıp taraf tarafa toplanır.',
+      '<b>5) Diğer atomları (H, O vb.) dengele.</b> Not: Doğru dengelendiyse oksijen sayısı her iki tarafta da eşit \u00e7ıkar \u2014 kontrol et.'
     ];
+    return steps;
   }
   var redoxAdvSt = {}; // { idx: currentStepIndex }
   function redoxAdvRenderList(){
@@ -9125,7 +9178,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
           '<div style="font-family:monospace;font-size:13px;color:#f59e0b;word-break:break-word">' + redoxAdvUnbal(r.eq) + '</div>' +
         '</div>' +
         '<div id="radv-steps-' + i + '" style="font-size:12px;color:var(--tx2);line-height:1.9;margin-bottom:8px">';
-      for (var s = 0; s < Math.min(cur, steps.length); s++) html += '<div style="padding:4px 0;border-top:1px solid rgba(255,255,255,.06)">' + (s+1) + '. ' + steps[s] + '</div>';
+      for (var s = 0; s < Math.min(cur, steps.length); s++) html += '<div style="padding:8px 0;border-top:1px solid rgba(255,255,255,.06)">' + steps[s] + '</div>';
       html += '</div>';
       if (cur < steps.length) {
         html += '<button type="button" class="ob" style="width:100%" onclick="redoxAdvNextStep(' + i + ')">' + (cur === 0 ? '\ud83d\udc41\ufe0f \u00c7özmeye Başla' : (cur === steps.length - 1 ? 'Dengeli Denklemi G\u00f6ster \u2192' : 'Sonraki Adım \u2192')) + '</button>';
@@ -9164,20 +9217,16 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     var out = document.getElementById('redoxown-out');
     if (!out || !redoxOwnSt.result) return;
     var r = redoxOwnSt.result;
-    var oksList = r.trans.filter(function(t){ return t.kind === 'yukselt'; }).map(function(t){ return t.el; }).join(', ');
-    var indList = r.trans.filter(function(t){ return t.kind === 'indirge'; }).map(function(t){ return t.el; }).join(', ');
-    var steps = [
-      'Yükseltgenme basamağı değişen elementleri belirle: ' + r.trans.map(function(t){ return t.el+': '+fmtOx(t.from)+'\u2192'+fmtOx(t.to); }).join(', '),
-      'Yükseltgenen: <b style="color:#fca5a5">' + (oksList||'\u2014') + '</b> \u00b7 İndirgenen: <b style="color:#86efac">' + (indList||'\u2014') + '</b>'
-    ];
+    var tTuples = r.trans.map(function(t){ return [t.el, t.from, t.to]; });
+    var steps = redoxAdvSteps({ eq: r.balanced, t: tTuples });
     var cur = redoxOwnSt.step;
     var html = '<div style="font-size:12px;color:var(--tx2);line-height:1.9;margin-bottom:8px">';
-    for (var s = 0; s < cur; s++) html += '<div style="padding:4px 0;border-top:1px solid rgba(255,255,255,.06)">' + (s+1) + '. ' + steps[s] + '</div>';
+    for (var s = 0; s < Math.min(cur, steps.length); s++) html += '<div style="padding:8px 0;border-top:1px solid rgba(255,255,255,.06)">' + steps[s] + '</div>';
     html += '</div>';
     if (r.trans.length === 0) {
       html += '<p style="font-size:12px;color:var(--tx3)">Redoks tespit edilemedi.</p>';
     } else if (cur < steps.length) {
-      html += '<button type="button" class="ob" style="width:100%" onclick="redoxOwnNextStep()">' + (cur === 0 ? '\ud83d\udc41\ufe0f \u00c7özmeye Başla' : 'Dengeli Denklemi G\u00f6ster \u2192') + '</button>';
+      html += '<button type="button" class="ob" style="width:100%" onclick="redoxOwnNextStep()">' + (cur === 0 ? '\ud83d\udc41\ufe0f \u00c7özmeye Başla' : (cur === steps.length-1 ? 'Dengeli Denklemi G\u00f6ster \u2192' : 'Sonraki Adım \u2192')) + '</button>';
     } else {
       html += '<div style="padding:10px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:10px">' +
         '<div style="font-family:monospace;font-size:14px;font-weight:700;color:#86efac;word-break:break-word">' + r.balanced + '</div></div>' +
