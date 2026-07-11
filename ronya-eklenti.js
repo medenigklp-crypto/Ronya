@@ -15,6 +15,13 @@
    KMnO4/peroksit/çoklu-N bileşiklerinde hata yaptığı tespit edildi,
    örn. K2MnO4’te Mn+7 sanması gibi — bu hatalar düzeltilerek
    sabit veri olarak eklendi).
+   YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
+   İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
+   + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
+   tepkimesi üzerinden 13 farklı senaryo (madde ekleme/cikarma,
+   sicaklik, hacim, basinc, katalizor, He gazi sabit hacim/basinc
+   ayrimi dahil), hepsi elle Le Chatelier kurallariyla dogrulanip
+   interaktif (dokununca acilan) liste olarak eklendi.
    1) Gerçek denklem dengeleyici (matris + Gauss eliminasyonu)
    2) 21–118 arası TAM element verisi
    3) Gelişmiş element testi: aralıklar (İlk 20 / 36+12 / Tümü /
@@ -8855,6 +8862,54 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
   var denge2St = { cat: 'Tümü' };
   window.denge2SetCat = function(cat, btn){ denge2St.cat = cat; if (btn) selectInRow(btn); denge2RenderList(); };
 
+  MAARIF_DENGE_THEORY.t5 = '<h3 style="color:#93c5fd;margin-bottom:10px">2.1.5 Dengeyi Etkileyen Faktörler (Le Chatelier İlkesi)</h3>' +
+    '<p style="margin-bottom:10px"><b>Le Chatelier İlkesi:</b> Dengedeki bir sisteme dışarıdan bir etki uygulandığında, sistem bu etkiyi AZALTACAK y\u00f6nde kendini yeniden d\u00fczenler. Bu ilke hem kimyasal hem fiziksel dengeler i\u00e7in ge\u00e7erlidir.</p>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">1) Derişimin Etkisi</div>' +
+      '<p style="font-size:13px">Bir madde EKLENİRSE, sistem o maddeyi T\u00dcKETECEK y\u00f6ne kayar. Bir madde \u00c7EKİLİRSE, sistem o maddeyi \u00dcRETECEK y\u00f6ne kayar. <b>Kc DEĞİŞMEZ</b> (derişim değişimi hız sabitlerini etkilemez). Saf katı/sıvı eklenmesi/\u00e7ıkarılması dengeyi ETKİLEMEZ (aktiviteleri sabittir).</p></div>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">2) Hacmin Etkisi</div>' +
+      '<p style="font-size:13px">Hacim ARTARSA t\u00fcm derişimler azalır, sistem katsayısı (gaz mol sayısı) FAZLA olan tarafa kayar. Hacim AZALIRSA derişimler artar, sistem katsayısı AZ olan tarafa kayar. Katsayılar EŞİTSE hacim değişimi dengeyi KAYDIRMAZ. <b>Kc DEĞİŞMEZ.</b></p></div>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">3) Basıncın Etkisi</div>' +
+      '<p style="font-size:13px">Hacim k\u00fc\u00e7\u00fclt\u00fclerek basın\u00e7 artırılırsa sistem AZ gaz molek\u00fcl\u00fc i\u00e7eren tarafa kayar. Hacim artırılarak basın\u00e7 azaltılırsa sistem \u00c7OK gaz molek\u00fcl\u00fc i\u00e7eren tarafa kayar (hacim etkisiyle aynı mantık). <b>Kc DEĞİŞMEZ.</b></p></div>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">4) Sıcaklığın Etkisi \u2014 TEK Kc DEĞİŞTİREN FAKT\u00d6R!</div>' +
+      '<p style="font-size:13px"><b>Endotermik</b> tepkimede sıcaklık ARTARSA \u00fcr\u00fcnler y\u00f6n\u00fcne kayar, <b>Kc ARTAR</b>. Sıcaklık AZALIRSA tepkenler y\u00f6n\u00fcne kayar, <b>Kc AZALIR</b>. (Sıcaklık ile Kc DOĞRU orantılı.)<br><b>Ekzotermik</b> tepkimede sıcaklık ARTARSA tepkenler y\u00f6n\u00fcne kayar, <b>Kc AZALIR</b>. Sıcaklık AZALIRSA \u00fcr\u00fcnler y\u00f6n\u00fcne kayar, <b>Kc ARTAR</b>. (Sıcaklık ile Kc TERS orantılı.)</p></div>' +
+    '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">5) Katalizör\u00fcn Etkisi</div>' +
+      '<p style="font-size:13px">Katalizör ileri VE geri tepkimenin aktifleşme enerjisini AYNI ORANDA d\u00fcş\u00fcrerek dengeye ulaşma S\u00dcRESİNİ kısaltır. Y\u00d6N belirlemez, denge derişimlerini VE <b>Kc\u2019yi DEĞİŞTİRMEZ.</b></p></div>' +
+    '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#93c5fd;margin-bottom:10px">\u2713 MEB Kitabı Doğrulanmış \u00d6rnek (2.5. Kontrol Noktası)</div>' +
+      '<p style="font-size:13px;margin-bottom:10px">2H\u2082S(g)+CH\u2084(g)\u21ccCS\u2082(s)+4H\u2082(g)+ısı tepkimesi (EKZOTERMİK, CS\u2082 SAF SIVI, gaz mol sayısı tepken=3&lt;\u00fcr\u00fcn=4). Aşağıdaki her etkiye dokunup sistemin tepkisini g\u00f6r:</p>' +
+      '<div id="mdg-kn25"></div></div>';
+
+  var MDG_KN25 = [
+    { e:'Sabit hacim/sıcaklıkta CH\u2084(g) ekleme', y:'İLERİ (\u00fcr\u00fcnler)', kc:'Değişmez', h2s:'Azalır', ch4:'Artar', cs2:'Değişmez (saf sıvı)', h2:'Artar' },
+    { e:'Sabit hacim/sıcaklıkta H\u2082(g) ekleme', y:'GERİ (tepkenler)', kc:'Değişmez', h2s:'Artar', ch4:'Artar', cs2:'Değişmez (saf sıvı)', h2:'Artar (net)' },
+    { e:'Sabit hacim/sıcaklıkta CS\u2082(s) ekleme', y:'DEĞİŞMEZ', kc:'Değişmez', h2s:'Değişmez', ch4:'Değişmez', cs2:'Değişmez (zaten sabit)', h2:'Değişmez' },
+    { e:'Sabit hacim/sıcaklıkta H\u2082S(g) \u00e7ıkarma', y:'GERİ (tepkenler)', kc:'Değişmez', h2s:'Azalır (net)', ch4:'Artar', cs2:'Değişmez (saf sıvı)', h2:'Azalır' },
+    { e:'Sabit hacimli kapta sıcaklığı artırma', y:'GERİ (endotermik y\u00f6n)', kc:'AZALIR', h2s:'Artar', ch4:'Artar', cs2:'Değişmez (saf sıvı)', h2:'Azalır' },
+    { e:'Sabit hacimli kapta sıcaklığı azaltma', y:'İLERİ (ekzotermik y\u00f6n)', kc:'ARTAR', h2s:'Azalır', ch4:'Azalır', cs2:'Değişmez (saf sıvı)', h2:'Artar' },
+    { e:'Sabit sıcaklıkta kabın hacmini artırma', y:'İLERİ (katsayı fazla/\u00fcr\u00fcn)', kc:'Değişmez', h2s:'Azalır', ch4:'Azalır', cs2:'Değişmez (saf sıvı)', h2:'Artar' },
+    { e:'Sabit sıcaklıkta kabın hacmini azaltma', y:'GERİ (katsayı az/tepken)', kc:'Değişmez', h2s:'Artar', ch4:'Artar', cs2:'Değişmez (saf sıvı)', h2:'Azalır' },
+    { e:'Katalizör ekleme', y:'DEĞİŞMEZ (sadece hız artar)', kc:'Değişmez', h2s:'Değişmez', ch4:'Değişmez', cs2:'Değişmez', h2:'Değişmez' },
+    { e:'Sabit sıcaklıkta sistemin basıncını artırma', y:'GERİ (hacim k\u00fc\u00e7\u00fclmesiyle aynı)', kc:'Değişmez', h2s:'Artar', ch4:'Artar', cs2:'Değişmez (saf sıvı)', h2:'Azalır' },
+    { e:'Sabit sıcaklıkta sistemin basıncını azaltma', y:'İLERİ (hacim b\u00fcy\u00fcmesiyle aynı)', kc:'Değişmez', h2s:'Azalır', ch4:'Azalır', cs2:'Değişmez (saf sıvı)', h2:'Artar' },
+    { e:'Sabit hacim/sıcaklıkta He(g) ekleme', y:'DEĞİŞMEZ', kc:'Değişmez', h2s:'Değişmez', ch4:'Değişmez', cs2:'Değişmez', h2:'Değişmez (kısmi basın\u00e7lar etkilenmez)' },
+    { e:'Sabit basınçlı kaba sabit sıcaklıkta He(g) ekleme', y:'İLERİ (hacim genişler, seyrelir)', kc:'Değişmez', h2s:'Azalır', ch4:'Azalır', cs2:'Değişmez (saf sıvı)', h2:'Artar' }
+  ];
+
+  function mdgKn25Render(){
+    var box = document.getElementById('mdg-kn25');
+    if (!box) return;
+    var html = '';
+    MDG_KN25.forEach(function(r, i){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mdgkn-' + i + '\')">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600">' + (i+1) + '. ' + r.e + '</div>' +
+        '<div id="mdgkn-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.9">' +
+          '<b style="color:#f59e0b">Sistemin Y\u00f6n\u00fc:</b> ' + r.y + '<br>' +
+          '<b style="color:#f59e0b">Kc:</b> ' + r.kc + '<br>' +
+          '[H\u2082S]: ' + r.h2s + ' \u00b7 [CH\u2084]: ' + r.ch4 + ' \u00b7 [CS\u2082]: ' + r.cs2 + ' \u00b7 [H\u2082]: ' + r.h2 +
+        '</div></div>';
+    });
+    box.innerHTML = html;
+  }
+
   function setupMaarifDenge(){
     if (document.getElementById('mdg-wrap')) return;
     var host = document.getElementById('denge2-group-0');
@@ -8862,10 +8917,11 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     host.insertAdjacentHTML('beforeend', '<div id="mdg-wrap"></div>');
     var wrap = document.getElementById('mdg-wrap');
     wrap.innerHTML =
-      '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cDenge\u201d ünitesinin konu anlatımı \u2014 1. parça (2.1.1-2.1.4).</p>' +
-      MAARIF_DENGE_THEORY.t1 + MAARIF_DENGE_THEORY.t2 + MAARIF_DENGE_THEORY.t3 + MAARIF_DENGE_THEORY.t4 +
-      '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 2.1.5 Dengeyi Etkileyen Fakt\u00f6rler (Le Chatelier İlkesi) ve b\u00f6l\u00fcm sonu \u00f6l\u00e7me-değerlendirme soruları sıradaki g\u00fcncellemede eklenecek.</p>';
+      '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cDenge\u201d ünitesinin TAM konu anlatımı (2.1.1-2.1.5).</p>' +
+      MAARIF_DENGE_THEORY.t1 + MAARIF_DENGE_THEORY.t2 + MAARIF_DENGE_THEORY.t3 + MAARIF_DENGE_THEORY.t4 + MAARIF_DENGE_THEORY.t5 +
+      '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 B\u00f6l\u00fcm sonu \u00f6l\u00e7me-değerlendirme (2.1 t\u00fcm\u00fc) sıradaki g\u00fcncellemede eklenecek. Sırada ayrıca: MEB Asit-Baz Dengesi (2.2) ve Çözünürlük Dengesi (2.3).</p>';
     setTimeout(maarifDengeDrawGraphs, 60);
+    mdgKn25Render();
   }
 
   function denge2RenderList(){
