@@ -30,6 +30,15 @@
    tepkimeler dengeli denklem stringinden OTOMATIK turetiliyor (48
    ornegi elle yeniden yazmadan), parseFormula ile her turdeki atom
    sayisi hesaplaniyor.
+   YENI ANA EKRAN: "Asit-Baz Dengesi" -- el yazmasi Asit-Baz notundan
+   15 cozumlu ornek (1. parca): suyun otoiyonizasyonu, pH/pOH/Ksu,
+   Bronsted-Lowry tanimi, konjuge asit-baz ciftleri, kuvvetli asit/baz
+   hesaplamalari, zayif asit/baz Ka/Kb hesaplari. Tum sayisal problemler
+   node.js ile dogrulandi -- bir soruda (Q14, HF seyreltme) basit
+   yaklasiklik yontemi YANLIS sonuc verdigi (%100 gibi imkansiz bir
+   deger) icin tam ikinci dereceden denklem cozulerek dogru sonuc
+   (%61,8) bulundu, bu fark ogrenciye acikca not edildi. MEB kitabinin
+   Asit-Baz bolumu (2.2) ve notun kalan sayfalari siradaki adimda.
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9236,6 +9245,87 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
   }
   window.redoxOwnNextStep = function(){ redoxOwnSt.step++; redoxOwnRender(); };
 
+  var ASITBAZ_Q = [
+    { n:1, kat:'Kavram', t:'Suyun otoiyonizasyonu nedir? Ksu ifadesini ve 25°C\u2019deki değerini yazınız.',
+      c:'Suyun kendi kendine iyonlarına ayrışmasına <b>otoiyonizasyon</b> denir: 2H\u2082O(s)\u21ccH\u2083O\u207a(suda)+OH\u207b(suda) (kısaca H\u2082O\u21ccH\u207a+OH\u207b).<br><b>Ksu=[H\u207a][OH\u207b]</b>. 25°C\u2019de Ksu=10\u207b\u00b9\u2074, bu durumda saf suda [H\u207a]=[OH\u207b]=10\u207b\u2077 M.<br>Ksu SADECE SICAKLIKLA değişir (derişimden bağımsızdır).' },
+    { n:2, kat:'Kavram', t:'pH, pOH ve pKsu tanımlarını yazınız. 25°C\u2019de pH+pOH ka\u00e7tır?',
+      c:'pH=\u2212log[H\u207a], pOH=\u2212log[OH\u207b], pKsu=\u2212logKsu.<br>25°C\u2019de Ksu=10\u207b\u00b9\u2074 olduğundan <b>pH+pOH=14</b>.<br>pH&lt;7: asidik \u00b7 pH=7: n\u00f6tr \u00b7 pH&gt;7: bazik (SADECE 25°C\u2019de ge\u00e7erlidir \u2014 Ksu sıcaklıkla değiştiği i\u00e7in n\u00f6tr noktanın pH\u2019ı da sıcaklıkla değişir).' },
+    { n:3, kat:'Kavram', t:'Bronsted-Lowry asit-baz tanımını yazınız. Konjuge asit-baz \u00e7ifti nedir?',
+      c:'<b>Bronsted-Lowry:</b> Proton (H\u207a) VEREN maddeye asit, proton ALAN maddeye baz denir. Asit-baz tepkimelerinde H\u207a asitten baza aktarılır.<br><b>Konjuge \u00e7ift:</b> Bir asit proton verdiğinde geriye kendi KONJUGE BAZI kalır; bir baz proton aldığında kendi KONJUGE ASİDİ oluşur. \u00d6rn: NH\u2083(baz)+H\u2082O(asit)\u21ccNH\u2084\u207a(konjuge asit)+OH\u207b(konjuge baz).<br><b>Amfoter (amfiprotik) t\u00fcrler</b> (\u00f6rn. H\u2082PO\u2084\u207b, HCO\u2083\u207b) hem asit hem baz gibi davranabilir \u2014 hem proton verebilir hem alabilir.' },
+    { n:4, kat:'Hesaplama', t:'25°C\u2019de pH\u2019ı 3pOH olan bir sulu \u00e7\u00f6zeltideki [H\u207a] ve [OH\u207b] değerlerini bularak \u00e7\u00f6zeltinin t\u00fcr\u00fcn\u00fc belirleyiniz.',
+      c:'pH+pOH=14 ve pH=3pOH \u2192 3pOH+pOH=14 \u2192 4pOH=14 \u2192 <b>pOH=3,5</b>, <b>pH=10,5</b>.<br>[H\u207a]=10\u207b\u00b9\u2070\u1d43\u2075, [OH\u207b]=10\u207b\u00b3\u1d43\u2075.<br>pH&gt;7 olduğundan \u00e7\u00f6zelti <b>BAZİKTİR</b>.' },
+    { n:5, kat:'Hesaplama', t:'2,52 gram HNO\u2083 ile 20 litrelik bir \u00e7\u00f6zelti hazırlanıyor. Bu \u00e7\u00f6zeltiden 20 mL alınıp saf su ile 100 mL\u2019ye seyreltilirse [H\u207a] iyonu derişimi ka\u00e7 M olur? (HNO\u2083:63)',
+      c:'mol HNO\u2083=2,52/63=<b>0,04 mol</b>. Başlangı\u00e7 derişimi=0,04/20=<b>0,002 M</b>.<br>20 mL\u2019yi 100 mL\u2019ye seyreltmek 5 kat seyreltme demektir: C<sub>yeni</sub>=0,002\u00d7(20/100)=<b>0,0004 M</b>.<br>HNO\u2083 KUVVETLİ asit (tam iyonlaşır) olduğundan [H\u207a]=<b>4\u00d710\u207b\u2074 M</b>.' },
+    { n:6, kat:'Hesaplama', t:'Yeterince Al metali 600 mL HNO\u2083 \u00e7\u00f6zeltisine atıldığında a\u00e7ığa \u00e7ıkan H\u2082 gazı NK\u2019da 6,72 litredir (2Al+6HNO\u2083\u21922Al(NO\u2083)\u2083+3H\u2082 basitleştirilmiş tepkimesi varsayılıyor). Buna g\u00f6re, HNO\u2083 \u00e7\u00f6zeltisinin molar derişimi ka\u00e7tır? (Al:27)',
+      c:'mol H\u2082=6,72/22,4=<b>0,3 mol</b>. Katsayı oranı HNO\u2083:H\u2082=6:3=2:1 \u2192 mol HNO\u2083=0,3\u00d72=<b>0,6 mol</b>.<br>Derişim=0,6mol/0,6L=<b>1 M</b>.' },
+    { n:7, kat:'Hesaplama', t:'Oda sıcaklığında pOH=2 olan kuvvetli bir bazın sulu \u00e7\u00f6zeltisinin bir litresine ka\u00e7 litre su eklenirse pOH=3 olur?',
+      c:'pOH=2 \u2192 [OH\u207b]\u2080=0,01 M. pOH=3 \u2192 [OH\u207b]<sub>yeni</sub>=0,001 M.<br>Seyreltme: C\u2080V\u2080=C<sub>yeni</sub>V<sub>yeni</sub> \u2192 0,01\u00d71=0,001\u00d7V<sub>yeni</sub> \u2192 V<sub>yeni</sub>=<b>10 L</b>.<br>Eklenen su=10\u22121=<b>9 L</b>.' },
+    { n:8, kat:'Hesaplama', t:'pH\u2019ı 1 olan 10 mL HCl \u00e7\u00f6zeltisi ile pH\u2019ı 2 olan 100 mL HCl \u00e7\u00f6zeltisi karıştırılıp son hacim 200 mL\u2019ye tamamlanırsa oluşan yeni \u00e7\u00f6zeltinin pH değeri ka\u00e7 olur?',
+      c:'1. \u00e7\u00f6zelti: [H\u207a]=10\u207b\u00b9=0,1M, V=0,01L \u2192 mol H\u207a=0,001.<br>2. \u00e7\u00f6zelti: [H\u207a]=10\u207b\u00b2=0,01M, V=0,1L \u2192 mol H\u207a=0,001.<br>Toplam mol H\u207a=0,002, toplam V=0,2L \u2192 [H\u207a]<sub>yeni</sub>=0,002/0,2=<b>0,01 M</b> \u2192 <b>pH=2</b>.' },
+    { n:9, kat:'Hesaplama', t:'pH=1 olan 48 L \u00e7\u00f6zelti hazırlanması i\u00e7in, \u00f6zk\u00fctlesi 1,2 g/mL olan ve k\u00fctlece %36,5 HCl i\u00e7eren \u00e7\u00f6zeltiden ka\u00e7 L kullanılmalıdır? (HCl:36,5)',
+      c:'pH=1 \u2192 [H\u207a]=0,1M (HCl kuvvetli asit). Gerekli mol HCl=0,1\u00d748=<b>4,8 mol</b>.<br>Gerekli k\u00fctle=4,8\u00d736,5=<b>175,2 g</b>.<br>1 mL stok \u00e7\u00f6zeltide: k\u00fctle=1,2g, HCl k\u00fctlesi=1,2\u00d70,365=0,438g.<br>Gerekli hacim=175,2/0,438=400 mL=<b>0,4 L</b>.' },
+    { n:10, kat:'Hesaplama', t:'25°C\u2019de 0,005 M H\u2082SO\u2084 \u00e7\u00f6zeltisi i\u00e7in: a) [H\u207a] ka\u00e7 mol/L\u2019dir? b) \u00c7\u00f6zeltinin pH değeri ka\u00e7tır? c) [OH\u207b] ka\u00e7 mol/L\u2019dir?',
+      c:'H\u2082SO\u2084 iki değerli KUVVETLİ asit (basitleştirilmiş tam iyonlaşma varsayımıyla): [H\u207a]=2\u00d70,005=<b>0,01 M</b>.<br>b) pH=\u2212log(0,01)=<b>2</b>.<br>c) [OH\u207b]=Ksu/[H\u207a]=10\u207b\u00b9\u2074/0,01=<b>10\u207b\u00b9\u00b2 M</b>.' },
+    { n:11, kat:'Zayıf Asit/Baz', t:'0,1 M\u2019lık HF \u00e7\u00f6zeltisinin oda koşullarında pH değeri ka\u00e7tır? (HF i\u00e7in oda koşullarında Ka=1\u00d710\u207b\u00b3)',
+      c:'Zayıf asit dengesi: Ka=x\u00b2/(C\u2212x)\u2248x\u00b2/C (x\u226aC yaklaşıklığıyla).<br>x\u00b2=Ka\u00d7C=10\u207b\u00b3\u00d70,1=10\u207b\u2074 \u2192 x=[H\u207a]=<b>0,01 M</b>.<br>pH=\u2212log(0,01)=<b>2</b>.' },
+    { n:12, kat:'Zayıf Asit/Baz', t:'Oda koşullarında hazırlanan 0,2 M\u2019lık CH\u2083COOH \u00e7\u00f6zeltisinin pH değeri 5\u2019tir. Buna g\u00f6re: a) 25°C\u2019de Ka değeri ka\u00e7tır? b) İyonlaşma y\u00fczdesi ka\u00e7tır?',
+      c:'pH=5 \u2192 [H\u207a]=10\u207b\u2075 M.<br>a) Ka\u2248[H\u207a]\u00b2/C=(10\u207b\u2075)\u00b2/0,2=<b>5\u00d710\u207b\u00b9\u2070</b>.<br>b) İyonlaşma y\u00fczdesi=([H\u207a]/C)\u00d7100=(10\u207b\u2075/0,2)\u00d7100=<b>%0,005</b> (\u00e7ok zayıf bir asit olduğunu g\u00f6sterir).' },
+    { n:13, kat:'Zayıf Asit/Baz', t:'BOH ile g\u00f6sterilen zayıf bir bazın 0,02 M \u00e7\u00f6zeltisinde %0,5 oranında iyonlaşma olduğuna g\u00f6re: a) [OH\u207b] ka\u00e7 mol/L\u2019dir? b) Bazın iyonlaşma sabiti Kb ka\u00e7tır? c) pOH ve [H\u207a] ka\u00e7tır?',
+      c:'a) [OH\u207b]=C\u00d7iyonlaşma oranı=0,02\u00d70,005=<b>10\u207b\u2074 M</b>.<br>b) Kb\u2248[OH\u207b]\u00b2/C=(10\u207b\u2074)\u00b2/0,02=<b>5\u00d710\u207b\u2077</b>.<br>c) pOH=\u2212log(10\u207b\u2074)=<b>4</b>. [H\u207a]=Ksu/[OH\u207b]=10\u207b\u00b9\u2074/10\u207b\u2074=<b>10\u207b\u00b9\u2070 M</b>.' },
+    { n:14, kat:'Zayıf Asit/Baz', t:'0,1 M HF \u00e7\u00f6zeltisi i\u00e7in (Ka=10\u207b\u00b3): a) İyonlaşma y\u00fczdesini bulunuz. b) 100 mL\u2019sine 9900 mL su ilave edilip 10000 mL\u2019ye tamamlanırsa yeni iyonlaşma y\u00fczdesi ka\u00e7 olur?',
+      c:'a) x\u00b2\u2248Ka\u00d7C=10\u207b\u00b3\u00d70,1=10\u207b\u2074 \u2192 x=0,01M. Y\u00fczde=(0,01/0,1)\u00d7100=<b>%10</b>.<br>b) Seyreltme sonrası C=0,1\u00d7(100/10000)=<b>0,001 M</b> (=Ka\u2019ya eşit!).<br><span style="color:#fca5a5">\u26a0\ufe0f Burada x, C\u2019ye g\u00f6re artık İHMAL EDİLEMEZ (x\u2248C mertebesinde) \u2014 basit x\u00b2=Ka\u00d7C yaklaşıklığı YANLIŞ sonu\u00e7 verir (%100 gibi imkansız bir değer \u00e7ıkar). TAM ikinci dereceden denklem \u00e7\u00f6z\u00fclmeli:</span><br>x\u00b2+Ka\u00b7x\u2212Ka\u00b7C=0 \u2192 x\u00b2+0,001x\u22120,000001=0 \u2192 x\u22480,000618M.<br>Yeni y\u00fczde=(0,000618/0,001)\u00d7100\u2248<b>%61,8</b> (y\u00fczde artmıştır \u2014 zayıf asit/bazlarda SEYRELTME İYONLAŞMA Y\u00dcZDESİNİ HER ZAMAN ARTIRIR, ama bu \u00f6rnek basit oranlamayla değil tam denklemle \u00e7\u00f6z\u00fclmesi gerektiğini g\u00f6steriyor).' },
+    { n:15, kat:'Kavram (Kuvvetli/Zayıf Ayrımı)', t:'Şekildeki beherlerde 25°C\u2019de 1\u2019er molar (1M) \u00e7\u00f6zeltiler bulunmaktadır: X \u00e7\u00f6zeltisi pH=3, Y \u00e7\u00f6zeltisi pH=4, Z \u00e7\u00f6zeltisi pH=7, T \u00e7\u00f6zeltisi pH=11. Bu maddelerin asit veya bazlıklarının zayıf ya da kuvvetli olduğunu belirtiniz. (\u00c7\u00f6zeltiler tek değerlidir.)',
+      c:'1M KUVVETLİ bir asit i\u00e7in [H\u207a]=1M olur, yani <b>pH=0</b> beklenir. 1M KUVVETLİ bir baz i\u00e7in [OH\u207b]=1M, <b>pH=14</b> beklenir.<br><b>X (pH=3):</b> 1M olmasına rağmen pH=0 değil, 3 \u2192 tam iyonlaşmamış \u2192 <b>ZAYIF ASİT</b>.<br><b>Y (pH=4):</b> Aynı mantıkla, X\u2019ten de az iyonlaşmış \u2192 <b>ZAYIF ASİT</b> (X\u2019ten daha zayıf).<br><b>Z (pH=7):</b> N\u00d6TR \u2014 ne asit ne baz \u00f6zelliği g\u00f6sterir.<br><b>T (pH=11):</b> 1M olmasına rağmen pH=14 değil, 11 \u2192 tam iyonlaşmamış \u2192 <b>ZAYIF BAZ</b>.<br>\u2192 Bu \u00f6rnek \u00f6nemli bir kavramı g\u00f6sterir: <b>Kuvvetli/zayıf ayrımı derişimden değil, İYONLAŞMA ORANINDAN anlaşılır</b> \u2014 aynı derişimde kuvvetli bir asit/baz teorik uç pH değerine (0 veya 14) ulaşır, zayıf olan ulaşamaz.' }
+  ];
+
+  // ---------- 34. ASİT-BAZ DENGESİ — ÖZEL DERS NOTU ----------
+  function setupAsitBaz2(){
+    if (document.getElementById('s-asitbaz2')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    var cats = ['Tümü'];
+    ASITBAZ_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-asitbaz2" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83e\uddea Asit-Baz Dengesi</h1>' +
+        '<p class="psub">El yazması ders notundan çözümlü örnekler \u2014 1. parça (' + ASITBAZ_Q.length + ' soru). Ka/Kb, pH/pOH, zayıf-kuvvetli ayrımı.</p>' +
+        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="asitbaz2-cats">' +
+          cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="asitbaz2SetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
+        '</div></div>' +
+        '<div id="asitbaz2-list"></div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-asitbaz2') === -1) SCREENS.push('s-asitbaz2');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-asitbaz2'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-asitbaz2" onclick="nav(\'asitbaz2\')">\ud83e\uddea Asit-Baz Dengesi</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-asitbaz2'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-asitbaz2" onclick="nav(\'asitbaz2\')"><div class="ti">\ud83e\uddea</div><div class="tt">Asit-Baz Dengesi</div><div class="td">pH/pOH, Ka/Kb, zayıf-kuvvetli asit-baz \u2014 çözümlü örnekler.</div></div>');
+    asitbaz2RenderList();
+  }
+  var asitbaz2St = { cat: 'Tümü' };
+  window.asitbaz2SetCat = function(cat, btn){ asitbaz2St.cat = cat; if (btn) selectInRow(btn); asitbaz2RenderList(); };
+
+  function asitbaz2RenderList(){
+    var box = document.getElementById('asitbaz2-list');
+    if (!box) return;
+    var html = '';
+    ASITBAZ_Q.forEach(function(q){
+      if (asitbaz2St.cat !== 'Tümü' && q.kat !== asitbaz2St.cat) return;
+      html += '<div class="card" style="margin-bottom:18px;padding:18px 16px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+          '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(52,211,153,.18);color:#34d399;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
+          '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
+        '</div>' +
+        '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
+        '<div onclick="molToggle(\'asitbaz2-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#34d399;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
+        '<div id="asitbaz2-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' + q.c + '</div>' +
+      '</div>';
+    });
+    box.innerHTML = html;
+  }
+
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
@@ -9260,6 +9350,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try { setupEnerji(); } catch (e) { /* sessiz */ }
     try { setupVideoLib(); } catch (e) { /* sessiz */ }
     try { setupDenge2(); } catch (e) { /* sessiz */ }
+    try { setupAsitBaz2(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
