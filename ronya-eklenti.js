@@ -108,6 +108,13 @@
    iletkenlik deneyi analizi) hepsi node.js ile dogrulandi. Sirada:
    2.2.4-2.2.7 (Kuvvetli/Zayif karsilastirma, Notralesme, Titrasyon,
    Asidik/Bazik urunler).
+   2.2.5-2.2.6 EKLENDI: Notralesme teorisi (n_H+=z*M*V formulu, tam
+   vs kismi notralesme ayrimi) + MEB'in 2.19-2.20 Etkinliginden 4
+   GERCEK notralesme ornegi (H2SO4+NaOH tam notr pH=7, HCl+NaOH kismi
+   pH=1, HNO3+Ba(OH)2 kismi pH=13, Ba(OH)2+HBr pH=1 -- hepsi node.js
+   dogrulamali) + Titrasyon formulu (zA*MA*VA=zB*MB*VB) + 2 yeni
+   Uygulama ornegi. Siradaki: 2.2.7 (Asidik/Bazik urunler), Bolum
+   Sonu Olcme-Degerlendirme, ve MEB Cozunurluk Dengesi (2.3).
    DUZELTME (kullanici): Q28'deki KOH derisimi 0,1M degil 0,2M imis.
    Bu onemli bir fark yaratti -- artik titrant tavani (0,2M) hedef
    [OH-]'den (0,1M) BUYUK oldugu icin Y ARTIK ASIMPTOTIK DEGIL, SONLU
@@ -9622,14 +9629,39 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       c:'KOH (KUVVETLİ baz): [OH\u207b]=0,1M \u2192 pOH=1 \u2192 <b>pH=13</b>.<br>NH\u2083 (ZAYIF baz): x=\u221a(0,1\u00d710\u207b\u2075)=\u221a(10\u207b\u2076)=0,001M \u2192 pOH=3 \u2192 <b>pH=11</b>.<br>\u2192 pH DAHA Y\u00dcKSEK olan KOH, DAHA KUVVETLİ BAZDIR: <b>KOH &gt; NH\u2083</b>.' }
   ];
 
+  MAARIF_ASITBAZ_THEORY.t5 = '<h3 style="color:#93c5fd;margin-bottom:10px">2.2.5 Kuvvetli Asit-Baz N\u00f6tralleşme Tepkimeleri</h3>' +
+    '<p style="margin-bottom:8px">Asit+Baz\u2192Tuz+Su+Isı (EKZOTERMİK). Net iyon denklemi: <b>H\u207a(suda)+OH\u207b(suda)\u2192H\u2082O(s)</b>. Kuvvetli asit-baz n\u00f6trleşmesi HIZLI ve TEK Y\u00d6NL\u00dcD\u00dcR, verim %100 kabul edilir.</p>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">Hesaplama Form\u00fclleri</div>' +
+    '<p style="font-size:13px">n<sub>H\u207a</sub>=z<sub>asit</sub>\u00d7M<sub>asit</sub>\u00d7V<sub>asit</sub> \u00b7 n<sub>OH\u207b</sub>=z<sub>baz</sub>\u00d7M<sub>baz</sub>\u00d7V<sub>baz</sub> (z=değerlik)<br>\u2022 <b>n<sub>H\u207a</sub>=n<sub>OH\u207b</sub></b> \u2192 TAM N\u00d6TRALLEŞME, pH=7 (25°C).<br>\u2022 <b>n<sub>H\u207a</sub>&gt;n<sub>OH\u207b</sub></b> \u2192 KISMİ n\u00f6tralleşme, ASİDİK: [H\u207a]=(n<sub>H\u207a</sub>\u2212n<sub>OH\u207b</sub>)/(V<sub>asit</sub>+V<sub>baz</sub>)<br>\u2022 <b>n<sub>OH\u207b</sub>&gt;n<sub>H\u207a</sub></b> \u2192 KISMİ n\u00f6tralleşme, BAZİK: [OH\u207b]=(n<sub>OH\u207b</sub>\u2212n<sub>H\u207a</sub>)/(V<sub>asit</sub>+V<sub>baz</sub>)</p></div>' +
+    '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#93c5fd;margin-bottom:10px">\u2713 MEB Kitabı Doğrulanmış \u00d6rnekler (2.19-2.20. Etkinlik)</div>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:5px;text-align:left">Karışım</th><th style="padding:5px">n<sub>H\u207a</sub></th><th style="padding:5px">n<sub>OH\u207b</sub></th><th style="padding:5px">Sonu\u00e7</th></tr>' +
+    '<tr><td style="padding:5px">H\u2082SO\u2084 1M100mL+NaOH 2M100mL</td><td style="padding:5px;text-align:center">0,2mol</td><td style="padding:5px;text-align:center">0,2mol</td><td style="padding:5px;text-align:center"><b>pH=7</b></td></tr>' +
+    '<tr><td style="padding:5px">HCl 1M1000mL+NaOH 0,8M1000mL</td><td style="padding:5px;text-align:center">1mol</td><td style="padding:5px;text-align:center">0,8mol</td><td style="padding:5px;text-align:center"><b>pH=1</b></td></tr>' +
+    '<tr><td style="padding:5px">HNO\u2083 1,8M1000mL+Ba(OH)\u2082 1M1000mL</td><td style="padding:5px;text-align:center">1,8mol</td><td style="padding:5px;text-align:center">2mol</td><td style="padding:5px;text-align:center"><b>pH=13</b></td></tr>' +
+    '<tr><td style="padding:5px">Ba(OH)\u2082 1M100mL+HBr 2,2M100mL</td><td style="padding:5px;text-align:center">0,22mol</td><td style="padding:5px;text-align:center">0,2mol</td><td style="padding:5px;text-align:center"><b>pH=1</b></td></tr></table>' +
+    '<p style="font-size:12px;color:var(--tx3);margin-top:8px">T\u00fcm sonu\u00e7lar node.js ile doğrulandı. İlk satır TAM n\u00f6tralleşmeye (eşit mol), diğerleri KISMİ n\u00f6tralleşmeye \u00f6rnektir.</p></div>';
+
+  MAARIF_ASITBAZ_THEORY.t6 = '<h3 style="color:#93c5fd;margin-bottom:10px">2.2.6 Kuvvetli Asit-Kuvvetli Baz Titrasyonları</h3>' +
+    '<p style="margin-bottom:8px">Derişimi BİLİNEN bir \u00e7\u00f6zelti (b\u00fcrette) ile derişimi BİLİNMEYEN bir \u00e7\u00f6zeltinin (erlende) derişimini belirleme y\u00f6ntemine <b>titrasyon</b> denir. Tam n\u00f6tralleşme anı İNDİKAT\u00d6R renk değişimiyle belirlenir.</p>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">Titrasyon Form\u00fcl\u00fc</div>' +
+    '<p style="font-size:13px;text-align:center;font-size:15px"><b>z<sub>A</sub>\u00b7M<sub>A</sub>\u00b7V<sub>A</sub> = z<sub>B</sub>\u00b7M<sub>B</sub>\u00b7V<sub>B</sub></b></p>' +
+    '<p style="font-size:12px;color:var(--tx3);margin-top:6px">Titrasyon; \u00e7\u00f6kt\u00fcrme, redoks, asit-baz titrasyonları olarak sınıflandırılır. B\u00fcretteki \u00e7\u00f6zelti erlendeki \u00e7\u00f6zeltiye DAMLA DAMLA eklenir, kalıcı renk değişimi ger\u00e7ekleştiğinde (d\u00f6n\u00fcm noktası) işlem durdurulur.</p></div>';
+
+  var MAB_UYG3 = [
+    { s:'1 M 100 mL Ba(OH)\u2082 \u00e7\u00f6zeltisi \u00fczerine 2,2 M 100 mL HBr \u00e7\u00f6zeltisi ilave edildiğinde oluşan \u00e7\u00f6zeltinin pH\u2019ını hesaplayınız.',
+      c:'mol OH\u207b=1\u00d70,1\u00d72(Ba(OH)\u2082 iki değerli)=<b>0,2mol</b>. mol H\u207a=2,2\u00d70,1\u00d71(HBr tek değerli)=<b>0,22mol</b>.<br>H\u207a fazla: 0,22\u22120,2=0,02mol. Toplam hacim=200mL=0,2L.<br>[H\u207a]=0,02/0,2=<b>0,1M</b> \u2192 <b>pH=1</b>.' },
+    { s:'Derişimi bilinmeyen 25 mL HCl \u00e7\u00f6zeltisi, 0,2 M NaOH ile titre ediliyor. D\u00f6n\u00fcm noktasında b\u00fcretten 40 mL NaOH harcandığı okunuyor. HCl\u2019nin derişimi ka\u00e7 molardır?',
+      c:'Titrasyon form\u00fcl\u00fc: z<sub>A</sub>M<sub>A</sub>V<sub>A</sub>=z<sub>B</sub>M<sub>B</sub>V<sub>B</sub> (HCl ve NaOH ikisi de tek değerli, z=1).<br>1\u00d7M<sub>HCl</sub>\u00d725=1\u00d70,2\u00d740 \u2192 M<sub>HCl</sub>=8/25=<b>0,32 M</b>.' }
+  ];
+
   function setupMaarifAsitBaz(){
     if (document.getElementById('mab-wrap')) return;
     var host = document.getElementById('asitbaz2-group-0');
     if (!host) return;
     host.insertAdjacentHTML('beforeend', '<div id="mab-wrap"></div>');
     var wrap = document.getElementById('mab-wrap');
-    var html = '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cAsit-Baz Dengesi\u201d \u00fcnitesinin konu anlatımı \u2014 2. parça (2.2.1-2.2.4).</p>' +
-      MAARIF_ASITBAZ_THEORY.t1 + MAARIF_ASITBAZ_THEORY.t2 + MAARIF_ASITBAZ_THEORY.t3 + MAARIF_ASITBAZ_THEORY.t4 +
+    var html = '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cAsit-Baz Dengesi\u201d \u00fcnitesinin konu anlatımı \u2014 3. parça (2.2.1-2.2.6).</p>' +
+      MAARIF_ASITBAZ_THEORY.t1 + MAARIF_ASITBAZ_THEORY.t2 + MAARIF_ASITBAZ_THEORY.t3 + MAARIF_ASITBAZ_THEORY.t4 + MAARIF_ASITBAZ_THEORY.t5 + MAARIF_ASITBAZ_THEORY.t6 +
       '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd Uygulama Noktası \u00d6rnekleri (2.2.1-2.2.3)</h4>';
     MAB_UYG.forEach(function(u, i){
       html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg-' + i + '\')">' +
@@ -9642,7 +9674,13 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
         '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
         '<div id="mabuyg2-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
     });
-    html += '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 2.2.5-2.2.7 (N\u00f6tralleşme, Titrasyon, Asidik/Bazik \u00fcr\u00fcnler) sıradaki g\u00fcncellemede eklenecek.</p>';
+    html += '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd N\u00f6tralleşme/Titrasyon \u00d6rnekleri (2.2.5-2.2.6)</h4>';
+    MAB_UYG3.forEach(function(u, i){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg3-' + i + '\')">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+        '<div id="mabuyg3-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
+    });
+    html += '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 2.2.7 (Asidik/Bazik \u00fcr\u00fcnler \u2014 g\u00fcnl\u00fck hayat) sıradaki g\u00fcncellemede eklenecek. Ardından B\u00f6l\u00fcm Sonu \u00d6l\u00e7me-Değerlendirme ve MEB \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi (2.3).</p>';
     wrap.innerHTML = html;
   }
 
