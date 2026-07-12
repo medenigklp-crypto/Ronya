@@ -108,6 +108,13 @@
    iletkenlik deneyi analizi) hepsi node.js ile dogrulandi. Sirada:
    2.2.4-2.2.7 (Kuvvetli/Zayif karsilastirma, Notralesme, Titrasyon,
    Asidik/Bazik urunler).
+   DUZELTME (kullanici): Q28'deki KOH derisimi 0,1M degil 0,2M imis.
+   Bu onemli bir fark yaratti -- artik titrant tavani (0,2M) hedef
+   [OH-]'den (0,1M) BUYUK oldugu icin Y ARTIK ASIMPTOTIK DEGIL, SONLU
+   bir hacimde TAM cozulebiliyor: X=50mL (esdegerlik), Y=200mL (pH=13,
+   node.js ile dogrulandi). Grafik de yeni degerlerle guncellendi.
+   NOT: pH-pOH grafigi (abz-phline) ve H+-OH- grafigi (abz-hcurve)
+   zaten mevcuttu, tekrar dogrulandi, calisiyorlar.
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9370,9 +9377,9 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       ac:'Eşit hacimde (V) her se\u00e7enek i\u00e7in mol H\u207a = derişim\u00d7değerlik\u00d7V ile mol OH\u207b = derişim\u00d7değerlik\u00d7V karşılaştırılır (V ortak olduğu i\u00e7in sadeleşir, sadece \u201cderişim\u00d7değerlik\u201d karşılaştırılır):<br>A) 0,2\u00d71=0,2 vs 0,2\u00d71=0,2 \u2192 EŞİT ✓<br>B) 0,1\u00d72=0,2 vs 0,1\u00d72=0,2 \u2192 EŞİT ✓<br>C) 0,2\u00d71=0,2 vs 0,2\u00d71=0,2 \u2192 EŞİT ✓<br>D) 0,1\u00d73=0,3 vs 0,3\u00d71=0,3 \u2192 EŞİT ✓<br>E) 0,2\u00d72=0,4 vs 0,2\u00d71=0,2 \u2192 <b>FARKLI!</b> H\u207a fazla kalır \u2014 \u00e7\u00fcnk\u00fc H\u2082SO\u2084 İKİ değerli ama NaOH TEK değerli.<br>\u2192 <b>E</b> (tam n\u00f6tralleşme olmaz, asidik kalır).' },
     { n:27, kat:'Titrasyon', t:'Titrasyon ile ilgili temel kavramları tanımlayınız: eşdeğerlik noktası, titrasyon işlemi, d\u00f6n\u00fcm noktası. Kuvvetli asit-kuvvetli baz titrasyonunda eşdeğerlik noktasındaki pH ka\u00e7tır?',
       c:'<b>Eşdeğerlik noktası:</b> N\u00f6tralleşme tepkimelerinde asit ve bazın eşdeğer miktarda (tam n\u00f6trleşecek şekilde) tepkimeye girdiği nokta.<br><b>Titrasyon:</b> Eşdeğerlik noktasını belirlemek i\u00e7in, uygun bir İNDİKAT\u00d6R (belirte\u00e7) kullanarak asidik bir \u00e7\u00f6zeltiye damla damla baz (ya da bazik bir \u00e7\u00f6zeltiye damla damla asit) ilave edilmesi işlemi.<br><b>D\u00f6n\u00fcm noktası:</b> Eklenen indikat\u00f6r\u00fcn RENK DEĞİŞTİRDİĞİ nokta (ideal bir titrasyonda d\u00f6n\u00fcm noktası, eşdeğerlik noktasına \u00e7ok yakın se\u00e7ilir).<br><b>Kuvvetli asit+kuvvetli baz</b> titrasyonunda eşdeğerlik noktasında oda koşullarında \u00e7\u00f6zeltinin pH değeri <b>7</b> olur (n\u00f6tr tuz oluşur).' },
-    { n:28, kat:'Titrasyon', t:'100 mL HNO\u2083 \u00e7\u00f6zeltisi (başlangı\u00e7ta pH=1) yavaş yavaş 0,1 M KOH \u00e7\u00f6zeltisi ile titre ediliyor. Grafikte eklenen baz hacmi X mL iken pH=7, Y mL iken pH=13 oluyor. X ve Y ka\u00e7tır?',
+    { n:28, kat:'Titrasyon', t:'Başlangı\u00e7 pH\u2019ı 1 olan 100 mL HNO\u2083 \u00e7\u00f6zeltisi yavaş yavaş 0,2 M KOH \u00e7\u00f6zeltisi ile titre ediliyor. Grafikte eklenen baz hacmi X mL iken pH=7, Y mL iken pH=13 oluyor. X ve Y ka\u00e7tır?',
       graph:'abzg-titr1',
-      c:'Başlangı\u00e7 [H\u207a]=10\u207b\u00b9=0,1M (HNO\u2083 tek değerli kuvvetli asit) \u2192 mol H\u207a=0,1\u00d7100=<b>10 mmol</b>.<br><b>X (eşdeğerlik noktası, pH=7):</b> mol KOH eklenen = mol H\u207a \u2192 0,1\u00d7X=10 \u2192 <b>X=100 mL</b>.<br><b>Y (pH=13 noktası):</b> Hedef [OH\u207b]=0,1M. Ancak KOH TEK DEĞERLİ olduğu i\u00e7in [OH\u207b]\u2019nin ULAŞABİLECEĞİ TEORİK \u00dcST SINIR, tam olarak titrantın KENDİ derişimi olan <b>0,1M\u2019dir</b> \u2014 bu sınıra SADECE Y sonsuza giderken YAKLAŞILIR, hi\u00e7bir SONLU Y değerinde TAM olarak ulaşılamaz (matematiksel bir asimptottur).<br><span style="color:#93c5fd">\ud83d\udca1 Pratikte grafik \u00e7ok b\u00fcy\u00fck Y değerlerinde (\u00f6rn. Y=10000mL\u2019de pH\u224812,99) g\u00f6rsel olarak d\u00fcz bir \u201cpH\u224813 platosu\u201d gibi g\u00f6r\u00fcn\u00fcr, bu y\u00fczden elle \u00e7izilen grafiklerde \u201cY mL\u2019de pH=13\u201d şeklinde YAKLAŞIK g\u00f6sterilir. Bu, tek değerli titrantlarla yapılan titrasyonların \u00f6nemli bir \u00f6zelliğidir: <b>plato pH\u2019ı, titrantın kendi pH\u2019ını ge\u00e7emez.</b></span>' },
+      c:'Başlangı\u00e7 pH=1 \u2192 [H\u207a]=0,1M (HNO\u2083 tek değerli kuvvetli asit) \u2192 mol H\u207a=0,1\u00d7100=<b>10 mmol</b>.<br><b>X (eşdeğerlik noktası, pH=7):</b> mol KOH eklenen = mol H\u207a \u2192 0,2\u00d7X=10 \u2192 <b>X=50 mL</b>.<br><b>Y (pH=13 noktası):</b> Hedef [OH\u207b]=0,1M. KOH derişimi 0,2M olduğu i\u00e7in bu sefer [OH\u207b]\u2019nin teorik \u00fcst sınırı 0,2M\u2019dir \u2014 hedef (0,1M) bu sınırın ALTINDA olduğu i\u00e7in SONLU bir Y değerinde TAM olarak ulaşılabilir:<br>[OH\u207b]=(0,2Y\u221210)/(100+Y)=0,1 \u2192 0,2Y\u221210=10+0,1Y \u2192 0,1Y=20 \u2192 <b>Y=200 mL</b>.<br><span style="color:#93c5fd">\ud83d\udca1 Bir \u00f6nceki (0,1M KOH\u2019lu) versiyonuyla karşılaştır: titrant derişimi 2 katına \u00e7ıkınca hem eşdeğerlik noktası hem de pH=13 noktası SONLU ve NET bir şekilde \u00e7\u00f6z\u00fclebilir hâle geldi \u2014 \u00e7\u00fcnk\u00fc titrant derişimi artık hedef [OH\u207b]\u2019den (0,1M) B\u00dcY\u00dcK.</span>' },
     { n:29, kat:'Titrasyon', t:'100 mL H\u2082SO\u2084 \u00e7\u00f6zeltisi (başlangı\u00e7ta pH=1) yavaş yavaş 0,1 M Ca(OH)\u2082 \u00e7\u00f6zeltisi ile titre ediliyor. Grafikte: 25 mL\u2019de pH=X, V mL\u2019de pH=7 (eşdeğerlik), 100 mL\u2019de pH=Y, 200 mL\u2019de pH=Z, 300 mL\u2019de pH=T oluyor. X ve Y ka\u00e7tır?',
       graph:'abzg-titr2',
       c:'Başlangı\u00e7 [H\u207a]=0,1M \u2192 mol H\u207a=0,1\u00d7100=<b>10 mmol</b> (sabit kalır, titrasyon boyunca t\u00fcketilir).<br>Ca(OH)\u2082 İKİ DEĞERLİ baz: her mL eklenen 0,1M Ca(OH)\u2082, 0,2 mmol OH\u207b getirir.<br><b>V (eşdeğerlik, pH=7):</b> 0,2\u00d7V=10 \u2192 <b>V=50 mL</b>.<br><b>X (25 mL\u2019de pH):</b> mol OH\u207b eklenen=0,2\u00d725=5mmol. Kalan H\u207a=10\u22125=5mmol. Toplam hacim=125mL. [H\u207a]=5/125=0,04M \u2192 <b>X=pH\u22481,4</b>.<br><b>Y (100 mL\u2019de pH):</b> mol OH\u207b eklenen=0,2\u00d7100=20mmol. Fazla OH\u207b=20\u221210=10mmol. Toplam hacim=200mL. [OH\u207b]=10/200=0,05M \u2192 pOH\u22481,3 \u2192 <b>Y=pH\u224812,7</b>.<br><span style="color:#93c5fd">\ud83d\udca1 Ek bilgi: Z (200mL\u2019de) TAM <b>pH=13</b> \u00e7ıkar (bu soruda titrant Ca(OH)\u2082 İKİ DEĞERLİ olduğu i\u00e7in [OH\u207b] \u00fcst sınırı 0,2M\u2019dir, yani pH=13 SONLU bir hacimde ger\u00e7ekten ulaşılabilir \u2014 bu, bir \u00f6nceki soru [Q28, tek değerli KOH] ile arasındaki \u00f6nemli farktır!).</span>' }
@@ -9637,14 +9644,14 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
   }
 
   function abzDrawQGraphs(){
-    // Titrasyon eğrisi 1: 100mL HNO3 (pH=1) + 0.1M KOH (tek değerli, plato pH=13'e ASLA tam ulaşmaz)
+    // Titrasyon eğrisi 1: 100mL HNO3 (pH=1) + 0.2M KOH (X=50mL eşdeğerlik, Y=200mL pH=13)
     maarifChart('abzg-titr1', function(x, W, H2){
       var g = mcAxes(x, W, H2, 34, 12, 14, 26, 'Eklenen baz hacmi (mL)', 'pH');
-      var maxV = 400;
+      var maxV = 300;
       var pts = [];
       for (var i = 0; i <= 100; i++) {
         var V = (i/100)*maxV;
-        var molH0 = 10, molOH = 0.1*V, totalV = 100+V;
+        var molH0 = 10, molOH = 0.2*V, totalV = 100+V;
         var net = molOH - molH0, pH;
         if (Math.abs(net) < 0.01) pH = 7;
         else if (net < 0) pH = -Math.log10((-net)/totalV);
@@ -9653,11 +9660,17 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       }
       x.strokeStyle = '#34d399'; x.lineWidth = 2.2; x.beginPath();
       pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
-      // X=100mL işaretle (pH=7)
-      var xx = g.padL+(100/maxV)*g.plotW, xy = g.padT+g.plotH-(7/14)*g.plotH;
-      x.fillStyle='#f59e0b'; x.beginPath(); x.arc(xx,xy,3,0,6.283); x.fill();
-      x.font='9px sans-serif'; x.textAlign='center'; x.fillText('X=100mL, pH=7', xx, xy-10);
-      x.fillStyle='rgba(255,255,255,.5)'; x.fillText('pH\u224813 platosuna YAKLAŞIR (asla tam eşitlenmez)', g.padL+g.plotW*0.7, g.padT+12);
+      var marks1 = [[50,'X=50mL, pH=7'],[200,'Y=200mL, pH=13']];
+      marks1.forEach(function(m){
+        var V=m[0];
+        var molOH=0.2*V, totalV=100+V, net=molOH-10, pH;
+        if (Math.abs(net) < 0.01) pH = 7;
+        else if (net < 0) pH = -Math.log10((-net)/totalV);
+        else pH = 14 + Math.log10(net/totalV);
+        var mx=g.padL+(V/maxV)*g.plotW, my=g.padT+g.plotH-(pH/14)*g.plotH;
+        x.fillStyle='#f59e0b'; x.beginPath(); x.arc(mx,my,3.5,0,6.283); x.fill();
+        x.font='9px sans-serif'; x.textAlign='center'; x.fillStyle='#fff'; x.fillText(m[1], mx, my-10);
+      });
     });
     // Titrasyon eğrisi 2: 100mL H2SO4 (pH=1) + 0.1M Ca(OH)2 (iki değerli, pH=13 SONLU V'de ulaşılır)
     maarifChart('abzg-titr2', function(x, W, H2){
