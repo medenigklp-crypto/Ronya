@@ -5751,6 +5751,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       st.textContent =
         '.app.ronya-light{filter:invert(1) hue-rotate(180deg);}' +
         '.app.ronya-light img,.app.ronya-light video,.app.ronya-light canvas{filter:invert(1) hue-rotate(180deg);}' +
+        '.app.ronya-light .logo,.app.ronya-light .logo-sub{filter:invert(1) hue-rotate(180deg);-webkit-text-fill-color:transparent!important;background-clip:text!important;-webkit-background-clip:text!important;}' +
         'body.ronya-light-body{background:#f1f5f9!important;}';
       document.head.appendChild(st);
     }
