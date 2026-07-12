@@ -194,6 +194,17 @@
    turetilip capraz dogrulandi, Q68 metin celiskisi tespiti). Tema
    Sonu Degerlendirme artik: 16 bosluk doldurma + 9 acik uclu + 41
    coktan secmeli = 66 soru, hepsi ayni goz butonu deseniyle.
+   YENI OZELLIK: Karanlik/Aydinlik tema secimi eklendi (Ayarlar
+   ekraninda). Uygulama binlerce hardcoded koyu renk (canvas grafikler,
+   kart arka planlari) icerdigi icin her birini tek tek CSS degiskenine
+   cevirmek yerine PRATIK bir yontem kullanildi: aydinlik modda .app
+   konteynerine 'filter: invert(1) hue-rotate(180deg)' CSS filtresi
+   uygulaniyor -- bu, TUM koyu renkleri (base uygulama + benim TUM
+   eklentilerim: grafikler, kartlar, butonlar) tek seferde acik renge
+   ceviriyor, canvas ciktilarini da kapsiyor. Secim localStorage'da
+   saklaniyor, sayfa her acildiginda otomatik uygulaniyor. Node.js ile
+   toggle mekanizmasi (sinif ekleme/kaldirma, localStorage kaydi, style
+   tag enjeksiyonu) dogrulandi.
    29 SORU DAHA EKLENDI ("Tamamini istiyorum" istegi uzerine): Denge
    (32,33,34,36,37,38,39,40,41,42,43,44 -- tam veri tablosu ile Q,
    Kc, denge tespiti; 46,47,48 -- PET sentezi Le Chatelier), Otoiyoni-
@@ -5688,6 +5699,13 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       '<div id="s-set" style="display:none"><div class="pw narrow">' +
         '<h1 class="ptitle">\u2699\ufe0f Ayarlar</h1>' +
         '<p class="psub">\u0130lerleme verilerini g\u00f6r\u00fcnt\u00fcle ve gerekirse s\u0131f\u0131rla.</p>' +
+        '<div class="card" style="margin-bottom:14px">' +
+          '<div class="slbl">G\u00f6r\u00fcn\u00fcm</div>' +
+          '<div style="display:flex;gap:8px">' +
+            '<button type="button" id="theme-btn-dark" class="ob" onclick="setTheme(\'dark\',this)" style="flex:1">\ud83c\udf19 Karanl\u0131k</button>' +
+            '<button type="button" id="theme-btn-light" class="ob" onclick="setTheme(\'light\',this)" style="flex:1">\u2600\ufe0f Ayd\u0131nl\u0131k</button>' +
+          '</div>' +
+        '</div>' +
         '<div id="set-list" style="margin-bottom:14px"></div>' +
         '<button type="button" onclick="setResetAll()" style="width:100%;padding:14px;background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:var(--rlg);color:#fca5a5;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px">\ud83d\uddd1\ufe0f T\u00fcm \u0130lerlemeyi S\u0131f\u0131rla</button>' +
         '<p style="font-size:11px;color:var(--tx3);text-align:center;line-height:1.6">Bu ekran yaln\u0131zca bu cihazda saklanan yerel ilerleme verilerini y\u00f6netir. Hi\u00e7bir veri sunucuya g\u00f6nderilmez.</p>' +
@@ -5696,8 +5714,48 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     var mn = document.getElementById('mn');
     if (mn && !document.getElementById('mn-set'))
       mn.insertAdjacentHTML('beforeend', '<button id="mn-set" onclick="nav(\'set\')">\u2699\ufe0f Ayarlar</button>');
+    updateThemeButtons();
   }
-  function setEnter(){ setRenderList(); }
+  window.setTheme = function(mode, btn){
+    var appEl = document.querySelector('.app');
+    if (mode === 'light') {
+      if (appEl) appEl.classList.add('ronya-light');
+      document.body.classList.add('ronya-light-body');
+    } else {
+      if (appEl) appEl.classList.remove('ronya-light');
+      document.body.classList.remove('ronya-light-body');
+    }
+    try { localStorage.setItem('ronya_theme', mode); } catch (e) {}
+    updateThemeButtons();
+  };
+  function updateThemeButtons(){
+    var mode = 'dark';
+    try { mode = localStorage.getItem('ronya_theme') || 'dark'; } catch (e) {}
+    var db = document.getElementById('theme-btn-dark'), lb = document.getElementById('theme-btn-light');
+    if (db && lb) {
+      if (mode === 'light') { lb.classList.add('sel2'); db.classList.remove('sel2'); }
+      else { db.classList.add('sel2'); lb.classList.remove('sel2'); }
+    }
+  }
+  function applyStoredTheme(){
+    var mode = 'dark';
+    try { mode = localStorage.getItem('ronya_theme') || 'dark'; } catch (e) {}
+    if (mode === 'light') {
+      var appEl = document.querySelector('.app');
+      if (appEl) appEl.classList.add('ronya-light');
+      document.body.classList.add('ronya-light-body');
+    }
+    if (!document.getElementById('ronya-theme-style')) {
+      var st = document.createElement('style');
+      st.id = 'ronya-theme-style';
+      st.textContent =
+        '.app.ronya-light{filter:invert(1) hue-rotate(180deg);}' +
+        '.app.ronya-light img,.app.ronya-light video,.app.ronya-light canvas{filter:invert(1) hue-rotate(180deg);}' +
+        'body.ronya-light-body{background:#f1f5f9!important;}';
+      document.head.appendChild(st);
+    }
+  }
+  function setEnter(){ setRenderList(); updateThemeButtons(); }
 
   // ---------- 15. GALVANİK (VOLTAİK) HÜCRE 3D ----------
   var GV_METALS = {
@@ -10326,6 +10384,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
   }
 
   function init(){
+    try { applyStoredTheme(); } catch (e) { /* sessiz */ }
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
     try { setupMolFormula(); } catch (e) { /* sessiz */ }
