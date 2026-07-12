@@ -123,6 +123,90 @@
    TAM pH=7 veren Y tableti en uygun). 2.2.1'den 2.2.7'ye kadar TUM
    MEB Asit-Baz konu anlatimi artik tamamlandi. Siradaki: MEB
    Cozunurluk Dengesi (2.3, 161 sayfalik dosyanin son bolumu).
+   COZUNURLUK DENGESI (2.3.1) DOGRULANDI VE DUZELTILDI: Bu icerik
+   aslinda ONCEDEN eklenmis bulundu (gorunmeyen bir noktada) -- ayni
+   6 ornegi ben de bagimsiz olarak yeniden turetince neredeyse birebir
+   ayni cikti, bu da her ikisinin de dogrulugunu destekliyor. Kendi
+   tekrarimi kaldirdim, SADECE orijinali biraktim. Ayrica orijinal
+   kodda GERCEK bir sozdizimi hatasi buldum (yanlis yerde noktali
+   virgul, COZ_THEORY object literal'ini erken kapatiyordu) ve
+   duzelttim. Icerik: Kcc tanimi, s-Kcc iliski tablosu (XY,XY2,XY3,
+   X2Y3), MEB'in gercek 20 tuzluk Tablo 2.6'si (25C), 6 cozumlu ornek
+   (AgCl/BaCO3/SrF2, AgBr/MgCO3/Ag2SO4, Ag2SO4 Kcc bulma, CaSO4 su
+   hacmi, CuBr/Ag2CrO4/Li3PO4 karsilastirma, MgF2 kismi cozunme).
+   Siradaki: 2.3.2 (Cozunurluge etki eden faktorler -- ortak iyon
+   etkisi, sicaklik, Le Chatelier -- 2.14 Kontrol Noktasi'ndaki PbF2
+   tablosu dahil).
+   2.3.2 EKLENDI - MEB COZUNURLUK DENGESI (2.3) TAMAMEN BITTI:
+   Sicaklik etkisi (endotermik/ekzotermik ayrimi, MEB'in GERCEK
+   Ca(IO3)2 [endotermik] ve CaCrO4 [ekzotermik] 3-sicaklikli veri
+   tablolari) + Ortak iyon etkisi (MEB'in GERCEK AgCl+NaCl/AgNO3
+   verisi: cozunurluk degisir ama Kcc HER ZAMAN 1,6e-9 sabit kalir) +
+   bobrek tasi gercek hayat uygulamasi + PbF2 Le Chatelier tablosu
+   (2.14 Kontrol Noktasi, 7 sikli: sicaklik/katı ekleme/ortak iyon/
+   asiri su -- hepsi kendi kimya bilgimle cozuldu, ozellikle "katinin
+   TAMAMINI cozecek fazla su eklenirse Kcc kavrami artik uygulanamaz"
+   inceligi vurgulandi) + AgNO3+NaCl AgCl uretimi uygulamasi (dusuk
+   sicaklikta VE ortak iyon eklenince DAHA FAZLA katı elde edildigi
+   gosterildi). Boylece Tema 2'nin TUMU (Denge 2.1, Asit-Baz 2.2,
+   Cozunurluk 2.3) MEB konu anlatimi olarak TAMAMLANDI.
+   TEMA SONU OLCME-DEGERLENDIRME EKLENDI: MEB'in devasa (75 soruluk,
+   D/Y bulmaca + bosluk doldurma + acik uclu + coktan secmeli karisimi)
+   test bankasindan: 1) TUM 16 bosluk doldurma sorusu (2-17), kelime
+   havuzuyla tam cozuldu (tersinir, denge sabiti, Le Chatelier ilkesi,
+   otoiyonizasyon, proton, notralesme, titrasyon, cozunurluk, ortak
+   iyon vb.) 2) 8 secilmis coktan secmeli soru -- Denge (fiziksel/
+   kimyasal denge ayrimi, ekzotermik SO3 tepkimesinde Le Chatelier
+   hipotezleri, katalizor etkisi), Asit-Baz (Arrhenius'un "proton"
+   kavramini KULLANMADIGI incelik), Cozunurluk (CaSO4 molar cozunurluk
+   hesaplama, deneysel/teorik fark nedenleri, model hatasi tespiti) --
+   hepsi node.js ile dogrulandi/kendi kimya bilgimle cozuldu. NOT:
+   75 sorunun TAMAMI degil, temsili/kaliteli bir secki sunuldu (zaman
+   kisitlari nedeniyle) -- kullanici isterse devami eklenebilir.
+   4 SORU DAHA EKLENDI (Q58-61, Titrasyon): NaOH+H2SO4 iletkenlik
+   titrasyonu -- iletkenlik disinda gozlem olcutleri, esdegerlik
+   sonrasi pH yanlislama tespiti (35mL'de pH~0.74, asidik, "pH>7"
+   iddiasi YANLIS), NaOH derisimi bulma (3M), 80mL sonrasi pH=0.
+   Hepsi node.js ile dogrulandi. Toplam 12 secilmis MC soru.
+   TUTARLILIK DUZELTMESI (kullanici istegi): TUM MEB soru bloklarinda
+   (Denge Le Chatelier 13 senaryo, Asit-Baz 3 Uygulama seti, Cozunurluk
+   2 Ornek seti, Tema Sonu 12 MC) artik AYNI goz butonu ("Cozumu
+   Goster") deseni kullaniliyor -- onceden bazilari sadece karta
+   tiklaniyordu (buton gorunmuyordu), simdi hepsi NOTE_Q/DENGE_Q/
+   ASITBAZ_Q ile TUTARLI acik buton gosteriyor.
+   3 ACIK UCLU SORU EKLENDI (Q25-27, Asit-Baz): Q25 (A/B/C/D 0.1M
+   monofonksiyonel, pH 4/13/1/10 -- asit/baz ayrimi, iyonlasma yuzdesi,
+   kuvvet siralamasi, OH- karsilastirmasi TAM cozuldu), Q26 (gercek
+   urunler: HNO3=kirec cozucu, CH3COOH=sirke Ka=1e-7, NaOH=lavabo
+   acici, NH3=yuzey temizleyici Kb=1e-5 -- 4 pH hesabi: 1,4,13,11 +
+   "neden farkli" kavramsal sorusu), Q27 (200mL 0.8M HNO3+200mL 0.6M
+   KOH notrlesme, pH=1). Hepsi node.js dogrulamali. "Acik Uclu
+   Sorular" yeni bir bolum olarak Tema Sonu degerlendirmeye eklendi,
+   ayni goz butonu deseniyle.
+   BUYUK GENISLEME (kullanici: "tamamini istiyorum"): 75 soruluk MEB
+   test bankasindan MUMKUN OLAN NEREDEYSE TUMU eklendi -- artik 9 acik
+   uclu (18,19,25-31) + 41 coktan secmeli soru var. Skip edilenler:
+   Q45(II/III metni eksikti), Q62-65(titrasyon grafiginin 0-35mL
+   araligindaki tam egri sekli metinden okunamadi, tahminle
+   doldurulmadi). Tum yeni sorular node.js ile dogrulandi (ornekler:
+   Q41 tepkime orani Q=4.82 tam hesaplandi, Q42 Qc=0.149<<Kc=21.87
+   karsilastirmasi, Q54/55/56 ayni 4-kap verisinden 3 farkli soru
+   turetilip capraz dogrulandi, Q68 metin celiskisi tespiti). Tema
+   Sonu Degerlendirme artik: 16 bosluk doldurma + 9 acik uclu + 41
+   coktan secmeli = 66 soru, hepsi ayni goz butonu deseniyle.
+   29 SORU DAHA EKLENDI ("Tamamini istiyorum" istegi uzerine): Denge
+   (32,33,34,36,37,38,39,40,41,42,43,44 -- tam veri tablosu ile Q,
+   Kc, denge tespiti; 46,47,48 -- PET sentezi Le Chatelier), Otoiyoni-
+   zasyon (49,50), Asit-Baz Teorileri (52,53), Kuvvetli/Zayif (54,55,
+   56,57 -- 4 kap pH karsilastirmasi), Titrasyon (62,64), Kimya ve
+   Yasam (66,67,68 -- antiasit tablet secimi), Le Chatelier (70).
+   TOPLAM 41 coktan secmeli soru (12+29). Hepsi tam metin/veri ile
+   dogrulandi (node.js hesaplamalari veya saglam mantik yurutmesi).
+   ATLANAN SORULAR (durustce belirtiliyor): 18-24, grafik/gorsel
+   okuma gerektiren ve OCR'dan guvenilir sekilde okunamayan sorular
+   (A/B/C konteyner gorselleri, spesifik egri sekilleri) -- bunlari
+   tahminle doldurmadim. 29 (AgCl Le Chatelier, PbF2 ile ayni desen)
+   ve 65 (grafik okuma) de benzer sebeplerle bekliyor.
    DUZELTME (kullanici): Q28'deki KOH derisimi 0,1M degil 0,2M imis.
    Bu onemli bir fark yaratti -- artik titrant tavani (0,2M) hedef
    [OH-]'den (0,1M) BUYUK oldugu icin Y ARTIK ASIMPTOTIK DEGIL, SONLU
@@ -9043,8 +9127,9 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (!box) return;
     var html = '';
     MDG_KN25.forEach(function(r, i){
-      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mdgkn-' + i + '\')">' +
-        '<div style="font-size:13px;color:#fff;font-weight:600">' + (i+1) + '. ' + r.e + '</div>' +
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;margin-bottom:8px">' + (i+1) + '. ' + r.e + '</div>' +
+        '<div onclick="molToggle(\'mdgkn-' + i + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f \u00c7\u00f6z\u00fcm\u00fc G\u00f6ster</div>' +
         '<div id="mdgkn-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.9">' +
           '<b style="color:#f59e0b">Sistemin Y\u00f6n\u00fc:</b> ' + r.y + '<br>' +
           '<b style="color:#f59e0b">Kc:</b> ' + r.kc + '<br>' +
@@ -9683,20 +9768,23 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       MAARIF_ASITBAZ_THEORY.t1 + MAARIF_ASITBAZ_THEORY.t2 + MAARIF_ASITBAZ_THEORY.t3 + MAARIF_ASITBAZ_THEORY.t4 + MAARIF_ASITBAZ_THEORY.t5 + MAARIF_ASITBAZ_THEORY.t6 + MAARIF_ASITBAZ_THEORY.t7 +
       '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd Uygulama Noktası \u00d6rnekleri (2.2.1-2.2.3)</h4>';
     MAB_UYG.forEach(function(u, i){
-      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg-' + i + '\')">' +
-        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6;margin-bottom:8px">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+        '<div onclick="molToggle(\'mabuyg-' + i + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
         '<div id="mabuyg-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
     });
     html += '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd \u00c7alışma Yaprağı \u00d6rnekleri (2.2.4)</h4>';
     MAB_UYG2.forEach(function(u, i){
-      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg2-' + i + '\')">' +
-        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6;margin-bottom:8px">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+        '<div onclick="molToggle(\'mabuyg2-' + i + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
         '<div id="mabuyg2-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
     });
     html += '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd N\u00f6tralleşme/Titrasyon \u00d6rnekleri (2.2.5-2.2.6)</h4>';
     MAB_UYG3.forEach(function(u, i){
-      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg3-' + i + '\')">' +
-        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6;margin-bottom:8px">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+        '<div onclick="molToggle(\'mabuyg3-' + i + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
         '<div id="mabuyg3-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
     });
     html += '<p style="font-size:12px;color:#86efac;margin-top:14px;padding:12px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px">\u2705 MEB Asit-Baz Dengesi (2.2) konu anlatımı TAMAMLANDI (2.2.1-2.2.7). Sırada: MEB \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi (2.3).</p>';
@@ -9817,6 +9905,426 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     });
   }
 
+  // ---------- 35. ÇÖZÜNÜRLÜK DENGESİ (MEB 2.3) ----------
+  var COZ_THEORY = {
+    t1: '<h3 style="color:#93c5fd;margin-bottom:10px">2.3.1 Suda Az \u00c7\u00f6z\u00fcnen Tuzların Molar \u00c7\u00f6z\u00fcn\u00fcrl\u00fckleri</h3>' +
+      '<p style="margin-bottom:8px">Doymuş bir \u00e7\u00f6zeltide katı, \u00e7\u00f6zeltideki iyonlarla DENGE hâlindedir (\u00e7\u00f6zünme hızı=\u00e7\u00f6kelme hızı). Bu dengeye <b>\u00e7\u00f6z\u00fcn\u00fcrl\u00fck dengesi</b> denir: AgCl(k)\u21ccAg\u207a(suda)+Cl\u207b(suda).</p>' +
+      '<p style="margin-bottom:8px"><b>\u00c7\u00f6z\u00fcn\u00fcrl\u00fck \u00e7arpımı (K<sub>\u00e7\u00e7</sub>)</b>=[Ag\u207a][Cl\u207b] (saf katının derişimi sabit olduğu i\u00e7in bağıntıya girmez). SADECE sıcaklıkla değişir.</p>' +
+      '<p style="margin-bottom:10px"><b>Molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fck (s):</b> 1 litre doygun \u00e7\u00f6zeltide \u00e7\u00f6z\u00fcnen madde miktarı (mol/L).</p>' +
+      '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:8px">Tuz Form\u00fcl\u00fcne G\u00f6re K<sub>\u00e7\u00e7</sub>\u2194s İlişkisi (Tablo 2.5)</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:6px">Tuz Tipi</th><th style="padding:6px">\u00d6rnek</th><th style="padding:6px">K<sub>\u00e7\u00e7</sub></th></tr>' +
+      '<tr><td style="padding:6px;text-align:center">XY</td><td style="padding:6px;text-align:center">AgCl</td><td style="padding:6px;text-align:center"><b>s\u00b2</b></td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">XY\u2082 / X\u2082Y</td><td style="padding:6px;text-align:center">CaF\u2082 / Ag\u2082SO\u2084</td><td style="padding:6px;text-align:center"><b>4s\u00b3</b></td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">XY\u2083 / X\u2083Y</td><td style="padding:6px;text-align:center">Li\u2083PO\u2084</td><td style="padding:6px;text-align:center"><b>27s\u2074</b></td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">X\u2082Y\u2083</td><td style="padding:6px;text-align:center">\u2014</td><td style="padding:6px;text-align:center"><b>108s\u2075</b></td></tr></table></div>' +
+      '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#93c5fd;margin-bottom:8px">\u2713 MEB Kitabı Doğrulanmış Tablo (Tablo 2.6, 25°C)</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:11px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:4px">Tuz</th><th style="padding:4px">K<sub>\u00e7\u00e7</sub></th><th style="padding:4px">Tuz</th><th style="padding:4px">K<sub>\u00e7\u00e7</sub></th></tr>' +
+      '<tr><td style="padding:4px">AgCl</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u00b9\u2070</td><td style="padding:4px">CuS</td><td style="padding:4px;text-align:center">6,0\u00d710\u207b\u00b3\u2077</td></tr>' +
+      '<tr><td style="padding:4px">AgI</td><td style="padding:4px;text-align:center">8,3\u00d710\u207b\u00b9\u2077</td><td style="padding:4px">FeS</td><td style="padding:4px;text-align:center">6,0\u00d710\u207b\u00b9\u2079</td></tr>' +
+      '<tr><td style="padding:4px">Ag\u2082S</td><td style="padding:4px;text-align:center">6\u00d710\u207b\u2075\u00b9</td><td style="padding:4px">HgS</td><td style="padding:4px;text-align:center">4,0\u00d710\u207b\u2075\u2074</td></tr>' +
+      '<tr><td style="padding:4px">Ag\u2082SO\u2084</td><td style="padding:4px;text-align:center">1,4\u00d710\u207b\u2075</td><td style="padding:4px">MnS</td><td style="padding:4px;text-align:center">3,0\u00d710\u207b\u00b9\u2074</td></tr>' +
+      '<tr><td style="padding:4px">BaCO\u2083</td><td style="padding:4px;text-align:center">8,1\u00d710\u207b\u2079</td><td style="padding:4px">PbCrO\u2084</td><td style="padding:4px;text-align:center">2,0\u00d710\u207b\u00b9\u2074</td></tr>' +
+      '<tr><td style="padding:4px">BaSO\u2084</td><td style="padding:4px;text-align:center">1,1\u00d710\u207b\u00b9\u2070</td><td style="padding:4px">PbS</td><td style="padding:4px;text-align:center">3,4\u00d710\u207b\u00b2\u2078</td></tr>' +
+      '<tr><td style="padding:4px">BaF\u2082</td><td style="padding:4px;text-align:center">1,7\u00d710\u207b\u2076</td><td style="padding:4px">SrCO\u2083</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u2079</td></tr>' +
+      '<tr><td style="padding:4px">CaCO\u2083</td><td style="padding:4px;text-align:center">8,7\u00d710\u207b\u2079</td><td style="padding:4px">ZnS</td><td style="padding:4px;text-align:center">3,0\u00d710\u207b\u00b2\u00b3</td></tr>' +
+      '<tr><td style="padding:4px">CaF\u2082</td><td style="padding:4px;text-align:center">4,0\u00d710\u207b\u00b9\u00b9</td><td style="padding:4px">CoS</td><td style="padding:4px;text-align:center">4,0\u00d710\u207b\u00b2\u00b9</td></tr>' +
+      '<tr><td style="padding:4px">Ca\u2083(PO\u2084)\u2082</td><td style="padding:4px;text-align:center">1,2\u00d710\u207b\u00b2\u2076</td><td style="padding:4px">CuBr</td><td style="padding:4px;text-align:center">4,2\u00d710\u207b\u2078</td></tr></table>' +
+      '<p style="font-size:11px;color:var(--tx3);margin-top:6px">Not: Suda MOLEK\u00dcLER \u00e7\u00f6z\u00fcnen maddeler (\u00f6rn. C\u2086H\u2081\u2082O\u2086) i\u00e7in K<sub>\u00e7\u00e7</sub> yazılmaz \u2014 sadece İYONLAŞAN maddeler i\u00e7in ge\u00e7erlidir.</p></div>'
+  };
+
+  var COZ_Q = [
+    { s:'Kçç değeri 16\u00d710\u207b\u00b9\u2070 olan AgCl (XY tipi, s\u00b2), 9\u00d710\u207b\u2078 olan BaCO\u2083 (XY tipi, s\u00b2) ve 32\u00d710\u207b\u2079 olan SrF\u2082 (XY\u2082 tipi, 4s\u00b3) tuzlarının molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fcklerini hesaplayınız.',
+      c:'AgCl: s=\u221a(16\u00d710\u207b\u00b9\u2070)=<b>4\u00d710\u207b\u2075 mol/L</b>.<br>BaCO\u2083: s=\u221a(9\u00d710\u207b\u2078)=<b>3\u00d710\u207b\u2074 mol/L</b>.<br>SrF\u2082: 4s\u00b3=32\u00d710\u207b\u2079 \u2192 s\u00b3=8\u00d710\u207b\u2079 \u2192 s=<b>2\u00d710\u207b\u00b3 mol/L</b>.' },
+    { s:'AgBr (Kçç=1\u00d710\u207b\u00b9\u2074, XY tipi), MgCO\u2083 (Kçç=16\u00d710\u207b\u2078, XY tipi) ve Ag\u2082SO\u2084 (Kçç=4\u00d710\u207b\u2076, X\u2082Y tipi) tuzlarının molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fcklerini karşılaştırınız.',
+      c:'AgBr: s=\u221a(10\u207b\u00b9\u2074)=<b>10\u207b\u2077 mol/L</b>.<br>MgCO\u2083: s=\u221a(16\u00d710\u207b\u2078)=<b>4\u00d710\u207b\u2074 mol/L</b>.<br>Ag\u2082SO\u2084: 4s\u00b3=4\u00d710\u207b\u2076 \u2192 s\u00b3=10\u207b\u2076 \u2192 s=<b>10\u207b\u00b2 mol/L</b>.<br>\u2192 \u00c7\u00f6z\u00fcn\u00fcrl\u00fck sıralaması: <b>Ag\u2082SO\u2084 &gt; MgCO\u2083 &gt; AgBr</b> (K<sub>\u00e7\u00e7</sub> b\u00fcy\u00fckl\u00fcğ\u00fc TEK BAŞINA \u00e7\u00f6z\u00fcn\u00fcrl\u00fck sıralamasını vermez \u2014 tuz TİPİ de \u00f6nemlidir!).' },
+    { s:'Doygun Ag\u2082SO\u2084 \u00e7\u00f6zeltisinin derişimi (molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fcğ\u00fc) 1\u00d710\u207b\u00b3 mol/L olarak \u00f6l\u00e7\u00fclm\u00fcşt\u00fcr. Ag\u2082SO\u2084\u2019n\u00fcn K<sub>\u00e7\u00e7</sub> değeri nedir?',
+      c:'Ag\u2082SO\u2084 (X\u2082Y tipi): K<sub>\u00e7\u00e7</sub>=4s\u00b3=4\u00d7(10\u207b\u00b3)\u00b3=<b>4\u00d710\u207b\u2079</b>.' },
+    { s:'CaSO\u2084 tuzunun K<sub>\u00e7\u00e7</sub> değeri 1,6\u00d710\u207b\u2079\u2019dur. 0,544 gram CaSO\u2084 katısının tamamen \u00e7\u00f6z\u00fcnebilmesi i\u00e7in ka\u00e7 litre su gerekir? (CaSO\u2084:136)',
+      c:'CaSO\u2084 (XY tipi): s=\u221a(1,6\u00d710\u207b\u2079)=<b>4\u00d710\u207b\u2075 mol/L</b> (doygun \u00e7\u00f6zeltide 1L\u2019de \u00e7\u00f6z\u00fcnebilen max miktar).<br>mol CaSO\u2084=0,544/136=<b>0,004 mol</b>.<br>V=mol/s=0,004/(4\u00d710\u207b\u2075)=<b>100 L</b>.' },
+    { s:'CuBr, Ag\u2082CrO\u2084 ve Li\u2083PO\u2084 tuzlarının a\u0131nı sıcaklıkta molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fckleri 1\u00d710\u207b\u2074 mol/L olarak \u00f6l\u00e7\u00fclm\u00fcşt\u00fcr. Her bir tuzun K<sub>\u00e7\u00e7</sub> değerini hesaplayıp karşılaştırınız.',
+      c:'CuBr (XY tipi): K<sub>\u00e7\u00e7</sub>=s\u00b2=(10\u207b\u2074)\u00b2=<b>10\u207b\u2078</b>.<br>Ag\u2082CrO\u2084 (X\u2082Y tipi): K<sub>\u00e7\u00e7</sub>=4s\u00b3=4\u00d7(10\u207b\u2074)\u00b3=<b>4\u00d710\u207b\u00b9\u00b2</b>.<br>Li\u2083PO\u2084 (X\u2083Y tipi): K<sub>\u00e7\u00e7</sub>=27s\u2074=27\u00d7(10\u207b\u2074)\u2074=<b>2,7\u00d710\u207b\u00b9\u2075</b>.<br>\u2192 AYNI molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fckte bile K<sub>\u00e7\u00e7</sub> değerleri \u00c7OK FARKLI \u00e7ıkar \u2014 \u00e7\u00fcnk\u00fc tuz tipi (iyon sayısı/oranı) K<sub>\u00e7\u00e7</sub> form\u00fcl\u00fcn\u00fc değiştirir.' },
+    { s:'MgF\u2082 tuzunun K<sub>\u00e7\u00e7</sub>=4\u00d710\u207b\u2079\u2019dur (t°C\u2019de). 1 gram MgF\u2082 katısı 1 litre saf suya eklendiğinde: a) Ka\u00e7 gramı \u00e7\u00f6zünmeden dipte kalır? b) Dipteki katıyı tamamen \u00e7\u00f6zmek i\u00e7in ka\u00e7 litre daha su eklenmelidir? (MgF\u2082:62)',
+      c:'MgF\u2082 (XY\u2082 tipi): 4s\u00b3=4\u00d710\u207b\u2079 \u2192 s\u00b3=10\u207b\u2079 \u2192 s=<b>10\u207b\u00b3 mol/L</b> (1L suda \u00e7\u00f6z\u00fcnebilen max miktar).<br>a) \u00c7\u00f6z\u00fcnen mol=10\u207b\u00b3\u00d71L=10\u207b\u00b3mol \u2192 k\u00fctle=10\u207b\u00b3\u00d762=0,062g. Dipte kalan=1\u22120,062=<b>0,938 g</b>.<br>b) Toplam mol MgF\u2082=1/62\u22480,01613mol. Tamamını \u00e7\u00f6zmek i\u00e7in gereken hacim=0,01613/10\u207b\u00b3\u224816,13L. Zaten 1L var, eklenmesi gereken=16,13\u22121=<b>\u224815,13 L</b>.' }
+  ];
+
+  COZ_THEORY.t2 = '<h3 style="color:#93c5fd;margin-bottom:10px">2.3.2 \u00c7\u00f6z\u00fcn\u00fcrl\u00fcğe Etki Eden Fakt\u00f6rler</h3>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">1) Sıcaklığın Etkisi (Le Chatelier)</div>' +
+    '<p style="font-size:13px"><b>Endotermik \u00e7\u00f6z\u00fcnme</b> (\u00f6rn. BaSO\u2084(k)+ısı\u21ccBa\u00b2\u207a+SO\u2084\u00b2\u207b): Sıcaklık artınca denge \u00c7\u00d6Z\u00dcNME y\u00f6n\u00fcne kayar \u2192 \u00e7\u00f6z\u00fcn\u00fcrl\u00fck ARTAR, K<sub>\u00e7\u00e7</sub> ARTAR.<br><b>Ekzotermik \u00e7\u00f6z\u00fcnme</b> (\u00f6rn. Li\u2082CO\u2083(k)\u21cc2Li\u207a+CO\u2083\u00b2\u207b+ısı): Sıcaklık artınca denge \u00c7\u00d6KELME y\u00f6n\u00fcne kayar \u2192 \u00e7\u00f6z\u00fcn\u00fcrl\u00fck AZALIR, K<sub>\u00e7\u00e7</sub> AZALIR.</p></div>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#93c5fd;margin-bottom:8px">\u2713 MEB Kitabı Doğrulanmış Veri (2.24 Etkinlik)</div>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:4px">Ca(IO\u2083)\u2082</th><th style="padding:4px">0°C</th><th style="padding:4px">20°C</th><th style="padding:4px">40°C</th></tr>' +
+    '<tr><td style="padding:4px">\u00c7\u00f6z\u00fcn\u00fcrl\u00fck</td><td style="padding:4px;text-align:center">2,3\u00d710\u207b\u00b3</td><td style="padding:4px;text-align:center">6,2\u00d710\u207b\u00b3</td><td style="padding:4px;text-align:center">1,3\u00d710\u207b\u00b2</td></tr>' +
+    '<tr><td style="padding:4px">K<sub>\u00e7\u00e7</sub></td><td style="padding:4px;text-align:center">4,9\u00d710\u207b\u2078</td><td style="padding:4px;text-align:center">9,5\u00d710\u207b\u2077</td><td style="padding:4px;text-align:center">8,8\u00d710\u207b\u2076</td></tr></table>' +
+    '<p style="font-size:12px;color:var(--tx3);margin-bottom:8px">\u2192 Sıcaklık arttık\u00e7a HEM \u00e7\u00f6z\u00fcn\u00fcrl\u00fck HEM K<sub>\u00e7\u00e7</sub> artıyor \u2192 Ca(IO\u2083)\u2082 \u00e7\u00f6zünmesi <b>ENDOTERMİKTİR</b>.</p>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:4px">CaCrO\u2084</th><th style="padding:4px">0°C</th><th style="padding:4px">20°C</th><th style="padding:4px">40°C</th></tr>' +
+    '<tr><td style="padding:4px">\u00c7\u00f6z\u00fcn\u00fcrl\u00fck</td><td style="padding:4px;text-align:center">0,29</td><td style="padding:4px;text-align:center">0,14</td><td style="padding:4px;text-align:center">0,09</td></tr>' +
+    '<tr><td style="padding:4px">K<sub>\u00e7\u00e7</sub></td><td style="padding:4px;text-align:center">8,4\u00d710\u207b\u00b2</td><td style="padding:4px;text-align:center">2\u00d710\u207b\u00b2</td><td style="padding:4px;text-align:center">8,1\u00d710\u207b\u00b3</td></tr></table>' +
+    '<p style="font-size:12px;color:var(--tx3)">\u2192 Sıcaklık arttık\u00e7a HEM \u00e7\u00f6z\u00fcn\u00fcrl\u00fck HEM K<sub>\u00e7\u00e7</sub> azalıyor \u2192 CaCrO\u2084 \u00e7\u00f6z\u00fcnmesi <b>EKZOTERMİKTİR</b>.</p></div>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">2) Ortak İyon Etkisi</div>' +
+    '<p style="font-size:13px">Dengedeki bir tuzun \u00e7\u00f6zeltisine, tuzun kendi iyonlarından biri (ortak iyon) dışarıdan eklenirse, Le Chatelier\u2019e g\u00f6re sistem bu iyonun derişimini azaltacak y\u00f6nde (\u00c7\u00d6KELME) hareket eder. <b>\u00c7\u00f6z\u00fcn\u00fcrl\u00fck AZALIR, ama K<sub>\u00e7\u00e7</sub> DEĞİŞMEZ</b> (sıcaklık sabit olduğu i\u00e7in).</p></div>' +
+    '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#93c5fd;margin-bottom:8px">\u2713 MEB Kitabı Doğrulanmış Veri (AgCl + Ortak İyon)</div>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:11px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:4px;text-align:left">Ortam</th><th style="padding:4px">\u00c7\u00f6z\u00fcn\u00fcrl\u00fck</th><th style="padding:4px">K<sub>\u00e7\u00e7</sub></th></tr>' +
+    '<tr><td style="padding:4px">Saf su</td><td style="padding:4px;text-align:center">4\u00d710\u207b\u2075</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u2079</td></tr>' +
+    '<tr><td style="padding:4px">0,01M NaCl</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u2077</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u2079</td></tr>' +
+    '<tr><td style="padding:4px">0,1M NaCl</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u2078</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u2079</td></tr>' +
+    '<tr><td style="padding:4px">0,1M AgNO\u2083</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u2078</td><td style="padding:4px;text-align:center">1,6\u00d710\u207b\u2079</td></tr></table>' +
+    '<p style="font-size:12px;color:var(--tx3);margin-top:8px">\u2192 Ortak iyon (Cl\u207b ya da Ag\u207a) derişimi arttık\u00e7a AgCl\u2019nin \u00e7\u00f6z\u00fcn\u00fcrl\u00fcğ\u00fc AZALIYOR ama K<sub>\u00e7\u00e7</sub> HER ZAMAN 1,6\u00d710\u207b\u2079 olarak SABİT kalıyor \u2014 bu, ortak iyon etkisinin en net kanıtıdır.</p></div>' +
+    '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">\ud83d\udca1 Ger\u00e7ek Hayat: B\u00f6brek Taşı</div>' +
+    '<p style="font-size:13px">B\u00f6brek taşları genellikle kalsiyum oksalat (CaC\u2082O\u2084) \u00e7\u00f6kmesiyle oluşur. İdrarda Ca\u00b2\u207a ve C\u2082O\u2084\u00b2\u207b derişimi arttık\u00e7a (fazla oksalatlı besin, az su i\u00e7me) ORTAK İYON ETKİSİYLE \u00e7\u00f6z\u00fcn\u00fcrl\u00fck azalır, \u00e7\u00f6kelme hızlanır \u2192 taş oluşur. \u00c7\u00f6z\u00fcm: bol su i\u00e7mek (seyreltme) ve oksalatlı besinleri azaltmak.</p></div>';
+
+  var COZ_Q2 = [
+    { s:'Yandaki g\u00f6rselde PbF\u2082 tuzunun katısıyla dengedeki sulu \u00e7\u00f6zeltisi verilmiştir: PbF\u2082(k)+ısı\u21ccPb\u00b2\u207a(suda)+2F\u207b(suda). Aşağıdaki etkilerin dengenin y\u00f6n\u00fcne, \u00e7\u00f6z\u00fcn\u00fcrl\u00fcğe, [Pb\u00b2\u207a], [F\u207b] ve K<sub>\u00e7\u00e7</sub>\u2019ye etkisini belirtiniz: a) Sıcaklığı artırma b) Sıcaklığı azaltma c) PbF\u2082 katısı ekleme \u00e7) NaF katısı ekleme d) PbSO\u2084 katısı ekleme (iyi \u00e7\u00f6z\u00fcn\u00fcr) e) NaCl katısı ekleme (PbCl\u2082 az \u00e7\u00f6z\u00fcn\u00fcr) f) Katının bir kısmını \u00e7\u00f6zecek kadar su ekleme g) Katının TAMAMINI \u00e7\u00f6zebilecekten FAZLA su ekleme',
+      c:'PbF\u2082 \u00e7\u00f6z\u00fcnmesi ENDOTERMİKTİR (ısı sol tarafta).<br><b>a) Sıcaklık \u2191:</b> İLERİ (\u00e7\u00f6z\u00fcnme) \u2192 \u00e7\u00f6z\u00fcn\u00fcrl\u00fck\u2191, [Pb\u00b2\u207a]\u2191, [F\u207b]\u2191, <b>K<sub>\u00e7\u00e7</sub>\u2191</b>.<br><b>b) Sıcaklık \u2193:</b> GERİ (\u00e7\u00f6kelme) \u2192 \u00e7\u00f6z\u00fcn\u00fcrl\u00fck\u2193, [Pb\u00b2\u207a]\u2193, [F\u207b]\u2193, <b>K<sub>\u00e7\u00e7</sub>\u2193</b>.<br><b>c) PbF\u2082 ekleme:</b> Saf katı, denge ETKİLENMEZ \u2192 hepsi DEĞİŞMEZ.<br><b>\u00e7) NaF ekleme (ortak iyon F\u207b):</b> GERİ \u2192 \u00e7\u00f6z\u00fcn\u00fcrl\u00fck\u2193, [Pb\u00b2\u207a]\u2193, [F\u207b]\u2191(net), K<sub>\u00e7\u00e7</sub> DEĞİŞMEZ.<br><b>d) PbSO\u2084 ekleme (ortak iyon Pb\u00b2\u207a):</b> GERİ \u2192 \u00e7\u00f6z\u00fcn\u00fcrl\u00fck\u2193, [Pb\u00b2\u207a]\u2191(net), [F\u207b]\u2193, K<sub>\u00e7\u00e7</sub> DEĞİŞMEZ.<br><b>e) NaCl ekleme (Pb\u00b2\u207a, PbCl\u2082 olarak \u00e7\u00f6ker, azalır):</b> İLERİ \u2192 \u00e7\u00f6z\u00fcn\u00fcrl\u00fck\u2191, [Pb\u00b2\u207a]\u2193, [F\u207b]\u2191, K<sub>\u00e7\u00e7</sub> DEĞİŞMEZ.<br><b>f) Kısmi \u00e7\u00f6zecek su:</b> Hala doygun (katı fazlası var) \u2192 hepsi DEĞİŞMEZ.<br><b>g) Fazla su (t\u00fcm katı biter):</b> ARTIK DOYGUN DEĞİL, katı-\u00e7\u00f6zelti dengesi YOK \u2192 K<sub>\u00e7\u00e7</sub> kavramı UYGULANAMAZ, [Pb\u00b2\u207a] ve [F\u207b] seyrelmeyle AZALIR.' },
+    { s:'AgNO\u2083 \u00e7\u00f6zeltisi ile NaCl \u00e7\u00f6zeltisi karıştırılarak AgCl elde ediliyor (AgCl \u00e7\u00f6zünmesi ENDOTERMİKTİR, tepkimeler tam verimle ger\u00e7ekleşiyor). a) 20°C ile 50°C\u2019de hangi sıcaklıkta daha FAZLA AgCl katısı elde edilir? b) 3. kaba NaCl katısı eklenmesi AgCl miktarını nasıl etkiler?',
+      c:'a) AgCl endotermik \u00e7\u00f6z\u00fcnd\u00fcğ\u00fc i\u00e7in y\u00fcksek sıcaklıkta \u00e7\u00f6z\u00fcn\u00fcrl\u00fck ARTAR (daha \u00e7ok \u00e7\u00f6z\u00fcn\u00fcr, daha AZ katı kalır). D\u00fcş\u00fck sıcaklıkta (20°C) \u00e7\u00f6z\u00fcn\u00fcrl\u00fck DAHA AZ olduğu i\u00e7in DAHA FAZLA AgCl katı hâlde kalır. \u2192 <b>20°C\u2019de daha fazla AgCl katısı elde edilir.</b><br>b) NaCl eklenmesi ortak iyon (Cl\u207b) derişimini artırır \u2192 Le Chatelier\u2019e g\u00f6re \u00e7\u00f6kelme y\u00f6n\u00fcne kayar \u2192 <b>daha FAZLA AgCl katısı elde edilir</b> (\u00e7\u00f6z\u00fcn\u00fcrl\u00fck azalır).' }
+  ];
+
+  var TEMA2_BOSLUK = [
+    { n:2, t:'Hem ileri yönde hem de geri yönde gerçekleşebilen tepkimelere ……… tepkimeler denir.', c:'tersinir' },
+    { n:3, t:'Denge durumundaki bir tepkimede ileri tepkime ile geri tepkime ……… birbirine eşittir.', c:'hızı' },
+    { n:4, t:'Sabit sıcaklıkta kimyasal bir tepkimenin denge durumundaki ileri ve geri tepkimelerin hız sabitleri oranına ……… denir.', c:'denge sabiti' },
+    { n:5, t:'Kimyasal bir denge tepkimesinde tepkimenin herhangi bir anındaki ürün derişimi ile tepken derişimlerinden türetilen orana ……… denir.', c:'tepkime oranı' },
+    { n:6, t:'Kimyasal bir denge tepkimesine dışarıdan bir etki yapıldığında sistemin bu etkiye vereceği tepki ……… ile ifade edilir.', c:'Le Chatelier ilkesi' },
+    { n:7, t:'Kimyasal bir tepkimedeki denge durumu derişim, hacim, basınç ve ……… değişkenlerinden birinin değişmesiyle bozulabilir.', c:'sıcaklık' },
+    { n:8, t:'Saf suyun kendi kendine iyonlarına ayrışmasına ……… denir.', c:'otoiyonizasyon' },
+    { n:9, t:'Arrhenius asit-baz teorisine göre suda çözündüğünde ……… oluşturan maddeler asittir.', c:'H\u207a iyonu' },
+    { n:10, t:'Bronsted-Lowry asit-baz teorisine göre ……… alabilen maddeler bazdır.', c:'proton' },
+    { n:11, t:'Suda %100 iyonlaştığı kabul edilen bazlara ……… bazlar denir.', c:'kuvvetli' },
+    { n:12, t:'Bir asit-bazın kuvvetli ya da zayıf olduğunu ……… belirler.', c:'iyonlaşma yüzdesi' },
+    { n:13, t:'Bir asit ile bir bazın tepkimeye girerek tuz ve su oluşturduğu kimyasal tepkimelere ……… tepkimeleri denir.', c:'nötralleşme' },
+    { n:14, t:'Derişimi bilinen bir asit ya da baz çözeltisi kullanarak derişimi bilinmeyen bir asit ya da baz çözeltisinin derişimini belirleme işlemine ……… denir.', c:'titrasyon' },
+    { n:15, t:'Mide, ağız, diş ve cilt sağlığı için kullanılan ürünlerde ……… değerine dikkat edilmelidir.', c:'pH' },
+    { n:16, t:'Belirli bir sıcaklıkta suda az çözünen bir tuzun K\u00e7\u00e7 değeri kullanılarak ……… değeri hesaplanabilir.', c:'çözünürlük' },
+    { n:17, t:'Suda az çözünen tuzların çözünürlüğünü sıcaklık ve ……… etkiler.', c:'ortak iyon' }
+  ];
+
+  var TEMA2_ACIKUCLU2 = [
+    { n:18, t:'Aşağıdaki tepkimelerin TERSİNİR olabileceğine ilişkin g\u00f6zlemlenebilir/\u00f6l\u00e7\u00fclebilir nitelikleri belirtiniz: a) KClO\u2083(k)+ısı\u21ccKCl(k)+3/2O\u2082(g) b) Cu(H\u2082O)\u2084\u00b2\u207a(mavi)+4Cl\u207b+ısı\u21ccCuCl\u2084\u00b2\u207b(yeşil)+6H\u2082O c) 2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g)+ısı \u00e7) Ag\u207a+Fe\u00b2\u207a\u21ccAg(k)+Fe\u00b3\u207a d) CH\u2083COOH+H\u2082O\u21ccCH\u2083COO\u207b+H\u2083O\u207a',
+      c:'a) <b>GAZ \u00c7IKIŞI</b> (kabarcık/basın\u00e7 değişimi) g\u00f6zlemlenebilir.<br>b) <b>RENK DEĞİŞİMİ</b> (mavi\u2194yeşil) net bir g\u00f6stergedir.<br>c) <b>SICAKLIK değişimi</b> (ekzotermik) ve gaz mol sayısı değiştiği i\u00e7in <b>BASIN\u00c7/HACİM değişimi</b> \u00f6l\u00e7\u00fclebilir.<br>\u00e7) <b>KATI (Ag metali) OLUŞUMU/\u00e7\u00f6kmesi</b> ve \u00e7\u00f6zeltide renk değişimi g\u00f6zlemlenebilir.<br>d) <b>pH değişimi</b> ve <b>İLETKENLİK değişimi</b> \u00f6l\u00e7\u00fclebilir g\u00f6stergelerdir.' },
+    { n:19, t:'A(g)\u21cc2B(g) tepkimesi kapalı bir kapta sabit sıcaklıkta SADECE A gazıyla başlatılıyor. Tepkimenin dengeye ulaşma s\u00fcrecinde ileri tepkime hız sabiti k\u1d62, geri tepkime hız sabiti k\u1d4d ve denge sabiti Kc nasıl değişir (artar/azalır/değişmez)?',
+      c:'Hız sabitleri (k\u1d62, k\u1d4d) VE denge sabiti (Kc) <b>SADECE SICAKLIĞA bağlıdır</b>. Sıcaklık SABİT tutulduğu i\u00e7in dengeye ulaşma s\u00fcreci boyunca (derişimler değişse bile) \u00fc\u00e7\u00fc de <b>DEĞİŞMEZ</b>. (Yalnızca A ve B\u2019nin ANLIK derişimleri ve tepkime HIZLARI değişir \u2014 hız SABİTLERİ değil.)' },
+    { n:28, t:'50 mL derişimi bilinmeyen HNO\u2083 (kire\u00e7 \u00e7\u00f6z\u00fcc\u00fc), 0,1 M NaOH ile fenolftalein indikat\u00f6r\u00fc kullanılarak titre ediliyor; renk değişimi 30 mL NaOH harcandığında g\u00f6zlemleniyor. a) Eş değerlik noktası nasıl belirlenir? b) Kire\u00e7 \u00e7\u00f6z\u00fcc\u00fcn\u00fcn derişimi ka\u00e7 molardır?',
+      c:'a) Eş değerlik noktası, <b>indikat\u00f6r\u00fcn (fenolftalein) KALICI RENK DEĞİŞTİRDİĞİ AN</b> ile belirlenir (d\u00f6n\u00fcm noktası).<br>b) mol NaOH=0,1\u00d70,030=<b>0,003 mol</b>=mol HNO\u2083 (tek değerli, 1:1).<br>[HNO\u2083]=0,003/0,050=<b>0,06 M</b>.' },
+    { n:29, t:'AgCl(k)+ısı\u21ccAg\u207a(suda)+Cl\u207b(suda) (ENDOTERMİK). Aşağıdaki işlemlerin [Ag\u207a], [Cl\u207b], \u00e7\u00f6z\u00fcn\u00fcrl\u00fck, AgCl katı k\u00fctlesi, Ag\u207a ve Cl\u207b mol sayısına etkisini belirtiniz: a) Sıcaklığı artırma b) Katının bir kısmını \u00e7\u00f6zecek kadar su ilave etme c) NaCl katısı ilave etme',
+      c:'<b>a) Sıcaklık artırma</b> (İLERİ/\u00e7\u00f6zünme y\u00f6n\u00fcne kayar): [Ag\u207a] ARTAR, [Cl\u207b] ARTAR, \u00e7\u00f6z\u00fcn\u00fcrl\u00fck ARTAR, katı k\u00fctlesi AZALIR, Ag\u207a mol sayısı ARTAR, Cl\u207b mol sayısı ARTAR.<br><b>b) Kısmi \u00e7\u00f6zecek su ekleme</b> (hala DOYGUN): [Ag\u207a] DEĞİŞMEZ, [Cl\u207b] DEĞİŞMEZ, \u00e7\u00f6z\u00fcn\u00fcrl\u00fck DEĞİŞMEZ, katı k\u00fctlesi AZALIR (bir kısmı \u00e7\u00f6z\u00fcnd\u00fc), Ag\u207a ve Cl\u207b mol sayıları ARTAR (derişim aynı ama hacim artınca toplam mol artar).<br><b>c) NaCl ekleme</b> (ortak iyon, GERİ/\u00e7\u00f6kelme y\u00f6n\u00fcne kayar): [Ag\u207a] AZALIR, [Cl\u207b] ARTAR(net), \u00e7\u00f6z\u00fcn\u00fcrl\u00fck AZALIR, katı k\u00fctlesi ARTAR, Ag\u207a mol sayısı AZALIR, Cl\u207b mol sayısı ARTAR(net).' },
+    { n:30, t:'Aşağıdaki sağlık sorunlarını gidermek i\u00e7in kullanılan \u00fcr\u00fcnlerin ASİDİK mi BAZİK mi olması gerektiğini a\u00e7ıklayınız: a) S\u00fcrekli mide ekşimesi/reflü b) Hassas diş minesi/diş eti problemleri c) Akne/sivilce problemleri',
+      c:'a) Mide ekşimesi AŞIRI ASİT kaynaklıdır \u2192 kullanılan \u00fcr\u00fcn (antiasit) <b>BAZİK</b> olmalı (mide asidini n\u00f6trler).<br>b) Diş minesi AŞIRI ASİTTEN zarar g\u00f6r\u00fcr \u2192 diş bakım \u00fcr\u00fcnleri HAFİF <b>BAZİK</b> olmalı (asit hasarını \u00f6nler, ama AŞIRI bazik de zararlıdır).<br>c) Cildin doğal pH\u2019ı HAFİF ASİDİKTİR (4,5-5,5); akne \u00fcr\u00fcnleri cildin kendi <b>HAFİF ASİDİK</b> pH\u2019ına yakın olmalı \u2014 AŞIRI BAZİK \u00fcr\u00fcnler (\u00f6rn. sert sabun) koruyucu bariyeri bozup sorunu artırabilir.' },
+    { n:31, t:'FeCO\u2083 tuzunun 25°C\u2019deki K\u00e7\u00e7 değeri yaklaşık 3,6\u00d710\u207b\u00b9\u00b9\u2019dir: Fe\u00b2\u207a(suda)+CO\u2083\u00b2\u207b(suda)\u21ccFeCO\u2083(k). a) FeCO\u2083\u2019\u00fcn saf sudaki molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fcğ\u00fc ka\u00e7 mol/L\u2019dir? b) Doygun \u00e7\u00f6zeltide [Fe\u00b2\u207a] ve [CO\u2083\u00b2\u207b] ka\u00e7 M\u2019dir?',
+      c:'FeCO\u2083 (XY tipi): K\u00e7\u00e7=s\u00b2.<br>a) s=\u221a(3,6\u00d710\u207b\u00b9\u00b9)=<b>6\u00d710\u207b\u2076 mol/L</b>.<br>b) XY tipi tuzda [Fe\u00b2\u207a]=[CO\u2083\u00b2\u207b]=s=<b>6\u00d710\u207b\u2076 M</b> (1:1 oranı).' }
+  ];
+
+  var TEMA2_MC2 = [
+    { n:32, kat:'Denge', t:'Bir araştırmacı kapalı bir kaptaki A maddesi \u00fczerine B maddesi ekliyor. A ve B azalırken C oluşuyor, ortam SARIYA d\u00f6n\u00fcş\u00fcyor, sıcaklık ARTIYOR. Bir s\u00fcre sonra C tekrar A ve B\u2019yi oluşturuyor, derişimler zamanla sabitleniyor. Araştırmacı hangi sonuca ULAŞAMAZ?',
+      o:['Tersinirdir','Dengeye ulaşmıştır','Tam verimle ger\u00e7ekleşmiştir','Hem ileri hem geri y\u00f6nde ger\u00e7ekleşmiştir','Ekzotermiktir'], c:2,
+      ac:'Tersinirlik, dengeye ulaşma, ekzotermiklik (sıcaklık artışı) VE her iki y\u00f6nde ger\u00e7ekleşme g\u00f6zlemlerden DOĞRUDAN \u00e7ıkarılabilir. Ancak <b>denge tepkimeleri TANIM GEREĞİ tam verimle ger\u00e7ekleşmez</b> (tepkenlerin bir kısmı hep kalır) \u2014 bu sonuca ULAŞILAMAZ.<br>\u2192 <b>C</b>.' },
+    { n:33, kat:'Denge', t:'Aynı g\u00f6zlemlere g\u00f6re araştırmacı aşağıdaki sonu\u00e7lardan hangisine ULAŞIR (kesin DOĞRU)?',
+      o:['Fiziksel denge tepkimesidir','Kimyasal denge tepkimesidir','Endotermik bir tepkimedir','G\u00f6zlenemeyen mikro olaylar durmuştur','Tersinmez bir tepkimedir'], c:1,
+      ac:'Yeni madde (C) oluşumu + tersinirlik + derişimlerin sabitlenmesi = <b>KİMYASAL DENGE TEPKİMESİ</b>. (Fiziksel değil \u2014 yeni madde oluşuyor; endotermik değil \u2014 sıcaklık ARTIYOR yani ekzotermik; mikro olaylar dinamik dengede ASLA durmaz; tersinmez değil \u2014 tersinir olduğu g\u00f6sterilmiş.)<br>\u2192 <b>B</b>.' },
+    { n:34, kat:'Denge', t:'Aynı kaptaki tepkimeye g\u00f6re aşağıdakilerden hangisi KESİNLİKLE doğrudur?',
+      o:['Homojen bir tepkimedir','Yanma tepkimesidir','Heterojen bir tepkimedir','Analiz (ayrışma) tepkimesidir','Denge tepkimesidir'], c:4,
+      ac:'Fazlar (gaz/sıvı/katı) hakkında bilgi verilmediği i\u00e7in homojen/heterojen KESİN s\u00f6ylenemez; yanma/ayrışma tepkimesi olduğuna dair veri yok. Ancak tersinirlik VE derişimlerin sabitlenmesi <b>KESİN olarak DENGE TEPKİMESİ</b> olduğunu g\u00f6sterir.<br>\u2192 <b>E</b>.' },
+    { n:36, kat:'Denge', t:'I. H\u2082O(k)\u21ccH\u2082O(s) II. H\u2082(g)+Br\u2082(g)\u21cc2HBr(g) III. C(k)+H\u2082O(g)\u21ccH\u2082(g)+CO(g) IV. 2NO\u2082(g)\u21ccN\u2082O\u2084(g) V. CO\u2082(g)+H\u2082O(s)\u21ccH\u2082CO\u2083(suda). Hangileri KİMYASAL HETEROJEN denge tepkimesidir?',
+      o:['I ve II','II ve IV','III ve V','III, IV ve V','II, III, IV ve V'], c:2,
+      ac:'III (C katı + gazlar) ve V (gaz+sıvı+\u00e7\u00f6zelti) FARKLI fazlarda \u2014 HETEROJEN. II ve IV hepsi gaz \u2014 HOMOJEN. I fiziksel değişim.<br>\u2192 <b>C) III ve V</b>.' },
+    { n:37, kat:'Denge', t:'Aynı 5 tepkime i\u00e7in: Hangileri KİMYASAL HOMOJEN denge tepkimesidir?',
+      o:['I ve III','II ve IV','II, III ve V','III, IV ve V','I, II, III, IV ve V'], c:1,
+      ac:'II (H\u2082+Br\u2082\u21cc2HBr) ve IV (2NO\u2082\u21ccN\u2082O\u2084) t\u00fcm\u00fc GAZ fazında \u2014 HOMOJEN kimyasal denge.<br>\u2192 <b>B) II ve IV</b>.' },
+    { n:38, kat:'Denge', t:'Aynı 5 tepkime i\u00e7in: Hangi tepkimelerde denge bağıntısında YER ALMAYAN madde bulunur?',
+      o:['I ve II','II ve III','II, III ve V','I, III ve V','II, III, IV ve V'], c:3,
+      ac:'Saf katı/sıvılar denge bağıntısında YER ALMAZ. I\u2019de H\u2082O(k) ve H\u2082O(s) (fiziksel değişim), III\u2019te C(k), V\u2019te H\u2082O(s) \u2014 hepsinde saf katı/sıvı var. II ve IV\u2019te t\u00fcm t\u00fcrler gaz, hepsi bağıntıda yer alır.<br>\u2192 <b>D) I, III ve V</b>.' },
+    { n:39, kat:'Denge', t:'A(g)+2B(g)\u21cc2C(g)+3D(g) tepkimesinin denge bağıntısı hangisidir?',
+      o:['[C][D]/([A][B])','[C]\u00b2[D]\u00b3/([A][B]\u00b2)','[A][B]\u00b2/([C]\u00b2[D]\u00b3)','[A][B]/([C][D])','[C]\u00b3[D]\u00b2/([A]\u00b2[B])'], c:1,
+      ac:'Kc=\u00fcr\u00fcnler/tepkenler (katsayılar \u00fcs olarak): <b>Kc=[C]\u00b2[D]\u00b3/([A][B]\u00b2)</b>.<br>\u2192 <b>B</b>.' },
+    { n:40, kat:'Denge', t:'Bir kimyager A(g)+2B(g)\u21cc2C(g)+3D(g) tepkimesini izliyor; 30 ve 40. saniyelerde t\u00fcm derişimler SABİT kalıyor. Tepkimenin DENGEYE ULAŞTIĞINA dair EN G\u00dc\u00c7L\u00dc kanıt hangisidir?',
+      o:['10. saniyede [C] ve [D] artması','20. saniyede [A] ve [B] azalması','30 ve 40. saniyelerde T\u00dcM derişimlerin SABİT kalması','Tepkimenin [A] ve [B] ile başlaması','Tepkimenin tersinir olması'], c:2,
+      ac:'Denge, derişimlerin ZAMANLA DEĞİŞMEMESİ (SABİT kalması) ile tanımlanır \u2014 bu DOĞRUDAN denge kanıtıdır. Diğerleri sadece tepkimenin İLERLEDİĞİNİ g\u00f6sterir, dengeye ULAŞTIĞINI değil.<br>\u2192 <b>C</b>.' },
+    { n:41, kat:'Denge', t:'Aynı tepkimede 20. saniyede [A]=0,7 [B]=1,0 [C]=1,0 [D]=1,5 mol/L \u00f6l\u00e7\u00fclm\u00fcşt\u00fcr. 20. saniyedeki tepkime oranı (Q) ka\u00e7tır?',
+      o:['2,41','4,82','24,1','48,2','96,4'], c:1,
+      ac:'Q=[C]\u00b2[D]\u00b3/([A][B]\u00b2)=(1,0)\u00b2(1,5)\u00b3/(0,7\u00d71,0\u00b2)=1\u00d73,375/0,7=<b>4,82</b> (node.js doğrulamalı).<br>\u2192 <b>B</b>.' },
+    { n:42, kat:'Denge', t:'25°C\u2019de Kc=21,87. 10. saniyede [A]=0,9 [B]=1,4 [C]=0,6 [D]=0,9 iken hesaplanan Qc değeriyle Kc karşılaştırıldığında: I. İleri tepkime hızı geri tepkime hızına eşittir. II. Tepkime \u00fcr\u00fcnler y\u00f6n\u00fcne hareket eder. III. Kaptaki molek\u00fcl sayısı zamanla artar. Hangileri doğrudur?',
+      o:['Yalnız I','Yalnız II','I ve II','II ve III','I, II ve III'], c:3,
+      ac:'Qc=(0,6)\u00b2(0,9)\u00b3/(0,9\u00d71,4\u00b2)\u22480,149 (node.js). Qc(0,149) \u2192 <b>D) II ve III</b>.' },
+    { n:43, kat:'Denge', t:'Kimyager, tepkimenin dengeye ulaştığı tahmininin GE\u00c7ERLİLİĞİNİ sorgulamak i\u00e7in hangi BİLİMSEL VERİYE ihtiya\u00e7 duyar?',
+      o:['Tepkimenin entalpi değişimine','Tepkimenin aktivasyon enerjisine','Denge sabiti değerine','Tepkime kabının hacmine','Katalizör eklenip eklenmediğine'], c:2,
+      ac:'Derişimlerin SABİT kalması TEK BAŞINA yeterli kanıt değildir (\u00e7ok yavaş bir tepkime de b\u00f6yle g\u00f6r\u00fcnebilir). GER\u00c7EK dengeyi doğrulamak i\u00e7in hesaplanan Q değerinin K<sub>c</sub> (<b>denge sabiti</b>) ile karşılaştırılması gerekir.<br>\u2192 <b>C</b>.' },
+    { n:44, kat:'Denge', t:'Kimyager, tepkimenin dengeye ulaşıp ulaşmadığını tahmin etmek i\u00e7in hangi Y\u00d6NTEMİ kullanmıştır?',
+      o:['Katalizör ekleyip g\u00f6zlem yapmak','Sadece tepkenlerin derişimlerini \u00f6l\u00e7mek','Sadece \u00fcr\u00fcnlerin derişimlerini \u00f6l\u00e7mek','Tepkenlerin VE \u00fcr\u00fcnlerin derişimlerini farklı zamanlarda \u00f6l\u00e7mek','Farklı sıcaklıklarda tekrarlamak'], c:3,
+      ac:'Tablo verisi, hem A/B (tepken) hem C/D (\u00fcr\u00fcn) derişimlerinin BİRDEN FAZLA zaman noktasında \u00f6l\u00e7\u00fclmesiyle oluşturulmuş.<br>\u2192 <b>D</b>.' },
+    { n:46, kat:'Denge (PET)', t:'PET sentez tepkimesi (endotermik, tersinir) dengedeyken ortamda SU fazla birikirse: I. Sistem GERİ y\u00f6ne ilerler. II. PET \u00fcretim verimi ARTAR. III. Sabit sıcaklıkta Kc\u2019nin sayısal değeri değişir. Hangileri ger\u00e7ekleşir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:0,
+      ac:'Su \u00dcR\u00dcND\u00dcR; fazla birikmesi Le Chatelier\u2019e g\u00f6re <b>GERİ</b> y\u00f6ne kaydırır (I DOĞRU). Geri kayınca PET AZALIR, verim ARTMAZ (II YANLIŞ). Sıcaklık SABİT olduğu i\u00e7in Kc DEĞİŞMEZ (III YANLIŞ).<br>\u2192 <b>A) Yalnız I</b>.' },
+    { n:47, kat:'Denge (PET)', t:'PET sentezi dengedeyken sabit sıcaklıkta etilen glikol ilave ediliyor. Sistemin tekrar dengeye ulaşma s\u00fcrecinde: I. Daha AZ PET elde edilir. II. İleri tepkime hızı ARTAR. III. Tereftalik asit derişimi AZALIR. Hangileri ger\u00e7ekleşir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','II ve III','I, II ve III'], c:3,
+      ac:'Etilen glikol (tepken) eklenmesi İLERİ y\u00f6ne kaydırır: daha \u00c7OK PET oluşur (I YANLIŞ), derişim artışı \u00e7arpışma sıklığını artırıp ileri hızı ARTIRIR (II DOĞRU), tereftalik asit İLERİ y\u00f6nde T\u00dcKETİLİR, AZALIR (III DOĞRU).<br>\u2192 <b>D) II ve III</b>.' },
+    { n:48, kat:'Denge (PET)', t:'PET \u00fcretimi (endotermik) dengedeyken: I. Sıcaklığı düşürme II. Etilen glikol ilave etme III. Oluşan PET\u2019i ortamdan uzaklaştırma etkileri yapılıyor. Hangi \u00e7ıkarım YANLIŞTIR?',
+      o:['I. etki i\u00e7ecek şişesi \u00fcretimini AZALTIR','II. etki elyaf lif \u00fcretimini ARTIRIR','III. etki toplam PET \u00fcretimini AZALTIR','I. etki tekstil \u00fcr\u00fcn miktarında D\u00dcŞMEYE neden olur','II ve III birlikte gıda kabı sayısını ARTIRIR'], c:2,
+      ac:'Endotermik tepkimede sıcaklık D\u00dcŞ\u00fcRMEK GERİ y\u00f6ne kaydırır (PET azalır, A ve D DOĞRU). Etilen glikol EKLEMEK İLERİ y\u00f6ne kaydırır (PET/elyaf ARTAR, B DOĞRU, E DOĞRU). PET\u2019i UZAKLAŞTIRMAK İLERİ y\u00f6ne kaydırır \u2014 s\u00fcrekli \u00fcretimle TOPLAM PET miktarı ZAMANLA ARTAR, AZALMAZ \u2014 C YANLIŞ.<br>\u2192 <b>C</b>.' },
+    { n:49, kat:'Otoiyonizasyon', t:'Suyun otoiyonizasyon dengesi hakkında hangisi DOĞRUDUR?',
+      o:['Sıcaklıktan etkilenmez','50°C\u2019de pH=7', '50°C\u2019de [H\u207a]&gt;[OH\u207b]', '10°C\u2019de [H\u207a]&lt;[OH\u207b]', '50°C\u2019de K<sub>su</sub>, 10\u207b\u00b9\u2074\u2019ten B\u00dcY\u00dcKT\u00dcR'], c:4,
+      ac:'Saf su HER sıcaklıkta [H\u207a]=[OH\u207b] olur (nötr) \u2014 B,C,D YANLIŞ. Otoiyonizasyon ENDOTERMİK olduğu i\u00e7in sıcaklık artınca K<sub>su</sub> ARTAR (A YANLIŞ, E DOĞRU).<br>\u2192 <b>E</b>.' },
+    { n:50, kat:'Otoiyonizasyon', t:'Saf suyun otoiyonizasyonu: I. İletkenlik değişimi II. pH değişimi III. Hidrojen GAZI miktarı niteliklerinden hangileri ile g\u00f6zlemlenebilir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:3,
+      ac:'Otoiyonizasyonda H\u207a VE OH\u207b İYONLARI oluşur, H\u2082 GAZI OLUŞMAZ (III YANLIŞ). İletkenlik ve pH değişimi ge\u00e7erli g\u00f6zlem y\u00f6ntemleridir.<br>\u2192 <b>D) I ve II</b>.' },
+    { n:52, kat:'Asit-Baz Teorileri', t:'Potasyum hidroksit (KOH\u2192K\u207a+OH\u207b şeklinde \u00e7\u00f6z\u00fcn\u00fcyor) i\u00e7in: I. Bronsted-Lowry\u2019ye g\u00f6re baz \u00f6zelliği a\u00e7ıklanmıştır. II. Arrhenius\u2019a g\u00f6re baz \u00f6zelliği a\u00e7ıklanmıştır. III. Bronsted-Lowry\u2019ye g\u00f6re eşlenik bazı K\u207a iyonudur. Hangileri doğrudur?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:1,
+      ac:'Verilen denklem basit disosiyon (K\u207a+OH\u207b), PROTON ALMA g\u00f6sterilmiyor \u2192 Bronsted-Lowry A\u00c7IKLANMAMIŞ (I YANLIŞ). OH\u207b oluşturma g\u00f6sterildiği i\u00e7in Arrhenius A\u00c7IKLANMIŞ (II DOĞRU). K\u207a sadece seyirci iyondur, konjuge baz kavramına girmez (III YANLIŞ).<br>\u2192 <b>B) Yalnız II</b>.' },
+    { n:53, kat:'pH-pOH', t:'25°C sıcaklıkta HNO\u2082 (zayıf asit) \u00e7\u00f6zeltisi i\u00e7in: I. [H\u207a]&gt;[OH\u207b] II. [H\u207a][OH\u207b]=10\u207b\u00b9\u2074 III. pH&gt;pOH IV. OH\u207b iyonu i\u00e7ermez. Hangileri doğrudur?',
+      o:['I ve II','III ve IV','II ve IV','I, II ve III','I, II, III ve IV'], c:0,
+      ac:'HNO\u2082 asit olduğu i\u00e7in ortam asidiktir: [H\u207a]&gt;[OH\u207b] (I DOĞRU). 25°C\u2019de K<sub>su</sub>=10\u207b\u00b9\u2074 HER ZAMAN ge\u00e7erlidir (II DOĞRU). Asidik ortamda pH&lt;pOH olur, TERSİ değil (III YANLIŞ). Her sulu \u00e7\u00f6zeltide otoiyonizasyondan AZ miktarda OH\u207b HER ZAMAN vardır (IV YANLIŞ).<br>\u2192 <b>A) I ve II</b>.' },
+    { n:54, kat:'Kuvvetli/Zayıf', t:'0,1M\u2019lık 4 kabın pH değerleri: 1.kap=1, 2.kap=9, 3.kap=13, 4.kap=5. İyonlaşma y\u00fczdeleri hangi şıkta DOĞRU verilmiştir?',
+      o:['%100, %0,01, %100, %0,01','%0,01, %0,02, %100, %100','%100, %100, %0,01, %0,02','%0,02, %100, %0,01, %100','%100, %100, %0,02, %0,02'], c:0,
+      ac:'1.kap(pH=1): [H\u207a]=0,1M=TAM derişim\u2192<b>%100</b> (kuvvetli asit). 2.kap(pH=9): [H\u207a]=10\u207b\u2079\u2192[OH\u207b]=10\u207b\u2075\u2192<b>%0,01</b> (zayıf baz). 3.kap(pH=13): [OH\u207b]=0,1M=TAM\u2192<b>%100</b> (kuvvetli baz). 4.kap(pH=5): [H\u207a]=10\u207b\u2075\u2192<b>%0,01</b> (zayıf asit). (node.js doğrulamalı)<br>\u2192 <b>A</b>.' },
+    { n:55, kat:'Kuvvetli/Zayıf', t:'Aynı 4 kabın [H\u2083O\u207a] derişimleri hangi şıkta DOĞRU verilmiştir?',
+      o:['10\u207b\u00b9, 10\u207b\u2079, 10\u207b\u00b9, 10\u207b\u00b9\u00b3', '10\u207b\u2079, 10\u207b\u2079, 10\u207b\u00b9, 10\u207b\u00b9\u00b3', '10\u207b\u2079, 10\u207b\u00b9, 10\u207b\u00b9\u00b3, 10\u207b\u00b9', '10\u207b\u00b9, 10\u207b\u00b9, 10\u207b\u00b9, 10\u207b\u00b9', '10\u207b\u00b9 M, 10\u207b\u2079 M, 10\u207b\u00b9\u00b3 M, 10\u207b\u2075 M'], c:4,
+      ac:'pH=1\u21924.kaba kadar sırasıyla [H\u207a]=10\u207b\u00b9, 10\u207b\u2079, 10\u207b\u00b9\u00b3, 10\u207b\u2075 (doğrudan pH tanımından).<br>\u2192 <b>E</b>.' },
+    { n:56, kat:'Kuvvetli/Zayıf', t:'Etiketler pH \u00f6l\u00e7\u00fcm sonu\u00e7larına g\u00f6re hangi şekilde yerleştirilirse DOĞRU olur?',
+      o:['Zayıf asit, Zayıf baz, Kuvvetli asit, Kuvvetli baz','Zayıf asit, Kuvvetli asit, Zayıf baz, Kuvvetli baz','Kuvvetli asit, Zayıf baz, Kuvvetli baz, Zayıf asit','Kuvvetli asit, Zayıf asit, Kuvvetli baz, Zayıf baz','Kuvvetli baz, Zayıf baz, Zayıf asit, Kuvvetli asit'], c:2,
+      ac:'1.kap(pH=1)=KUVVETLİ ASİT, 2.kap(pH=9)=ZAYIF BAZ, 3.kap(pH=13)=KUVVETLİ BAZ, 4.kap(pH=5)=ZAYIF ASİT.<br>\u2192 <b>C</b>.' },
+    { n:57, kat:'Kavram', t:'Kuvvetli asitler/bazlardaki pH hesaplama ile zayıf asitler/bazlardaki pH hesaplamanın FARKLI olmasının temel nedeni nedir?',
+      o:['İyonlaşma y\u00fczdeleri','H\u2083O\u207a iyonu derişimi','OH\u207b iyonu derişimi','İletkenlik değerleri','pOH değerleri'], c:0,
+      ac:'Kuvvetli asit/baz %100 iyonlaşırken zayıf asit/baz KISMEN iyonlaşır \u2014 bu <b>İYONLAŞMA Y\u00dcZDESİ</b> farkı, hesaplama y\u00f6ntemini (direkt derişim vs \u221a(C\u00b7K)) FARKLILAŞTIRIR.<br>\u2192 <b>A</b>.' },
+    { n:66, kat:'Günlük Hayat', t:'Tablet formundaki antiasit ila\u00e7ların genellikle \u00c7İĞNENEREK kullanılmasının TEMEL sebebi nedir?',
+      o:['Suda daha iyi \u00e7\u00f6z\u00fcnmesi','Sindirim kanalından ge\u00e7emeyecek kadar b\u00fcy\u00fck olması','Mideye ulaşıncaya kadar dağılmasının engellenmesi','K\u00fc\u00e7\u00fck par\u00e7alar hâlinde ulaşıp HIZLA tepkimeye girmesi','Mideki koruyucu asit bariyerini kaldırması'], c:3,
+      ac:'\u00c7iğnemek y\u00fczey alanını ARTIRIR, tablet mideye K\u00dc\u00c7\u00dcK PAR\u00c7ALAR hâlinde ulaşır ve mide asidiyle \u00c7OK DAHA HIZLI tepkimeye girer.<br>\u2192 <b>D</b>.' },
+    { n:67, kat:'Günlük Hayat', t:'Mide sağlığı i\u00e7in en uygun antiasit ila\u00e7 se\u00e7iminde: I. Mide asidiyle HIZLI tepkime verme II. Midede KOLAYCA dağılma III. Mide pH\u2019ını YETERİNCE y\u00fckseltebilme \u00f6l\u00e7\u00fctlerinden hangileri g\u00f6z \u00f6n\u00fcne alınmalıdır?',
+      o:['Yalnız I','Yalnız III','I ve II','II ve III','I, II ve III'], c:4,
+      ac:'\u00dc\u00e7 \u00f6l\u00e7\u00fct de metinde a\u00e7ık\u00e7a belirtilen, GE\u00c7ERLİ se\u00e7im kriterleridir.<br>\u2192 <b>E</b>.' },
+    { n:68, kat:'Günlük Hayat', t:'Mide sağlığı i\u00e7in kullanılan antiasit ila\u00e7lar hakkında hangisi YANLIŞTIR?',
+      o:['Mide asidiyle tepkimeye girip pH\u2019ı ARTIRIRLAR','İ\u00e7eriklerinde suda \u00c7OK \u00c7\u00d6Z\u00dcNEN KUVVETLİ bazlar bulundururlar','Mideye ulaşıncaya kadar sindirim organlarını tahriş etmezler','Midede hızla dağılıp mide asidiyle hızlıca tepkimeye girerler','Mide asidiyle tepkimeye girip tamamen t\u00fckenir, bağırsaklara ulaşmazlar'], c:1,
+      ac:'Metne g\u00f6re i\u00e7erdikleri bazlar suda TAMAMEN \u00c7\u00d6Z\u00dcNMEMELİDİR (kontroll\u00fc/az \u00e7\u00f6z\u00fcnen olmalı) \u2014 \u201c\u00e7ok \u00e7\u00f6z\u00fcnen kuvvetli baz\u201d ifadesi bu bilgiyle \u00c7ELİŞİR.<br>\u2192 <b>B</b>.' },
+    { n:70, kat:'Le Chatelier', t:'2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g), \u0394H&lt;0 (EKZOTERMİK). Kimya m\u00fchendisi enerji maliyetini d\u00fcş\u00fcrmek i\u00e7in tepkimeyi DAHA D\u00dcŞ\u00dcK sıcaklıkta ger\u00e7ekleştirmeyi planlıyor. Bu değişiklik dengedeki sistemde neye neden olur?',
+      o:['Sistem tepkenler y\u00f6n\u00fcne ilerler','SO\u2082 miktarında artış g\u00f6zlenir','İleri tepkime hızı artar','Kc\u2019nin sayısal değeri azalır','SO\u2083 miktarında artış g\u00f6zlenir'], c:4,
+      ac:'EKZOTERMİK tepkimede sıcaklık D\u00dcŞ\u00dcRMEK sistemi \u00dcR\u00dcNLER y\u00f6n\u00fcne kaydırır (Kc de ARTAR, azalmaz) \u2014 SO\u2083 miktarı ARTAR. (Hızlar sıcaklık d\u00fcşünce genelde AZALIR, artmaz.)<br>\u2192 <b>E</b>.' }
+  ];
+
+  var TEMA2_ACIKUCLU = [
+    { n:25, t:'0,1 M derişimli, monofonksiyonel asit ya da baz olduğu bilinen A, B, C ve D maddelerinin pH değerleri: A=4, B=13, C=1, D=10 (25°C). a) Hangileri asit, hangileri baz? b) İyonlaşma y\u00fczdelerini karşılaştırınız. c) Kuvvet sıralaması nedir? \u00e7) [OH\u207b] derişimlerini karşılaştırınız.',
+      c:'a) pH&lt;7: <b>A ve C ASİT</b> \u00b7 pH&gt;7: <b>B ve D BAZ</b>.<br>b) C: [H\u207a]=0,1M=TAM derişim \u2192 <b>%100 (KUVVETLİ)</b>. A: [H\u207a]=10\u207b\u2074M \u2192 <b>%0,1 (ZAYIF)</b>. B: [OH\u207b]=0,1M \u2192 <b>%100 (KUVVETLİ)</b>. D: [OH\u207b]=10\u207b\u2074M \u2192 <b>%0,1 (ZAYIF)</b>.<br>c) Asitlik: <b>C&gt;A</b> \u00b7 Bazlık: <b>B&gt;D</b>. C ve B KUVVETLİ; A ve D ZAYIFTIR.<br>\u00e7) [OH\u207b] sıralaması (pH ile DOĞRU orantılı): <b>B(0,1M) &gt; D(10\u207b\u2074M) &gt; A(10\u207b\u00b9\u2070M) &gt; C(10\u207b\u00b9\u00b3M)</b>.' },
+    { n:26, t:'0,1M HNO\u2083 (kire\u00e7 \u00e7\u00f6z\u00fcc\u00fc), 0,1M CH\u2083COOH (sirke, Ka=10\u207b\u2077), 0,1M NaOH (lavabo a\u00e7ıcı), 0,1M NH\u2083 (y\u00fczey temizleyici, Kb=10\u207b\u2075) \u00e7\u00f6zeltilerinin pH değerlerini hesaplayınız. Ardından: aynı derişimli kuvvetli ve zayıf asitlerin pH\u2019larının farklı olma nedenini a\u00e7ıklayınız.',
+      c:'<b>Kire\u00e7 \u00e7\u00f6z\u00fcc\u00fc (HNO\u2083, kuvvetli):</b> [H\u207a]=0,1M \u2192 <b>pH=1</b>.<br><b>Sirke (CH\u2083COOH, zayıf):</b> x=\u221a(0,1\u00d710\u207b\u2077)=10\u207b\u2074M \u2192 <b>pH=4</b>.<br><b>Lavabo a\u00e7ıcı (NaOH, kuvvetli):</b> [OH\u207b]=0,1M \u2192 pOH=1 \u2192 <b>pH=13</b>.<br><b>Y\u00fczey temizleyici (NH\u2083, zayıf):</b> x=\u221a(0,1\u00d710\u207b\u2075)=10\u207b\u00b3M \u2192 pOH=3 \u2192 <b>pH=11</b>.<br><b>Neden farklı?</b> Aynı derişimde olsalar da KUVVETLİ asit/baz TAMAMEN (%100) iyonlaşırken, ZAYIF asit/baz sadece KISMEN iyonlaşır \u2014 bu y\u00fczden ger\u00e7ek [H\u207a]/[OH\u207b] derişimleri (dolayısıyla pH) \u00e7ok farklı \u00e7ıkar.' },
+    { n:27, t:'200 mL 0,8 M HNO\u2083 \u00e7\u00f6zeltisi ile 200 mL 0,6 M KOH \u00e7\u00f6zeltisi karıştırılarak n\u00f6tralleşme tepkimesi ger\u00e7ekleştiriliyor. Oluşan karışımın pH değeri ka\u00e7tır?',
+      c:'mol H\u207a=0,8\u00d70,2=<b>0,16 mol</b>. mol OH\u207b=0,6\u00d70,2=<b>0,12 mol</b>.<br>H\u207a fazla: 0,16\u22120,12=0,04mol. Toplam hacim=200+200=400mL=0,4L.<br>[H\u207a]=0,04/0,4=<b>0,1 M</b> \u2192 <b>pH=1</b>.' }
+  ];
+
+  var TEMA2_MC = [
+    { n:35, kat:'Denge', t:'Bir öğretmen şu tepkimeleri veriyor: I. H\u2082O(k)\u21ccH\u2082O(s) II. H\u2082(g)+Br\u2082(g)\u21cc2HBr(g) III. C(k)+H\u2082O(g)\u21ccH\u2082(g)+CO(g) IV. 2NO\u2082(g)\u21ccN\u2082O\u2084(g) V. CO\u2082(g)+H\u2082O(s)\u21ccH\u2082CO\u2083(suda). Hangileri FİZİKSEL denge tepkimesidir?',
+      o:['Yalnız I','Yalnız IV','I ve II','III ve V','II, III ve IV'], c:0,
+      ac:'I: H\u2082O(k)\u21ccH\u2082O(s) sadece HAL DEĞİŞİMİDİR (aynı madde, kimyasal değişim yok) \u2192 FİZİKSEL.<br>II-V: hepsinde YENİ madde(ler) oluşuyor (HBr, CO+H\u2082, N\u2082O\u2084, H\u2082CO\u2083) \u2192 hepsi KİMYASAL.<br>\u2192 <b>A) Yalnız I</b>.' },
+    { n:69, kat:'Le Chatelier', t:'2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g) tepkimesi EKZOTERMİKTİR (\u0394H&lt;0). Daha fazla SO\u2083 elde etmek i\u00e7in: I. Sıcaklığı artırmak \u00fcr\u00fcnleri artırır. II. Hacmi artırmak \u00fcr\u00fcnleri artırır. III. SO\u2082 derişimini artırmak \u00fcr\u00fcnleri artırır. Hangi hipotez(ler) DOĞRUDUR?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:2,
+      ac:'I \u2014 YANLIŞ: EKZOTERMİK tepkimede sıcaklık artışı GERİ (tepken) y\u00f6n\u00fcne kaydırır, SO\u2083 AZALIR.<br>II \u2014 YANLIŞ: Tepken tarafı 3mol (2SO\u2082+O\u2082), \u00fcr\u00fcn tarafı 2mol (2SO\u2083); hacim artışı KATSAYISI FAZLA (tepken) tarafa kayar, SO\u2083 AZALIR.<br>III \u2014 DOĞRU: SO\u2082 eklemek Le Chatelier\u2019e g\u00f6re \u00fcr\u00fcn y\u00f6n\u00fcne kaydırır.<br>\u2192 <b>C) Yalnız III</b>.' },
+    { n:71, kat:'Le Chatelier', t:'Aynı ekzotermik SO\u2083 tepkimesinde (2SO\u2082+O\u2082\u21cc2SO\u2083), hangi etkiler EN KISA s\u00fcrede EN AZ enerjiyle EN FAZLA SO\u2083 verir?',
+      o:['SO\u2082 ekle, sıcaklığı düşür','O\u2082 uzaklaştır, sıcaklığı yükselt','Katalizör ekle, sıcaklığı yükselt','Hacmi artır, sıcaklığı düşür','O\u2082 ekle, sıcaklığı düşür, katalizör ekle'], c:4,
+      ac:'\u00dcr\u00fcn miktarını ARTIRMAK i\u00e7in: O\u2082 EKLEMEK (Le Chatelier, doğru y\u00f6n) VE sıcaklığı DÜŞÜRMEK (ekzotermikte \u00fcr\u00fcne kaydırır) gerekir. HIZI ARTIRMAK (en kısa s\u00fcre) i\u00e7in KATALİZÖR eklenir (verimi değiştirmez, sadece hızlandırır). \u00dc\u00e7\u00fc BİRLİKTE t\u00fcm hedefleri (\u00e7ok \u00fcr\u00fcn+az enerji+hızlı) sağlar.<br>\u2192 <b>E</b>.' },
+    { n:72, kat:'Kavram', t:'Tepkime ortamına katalizör eklenmesi durumunda aşağıdakilerden hangisi DOĞRU olur?',
+      o:['Dengeye ulaşma süresini geciktirir','İleri ve geri tepkime hızını EŞİT şekilde artırır','İleri tepkimeyi daha fazla hızlandırıp verimi artırır','Sıcaklığı düşürerek tepkimeyi hızlandırır','Dengeyi sonlandırıp tepkimeyi tek yönlü yapar'], c:1,
+      ac:'Katalizör, ileri VE geri tepkimenin aktifleşme enerjisini AYNI ORANDA d\u00fcş\u00fcrerek İKİSİNİN DE hızını EŞİT şekilde artırır. Dengeye ULAŞMA S\u00dcRESİNİ kısaltır (geciktirmez), \u00dcR\u00dcN MİKTARINI (verimi) DEĞİŞTİRMEZ, sıcaklığı etkilemez, dengeyi ortadan kaldırmaz.<br>\u2192 <b>B</b>.' },
+    { n:73, kat:'Çözünürlük', t:'Bir öğrenci CaSO\u2084 tuzunun molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fcğ\u00fcn\u00fc deneysel olarak \u00f6l\u00e7\u00fcyor, sonra bilimsel kaynaklarda CaSO\u2084\u2019\u00fcn 25°C\u2019deki K\u00e7\u00e7 değerinin 9\u00d710\u207b\u2076 olduğunu buluyor. Bilimsel K\u00e7\u00e7 değerine g\u00f6re CaSO\u2084\u2019\u00fcn 25°C\u2019deki molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fcğ\u00fc nedir?',
+      o:['2\u00d710\u207b\u00b2 M','3\u00d710\u207b\u00b2 M','3\u00d710\u207b\u00b3 M','9\u00d710\u207b\u00b3 M','9\u00d710\u207b\u2076 M'], c:2,
+      ac:'CaSO\u2084 (XY tipi): s=\u221aK\u00e7\u00e7=\u221a(9\u00d710\u207b\u2076)=<b>3\u00d710\u207b\u00b3 M</b>.<br>\u2192 <b>C</b>.' },
+    { n:74, kat:'Çözünürlük', t:'\u00d6ğrenci, \u00e7eşme suyuyla \u00f6l\u00e7t\u00fcğ\u00fc CaSO\u2084 \u00e7\u00f6z\u00fcn\u00fcrl\u00fcğ\u00fcn\u00fcn (2\u00d710\u207b\u2074M) bilimsel K\u00e7\u00e7\u2019den hesaplananla (3\u00d710\u207b\u00b3M) FARKLI \u00e7ıktığını fark ediyor. I. \u00c7eşme suyu sıcaklığının 25°C\u2019den farklı olması. II. \u00c7eşme suyunun Ca\u00b2\u207a ya da SO\u2084\u00b2\u207b i\u00e7ermesi. III. \u00c7\u00f6zeltinin hızlı dengeye ulaşması i\u00e7in karıştırılması. Hangileri farkın nedeni olabilir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:3,
+      ac:'I \u2014 GE\u00c7ERLİ: K\u00e7\u00e7 sıcaklığa bağlıdır, farklı sıcaklık farklı \u00e7\u00f6z\u00fcn\u00fcrl\u00fck verir.<br>II \u2014 GE\u00c7ERLİ: \u00c7eşme suyunda ORTAK İYON varsa (Ca\u00b2\u207a/SO\u2084\u00b2\u207b), \u00e7\u00f6z\u00fcn\u00fcrl\u00fck AZALIR \u2014 tam da g\u00f6zlenen d\u00fcş\u00fck değerle TUTARLI.<br>III \u2014 GE\u00c7ERSİZ: Karıştırma sadece dengeye ULAŞMA HIZINI etkiler, denge ANINDAKİ derişimi (SONU\u00c7 değerini) değiştirmez.<br>\u2192 <b>D) I ve II</b>.' },
+    { n:75, kat:'Çözünürlük', t:'Öğrenci CaSO\u2084\u2019\u00fcn suda \u00e7\u00f6z\u00fcnme modelini \u00e7izerken hangi TEMEL HATAYI yapmış olabilir? (CaSO\u2084 suda AZ \u00e7\u00f6z\u00fcnen bir tuzdur.)',
+      o:['Kristal \u00f6rg\u00fc yapısıyla g\u00f6stermesi','İyonların su molek\u00fclleriyle sarıldığını g\u00f6stermesi','İyonlarına ayrışarak \u00e7\u00f6z\u00fcnd\u00fcğ\u00fcn\u00fc g\u00f6stermesi','Katyonların oksijen tarafından sarıldığını g\u00f6stermesi','CaSO\u2084\u2019\u00fcn TAMAMININ \u00e7\u00f6z\u00fcnd\u00fcğ\u00fcn\u00fc g\u00f6stermesi'], c:4,
+      ac:'CaSO\u2084 AZ \u00e7\u00f6z\u00fcnen bir tuzdur \u2014 doygun \u00e7\u00f6zeltide her zaman \u00e7\u00f6z\u00fcnmeden kalan KATI bulunur (denge hâli). T\u00fcm katının \u00e7\u00f6z\u00fcnd\u00fcğ\u00fcn\u00fc g\u00f6stermek, \u201caz \u00e7\u00f6z\u00fcnen tuz\u201d kavramıyla \u00c7ELİŞİR.<br>\u2192 <b>E</b>.' },
+    { n:51, kat:'Asit-Baz Teorileri', t:'Nitr\u00f6z asit (HNO\u2082) i\u00e7in: I. Arrhenius\u2019a g\u00f6re suya bir PROTON vererek \u00e7\u00f6z\u00fcn\u00fcr. II. Bronsted-Lowry\u2019ye g\u00f6re suda H\u2083O\u207a derişimini artırdığı i\u00e7in asittir. III. Bronsted-Lowry\u2019ye g\u00f6re eşlenik bazı NO\u2082\u207b iyonudur. Hangileri DOĞRUDUR?',
+      o:['Yalnız I','Yalnız II','Yalnız III','II ve III','I, II ve III'], c:3,
+      ac:'I \u2014 YANLIŞ: Arrhenius teorisi \u201cPROTON\u201d kavramını KULLANMAZ, sadece \u201csuda H\u207a iyonu oluşturma\u201d der \u2014 \u201cproton verme\u201d dili BRONSTED-LOWRY\u2019ye aittir.<br>II \u2014 DOĞRU: Bronsted-Lowry\u2019ye g\u00f6re H\u2083O\u207a derişimini artıran madde asittir.<br>III \u2014 DOĞRU: HNO\u2082, H\u207a verince NO\u2082\u207b (eşlenik baz) kalır.<br>\u2192 <b>D) II ve III</b>.' },
+    { n:58, kat:'Titrasyon', t:'20 mL derişimi bilinmeyen NaOH \u00e7\u00f6zeltisi, 1 M H\u2082SO\u2084 ile titre ediliyor; iletkenlik değişimi grafiği \u00e7iziliyor. N\u00f6tralleşme tepkimesini iletkenlik değişimi DIŞINDA hangi \u00f6l\u00e7\u00fctlerle de g\u00f6zlemleyebiliriz? I. Hacim değişimi II. İndikat\u00f6r\u00fcn renk değişimi III. pH değişimi',
+      o:['Yalnız I','Yalnız III','I ve II','II ve III','I, II ve III'], c:3,
+      ac:'Hacim değişimi (I) tek başına n\u00f6tralleşmeyi G\u00d6ZLEMLEMEK i\u00e7in anlamlı bir \u00f6l\u00e7\u00fct DEĞİLDİR. İndikat\u00f6r renk değişimi (II) VE pH değişimi (III) ise KLASİK ve ge\u00e7erli y\u00f6ntemlerdir.<br>\u2192 <b>D) II ve III</b>.' },
+    { n:59, kat:'Titrasyon', t:'Yukarıdaki NaOH+H\u2082SO\u2084 titrasyonunda iletkenlik EN D\u00dcŞ\u00dcK değerine 30 mL H\u2082SO\u2084 eklendiğinde ulaşıyor (eşdeğerlik noktası). Buna g\u00f6re aşağıdakilerden hangisi YANLIŞTIR?',
+      o:['NaOH t\u00fckeninceye kadar iletkenlik azalmaya devam eder','İletkenlik en d\u00fcş\u00fck değerine ulaştığında tam n\u00f6tralleşme ger\u00e7ekleşir','35 mL H\u2082SO\u2084 eklendiğinde karışımın pH değeri 7\u2019den B\u00dcY\u00dcKT\u00dcR','N\u00f6tralleşme sırasında Na\u2082SO\u2084 ve H\u2082O oluşur','30 mL H\u2082SO\u2084 eklendiğinde H\u207a ve OH\u207b derişimleri EŞİT olur'], c:2,
+      ac:'30mL\u2019den SONRA (\u00f6rn. 35mL\u2019de) artık FAZLA H\u2082SO\u2084 (asit) eklenmiş olur, bu y\u00fczden karışım ASİDİK olur, pH<b>7\u2019den K\u00dc\u00c7\u00dcKT\u00dcR</b> \u2014 \u201c7\u2019den b\u00fcy\u00fckt\u00fcr\u201d ifadesi YANLIŞTIR (node.js: 35mL\u2019de pH\u22480,74 \u00e7ıkar). Diğer t\u00fcm se\u00e7enekler DOĞRUDUR.<br>\u2192 <b>C</b>.' },
+    { n:60, kat:'Titrasyon', t:'Eşdeğerlik noktasında (30 mL 1M H\u2082SO\u2084 eklendiğinde) 20 mL\u2019lik NaOH \u00e7\u00f6zeltisi tam n\u00f6trleşiyor. NaOH \u00e7\u00f6zeltisinin derişimi ka\u00e7 molardır?',
+      o:['2','3','4','5','6'], c:1,
+      ac:'mol H\u207a (eşdeğerlikte)=1\u00d70,030\u00d72(H\u2082SO\u2084 iki değerli)=<b>0,06 mol</b>.<br>Tam n\u00f6trleşme: mol NaOH=0,06mol \u2192 [NaOH]=0,06/0,020=<b>3 M</b>.<br>\u2192 <b>B</b>.' },
+    { n:61, kat:'Titrasyon', t:'Aynı titrasyonda ([NaOH]=3M, 20mL) 80 mL H\u2082SO\u2084 (1M) harcandığında karışımın pH değeri ka\u00e7 olur?',
+      o:['0','1','2','3','4'], c:0,
+      ac:'mol H\u207a eklenen=1\u00d70,080\u00d72=<b>0,16 mol</b>. mol OH\u207b başlangı\u00e7=3\u00d70,020=0,06mol.<br>Kalan H\u207a=0,16\u22120,06=0,10mol. Toplam hacim=20+80=100mL=0,1L.<br>[H\u207a]=0,10/0,1=<b>1 M</b> \u2192 pH=\u2212log(1)=<b>0</b>.<br>\u2192 <b>A</b>.' }
+  ];
+
+  function temaBoslukRenderHtml(){
+    var html = '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#93c5fd;margin-bottom:10px">\ud83d\udcdd Boşluk Doldurma (2-17)</div>' +
+      '<p style="font-size:12px;color:var(--tx3);margin-bottom:10px">Kelime havuzu: Le Chatelier ilkesi, zayıf, n\u00f6tralleşme, tersinmez, iyonlaşma y\u00fczdesi, denge sabiti, proton, ortak iyon, H\u207a iyonu, sıcaklık, \u00e7\u00f6z\u00fcn\u00fcrl\u00fck, hızı, OH\u207b iyonu, titrasyon, tepkime oranı, pH, otoiyonizasyon, iletkenlik, tersinir, kuvvetli</p>';
+    TEMA2_BOSLUK.forEach(function(q){
+      html += '<div style="padding:8px 0;border-top:1px solid rgba(255,255,255,.06);cursor:pointer" onclick="molToggle(\'tboslukc-' + q.n + '\')">' +
+        '<div style="font-size:13px;color:#fff">' + q.n + '. ' + q.t.replace('………', '<b style="color:#f59e0b">………</b>') + '</div>' +
+        '<div id="tboslukc-' + q.n + '" style="display:none;margin-top:4px;font-size:12px;color:#86efac">\u2192 <b>' + q.c + '</b></div></div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  var TEMA2_MC2 = [
+    { n:32, kat:'Denge', t:'Bir araştırmacı, kapalı bir kapta t°C\u2019ta bulunan A maddesi \u00fczerine B maddesini ekliyor. Kapta zamanla A ve B miktarlarında azalma olurken C maddesi oluşuyor, ortam sarıya d\u00f6n\u00fcş\u00fcyor ve sıcaklık artıyor. Bir s\u00fcre sonra C tekrar A ve B\u2019yi oluşturuyor, derişimler sabitleniyor. Araştırmacı hangi sonuca ULAŞAMAZ?',
+      o:['Tersinirdir','Dengeye ulaşmıştır','Tam verimle ger\u00e7ekleşmiştir','Hem ileri hem geri y\u00f6nde ger\u00e7ekleşmiştir','Ekzotermiktir'], c:2,
+      ac:'Denge durumunda hem tepken hem \u00fcr\u00fcn BİRLİKTE var olur \u2014 <b>TAM VERİM</b> (t\u00fcm tepkenlerin \u00fcr\u00fcne d\u00f6n\u00fcşmesi) denge sistemlerinde ASLA ger\u00e7ekleşmez. Diğer t\u00fcm sonu\u00e7lar (tersinirlik, denge, ekzotermiklik/sıcaklık artışından) doğrudan gözlemlerden \u00e7ıkarılabilir.<br>\u2192 <b>C</b>.' },
+    { n:33, kat:'Denge', t:'Aynı gözlemlerden (Q32\u2019deki deney) araştırmacı hangi sonuca ULAŞIR?',
+      o:['Fiziksel denge tepkimesidir','Kimyasal denge tepkimesidir','Endotermik bir tepkimedir','G\u00f6zlenemeyen mikro olaylar durmuştur','Tersinmez bir tepkimedir'], c:1,
+      ac:'Yeni madde (C) oluştuğu i\u00e7in <b>KİMYASAL</b>; derişimler sabitlendiği i\u00e7in <b>DENGE</b> tepkimesidir. Sıcaklık ARTTIĞI i\u00e7in EKZOTERMİKTİR (endotermik değil); dengede MİKRO olaylar (\u00e7arpışmalar) DEVAM EDER (sadece makroskobik değişim durur); tepkime zaten TERSİNİR olduğu g\u00f6zlenmiştir.<br>\u2192 <b>B</b>.' },
+    { n:34, kat:'Denge', t:'Kapta ger\u00e7ekleşen bu tepkimeye g\u00f6re aşağıdakilerden hangisi KESİNLİKLE DOĞRUDUR?',
+      o:['Homojen bir tepkimedir','Yanma tepkimesidir','Heterojen bir tepkimedir','Analiz (ayrışma) tepkimesidir','Denge tepkimesidir'], c:4,
+      ac:'Derişimlerin zamanla SABİTLENMESİ, tepkimenin bir DENGE tepkimesi olduğunu KESİN olarak g\u00f6sterir. Diğer se\u00e7enekler (homojen/heterojen, yanma, ayrışma) verilen bilgilerden KESİN olarak \u00e7ıkarılamaz.<br>\u2192 <b>E</b>.' },
+    { n:36, kat:'Denge', t:'I. H\u2082O(k)\u21ccH\u2082O(s) II. H\u2082(g)+Br\u2082(g)\u21cc2HBr(g) III. C(k)+H\u2082O(g)\u21ccH\u2082(g)+CO(g) IV. 2NO\u2082(g)\u21ccN\u2082O\u2084(g) V. CO\u2082(g)+H\u2082O(s)\u21ccH\u2082CO\u2083(suda). Hangileri KİMYASAL HETEROJEN denge tepkimesidir?',
+      o:['I ve II','II ve IV','III ve V','III, IV ve V','II, III, IV ve V'], c:2,
+      ac:'III: C(k) SAF KATI, diğerleri gaz \u2192 KİMYASAL+HETEROJEN ✓<br>V: H\u2082O(s) SAF SIVI, diğerleri gaz/\u00e7\u00f6zelti \u2192 KİMYASAL+HETEROJEN ✓<br>I fiziksel (elenir); II ve IV hepsi gaz olduğu i\u00e7in HOMOJEN (elenir).<br>\u2192 <b>C) III ve V</b>.' },
+    { n:37, kat:'Denge', t:'Aynı 5 tepkimeden (Q36) hangileri KİMYASAL HOMOJEN denge tepkimesidir?',
+      o:['I ve III','II ve IV','II, III ve V','III, IV ve V','I, II, III, IV ve V'], c:1,
+      ac:'II: H\u2082(g)+Br\u2082(g)\u21cc2HBr(g) \u2014 hepsi GAZ \u2192 HOMOJEN+KİMYASAL ✓<br>IV: 2NO\u2082(g)\u21ccN\u2082O\u2084(g) \u2014 hepsi GAZ \u2192 HOMOJEN+KİMYASAL ✓<br>\u2192 <b>B) II ve IV</b>.' },
+    { n:38, kat:'Denge', t:'Aynı 5 tepkimeden (Q36) hangilerinde denge bağıntısında YER ALMAYAN madde bulunur?',
+      o:['I ve II','II ve III','II, III ve V','I, III ve V','II, III, IV ve V'], c:3,
+      ac:'Saf katı/sıvı derişimleri SABİT olduğu i\u00e7in denge bağıntısında YER ALMAZ: I (H\u2082O katı/sıvı hâl değişimi), III (C katı), V (H\u2082O sıvı).<br>\u2192 <b>D) I, III ve V</b>.' },
+    { n:39, kat:'Denge', t:'Bir kimyager A(g)+2B(g)\u21cc2C(g)+3D(g) tepkimesini inceliyor. Tepkimenin denge bağıntısı hangisidir?',
+      o:['Kc=[C][D]/([A][B])','Kc=[C]\u00b2[D]\u00b3/([A][B]\u00b2)','Kc=[A][B]\u00b2/([C]\u00b2[D]\u00b3)','Kc=[A][B]/([C][D])','Kc=[C]\u00b3[D]\u00b2/([A]\u00b2[B])'], c:1,
+      ac:'Denge bağıntısında katsayılar \u00fcs olarak yazılır: \u00fcr\u00fcnler/tepkenler.<br>\u2192 <b>B) Kc=[C]\u00b2[D]\u00b3/([A][B]\u00b2)</b>.' },
+    { n:40, kat:'Denge', t:'Kimyager, A(g)+2B(g)\u21cc2C(g)+3D(g) tepkimesi i\u00e7in derişimleri 0,10,20,30,40. saniyelerde \u00f6l\u00e7\u00fcyor: t=30 ve t=40\u2019ta t\u00fcm derişimler AYNI \u00e7ıkıyor. Tepkimenin dengeye ulaştığına dair EN G\u00dc\u00c7L\u00dc kanıt hangisidir?',
+      o:['10. saniyede [C] ve [D] artması','20. saniyede [A] ve [B] azalması','30 ve 40. saniyelerde t\u00fcm derişimlerin SABİT kalması','Tepkimenin başlangı\u00e7ta A ve B ile başlaması','Tepkimenin tersinir olması'], c:2,
+      ac:'Denge, derişimlerin ZAMANLA DEĞİŞMEMESİ (sabit kalması) ile tanımlanır \u2014 bu, dengeye ulaşıldığının EN DOĞRUDAN ve EN G\u00dc\u00c7L\u00dc kanıtıdır.<br>\u2192 <b>C</b>.' },
+    { n:41, kat:'Denge', t:'Aynı tepkimede (Q39-40) 20. saniyede [A]=0,7, [B]=1,0, [C]=1,0, [D]=1,5 mol/L \u00f6l\u00e7\u00fcl\u00fcyor. 20. saniyedeki tepkime oranı (Q) değeri ka\u00e7tır?',
+      o:['2,41','4,82','24,1','48,2','96,4'], c:1,
+      ac:'Q=[C]\u00b2[D]\u00b3/([A][B]\u00b2)=(1,0)\u00b2(1,5)\u00b3/(0,7\u00d71,0\u00b2)=1\u00d73,375/0,7=<b>4,82</b>.<br>\u2192 <b>B</b>.' },
+    { n:42, kat:'Denge', t:'Aynı tepkime i\u00e7in 25°C\u2019de Kc=21,87\u2019dir. 10. saniyede [A]=0,9, [B]=1,4, [C]=0,6, [D]=0,9 \u00f6l\u00e7\u00fcl\u00fcyor (Qc\u22480,15). Buna g\u00f6re: I. İleri tepkime hızı geri tepkime hızına eşittir. II. Tepkime \u00fcr\u00fcnler y\u00f6n\u00fcne hareket eder. III. Kaptaki molek\u00fcl sayısı zamanla artar. Hangileri DOĞRUDUR?',
+      o:['Yalnız I','Yalnız II','I ve II','II ve III','I, II ve III'], c:3,
+      ac:'Qc(\u22480,15) &lt; Kc(21,87) olduğu i\u00e7in sistem HEN\u00dcZ DENGEDE DEĞİL, \u00dcR\u00dcNLER y\u00f6n\u00fcne ilerler (II doğru). Dengede OLMADIĞI i\u00e7in ileri/geri hız EŞİT DEĞİLDİR (I yanlış). Tepken tarafı 3mol (A+2B), \u00fcr\u00fcn tarafı 5mol (2C+3D) \u2014 ileri y\u00f6nde ilerlerken TOPLAM molek\u00fcl sayısı ARTAR (III doğru).<br>\u2192 <b>D) II ve III</b>.' },
+    { n:43, kat:'Denge', t:'Kimyager, sadece derişim verilerinden yola \u00e7ıkarak tepkimenin dengeye ulaştığı tahmininin GE\u00c7ERLİLİĞİNİ sorgulamak i\u00e7in hangi bilimsel veriye ihtiya\u00e7 duyar?',
+      o:['Tepkimenin entalpi değişimine','Tepkimenin aktivasyon enerjisine','Denge sabiti değerine','Tepkime kabının hacmine','Katalizör eklenip eklenmediğine'], c:2,
+      ac:'Derişimlerin sabitlenmesi TEK BAŞINA yeterli olsa da, bağımsız bir kaynaktan bilinen <b>DENGE SABİTİ (Kc)</b> değeriyle hesaplanan Q\u2019yu karşılaştırmak, dengeye ulaşıldığını BİLİMSEL olarak DOĞRULAR.<br>\u2192 <b>C</b>.' },
+    { n:44, kat:'Denge', t:'Kimyager tepkimenin dengeye ulaşıp ulaşmadığını tahmin etmek i\u00e7in hangi y\u00f6ntemi kullanmıştır?',
+      o:['Katalizör ekleyerek g\u00f6zlem yapmak','Sadece tepkenlerin derişimlerini \u00f6l\u00e7mek','Sadece \u00fcr\u00fcnlerin derişimlerini \u00f6l\u00e7mek','Tepken VE \u00fcr\u00fcnlerin derişimlerini FARKLI ZAMANLARDA \u00f6l\u00e7mek','Tepkimeyi farklı sıcaklıklarda tekrarlamak'], c:3,
+      ac:'Kimyager, t=0,10,20,30,40 saniyelerde HEM tepkenlerin HEM \u00fcr\u00fcnlerin derişimlerini \u00f6l\u00e7erek zamanla SABİTLENİP SABİTLENMEDİĞİNİ takip etmiştir.<br>\u2192 <b>D</b>.' },
+    { n:46, kat:'Le Chatelier (PET)', t:'PET sentez tepkimesi (endotermik) dengede iken ortamda SU fazla miktarda birikirse: I. Sistem GERİ y\u00f6ne ilerler. II. PET \u00fcretim verimi ARTAR. III. Sabit sıcaklıkta Kc değeri değişir. Hangileri ger\u00e7ekleşir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve III','I, II ve III'], c:0,
+      ac:'Su \u00dcR\u00dcN tarafında birikince (fazlalaşınca), Le Chatelier\u2019e g\u00f6re sistem GERİ y\u00f6ne kayar (I doğru). Bu PET VERİMİNİ AZALTIR (II yanlış). Sıcaklık SABİT olduğu i\u00e7in Kc DEĞİŞMEZ (III yanlış).<br>\u2192 <b>A) Yalnız I</b>.' },
+    { n:47, kat:'Le Chatelier (PET)', t:'PET sentez tepkimesi dengede iken ortama sabit sıcaklıkta etilen glikol (tepken) ilave ediliyor. Buna g\u00f6re: I. Daha AZ PET elde edilir. II. İleri tepkime hızı ARTAR. III. Tereftalik asit derişimi AZALIR. Hangileri ger\u00e7ekleşir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','II ve III','I, II ve III'], c:3,
+      ac:'Etilen glikol (tepken) eklenince sistem İLERİ y\u00f6ne kayar \u2192 DAHA FAZLA PET oluşur (I yanlış). Derişim artışı hızı artırır (II doğru). İleri y\u00f6nde ilerlerken diğer tepken (tereftalik asit) de t\u00fcketilir, derişimi AZALIR (III doğru).<br>\u2192 <b>D) II ve III</b>.' },
+    { n:48, kat:'Le Chatelier (PET)', t:'PET \u00fcretim tepkimesi (endotermik) dengede iken: I. Sıcaklığı düşürme II. Etilen glikol ilave etme III. Oluşan PET\u2019i ortamdan uzaklaştırma etkileri yapılıyor. Aşağıdaki \u00e7ıkarımlardan hangisi YANLIŞTIR?',
+      o:['I. etki şişe \u00fcretim miktarını azaltır','II. etki elyaf lif miktarını artırır','III. etki \u00fcretilen PET\u2019in TOPLAMDA AZALMASINA neden olur','I. etki tekstil \u00fcr\u00fcn miktarında düşmeye neden olur','II ve III birlikte yapılırsa gıda kabı sayısını toplamda artırır'], c:2,
+      ac:'PET\u2019i ortamdan uzaklaştırmak (\u00fcr\u00fcn azaltma) sistemi İLERİ y\u00f6ne kaydırır \u2014 sistem bu kaybı TELAFİ etmek i\u00e7in DAHA FAZLA PET \u00fcretir. Bu y\u00fczden \u201ctoplamda AZALIR\u201d ifadesi YANLIŞTIR (aslında toplam \u00fcretim ARTAR). Diğer \u00e7ıkarımlar (I,II ve E şıkkı) DOĞRUDUR.<br>\u2192 <b>C</b>.' },
+    { n:49, kat:'Otoiyonizasyon', t:'Suyun otoiyonizasyon dengesi hakkında aşağıdakilerden hangisi DOĞRUDUR?',
+      o:['Sıcaklık değişiminden etkilenmez','50°C\u2019de pH=7\u2019dir','50°C\u2019de [H\u207a]&gt;[OH\u207b] ilişkisi vardır','10°C\u2019de [H\u207a]&lt;[OH\u207b] ilişkisi vardır','K<sub>su</sub> 50°C\u2019de 10\u207b\u00b9\u2074 değerinden B\u00dcY\u00dcKT\u00dcR'], c:4,
+      ac:'Saf su HER SICAKLIKTA n\u00f6trd\u00fcr, yani [H\u207a]=[OH\u207b] EŞİTLİĞİ Hİ\u00c7BİR ZAMAN BOZULMAZ (B,C,D yanlış \u2014 sadece pH\u2019ın SAYISAL değeri 7\u2019den farklı olabilir). Otoiyonizasyon sıcaklıkla DEĞİŞİR (A yanlış). Sıcaklık arttık\u00e7a K<sub>su</sub> ARTAR.<br>\u2192 <b>E</b>.' },
+    { n:50, kat:'Otoiyonizasyon', t:'Suyun otoiyonizasyonu I. İletkenlik değişimi II. pH değişimi III. Hidrojen gazı miktarı niteliklerinden hangileri ile g\u00f6zlemlenebilir?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:3,
+      ac:'Otoiyonizasyonda İYONLAR (H\u207a, OH\u207b) oluşur \u2014 bu hem İLETKENLİK hem pH değişimiyle g\u00f6zlemlenebilir (I,II doğru). H\u2082 GAZI OLUŞMAZ (sadece \u00e7\u00f6z\u00fcnm\u00fcş iyonlar vardır, gaz \u00e7ıkışı YOKTUR) (III yanlış).<br>\u2192 <b>D) I ve II</b>.' },
+    { n:52, kat:'Asit-Baz Teorileri', t:'KOH\u2019in suda \u00e7\u00f6z\u00fcnmesi KOH\u2192K\u207a+OH\u207b şeklinde (basit iyonlaşma olarak) g\u00f6steriliyor. Buna g\u00f6re: I. Bronsted-Lowry\u2019ye g\u00f6re baz \u00f6zelliği a\u00e7ıklanmıştır. II. Arrhenius\u2019a g\u00f6re baz \u00f6zelliği a\u00e7ıklanmıştır. III. Bronsted-Lowry\u2019ye g\u00f6re eşlenik bazı K\u207a\u2019dır. Hangileri DOĞRUDUR?',
+      o:['Yalnız I','Yalnız II','Yalnız III','I ve II','I, II ve III'], c:1,
+      ac:'Verilen denklem sadece BASİT İYONLAŞMA g\u00f6steriyor (proton transferi YOK) \u2014 bu <b>Arrhenius</b> \u00e7er\u00e7evesinde a\u00e7ıklamadır (OH\u207b oluşumu). Bronsted-Lowry i\u00e7in bir PROTON ALIŞ-VERİŞİ g\u00f6sterilmesi gerekirdi, bu YOK (I yanlış). K\u207a bir SPEKTAT\u00d6R iyondur, \u201ceşlenik baz\u201d kavramı ONA uygulanmaz (III yanlış).<br>\u2192 <b>B) Yalnız II</b>.' },
+    { n:53, kat:'Asit-Baz Hesap', t:'25°C sıcaklıkta HNO\u2082 (zayıf asit) \u00e7\u00f6zeltisi i\u00e7in: I. [H\u207a]&gt;[OH\u207b] II. [H\u207a][OH\u207b]=10\u207b\u00b9\u2074 III. pH&gt;pOH IV. OH\u207b iyonu i\u00e7ermez. Hangileri DOĞRUDUR?',
+      o:['I ve II','III ve IV','II ve IV','I, II ve III','I, II, III ve IV'], c:0,
+      ac:'HNO\u2082 asidik \u00e7\u00f6zelti olduğu i\u00e7in [H\u207a]&gt;[OH\u207b] (I doğru). K<sub>su</sub> bağıntısı HER ZAMAN ge\u00e7erlidir, 25°C\u2019de =10\u207b\u00b9\u2074 (II doğru). Asidik \u00e7\u00f6zeltide pH&lt;7&lt;pOH, yani pH&lt;pOH\u2019dur (III yanlış, tersi iddia ediliyor). Her sulu \u00e7\u00f6zeltide otoiyonizasyon nedeniyle AZ miktarda OH\u207b bulunur (IV yanlış).<br>\u2192 <b>A) I ve II</b>.' },
+    { n:54, kat:'Kuvvetli/Zayıf', t:'0,1M monofonksiyonel kuvvetli asit, zayıf asit, kuvvetli baz, zayıf baz i\u00e7eren 4 kabın pH değerleri: 1.kap=1, 2.kap=9, 3.kap=13, 4.kap=5. Kaplardaki iyonlaşma y\u00fczdeleri hangi şıkta DOĞRU verilmiştir?',
+      o:['%100, %0,01, %100, %0,01','%0,01, %0,02, %100, %100','%100, %100, %0,01, %0,02','%0,02, %100, %0,01, %100','%100, %100, %0,02, %0,02'], c:0,
+      ac:'1.kap(pH=1): [H\u207a]=0,1M=TAM derişim \u2192 <b>%100 (kuvvetli asit)</b>.<br>2.kap(pH=9): pOH=5, [OH\u207b]=10\u207b\u2075M \u2192 <b>%0,01 (zayıf baz)</b>.<br>3.kap(pH=13): pOH=1, [OH\u207b]=0,1M=TAM derişim \u2192 <b>%100 (kuvvetli baz)</b>.<br>4.kap(pH=5): [H\u207a]=10\u207b\u2075M \u2192 <b>%0,01 (zayıf asit)</b>.<br>\u2192 <b>A</b>.' },
+    { n:55, kat:'Kuvvetli/Zayıf', t:'Aynı 4 kaptaki (Q54) H\u2083O\u207a iyonu derişimleri hangi şıkta DOĞRU verilmiştir?',
+      o:['10\u207b\u00b9, 10\u207b\u2079, 10\u207b\u00b9, 10\u207b\u00b9\u00b3','10\u207b\u2079, 10\u207b\u2079, 10\u207b\u00b9, 10\u207b\u00b9\u00b3','10\u207b\u2079, 10\u207b\u00b9, 10\u207b\u00b9\u00b3, 10\u207b\u00b9','10\u207b\u00b9, 10\u207b\u00b9, 10\u207b\u00b9, 10\u207b\u00b9','10\u207b\u00b9, 10\u207b\u2079, 10\u207b\u00b9\u00b3, 10\u207b\u2075'], c:4,
+      ac:'[H\u2083O\u207a]=10\u207b\u1d56\u1d34 doğrudan pH değerinden okunur: 1.kap(pH=1)\u219210\u207b\u00b9, 2.kap(pH=9)\u219210\u207b\u2079, 3.kap(pH=13)\u219210\u207b\u00b9\u00b3, 4.kap(pH=5)\u219210\u207b\u2075.<br>\u2192 <b>E</b>.' },
+    { n:56, kat:'Kuvvetli/Zayıf', t:'Aynı 4 kabın (Q54-55) etiketleri (zayıf asit/zayıf baz/kuvvetli asit/kuvvetli baz) hangi şekilde yerleştirilirse DOĞRU olur?',
+      o:['Zayıf asit, Zayıf baz, Kuvvetli asit, Kuvvetli baz','Zayıf asit, Kuvvetli asit, Zayıf baz, Kuvvetli baz','Kuvvetli asit, Zayıf baz, Kuvvetli baz, Zayıf asit','Kuvvetli asit, Zayıf asit, Kuvvetli baz, Zayıf baz','Kuvvetli baz, Zayıf baz, Zayıf asit, Kuvvetli asit'], c:2,
+      ac:'Q54-55\u2019ten: 1.kap=KUVVETLİ ASİT, 2.kap=ZAYIF BAZ, 3.kap=KUVVETLİ BAZ, 4.kap=ZAYIF ASİT.<br>\u2192 <b>C) Kuvvetli asit, Zayıf baz, Kuvvetli baz, Zayıf asit</b>.' },
+    { n:57, kat:'Kavram', t:'Kuvvetli asitler/bazlardaki pH hesaplama ile zayıf asitler/bazlardaki pH hesaplamanın FARKLI olmasının temel nedeni nedir?',
+      o:['İyonlaşma y\u00fczdeleri','H\u2083O\u207a iyonu derişimi','OH\u207b iyonu derişimi','İletkenlik değerleri','pOH değerleri'], c:0,
+      ac:'Kuvvetli asit/baz %100 iyonlaşırken zayıf asit/baz KISMEN iyonlaşır \u2014 bu <b>İYONLAŞMA Y\u00dcZDESİ</b> farkı, [H\u2083O\u207a]/[OH\u207b] hesaplama y\u00f6ntemini (direkt derişim mi, yoksa \u221a(C\u00b7K) mi) belirleyen TEMEL sebeptir. Diğer se\u00e7enekler bu FARKIN SONUCUDUR, NEDENİ değildir.<br>\u2192 <b>A</b>.' },
+    { n:62, kat:'Titrasyon', t:'Derişimi bilinmeyen NaOH \u00e7\u00f6zeltisi ile 1M HCl arasında ger\u00e7ekleştirilen titrasyon i\u00e7in aşağıdakilerden hangisi DOĞRUDUR?',
+      o:['60mL HCl harcandığında n<sub>H\u207a</sub>=n<sub>OH\u207b</sub> olur','40mL HCl harcandığında indikat\u00f6r renk değiştirir','Grafikte eşdeğerlik noktası ve d\u00f6n\u00fcm noktası AYNI konumu g\u00f6sterir','pH değeri 7 olduğunda eşdeğerlik noktasına ulaşılmıştır','Grafikte pH=7 olan nokta d\u00f6n\u00fcm noktasıdır'], c:3,
+      ac:'NaOH (kuvvetli baz) ile HCl (kuvvetli asit) titrasyonunda eşdeğerlik noktası HER ZAMAN <b>pH=7</b>\u2019dir (n\u00f6tr tuz oluşur) \u2014 bu KESİN bir kimya ger\u00e7eğidir. D\u00f6n\u00fcm noktası İNDİKAT\u00d6RE bağlı olduğu i\u00e7in eşdeğerlik noktasıyla TAM AYNI KONUMDA olmak ZORUNDA DEĞİLDİR.<br>\u2192 <b>D</b>.' },
+    { n:64, kat:'Titrasyon', t:'Titrasyon işlem basamakları: I. Derişimi bilinmeyen NaOH erlenmayere, 1M HCl b\u00fcrete konulur. II. B\u00fcretteki HCl\u2019ye birka\u00e7 damla metil oranj indikat\u00f6r\u00fc damlatılır. III. B\u00fcretteki \u00e7\u00f6zelti erlenmayerdeki \u00e7\u00f6zeltiye damla damla ilave edilir. IV. Kalıcı renk değişiminde harcanan HCl hacmi belirlenir. V. Derişim hesaplanır. Hangi basamakta HATA yapılmıştır?',
+      o:['I','II','III','IV','V'], c:1,
+      ac:'İndikat\u00f6r, İ\u00c7İNDE DERİŞİMİ ARANAN \u00e7\u00f6zeltiye (ERLENMAYERDEKİ NaOH\u2019a) damlatılmalıdır \u2014 b\u00fcretteki (bilinen derişimli) \u00e7\u00f6zeltiye DEĞİL! Bu y\u00fczden II. adımda hata vardır.<br>\u2192 <b>B</b>.' },
+    { n:66, kat:'Kimya ve Yaşam', t:'Tablet formundaki antiasit ila\u00e7ların genellikle \u00e7İĞNENEREK kullanılmasının temel sebebi nedir?',
+      o:['Suda daha iyi \u00e7\u00f6z\u00fcnmesinin sağlanması','Sindirim kanalından ge\u00e7emeyecek kadar b\u00fcy\u00fck olması','Mideye ulaşıncaya kadar dağılmasının engellenmesi','Mideye k\u00fc\u00e7\u00fck par\u00e7alar hâlinde ulaşıp HIZLA tepkimeye girmesi','Mideki koruyucu asit bariyerini ortadan kaldırması'], c:3,
+      ac:'\u00c7iğnemek tableti K\u00dc\u00c7\u00dcK PAR\u00c7ALARA ayırarak y\u00fczey alanını artırır \u2014 bu, mideye ulaştığında mide asidiyle DAHA HIZLI ve ETKİLİ tepkimeye girmesini sağlar (metinde \u201ckolayca dağılmalı, hızlı tepkimeye girmeli\u201d denmiş).<br>\u2192 <b>D</b>.' },
+    { n:67, kat:'Kimya ve Yaşam', t:'Mide sağlığı i\u00e7in en uygun antiasit ila\u00e7 se\u00e7iminde: I. Mide asidiyle HIZLI tepkime verme II. Midede kolayca DAĞILMA III. Mide pH\u2019ını YETERİNCE y\u00fckseltebilme \u00f6l\u00e7\u00fctlerinden hangileri g\u00f6z \u00f6n\u00fcne alınmalıdır?',
+      o:['Yalnız I','Yalnız III','I ve II','II ve III','I, II ve III'], c:4,
+      ac:'Metinde a\u00e7ık\u00e7a belirtilen KRİTERLERİN \u00fc\u00e7\u00fc de (hızlı tepkime, kolay dağılma, yeterli pH y\u00fckseltme) \u00f6nemlidir.<br>\u2192 <b>E</b>.' },
+    { n:68, kat:'Kimya ve Yaşam', t:'Mide sağlığı i\u00e7in kullanılan EN UYGUN antiasit ila\u00e7larla ilgili aşağıdaki ifadelerden hangisi YANLIŞTIR?',
+      o:['Mide asidiyle tepkimeye girip pH\u2019ı artırırlar','İ\u00e7eriklerinde suda \u00c7OK \u00e7\u00f6z\u00fcnen kuvvetli bazlar bulundururlar','Mideye ulaşıncaya kadar sindirim organlarını tahriş etmezler','Midede hızla dağılıp hızlıca tepkimeye girerler','Mide asidiyle tepkimeye girip TAMAMEN t\u00fckenir, bağırsaklara ulaşmazlar'], c:1,
+      ac:'Metne g\u00f6re antiasit i\u00e7eriğindeki bazlar suda TAMAMEN \u00c7\u00d6Z\u00dcNMEMELİDİR (mideye ulaşana kadar sindirim kanalına zarar vermemesi i\u00e7in) \u2014 yani suda AZ \u00e7\u00f6z\u00fcnen bazlar tercih edilir, \u201c\u00e7ok \u00e7\u00f6z\u00fcnen kuvvetli bazlar\u201d ifadesi bu bilgiyle \u00c7ELİŞİR.<br>\u2192 <b>B</b>.' },
+    { n:70, kat:'Le Chatelier', t:'2SO\u2082(g)+O\u2082(g)\u21cc2SO\u2083(g) (EKZOTERMİK) tepkimesinde kimya m\u00fchendisi enerji maliyetlerini d\u00fcş\u00fcrmek i\u00e7in tepkimeyi DAHA D\u00dcŞ\u00dcK sıcaklıkta ger\u00e7ekleştirmeyi planlıyor. Bu değişiklik dengedeki sistemde neye neden olur?',
+      o:['Sistem tepkenler y\u00f6n\u00fcne ilerler','SO\u2082 miktarında artış g\u00f6zlenir','İleri tepkime hızı artar','Kc\u2019nin sayısal değeri azalır','SO\u2083 miktarında artış g\u00f6zlenir'], c:4,
+      ac:'EKZOTERMİK tepkimede sıcaklık D\u00dcŞ\u00dcR\u00dcL\u00dcRSE sistem EKZOTERMİK (İLERİ, \u00fcr\u00fcn) y\u00f6n\u00fcne kayar \u2192 <b>SO\u2083 ARTAR</b> (SO\u2082 azalır, tepken değil ürün yönüne kayış olur, Kc ARTAR azalmaz, hızlar sıcaklık düşünce genelde AZALIR artmaz).<br>\u2192 <b>E</b>.' }
+  ];
+
+  function temaAcikRenderHtml(){
+    var all = TEMA2_ACIKUCLU.concat(TEMA2_ACIKUCLU2).sort(function(a,b){ return a.n-b.n; });
+    var html = '<div style="font-weight:700;color:#93c5fd;margin-bottom:10px">\ud83d\udcdd Se\u00e7ilmiş A\u00e7ık U\u00e7lu Sorular</div>' +
+      '<p style="font-size:12px;color:var(--tx3);margin-bottom:10px">Denge/Asit-Baz/\u00c7\u00f6z\u00fcn\u00fcrl\u00fck konularını kapsayan ' + all.length + ' detaylı, \u00e7ok basamaklı a\u00e7ık u\u00e7lu \u00f6rnek.</p>';
+    all.forEach(function(q){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6;margin-bottom:8px">' + q.n + '. ' + formatOncul(q.t) + '</div>' +
+        '<div onclick="molToggle(\'tacik-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f \u00c7\u00f6z\u00fcm\u00fc G\u00f6ster</div>' +
+        '<div id="tacik-' + q.n + '" style="display:none;margin-top:10px;padding:10px;background:rgba(147,197,253,.08);border:1px solid rgba(147,197,253,.2);border-radius:8px;font-size:12px;color:var(--tx2);line-height:1.8">' + q.c + '</div></div>';
+    });
+    return html;
+  }
+
+  function temaMcRenderHtml(){
+    var all = TEMA2_MC.concat(TEMA2_MC2).sort(function(a,b){ return a.n-b.n; });
+    var html = '<div style="font-weight:700;color:#93c5fd;margin-bottom:10px">\ud83d\udcdd Se\u00e7ilmiş Çoktan Se\u00e7meli \u00d6rnekler</div>' +
+      '<p style="font-size:12px;color:var(--tx3);margin-bottom:10px">MEB\u2019in devasa (75 soruluk) test bankasından, Denge/Asit-Baz/\u00c7\u00f6z\u00fcn\u00fcrl\u00fck konularını kapsayan ' + all.length + ' se\u00e7ilmiş \u00f6rnek.</p>';
+    all.forEach(function(q, i){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:10px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">' + q.kat + ' \u00b7 Soru ' + q.n + '</div>' +
+        '<div style="font-size:13px;color:#fff;font-weight:500;line-height:1.7;margin-bottom:8px">' + formatOncul(q.t) + '</div>' +
+        '<div style="margin-bottom:8px">' + q.o.map(function(o,oi){ return '<div style="padding:3px 0;font-size:12px;color:var(--tx2)">' + String.fromCharCode(65+oi) + ') ' + o + '</div>'; }).join('') + '</div>' +
+        '<div onclick="molToggle(\'tmc-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f Cevabı G\u00f6ster</div>' +
+        '<div id="tmc-' + q.n + '" style="display:none;margin-top:10px;padding:10px;background:rgba(147,197,253,.08);border:1px solid rgba(147,197,253,.2);border-radius:8px;font-size:12px;color:var(--tx2);line-height:1.8">' +
+          '<div style="font-weight:700;color:#86efac;margin-bottom:4px">Doğru cevap: ' + String.fromCharCode(65+q.c) + ') ' + q.o[q.c] + '</div>' + q.ac +
+        '</div></div>';
+    });
+    TEMA2_MC2.forEach(function(q, i){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:10px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">' + q.kat + ' \u00b7 Soru ' + q.n + '</div>' +
+        '<div style="font-size:13px;color:#fff;font-weight:500;line-height:1.7;margin-bottom:8px">' + formatOncul(q.t) + '</div>' +
+        '<div style="margin-bottom:8px">' + q.o.map(function(o,oi){ return '<div style="padding:3px 0;font-size:12px;color:var(--tx2)">' + String.fromCharCode(65+oi) + ') ' + o + '</div>'; }).join('') + '</div>' +
+        '<div onclick="molToggle(\'tmc2-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f Cevabı G\u00f6ster</div>' +
+        '<div id="tmc2-' + q.n + '" style="display:none;margin-top:10px;padding:10px;background:rgba(147,197,253,.08);border:1px solid rgba(147,197,253,.2);border-radius:8px;font-size:12px;color:var(--tx2);line-height:1.8">' +
+          '<div style="font-weight:700;color:#86efac;margin-bottom:4px">Doğru cevap: ' + String.fromCharCode(65+q.c) + ') ' + q.o[q.c] + '</div>' + q.ac +
+        '</div></div>';
+    });
+    return html;
+  }
+
+  function setupCozunurluk(){
+    if (document.getElementById('s-cozunurluk2')) return;
+    var app = document.querySelector('.app');
+    if (!app) return;
+    app.insertAdjacentHTML('beforeend',
+      '<div id="s-cozunurluk2" style="display:none"><div class="pw narrow">' +
+        '<h1 class="ptitle">\ud83e\uddc2 \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi</h1>' +
+        '<p class="psub">MEB kitabı konu anlatımı (2.3.1) \u2014 Kçç, molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fck, ' + COZ_Q.length + ' \u00e7\u00f6z\u00fcml\u00fc \u00f6rnek.</p>' +
+        '<div id="cozunurluk-body"></div>' +
+      '</div></div>');
+    if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-cozunurluk2') === -1) SCREENS.push('s-cozunurluk2');
+    var mn = document.getElementById('mn');
+    if (mn && !document.getElementById('mn-cozunurluk2'))
+      mn.insertAdjacentHTML('beforeend', '<button id="mn-cozunurluk2" onclick="nav(\'cozunurluk2\')">\ud83e\uddc2 \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi</button>');
+    var tg = document.querySelector('#s-home .tgrid');
+    if (tg && !document.getElementById('tile-cozunurluk2'))
+      tg.insertAdjacentHTML('afterbegin',
+        '<div class="tc" id="tile-cozunurluk2" onclick="nav(\'cozunurluk2\')"><div class="ti">\ud83e\uddc2</div><div class="tt">\u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi</div><div class="td">Kçç, molar \u00e7\u00f6z\u00fcn\u00fcrl\u00fck \u2014 MEB konu anlatımı + \u00e7\u00f6z\u00fcml\u00fc \u00f6rnekler.</div></div>');
+
+    var body = document.getElementById('cozunurluk-body');
+    var html = COZ_THEORY.t1 + '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd \u00c7\u00f6z\u00fcml\u00fc \u00d6rnekler (2.3.1)</h4>';
+    COZ_Q.forEach(function(q, i){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6;margin-bottom:8px">' + (i+1) + '. ' + formatOncul(q.s) + '</div>' +
+        '<div onclick="molToggle(\'cozq-' + i + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
+        '<div id="cozq-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + q.c + '</div></div>';
+    });
+    html += COZ_THEORY.t2 + '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd \u00c7\u00f6z\u00fcml\u00fc \u00d6rnekler (2.3.2)</h4>';
+    COZ_Q2.forEach(function(q, i){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6;margin-bottom:8px">' + (i+1) + '. ' + formatOncul(q.s) + '</div>' +
+        '<div onclick="molToggle(\'cozq2-' + i + '\')" style="cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#050510;background:#93c5fd;border-radius:8px;padding:8px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
+        '<div id="cozq2-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + q.c + '</div></div>';
+    });
+    html += '<p style="font-size:12px;color:#86efac;margin-top:14px;padding:12px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px">\u2705 MEB \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi (2.3) konu anlatımı TAMAMLANDI (2.3.1-2.3.2). B\u00f6ylece Tema 2\u2019nin (Denge, Asit-Baz, \u00c7\u00f6z\u00fcn\u00fcrl\u00fck) T\u00dcM MEB konu anlatımı bitti!</p>';
+    html += '<h3 style="color:#f59e0b;margin:20px 0 10px;padding-top:16px;border-top:2px solid rgba(245,158,11,.3)">\ud83c\udfaf Tema Sonu \u00d6l\u00e7me-Değerlendirme</h3>' + temaBoslukRenderHtml() + temaAcikRenderHtml() + temaMcRenderHtml();
+    body.innerHTML = html;
+  }
+
   function init(){
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
@@ -9842,6 +10350,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try { setupVideoLib(); } catch (e) { /* sessiz */ }
     try { setupDenge2(); } catch (e) { /* sessiz */ }
     try { setupAsitBaz2(); } catch (e) { /* sessiz */ }
+    try { setupCozunurluk(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
