@@ -10410,6 +10410,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try { setupDenge2(); } catch (e) { /* sessiz */ }
     try { setupAsitBaz2(); } catch (e) { /* sessiz */ }
     try { setupCozunurluk(); } catch (e) { /* sessiz */ }
+    try { setupSet(); } catch (e) { /* sessiz */ }
     // nav sarmalayıcı: skor ekranında tabloyu güncelle, test
     // ekranında sayaçları tazele, detaydan çıkınca Bohr'u durdur
     try {
@@ -10432,6 +10433,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
             if (id === 'alev') flameEnter(); else flameLeave();
             if (id === 'redoks') redoxEnter();
             if (id === 'kinetik') kinEnter(); else kinLeave();
+            if (id === 'set') setEnter();
             if (id === 'fizkim') fkEnter();
           } catch (e) {}
         };
