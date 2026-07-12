@@ -67,6 +67,32 @@
    edilirse" tam tersi -- ikisi de 10^-7 referans cizgisine gore
    simetrik). 2) pH ve pOH sayi dogrulari (0-14, ZIT yonlu oklarla:
    pH kuculdukce asitlik artar, pOH kuculdukce bazlik artar).
+   BUYUK EKLEME: Notrlesme Tepkimeleri teorisi + 7 cozumlu problem
+   (Q19-25: NaOH-HCl, HCl-KOH pOH bulma, H3PO4-Ca(OH)2, HNO3-Ba(OH)2,
+   degerlik-2 asit mol kutlesi, %49 H2SO4+NaOH pH=13) + Q26 (esit
+   hacimde karistirma, tam notrallesme OLMAYAN sikki bulma -- H2SO4
+   iki degerli/NaOH tek degerli farki) + Q27 (Titrasyon teorisi:
+   esdegerlik noktasi, donum noktasi, indikator). Hepsi node.js ile
+   dogrulandi, hepsi temiz sayilar verdi. 2 grafik-okuma titrasyon
+   ornegi (X,Y,Z bulma) el yazisindan guvenle okunamadigi icin
+   eklenmedi. Toplam 27 soru.
+   IKI TITRASYON GRAFIGI TAMAMLANDI (kullanicidan tam veri alindi):
+   Q28 (100mL HNO3 pH=1, 0.1M KOH ile titre): X=100mL(pH=7) bulundu.
+   Y (pH=13 noktasi) icin ONEMLI matematiksel bulgu: KOH TEK DEGERLI
+   oldugu icin [OH-] hicbir SONLU hacimde TAM 0,1M'e ulasamiyor --
+   sadece asimptotik olarak yaklasiyor (node.js ile kanitlandi: y=10000
+   mL'de bile pH sadece 12.99). Bu durum ogrenciye acikca anlatildi.
+   Q29 (100mL H2SO4 pH=1, 0.1M Ca(OH)2 ile titre): Ca(OH)2 IKI DEGERLI
+   oldugu icin ayni tip soru burada COZULEBILIYOR -- X(25mL)=pH~1.4,
+   Y(100mL)=pH~12.7, Z(200mL)=TAM pH=13 (sonlu hacimde ulasilabiliyor).
+   Bu iki soru birbiriyle karsilastirilarak deger-lik farkinin titrasyon
+   platosuna etkisi ogretiliyor. Her ikisi de gercek titrasyon egrisi
+   grafigiyle (canvas, X/Y noktalari isaretli) sunuluyor.
+   SUYUN OTOIYONIZASYONU 2. GRAFIGI EKLENDI: [H+] vs [OH-] hiperbolik
+   egri (Asitlik artar / Notr / Bazlik artar bolgeleri, log-log
+   dogrusal gorunum). Artik 4 grafik var: H+/OH- derisim-zaman,
+   H+ vs OH- egrisi, pH/pOH sayi dogrulari, Ksu-sicaklik grafigi.
+   Toplam 29 soru.
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9309,7 +9335,32 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     { n:17, kat:'Kavram', t:'Bronsted-Lowry tanımına g\u00f6re aşağıdaki t\u00fcrlerin KONJUGE ASİTLERİNİ ve KONJUGE BAZLARINI yazınız: H\u2082O \u00b7 HCO\u2083\u207b \u00b7 H\u2082PO\u2084\u207b \u00b7 HPO\u2084\u207b \u00b7 NH\u2083',
       c:'Bir t\u00fcr\u00fcn <b>konjuge asidi</b> = kendisine bir H\u207a EKLENMİŞ hali. <b>Konjuge bazı</b> = kendisinden bir H\u207a \u00c7IKARILMIŞ hali.<table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:6px;text-align:left">T\u00fcr</th><th style="padding:6px">Konjuge Asidi (+H\u207a)</th><th style="padding:6px">Konjuge Bazı (\u2212H\u207a)</th></tr><tr><td style="padding:6px">H\u2082O</td><td style="padding:6px;text-align:center"><b>H\u2083O\u207a</b></td><td style="padding:6px;text-align:center"><b>OH\u207b</b></td></tr><tr><td style="padding:6px">HCO\u2083\u207b</td><td style="padding:6px;text-align:center"><b>H\u2082CO\u2083</b></td><td style="padding:6px;text-align:center"><b>CO\u2083\u00b2\u207b</b></td></tr><tr><td style="padding:6px">H\u2082PO\u2084\u207b</td><td style="padding:6px;text-align:center"><b>H\u2083PO\u2084</b></td><td style="padding:6px;text-align:center"><b>HPO\u2084\u00b2\u207b</b></td></tr><tr><td style="padding:6px">HPO\u2084\u00b2\u207b</td><td style="padding:6px;text-align:center"><b>H\u2082PO\u2084\u207b</b></td><td style="padding:6px;text-align:center"><b>PO\u2084\u00b3\u207b</b></td></tr><tr><td style="padding:6px">NH\u2083</td><td style="padding:6px;text-align:center"><b>NH\u2084\u207a</b></td><td style="padding:6px;text-align:center"><b>NH\u2082\u207b</b></td></tr></table><p style="margin-top:8px">\u2192 <b>H\u2082O, HCO\u2083\u207b ve H\u2082PO\u2084\u207b</b> hem H\u207a verip hem alabildikleri (yani hem bir molek\u00fcl\u00fcn konjuge asidi hem başka bir molek\u00fcl\u00fcn konjuge bazı olabildikleri) i\u00e7in <b>AMFOTER (amfiprotik)</b> t\u00fcrlerdir.</p>' },
     { n:18, kat:'Zayıf Asit/Baz', t:'pH\u2019ı 5 olan 0,1 M HF \u00e7\u00f6zeltisinin 1 L\u2019sine ka\u00e7 L su ilave edersek yeni \u00e7\u00f6zeltinin pH\u2019ı 6 olur?',
-      c:'Başlangı\u00e7: C\u2081=0,1M, pH=5 \u2192 [H\u207a]\u2081=10\u207b\u2075.<br>Ka\u2248[H\u207a]\u2081\u00b2/C\u2081=(10\u207b\u2075)\u00b2/0,1=<b>10\u207b\u2079</b> (bu \u00f6rnekte HF i\u00e7in kullanılan Ka değeri).<br>Hedef: pH=6 \u2192 [H\u207a]\u2082=10\u207b\u2076. Ka=[H\u207a]\u2082\u00b2/C\u2082 \u2192 C\u2082=(10\u207b\u2076)\u00b2/10\u207b\u2079=<b>0,001 M</b>.<br>Zayıf asitte seyreltirken TOPLAM HF miktarı (mol) korunur: C\u2081V\u2081=C\u2082V\u2082 \u2192 0,1\u00d71=0,001\u00d7V\u2082 \u2192 <b>V\u2082=100 L</b>.<br>Eklenen su=100\u22121=<b>99 L</b>.<br><span style="color:#93c5fd">\ud83d\udca1 Dikkat: zayıf asitte pH\u2019ı 1 birim artırmak i\u00e7in KUVVETLİ asitteki gibi sadece 10 kat değil, TAM 100 KAT seyreltme gerekti \u2014 \u00e7\u00fcnk\u00fc seyreldik\u00e7e iyonlaşma oranı da artıyor, bu da derişim azalışını kısmen \u201ctelafi\u201d ediyor.</span>' }
+      c:'Başlangı\u00e7: C\u2081=0,1M, pH=5 \u2192 [H\u207a]\u2081=10\u207b\u2075.<br>Ka\u2248[H\u207a]\u2081\u00b2/C\u2081=(10\u207b\u2075)\u00b2/0,1=<b>10\u207b\u2079</b> (bu \u00f6rnekte HF i\u00e7in kullanılan Ka değeri).<br>Hedef: pH=6 \u2192 [H\u207a]\u2082=10\u207b\u2076. Ka=[H\u207a]\u2082\u00b2/C\u2082 \u2192 C\u2082=(10\u207b\u2076)\u00b2/10\u207b\u2079=<b>0,001 M</b>.<br>Zayıf asitte seyreltirken TOPLAM HF miktarı (mol) korunur: C\u2081V\u2081=C\u2082V\u2082 \u2192 0,1\u00d71=0,001\u00d7V\u2082 \u2192 <b>V\u2082=100 L</b>.<br>Eklenen su=100\u22121=<b>99 L</b>.<br><span style="color:#93c5fd">\ud83d\udca1 Dikkat: zayıf asitte pH\u2019ı 1 birim artırmak i\u00e7in KUVVETLİ asitteki gibi sadece 10 kat değil, TAM 100 KAT seyreltme gerekti \u2014 \u00e7\u00fcnk\u00fc seyreldik\u00e7e iyonlaşma oranı da artıyor, bu da derişim azalışını kısmen \u201ctelafi\u201d ediyor.</span>' },
+    { n:19, kat:'Kavram', t:'N\u00f6trleşme tepkimesi nedir? Tam n\u00f6trleşme şartı nedir? Kuvvetli asit + kuvvetli baz tepkimesinde n(asit)\u00d7değerlik ile n(baz)\u00d7değerlik karşılaştırması sonucu \u00e7\u00f6zeltinin t\u00fcr\u00fc nasıl belirlenir?',
+      c:'<b>N\u00f6trleşme:</b> Asit+Baz\u2192Tuz+Su tepkimesidir. Net iyon denklemi: <b>H\u207a+OH\u207b\u2192H\u2082O</b> (asidin anyonu ile bazın katyonu tuzu oluşturur).<br><b>Tam n\u00f6trleşme şartı:</b> n<sub>asit</sub>\u00d7değerlik<sub>asit</sub> = n<sub>baz</sub>\u00d7değerlik<sub>baz</sub> (yani toplam H\u207a mol sayısı = toplam OH\u207b mol sayısı).<br>Kuvvetli asit+kuvvetli baz i\u00e7in:<br>\u2022 n<sub>H\u207a</sub>=n<sub>OH\u207b</sub> \u2192 <b>N\u00d6TR</b> (pH=7)<br>\u2022 n<sub>H\u207a</sub>&gt;n<sub>OH\u207b</sub> \u2192 <b>ASİDİK</b> (artan asit var)<br>\u2022 n<sub>H\u207a</sub>&lt;n<sub>OH\u207b</sub> \u2192 <b>BAZİK</b> (artan baz var)' },
+    { n:20, kat:'Nötrleşme', t:'200 mL 0,3 M NaOH \u00e7\u00f6zeltisini tamamen n\u00f6trleştirmek i\u00e7in 0,05 M\u2019lık HCl \u00e7\u00f6zeltisinden ka\u00e7 mL gerekir?',
+      c:'mol NaOH=0,3\u00d70,2=<b>0,06 mol</b>. Tam n\u00f6trleşme i\u00e7in mol HCl=mol NaOH=0,06mol (ikisi de tek değerli).<br>V(HCl)=0,06/0,05=<b>1,2 L = 1200 mL</b>.' },
+    { n:21, kat:'Nötrleşme', t:'25°C\u2019de 200 mL 0,02 M HCl \u00e7\u00f6zeltisi ile 400 mL KOH \u00e7\u00f6zeltisi karıştırıldığında oluşan yeni \u00e7\u00f6zeltinin pOH\u2019ı 2\u2019dir. Buna g\u00f6re, KOH \u00e7\u00f6zeltisinin başlangı\u00e7 derişimi ka\u00e7 molardır?',
+      c:'mol HCl (H\u207a)=0,02\u00d70,2=<b>0,004 mol</b>. Son pOH=2 \u2192 [OH\u207b]<sub>kalan</sub>=0,01M (BAZİK \u00e7ıktı, yani KOH fazla gelmiş).<br>Toplam hacim=200+400=600mL=0,6L \u2192 mol OH\u207b<sub>kalan</sub>=0,01\u00d70,6=<b>0,006 mol</b>.<br>mol KOH<sub>başlangı\u00e7</sub>=mol OH\u207b<sub>kalan</sub>+mol H\u207a<sub>t\u00fcketilen</sub>=0,006+0,004=<b>0,01 mol</b>.<br>[KOH]=0,01/0,4=<b>0,025 M</b>.' },
+    { n:22, kat:'Nötrleşme', t:'300 mL 0,4 M H\u2083PO\u2084 \u00e7\u00f6zeltisini tamamen n\u00f6trleştirmek i\u00e7in Ca(OH)\u2082 \u00e7\u00f6zeltisinden 500 mL kullanılıyor. Buna g\u00f6re, Ca(OH)\u2082 \u00e7\u00f6zeltisinin derişimi ka\u00e7 molardır?',
+      c:'H\u2083PO\u2084 \u00fc\u00e7 değerli asit: mol H\u207a=0,4\u00d70,3\u00d73=<b>0,36 mol</b>.<br>Ca(OH)\u2082 iki değerli baz: mol Ca(OH)\u2082=0,36/2=<b>0,18 mol</b>.<br>[Ca(OH)\u2082]=0,18/0,5=<b>0,36 M</b>.' },
+    { n:23, kat:'Nötrleşme', t:'100 mL 0,2 M HNO\u2083 \u00e7\u00f6zeltisi ile 100 mL 0,2 M Ba(OH)\u2082 \u00e7\u00f6zeltisi karıştırıldığında oluşan \u00e7\u00f6zeltinin oda koşullarındaki pH\u2019ı ka\u00e7tır?',
+      c:'mol H\u207a=0,2\u00d70,1=0,02mol. Ba(OH)\u2082 iki değerli: mol OH\u207b=0,2\u00d70,1\u00d72=0,04mol.<br>Kalan OH\u207b=0,04\u22120,02=0,02mol. Toplam hacim=200mL=0,2L \u2192 [OH\u207b]=0,02/0,2=<b>0,1 M</b>.<br>pOH=1 \u2192 <b>pH=13</b>.' },
+    { n:24, kat:'Nötrleşme', t:'Değerliği 2 olan kuvvetli bir asidin 2,9 gramını tamamen n\u00f6trleştirmek i\u00e7in 0,5 M\u2019lık LiOH \u00e7\u00f6zeltisinden 200 mL kullanılıyor. Buna g\u00f6re asidin mol k\u00fctlesi ka\u00e7tır?',
+      c:'mol LiOH=0,5\u00d70,2=<b>0,1 mol</b>=mol OH\u207b=mol H\u207a gerekli (tam n\u00f6trleşme).<br>Asit 2 değerli: mol asit\u00d72=0,1 \u2192 mol asit=<b>0,05 mol</b>.<br>Mol k\u00fctle=k\u00fctle/mol=2,9/0,05=<b>58 g/mol</b>.' },
+    { n:25, kat:'Nötrleşme', t:'K\u00fctlece %49\u2019luk, \u00f6zk\u00fctlesi 1,2 g/mL olan 100 mL H\u2082SO\u2084 \u00e7\u00f6zeltisine bir miktar NaOH katısı eklendiğinde oluşan \u00e7\u00f6zeltinin 25°C\u2019de pH değeri 13 oluyor. Buna g\u00f6re eklenen NaOH ka\u00e7 gramdır? (NaOH:40, H\u2082SO\u2084:98, hacim değişimi ihmal edilecek)',
+      c:'\u00c7\u00f6zelti k\u00fctlesi=100\u00d71,2=120g. H\u2082SO\u2084 k\u00fctlesi=120\u00d70,49=58,8g. mol H\u2082SO\u2084=58,8/98=0,6mol.<br>H\u2082SO\u2084 iki değerli: mol H\u207a=0,6\u00d72=<b>1,2 mol</b>.<br>Son pH=13 (BAZİK, NaOH fazla gelmiş) \u2192 [OH\u207b]<sub>kalan</sub>=0,1M. Hacim değişimi ihmal (V=100mL=0,1L) \u2192 mol OH\u207b<sub>kalan</sub>=0,1\u00d70,1=0,01mol.<br>mol NaOH<sub>toplam</sub>=mol H\u207a t\u00fcketilen+mol OH\u207b kalan=1,2+0,01=<b>1,21 mol</b>.<br>K\u00fctle NaOH=1,21\u00d740=<b>48,4 g</b>.' },
+    { n:26, kat:'Nötrleşme (Kavramsal)', t:'Aşağıdaki \u00e7\u00f6zelti \u00e7iftleri EŞİT HACİMLERDE karıştırıldığında, oluşan \u00e7\u00f6zeltilerin hangisinde TAM N\u00d6TRALLEŞME OLMAZ? A) 0,2M HF - 0,2M KOH B) 0,1M H\u2082SO\u2084 - 0,1M Mg(OH)\u2082 C) 0,2M HNO\u2083 - 0,2M KOH D) 0,1M H\u2083PO\u2084 - 0,3M NaOH E) 0,2M H\u2082SO\u2084 - 0,2M NaOH',
+      o:['0,2M HF - 0,2M KOH','0,1M H\u2082SO\u2084 - 0,1M Mg(OH)\u2082','0,2M HNO\u2083 - 0,2M KOH','0,1M H\u2083PO\u2084 - 0,3M NaOH','0,2M H\u2082SO\u2084 - 0,2M NaOH'], c:4,
+      ac:'Eşit hacimde (V) her se\u00e7enek i\u00e7in mol H\u207a = derişim\u00d7değerlik\u00d7V ile mol OH\u207b = derişim\u00d7değerlik\u00d7V karşılaştırılır (V ortak olduğu i\u00e7in sadeleşir, sadece \u201cderişim\u00d7değerlik\u201d karşılaştırılır):<br>A) 0,2\u00d71=0,2 vs 0,2\u00d71=0,2 \u2192 EŞİT ✓<br>B) 0,1\u00d72=0,2 vs 0,1\u00d72=0,2 \u2192 EŞİT ✓<br>C) 0,2\u00d71=0,2 vs 0,2\u00d71=0,2 \u2192 EŞİT ✓<br>D) 0,1\u00d73=0,3 vs 0,3\u00d71=0,3 \u2192 EŞİT ✓<br>E) 0,2\u00d72=0,4 vs 0,2\u00d71=0,2 \u2192 <b>FARKLI!</b> H\u207a fazla kalır \u2014 \u00e7\u00fcnk\u00fc H\u2082SO\u2084 İKİ değerli ama NaOH TEK değerli.<br>\u2192 <b>E</b> (tam n\u00f6tralleşme olmaz, asidik kalır).' },
+    { n:27, kat:'Titrasyon', t:'Titrasyon ile ilgili temel kavramları tanımlayınız: eşdeğerlik noktası, titrasyon işlemi, d\u00f6n\u00fcm noktası. Kuvvetli asit-kuvvetli baz titrasyonunda eşdeğerlik noktasındaki pH ka\u00e7tır?',
+      c:'<b>Eşdeğerlik noktası:</b> N\u00f6tralleşme tepkimelerinde asit ve bazın eşdeğer miktarda (tam n\u00f6trleşecek şekilde) tepkimeye girdiği nokta.<br><b>Titrasyon:</b> Eşdeğerlik noktasını belirlemek i\u00e7in, uygun bir İNDİKAT\u00d6R (belirte\u00e7) kullanarak asidik bir \u00e7\u00f6zeltiye damla damla baz (ya da bazik bir \u00e7\u00f6zeltiye damla damla asit) ilave edilmesi işlemi.<br><b>D\u00f6n\u00fcm noktası:</b> Eklenen indikat\u00f6r\u00fcn RENK DEĞİŞTİRDİĞİ nokta (ideal bir titrasyonda d\u00f6n\u00fcm noktası, eşdeğerlik noktasına \u00e7ok yakın se\u00e7ilir).<br><b>Kuvvetli asit+kuvvetli baz</b> titrasyonunda eşdeğerlik noktasında oda koşullarında \u00e7\u00f6zeltinin pH değeri <b>7</b> olur (n\u00f6tr tuz oluşur).' },
+    { n:28, kat:'Titrasyon', t:'100 mL HNO\u2083 \u00e7\u00f6zeltisi (başlangı\u00e7ta pH=1) yavaş yavaş 0,1 M KOH \u00e7\u00f6zeltisi ile titre ediliyor. Grafikte eklenen baz hacmi X mL iken pH=7, Y mL iken pH=13 oluyor. X ve Y ka\u00e7tır?',
+      graph:'abzg-titr1',
+      c:'Başlangı\u00e7 [H\u207a]=10\u207b\u00b9=0,1M (HNO\u2083 tek değerli kuvvetli asit) \u2192 mol H\u207a=0,1\u00d7100=<b>10 mmol</b>.<br><b>X (eşdeğerlik noktası, pH=7):</b> mol KOH eklenen = mol H\u207a \u2192 0,1\u00d7X=10 \u2192 <b>X=100 mL</b>.<br><b>Y (pH=13 noktası):</b> Hedef [OH\u207b]=0,1M. Ancak KOH TEK DEĞERLİ olduğu i\u00e7in [OH\u207b]\u2019nin ULAŞABİLECEĞİ TEORİK \u00dcST SINIR, tam olarak titrantın KENDİ derişimi olan <b>0,1M\u2019dir</b> \u2014 bu sınıra SADECE Y sonsuza giderken YAKLAŞILIR, hi\u00e7bir SONLU Y değerinde TAM olarak ulaşılamaz (matematiksel bir asimptottur).<br><span style="color:#93c5fd">\ud83d\udca1 Pratikte grafik \u00e7ok b\u00fcy\u00fck Y değerlerinde (\u00f6rn. Y=10000mL\u2019de pH\u224812,99) g\u00f6rsel olarak d\u00fcz bir \u201cpH\u224813 platosu\u201d gibi g\u00f6r\u00fcn\u00fcr, bu y\u00fczden elle \u00e7izilen grafiklerde \u201cY mL\u2019de pH=13\u201d şeklinde YAKLAŞIK g\u00f6sterilir. Bu, tek değerli titrantlarla yapılan titrasyonların \u00f6nemli bir \u00f6zelliğidir: <b>plato pH\u2019ı, titrantın kendi pH\u2019ını ge\u00e7emez.</b></span>' },
+    { n:29, kat:'Titrasyon', t:'100 mL H\u2082SO\u2084 \u00e7\u00f6zeltisi (başlangı\u00e7ta pH=1) yavaş yavaş 0,1 M Ca(OH)\u2082 \u00e7\u00f6zeltisi ile titre ediliyor. Grafikte: 25 mL\u2019de pH=X, V mL\u2019de pH=7 (eşdeğerlik), 100 mL\u2019de pH=Y, 200 mL\u2019de pH=Z, 300 mL\u2019de pH=T oluyor. X ve Y ka\u00e7tır?',
+      graph:'abzg-titr2',
+      c:'Başlangı\u00e7 [H\u207a]=0,1M \u2192 mol H\u207a=0,1\u00d7100=<b>10 mmol</b> (sabit kalır, titrasyon boyunca t\u00fcketilir).<br>Ca(OH)\u2082 İKİ DEĞERLİ baz: her mL eklenen 0,1M Ca(OH)\u2082, 0,2 mmol OH\u207b getirir.<br><b>V (eşdeğerlik, pH=7):</b> 0,2\u00d7V=10 \u2192 <b>V=50 mL</b>.<br><b>X (25 mL\u2019de pH):</b> mol OH\u207b eklenen=0,2\u00d725=5mmol. Kalan H\u207a=10\u22125=5mmol. Toplam hacim=125mL. [H\u207a]=5/125=0,04M \u2192 <b>X=pH\u22481,4</b>.<br><b>Y (100 mL\u2019de pH):</b> mol OH\u207b eklenen=0,2\u00d7100=20mmol. Fazla OH\u207b=20\u221210=10mmol. Toplam hacim=200mL. [OH\u207b]=10/200=0,05M \u2192 pOH\u22481,3 \u2192 <b>Y=pH\u224812,7</b>.<br><span style="color:#93c5fd">\ud83d\udca1 Ek bilgi: Z (200mL\u2019de) TAM <b>pH=13</b> \u00e7ıkar (bu soruda titrant Ca(OH)\u2082 İKİ DEĞERLİ olduğu i\u00e7in [OH\u207b] \u00fcst sınırı 0,2M\u2019dir, yani pH=13 SONLU bir hacimde ger\u00e7ekten ulaşılabilir \u2014 bu, bir \u00f6nceki soru [Q28, tek değerli KOH] ile arasındaki \u00f6nemli farktır!).</span>' }
   ];
 
   // ---------- 34. ASİT-BAZ DENGESİ — ÖZEL DERS NOTU ----------
@@ -9320,7 +9371,9 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       '<p style="font-size:13px;margin-bottom:8px"><b>K<sub>su</sub>=[H\u207a][OH\u207b]</b>. 25°C\u2019de K<sub>su</sub>=10\u207b\u00b9\u2074, saf suda [H\u207a]=[OH\u207b]=10\u207b\u2077 M.</p>' +
       '<p style="font-size:13px;margin-bottom:10px">p\u2192\u2212log: <b>pH=\u2212log[H\u207a]</b>, <b>pOH=\u2212log[OH\u207b]</b>, <b>pK<sub>su</sub>=\u2212logK<sub>su</sub></b>. 25°C\u2019de <b>pH+pOH=14</b>.</p>' +
       '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:8px"><canvas id="abz-hohgraph" style="width:100%;display:block" height="210"></canvas></div>' +
-      '<p style="font-size:12px;color:var(--tx3)">Saf suya ASİT ilave edilirse [H\u207a] anında sı\u00e7rar ve y\u00fcksek bir seviyede sabitlenir, [OH\u207b] ise azalıp d\u00fcş\u00fck bir seviyede sabitlenir (\u0130\u0130si \u00e7arpım hep 10\u207b\u00b9\u2074 kalacak şekilde). BAZ ilave edilirse tam tersi olur.</p>' +
+      '<p style="font-size:12px;color:var(--tx3);margin-bottom:8px">Saf suya ASİT ilave edilirse [H\u207a] anında sı\u00e7rar ve y\u00fcksek bir seviyede sabitlenir, [OH\u207b] ise azalıp d\u00fcş\u00fck bir seviyede sabitlenir (İkisinin \u00e7arpımı hep 10\u207b\u00b9\u2074 kalacak şekilde). BAZ ilave edilirse tam tersi olur.</p>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:8px"><canvas id="abz-hcurve" style="width:100%;display:block" height="220"></canvas></div>' +
+      '<p style="font-size:12px;color:var(--tx3)">[H\u207a] ile [OH\u207b] TERS orantılıdır (\u00e7arpımları sabit=10\u207b\u00b9\u2074): [OH\u207b] azaldık\u00e7a [H\u207a] artar (ASİTLİK ARTAR), [OH\u207b] arttık\u00e7a [H\u207a] azalır (BAZLIK ARTAR). Tam ortadaki nokta (10\u207b\u2077,10\u207b\u2077) N\u00d6TR noktadır.</p>' +
     '</div>' +
     '<div class="card" style="margin-bottom:14px">' +
       '<h3 style="color:#34d399;margin-bottom:10px">pH ve pOH Sayı Doğruları</h3>' +
@@ -9367,6 +9420,29 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       miniPanel(W/2+8, 'Baz ilave edilirse', false);
       x.fillStyle='rgba(255,255,255,.5)'; x.font='9px sans-serif'; x.textAlign='left';
       x.fillText('Derişim', 2, 10);
+    });
+    // [H+] vs [OH-] hiperbolik eğri (Asitlik artar / Nötr / Bazlar artar)
+    maarifChart('abz-hcurve', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 14, 14, 30, '[OH\u207b] (log \u00f6l\u00e7ek, sağa doğru artar)', '[H\u207a] (log \u00f6l\u00e7ek)');
+      // pOH 0(sol,çok asidik OH- azken H+ çok)..14(sağ) eksenine karşılık pH=14-pOH çiziliyor (ters orantı hiperbolü, log-log doğrusal görünür)
+      var pts = [];
+      for (var i = 1; i <= 99; i++) {
+        var pOH = (i/100)*14; // x ekseni: pOH 0->14 (yani [OH-] artıyor sağa doğru)
+        var pH = 14 - pOH;    // ters orantı: pH+pOH=14
+        var xx = g.padL + (pOH/14)*g.plotW;
+        var yy = g.padT + g.plotH - (pH/14)*g.plotH;
+        pts.push([xx,yy]);
+      }
+      x.strokeStyle = '#34d399'; x.lineWidth = 2.2; x.beginPath();
+      pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
+      // Nötr nokta (pOH=7,pH=7)
+      var nx = g.padL+(7/14)*g.plotW, ny = g.padT+g.plotH-(7/14)*g.plotH;
+      x.fillStyle='#f59e0b'; x.beginPath(); x.arc(nx,ny,3.5,0,6.283); x.fill();
+      x.font='10px sans-serif'; x.textAlign='center'; x.fillStyle='#f59e0b'; x.fillText('N\u00f6tr (10\u207b\u2077,10\u207b\u2077)', nx, ny-10);
+      x.font='10px sans-serif'; x.textAlign='left'; x.fillStyle='#fca5a5';
+      x.fillText('\u2190 Asitlik artar', g.padL+4, g.padT+16);
+      x.textAlign='right'; x.fillStyle='#86efac';
+      x.fillText('Bazlık artar \u2192', g.padL+g.plotW-4, g.padT+g.plotH-10);
     });
     // pH ve pOH sayı doğruları (zıt yönlü)
     maarifChart('abz-phline', function(x, W, H2){
@@ -9445,17 +9521,77 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     var html = '';
     ASITBAZ_Q.forEach(function(q){
       if (asitbaz2St.cat !== 'Tümü' && q.kat !== asitbaz2St.cat) return;
+      var optsHtml = '';
+      if (q.o) optsHtml = '<div style="margin-bottom:8px">' + q.o.map(function(o,i){ return '<div style="padding:4px 0;font-size:12px;color:var(--tx2)">' + String.fromCharCode(65+i) + ') ' + o + '</div>'; }).join('') + '</div>';
       html += '<div class="card" style="margin-bottom:18px;padding:18px 16px">' +
         '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
           '<span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(52,211,153,.18);color:#34d399;font-weight:800;font-size:13px;flex-shrink:0">' + q.n + '</span>' +
           '<span style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px">' + q.kat + '</span>' +
         '</div>' +
         '<div style="font-size:14px;color:#fff;font-weight:500;line-height:1.75;margin-bottom:12px">' + formatOncul(q.t) + '</div>' +
+        optsHtml +
+        (q.graph ? '<div style="background:#050510;border:1px solid rgba(52,211,153,.25);border-radius:12px;overflow:hidden;margin-bottom:14px"><canvas id="' + q.graph + '" style="width:100%;display:block" height="190"></canvas></div>' : '') +
         '<div onclick="molToggle(\'asitbaz2-' + q.n + '\')" style="cursor:pointer;text-align:center;font-size:13px;font-weight:700;color:#050510;background:#34d399;border-radius:10px;padding:10px;margin-top:4px">\ud83d\udc41\ufe0f Çözümü Göster</div>' +
-        '<div id="asitbaz2-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' + q.c + '</div>' +
+        '<div id="asitbaz2-' + q.n + '" style="display:none;margin-top:14px;padding:14px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:10px;font-size:13px;color:var(--tx2);line-height:1.85">' +
+          (q.o ? '<div style="font-size:13px;font-weight:700;color:#86efac;margin-bottom:6px">Doğru cevap: ' + String.fromCharCode(65+q.c) + ') ' + q.o[q.c] + '</div>' + q.ac : q.c) +
+        '</div>' +
       '</div>';
     });
     box.innerHTML = html;
+    setTimeout(abzDrawQGraphs, 60);
+  }
+
+  function abzDrawQGraphs(){
+    // Titrasyon eğrisi 1: 100mL HNO3 (pH=1) + 0.1M KOH (tek değerli, plato pH=13'e ASLA tam ulaşmaz)
+    maarifChart('abzg-titr1', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 34, 12, 14, 26, 'Eklenen baz hacmi (mL)', 'pH');
+      var maxV = 400;
+      var pts = [];
+      for (var i = 0; i <= 100; i++) {
+        var V = (i/100)*maxV;
+        var molH0 = 10, molOH = 0.1*V, totalV = 100+V;
+        var net = molOH - molH0, pH;
+        if (Math.abs(net) < 0.01) pH = 7;
+        else if (net < 0) pH = -Math.log10((-net)/totalV);
+        else pH = 14 + Math.log10(net/totalV);
+        pts.push([g.padL+(V/maxV)*g.plotW, g.padT+g.plotH-(pH/14)*g.plotH]);
+      }
+      x.strokeStyle = '#34d399'; x.lineWidth = 2.2; x.beginPath();
+      pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
+      // X=100mL işaretle (pH=7)
+      var xx = g.padL+(100/maxV)*g.plotW, xy = g.padT+g.plotH-(7/14)*g.plotH;
+      x.fillStyle='#f59e0b'; x.beginPath(); x.arc(xx,xy,3,0,6.283); x.fill();
+      x.font='9px sans-serif'; x.textAlign='center'; x.fillText('X=100mL, pH=7', xx, xy-10);
+      x.fillStyle='rgba(255,255,255,.5)'; x.fillText('pH\u224813 platosuna YAKLAŞIR (asla tam eşitlenmez)', g.padL+g.plotW*0.7, g.padT+12);
+    });
+    // Titrasyon eğrisi 2: 100mL H2SO4 (pH=1) + 0.1M Ca(OH)2 (iki değerli, pH=13 SONLU V'de ulaşılır)
+    maarifChart('abzg-titr2', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 34, 12, 14, 26, 'Eklenen baz hacmi (mL)', 'pH');
+      var maxV = 350;
+      var pts = [];
+      for (var i = 0; i <= 100; i++) {
+        var V = (i/100)*maxV;
+        var molH0 = 10, molOH = 0.2*V, totalV = 100+V;
+        var net = molOH - molH0, pH;
+        if (Math.abs(net) < 0.01) pH = 7;
+        else if (net < 0) pH = -Math.log10((-net)/totalV);
+        else pH = 14 + Math.log10(net/totalV);
+        pts.push([g.padL+(V/maxV)*g.plotW, g.padT+g.plotH-(pH/14)*g.plotH]);
+      }
+      x.strokeStyle = '#34d399'; x.lineWidth = 2.2; x.beginPath();
+      pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
+      var marks = [[25,'X\u22481,4'],[50,'V=7'],[100,'Y\u224812,7'],[200,'Z=13']];
+      marks.forEach(function(m){
+        var V=m[0];
+        var molOH=0.2*V, totalV=100+V, net=molOH-10, pH;
+        if (Math.abs(net) < 0.01) pH = 7;
+        else if (net < 0) pH = -Math.log10((-net)/totalV);
+        else pH = 14 + Math.log10(net/totalV);
+        var mx=g.padL+(V/maxV)*g.plotW, my=g.padT+g.plotH-(pH/14)*g.plotH;
+        x.fillStyle='#f59e0b'; x.beginPath(); x.arc(mx,my,3,0,6.283); x.fill();
+        x.font='8px sans-serif'; x.textAlign='center'; x.fillStyle='#fff'; x.fillText(m[1], mx, my-8);
+      });
+    });
   }
 
   function init(){
