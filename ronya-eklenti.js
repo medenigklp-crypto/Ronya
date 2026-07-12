@@ -93,6 +93,21 @@
    dogrusal gorunum). Artik 4 grafik var: H+/OH- derisim-zaman,
    H+ vs OH- egrisi, pH/pOH sayi dogrulari, Ksu-sicaklik grafigi.
    Toplam 29 soru.
+   YENI ANA BOLUM: "Asit-Baz Dengesi" ekrani artik Denge gibi 2 gruba
+   ayrildi: "MEB Konu Anlatimi" + "Ozel Ders Notu". MEB Konu Anlatimi
+   1. parca eklendi (2.2.1-2.2.3, 67 sayfalik MEB Asit-Baz bolumunun
+   ilk ucte biri): Suyun Otoiyonizasyonu (Ksu'nun GERCEK sicaklik
+   tablosu, 0-100C arasi 6 deger), Arrhenius vs Bronsted-Lowry
+   karsilastirmasi (kapsamlarindaki fark, ornekler), monofonksiyonel/
+   polifonksiyonel siniflandirmasi, ametal oksitlerin asitligi (SO2,
+   N2O5, CO2 endustriyel tepkimeleri), Asitlerin/Bazlarin Kuvveti
+   (MEB'in kendi 2.16 Etkinliginden GERCEK iyonlasma yuzdesi tablosu:
+   HCl/HNO3/NaOH/KOH=%100, HF=%2.6, CH3COOH=%0.4, NH3=%0.4 + HCN/NH3
+   icin gercek olculmus deger) + 3 Uygulama Noktasi cozumu (HX/HY
+   karsilastirma, XOH/YOH/ZOH siralama, kloroasetik/asetik/izobutirik
+   iletkenlik deneyi analizi) hepsi node.js ile dogrulandi. Sirada:
+   2.2.4-2.2.7 (Kuvvetli/Zayif karsilastirma, Notralesme, Titrasyon,
+   Asidik/Bazik urunler).
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9484,22 +9499,80 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     });
   }
 
+  var MAARIF_ASITBAZ_THEORY = {
+    t1: '<h3 style="color:#93c5fd;margin-bottom:10px">2.2.1 Saf Suyun Otoiyonizasyonu</h3>' +
+      '<p style="margin-bottom:10px">2H\u2082O(s)+ısı\u21ccH\u2083O\u207a(suda)+OH\u207b(suda) \u2014 ENDOTERMİK bir olaydır. K<sub>su</sub>=[H\u2083O\u207a][OH\u207b], sıcaklığa bağlı değişir ve Le Chatelier ilkesine uyar.</p>' +
+      '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:8px">\u2713 MEB Kitabı Doğrulanmış Tablo (Tablo 2.2)</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:6px">Sıcaklık (°C)</th><th style="padding:6px">K<sub>su</sub></th></tr>' +
+      '<tr><td style="padding:6px;text-align:center">0</td><td style="padding:6px;text-align:center">1,14\u00d710\u207b\u00b9\u2075</td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">10</td><td style="padding:6px;text-align:center">2,92\u00d710\u207b\u00b9\u2075</td></tr>' +
+      '<tr style="background:rgba(52,211,153,.1)"><td style="padding:6px;text-align:center"><b>25</b></td><td style="padding:6px;text-align:center"><b>1\u00d710\u207b\u00b9\u2074</b></td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">37</td><td style="padding:6px;text-align:center">2,4\u00d710\u207b\u00b9\u2074</td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">50</td><td style="padding:6px;text-align:center">5,48\u00d710\u207b\u00b9\u2074</td></tr>' +
+      '<tr><td style="padding:6px;text-align:center">100</td><td style="padding:6px;text-align:center">5,13\u00d710\u207b\u00b9\u00b3</td></tr></table>' +
+      '<p style="font-size:12px;color:var(--tx3);margin-top:8px">Sıcaklık arttık\u00e7a K<sub>su</sub> her zaman B\u00dcY\u00dcR (endotermik olay olduğu i\u00e7in) \u2014 100°C\u2019de K<sub>su</sub>, 25°C\u2019dekinin yaklaşık 51 katıdır!</p></div>',
+    t2: '<h3 style="color:#93c5fd;margin-bottom:10px">2.2.2 Asit-Baz Teorilerinin Karşılaştırılması</h3>' +
+      '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">Arrhenius (1884)</div>' +
+      '<p style="font-size:13px">Suda \u00e7\u00f6z\u00fcnd\u00fcğ\u00fcnde suya H\u207a veren madde ASİT, OH\u207b veren madde BAZ. <b>SADECE sulu \u00e7\u00f6zeltiler i\u00e7in ge\u00e7erli</b> \u2014 yapısında hidrojen i\u00e7ermeyen SO\u2082, CO\u2082 gibi maddelerin asitliğini, hidroksit i\u00e7ermeyen NH\u2083 gibi maddelerin bazlığını A\u00c7IKLAYAMAZ. D\u0130\u015e\u0130A DAR kapsamlıdır.</p></div>' +
+      '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">Bronsted-Lowry (1923)</div>' +
+      '<p style="font-size:13px">Proton (H\u207a) VEREN madde ASİT, ALAN madde BAZ. Hem sulu \u00e7\u00f6zeltiler HEM DE susuz ortamlar i\u00e7in ge\u00e7erli \u2014 SO\u2082, CO\u2082, NH\u2083 gibi maddeleri de a\u00e7ıklayabilir. DAHA GENİŞ kapsamlıdır. Proton transferiyle ger\u00e7ekleştiği i\u00e7in tuz+su oluşması ZORUNLU DEĞİLDİR (Arrhenius\u2019tan farklı olarak).</p>' +
+      '<p style="font-size:13px;margin-top:6px">\u00d6rnek: HF(g)+H\u2082O(s)\u21ccF\u207b(suda)+H\u2083O\u207a(suda) \u2014 Asit1:HF, Baz2:H\u2082O, Baz1:F\u207b, Asit2:H\u2083O\u207a. Eşlenik (konjuge) \u00e7iftler: HF-F\u207b ve H\u2082O-H\u2083O\u207a.</p></div>' +
+      '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">Monofonksiyonel / Polifonksiyonel</div>' +
+      '<p style="font-size:13px"><b>Monofonksiyonel asit:</b> 1 H\u207a verir (HCl, HNO\u2083, CH\u2083COOH). <b>Polifonksiyonel asit:</b> birden fazla H\u207a verir (H\u2082SO\u2084\u21922H\u207a, H\u2083PO\u2084\u21923H\u207a).<br><b>Monofonksiyonel baz:</b> 1 OH\u207b verir (NaOH, KOH). <b>Polifonksiyonel baz:</b> birden fazla OH\u207b verir (Ca(OH)\u2082, Mg(OH)\u2082\u21922OH\u207b).</p>' +
+      '<p style="font-size:13px;margin-top:8px"><b>Ametal oksitlerin asidik \u00f6zelliği:</b> Oksijence ZENGİN ametal oksitler (SO\u2082, N\u2082O\u2085, CO\u2082 gibi) su ile tepkimeye girip asit oluşturur:<br>SO\u2082+\u00bdO\u2082\u2192SO\u2083, SO\u2083+H\u2082O\u2192H\u2082SO\u2084 (g\u00fcbre, patlayıcı, pil \u00fcretiminde kullanılır)<br>N\u2082O\u2085+H\u2082O\u21922HNO\u2083 (g\u00fcbre, patlayıcı, roket oksitleyicisi)<br>CO\u2082+H\u2082O\u2192H\u2082CO\u2083 (kanın pH dengesi, okyanus asitleşmesi, gazlı i\u00e7ecekler)<br><span style="color:var(--tx3);font-size:11px">Not: Oksijence FAKİR ametal oksitler (CO, NO, N\u2082O gibi) N\u00d6TR \u00f6zellik g\u00f6sterir.</span></p></div>',
+    t3: '<h3 style="color:#93c5fd;margin-bottom:10px">2.2.3 Asitlerin ve Bazların Kuvveti</h3>' +
+      '<p style="margin-bottom:8px"><b>İyonlaşma y\u00fczdesi</b> = ([H\u2083O\u207a]/[HA]\u2080)\u00d7100 (asit i\u00e7in) ya da ([OH\u207b]/[BOH]\u2080)\u00d7100 (baz i\u00e7in). Y\u00fczde ~100 ise KUVVETLİ, k\u00fc\u00e7\u00fckse ZAYIF.</p>' +
+      '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:8px">\u2713 MEB Kitabı Doğrulanmış Veri (2.16. Etkinlik) \u2014 1M \u00e7\u00f6zeltilerde iyonlaşma y\u00fczdesi</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:6px;text-align:left">Asit</th><th style="padding:6px">İyonlaşma %</th><th style="padding:6px;text-align:left">Baz</th><th style="padding:6px">İyonlaşma %</th></tr>' +
+      '<tr><td style="padding:6px">HCl</td><td style="padding:6px;text-align:center">%100</td><td style="padding:6px">NaOH</td><td style="padding:6px;text-align:center">%100</td></tr>' +
+      '<tr><td style="padding:6px">HNO\u2083</td><td style="padding:6px;text-align:center">%100</td><td style="padding:6px">KOH</td><td style="padding:6px;text-align:center">%100</td></tr>' +
+      '<tr><td style="padding:6px">HF</td><td style="padding:6px;text-align:center">%2,6</td><td style="padding:6px">Etilamin</td><td style="padding:6px;text-align:center">%2,5</td></tr>' +
+      '<tr><td style="padding:6px">CH\u2083COOH</td><td style="padding:6px;text-align:center">%0,4</td><td style="padding:6px">NH\u2083</td><td style="padding:6px;text-align:center">%0,4</td></tr></table>' +
+      '<p style="font-size:12px;color:var(--tx3);margin-top:8px">1M HCN\u2019de [H\u2083O\u207a]\u22482,5\u00d710\u207b\u2075M \u00b7 1M NH\u2083\u2019te [OH\u207b]\u22484,2\u00d710\u207b\u00b3M (25°C, ger\u00e7ek \u00f6l\u00e7\u00fclm\u00fcş değerler).</p></div>' +
+      '<p style="font-size:13px">Zayıf asit/baz \u00e7\u00f6zeltileri, eşit derişimli kuvvetli asit/baza g\u00f6re: elektriksel iletkenlikleri D\u00dcŞ\u00dcK, pH değerleri (asit i\u00e7in) B\u00dcY\u00dcKT\u00dcR.</p>'
+  };
+
+  var MAB_UYG = [
+    { s:'0,1 M HX \u00e7\u00f6zeltisinin pH\u2019ı 1, 0,1 M HY \u00e7\u00f6zeltisinin pH\u2019ı 2,4\u2019t\u00fcr (25°C). İyonlaşma y\u00fczdesi, elektriksel iletkenlik ve asitlik kuvvetlerini karşılaştırınız.',
+      c:'HX: [H\u207a]=10\u207b\u00b9=0,1M=başlangı\u00e7 derişiminin TAMAMI \u2192 iyonlaşma=<b>%100 \u2192 KUVVETLİ ASİT</b>.<br>HY: [H\u207a]=10\u207b\u00b2\u02d9\u2074\u22480,00398M \u2192 iyonlaşma=(0,00398/0,1)\u00d7100\u2248<b>%4 \u2192 ZAYIF ASİT</b>.<br>\u2192 İyonlaşma y\u00fczdesi: <b>HX&gt;HY</b> \u00b7 Elektriksel iletkenlik: <b>HX&gt;HY</b> \u00b7 Asitlik kuvveti: <b>HX&gt;HY</b>.' },
+    { s:'XOH, YOH, ZOH bazlarıyla hazırlanan 0,1 M \u00e7\u00f6zeltilerde [OH\u207b] sırasıyla 0,001M, 0,1M, 0,01M\u2019dir. Bazların kuvvetini karşılaştırınız.',
+      c:'YOH: [OH\u207b]=0,1M=TAM derişim \u2192 %100 iyonlaşma \u2192 <b>KUVVETLİ BAZ</b>.<br>ZOH: [OH\u207b]=0,01M \u2192 %10 iyonlaşma \u2192 ORTA g\u00fc\u00e7te zayıf baz.<br>XOH: [OH\u207b]=0,001M \u2192 %1 iyonlaşma \u2192 EN ZAYIF baz.<br>\u2192 Kuvvet sıralaması: <b>YOH &gt; ZOH &gt; XOH</b>.' },
+    { s:'Kloroasetik asit (a), asetik asit (b) ve izob\u00fctirik asit (c) 1M \u00e7\u00f6zeltileri hazırlanıyor. I. a\u2019dan b\u2019ye eklenince b\u2019nin iletkenliği ARTIYOR. II. c\u2019den a\u2019ya eklenince a\u2019nın iletkenliği AZALIYOR. III. b\u2019den c\u2019ye eklenince c\u2019nin iletkenliği ARTIYOR. Asitlerin kuvvet sıralamasını belirleyiniz.',
+      c:'I \u2014 a eklenince b\u2019nin iletkenliği ARTMIŞ \u2192 a, b\u2019den DAHA \u00c7OK iyon taşıyor \u2192 <b>a&gt;b</b> (kuvveẗe).<br>II \u2014 c eklenince a\u2019nın iletkenliği AZALMIŞ (seyrelme etkisi baskın) \u2192 c, a\u2019dan DAHA AZ iyon taşıyor \u2192 <b>a&gt;c</b>.<br>III \u2014 b eklenince c\u2019nin iletkenliği ARTMIŞ \u2192 b, c\u2019den DAHA \u00c7OK iyon taşıyor \u2192 <b>b&gt;c</b>.<br>\u2192 İyonlaşma y\u00fczdesi VE asitlik kuvveti sıralaması: <b>Kloroasetik &gt; Asetik &gt; İzob\u00fctirik</b>.<br>pH sıralaması (asitlik kuvvetiyle TERS orantılı): <b>İzob\u00fctirik &gt; Asetik &gt; Kloroasetik</b>.' }
+  ];
+
+  function setupMaarifAsitBaz(){
+    if (document.getElementById('mab-wrap')) return;
+    var host = document.getElementById('asitbaz2-group-0');
+    if (!host) return;
+    host.insertAdjacentHTML('beforeend', '<div id="mab-wrap"></div>');
+    var wrap = document.getElementById('mab-wrap');
+    var html = '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cAsit-Baz Dengesi\u201d \u00fcnitesinin konu anlatımı \u2014 1. parça (2.2.1-2.2.3).</p>' +
+      MAARIF_ASITBAZ_THEORY.t1 + MAARIF_ASITBAZ_THEORY.t2 + MAARIF_ASITBAZ_THEORY.t3 +
+      '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd Uygulama Noktası \u00d6rnekleri</h4>';
+    MAB_UYG.forEach(function(u, i){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg-' + i + '\')">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+        '<div id="mabuyg-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
+    });
+    html += '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 2.2.4-2.2.7 (Kuvvetli/Zayıf karşılaştırma, N\u00f6tralleşme, Titrasyon, Asidik/Bazik \u00fcr\u00fcnler) sıradaki g\u00fcncellemede eklenecek.</p>';
+    wrap.innerHTML = html;
+  }
+
   function setupAsitBaz2(){
     if (document.getElementById('s-asitbaz2')) return;
     var app = document.querySelector('.app');
     if (!app) return;
-    var cats = ['Tümü'];
-    ASITBAZ_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
     app.insertAdjacentHTML('beforeend',
       '<div id="s-asitbaz2" style="display:none"><div class="pw narrow">' +
         '<h1 class="ptitle">\ud83e\uddea Asit-Baz Dengesi</h1>' +
-        '<p class="psub">El yazması ders notu \u2014 konu anlatımı + ' + ASITBAZ_Q.length + ' çözümlü örnek.</p>' +
-        ASITBAZ_THEORY_HTML +
-        '<h3 style="color:#34d399;margin:18px 0 10px">\ud83d\udcdd Çözümlü Sorular</h3>' +
-        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="asitbaz2-cats">' +
-          cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="asitbaz2SetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
-        '</div></div>' +
-        '<div id="asitbaz2-list"></div>' +
+        '<p class="psub">MEB kitabı konu anlatımı ve el yazması ders notu \u2014 çözümlü örnekler.</p>' +
+        '<div class="ltabs" id="asitbaz2-maingroup" style="margin-bottom:14px">' +
+          '<button class="ltab on" onclick="asitbaz2GroupSet(0,this)">\ud83d\udcd8 MEB Konu Anlatımı</button>' +
+          '<button class="ltab" onclick="asitbaz2GroupSet(1,this)">\ud83d\udcd3 Özel Ders Notu</button>' +
+        '</div>' +
+        '<div id="asitbaz2-group-0" style="display:block"></div>' +
+        '<div id="asitbaz2-group-1" style="display:none"></div>' +
       '</div></div>');
     if (typeof SCREENS !== 'undefined' && SCREENS.indexOf('s-asitbaz2') === -1) SCREENS.push('s-asitbaz2');
     var mn = document.getElementById('mn');
@@ -9508,14 +9581,36 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     var tg = document.querySelector('#s-home .tgrid');
     if (tg && !document.getElementById('tile-asitbaz2'))
       tg.insertAdjacentHTML('afterbegin',
-        '<div class="tc" id="tile-asitbaz2" onclick="nav(\'asitbaz2\')"><div class="ti">\ud83e\uddea</div><div class="tt">Asit-Baz Dengesi</div><div class="td">pH/pOH, Ka/Kb, zayıf-kuvvetli asit-baz \u2014 çözümlü örnekler.</div></div>');
-    setTimeout(abzDrawGraphs, 60);
+        '<div class="tc" id="tile-asitbaz2" onclick="nav(\'asitbaz2\')"><div class="ti">\ud83e\uddea</div><div class="tt">Asit-Baz Dengesi</div><div class="td">MEB konu anlatımı + pH/pOH, Ka/Kb çözümlü örnekler.</div></div>');
+    setupMaarifAsitBaz();
     asitbaz2RenderList();
   }
+  window.asitbaz2GroupSet = function(i, btn){
+    for (var g = 0; g < 2; g++) { var el = document.getElementById('asitbaz2-group-' + g); if (el) el.style.display = (g === i) ? 'block' : 'none'; }
+    var bar = document.getElementById('asitbaz2-maingroup');
+    if (bar && btn) { var bs = bar.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].classList.remove('on'); btn.classList.add('on'); }
+    if (i === 0) setTimeout(abzDrawGraphs, 60);
+    if (i === 1) setTimeout(abzDrawQGraphs, 60);
+  };
   var asitbaz2St = { cat: 'Tümü' };
   window.asitbaz2SetCat = function(cat, btn){ asitbaz2St.cat = cat; if (btn) selectInRow(btn); asitbaz2RenderList(); };
 
   function asitbaz2RenderList(){
+    if (!document.getElementById('asitbaz2-notewrap')) {
+      var host = document.getElementById('asitbaz2-group-1');
+      if (!host) return;
+      var cats = ['Tümü'];
+      ASITBAZ_Q.forEach(function(q){ if (cats.indexOf(q.kat) === -1) cats.push(q.kat); });
+      host.insertAdjacentHTML('beforeend',
+        '<div id="asitbaz2-notewrap"><p class="psub" style="margin-bottom:10px">El yazması ders notu \u2014 konu anlatımı + ' + ASITBAZ_Q.length + ' çözümlü örnek.</p>' +
+        ASITBAZ_THEORY_HTML +
+        '<h3 style="color:#34d399;margin:18px 0 10px">\ud83d\udcdd Çözümlü Sorular</h3>' +
+        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:14px"><div style="display:flex;gap:6px;min-width:max-content" id="asitbaz2-cats">' +
+          cats.map(function(c,i){ return '<button type="button" class="ob' + (i===0?' sel2':'') + '" onclick="asitbaz2SetCat(\'' + c + '\',this)">' + c + '</button>'; }).join('') +
+        '</div></div>' +
+        '<div id="asitbaz2-list"></div></div>');
+      setTimeout(abzDrawGraphs, 60);
+    }
     var box = document.getElementById('asitbaz2-list');
     if (!box) return;
     var html = '';
