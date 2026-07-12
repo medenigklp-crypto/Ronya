@@ -5749,10 +5749,8 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       var st = document.createElement('style');
       st.id = 'ronya-theme-style';
       st.textContent =
-        '.app.ronya-light{filter:invert(1) hue-rotate(180deg);}' +
-        '.app.ronya-light img,.app.ronya-light video,.app.ronya-light canvas{filter:invert(1) hue-rotate(180deg);}' +
-        '.app.ronya-light .logo{background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;-webkit-text-fill-color:#6366f1!important;color:#6366f1!important;}' +
-        '.app.ronya-light .logo-sub{-webkit-text-fill-color:#94a3b8!important;color:#94a3b8!important;}' +
+        '.app.ronya-light > *:not(header){filter:invert(1) hue-rotate(180deg);}' +
+        '.app.ronya-light header{background:var(--bg,#08090f);}' +
         'body.ronya-light-body{background:#f1f5f9!important;}';
       document.head.appendChild(st);
     }
