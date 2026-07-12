@@ -5752,32 +5752,8 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       var st = document.createElement('style');
       st.id = 'ronya-theme-style';
       st.textContent =
-        '.app.ronya-light{--bg:#f8fafc;--sf:#ffffff;--sf2:#f1f5f9;--sf3:#e2e8f0;--br:#e2e8f0;--br2:#cbd5e1;--tx:#0f172a;--tx2:#334155;--tx3:#64748b;}' +
-        '.app.ronya-light [style*="#050510"]{background:#ffffff!important;border-color:#e2e8f0!important;color:#0f172a!important;}' +
-        '.app.ronya-light [style*="color:#fff"]{color:#0f172a!important;}' +
-        '.app.ronya-light [style*="color:#93c5fd"]{color:#1d4ed8!important;}' +
-        '.app.ronya-light [style*="color:#34d399"]{color:#047857!important;}' +
-        '.app.ronya-light [style*="color:#f59e0b"]{color:#b45309!important;}' +
-        '.app.ronya-light [style*="color:#86efac"]{color:#15803d!important;}' +
-        '.app.ronya-light [style*="color:#fca5a5"]{color:#b91c1c!important;}' +
-        '.app.ronya-light [style*="color:#60a5fa"]{color:#1e40af!important;}' +
-        '.app.ronya-light [style*="color:#a78bfa"]{color:#6d28d9!important;}' +
-        '.app.ronya-light [style*="color:#00d4ff"]{color:#0369a1!important;}' +
-        '.app.ronya-light [style*="color:#f87171"]{color:#b91c1c!important;}' +
-        '.app.ronya-light [style*="color:#22c55e"]{color:#15803d!important;}' +
-        '.app.ronya-light [style*="color:#facc15"]{color:#a16207!important;}' +
-        '.app.ronya-light [style*="color:#fbbf24"]{color:#a16207!important;}' +
-        '.app.ronya-light [style*="color:#fb7185"]{color:#be123c!important;}' +
-        '.app.ronya-light [style*="color:#22d3ee"]{color:#0e7490!important;}' +
-        '.app.ronya-light [style*="color:#f97316"]{color:#c2410c!important;}' +
-        '.app.ronya-light [style*="color:#ef4444"]{color:#b91c1c!important;}' +
-        '.app.ronya-light [style*="color:#ff6666"]{color:#b91c1c!important;}' +
-        '.app.ronya-light [style*="color:#fcd34d"]{color:#a16207!important;}' +
-        '.app.ronya-light [style*="color:#e2e8f0"]{color:#334155!important;}' +
-        '.app.ronya-light [style*="color:rgba(255,255,255"]{color:#334155!important;}' +
-        '.app.ronya-light [style*="background:rgba(255,255,255,.08)"],.app.ronya-light [style*="background:rgba(255,255,255,.05)"],.app.ronya-light [style*="background:rgba(255,255,255,.03)"],.app.ronya-light [style*="background:rgba(255,255,255,.1)"]{background:#f1f5f9!important;}' +
-        '.app.ronya-light [style*="border:1px solid rgba(255,255,255,.06)"],.app.ronya-light [style*="border-top:1px solid rgba(255,255,255,.06)"]{border-color:#e2e8f0!important;}' +
-        '.app.ronya-light header{background:#08090f;}' +
+        '.app.ronya-light > *:not(header){filter:invert(1) hue-rotate(180deg);}' +
+        '.app.ronya-light header{background:#08090f;filter:none;}' +
         'body.ronya-light-body{background:#f8fafc!important;}' +
         'html.ronya-light-body{background:#f8fafc!important;}';
       document.head.appendChild(st);
@@ -7552,10 +7528,6 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
   var maarifSt = { sub: 0 };
 
   // Basit çizgi/alan grafik çizici — Grafik 1.x'lerin yeniden üretimi için ortak altyapı
-  function isLightTheme(){
-    var a = document.querySelector('.app');
-    return !!(a && a.classList.contains('ronya-light'));
-  }
   function maarifChart(canvasId, drawFn){
     var cv = document.getElementById(canvasId);
     if (!cv) return;
@@ -7564,14 +7536,13 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
     var x = cv.getContext('2d');
     x.setTransform(dpr, 0, 0, dpr, 0, 0);
-    x.fillStyle = isLightTheme() ? '#ffffff' : '#050510'; x.fillRect(0, 0, W, H2);
+    x.fillStyle = '#050510'; x.fillRect(0, 0, W, H2);
     try { drawFn(x, W, H2); } catch (e) { drawErr(x, W, H2, e); }
   }
   function mcAxes(x, W, H2, padL, padR, padT, padB, xlab, ylab){
-    var light = isLightTheme();
-    x.strokeStyle = light ? 'rgba(15,23,42,.3)' : 'rgba(255,255,255,.25)'; x.lineWidth = 1;
+    x.strokeStyle = 'rgba(255,255,255,.25)'; x.lineWidth = 1;
     x.beginPath(); x.moveTo(padL, padT); x.lineTo(padL, H2-padB); x.lineTo(W-padR, H2-padB); x.stroke();
-    x.fillStyle = light ? 'rgba(15,23,42,.6)' : 'rgba(255,255,255,.45)'; x.font = '10px sans-serif'; x.textAlign = 'center';
+    x.fillStyle = 'rgba(255,255,255,.45)'; x.font = '10px sans-serif'; x.textAlign = 'center';
     x.fillText(xlab, (padL+W-padR)/2, H2-6);
     x.save(); x.translate(12, (padT+H2-padB)/2); x.rotate(-Math.PI/2); x.fillText(ylab, 0, 0); x.restore();
     return { padL: padL, padR: padR, padT: padT, padB: padB, plotW: W-padL-padR, plotH: H2-padT-padB };
@@ -9641,7 +9612,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       x.fillStyle='rgba(255,255,255,.4)'; x.font='9px sans-serif'; x.textAlign='left'; x.fillText('10\u207b\u2077', g.padL-2, baseY+3);
       var t0 = 0.3, Hpeak = 0.55, Hfinal = 0.20, OHfinal = 0.20;
       function Hat(t){ if (t < t0) return 0; var tt=(t-t0)/(1-t0); return Hfinal + (Hpeak-Hfinal)/(1+6*tt); }
-      function OHat(t){ return OHfinal + (1-OHfinal)/(1+6*t); } // t=0'dan itibaren DOĞRUDAN hiperbolik azalma
+      function OHat(t){ if (t < t0) return 0; var tt=(t-t0)/(1-t0); return OHfinal + (1-OHfinal)/(1+6*tt); }
       function toY(v){ return baseY - v*g.plotH*0.62; }
       function toYneg(v){ return baseY + v*g.plotH*0.62; }
       var xt0 = g.padL+t0*g.plotW;
@@ -9650,9 +9621,9 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       for (var i=0;i<=100;i++){ var t=t0+(1-t0)*i/100; x.lineTo(g.padL+t*g.plotW, toY(Hat(t))); }
       x.strokeStyle='#f87171'; x.lineWidth=2.5; x.stroke();
       x.fillStyle='#f87171'; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText('H\u207a', g.padL+g.plotW-4, toY(Hfinal)-8);
-      // OH- : BAŞTAN İTİBAREN doğrudan hiperbolik azalma (sıçrama yok)
-      x.beginPath();
-      for (var i2=0;i2<=100;i2++){ var t2=i2/100; var yy = i2===0?baseY:toYneg(1-OHat(t2)); x.lineTo(g.padL+t2*g.plotW, yy); }
+      // OH- : t0'a kadar düz, t0'dan itibaren (sıçramadan, y\u0131k\u0131lmadan) SM\u00dcRZ hiperbolik azalma
+      x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(xt0,baseY);
+      for (var i2=0;i2<=100;i2++){ var t2=t0+(1-t0)*i2/100; x.lineTo(g.padL+t2*g.plotW, toYneg(1-OHat(t2))); }
       x.strokeStyle='#60a5fa'; x.lineWidth=2.5; x.stroke();
       x.fillStyle='#60a5fa'; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText('OH\u207b', g.padL+g.plotW-4, toYneg(1-OHfinal)+14);
       x.fillStyle='#93c5fd'; x.font='bold 10px sans-serif'; x.textAlign='left';
@@ -9668,7 +9639,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       x.fillStyle='rgba(255,255,255,.4)'; x.font='9px sans-serif'; x.textAlign='left'; x.fillText('10\u207b\u2077', g.padL-2, baseY+3);
       var t0 = 0.3, OHpeak = 0.55, OHfinal = 0.20, Hfinal = 0.20;
       function OHat(t){ if (t<t0) return 0; var tt=(t-t0)/(1-t0); return OHfinal+(OHpeak-OHfinal)/(1+6*tt); }
-      function Hat2(t){ return Hfinal + (1-Hfinal)/(1+6*t); } // t=0'dan itibaren DOĞRUDAN hiperbolik azalma
+      function Hat2(t){ if (t < t0) return 0; var tt=(t-t0)/(1-t0); return Hfinal + (1-Hfinal)/(1+6*tt); }
       function toY(v){ return baseY - v*g.plotH*0.62; }
       function toYneg(v){ return baseY + v*g.plotH*0.62; }
       var xt0 = g.padL+t0*g.plotW;
@@ -9676,8 +9647,8 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       for (var i=0;i<=100;i++){ var t=t0+(1-t0)*i/100; x.lineTo(g.padL+t*g.plotW, toY(OHat(t))); }
       x.strokeStyle='#60a5fa'; x.lineWidth=2.5; x.stroke();
       x.fillStyle='#60a5fa'; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText('OH\u207b', g.padL+g.plotW-4, toY(OHfinal)-8);
-      x.beginPath();
-      for (var i2=0;i2<=100;i2++){ var t2=i2/100; var yy = i2===0?baseY:toYneg(1-Hat2(t2)); x.lineTo(g.padL+t2*g.plotW, yy); }
+      x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(xt0,baseY);
+      for (var i2=0;i2<=100;i2++){ var t2=t0+(1-t0)*i2/100; x.lineTo(g.padL+t2*g.plotW, toYneg(1-Hat2(t2))); }
       x.strokeStyle='#f87171'; x.lineWidth=2.5; x.stroke();
       x.fillStyle='#f87171'; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText('H\u207a', g.padL+g.plotW-4, toYneg(1-Hfinal)+14);
       x.fillStyle='#93c5fd'; x.font='bold 10px sans-serif'; x.textAlign='left';
