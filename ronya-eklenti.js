@@ -115,6 +115,14 @@
    dogrulamali) + Titrasyon formulu (zA*MA*VA=zB*MB*VB) + 2 yeni
    Uygulama ornegi. Siradaki: 2.2.7 (Asidik/Bazik urunler), Bolum
    Sonu Olcme-Degerlendirme, ve MEB Cozunurluk Dengesi (2.3).
+   2.2.7 EKLENDI - MEB ASIT-BAZ DENGESI (2.2) TAMAMEN BITTI: mide
+   sivisi pH 1,5-3,5 (cok asidik), dis macunu pH 8-9 (hafif bazik),
+   cilt pH 4,5-5,5 (hafif asidik) -- gercek degerler + MEB'in kendi
+   2 veri-analizi ornegi (sabun deneyi: cildin kendi pH'ina en yakin
+   olan B sabunu en uygun; antiasit tablet deneyi: tepkime sonunda
+   TAM pH=7 veren Y tableti en uygun). 2.2.1'den 2.2.7'ye kadar TUM
+   MEB Asit-Baz konu anlatimi artik tamamlandi. Siradaki: MEB
+   Cozunurluk Dengesi (2.3, 161 sayfalik dosyanin son bolumu).
    DUZELTME (kullanici): Q28'deki KOH derisimi 0,1M degil 0,2M imis.
    Bu onemli bir fark yaratti -- artik titrant tavani (0,2M) hedef
    [OH-]'den (0,1M) BUYUK oldugu icin Y ARTIK ASIMPTOTIK DEGIL, SONLU
@@ -9654,14 +9662,25 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       c:'Titrasyon form\u00fcl\u00fc: z<sub>A</sub>M<sub>A</sub>V<sub>A</sub>=z<sub>B</sub>M<sub>B</sub>V<sub>B</sub> (HCl ve NaOH ikisi de tek değerli, z=1).<br>1\u00d7M<sub>HCl</sub>\u00d725=1\u00d70,2\u00d740 \u2192 M<sub>HCl</sub>=8/25=<b>0,32 M</b>.' }
   ];
 
+  MAARIF_ASITBAZ_THEORY.t7 = '<h3 style="color:#93c5fd;margin-bottom:10px">2.2.7 Asidik ve Bazik \u00dcr\u00fcnlerin Se\u00e7iminde Dikkat Edilmesi Gerekenler</h3>' +
+    '<p style="margin-bottom:10px">G\u00fcnl\u00fck yaşamda mide, ağız-diş ve cilt sağlığı i\u00e7in kullanılan \u00fcr\u00fcnlerin pH değeri sağlık a\u00e7ısından \u00e7ok \u00f6nemlidir. \u201cHomeostazi\u201d (i\u00e7 ortamın fiziksel/kimyasal koşullarının sabit tutulması) i\u00e7in doğru \u00fcr\u00fcn se\u00e7imi gerekir.</p>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:6px;text-align:left">Organ/\u00dcr\u00fcn</th><th style="padding:6px">pH Aralığı</th><th style="padding:6px;text-align:left">Neden</th></tr>' +
+    '<tr><td style="padding:6px"><b>Mide sıvısı</b></td><td style="padding:6px;text-align:center">1,5\u20133,5<br>(\u00c7OK ASİDİK)</td><td style="padding:6px">HCl+pepsinojen protein sindirir, mikroorganizmaları \u00f6ld\u00fcr\u00fcr. Az asit\u2192enfeksiyon riski; \u00e7ok asit\u2192reflü/\u00fclser.</td></tr>' +
+    '<tr><td style="padding:6px"><b>Diş macunu</b></td><td style="padding:6px;text-align:center">8\u20139<br>(HAFİF BAZİK)</td><td style="padding:6px">Ağız bakterilerinin şeker/nişastayı aside \u00e7evirip diş minesini aşındırmasını \u00f6nler. pH&lt;8 yetersiz; pH&gt;9 diş eti/mine hasarı.</td></tr>' +
+    '<tr><td style="padding:6px"><b>Cilt</b></td><td style="padding:6px;text-align:center">4,5\u20135,5<br>(HAFİF ASİDİK)</td><td style="padding:6px">Hafif asidik yapı zararlı mikroorganizmalara karşı koruyucu bariyer oluşturur. \u00c7ok bazik sabun\u2192cilt kuruluğu.</td></tr></table>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:8px">\u2713 MEB Kitabı \u00d6rneği (2.8. Uygulama Noktası \u2014 Sabun Deneyi)</div>' +
+    '<p style="font-size:13px;margin-bottom:8px">A(pH=11,5), B(pH=5,5), C(pH=8,4) sabunları test ediliyor; anketle \u201ckuruluk/temizleme/koku/durulama\u201d puanlanıyor. B sabunu (pH=5,5, cildin doğal pH\u2019ına EN YAKIN) en AZ kuruluk yaratıyor \u2014 <b>cilt sağlığı i\u00e7in en uygun se\u00e7im pH\u2019ı cildin kendi pH aralığına (4,5-5,5) en yakın olandır</b>, en bazik olan (A) DEĞİL.</p></div>' +
+    '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#f59e0b;margin-bottom:8px">\u2713 MEB Kitabı \u00d6rneği (2.12. Kontrol Noktası \u2014 Antiasit Tablet Deneyi)</div>' +
+    '<p style="font-size:13px">X(pH=11,2), Y(pH=9,6), Z(pH=10,5) antiasit tabletleri 0,1M HCl ile tepkimeye sokuluyor: X 3dk/pH=6, Y 4dk/pH=7, Z 2dk/pH=8 sonu\u00e7 veriyor. <b>Y tableti tepkime SONUNDA TAM pH=7 (n\u00f6tr) verdiği i\u00e7in mide asidini ne EKSİK ne FAZLA n\u00f6trler \u2014 en uygun se\u00e7imdir</b> (X hâlâ hafif asidik/eksik n\u00f6trlemiş, Z fazla n\u00f6trleyip bazik bırakmış olabilir \u2014 tepkime s\u00fcresi de \u00f6nemli bir ikincil \u00f6l\u00e7\u00fctt\u00fcr).</p></div>';
+
   function setupMaarifAsitBaz(){
     if (document.getElementById('mab-wrap')) return;
     var host = document.getElementById('asitbaz2-group-0');
     if (!host) return;
     host.insertAdjacentHTML('beforeend', '<div id="mab-wrap"></div>');
     var wrap = document.getElementById('mab-wrap');
-    var html = '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cAsit-Baz Dengesi\u201d \u00fcnitesinin konu anlatımı \u2014 3. parça (2.2.1-2.2.6).</p>' +
-      MAARIF_ASITBAZ_THEORY.t1 + MAARIF_ASITBAZ_THEORY.t2 + MAARIF_ASITBAZ_THEORY.t3 + MAARIF_ASITBAZ_THEORY.t4 + MAARIF_ASITBAZ_THEORY.t5 + MAARIF_ASITBAZ_THEORY.t6 +
+    var html = '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cAsit-Baz Dengesi\u201d \u00fcnitesinin TAM konu anlatımı (2.2.1-2.2.7).</p>' +
+      MAARIF_ASITBAZ_THEORY.t1 + MAARIF_ASITBAZ_THEORY.t2 + MAARIF_ASITBAZ_THEORY.t3 + MAARIF_ASITBAZ_THEORY.t4 + MAARIF_ASITBAZ_THEORY.t5 + MAARIF_ASITBAZ_THEORY.t6 + MAARIF_ASITBAZ_THEORY.t7 +
       '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd Uygulama Noktası \u00d6rnekleri (2.2.1-2.2.3)</h4>';
     MAB_UYG.forEach(function(u, i){
       html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg-' + i + '\')">' +
@@ -9680,7 +9699,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
         '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
         '<div id="mabuyg3-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
     });
-    html += '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 2.2.7 (Asidik/Bazik \u00fcr\u00fcnler \u2014 g\u00fcnl\u00fck hayat) sıradaki g\u00fcncellemede eklenecek. Ardından B\u00f6l\u00fcm Sonu \u00d6l\u00e7me-Değerlendirme ve MEB \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi (2.3).</p>';
+    html += '<p style="font-size:12px;color:#86efac;margin-top:14px;padding:12px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px">\u2705 MEB Asit-Baz Dengesi (2.2) konu anlatımı TAMAMLANDI (2.2.1-2.2.7). Sırada: MEB \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi (2.3).</p>';
     wrap.innerHTML = html;
   }
 
