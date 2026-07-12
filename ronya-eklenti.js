@@ -9655,14 +9655,15 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       x.fillText('H\u2082O \u21cc H\u207a\u208d\u2090\u2071\u2071\u208e + OH\u207b\u208d\u2090\u2071\u2071\u208e', g.padL+4, g.padT+12);
       x.fillStyle='rgba(255,255,255,.4)'; x.font='8px sans-serif'; x.textAlign='center'; x.fillText('baz ilave', xt0, H2-2);
     });
-    // 3. [H+]-[OH-] ters orantı (DOĞRUSAL eksen, GERÇEK hiperbol görünümü)
+    // 3. [H+]-[OH-] ters orantı (DOĞRUSAL eksen, GERÇEK hiperbol, kırpma YOK)
     maarifChart('abz-g3', function(x, W, H2){
       var g = mcAxes(x, W, H2, 44, 16, 14, 30, '[OH\u207b]', '[H\u207a]');
       var k = 0.16; // x*y=k (hiperbol sabiti, şematik)
+      var xMin = k, xMax = 1; // x=k'da y=1 (tepe), x=1'de y=k (taban) \u2014 kırpmasız d\u00fczg\u00fcn hiperbol
       var pts = [];
-      for (var i = 1; i <= 500; i++) {
-        var xv = (i/500); // 0'a \u00e7ok yakından 1'e (0 hari\u00e7, asimptot)
-        var yv = Math.min(1, k/xv);
+      for (var i = 0; i <= 500; i++) {
+        var xv = xMin + (xMax-xMin)*(i/500);
+        var yv = k/xv;
         var xx = g.padL + xv*g.plotW;
         var yy = g.padT + g.plotH - yv*g.plotH*0.95;
         pts.push([xx,yy]);
@@ -9709,14 +9710,15 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       var temps = [ {k:0.10,c:'#f87171',l:'T\u2081'}, {k:0.16,c:'#fb923c',l:'T\u2082'}, {k:0.24,c:'#4ade80',l:'T\u2083'} ];
       temps.forEach(function(t){
         var pts = [];
-        for (var i = 1; i <= 500; i++) {
-          var xv = i/500;
-          var yv = Math.min(1, t.k/xv);
+        var xMin = t.k, xMax = 1;
+        for (var i = 0; i <= 500; i++) {
+          var xv = xMin + (xMax-xMin)*(i/500);
+          var yv = t.k/xv;
           pts.push([g.padL+xv*g.plotW, g.padT+g.plotH-yv*g.plotH*0.95]);
         }
         x.strokeStyle=t.c; x.lineWidth=2.2; x.beginPath();
         pts.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
-        var lp = pts[Math.floor(pts.length*0.25)];
+        var lp = pts[Math.floor(pts.length*0.15)];
         x.fillStyle=t.c; x.font='bold 10px sans-serif'; x.textAlign='left'; x.fillText(t.l, lp[0]+4, lp[1]-4);
       });
       x.fillStyle='rgba(255,255,255,.5)'; x.font='9px sans-serif'; x.textAlign='left';
