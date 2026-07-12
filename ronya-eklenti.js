@@ -5721,9 +5721,11 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (mode === 'light') {
       if (appEl) appEl.classList.add('ronya-light');
       document.body.classList.add('ronya-light-body');
+      document.documentElement.classList.add('ronya-light-body');
     } else {
       if (appEl) appEl.classList.remove('ronya-light');
       document.body.classList.remove('ronya-light-body');
+      document.documentElement.classList.remove('ronya-light-body');
     }
     try { localStorage.setItem('ronya_theme', mode); } catch (e) {}
     updateThemeButtons();
@@ -5744,14 +5746,20 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       var appEl = document.querySelector('.app');
       if (appEl) appEl.classList.add('ronya-light');
       document.body.classList.add('ronya-light-body');
+      document.documentElement.classList.add('ronya-light-body');
     }
     if (!document.getElementById('ronya-theme-style')) {
       var st = document.createElement('style');
       st.id = 'ronya-theme-style';
       st.textContent =
-        '.app.ronya-light > *:not(header){filter:invert(1) hue-rotate(180deg);}' +
-        '.app.ronya-light header{background:var(--bg,#08090f);}' +
-        'body.ronya-light-body{background:#f1f5f9!important;}';
+        '.app.ronya-light{--bg:#f8fafc;--sf:#ffffff;--sf2:#f1f5f9;--sf3:#e2e8f0;--br:#e2e8f0;--br2:#cbd5e1;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;}' +
+        '.app.ronya-light [style*="#050510"]{background:#ffffff!important;border-color:#e2e8f0!important;}' +
+        '.app.ronya-light [style*="color:#fff"]{color:#0f172a!important;}' +
+        '.app.ronya-light [style*="background:rgba(255,255,255,.08)"],.app.ronya-light [style*="background:rgba(255,255,255,.05)"],.app.ronya-light [style*="background:rgba(255,255,255,.03)"]{background:#f1f5f9!important;}' +
+        '.app.ronya-light [style*="border:1px solid rgba(255,255,255,.06)"],.app.ronya-light [style*="border-top:1px solid rgba(255,255,255,.06)"]{border-color:#e2e8f0!important;}' +
+        '.app.ronya-light header{background:#08090f;}' +
+        'body.ronya-light-body{background:#f8fafc!important;}' +
+        'html.ronya-light-body{background:#f8fafc!important;}';
       document.head.appendChild(st);
     }
   }
@@ -7524,6 +7532,10 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
   var maarifSt = { sub: 0 };
 
   // Basit çizgi/alan grafik çizici — Grafik 1.x'lerin yeniden üretimi için ortak altyapı
+  function isLightTheme(){
+    var a = document.querySelector('.app');
+    return !!(a && a.classList.contains('ronya-light'));
+  }
   function maarifChart(canvasId, drawFn){
     var cv = document.getElementById(canvasId);
     if (!cv) return;
@@ -7532,13 +7544,14 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (Math.abs(cv.width - W*dpr) > 2 || Math.abs(cv.height - H2*dpr) > 2) { cv.width = W*dpr; cv.height = H2*dpr; }
     var x = cv.getContext('2d');
     x.setTransform(dpr, 0, 0, dpr, 0, 0);
-    x.fillStyle = '#050510'; x.fillRect(0, 0, W, H2);
+    x.fillStyle = isLightTheme() ? '#ffffff' : '#050510'; x.fillRect(0, 0, W, H2);
     try { drawFn(x, W, H2); } catch (e) { drawErr(x, W, H2, e); }
   }
   function mcAxes(x, W, H2, padL, padR, padT, padB, xlab, ylab){
-    x.strokeStyle = 'rgba(255,255,255,.25)'; x.lineWidth = 1;
+    var light = isLightTheme();
+    x.strokeStyle = light ? 'rgba(15,23,42,.3)' : 'rgba(255,255,255,.25)'; x.lineWidth = 1;
     x.beginPath(); x.moveTo(padL, padT); x.lineTo(padL, H2-padB); x.lineTo(W-padR, H2-padB); x.stroke();
-    x.fillStyle = 'rgba(255,255,255,.45)'; x.font = '10px sans-serif'; x.textAlign = 'center';
+    x.fillStyle = light ? 'rgba(15,23,42,.6)' : 'rgba(255,255,255,.45)'; x.font = '10px sans-serif'; x.textAlign = 'center';
     x.fillText(xlab, (padL+W-padR)/2, H2-6);
     x.save(); x.translate(12, (padT+H2-padB)/2); x.rotate(-Math.PI/2); x.fillText(ylab, 0, 0); x.restore();
     return { padL: padL, padR: padR, padT: padT, padB: padB, plotW: W-padL-padR, plotH: H2-padT-padB };
@@ -9599,51 +9612,66 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     '</div>';
 
   function abzDrawGraphs(){
-    // 1. Saf suya asit ilave edersek
+    // 1. Saf suya asit ilave edersek (ANİ sıçrama + HİPERBOLİK yeni dengeye yaklaşma, H·OH=sabit)
     maarifChart('abz-g1', function(x, W, H2){
       var g = mcAxes(x, W, H2, 40, 14, 14, 26, 'Zaman', 'Derişim');
       var baseY = g.padT + g.plotH*0.5;
       x.strokeStyle='rgba(255,255,255,.25)'; x.setLineDash([4,4]); x.lineWidth=1;
       x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(g.padL+g.plotW,baseY); x.stroke(); x.setLineDash([]);
       x.fillStyle='rgba(255,255,255,.4)'; x.font='9px sans-serif'; x.textAlign='left'; x.fillText('10\u207b\u2077', g.padL-2, baseY+3);
-      var t0 = 0.35;
-      function curve(sign, color, label){
-        var pts=[];
-        for (var i=0;i<=100;i++){ var t=i/100; var xx=g.padL+t*g.plotW;
-          var yy=baseY; if(t>t0) yy = baseY - sign*((t-t0)/(1-t0))*g.plotH*0.35;
-          pts.push([xx,yy]); }
-        x.strokeStyle=color; x.lineWidth=2.5; x.beginPath();
-        pts.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
-        var last=pts[pts.length-1];
-        x.fillStyle=color; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText(label, g.padL+g.plotW-4, last[1]+(sign>0?-6:14));
+      var t0 = 0.3; // asit ilave anı (x ekseninde bu noktada dikey sıçrama)
+      var K = 0.12; // görsel Kw sabiti (H·OH=K, şematik)
+      var Hpeak = 0.55; // sıçrama sonrası tepe (0..1 şematik ölçek, y ekseninde yükseklik oranı)
+      var Hfinal = 0.20; // yeni denge (eski seviyeden YÜKSEK kalır, tam eski 0'a d\u00f6nmez)
+      function Hat(t){ // t: 0..1, t0 sonrası hiperbolik azalma
+        if (t < t0) return 0;
+        var tt = (t-t0)/(1-t0);
+        return Hfinal + (Hpeak-Hfinal)/(1+6*tt); // hiperbolik: tepe(t=t0) -> Hfinal (t->1)
       }
-      curve(1, '#f87171', 'H\u207a');
-      curve(-1, '#60a5fa', 'OH\u207b');
+      function toY(h){ return baseY - h*g.plotH*0.62; }
+      function toYneg(oh){ return baseY + oh*g.plotH*0.62; }
+      // H+ eğrisi: t0'a kadar düz, t0'da DİKEY sıçrama, sonra hiperbolik azalma
+      var xt0 = g.padL+t0*g.plotW;
+      x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(xt0,baseY); x.lineTo(xt0,toY(Hat(t0)));
+      for (var i2=0;i2<=100;i2++){ var t2=t0+(1-t0)*i2/100; x.lineTo(g.padL+t2*g.plotW, toY(Hat(t2))); }
+      x.strokeStyle='#f87171'; x.lineWidth=2.5; x.stroke();
+      x.fillStyle='#f87171'; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText('H\u207a', g.padL+g.plotW-4, toY(Hfinal)-8);
+      // OH- eğrisi: t0'a kadar düz, t0'da DİKEY d\u00fcş\u00fcş, sonra hiperbolik olarak biraz toparlanır ama eski seviyenin ALTINDA kalır (K/H ilişkisi)
+      x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(xt0,baseY);
+      var OHfinal = K/Hfinal*0.15; // eski seviyenin altında yeni denge
+      var OHpeakDrop = K/Hpeak*0.15;
+      x.lineTo(xt0, toYneg(OHpeakDrop));
+      for (var i3=0;i3<=100;i3++){ var t3=t0+(1-t0)*i3/100; var h3=Hat(t3); var oh3=(K/h3)*0.15; x.lineTo(g.padL+t3*g.plotW, toYneg(oh3)); }
+      x.strokeStyle='#60a5fa'; x.lineWidth=2.5; x.stroke();
+      x.fillStyle='#60a5fa'; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText('OH\u207b', g.padL+g.plotW-4, toYneg(OHfinal)+14);
       x.fillStyle='#93c5fd'; x.font='bold 10px sans-serif'; x.textAlign='left';
       x.fillText('H\u2082O \u21cc H\u207a\u208d\u2090\u2071\u2071\u208e + OH\u207b\u208d\u2090\u2071\u2071\u208e', g.padL+4, g.padT+12);
+      x.fillStyle='rgba(255,255,255,.4)'; x.font='8px sans-serif'; x.textAlign='center'; x.fillText('asit ilave', xt0, H2-2);
     });
-    // 2. Saf suya baz ilave edersek (ayna görüntü)
+    // 2. Saf suya baz ilave edersek (ayna g\u00f6r\u00fcnt\u00fc: OH\u207b ani artar+hiperbolik azalır, H\u207a ani d\u00fcşer+hiperbolik artar)
     maarifChart('abz-g2', function(x, W, H2){
       var g = mcAxes(x, W, H2, 40, 14, 14, 26, 'Zaman', 'Derişim');
       var baseY = g.padT + g.plotH*0.5;
       x.strokeStyle='rgba(255,255,255,.25)'; x.setLineDash([4,4]); x.lineWidth=1;
       x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(g.padL+g.plotW,baseY); x.stroke(); x.setLineDash([]);
       x.fillStyle='rgba(255,255,255,.4)'; x.font='9px sans-serif'; x.textAlign='left'; x.fillText('10\u207b\u2077', g.padL-2, baseY+3);
-      var t0 = 0.35;
-      function curve(sign, color, label){
-        var pts=[];
-        for (var i=0;i<=100;i++){ var t=i/100; var xx=g.padL+t*g.plotW;
-          var yy=baseY; if(t>t0) yy = baseY - sign*((t-t0)/(1-t0))*g.plotH*0.35;
-          pts.push([xx,yy]); }
-        x.strokeStyle=color; x.lineWidth=2.5; x.beginPath();
-        pts.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
-        var last=pts[pts.length-1];
-        x.fillStyle=color; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText(label, g.padL+g.plotW-4, last[1]+(sign>0?-6:14));
-      }
-      curve(1, '#60a5fa', 'OH\u207b');
-      curve(-1, '#f87171', 'H\u207a');
+      var t0 = 0.3, K = 0.12, OHpeak = 0.55, OHfinal = 0.20;
+      function OHat(t){ if (t<t0) return 0; var tt=(t-t0)/(1-t0); return OHfinal+(OHpeak-OHfinal)/(1+6*tt); }
+      function toY(v){ return baseY - v*g.plotH*0.62; }
+      function toYneg(v){ return baseY + v*g.plotH*0.62; }
+      var xt0 = g.padL+t0*g.plotW;
+      x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(xt0,baseY); x.lineTo(xt0, toY(OHat(t0)));
+      for (var i=0;i<=100;i++){ var t=t0+(1-t0)*i/100; x.lineTo(g.padL+t*g.plotW, toY(OHat(t))); }
+      x.strokeStyle='#60a5fa'; x.lineWidth=2.5; x.stroke();
+      x.fillStyle='#60a5fa'; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText('OH\u207b', g.padL+g.plotW-4, toY(OHfinal)-8);
+      var HfinalV = K/OHfinal*0.15, HpeakDrop = K/OHpeak*0.15;
+      x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(xt0,baseY); x.lineTo(xt0, toYneg(HpeakDrop));
+      for (var i2=0;i2<=100;i2++){ var t2=t0+(1-t0)*i2/100; var oh2=OHat(t2); var h2=(K/oh2)*0.15; x.lineTo(g.padL+t2*g.plotW, toYneg(h2)); }
+      x.strokeStyle='#f87171'; x.lineWidth=2.5; x.stroke();
+      x.fillStyle='#f87171'; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText('H\u207a', g.padL+g.plotW-4, toYneg(HfinalV)+14);
       x.fillStyle='#93c5fd'; x.font='bold 10px sans-serif'; x.textAlign='left';
       x.fillText('H\u2082O \u21cc H\u207a\u208d\u2090\u2071\u2071\u208e + OH\u207b\u208d\u2090\u2071\u2071\u208e', g.padL+4, g.padT+12);
+      x.fillStyle='rgba(255,255,255,.4)'; x.font='8px sans-serif'; x.textAlign='center'; x.fillText('baz ilave', xt0, H2-2);
     });
     // 3. [H+]-[OH-] ters orantı (log ölçek, tek sıcaklık)
     maarifChart('abz-g3', function(x, W, H2){
