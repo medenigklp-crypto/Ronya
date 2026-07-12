@@ -128,6 +128,14 @@
    korundu). 2) Titrasyon grafiklerinden (abzg-titr1, abzg-titr2)
    CEVAP ETIKETLERI (X=50mL, pH=7 gibi) kaldirildi -- artik sadece
    egri gorunuyor, cevap grafikte yazmiyor, ogrenci once kendi okumali.
+   KULLANICI REFERANS KODU ILE 6 GRAFIGE GENISLETILDI: Kullanicinin
+   verdigi HTML/Canvas referans koduna dayanarak Suyun Otoiyonizasyonu
+   bolumu artik TAM 6 grafik iceriyor: 1) Saf suya asit ilave edersek
+   2) Saf suya baz ilave edersek 3) [H+]-[OH-] ters oranti (log olcek)
+   4) pH-pOH dogrusal iliski 5) Sicaklik etkisi pH-pOH (T1<T2<T3)
+   6) Sicaklik etkisi [H+]-[OH-] (T1<T2<T3, log olcek hiperboller).
+   Hepsi maarifChart/mcAxes altyapisina uyarlanarak node.js ile
+   hatasiz calistigi dogrulandi.
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9409,86 +9417,134 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       '<p style="font-size:13px;margin-bottom:8px">Suyun kendi kendine iyonlarına ayrışmasına <b>otoiyonizasyon</b> denir: 2H\u2082O(s)\u21ccH\u2083O\u207a(suda)+OH\u207b(suda). H\u207a iyonunda elektron yoktur; sulu ortamda H\u2082O ile birleşip H\u2083O\u207a (hidronyum) oluşturur \u2014 bu y\u00fczden H\u207a ve H\u2083O\u207a birbirinin yerine kullanılabilir.</p>' +
       '<p style="font-size:13px;margin-bottom:8px"><b>K<sub>su</sub>=[H\u207a][OH\u207b]</b>. 25°C\u2019de K<sub>su</sub>=10\u207b\u00b9\u2074, saf suda [H\u207a]=[OH\u207b]=10\u207b\u2077 M.</p>' +
       '<p style="font-size:13px;margin-bottom:10px">p\u2192\u2212log: <b>pH=\u2212log[H\u207a]</b>, <b>pOH=\u2212log[OH\u207b]</b>, <b>pK<sub>su</sub>=\u2212logK<sub>su</sub></b>. 25°C\u2019de <b>pH+pOH=14</b>.</p>' +
-      '<div style="font-size:12px;color:#93c5fd;font-weight:700;margin-bottom:4px">pH \u2014 pOH İlişkisi</div>' +
-      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:8px"><canvas id="abz-phpoh" style="width:100%;display:block" height="200"></canvas></div>' +
-      '<p style="font-size:12px;color:var(--tx3);margin-bottom:12px">pH ile pOH TERS orantılıdır (toplamları sabit=14): pOH azaldık\u00e7a pH artar (BAZLIK ARTAR), pOH arttık\u00e7a pH azalır (ASİTLİK ARTAR). Tam ortadaki nokta (7,7) N\u00d6TR noktadır.</p>' +
-      '<div style="font-size:12px;color:#93c5fd;font-weight:700;margin-bottom:4px">[H\u207a] \u2014 [OH\u207b] İlişkisi</div>' +
-      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:8px"><canvas id="abz-hcurve" style="width:100%;display:block" height="220"></canvas></div>' +
-      '<p style="font-size:12px;color:var(--tx3)">[H\u207a] ile [OH\u207b] TERS orantılıdır (\u00e7arpımları sabit=10\u207b\u00b9\u2074): [OH\u207b] azaldık\u00e7a [H\u207a] artar (ASİTLİK ARTAR), [OH\u207b] arttık\u00e7a [H\u207a] azalır (BAZLIK ARTAR). Tam ortadaki nokta (10\u207b\u2077,10\u207b\u2077) N\u00d6TR noktadır.</p>' +
-    '</div>' +
-    '<div class="card" style="margin-bottom:14px">' +
-      '<h3 style="color:#34d399;margin-bottom:10px">K<sub>su</sub>\u2019nun Sıcaklıkla Değişimi</h3>' +
-      '<p style="font-size:13px;margin-bottom:8px">Su otoiyonizasyonu ISI ALAN (endotermik) bir olaydır: ısı+H\u2082O\u21ccH\u207a+OH\u207b. Bu y\u00fczden sıcaklık artınca denge SAĞA kayar, K<sub>su</sub> B\u00dcY\u00dcR:</p>' +
-      '<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:6px;text-align:left">Sıcaklık</th><th style="padding:6px">K<sub>su</sub></th><th style="padding:6px">pH+pOH</th></tr>' +
-      '<tr><td style="padding:6px">t=25°C</td><td style="padding:6px;text-align:center">10\u207b\u00b9\u2074</td><td style="padding:6px;text-align:center">=14</td></tr>' +
-      '<tr><td style="padding:6px">t&gt;25°C</td><td style="padding:6px;text-align:center">&gt;10\u207b\u00b9\u2074</td><td style="padding:6px;text-align:center">&lt;14</td></tr>' +
-      '<tr><td style="padding:6px">t&lt;25°C</td><td style="padding:6px;text-align:center">&lt;10\u207b\u00b9\u2074</td><td style="padding:6px;text-align:center">&gt;14</td></tr></table>' +
-      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:8px"><canvas id="abz-ksugraph" style="width:100%;display:block" height="200"></canvas></div>' +
-      '<p style="font-size:12px;color:var(--tx3)">Sıcaklık arttık\u00e7a n\u00f6tr nokta (pH=pOH olan nokta) SOLA-AŞAĞI kayar \u2014 y\u00fcksek sıcaklıkta n\u00f6tr bir \u00e7\u00f6zeltinin pH\u2019ı 7\u2019den K\u00dc\u00c7\u00dcKT\u00dcR (\u00e7\u00fcnk\u00fc daha \u00e7ok H\u207a/OH\u207b oluşur), ama yine de N\u00d6TRD\u00dcR (\u00e7\u00fcnk\u00fc [H\u207a]=[OH\u207b] eşitliği hala ge\u00e7erlidir \u2014 n\u00f6tr olmak i\u00e7in pH=7 ZORUNLU DEĞİLDİR, [H\u207a]=[OH\u207b] yeterlidir).</p>' +
+      '<div style="font-size:12px;color:#93c5fd;font-weight:700;margin-bottom:4px">1. Saf Suya Asit İlave Edersek</div>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:12px"><canvas id="abz-g1" style="width:100%;display:block" height="210"></canvas></div>' +
+      '<div style="font-size:12px;color:#93c5fd;font-weight:700;margin-bottom:4px">2. Saf Suya Baz İlave Edersek</div>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:12px"><canvas id="abz-g2" style="width:100%;display:block" height="210"></canvas></div>' +
+      '<div style="font-size:12px;color:#93c5fd;font-weight:700;margin-bottom:4px">3. [H\u207a] \u2014 [OH\u207b] Ters Orantı (25°C)</div>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:12px"><canvas id="abz-g3" style="width:100%;display:block" height="220"></canvas></div>' +
+      '<div style="font-size:12px;color:#93c5fd;font-weight:700;margin-bottom:4px">4. pH \u2014 pOH Doğrusal İlişki (25°C)</div>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:12px"><canvas id="abz-g4" style="width:100%;display:block" height="200"></canvas></div>' +
+      '<div style="font-size:12px;color:#93c5fd;font-weight:700;margin-bottom:4px">5. Sıcaklık Etkisi: pH \u2014 pOH</div>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:12px"><canvas id="abz-g5" style="width:100%;display:block" height="200"></canvas></div>' +
+      '<div style="font-size:12px;color:#93c5fd;font-weight:700;margin-bottom:4px">6. Sıcaklık Etkisi: [H\u207a] \u2014 [OH\u207b]</div>' +
+      '<div style="background:#050510;border:1px solid rgba(52,211,153,.3);border-radius:12px;overflow:hidden;margin-bottom:8px"><canvas id="abz-g6" style="width:100%;display:block" height="220"></canvas></div>' +
+      '<p style="font-size:12px;color:var(--tx3)">T\u2081&lt;T\u2082&lt;T\u2083: sıcaklık arttık\u00e7a K<sub>su</sub> ARTAR (grafik 6), pK<sub>su</sub> AZALIR (grafik 5) \u2014 otoiyonizasyon endotermik olduğu i\u00e7in.</p>' +
     '</div>';
 
   function abzDrawGraphs(){
-    // pH — pOH ilişkisi (basit tek doğru, pH+pOH=14)
-    maarifChart('abz-phpoh', function(x, W, H2){
+    // 1. Saf suya asit ilave edersek
+    maarifChart('abz-g1', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 14, 14, 26, 'Zaman', 'Derişim');
+      var baseY = g.padT + g.plotH*0.5;
+      x.strokeStyle='rgba(255,255,255,.25)'; x.setLineDash([4,4]); x.lineWidth=1;
+      x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(g.padL+g.plotW,baseY); x.stroke(); x.setLineDash([]);
+      x.fillStyle='rgba(255,255,255,.4)'; x.font='9px sans-serif'; x.textAlign='left'; x.fillText('10\u207b\u2077', g.padL-2, baseY+3);
+      var t0 = 0.35;
+      function curve(sign, color, label){
+        var pts=[];
+        for (var i=0;i<=100;i++){ var t=i/100; var xx=g.padL+t*g.plotW;
+          var yy=baseY; if(t>t0) yy = baseY - sign*((t-t0)/(1-t0))*g.plotH*0.35;
+          pts.push([xx,yy]); }
+        x.strokeStyle=color; x.lineWidth=2.5; x.beginPath();
+        pts.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
+        var last=pts[pts.length-1];
+        x.fillStyle=color; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText(label, g.padL+g.plotW-4, last[1]+(sign>0?-6:14));
+      }
+      curve(1, '#f87171', 'H\u207a');
+      curve(-1, '#60a5fa', 'OH\u207b');
+      x.fillStyle='#93c5fd'; x.font='bold 10px sans-serif'; x.textAlign='left';
+      x.fillText('H\u2082O \u21cc H\u207a\u208d\u2090\u2071\u2071\u208e + OH\u207b\u208d\u2090\u2071\u2071\u208e', g.padL+4, g.padT+12);
+    });
+    // 2. Saf suya baz ilave edersek (ayna görüntü)
+    maarifChart('abz-g2', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 14, 14, 26, 'Zaman', 'Derişim');
+      var baseY = g.padT + g.plotH*0.5;
+      x.strokeStyle='rgba(255,255,255,.25)'; x.setLineDash([4,4]); x.lineWidth=1;
+      x.beginPath(); x.moveTo(g.padL,baseY); x.lineTo(g.padL+g.plotW,baseY); x.stroke(); x.setLineDash([]);
+      x.fillStyle='rgba(255,255,255,.4)'; x.font='9px sans-serif'; x.textAlign='left'; x.fillText('10\u207b\u2077', g.padL-2, baseY+3);
+      var t0 = 0.35;
+      function curve(sign, color, label){
+        var pts=[];
+        for (var i=0;i<=100;i++){ var t=i/100; var xx=g.padL+t*g.plotW;
+          var yy=baseY; if(t>t0) yy = baseY - sign*((t-t0)/(1-t0))*g.plotH*0.35;
+          pts.push([xx,yy]); }
+        x.strokeStyle=color; x.lineWidth=2.5; x.beginPath();
+        pts.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
+        var last=pts[pts.length-1];
+        x.fillStyle=color; x.font='bold 10px sans-serif'; x.textAlign='right'; x.fillText(label, g.padL+g.plotW-4, last[1]+(sign>0?-6:14));
+      }
+      curve(1, '#60a5fa', 'OH\u207b');
+      curve(-1, '#f87171', 'H\u207a');
+      x.fillStyle='#93c5fd'; x.font='bold 10px sans-serif'; x.textAlign='left';
+      x.fillText('H\u2082O \u21cc H\u207a\u208d\u2090\u2071\u2071\u208e + OH\u207b\u208d\u2090\u2071\u2071\u208e', g.padL+4, g.padT+12);
+    });
+    // 3. [H+]-[OH-] ters orantı (log ölçek, tek sıcaklık)
+    maarifChart('abz-g3', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 44, 16, 14, 30, '[OH\u207b] (log \u00f6l\u00e7ek)', '[H\u207a] (log \u00f6l\u00e7ek)');
+      var pts = [];
+      for (var i = 0; i <= 500; i++) {
+        var logOH = -14 + (i/500)*13; // 10^-14 .. 10^-1
+        var logH = -14 - logOH; // logH+logOH = -14
+        var xx = g.padL + ((logOH+14)/14)*g.plotW;
+        var yy = g.padT + g.plotH - ((logH+14)/14)*g.plotH;
+        if (yy >= g.padT && yy <= g.padT+g.plotH) pts.push([xx,yy]);
+      }
+      x.strokeStyle = '#34d399'; x.lineWidth = 2.5; x.beginPath();
+      pts.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
+      var nx = g.padL+(7/14)*g.plotW, ny = g.padT+g.plotH-(7/14)*g.plotH;
+      x.fillStyle='#34d399'; x.beginPath(); x.arc(nx,ny,4,0,6.283); x.fill();
+      x.font='10px sans-serif'; x.textAlign='left'; x.fillStyle='#34d399'; x.fillText('N\u00f6tr', nx+8, ny-6);
+      x.fillStyle='#f87171'; x.textAlign='right'; x.fillText('Asitlik artar \u2192', g.padL+g.plotW-2, ny+16);
+      x.fillStyle='#60a5fa'; x.textAlign='left'; x.fillText('\u2190 Bazlar artar', g.padL+2, ny-16);
+    });
+    // 4. pH — pOH doğrusal ilişki
+    maarifChart('abz-g4', function(x, W, H2){
       var g = mcAxes(x, W, H2, 40, 14, 14, 30, 'pOH', 'pH');
       var pts = [];
       for (var i = 0; i <= 100; i++) {
-        var pOH = (i/100)*14;
-        var pH = 14 - pOH;
+        var pOH = (i/100)*14, pH = 14-pOH;
         pts.push([g.padL+(pOH/14)*g.plotW, g.padT+g.plotH-(pH/14)*g.plotH]);
       }
-      x.strokeStyle = '#34d399'; x.lineWidth = 2.2; x.beginPath();
-      pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
+      x.strokeStyle = '#a78bfa'; x.lineWidth = 2.5; x.beginPath();
+      pts.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
       var nx = g.padL+(7/14)*g.plotW, ny = g.padT+g.plotH-(7/14)*g.plotH;
-      x.fillStyle='#f59e0b'; x.beginPath(); x.arc(nx,ny,3.5,0,6.283); x.fill();
-      x.font='10px sans-serif'; x.textAlign='center'; x.fillStyle='#f59e0b'; x.fillText('N\u00f6tr (7,7)', nx, ny-10);
-      x.font='10px sans-serif'; x.textAlign='left'; x.fillStyle='#86efac';
-      x.fillText('\u2190 Bazlık artar', g.padL+4, g.padT+16);
-      x.textAlign='right'; x.fillStyle='#fca5a5';
-      x.fillText('Asitlik artar \u2192', g.padL+g.plotW-4, g.padT+g.plotH-10);
+      x.fillStyle='#a78bfa'; x.beginPath(); x.arc(nx,ny,4,0,6.283); x.fill();
+      x.font='10px sans-serif'; x.textAlign='center'; x.fillStyle='#a78bfa'; x.fillText('N\u00f6tr (7,7)', nx, ny-10);
+      x.fillStyle='#60a5fa'; x.textAlign='left'; x.fillText('\u2190 Bazlar artar', g.padL+4, g.padT+14);
+      x.fillStyle='#f87171'; x.textAlign='right'; x.fillText('Asitlik artar \u2192', g.padL+g.plotW-2, g.padT+g.plotH-8);
     });
-    // [H+] vs [OH-] hiperbolik eğri (Asitlik artar / Nötr / Bazlar artar)
-    maarifChart('abz-hcurve', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 14, 14, 30, '[OH\u207b] (log \u00f6l\u00e7ek, sağa doğru artar)', '[H\u207a] (log \u00f6l\u00e7ek)');
-      // pOH 0(sol,çok asidik OH- azken H+ çok)..14(sağ) eksenine karşılık pH=14-pOH çiziliyor (ters orantı hiperbolü, log-log doğrusal görünür)
-      var pts = [];
-      for (var i = 1; i <= 99; i++) {
-        var pOH = (i/100)*14; // x ekseni: pOH 0->14 (yani [OH-] artıyor sağa doğru)
-        var pH = 14 - pOH;    // ters orantı: pH+pOH=14
-        var xx = g.padL + (pOH/14)*g.plotW;
-        var yy = g.padT + g.plotH - (pH/14)*g.plotH;
-        pts.push([xx,yy]);
-      }
-      x.strokeStyle = '#34d399'; x.lineWidth = 2.2; x.beginPath();
-      pts.forEach(function(p,i2){ i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]); }); x.stroke();
-      // Nötr nokta (pOH=7,pH=7)
-      var nx = g.padL+(7/14)*g.plotW, ny = g.padT+g.plotH-(7/14)*g.plotH;
-      x.fillStyle='#f59e0b'; x.beginPath(); x.arc(nx,ny,3.5,0,6.283); x.fill();
-      x.font='10px sans-serif'; x.textAlign='center'; x.fillStyle='#f59e0b'; x.fillText('N\u00f6tr (10\u207b\u2077,10\u207b\u2077)', nx, ny-10);
-      x.font='10px sans-serif'; x.textAlign='left'; x.fillStyle='#fca5a5';
-      x.fillText('\u2190 Asitlik artar', g.padL+4, g.padT+16);
-      x.textAlign='right'; x.fillStyle='#86efac';
-      x.fillText('Bazlık artar \u2192', g.padL+g.plotW-4, g.padT+g.plotH-10);
-    });
-    maarifChart('abz-ksugraph', function(x, W, H2){
-      var g = mcAxes(x, W, H2, 40, 12, 14, 26, 'pOH', 'pH');
-      var lines = [
-        { sum: 12, color: '#f59e0b', label: 'T\u2081>25°C' },
-        { sum: 14, color: '#34d399', label: 'T\u2082=25°C' },
-        { sum: 16, color: '#60a5fa', label: 'T\u2083<25°C' }
-      ];
-      lines.forEach(function(ln){
-        x.strokeStyle = ln.color; x.lineWidth = 2; x.beginPath();
-        var x0 = g.padL, y0 = g.padT + g.plotH - (ln.sum > 16 ? g.plotH : (ln.sum/16)*g.plotH);
-        var x1 = g.padL + g.plotW, y1 = g.padT + g.plotH;
-        x.moveTo(g.padL, Math.max(g.padT, g.padT + g.plotH - (ln.sum/16)*g.plotH));
-        x.lineTo(g.padL + Math.min(g.plotW, (ln.sum/16)*g.plotW), g.padT + g.plotH);
-        x.stroke();
+    // 5. Sıcaklık etkisi: pH-pOH (T1<T2<T3, pKsu azalır)
+    maarifChart('abz-g5', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 40, 14, 14, 30, 'pOH', 'pH');
+      var temps = [ {pK:14.0,c:'#f87171',l:'T\u2081'}, {pK:13.5,c:'#fb923c',l:'T\u2082'}, {pK:13.0,c:'#4ade80',l:'T\u2083'} ];
+      temps.forEach(function(t){
+        var x0=g.padL, y0=g.padT+g.plotH-(t.pK/14)*g.plotH, x1=g.padL+(t.pK/14)*g.plotW, y1=g.padT+g.plotH;
+        x.strokeStyle=t.c; x.lineWidth=2.2; x.beginPath(); x.moveTo(x0,y0); x.lineTo(x1,y1); x.stroke();
+        x.fillStyle=t.c; x.font='bold 10px sans-serif'; x.textAlign='center'; x.fillText(t.l, (x0+x1)/2, (y0+y1)/2-8);
       });
-      x.font = '10px sans-serif'; x.textAlign = 'left';
-      x.fillStyle = '#f59e0b'; x.fillText('T\u2081>25°C (toplam<14)', g.padL+6, g.padT+14);
-      x.fillStyle = '#34d399'; x.fillText('T\u2082=25°C (toplam=14)', g.padL+6, g.padT+28);
-      x.fillStyle = '#60a5fa'; x.fillText('T\u2083<25°C (toplam>14)', g.padL+6, g.padT+42);
+      x.fillStyle='rgba(255,255,255,.5)'; x.font='9px sans-serif'; x.textAlign='left';
+      x.fillText('T\u2081<T\u2082<T\u2083 \u2014 sıcaklık arttık\u00e7a pK_su azalır', g.padL+4, g.padT+14);
+    });
+    // 6. Sıcaklık etkisi: [H+]-[OH-] (T1<T2<T3, Ksu artar)
+    maarifChart('abz-g6', function(x, W, H2){
+      var g = mcAxes(x, W, H2, 44, 16, 14, 30, '[OH\u207b] (log \u00f6l\u00e7ek)', '[H\u207a] (log \u00f6l\u00e7ek)');
+      var temps = [ {pK:14.0,c:'#f87171',l:'T\u2081'}, {pK:13.5,c:'#fb923c',l:'T\u2082'}, {pK:13.0,c:'#4ade80',l:'T\u2083'} ];
+      temps.forEach(function(t){
+        var pts = [];
+        for (var i = 0; i <= 500; i++) {
+          var logOH = -14 + (i/500)*13;
+          var logH = -t.pK - logOH;
+          var xx = g.padL + ((logOH+14)/14)*g.plotW;
+          var yy = g.padT + g.plotH - ((logH+14)/14)*g.plotH;
+          if (yy >= g.padT && yy <= g.padT+g.plotH) pts.push([xx,yy]);
+        }
+        x.strokeStyle=t.c; x.lineWidth=2.2; x.beginPath();
+        pts.forEach(function(p,i2){i2===0?x.moveTo(p[0],p[1]):x.lineTo(p[0],p[1]);}); x.stroke();
+        if (pts.length) { var last=pts[pts.length-1]; x.fillStyle=t.c; x.font='bold 10px sans-serif'; x.textAlign='left'; x.fillText(t.l, last[0]-20, last[1]-6); }
+      });
+      x.fillStyle='rgba(255,255,255,.5)'; x.font='9px sans-serif'; x.textAlign='left';
+      x.fillText('T\u2081<T\u2082<T\u2083 \u2014 sıcaklık arttık\u00e7a K_su artar', g.padL+4, g.padT+14);
     });
   }
 
