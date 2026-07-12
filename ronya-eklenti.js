@@ -136,6 +136,14 @@
    6) Sicaklik etkisi [H+]-[OH-] (T1<T2<T3, log olcek hiperboller).
    Hepsi maarifChart/mcAxes altyapisina uyarlanarak node.js ile
    hatasiz calistigi dogrulandi.
+   2.2.4 EKLENDI (Kuvvetli/Zayif Asit-Baz pH Hesaplamalari): Kuvvetli
+   asit/baz icin [H+]=Ca / [OH-]=Cb kurali, zayif asit/baz icin
+   x=RareKarekok(C*K) formulu. MEB'in 2.17-2.18 Etkinliginden GERCEK
+   8 satirlik veri tablosu (HCl/HNO3/NaOH/KOH kuvvetli + CH3COOH/HCN/
+   NH3/C6H5NH2 zayif, hepsi node.js dogrulamali pH degerleriyle: 2,3,
+   4,6,12,11,10,8) + 2 Calisma Yapragi ornegi (HI vs HF, KOH vs NH3
+   karsilastirmasi). Siradaki: 2.2.5-2.2.7 (Notralesme, Titrasyon,
+   Asidik/Bazik urunler).
    YENİ: Kimyasal Denge MEB Konu Anlatımına 2.1.5 (Le Chatelier
    İlkesi) eklendi — Derişim/Hacim/Basınç/Sıcaklık/Katalizör kuralları
    + MEB kitabının 2.5. Kontrol Noktası'ndaki 2H2S+CH4<=>CS2(s)+4H2+isi
@@ -9590,21 +9598,51 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       c:'I \u2014 a eklenince b\u2019nin iletkenliği ARTMIŞ \u2192 a, b\u2019den DAHA \u00c7OK iyon taşıyor \u2192 <b>a&gt;b</b> (kuvveẗe).<br>II \u2014 c eklenince a\u2019nın iletkenliği AZALMIŞ (seyrelme etkisi baskın) \u2192 c, a\u2019dan DAHA AZ iyon taşıyor \u2192 <b>a&gt;c</b>.<br>III \u2014 b eklenince c\u2019nin iletkenliği ARTMIŞ \u2192 b, c\u2019den DAHA \u00c7OK iyon taşıyor \u2192 <b>b&gt;c</b>.<br>\u2192 İyonlaşma y\u00fczdesi VE asitlik kuvveti sıralaması: <b>Kloroasetik &gt; Asetik &gt; İzob\u00fctirik</b>.<br>pH sıralaması (asitlik kuvvetiyle TERS orantılı): <b>İzob\u00fctirik &gt; Asetik &gt; Kloroasetik</b>.' }
   ];
 
+  MAARIF_ASITBAZ_THEORY.t4 = '<h3 style="color:#93c5fd;margin-bottom:10px">2.2.4 Kuvvetli/Zayıf Asit-Baz Sulu \u00e7\u00f6zeltilerinde pH Hesaplamaları</h3>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">Kuvvetli Asit/Baz (%100 iyonlaşır, TEK Y\u00d6NL\u00dc, denge bağıntısı YAZILMAZ)</div>' +
+    '<p style="font-size:13px">Monofonksiyonel kuvvetli asitte: <b>[H\u2083O\u207a]=C<sub>a</sub></b> (asidin derişimi). Monofonksiyonel kuvvetli bazda: <b>[OH\u207b]=C<sub>b</sub></b>.<br>\u00d6rn: 0,1M HCl \u2192 [H\u2083O\u207a]=0,1M \u2192 pH=1. \u00d6rn: 0,1M NaOH \u2192 [OH\u207b]=0,1M \u2192 pOH=1 \u2192 pH=13 (25°C\u2019de).</p></div>' +
+    '<div class="card" style="margin-bottom:10px"><div style="font-weight:700;color:#f59e0b;margin-bottom:6px">Zayıf Asit/Baz (KISMEN iyonlaşır, denge kurulur, Ka/Kb kullanılır)</div>' +
+    '<p style="font-size:13px">HA(suda)+H\u2082O(s)\u21ccH\u2083O\u207a(suda)+A\u207b(suda) i\u00e7in <b>Ka=[H\u2083O\u207a][A\u207b]/[HA]</b>. x, C<sub>a</sub>\u2019nın yanında ihmal edilebilecek kadar k\u00fc\u00e7\u00fckse:<br><b>x=[H\u2083O\u207a]=\u221a(C<sub>a</sub>\u00b7K<sub>a</sub>)</b> (asit i\u00e7in) \u00b7 <b>x=[OH\u207b]=\u221a(C<sub>b</sub>\u00b7K<sub>b</sub>)</b> (baz i\u00e7in).</p></div>' +
+    '<div class="card" style="margin-bottom:14px"><div style="font-weight:700;color:#93c5fd;margin-bottom:10px">\u2713 MEB Kitabı Doğrulanmış \u00d6rnekler (2.17-2.18. Etkinlik)</div>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px"><tr style="background:rgba(255,255,255,.05)"><th style="padding:5px;text-align:left">Madde</th><th style="padding:5px">Derişim</th><th style="padding:5px">Ka/Kb</th><th style="padding:5px">pH</th></tr>' +
+    '<tr><td style="padding:5px">HCl (kuvvetli asit)</td><td style="padding:5px;text-align:center">0,01M</td><td style="padding:5px;text-align:center">\u2014</td><td style="padding:5px;text-align:center"><b>2</b></td></tr>' +
+    '<tr><td style="padding:5px">HNO\u2083 (kuvvetli asit)</td><td style="padding:5px;text-align:center">0,001M</td><td style="padding:5px;text-align:center">\u2014</td><td style="padding:5px;text-align:center"><b>3</b></td></tr>' +
+    '<tr><td style="padding:5px">CH\u2083COOH (zayıf asit)</td><td style="padding:5px;text-align:center">0,001M</td><td style="padding:5px;text-align:center">10\u207b\u2075</td><td style="padding:5px;text-align:center"><b>4</b></td></tr>' +
+    '<tr><td style="padding:5px">HCN (zayıf asit)</td><td style="padding:5px;text-align:center">0,01M</td><td style="padding:5px;text-align:center">10\u207b\u00b9\u2070</td><td style="padding:5px;text-align:center"><b>6</b></td></tr>' +
+    '<tr><td style="padding:5px">NaOH (kuvvetli baz)</td><td style="padding:5px;text-align:center">0,01M</td><td style="padding:5px;text-align:center">\u2014</td><td style="padding:5px;text-align:center"><b>12</b></td></tr>' +
+    '<tr><td style="padding:5px">KOH (kuvvetli baz)</td><td style="padding:5px;text-align:center">0,001M</td><td style="padding:5px;text-align:center">\u2014</td><td style="padding:5px;text-align:center"><b>11</b></td></tr>' +
+    '<tr><td style="padding:5px">NH\u2083 (zayıf baz)</td><td style="padding:5px;text-align:center">0,001M</td><td style="padding:5px;text-align:center">10\u207b\u2075</td><td style="padding:5px;text-align:center"><b>10</b></td></tr>' +
+    '<tr><td style="padding:5px">C\u2086H\u2085NH\u2082 (zayıf baz)</td><td style="padding:5px;text-align:center">0,01M</td><td style="padding:5px;text-align:center">10\u207b\u00b9\u2070</td><td style="padding:5px;text-align:center"><b>8</b></td></tr></table>' +
+    '<p style="font-size:12px;color:var(--tx3)">T\u00fcm değerler x=\u221a(C\u00b7K) form\u00fcl\u00fcyle node.js\u2019te doğrulandı. \u00d6nemli fark: kuvvetli asit/bazda SADECE derişim yeterliyken, zayıf asit/bazda MUTLAKA Ka/Kb değeri gerekir.</p></div>';
+
+  var MAB_UYG2 = [
+    { s:'0,01M HI \u00e7\u00f6zeltisi ile 0,01M HF \u00e7\u00f6zeltisinin (Ka\u22481\u00d710\u207b\u2074) pH değerlerini hesaplayıp asitlik kuvvetlerini karşılaştırınız.',
+      c:'HI (KUVVETLİ asit): [H\u2083O\u207a]=0,01M \u2192 <b>pH=2</b>.<br>HF (ZAYIF asit): x=\u221a(0,01\u00d710\u207b\u2074)=\u221a(10\u207b\u2076)=0,001M \u2192 <b>pH=3</b>.<br>\u2192 pH DAHA D\u00dcŞ\u00dcK olan HI, DAHA KUVVETLİDİR: <b>HI &gt; HF</b>.' },
+    { s:'0,1M KOH \u00e7\u00f6zeltisi ile 0,1M NH\u2083 \u00e7\u00f6zeltisinin (Kb\u22481\u00d710\u207b\u2075) pH değerlerini hesaplayıp bazlık kuvvetlerini karşılaştırınız.',
+      c:'KOH (KUVVETLİ baz): [OH\u207b]=0,1M \u2192 pOH=1 \u2192 <b>pH=13</b>.<br>NH\u2083 (ZAYIF baz): x=\u221a(0,1\u00d710\u207b\u2075)=\u221a(10\u207b\u2076)=0,001M \u2192 pOH=3 \u2192 <b>pH=11</b>.<br>\u2192 pH DAHA Y\u00dcKSEK olan KOH, DAHA KUVVETLİ BAZDIR: <b>KOH &gt; NH\u2083</b>.' }
+  ];
+
   function setupMaarifAsitBaz(){
     if (document.getElementById('mab-wrap')) return;
     var host = document.getElementById('asitbaz2-group-0');
     if (!host) return;
     host.insertAdjacentHTML('beforeend', '<div id="mab-wrap"></div>');
     var wrap = document.getElementById('mab-wrap');
-    var html = '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cAsit-Baz Dengesi\u201d \u00fcnitesinin konu anlatımı \u2014 1. parça (2.2.1-2.2.3).</p>' +
-      MAARIF_ASITBAZ_THEORY.t1 + MAARIF_ASITBAZ_THEORY.t2 + MAARIF_ASITBAZ_THEORY.t3 +
-      '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd Uygulama Noktası \u00d6rnekleri</h4>';
+    var html = '<p class="psub" style="margin-bottom:10px">MEB Maarif Modeli 11. Sınıf Kimya 2 ders kitabı, \u201cAsit-Baz Dengesi\u201d \u00fcnitesinin konu anlatımı \u2014 2. parça (2.2.1-2.2.4).</p>' +
+      MAARIF_ASITBAZ_THEORY.t1 + MAARIF_ASITBAZ_THEORY.t2 + MAARIF_ASITBAZ_THEORY.t3 + MAARIF_ASITBAZ_THEORY.t4 +
+      '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd Uygulama Noktası \u00d6rnekleri (2.2.1-2.2.3)</h4>';
     MAB_UYG.forEach(function(u, i){
       html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg-' + i + '\')">' +
         '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
         '<div id="mabuyg-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
     });
-    html += '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 2.2.4-2.2.7 (Kuvvetli/Zayıf karşılaştırma, N\u00f6tralleşme, Titrasyon, Asidik/Bazik \u00fcr\u00fcnler) sıradaki g\u00fcncellemede eklenecek.</p>';
+    html += '<h4 style="color:#f59e0b;margin:14px 0 8px">\ud83d\udcdd \u00c7alışma Yaprağı \u00d6rnekleri (2.2.4)</h4>';
+    MAB_UYG2.forEach(function(u, i){
+      html += '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer" onclick="molToggle(\'mabuyg2-' + i + '\')">' +
+        '<div style="font-size:13px;color:#fff;font-weight:600;line-height:1.6">' + (i+1) + '. ' + formatOncul(u.s) + '</div>' +
+        '<div id="mabuyg2-' + i + '" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--tx2);line-height:1.8">' + u.c + '</div></div>';
+    });
+    html += '<p style="font-size:12px;color:var(--tx3);margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px">\ud83d\udd39 2.2.5-2.2.7 (N\u00f6tralleşme, Titrasyon, Asidik/Bazik \u00fcr\u00fcnler) sıradaki g\u00fcncellemede eklenecek.</p>';
     wrap.innerHTML = html;
   }
 
