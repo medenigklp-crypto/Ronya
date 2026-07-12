@@ -5751,7 +5751,8 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       st.textContent =
         '.app.ronya-light{filter:invert(1) hue-rotate(180deg);}' +
         '.app.ronya-light img,.app.ronya-light video,.app.ronya-light canvas{filter:invert(1) hue-rotate(180deg);}' +
-        '.app.ronya-light .logo,.app.ronya-light .logo-sub{filter:invert(1) hue-rotate(180deg);-webkit-text-fill-color:transparent!important;background-clip:text!important;-webkit-background-clip:text!important;}' +
+        '.app.ronya-light .logo{background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;-webkit-text-fill-color:#6366f1!important;color:#6366f1!important;}' +
+        '.app.ronya-light .logo-sub{-webkit-text-fill-color:#94a3b8!important;color:#94a3b8!important;}' +
         'body.ronya-light-body{background:#f1f5f9!important;}';
       document.head.appendChild(st);
     }
