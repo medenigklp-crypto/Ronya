@@ -5758,6 +5758,13 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
         'html.ronya-light-body{background:#f8fafc!important;}';
       document.head.appendChild(st);
     }
+    if (!document.getElementById('ronya-home-clean-style')) {
+      var st2 = document.createElement('style');
+      st2.id = 'ronya-home-clean-style';
+      // Ana sayfadaki kart ızgarasını (tgrid/tc) KALICI olarak gizle — ne zaman eklenirse eklensin (base script'in gecikmeli eklemeleri dahil)
+      st2.textContent = '#s-home .tgrid,#s-home .tc{display:none!important;}';
+      document.head.appendChild(st2);
+    }
   }
   function setEnter(){ setRenderList(); updateThemeButtons(); }
 
