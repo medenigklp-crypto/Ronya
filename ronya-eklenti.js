@@ -5752,7 +5752,8 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       var st = document.createElement('style');
       st.id = 'ronya-theme-style';
       st.textContent =
-        '.app.ronya-light > *:not(header){filter:invert(1) hue-rotate(180deg);}' +
+        '.app.ronya-light > *:not(header):not(#s-pt){filter:invert(1) hue-rotate(180deg);}' +
+        '.app.ronya-light #s-pt{background:#08090f;filter:none;}' +
         '.app.ronya-light header{background:#08090f;filter:none;}' +
         'body.ronya-light-body{background:#f8fafc!important;}' +
         'html.ronya-light-body{background:#f8fafc!important;}';
@@ -5764,7 +5765,12 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       // Ana sayfadaki kart ızgarasını (tgrid/tc) ve eski/karıştırıcı harici sayfa butonlarını (organik.html, orbital.html, denge.html) KALICI olarak gizle
       st2.textContent = '#s-home .tgrid,#s-home .tc,' +
         '#s-home [onclick*="organik.html"],#s-home [onclick*="orbital.html"],#s-home [onclick*="denge.html"]' +
-        '{display:none!important;}';
+        '{display:none!important;}' +
+        // Masaüstü (geniş ekran) için: soru kartları arasına daha çok boşluk + biraz daha geniş içerik sütunu
+        '@media (min-width:900px){' +
+          '.pw.narrow{max-width:760px!important;}' +
+          '.card{margin-bottom:22px!important;}' +
+        '}';
       document.head.appendChild(st2);
     }
   }
@@ -10438,17 +10444,35 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (tg) tg.style.display = 'none';
     var otherTiles = home.querySelectorAll ? home.querySelectorAll('.tc') : [];
     if (otherTiles && otherTiles.forEach) otherTiles.forEach(function(el){ if (!tg || !tg.contains(el)) el.style.display = 'none'; });
+    var rows = [
+      ['1\ufe0f\u20e3','Ders \u00e7alışıyorsan','\u2630 men\u00fcden <b>\u2696\ufe0f Denge \u00dcnitesi (Tema 2)</b> grubunu a\u00e7 \u2014 Tepkime Hızı, Enerji, Denge, Redoks, Asit-Baz, \u00c7\u00f6z\u00fcn\u00fcrl\u00fck. Her biri MEB konu anlatımı + \u00f6zel ders notu i\u00e7erir.'],
+      ['2\ufe0f\u20e3','Hızlı hesaplama lazımsa','<b>\ud83d\udcd6 Temel Ara\u00e7lar</b> grubuna bak (Mol, Denklem, pH hesaplayıcılar vb.).'],
+      ['3\ufe0f\u20e3','G\u00f6rsel/3D anlatım istiyorsan','<b>\ud83e\uddec 3D Sim\u00fclasyonlar</b> grubunu incele.'],
+      ['4\ufe0f\u20e3','Motivasyon/geri sayım','<b>\u23f1\ufe0f Sınav & Motivasyon</b> grubu.']
+    ];
+    var rowsHtml = rows.map(function(r){
+      return '<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid rgba(255,255,255,.06)">' +
+        '<span style="font-size:16px;flex-shrink:0">' + r[0] + '</span>' +
+        '<div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:2px">' + r[1] + '</div>' +
+        '<div style="font-size:12px;color:var(--tx2);line-height:1.6">' + r[2] + '</div></div>' +
+      '</div>';
+    }).join('');
     pw.insertAdjacentHTML('afterbegin',
-      '<div id="home-guide" class="card" style="margin-bottom:20px;padding:18px">' +
-        '<div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f59e0b">\ud83e\udded Nereden Başlamalı?</div>' +
-        '<div style="font-size:13px;line-height:1.9;color:var(--tx2)">' +
-          '<b style="color:#fff">1) Ders \u00e7alışıyorsan:</b> \u2630 men\u00fcden <b>\u201c\u2696\ufe0f Denge \u00dcnitesi (Tema 2)\u201d</b> grubunu a\u00e7 \u2014 Tepkime Hızı, Kimyasal Enerji, Kimyasal Denge, Redoks, Asit-Baz ve \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi burada. Her biri hem <i>MEB konu anlatımı</i> hem <i>\u00f6zel ders notu \u00e7\u00f6z\u00fcml\u00fc \u00f6rnekler</i> i\u00e7erir.<br><br>' +
-          '<b style="color:#fff">2) Hızlı hesaplama/pratik lazımsa:</b> <b>\u201c\ud83d\udcd6 Temel Ara\u00e7lar\u201d</b> grubuna bak (Mol Hesaplayıcı, Denklem Dengeleyici, pH Hesaplayıcı vb.).<br><br>' +
-          '<b style="color:#fff">3) G\u00f6rsel/3D anlatım istiyorsan:</b> <b>\u201c\ud83e\uddec 3D Sim\u00fclasyonlar\u201d</b> grubunu incele.<br><br>' +
-          '<b style="color:#fff">4) Motive olmak/sınava geri sayım:</b> <b>\u201c\u23f1\ufe0f Sınav & Motivasyon\u201d</b> grubu.<br><br>' +
-          '<span style="font-size:12px;color:var(--tx3)">\ud83d\udc46 T\u00fcm ekranlara sol \u00fcstteki \u2630 men\u00fcden ulaşabilirsin.</span>' +
-        '</div>' +
+      '<div id="home-guide" class="card" style="margin-bottom:20px;padding:16px 18px">' +
+        '<div style="font-weight:800;font-size:15px;margin-bottom:4px;color:#f59e0b">\ud83e\udded Nereden Başlamalı?</div>' +
+        rowsHtml +
+        '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);font-size:11px;color:var(--tx3);text-align:center">\ud83d\udc46 T\u00fcm ekranlara sol \u00fcstteki \u2630 men\u00fcden ulaşabilirsin</div>' +
       '</div>');
+    // G\u00fcn\u00fcn Elementi'ni hero'ya (Periyodik Tabloyu G\u00f6r butonunun hemen altına) taşı
+    try {
+      var dayEl = document.getElementById('day-el');
+      var hero = home.querySelector('.hero');
+      if (dayEl && hero) {
+        dayEl.style.marginTop = '14px';
+        dayEl.style.marginBottom = '0';
+        hero.appendChild(dayEl);
+      }
+    } catch (e) {}
   }
   function rebuildMenu(){
     var mn = document.getElementById('mn');
