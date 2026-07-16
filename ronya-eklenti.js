@@ -10423,6 +10423,11 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (!home || document.getElementById('home-guide')) return;
     var pw = home.querySelector('.pw');
     if (!pw) return;
+    // Kart ızgarasını (tgrid) gizle — menüdeki butonların büyük tekrarıydı, kullanıcı geri bildirimiyle kaldırıldı
+    var tg = home.querySelector('.tgrid');
+    if (tg) tg.style.display = 'none';
+    var otherTiles = home.querySelectorAll ? home.querySelectorAll('.tc') : [];
+    if (otherTiles && otherTiles.forEach) otherTiles.forEach(function(el){ if (!tg || !tg.contains(el)) el.style.display = 'none'; });
     pw.insertAdjacentHTML('afterbegin',
       '<div id="home-guide" class="card" style="margin-bottom:20px;padding:18px">' +
         '<div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f59e0b">\ud83e\udded Nereden Başlamalı?</div>' +
@@ -10430,7 +10435,8 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
           '<b style="color:#fff">1) Ders \u00e7alışıyorsan:</b> \u2630 men\u00fcden <b>\u201c\u2696\ufe0f Denge \u00dcnitesi (Tema 2)\u201d</b> grubunu a\u00e7 \u2014 Tepkime Hızı, Kimyasal Enerji, Kimyasal Denge, Redoks, Asit-Baz ve \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi burada. Her biri hem <i>MEB konu anlatımı</i> hem <i>\u00f6zel ders notu \u00e7\u00f6z\u00fcml\u00fc \u00f6rnekler</i> i\u00e7erir.<br><br>' +
           '<b style="color:#fff">2) Hızlı hesaplama/pratik lazımsa:</b> <b>\u201c\ud83d\udcd6 Temel Ara\u00e7lar\u201d</b> grubuna bak (Mol Hesaplayıcı, Denklem Dengeleyici, pH Hesaplayıcı vb.).<br><br>' +
           '<b style="color:#fff">3) G\u00f6rsel/3D anlatım istiyorsan:</b> <b>\u201c\ud83e\uddec 3D Sim\u00fclasyonlar\u201d</b> grubunu incele.<br><br>' +
-          '<b style="color:#fff">4) Motive olmak/sınava geri sayım:</b> <b>\u201c\u23f1\ufe0f Sınav & Motivasyon\u201d</b> grubu.' +
+          '<b style="color:#fff">4) Motive olmak/sınava geri sayım:</b> <b>\u201c\u23f1\ufe0f Sınav & Motivasyon\u201d</b> grubu.<br><br>' +
+          '<span style="font-size:12px;color:var(--tx3)">\ud83d\udc46 T\u00fcm ekranlara sol \u00fcstteki \u2630 men\u00fcden ulaşabilirsin.</span>' +
         '</div>' +
       '</div>');
   }
