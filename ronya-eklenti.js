@@ -9774,7 +9774,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     { s:'XOH, YOH, ZOH bazlarıyla hazırlanan 0,1 M \u00e7\u00f6zeltilerde [OH\u207b] sırasıyla 0,001M, 0,1M, 0,01M\u2019dir. Bazların kuvvetini karşılaştırınız.',
       c:'YOH: [OH\u207b]=0,1M=TAM derişim \u2192 %100 iyonlaşma \u2192 <b>KUVVETLİ BAZ</b>.<br>ZOH: [OH\u207b]=0,01M \u2192 %10 iyonlaşma \u2192 ORTA g\u00fc\u00e7te zayıf baz.<br>XOH: [OH\u207b]=0,001M \u2192 %1 iyonlaşma \u2192 EN ZAYIF baz.<br>\u2192 Kuvvet sıralaması: <b>YOH &gt; ZOH &gt; XOH</b>.' },
     { s:'Kloroasetik asit (a), asetik asit (b) ve izob\u00fctirik asit (c) 1M \u00e7\u00f6zeltileri hazırlanıyor. I. a\u2019dan b\u2019ye eklenince b\u2019nin iletkenliği ARTIYOR. II. c\u2019den a\u2019ya eklenince a\u2019nın iletkenliği AZALIYOR. III. b\u2019den c\u2019ye eklenince c\u2019nin iletkenliği ARTIYOR. Asitlerin kuvvet sıralamasını belirleyiniz.',
-      c:'I \u2014 a eklenince b\u2019nin iletkenliği ARTMIŞ \u2192 a, b\u2019den DAHA \u00c7OK iyon taşıyor \u2192 <b>a&gt;b</b> (kuvveẗe).<br>II \u2014 c eklenince a\u2019nın iletkenliği AZALMIŞ (seyrelme etkisi baskın) \u2192 c, a\u2019dan DAHA AZ iyon taşıyor \u2192 <b>a&gt;c</b>.<br>III \u2014 b eklenince c\u2019nin iletkenliği ARTMIŞ \u2192 b, c\u2019den DAHA \u00c7OK iyon taşıyor \u2192 <b>b&gt;c</b>.<br>\u2192 İyonlaşma y\u00fczdesi VE asitlik kuvveti sıralaması: <b>Kloroasetik &gt; Asetik &gt; İzob\u00fctirik</b>.<br>pH sıralaması (asitlik kuvvetiyle TERS orantılı): <b>İzob\u00fctirik &gt; Asetik &gt; Kloroasetik</b>.' }
+      c:'I \u2014 a eklenince b\u2019nin iletkenliği ARTMIŞ \u2192 a, b\u2019den DAHA \u00c7OK iyon taşıyor \u2192 <b>a&gt;b</b> (kuvveẗe).<br>II \u2014 c eklenince a\u2019nın iletkenliği AZALMIŞ (seyrelme etkisi baskın) \u2192 c, a\u2019dan DAHA AZ iyon taşıyor \u2192 <b>a&gt;c</b>.<br>III \u2014 b eklenince c\u2019nin iletkenliği ARTMIŞ \u2192 b, c\u2019den DAHA \u00c7OK iyon taşıyor \u2192 <b>b&gt;c</b>.<br>\u2192 İyonlaşma y\u00fczdesi VE asitlik kuvveti sıralaması: <b>Kloroasetik &gt; Asetik &gt; İzob\u00fctirik</b>.<br>pH sıralaması (asitlik kuvvetiyle TERS orantılı): <b>İzob\u00fctirik &gt; Asetik &gt; Kloroasetik</b>.' }
   ];
 
   MAARIF_ASITBAZ_THEORY.t4 = '<h3 style="color:#93c5fd;margin-bottom:10px">2.2.4 Kuvvetli/Zayıf Asit-Baz Sulu \u00e7\u00f6zeltilerinde pH Hesaplamaları</h3>' +
@@ -10452,7 +10452,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
   }
   function rebuildMenu(){
     var mn = document.getElementById('mn');
-    if (!mn || mn.getAttribute('data-reorganized') === '1') return;
+    if (!mn) return;
     var html = '<button onclick="nav(\'home\')">\ud83c\udfe0 Ana Sayfa</button>';
     MENU_GROUPS.forEach(function(grp){
       html += '<button class="mn-grp-hdr" onclick="mnToggleGroup(\'' + grp.key + '\',this)" style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);font-weight:700">' +
@@ -10551,7 +10551,11 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try {
       if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
     } catch (e) { /* sessiz */ }
-    try { setTimeout(rebuildMenu, 250); } catch (e) { /* sessiz */ }
+    try {
+      setTimeout(rebuildMenu, 250);
+      setTimeout(rebuildMenu, 800);
+      setTimeout(rebuildMenu, 1800);
+    } catch (e) { /* sessiz */ }
     try { addHomeGuide(); } catch (e) { /* sessiz */ }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
