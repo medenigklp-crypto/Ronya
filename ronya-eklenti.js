@@ -5706,6 +5706,11 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
             '<button type="button" id="theme-btn-light" class="ob" onclick="setTheme(\'light\',this)" style="flex:1">\u2600\ufe0f Ayd\u0131nl\u0131k</button>' +
           '</div>' +
         '</div>' +
+        '<div class="card" style="margin-bottom:14px">' +
+          '<div class="slbl">\ud83d\udda5\ufe0f Sunum Modu</div>' +
+          '<p style="font-size:12px;color:var(--tx3);margin-bottom:10px">Akıllı tahtada/projeksiyonda kullan\u0131rken t\u00fcm i\u00e7eriği b\u00fcy\u00fct\u00fcr, sınıftan uzaktan okunabilir hale getirir.</p>' +
+          '<button type="button" id="sunum-btn" class="ob" onclick="toggleSunumModu(this)" style="width:100%">\ud83d\udda5\ufe0f Sunum Modunu A\u00e7</button>' +
+        '</div>' +
         '<div id="set-list" style="margin-bottom:14px"></div>' +
         '<button type="button" onclick="setResetAll()" style="width:100%;padding:14px;background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:var(--rlg);color:#fca5a5;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px">\ud83d\uddd1\ufe0f T\u00fcm \u0130lerlemeyi S\u0131f\u0131rla</button>' +
         '<p style="font-size:11px;color:var(--tx3);text-align:center;line-height:1.6">Bu ekran yaln\u0131zca bu cihazda saklanan yerel ilerleme verilerini y\u00f6netir. Hi\u00e7bir veri sunucuya g\u00f6nderilmez.</p>' +
@@ -5730,6 +5735,72 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try { localStorage.setItem('ronya_theme', mode); } catch (e) {}
     updateThemeButtons();
   };
+  window.toggleSunumModu = function(btn){
+    var appEl = document.querySelector('.app');
+    if (!appEl) return;
+    var on = appEl.classList.contains('sunum-modu');
+    if (on) {
+      appEl.classList.remove('sunum-modu');
+      try { localStorage.setItem('ronya_sunum', '0'); } catch (e) {}
+    } else {
+      appEl.classList.add('sunum-modu');
+      try { localStorage.setItem('ronya_sunum', '1'); } catch (e) {}
+    }
+    updateSunumButton();
+    if (!document.getElementById('ronya-sunum-style')) {
+      var st3 = document.createElement('style');
+      st3.id = 'ronya-sunum-style';
+      st3.textContent =
+        '.app.sunum-modu .pw{max-width:98vw!important;padding:24px 32px!important;}' +
+        '.app.sunum-modu .pw.narrow{max-width:1100px!important;margin:0 auto!important;}' +
+        '.app.sunum-modu{font-size:19px!important;}' +
+        '.app.sunum-modu .ptitle{font-size:34px!important;}' +
+        '.app.sunum-modu .psub{font-size:18px!important;}' +
+        '.app.sunum-modu .card{padding:28px 26px!important;margin-bottom:32px!important;border-radius:20px!important;}' +
+        '.app.sunum-modu .card div[style*="font-size:13px"]{font-size:20px!important;line-height:1.8!important;}' +
+        '.app.sunum-modu .card div[style*="font-size:12px"]{font-size:17px!important;line-height:1.8!important;}' +
+        '.app.sunum-modu .card div[style*="font-size:14px"]{font-size:22px!important;line-height:1.8!important;}' +
+        '.app.sunum-modu button{font-size:18px!important;padding:16px!important;}' +
+        '.app.sunum-modu header{display:none!important;}' +
+        '.app.sunum-modu canvas{min-height:280px!important;}';
+      document.head.appendChild(st3);
+    }
+  };
+  function updateSunumButton(){
+    var appEl = document.querySelector('.app');
+    var btn = document.getElementById('sunum-btn');
+    if (!btn || !appEl) return;
+    var on = appEl.classList.contains('sunum-modu');
+    btn.textContent = on ? '\ud83d\udda5\ufe0f Sunum Modunu Kapat' : '\ud83d\udda5\ufe0f Sunum Modunu A\u00e7';
+    if (on) { btn.classList.add('sel2'); } else { btn.classList.remove('sel2'); }
+  }
+  function applyStoredSunum(){
+    var on = '0';
+    try { on = localStorage.getItem('ronya_sunum') || '0'; } catch (e) {}
+    if (on === '1') {
+      var appEl = document.querySelector('.app');
+      if (appEl) appEl.classList.add('sunum-modu');
+      window.toggleSunumModu = window.toggleSunumModu; // no-op, stil zaten aşağıda enjekte edilecek
+      if (!document.getElementById('ronya-sunum-style')) {
+        var st3 = document.createElement('style');
+        st3.id = 'ronya-sunum-style';
+        st3.textContent =
+          '.app.sunum-modu .pw{max-width:98vw!important;padding:24px 32px!important;}' +
+          '.app.sunum-modu .pw.narrow{max-width:1100px!important;margin:0 auto!important;}' +
+          '.app.sunum-modu{font-size:19px!important;}' +
+          '.app.sunum-modu .ptitle{font-size:34px!important;}' +
+          '.app.sunum-modu .psub{font-size:18px!important;}' +
+          '.app.sunum-modu .card{padding:28px 26px!important;margin-bottom:32px!important;border-radius:20px!important;}' +
+          '.app.sunum-modu .card div[style*="font-size:13px"]{font-size:20px!important;line-height:1.8!important;}' +
+          '.app.sunum-modu .card div[style*="font-size:12px"]{font-size:17px!important;line-height:1.8!important;}' +
+          '.app.sunum-modu .card div[style*="font-size:14px"]{font-size:22px!important;line-height:1.8!important;}' +
+          '.app.sunum-modu button{font-size:18px!important;padding:16px!important;}' +
+          '.app.sunum-modu header{display:none!important;}' +
+          '.app.sunum-modu canvas{min-height:280px!important;}';
+        document.head.appendChild(st3);
+      }
+    }
+  }
   function updateThemeButtons(){
     var mode = 'dark';
     try { mode = localStorage.getItem('ronya_theme') || 'dark'; } catch (e) {}
@@ -5774,7 +5845,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       document.head.appendChild(st2);
     }
   }
-  function setEnter(){ setRenderList(); updateThemeButtons(); }
+  function setEnter(){ setRenderList(); updateThemeButtons(); updateSunumButton(); }
 
   // ---------- 15. GALVANİK (VOLTAİK) HÜCRE 3D ----------
   var GV_METALS = {
@@ -10506,6 +10577,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
 
   function init(){
     try { applyStoredTheme(); } catch (e) { /* sessiz */ }
+    try { applyStoredSunum(); } catch (e) { /* sessiz */ }
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
     try { setupMolFormula(); } catch (e) { /* sessiz */ }
