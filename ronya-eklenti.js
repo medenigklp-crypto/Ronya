@@ -5761,8 +5761,10 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     if (!document.getElementById('ronya-home-clean-style')) {
       var st2 = document.createElement('style');
       st2.id = 'ronya-home-clean-style';
-      // Ana sayfadaki kart ızgarasını (tgrid/tc) KALICI olarak gizle — ne zaman eklenirse eklensin (base script'in gecikmeli eklemeleri dahil)
-      st2.textContent = '#s-home .tgrid,#s-home .tc{display:none!important;}';
+      // Ana sayfadaki kart ızgarasını (tgrid/tc) ve eski/karıştırıcı harici sayfa butonlarını (organik.html, orbital.html, denge.html) KALICI olarak gizle
+      st2.textContent = '#s-home .tgrid,#s-home .tc,' +
+        '#s-home [onclick*="organik.html"],#s-home [onclick*="orbital.html"],#s-home [onclick*="denge.html"]' +
+        '{display:none!important;}';
       document.head.appendChild(st2);
     }
   }
