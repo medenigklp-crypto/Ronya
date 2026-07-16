@@ -5706,16 +5706,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
             '<button type="button" id="theme-btn-light" class="ob" onclick="setTheme(\'light\',this)" style="flex:1">\u2600\ufe0f Ayd\u0131nl\u0131k</button>' +
           '</div>' +
         '</div>' +
-        '<div class="card" style="margin-bottom:14px">' +
-          '<div class="slbl">\ud83d\udd0d İ\u00e7erik Boyutu</div>' +
-          '<p style="font-size:12px;color:var(--tx3);margin-bottom:10px">B\u00fcy\u00fck ekranda (Mac, akıllı tahta, tablet) veya k\u00fc\u00e7\u00fck ekranda i\u00e7eriği istediğin boyuta ayarla.</p>' +
-          '<div style="display:flex;align-items:center;gap:10px">' +
-            '<button type="button" onclick="adjustZoom(-10)" style="width:52px;height:52px;font-size:22px;font-weight:800;border-radius:14px;border:1px solid var(--br);background:var(--sf2);color:var(--tx)">\u2212</button>' +
-            '<div style="flex:1;text-align:center"><div id="zoom-pct" style="font-size:20px;font-weight:800;color:#f59e0b">100%</div></div>' +
-            '<button type="button" onclick="adjustZoom(10)" style="width:52px;height:52px;font-size:22px;font-weight:800;border-radius:14px;border:1px solid var(--br);background:var(--sf2);color:var(--tx)">+</button>' +
-          '</div>' +
-          '<button type="button" onclick="adjustZoom(0,true)" style="width:100%;margin-top:10px;padding:10px;background:none;border:1px solid var(--br);border-radius:10px;color:var(--tx3);font-size:12px">\u21ba Sıfırla (100%)</button>' +
-        '</div>' +
+        '<p style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:14px">\ud83d\udd0d B\u00fcy\u00fctmek/k\u00fc\u00e7\u00fcltmek i\u00e7in: telefon/tablette iki parmakla tut, Mac\u2019te \u2318 + veya \u2318 \u2212 tuşlarını kullan (tarayıcının kendi yakınlaştırması).</p>' +
         '<div id="set-list" style="margin-bottom:14px"></div>' +
         '<button type="button" onclick="setResetAll()" style="width:100%;padding:14px;background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:var(--rlg);color:#fca5a5;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px">\ud83d\uddd1\ufe0f T\u00fcm \u0130lerlemeyi S\u0131f\u0131rla</button>' +
         '<p style="font-size:11px;color:var(--tx3);text-align:center;line-height:1.6">Bu ekran yaln\u0131zca bu cihazda saklanan yerel ilerleme verilerini y\u00f6netir. Hi\u00e7bir veri sunucuya g\u00f6nderilmez.</p>' +
@@ -5740,30 +5731,6 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try { localStorage.setItem('ronya_theme', mode); } catch (e) {}
     updateThemeButtons();
   };
-  window.adjustZoom = function(delta, reset){
-    var cur = 100;
-    try { cur = parseInt(localStorage.getItem('ronya_zoom') || '100', 10); } catch (e) {}
-    var next = reset ? 100 : Math.max(70, Math.min(250, cur + delta));
-    var appEl = document.querySelector('.app');
-    if (appEl) appEl.style.zoom = (next / 100);
-    try { localStorage.setItem('ronya_zoom', String(next)); } catch (e) {}
-    var lbl = document.getElementById('zoom-pct');
-    if (lbl) lbl.textContent = next + '%';
-  };
-  function applyStoredZoom(){
-    var z = 100;
-    try { z = parseInt(localStorage.getItem('ronya_zoom') || '100', 10); } catch (e) {}
-    if (z !== 100) {
-      var appEl = document.querySelector('.app');
-      if (appEl) appEl.style.zoom = (z / 100);
-    }
-  }
-  function updateZoomLabel(){
-    var z = 100;
-    try { z = parseInt(localStorage.getItem('ronya_zoom') || '100', 10); } catch (e) {}
-    var lbl = document.getElementById('zoom-pct');
-    if (lbl) lbl.textContent = z + '%';
-  }
   function updateThemeButtons(){
     var mode = 'dark';
     try { mode = localStorage.getItem('ronya_theme') || 'dark'; } catch (e) {}
@@ -5808,7 +5775,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       document.head.appendChild(st2);
     }
   }
-  function setEnter(){ setRenderList(); updateThemeButtons(); updateZoomLabel(); }
+  function setEnter(){ setRenderList(); updateThemeButtons(); }
 
   // ---------- 15. GALVANİK (VOLTAİK) HÜCRE 3D ----------
   var GV_METALS = {
@@ -10540,7 +10507,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
 
   function init(){
     try { applyStoredTheme(); } catch (e) { /* sessiz */ }
-    try { applyStoredZoom(); } catch (e) { /* sessiz */ }
+    // (İçerik boyutu: tarayıcının doğal pinch/Cmd+ +/- yakınlaştırması kullanılıyor, özel zoom kodu kaldırıldı)
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
     try { setupMolFormula(); } catch (e) { /* sessiz */ }
