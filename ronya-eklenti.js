@@ -10395,6 +10395,71 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     body.innerHTML = html;
   }
 
+  // ---------- 36. MENÜ YENİDEN DÜZENLEME (kullanıcı geri bildirimi: "çok karışık") ----------
+  var MENU_GROUPS = [
+    { key:'temel', title:'\ud83d\udcd6 Temel Ara\u00e7lar', items:[
+      ['quiz','\u2697\ufe0f Element Testi'], ['pt','\ud83d\udd2c Periyodik Tablo'], ['mol','\u2696\ufe0f Mol Hesaplayıcı'],
+      ['eq','\u26a1 Denklem Dengeleyici'], ['ph','\ud83e\uddea pH Hesaplayıcı'], ['flashcard','\ud83d\udcdd Kimya Flashcard'],
+      ['gaz','\ud83d\udca8 Gaz Yasaları'], ['lab','\ud83e\uddea Lab Malzemeleri'], ['cozelti','\u2697\ufe0f \u00c7\u00f6zelti Sim\u00fclat\u00f6r\u00fc'],
+      ['izotop','\u269b\ufe0f İzotop/\u00c7ap Tanı Motoru'], ['cmp','\u2696\ufe0f Element Karşılaştır']
+    ]},
+    { key:'3d', title:'\ud83e\uddec 3D Sim\u00fclasyonlar', items:[
+      ['lab3d','\ud83d\udd2c 3D Lab'], ['elz','\ud83d\udd0b Elektroliz Laboratuvarı'], ['hc','\ud83e\uddec Hidrokarbonlar 3D'],
+      ['fg','\u2697\ufe0f Fonksiyonel Gruplar 3D'], ['wi','\ud83e\uddf2 Etkileşim \u00dcnitesi'], ['gv','\ud83d\udd0b Galvanik H\u00fccre 3D'],
+      ['rxntype','\ud83e\uddea Tepkime T\u00fcr\u00fc Sınıflandırıcı'], ['alev','\ud83d\udd25 Alev Testi']
+    ]},
+    { key:'denge', title:'\u2696\ufe0f Denge \u00dcnitesi (Tema 2)', items:[
+      ['kinetik','\ud83d\udca5 Tepkime Hızı'], ['enerji','\u26a1 Kimyasal Enerji'], ['denge2','\u2696\ufe0f Kimyasal Denge'],
+      ['redoks','\ud83d\udd0c Redoks Dengeleyici'], ['fizkim','\ud83d\udd04 Fiziksel/Kimyasal Değişim'],
+      ['asitbaz2','\ud83e\uddea Asit-Baz Dengesi'], ['cozunurluk2','\ud83e\udea8 \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi']
+    ]},
+    { key:'sinav', title:'\u23f1\ufe0f Sınav & Motivasyon', items:[
+      ['yks','\u23f1\ufe0f YKS Sayaç'], ['pom','\ud83c\udfaf Odaklan'], ['puan','\ud83d\udcca YKS Puan'],
+      ['board','\ud83c\udfc6 Skor'], ['video','\ud83c\udfac Videolar']
+    ]}
+  ];
+  function addHomeGuide(){
+    var home = document.getElementById('s-home');
+    if (!home || document.getElementById('home-guide')) return;
+    var pw = home.querySelector('.pw');
+    if (!pw) return;
+    pw.insertAdjacentHTML('afterbegin',
+      '<div id="home-guide" class="card" style="margin-bottom:20px;padding:18px">' +
+        '<div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f59e0b">\ud83e\udded Nereden Başlamalı?</div>' +
+        '<div style="font-size:13px;line-height:1.9;color:var(--tx2)">' +
+          '<b style="color:#fff">1) Ders \u00e7alışıyorsan:</b> \u2630 men\u00fcden <b>\u201c\u2696\ufe0f Denge \u00dcnitesi (Tema 2)\u201d</b> grubunu a\u00e7 \u2014 Tepkime Hızı, Kimyasal Enerji, Kimyasal Denge, Redoks, Asit-Baz ve \u00c7\u00f6z\u00fcn\u00fcrl\u00fck Dengesi burada. Her biri hem <i>MEB konu anlatımı</i> hem <i>\u00f6zel ders notu \u00e7\u00f6z\u00fcml\u00fc \u00f6rnekler</i> i\u00e7erir.<br><br>' +
+          '<b style="color:#fff">2) Hızlı hesaplama/pratik lazımsa:</b> <b>\u201c\ud83d\udcd6 Temel Ara\u00e7lar\u201d</b> grubuna bak (Mol Hesaplayıcı, Denklem Dengeleyici, pH Hesaplayıcı vb.).<br><br>' +
+          '<b style="color:#fff">3) G\u00f6rsel/3D anlatım istiyorsan:</b> <b>\u201c\ud83e\uddec 3D Sim\u00fclasyonlar\u201d</b> grubunu incele.<br><br>' +
+          '<b style="color:#fff">4) Motive olmak/sınava geri sayım:</b> <b>\u201c\u23f1\ufe0f Sınav & Motivasyon\u201d</b> grubu.' +
+        '</div>' +
+      '</div>');
+  }
+  function rebuildMenu(){
+    var mn = document.getElementById('mn');
+    if (!mn || mn.getAttribute('data-reorganized') === '1') return;
+    var html = '<button onclick="nav(\'home\')">\ud83c\udfe0 Ana Sayfa</button>';
+    MENU_GROUPS.forEach(function(grp){
+      html += '<button class="mn-grp-hdr" onclick="mnToggleGroup(\'' + grp.key + '\',this)" style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);font-weight:700">' +
+        '<span>' + grp.title + '</span><span id="mn-arrow-' + grp.key + '" style="font-size:11px;opacity:.6">\u25be</span></button>' +
+        '<div id="mn-group-' + grp.key + '" style="display:none;padding-left:8px">';
+      grp.items.forEach(function(it){
+        html += '<button onclick="nav(\'' + it[0] + '\')">' + it[1] + '</button>';
+      });
+      html += '</div>';
+    });
+    html += '<button onclick="nav(\'set\')">\u2699\ufe0f Ayarlar</button>';
+    mn.innerHTML = html;
+    mn.setAttribute('data-reorganized', '1');
+  }
+  window.mnToggleGroup = function(key, btn){
+    var g = document.getElementById('mn-group-' + key);
+    var arrow = document.getElementById('mn-arrow-' + key);
+    if (!g) return;
+    var open = g.style.display !== 'none';
+    g.style.display = open ? 'none' : 'block';
+    if (arrow) arrow.textContent = open ? '\u25be' : '\u25b4';
+  };
+
   function init(){
     try { applyStoredTheme(); } catch (e) { /* sessiz */ }
     try { enrichElements(); } catch (e) { /* sessiz */ }
@@ -10466,6 +10531,8 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try {
       if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
     } catch (e) { /* sessiz */ }
+    try { rebuildMenu(); } catch (e) { /* sessiz */ }
+    try { addHomeGuide(); } catch (e) { /* sessiz */ }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();})();
