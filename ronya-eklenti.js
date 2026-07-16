@@ -5761,7 +5761,6 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
         '.app.sunum-modu .card div[style*="font-size:12px"]{font-size:17px!important;line-height:1.8!important;}' +
         '.app.sunum-modu .card div[style*="font-size:14px"]{font-size:22px!important;line-height:1.8!important;}' +
         '.app.sunum-modu button{font-size:18px!important;padding:16px!important;}' +
-        '.app.sunum-modu header{display:none!important;}' +
         '.app.sunum-modu canvas{min-height:280px!important;}';
       document.head.appendChild(st3);
     }
@@ -5795,8 +5794,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
           '.app.sunum-modu .card div[style*="font-size:12px"]{font-size:17px!important;line-height:1.8!important;}' +
           '.app.sunum-modu .card div[style*="font-size:14px"]{font-size:22px!important;line-height:1.8!important;}' +
           '.app.sunum-modu button{font-size:18px!important;padding:16px!important;}' +
-          '.app.sunum-modu header{display:none!important;}' +
-          '.app.sunum-modu canvas{min-height:280px!important;}';
+            '.app.sunum-modu canvas{min-height:280px!important;}';
         document.head.appendChild(st3);
       }
     }
