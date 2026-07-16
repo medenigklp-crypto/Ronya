@@ -5707,9 +5707,14 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
           '</div>' +
         '</div>' +
         '<div class="card" style="margin-bottom:14px">' +
-          '<div class="slbl">\ud83d\udda5\ufe0f Sunum Modu</div>' +
-          '<p style="font-size:12px;color:var(--tx3);margin-bottom:10px">Akıllı tahtada/projeksiyonda kullan\u0131rken t\u00fcm i\u00e7eriği b\u00fcy\u00fct\u00fcr, sınıftan uzaktan okunabilir hale getirir.</p>' +
-          '<button type="button" id="sunum-btn" class="ob" onclick="toggleSunumModu(this)" style="width:100%">\ud83d\udda5\ufe0f Sunum Modunu A\u00e7</button>' +
+          '<div class="slbl">\ud83d\udd0d İ\u00e7erik Boyutu</div>' +
+          '<p style="font-size:12px;color:var(--tx3);margin-bottom:10px">B\u00fcy\u00fck ekranda (Mac, akıllı tahta, tablet) veya k\u00fc\u00e7\u00fck ekranda i\u00e7eriği istediğin boyuta ayarla.</p>' +
+          '<div style="display:flex;align-items:center;gap:10px">' +
+            '<button type="button" onclick="adjustZoom(-10)" style="width:52px;height:52px;font-size:22px;font-weight:800;border-radius:14px;border:1px solid var(--br);background:var(--sf2);color:var(--tx)">\u2212</button>' +
+            '<div style="flex:1;text-align:center"><div id="zoom-pct" style="font-size:20px;font-weight:800;color:#f59e0b">100%</div></div>' +
+            '<button type="button" onclick="adjustZoom(10)" style="width:52px;height:52px;font-size:22px;font-weight:800;border-radius:14px;border:1px solid var(--br);background:var(--sf2);color:var(--tx)">+</button>' +
+          '</div>' +
+          '<button type="button" onclick="adjustZoom(0,true)" style="width:100%;margin-top:10px;padding:10px;background:none;border:1px solid var(--br);border-radius:10px;color:var(--tx3);font-size:12px">\u21ba Sıfırla (100%)</button>' +
         '</div>' +
         '<div id="set-list" style="margin-bottom:14px"></div>' +
         '<button type="button" onclick="setResetAll()" style="width:100%;padding:14px;background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:var(--rlg);color:#fca5a5;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px">\ud83d\uddd1\ufe0f T\u00fcm \u0130lerlemeyi S\u0131f\u0131rla</button>' +
@@ -5735,69 +5740,29 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try { localStorage.setItem('ronya_theme', mode); } catch (e) {}
     updateThemeButtons();
   };
-  window.toggleSunumModu = function(btn){
+  window.adjustZoom = function(delta, reset){
+    var cur = 100;
+    try { cur = parseInt(localStorage.getItem('ronya_zoom') || '100', 10); } catch (e) {}
+    var next = reset ? 100 : Math.max(70, Math.min(250, cur + delta));
     var appEl = document.querySelector('.app');
-    if (!appEl) return;
-    var on = appEl.classList.contains('sunum-modu');
-    if (on) {
-      appEl.classList.remove('sunum-modu');
-      try { localStorage.setItem('ronya_sunum', '0'); } catch (e) {}
-    } else {
-      appEl.classList.add('sunum-modu');
-      try { localStorage.setItem('ronya_sunum', '1'); } catch (e) {}
-    }
-    updateSunumButton();
-    if (!document.getElementById('ronya-sunum-style')) {
-      var st3 = document.createElement('style');
-      st3.id = 'ronya-sunum-style';
-      st3.textContent =
-        '.app.sunum-modu .pw{max-width:98vw!important;padding:24px 32px!important;}' +
-        '.app.sunum-modu .pw.narrow{max-width:1100px!important;margin:0 auto!important;}' +
-        '.app.sunum-modu{font-size:19px!important;}' +
-        '.app.sunum-modu .ptitle{font-size:34px!important;}' +
-        '.app.sunum-modu .psub{font-size:18px!important;}' +
-        '.app.sunum-modu .card{padding:28px 26px!important;margin-bottom:32px!important;border-radius:20px!important;}' +
-        '.app.sunum-modu .card div[style*="font-size:13px"]{font-size:20px!important;line-height:1.8!important;}' +
-        '.app.sunum-modu .card div[style*="font-size:12px"]{font-size:17px!important;line-height:1.8!important;}' +
-        '.app.sunum-modu .card div[style*="font-size:14px"]{font-size:22px!important;line-height:1.8!important;}' +
-        '.app.sunum-modu button{font-size:18px!important;padding:16px!important;}' +
-        '.app.sunum-modu canvas{min-height:280px!important;}';
-      document.head.appendChild(st3);
-    }
+    if (appEl) appEl.style.zoom = (next / 100);
+    try { localStorage.setItem('ronya_zoom', String(next)); } catch (e) {}
+    var lbl = document.getElementById('zoom-pct');
+    if (lbl) lbl.textContent = next + '%';
   };
-  function updateSunumButton(){
-    var appEl = document.querySelector('.app');
-    var btn = document.getElementById('sunum-btn');
-    if (!btn || !appEl) return;
-    var on = appEl.classList.contains('sunum-modu');
-    btn.textContent = on ? '\ud83d\udda5\ufe0f Sunum Modunu Kapat' : '\ud83d\udda5\ufe0f Sunum Modunu A\u00e7';
-    if (on) { btn.classList.add('sel2'); } else { btn.classList.remove('sel2'); }
-  }
-  function applyStoredSunum(){
-    var on = '0';
-    try { on = localStorage.getItem('ronya_sunum') || '0'; } catch (e) {}
-    if (on === '1') {
+  function applyStoredZoom(){
+    var z = 100;
+    try { z = parseInt(localStorage.getItem('ronya_zoom') || '100', 10); } catch (e) {}
+    if (z !== 100) {
       var appEl = document.querySelector('.app');
-      if (appEl) appEl.classList.add('sunum-modu');
-      window.toggleSunumModu = window.toggleSunumModu; // no-op, stil zaten aşağıda enjekte edilecek
-      if (!document.getElementById('ronya-sunum-style')) {
-        var st3 = document.createElement('style');
-        st3.id = 'ronya-sunum-style';
-        st3.textContent =
-          '.app.sunum-modu .pw{max-width:98vw!important;padding:24px 32px!important;}' +
-          '.app.sunum-modu .pw.narrow{max-width:1100px!important;margin:0 auto!important;}' +
-          '.app.sunum-modu{font-size:19px!important;}' +
-          '.app.sunum-modu .ptitle{font-size:34px!important;}' +
-          '.app.sunum-modu .psub{font-size:18px!important;}' +
-          '.app.sunum-modu .card{padding:28px 26px!important;margin-bottom:32px!important;border-radius:20px!important;}' +
-          '.app.sunum-modu .card div[style*="font-size:13px"]{font-size:20px!important;line-height:1.8!important;}' +
-          '.app.sunum-modu .card div[style*="font-size:12px"]{font-size:17px!important;line-height:1.8!important;}' +
-          '.app.sunum-modu .card div[style*="font-size:14px"]{font-size:22px!important;line-height:1.8!important;}' +
-          '.app.sunum-modu button{font-size:18px!important;padding:16px!important;}' +
-            '.app.sunum-modu canvas{min-height:280px!important;}';
-        document.head.appendChild(st3);
-      }
+      if (appEl) appEl.style.zoom = (z / 100);
     }
+  }
+  function updateZoomLabel(){
+    var z = 100;
+    try { z = parseInt(localStorage.getItem('ronya_zoom') || '100', 10); } catch (e) {}
+    var lbl = document.getElementById('zoom-pct');
+    if (lbl) lbl.textContent = z + '%';
   }
   function updateThemeButtons(){
     var mode = 'dark';
@@ -5843,7 +5808,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       document.head.appendChild(st2);
     }
   }
-  function setEnter(){ setRenderList(); updateThemeButtons(); updateSunumButton(); }
+  function setEnter(){ setRenderList(); updateThemeButtons(); updateZoomLabel(); }
 
   // ---------- 15. GALVANİK (VOLTAİK) HÜCRE 3D ----------
   var GV_METALS = {
@@ -10575,7 +10540,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
 
   function init(){
     try { applyStoredTheme(); } catch (e) { /* sessiz */ }
-    try { applyStoredSunum(); } catch (e) { /* sessiz */ }
+    try { applyStoredZoom(); } catch (e) { /* sessiz */ }
     try { enrichElements(); } catch (e) { /* sessiz */ }
     try { setupQuizUI(); } catch (e) { /* sessiz */ }
     try { setupMolFormula(); } catch (e) { /* sessiz */ }
