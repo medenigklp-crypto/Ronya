@@ -10404,7 +10404,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
       ['izotop','\u269b\ufe0f İzotop/\u00c7ap Tanı Motoru'], ['cmp','\u2696\ufe0f Element Karşılaştır']
     ]},
     { key:'3d', title:'\ud83e\uddec 3D Sim\u00fclasyonlar', items:[
-      ['lab3d','\ud83d\udd2c 3D Lab'], ['elz','\ud83d\udd0b Elektroliz Laboratuvarı'], ['hc','\ud83e\uddec Hidrokarbonlar 3D'],
+      ['lab3d','\ud83d\udd2c 3D Lab'], ['bagSim','\u269b\ufe0f Lewis Bağ Sim\u00fclasyonu'], ['elz','\ud83d\udd0b Elektroliz Laboratuvarı'], ['hc','\ud83e\uddec Hidrokarbonlar 3D'],
       ['fg','\u2697\ufe0f Fonksiyonel Gruplar 3D'], ['wi','\ud83e\uddf2 Etkileşim \u00dcnitesi'], ['gv','\ud83d\udd0b Galvanik H\u00fccre 3D'],
       ['rxntype','\ud83e\uddea Tepkime T\u00fcr\u00fc Sınıflandırıcı'], ['alev','\ud83d\udd25 Alev Testi']
     ]},
@@ -10415,7 +10415,8 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     ]},
     { key:'sinav', title:'\u23f1\ufe0f Sınav & Motivasyon', items:[
       ['yks','\u23f1\ufe0f YKS Sayaç'], ['pom','\ud83c\udfaf Odaklan'], ['puan','\ud83d\udcca YKS Puan'],
-      ['board','\ud83c\udfc6 Skor'], ['video','\ud83c\udfac Videolar']
+      ['board','\ud83c\udfc6 Skor'], ['video','\ud83c\udfac Videolar'],
+      ['EXT:https://yokatlas.yok.gov.tr/','\ud83c\udf93 Y\u00d6K Atlas Kapısı']
     ]}
   ];
   function addHomeGuide(){
@@ -10449,7 +10450,11 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
         '<span>' + grp.title + '</span><span id="mn-arrow-' + grp.key + '" style="font-size:11px;opacity:.6">\u25be</span></button>' +
         '<div id="mn-group-' + grp.key + '" style="display:none;padding-left:8px">';
       grp.items.forEach(function(it){
-        html += '<button onclick="nav(\'' + it[0] + '\')">' + it[1] + '</button>';
+        if (it[0].indexOf('EXT:') === 0) {
+          html += '<button onclick="window.open(\'' + it[0].slice(4) + '\',\'_blank\')" style="background:#5c4dff!important;color:#fff!important;font-weight:700">' + it[1] + '</button>';
+        } else {
+          html += '<button onclick="nav(\'' + it[0] + '\')">' + it[1] + '</button>';
+        }
       });
       html += '</div>';
     });
@@ -10537,7 +10542,7 @@ window.__t = { parseOrganicName, checkCanonicalName, hcBuildAt, organicMolFormul
     try {
       if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
     } catch (e) { /* sessiz */ }
-    try { rebuildMenu(); } catch (e) { /* sessiz */ }
+    try { setTimeout(rebuildMenu, 250); } catch (e) { /* sessiz */ }
     try { addHomeGuide(); } catch (e) { /* sessiz */ }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
