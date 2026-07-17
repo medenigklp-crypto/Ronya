@@ -8,26 +8,93 @@
 (function(){
   'use strict';
 
-  // ---------- DÜZENLENEBİLİR İÇERİK (siz burayı güncelleyin) ----------
-
-  // Ana sayfa carousel'i — istediğiniz kadar slayt ekleyin/çıkarın
-  var CAROUSEL_SLIDES = [
-    { emoji:'\u2696\ufe0f', title:'Kimyasal Denge Ünitesi Tamamlandı!', desc:'Denge, Asit-Baz ve Çözünürlük Dengesi — MEB konu anlatımı + 100+ çözümlü soru', nav:'denge2', color:'linear-gradient(135deg,#6366f1,#818cf8)' },
-    { emoji:'\ud83d\udd0c', title:'Redoks Dengeleyici Yenilendi', desc:'48 örnek, adım adım yarı tepkime yöntemiyle', nav:'redoks', color:'linear-gradient(135deg,#f59e0b,#fbbf24)' },
-    { emoji:'\ud83e\uddea', title:'Asit-Baz Dengesi', desc:'Suyun otoiyonizasyonu, pH/pOH, titrasyon — tam kapsamlı', nav:'asitbaz2', color:'linear-gradient(135deg,#34d399,#6ee7b7)' },
-    { emoji:'\ud83e\udea8', title:'Çözünürlük Dengesi', desc:'Kçç hesaplamaları, ortak iyon etkisi, Le Chatelier', nav:'cozunurluk2', color:'linear-gradient(135deg,#a78bfa,#c4b5fd)' }
-  ];
-
-  // Haftanın sorusu — her hafta bu tek objeyi güncelleyin, yeter
-  var HAFTANIN_SORUSU = {
-    tarih: '14-20 Temmuz',
-    soru: '0,1 M\u2019lık HF çözeltisinin oda koşullarında pH değeri kaçtır? (HF için oda koşullarında Ka=1×10\u207b\u2075)',
-    cevap: 'Zayıf asit dengesi: Ka=x²/C (yaklaşıklık) → x²=10\u207b\u2075×0,1=10\u207b\u2076 → x=[H\u207a]=<b>0,001 M</b> → <b>pH=3</b>.'
+  // ---------- GOOGLE E-TABLOSU BAĞLANTILARI (siz sadece Google Sheets'i güncelleyin, buraya dokunmayın) ----------
+  var SHEET_URLS = {
+    haftanin: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTEHHIQxGqE8RHHHQnUXlk82n2KDwVKSFzqvtw7IM5FoUqO-IWh_Op61HmGjvyLLnPcelCBrDWG9ez/pub?gid=0&single=true&output=csv',
+    carousel: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTEHHIQxGqE8RHHHQnUXlk82n2KDwVKSFzqvtw7IM5FoUqO-IWh_Op61HmGjvyLLnPcelCBrDWG9ez/pub?gid=744491518&single=true&output=csv',
+    galeri: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTEHHIQxGqE8RHHHQnUXlk82n2KDwVKSFzqvtw7IM5FoUqO-IWh_Op61HmGjvyLLnPcelCBrDWG9ez/pub?gid=298291630&single=true&output=csv'
   };
 
-  // Fotoğraf galerisi — foto eklemek için: { src:'fotograf-linki.jpg', caption:'Açıklama' }
-  // Şimdilik boş — GitHub'a fotoğraf yükleyip buraya link eklediğinizde otomatik görünür
+  // Tablo yüklenemezse (internet yok, henüz yayınlanmadı vb.) gösterilecek YEDEK içerik
+  var CAROUSEL_SLIDES = [
+    { emoji:'\u2696\ufe0f', title:'Kimyasal Denge Ünitesi Tamamlandı!', desc:'Denge, Asit-Baz ve Çözünürlük Dengesi — MEB konu anlatımı + 100+ çözümlü soru', nav:'denge2', color:'linear-gradient(135deg,#6366f1,#818cf8)' }
+  ];
+  var HAFTANIN_SORUSU = {
+    tarih: '',
+    soru: '',
+    cevap: ''
+  };
   var PHOTO_GALLERY = [];
+
+  // ---------- CSV OKUMA VE AYRIŞTIRMA ----------
+  function parseCSV(text){
+    var rows = [];
+    var row = [], field = '', inQuotes = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i], next = text[i+1];
+      if (inQuotes) {
+        if (c === '"' && next === '"') { field += '"'; i++; }
+        else if (c === '"') { inQuotes = false; }
+        else { field += c; }
+      } else {
+        if (c === '"') inQuotes = true;
+        else if (c === ',') { row.push(field); field = ''; }
+        else if (c === '\n' || c === '\r') {
+          if (c === '\r' && next === '\n') i++;
+          row.push(field); field = '';
+          if (row.length > 1 || row[0] !== '') rows.push(row);
+          row = [];
+        } else { field += c; }
+      }
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows;
+  }
+  function fetchCSV(url){
+    return fetch(url).then(function(r){ return r.text(); }).then(parseCSV);
+  }
+  function loadHaftanin(){
+    return fetchCSV(SHEET_URLS.haftanin).then(function(rows){
+      var obj = {};
+      rows.forEach(function(r){ if (r[0]) obj[r[0].trim()] = (r[1] || '').trim(); });
+      if (obj.tarih || obj.soru) {
+        HAFTANIN_SORUSU.tarih = obj.tarih || '';
+        HAFTANIN_SORUSU.soru = obj.soru || '';
+        HAFTANIN_SORUSU.cevap = obj.cevap || '';
+      }
+    }).catch(function(){ /* yedek içerik zaten hazır, sessizce geç */ });
+  }
+  function loadCarousel(){
+    return fetchCSV(SHEET_URLS.carousel).then(function(rows){
+      if (rows.length < 2) return;
+      var headers = rows[0].map(function(h){ return h.trim().toLowerCase(); });
+      var slides = [];
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i]; if (!r[0]) continue;
+        var obj = {};
+        headers.forEach(function(h, hi){ obj[h] = (r[hi] || '').trim(); });
+        if (obj.title) slides.push({
+          emoji: obj.emoji || '\ud83d\udcda', title: obj.title, desc: obj.desc || '',
+          nav: obj.nav || 'home', color: 'linear-gradient(135deg,' + (obj.color || '#6366f1') + ',' + (obj.color || '#6366f1') + 'aa)'
+        });
+      }
+      if (slides.length) CAROUSEL_SLIDES = slides;
+    }).catch(function(){});
+  }
+  function loadGaleri(){
+    return fetchCSV(SHEET_URLS.galeri).then(function(rows){
+      if (rows.length < 2) return;
+      var headers = rows[0].map(function(h){ return h.trim().toLowerCase(); });
+      var photos = [];
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i]; if (!r[0]) continue;
+        var obj = {};
+        headers.forEach(function(h, hi){ obj[h] = (r[hi] || '').trim(); });
+        if (obj.src) photos.push({ src: obj.src, caption: obj.caption || '' });
+      }
+      PHOTO_GALLERY = photos;
+    }).catch(function(){});
+  }
 
   // ---------- ALT YAPI (bunları değiştirmenize gerek yok) ----------
 
@@ -141,10 +208,18 @@
     if (CAROUSEL_SLIDES.length > 1) resetRpTimer();
   }
 
-  function initPortal(){
-    // ronya-eklenti.js'in init()'i (menü/ana sayfa kurulumu) bittikten sonra çalışsın diye geciktiriyoruz
+  function tryRenderMultipleTimes(){
+    // ronya-eklenti.js'in init()'i (menü/ana sayfa kurulumu) bittikten sonra çalışsın diye birka\u00e7 kez deniyoruz
+    renderPortalHome();
     setTimeout(renderPortalHome, 400);
-    setTimeout(renderPortalHome, 1000); // güvenlik için ikinci deneme (varsa gecikmeli base script'lerden sonra)
+    setTimeout(renderPortalHome, 1000);
+  }
+
+  function initPortal(){
+    // \u00d6nce Google E-Tablosu'ndan g\u00fcncel veriyi \u00e7ek, sonra sayfay\u0131 \u00e7iz
+    Promise.all([loadHaftanin(), loadCarousel(), loadGaleri()]).then(tryRenderMultipleTimes).catch(tryRenderMultipleTimes);
+    // Veri \u00e7ok yava\u015f gelirse/hi\u00e7 gelmezse bile en ge\u00e7 1sn sonra yedek i\u00e7erikle g\u00f6ster
+    setTimeout(tryRenderMultipleTimes, 1200);
   }
 
   if (document.readyState === 'loading') {
@@ -153,4 +228,3 @@
     initPortal();
   }
 })();
-
